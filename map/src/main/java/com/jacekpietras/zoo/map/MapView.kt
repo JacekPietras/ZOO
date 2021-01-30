@@ -5,10 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
-import androidx.core.graphics.contains
 import androidx.core.graphics.plus
-import androidx.core.graphics.toPointF
-import kotlin.math.abs
 import kotlin.math.sqrt
 
 
@@ -33,9 +30,7 @@ class MapView @JvmOverloads constructor(
         strokeWidth = 2.dp
     }
 
-    private lateinit var visibleGpsCoordinate: RectF
-    private var horizontalScale: Float = 1f
-    private var verticalScale: Float = 1f
+    private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointF = PointF(20f, 20f)
     private var zoom: Float = 5f
     var objectList: List<Any> = listOf(
@@ -57,20 +52,21 @@ class MapView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        calcVisibleCoordinates()
+        cutOutNotVisible()
     }
 
     override fun onScale(scale: Float) {
         zoom = zoom.div(sqrt(scale)).coerceAtMost(10f).coerceAtLeast(2f)
-        calcVisibleCoordinates()
+        cutOutNotVisible()
         invalidate()
     }
 
     override fun onScroll(vX: Float, vY: Float) {
-        val horizontalScale = width / visibleGpsCoordinate.width()
-        val verticalScale = height / visibleGpsCoordinate.height()
-        centerGpsCoordinate += PointF(vX / horizontalScale, vY / verticalScale)
-        calcVisibleCoordinates()
+        centerGpsCoordinate += PointF(
+            vX / visibleGpsCoordinate.horizontalScale,
+            vY / visibleGpsCoordinate.verticalScale
+        )
+        cutOutNotVisible()
         invalidate()
     }
 
@@ -85,38 +81,17 @@ class MapView @JvmOverloads constructor(
                 else -> throw IllegalStateException("Unknown shape type $shape")
             }
         }
-
-        Log.i("dupa", System.currentTimeMillis().toString() + "     " + renderList.map { shape ->
-            when (shape) {
-                is RectF -> "RectF"
-                is PointF -> "PointF"
-                is Rect -> "Rect"
-                is Point -> "Point"
-                is PathsF -> "PathsF " + shape.list.map { it.size }.toString()
-                is DashedPathsF -> "DashedPathsF " + shape.list.map { it.size }.toString()
-                else -> "Unknown"
-            }
-        }.toString())
     }
 
-    private fun calcVisibleCoordinates() {
-        val ratioZoom = zoom * (height / width.toFloat())
-        visibleGpsCoordinate = RectF(
-            centerGpsCoordinate.x - zoom,
-            centerGpsCoordinate.y - ratioZoom,
-            centerGpsCoordinate.x + zoom,
-            centerGpsCoordinate.y + ratioZoom
-        )
-
-        horizontalScale = width / visibleGpsCoordinate.width()
-        verticalScale = height / visibleGpsCoordinate.height()
+    private fun cutOutNotVisible() {
+        visibleGpsCoordinate = ViewCoordinates.create(centerGpsCoordinate, zoom, width, height)
 
         renderList = objectList
             .asSequence()
             .filter { shape ->
                 when (shape) {
-                    is RectF -> shape.isVisible()
-                    is PointF -> shape.isVisible()
+                    is RectF -> visibleGpsCoordinate.intersects(shape)
+                    is PointF -> visibleGpsCoordinate.contains(shape)
                     is PathF -> true
                     is DashedPathF -> true
                     else -> throw IllegalStateException("Unknown shape type $shape")
@@ -125,10 +100,10 @@ class MapView @JvmOverloads constructor(
             .map { shape ->
                 @Suppress("IMPLICIT_CAST_TO_ANY")
                 when (shape) {
-                    is RectF -> shape.toViewCoordinates()
-                    is PointF -> shape.toViewCoordinates()
-                    is PathF -> shape.toViewCoordinates()
-                    is DashedPathF -> shape.toViewCoordinates()
+                    is RectF -> visibleGpsCoordinate.transform(shape)
+                    is PointF -> visibleGpsCoordinate.transform(shape)
+                    is PathF -> visibleGpsCoordinate.transform(shape)
+                    is DashedPathF -> visibleGpsCoordinate.transform(shape)
                     else -> throw IllegalStateException("Unknown shape type $shape")
                 }
             }
@@ -140,111 +115,23 @@ class MapView @JvmOverloads constructor(
                 }
             }
             .toList()
-    }
 
-    private fun RectF.toViewCoordinates(): Rect =
-        Rect(
-            ((left - visibleGpsCoordinate.left) * horizontalScale).toInt(),
-            ((top - visibleGpsCoordinate.top) * verticalScale).toInt(),
-            ((right - visibleGpsCoordinate.left) * horizontalScale).toInt(),
-            ((bottom - visibleGpsCoordinate.top) * verticalScale).toInt()
-        )
-
-    private fun PointF.toViewCoordinates(): Point =
-        Point(
-            ((x - visibleGpsCoordinate.left) * horizontalScale).toInt(),
-            ((y - visibleGpsCoordinate.top) * verticalScale).toInt()
-        )
-
-    private fun PathF.toViewCoordinates(): PathsF =
-        PathsF(
-            list
-                .cutOut { a, b -> visibleGpsCoordinate.containsLine(a, b) }
-                .map { it.map { point -> point.toViewCoordinates().toPointF() } }
-        )
-
-    private fun DashedPathF.toViewCoordinates(): DashedPathsF =
-        DashedPathsF(
-            list
-                .cutOut { a, b -> visibleGpsCoordinate.containsLine(a, b) }
-                .map { it.map { point -> point.toViewCoordinates().toPointF() } }
-        )
-
-    private inline fun <T> Iterable<T>.cutOut(
-        predicate: (a: T, b: T) -> Boolean,
-    ): List<List<T>> {
-        val iterator = iterator()
-        if (!iterator.hasNext()) return emptyList()
-
-        val result = mutableListOf<List<T>>()
-        var part: MutableList<T>? = null
-        var current = iterator.next()
-        while (iterator.hasNext()) {
-            val next = iterator.next()
-            if (predicate(current, next)) {
-                if (part == null) {
-                    part = mutableListOf(current, next)
-                } else {
-                    part.add(next)
-                }
-            } else {
-                if (part?.isNotEmpty() == true) {
-                    result.add(part)
-                }
-                part = null
-            }
-            current = next
+        if (BuildConfig.DEBUG) {
+            Log.i(
+                "dupa",
+                System.currentTimeMillis().toString() + "     " + renderList.map { shape ->
+                    when (shape) {
+                        is RectF -> "RectF"
+                        is PointF -> "PointF"
+                        is Rect -> "Rect"
+                        is Point -> "Point"
+                        is PathsF -> "PathsF " + shape.list.map { it.size }.toString()
+                        is DashedPathsF -> "DashedPathsF " + shape.list.map { it.size }.toString()
+                        else -> "Unknown"
+                    }
+                }.toString()
+            )
         }
-        if (part?.isNotEmpty() == true) {
-            result.add(part)
-        }
-        return result
-    }
-
-
-    private fun RectF.isVisible(): Boolean =
-        visibleGpsCoordinate.intersects(left, top, right, bottom)
-
-    private fun PointF.isVisible(): Boolean =
-        visibleGpsCoordinate.contains(this)
-
-    private fun RectF.containsLine(p1: PointF, p2: PointF): Boolean {
-        // Find min and max X for the segment
-        var minX = p1.x
-        var maxX = p2.x
-        if (p1.x > p2.x) {
-            minX = p2.x
-            maxX = p1.x
-        }
-
-        // Find the intersection of the segment's and rectangle's x-projections
-        if (maxX > right) maxX = right
-        if (minX < left) minX = left
-
-        // If their projections do not intersect return false
-        if (minX > maxX) return false
-
-        // Find corresponding min and max Y for min and max X we found before
-        var minY = p1.y
-        var maxY = p2.y
-        val dx = p2.x - p1.x
-        if (abs(dx) > 0.0000001) {
-            val a = (p2.y - p1.y) / dx
-            val b = p1.y - a * p1.x
-            minY = a * minX + b
-            maxY = a * maxX + b
-        }
-        if (minY > maxY) {
-            val tmp = maxY
-            maxY = minY
-            minY = tmp
-        }
-
-        // Find the intersection of the segment's and rectangle's y-projections
-        if (maxY > bottom) maxY = bottom
-        if (minY < top) minY = top
-
-        return minY <= maxY
     }
 
     private val Int.dp: Float
@@ -254,48 +141,4 @@ class MapView @JvmOverloads constructor(
                 toFloat(),
                 context.resources.displayMetrics
             )
-
-    class PathF(val list: List<PointF>) {
-
-        constructor(vararg points: Pair<Float, Float>)
-                : this(points.map { PointF(it.first, it.second) })
-    }
-
-    class DashedPathF(val list: List<PointF>) {
-
-        constructor(vararg points: Pair<Float, Float>)
-                : this(points.map { PointF(it.first, it.second) })
-    }
-
-    class PathsF(val list: List<List<PointF>>)
-
-    class DashedPathsF(val list: List<List<PointF>>)
-
-    private fun Canvas.drawPath(paths: PathsF, paint: Paint) {
-        paths.list.forEach { path ->
-            val toDraw = Path()
-            path.forEachIndexed { i, point ->
-                if (i == 0) {
-                    toDraw.moveTo(point.x, point.y)
-                } else {
-                    toDraw.lineTo(point.x, point.y)
-                }
-            }
-            drawPath(toDraw, paint)
-        }
-    }
-
-    private fun Canvas.drawPath(paths: DashedPathsF, paint: Paint) {
-        paths.list.forEach { path ->
-            val toDraw = Path()
-            path.forEachIndexed { i, point ->
-                if (i == 0) {
-                    toDraw.moveTo(point.x, point.y)
-                } else {
-                    toDraw.lineTo(point.x, point.y)
-                }
-            }
-            drawPath(toDraw, paint)
-        }
-    }
 }
