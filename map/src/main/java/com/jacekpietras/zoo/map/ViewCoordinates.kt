@@ -64,8 +64,14 @@ internal class ViewCoordinates(
                 .map { it.map { point -> transform(point).toPointF() } }
         )
 
+    fun transform(polygon: PolygonF): PolygonF =
+        PolygonF(polygon.list.map { point -> transform(point).toPointF() })
+
     fun intersects(rect: RectF): Boolean =
         visibleGpsCoordinate.intersects(rect.left, rect.top, rect.right, rect.bottom)
+
+    fun intersects(polygon: PolygonF): Boolean =
+        polygon.intersects(visibleGpsCoordinate)
 
     fun contains(p: PointF): Boolean =
         visibleGpsCoordinate.contains(p)

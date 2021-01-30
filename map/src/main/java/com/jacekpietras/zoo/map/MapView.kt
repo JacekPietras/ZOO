@@ -46,6 +46,12 @@ class MapView @JvmOverloads constructor(
             26f to 25f,
             26f to 30f,
             20f to 20f,
+        ),
+        PolygonF(
+            19f to 22f,
+            24f to 25f,
+            24f to 30f,
+            18f to 22f,
         )
     )
     private lateinit var renderList: List<Any>
@@ -78,6 +84,7 @@ class MapView @JvmOverloads constructor(
                 is Rect -> canvas.drawRect(shape, paint)
                 is PathsF -> canvas.drawPath(shape, strokePaint)
                 is DashedPathsF -> canvas.drawPath(shape, dashedPaint)
+                is PolygonF -> canvas.drawPath(shape, paint)
                 else -> throw IllegalStateException("Unknown shape type $shape")
             }
         }
@@ -92,6 +99,7 @@ class MapView @JvmOverloads constructor(
                 when (shape) {
                     is RectF -> visibleGpsCoordinate.intersects(shape)
                     is PointF -> visibleGpsCoordinate.contains(shape)
+                    is PolygonF -> visibleGpsCoordinate.intersects(shape)
                     is PathF -> true
                     is DashedPathF -> true
                     else -> throw IllegalStateException("Unknown shape type $shape")
@@ -104,6 +112,7 @@ class MapView @JvmOverloads constructor(
                     is PointF -> visibleGpsCoordinate.transform(shape)
                     is PathF -> visibleGpsCoordinate.transform(shape)
                     is DashedPathF -> visibleGpsCoordinate.transform(shape)
+                    is PolygonF -> visibleGpsCoordinate.transform(shape)
                     else -> throw IllegalStateException("Unknown shape type $shape")
                 }
             }
@@ -127,6 +136,7 @@ class MapView @JvmOverloads constructor(
                         is Point -> "Point"
                         is PathsF -> "PathsF " + shape.list.map { it.size }.toString()
                         is DashedPathsF -> "DashedPathsF " + shape.list.map { it.size }.toString()
+                        is PolygonF -> "PolygonF " + shape.list.size.toString()
                         else -> "Unknown"
                     }
                 }.toString()
