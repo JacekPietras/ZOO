@@ -8,7 +8,9 @@ import android.util.TypedValue
 import androidx.core.graphics.contains
 import androidx.core.graphics.plus
 import androidx.core.graphics.toPointF
+import kotlin.math.abs
 import kotlin.math.sqrt
+
 
 class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -82,6 +84,18 @@ class MapView @JvmOverloads constructor(
                 else -> throw IllegalStateException("Unknown shape type $shape")
             }
         }
+
+        Log.i("dupa", System.currentTimeMillis().toString() + "     " + renderList.map { shape ->
+            when (shape) {
+                is RectF -> "RectF"
+                is PointF -> "PointF"
+                is Rect -> "Rect"
+                is Point -> "Point"
+                is PathF -> "PathF"
+                is DashedPathF -> "DashedPathF"
+                else -> "Unknown"
+            }
+        }.toString())
     }
 
     private fun calcVisibleCoordinates() {
@@ -118,8 +132,6 @@ class MapView @JvmOverloads constructor(
                 }
             }
             .toList()
-
-        Log.i("dupa", renderList.size.toString())
     }
 
     private fun RectF.toViewCoordinates(): Rect =
@@ -149,10 +161,52 @@ class MapView @JvmOverloads constructor(
         visibleGpsCoordinate.contains(this)
 
     private fun PathF.isVisible(): Boolean =
-        this.list.any { visibleGpsCoordinate.contains(it) }
+        this.list.zipWithNext().any { visibleGpsCoordinate.containsLine(it.first, it.second) }
 
     private fun DashedPathF.isVisible(): Boolean =
-        this.list.any { visibleGpsCoordinate.contains(it) }
+        this.list.zipWithNext().any { visibleGpsCoordinate.containsLine(it.first, it.second) }
+
+    private fun RectF.containsLine(
+        p1: PointF,
+        p2: PointF
+    ): Boolean {
+        // Find min and max X for the segment
+        var minX = p1.x
+        var maxX = p2.x
+        if (p1.x > p2.x) {
+            minX = p2.x
+            maxX = p1.x
+        }
+
+        // Find the intersection of the segment's and rectangle's x-projections
+        if (maxX > right) maxX = right
+        if (minX < left) minX = left
+
+        // If their projections do not intersect return false
+        if (minX > maxX) return false
+
+        // Find corresponding min and max Y for min and max X we found before
+        var minY = p1.y
+        var maxY = p2.y
+        val dx = p2.x - p1.x
+        if (abs(dx) > 0.0000001) {
+            val a = (p2.y - p1.y) / dx
+            val b = p1.y - a * p1.x
+            minY = a * minX + b
+            maxY = a * maxX + b
+        }
+        if (minY > maxY) {
+            val tmp = maxY
+            maxY = minY
+            minY = tmp
+        }
+
+        // Find the intersection of the segment's and rectangle's y-projections
+        if (maxY > bottom) maxY = bottom
+        if (minY < top) minY = top
+
+        return minY <= maxY
+    }
 
     private val Int.dp: Float
         get() =
