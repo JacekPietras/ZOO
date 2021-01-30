@@ -1,2 +1,8 @@
+include ':core'
+include ':planner'
+include ':map'
+include ':domain'
+include ':catalogue'
+include ':data'
 include ':app'
 rootProject.name = "ZOO"

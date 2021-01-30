@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="around_you">Around you</string>
+    <string name="my_location">My location</string>
+</resources>
