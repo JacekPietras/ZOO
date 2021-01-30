@@ -5,6 +5,8 @@
 app/src/main/kotlin/.idea
 .DS_Store
 /build
+/build.*
+build.*
 /captures
 .externalNativeBuild
 .cxx
