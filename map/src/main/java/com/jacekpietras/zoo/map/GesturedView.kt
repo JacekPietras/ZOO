@@ -12,11 +12,8 @@ abstract class GesturedView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var swipeDetector =
-        GestureDetector(context, OnGestureListener { vX, vY -> onScroll(vX, vY) })
-    private var pinchDetector =
-        ScaleGestureDetector(context,
-            OnScaleGestureListener { onScale(it) })
+    private var swipeDetector = GestureDetector(context, OnGestureListener())
+    private var pinchDetector = ScaleGestureDetector(context, OnScaleGestureListener())
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -29,13 +26,16 @@ abstract class GesturedView @JvmOverloads constructor(
 
     abstract fun onScroll(vX: Float, vY: Float)
 
-    private class OnGestureListener(
-        val onScroll: (Float, Float) -> Unit
-    ) : GestureDetector.OnGestureListener {
+    abstract fun onClick(x: Float, y: Float)
+
+    private inner class OnGestureListener : GestureDetector.OnGestureListener {
 
         override fun onShowPress(e: MotionEvent?) = Unit
 
-        override fun onSingleTapUp(e: MotionEvent?) = false
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            onClick(e.x, e.y)
+            return false
+        }
 
         override fun onDown(e: MotionEvent?) = false
 
@@ -49,9 +49,7 @@ abstract class GesturedView @JvmOverloads constructor(
         override fun onLongPress(e: MotionEvent?) = Unit
     }
 
-    private class OnScaleGestureListener(
-        val onScale: (Float) -> Unit
-    ) : ScaleGestureDetector.OnScaleGestureListener {
+    private inner class OnScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener {
         override fun onScaleBegin(detector: ScaleGestureDetector?) = true
 
         override fun onScaleEnd(detector: ScaleGestureDetector?) = Unit

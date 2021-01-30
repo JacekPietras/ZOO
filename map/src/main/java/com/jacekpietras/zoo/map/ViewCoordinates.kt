@@ -57,13 +57,6 @@ internal class ViewCoordinates(
                 .map { it.map { point -> transform(point).toPointF() } }
         )
 
-    fun transform(path: DashedPathF): DashedPathsF =
-        DashedPathsF(
-            path.list
-                .cutOut { a, b -> visibleGpsCoordinate.containsLine(a, b) }
-                .map { it.map { point -> transform(point).toPointF() } }
-        )
-
     fun transform(polygon: PolygonF): PolygonF =
         PolygonF(polygon.list.map { point -> transform(point).toPointF() })
 

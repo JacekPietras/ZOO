@@ -4,57 +4,25 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
-import android.util.TypedValue
+import androidx.core.graphics.contains
 import androidx.core.graphics.plus
+import androidx.core.graphics.toRectF
 import kotlin.math.sqrt
-
 
 class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
 
-    private val paint = Paint().apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-        color = Color.RED
-    }
-    private val dashedPaint = Paint().apply {
-        color = Color.BLUE
-        style = Paint.Style.STROKE
-        strokeWidth = 2.dp
-        pathEffect = DashPathEffect(floatArrayOf(4.dp, 8.dp), 0f)
-    }
-    private val strokePaint = Paint().apply {
-        color = Color.GREEN
-        style = Paint.Style.STROKE
-        strokeWidth = 2.dp
-    }
-
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointF = PointF(20f, 20f)
     private var zoom: Float = 5f
-    var objectList: List<Any> = listOf(
-        RectF(18f, 18f, 20f, 20f),
-        RectF(28f, 15f, 40f, 25f),
-        DashedPathF(
-            20f to 20f,
-            25f to 25f,
-            25f to 30f
-        ),
-        PathF(
-            21f to 20f,
-            26f to 25f,
-            26f to 30f,
-            20f to 20f,
-        ),
-        PolygonF(
-            19f to 22f,
-            24f to 25f,
-            24f to 30f,
-            18f to 22f,
-        )
-    )
-    private lateinit var renderList: List<Any>
+    internal var objectList: List<MapItem> = emptyList()
+        set(value) {
+            field = value
+            cutOutNotVisible()
+            invalidate()
+        }
+    private lateinit var renderList: List<MapItem>
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -76,16 +44,33 @@ class MapView @JvmOverloads constructor(
         invalidate()
     }
 
+    override fun onClick(x: Float, y: Float) {
+        val point = PointF(x, y)
+        renderList.forEach { item ->
+            when (item.shape) {
+                is Rect -> {
+                    if (item.onClick != null && item.shape.toRectF().contains(point)) {
+                        item.onClick.invoke(x, y)
+                    }
+                }
+                is PolygonF -> {
+                    if (item.onClick != null && item.shape.contains(point)) {
+                        item.onClick.invoke(x, y)
+                    }
+                }
+            }
+        }
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        renderList.forEach { shape ->
-            when (shape) {
-                is Rect -> canvas.drawRect(shape, paint)
-                is PathsF -> canvas.drawPath(shape, strokePaint)
-                is DashedPathsF -> canvas.drawPath(shape, dashedPaint)
-                is PolygonF -> canvas.drawPath(shape, paint)
-                else -> throw IllegalStateException("Unknown shape type $shape")
+        renderList.forEach { item ->
+            when (item.shape) {
+                is Rect -> canvas.drawRect(item.shape, item.paint)
+                is PathsF -> canvas.drawPath(item.shape, item.paint)
+                is PolygonF -> canvas.drawPath(item.shape, item.paint)
+                else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
         }
     }
@@ -95,31 +80,42 @@ class MapView @JvmOverloads constructor(
 
         renderList = objectList
             .asSequence()
-            .filter { shape ->
-                when (shape) {
-                    is RectF -> visibleGpsCoordinate.intersects(shape)
-                    is PointF -> visibleGpsCoordinate.contains(shape)
-                    is PolygonF -> visibleGpsCoordinate.intersects(shape)
+            .filter { item ->
+                when (item.shape) {
+                    is PointF -> visibleGpsCoordinate.contains(item.shape)
+                    is RectF -> visibleGpsCoordinate.intersects(item.shape)
+                    is PolygonF -> visibleGpsCoordinate.intersects(item.shape)
                     is PathF -> true
-                    is DashedPathF -> true
-                    else -> throw IllegalStateException("Unknown shape type $shape")
+                    else -> throw IllegalStateException("Unknown shape type ${item.shape}")
                 }
             }
-            .map { shape ->
+            .map { item ->
                 @Suppress("IMPLICIT_CAST_TO_ANY")
-                when (shape) {
-                    is RectF -> visibleGpsCoordinate.transform(shape)
-                    is PointF -> visibleGpsCoordinate.transform(shape)
-                    is PathF -> visibleGpsCoordinate.transform(shape)
-                    is DashedPathF -> visibleGpsCoordinate.transform(shape)
-                    is PolygonF -> visibleGpsCoordinate.transform(shape)
-                    else -> throw IllegalStateException("Unknown shape type $shape")
+                when (item.shape) {
+                    is PointF -> MapItem(
+                        visibleGpsCoordinate.transform(item.shape),
+                        item.paint,
+                    )
+                    is RectF -> MapItem(
+                        visibleGpsCoordinate.transform(item.shape),
+                        item.paint,
+                        item.onClick,
+                    )
+                    is PolygonF -> MapItem(
+                        visibleGpsCoordinate.transform(item.shape),
+                        item.paint,
+                        item.onClick,
+                    )
+                    is PathF -> MapItem(
+                        visibleGpsCoordinate.transform(item.shape),
+                        item.paint,
+                    )
+                    else -> throw IllegalStateException("Unknown shape type ${item.shape}")
                 }
             }
-            .filter { shape ->
-                when (shape) {
-                    is PathsF -> shape.list.isNotEmpty()
-                    is DashedPathsF -> shape.list.isNotEmpty()
+            .filter { item ->
+                when (item.shape) {
+                    is PathsF -> item.shape.list.isNotEmpty()
                     else -> true
                 }
             }
@@ -128,27 +124,18 @@ class MapView @JvmOverloads constructor(
         if (BuildConfig.DEBUG) {
             Log.i(
                 "dupa",
-                System.currentTimeMillis().toString() + "     " + renderList.map { shape ->
-                    when (shape) {
+                System.currentTimeMillis().toString() + "     " + renderList.map { item ->
+                    when (item.shape) {
                         is RectF -> "RectF"
                         is PointF -> "PointF"
                         is Rect -> "Rect"
                         is Point -> "Point"
-                        is PathsF -> "PathsF " + shape.list.map { it.size }.toString()
-                        is DashedPathsF -> "DashedPathsF " + shape.list.map { it.size }.toString()
-                        is PolygonF -> "PolygonF " + shape.list.size.toString()
+                        is PathsF -> "PathsF " + item.shape.list.map { it.size }.toString()
+                        is PolygonF -> "PolygonF " + item.shape.list.size.toString()
                         else -> "Unknown"
                     }
                 }.toString()
             )
         }
     }
-
-    private val Int.dp: Float
-        get() =
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                toFloat(),
-                context.resources.displayMetrics
-            )
 }
