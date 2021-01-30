@@ -49,7 +49,8 @@ class MapView @JvmOverloads constructor(
         PathF(
             21f to 20f,
             26f to 25f,
-            26f to 30f
+            26f to 30f,
+            20f to 20f,
         )
     )
     private lateinit var renderList: List<Any>
@@ -79,8 +80,8 @@ class MapView @JvmOverloads constructor(
         renderList.forEach { shape ->
             when (shape) {
                 is Rect -> canvas.drawRect(shape, paint)
-                is PathF -> canvas.drawPath(shape, strokePaint)
-                is DashedPathF -> canvas.drawPath(shape, dashedPaint)
+                is PathsF -> canvas.drawPath(shape, strokePaint)
+                is DashedPathsF -> canvas.drawPath(shape, dashedPaint)
                 else -> throw IllegalStateException("Unknown shape type $shape")
             }
         }
@@ -91,8 +92,8 @@ class MapView @JvmOverloads constructor(
                 is PointF -> "PointF"
                 is Rect -> "Rect"
                 is Point -> "Point"
-                is PathF -> "PathF"
-                is DashedPathF -> "DashedPathF"
+                is PathsF -> "PathsF " + shape.list.map { it.size }.toString()
+                is DashedPathsF -> "DashedPathsF " + shape.list.map { it.size }.toString()
                 else -> "Unknown"
             }
         }.toString())
@@ -116,8 +117,8 @@ class MapView @JvmOverloads constructor(
                 when (shape) {
                     is RectF -> shape.isVisible()
                     is PointF -> shape.isVisible()
-                    is PathF -> shape.isVisible()
-                    is DashedPathF -> shape.isVisible()
+                    is PathF -> true
+                    is DashedPathF -> true
                     else -> throw IllegalStateException("Unknown shape type $shape")
                 }
             }
@@ -129,6 +130,13 @@ class MapView @JvmOverloads constructor(
                     is PathF -> shape.toViewCoordinates()
                     is DashedPathF -> shape.toViewCoordinates()
                     else -> throw IllegalStateException("Unknown shape type $shape")
+                }
+            }
+            .filter { shape ->
+                when (shape) {
+                    is PathsF -> shape.list.isNotEmpty()
+                    is DashedPathsF -> shape.list.isNotEmpty()
+                    else -> true
                 }
             }
             .toList()
@@ -148,11 +156,51 @@ class MapView @JvmOverloads constructor(
             ((y - visibleGpsCoordinate.top) * verticalScale).toInt()
         )
 
-    private fun PathF.toViewCoordinates(): PathF =
-        PathF(this.list.map { it.toViewCoordinates().toPointF() })
+    private fun PathF.toViewCoordinates(): PathsF =
+        PathsF(
+            list
+                .cutOut { a, b -> visibleGpsCoordinate.containsLine(a, b) }
+                .map { it.map { point -> point.toViewCoordinates().toPointF() } }
+        )
 
-    private fun DashedPathF.toViewCoordinates(): DashedPathF =
-        DashedPathF(this.list.map { it.toViewCoordinates().toPointF() })
+    private fun DashedPathF.toViewCoordinates(): DashedPathsF =
+        DashedPathsF(
+            list
+                .cutOut { a, b -> visibleGpsCoordinate.containsLine(a, b) }
+                .map { it.map { point -> point.toViewCoordinates().toPointF() } }
+        )
+
+    private inline fun <T> Iterable<T>.cutOut(
+        predicate: (a: T, b: T) -> Boolean,
+    ): List<List<T>> {
+        val iterator = iterator()
+        if (!iterator.hasNext()) return emptyList()
+
+        val result = mutableListOf<List<T>>()
+        var part: MutableList<T>? = null
+        var current = iterator.next()
+        while (iterator.hasNext()) {
+            val next = iterator.next()
+            if (predicate(current, next)) {
+                if (part == null) {
+                    part = mutableListOf(current, next)
+                } else {
+                    part.add(next)
+                }
+            } else {
+                if (part?.isNotEmpty() == true) {
+                    result.add(part)
+                }
+                part = null
+            }
+            current = next
+        }
+        if (part?.isNotEmpty() == true) {
+            result.add(part)
+        }
+        return result
+    }
+
 
     private fun RectF.isVisible(): Boolean =
         visibleGpsCoordinate.intersects(left, top, right, bottom)
@@ -160,16 +208,7 @@ class MapView @JvmOverloads constructor(
     private fun PointF.isVisible(): Boolean =
         visibleGpsCoordinate.contains(this)
 
-    private fun PathF.isVisible(): Boolean =
-        this.list.zipWithNext().any { visibleGpsCoordinate.containsLine(it.first, it.second) }
-
-    private fun DashedPathF.isVisible(): Boolean =
-        this.list.zipWithNext().any { visibleGpsCoordinate.containsLine(it.first, it.second) }
-
-    private fun RectF.containsLine(
-        p1: PointF,
-        p2: PointF
-    ): Boolean {
+    private fun RectF.containsLine(p1: PointF, p2: PointF): Boolean {
         // Find min and max X for the segment
         var minX = p1.x
         var maxX = p2.x
@@ -218,41 +257,45 @@ class MapView @JvmOverloads constructor(
 
     class PathF(val list: List<PointF>) {
 
-        constructor(vararg points: PointF) : this(points.asList())
-
         constructor(vararg points: Pair<Float, Float>)
                 : this(points.map { PointF(it.first, it.second) })
     }
 
     class DashedPathF(val list: List<PointF>) {
 
-        constructor(vararg points: PointF) : this(points.asList())
-
         constructor(vararg points: Pair<Float, Float>)
                 : this(points.map { PointF(it.first, it.second) })
     }
 
-    private fun Canvas.drawPath(path: PathF, paint: Paint) {
-        val toDraw = Path()
-        path.list.forEachIndexed { i, point ->
-            if (i == 0) {
-                toDraw.moveTo(point.x, point.y)
-            } else {
-                toDraw.lineTo(point.x, point.y)
+    class PathsF(val list: List<List<PointF>>)
+
+    class DashedPathsF(val list: List<List<PointF>>)
+
+    private fun Canvas.drawPath(paths: PathsF, paint: Paint) {
+        paths.list.forEach { path ->
+            val toDraw = Path()
+            path.forEachIndexed { i, point ->
+                if (i == 0) {
+                    toDraw.moveTo(point.x, point.y)
+                } else {
+                    toDraw.lineTo(point.x, point.y)
+                }
             }
+            drawPath(toDraw, paint)
         }
-        drawPath(toDraw, paint)
     }
 
-    private fun Canvas.drawPath(path: DashedPathF, paint: Paint) {
-        val toDraw = Path()
-        path.list.forEachIndexed { i, point ->
-            if (i == 0) {
-                toDraw.moveTo(point.x, point.y)
-            } else {
-                toDraw.lineTo(point.x, point.y)
+    private fun Canvas.drawPath(paths: DashedPathsF, paint: Paint) {
+        paths.list.forEach { path ->
+            val toDraw = Path()
+            path.forEachIndexed { i, point ->
+                if (i == 0) {
+                    toDraw.moveTo(point.x, point.y)
+                } else {
+                    toDraw.lineTo(point.x, point.y)
+                }
             }
+            drawPath(toDraw, paint)
         }
-        drawPath(toDraw, paint)
     }
 }
