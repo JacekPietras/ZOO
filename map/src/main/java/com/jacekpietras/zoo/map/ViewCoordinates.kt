@@ -8,7 +8,7 @@ import androidx.core.graphics.contains
 import androidx.core.graphics.toPointF
 
 internal class ViewCoordinates(
-    private val visibleGpsCoordinate: RectF,
+    val visibleRect: RectF,
     val horizontalScale: Float,
     val verticalScale: Float,
 ) {
@@ -29,7 +29,7 @@ internal class ViewCoordinates(
                 centerGpsCoordinate.y + ratioZoom
             )
             return ViewCoordinates(
-                visibleGpsCoordinate = visibleGpsCoordinate,
+                visibleRect = visibleGpsCoordinate,
                 horizontalScale = viewWidth / visibleGpsCoordinate.width(),
                 verticalScale = viewHeight / visibleGpsCoordinate.height(),
             )
@@ -38,22 +38,22 @@ internal class ViewCoordinates(
 
     fun transform(rect: RectF): Rect =
         Rect(
-            ((rect.left - visibleGpsCoordinate.left) * horizontalScale).toInt(),
-            ((rect.top - visibleGpsCoordinate.top) * verticalScale).toInt(),
-            ((rect.right - visibleGpsCoordinate.left) * horizontalScale).toInt(),
-            ((rect.bottom - visibleGpsCoordinate.top) * verticalScale).toInt()
+            ((rect.left - visibleRect.left) * horizontalScale).toInt(),
+            ((rect.top - visibleRect.top) * verticalScale).toInt(),
+            ((rect.right - visibleRect.left) * horizontalScale).toInt(),
+            ((rect.bottom - visibleRect.top) * verticalScale).toInt()
         )
 
     fun transform(p: PointF): Point =
         Point(
-            ((p.x - visibleGpsCoordinate.left) * horizontalScale).toInt(),
-            ((p.y - visibleGpsCoordinate.top) * verticalScale).toInt()
+            ((p.x - visibleRect.left) * horizontalScale).toInt(),
+            ((p.y - visibleRect.top) * verticalScale).toInt()
         )
 
     fun transform(path: PathF): PathsF =
         PathsF(
             path.list
-                .cutOut { a, b -> visibleGpsCoordinate.containsLine(a, b) }
+                .cutOut { a, b -> visibleRect.containsLine(a, b) }
                 .map { it.map { point -> transform(point).toPointF() } }
         )
 
@@ -61,11 +61,11 @@ internal class ViewCoordinates(
         PolygonF(polygon.list.map { point -> transform(point).toPointF() })
 
     fun intersects(rect: RectF): Boolean =
-        visibleGpsCoordinate.intersects(rect.left, rect.top, rect.right, rect.bottom)
+        visibleRect.intersects(rect.left, rect.top, rect.right, rect.bottom)
 
     fun intersects(polygon: PolygonF): Boolean =
-        polygon.intersects(visibleGpsCoordinate)
+        polygon.intersects(visibleRect)
 
     fun contains(p: PointF): Boolean =
-        visibleGpsCoordinate.contains(p)
+        visibleRect.contains(p)
 }

@@ -5,23 +5,28 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import androidx.core.graphics.contains
+import androidx.core.graphics.minus
 import androidx.core.graphics.plus
 import androidx.core.graphics.toRectF
 import kotlin.math.sqrt
 
-class MapView @JvmOverloads constructor(
+internal class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
 
-    private lateinit var visibleGpsCoordinate: ViewCoordinates
-    private var centerGpsCoordinate: PointF = PointF(20f, 20f)
-    private var zoom: Float = 5f
-    internal var objectList: List<MapItem> = emptyList()
+    var maxZoom: Float = 10f
+    var minZoom: Float = 2f
+    var worldRectangle: RectF = RectF(10f, 10f, 30f, 30f)
+    var objectList: List<MapItem> = emptyList()
         set(value) {
             field = value
             cutOutNotVisible()
             invalidate()
         }
+
+    private lateinit var visibleGpsCoordinate: ViewCoordinates
+    private var centerGpsCoordinate: PointF = PointF(20f, 20f)
+    private var zoom: Float = 5f
     private lateinit var renderList: List<MapItem>
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -30,7 +35,7 @@ class MapView @JvmOverloads constructor(
     }
 
     override fun onScale(scale: Float) {
-        zoom = zoom.div(sqrt(scale)).coerceAtMost(10f).coerceAtLeast(2f)
+        zoom = zoom.div(sqrt(scale)).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
         cutOutNotVisible()
         invalidate()
     }
@@ -75,8 +80,74 @@ class MapView @JvmOverloads constructor(
         }
     }
 
+    private fun preventedGoingOutsideWorld(): Boolean {
+        val leftMargin = visibleGpsCoordinate.visibleRect.left - worldRectangle.left
+        val rightMargin = worldRectangle.right - visibleGpsCoordinate.visibleRect.right
+        val topMargin = visibleGpsCoordinate.visibleRect.top - worldRectangle.top
+        val bottomMargin = worldRectangle.bottom - visibleGpsCoordinate.visibleRect.bottom
+
+        if (leftMargin < 0 && rightMargin < 0) {
+            zoom = zoom.times(0.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+            return true
+        } else if (leftMargin < 0) {
+            centerGpsCoordinate -= PointF(leftMargin, 0f)
+            return true
+        } else if (rightMargin < 0) {
+            centerGpsCoordinate += PointF(rightMargin, 0f)
+            return true
+        }
+
+        if (topMargin < 0 && bottomMargin < 0) {
+            zoom = zoom.times(0.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+            return true
+        } else if (topMargin < 0) {
+            centerGpsCoordinate -= PointF(0f, topMargin)
+            return true
+        } else if (bottomMargin < 0) {
+            centerGpsCoordinate += PointF(0f, bottomMargin)
+            return true
+        }
+
+        return false
+    }
+
+    private fun transform(item: MapItem): MapItem =
+        @Suppress("IMPLICIT_CAST_TO_ANY")
+        when (item.shape) {
+            is PointF -> MapItem(
+                visibleGpsCoordinate.transform(item.shape),
+                item.paint,
+            )
+            is RectF -> MapItem(
+                visibleGpsCoordinate.transform(item.shape),
+                item.paint,
+                item.onClick,
+            )
+            is PolygonF -> MapItem(
+                visibleGpsCoordinate.transform(item.shape),
+                item.paint,
+                item.onClick,
+            )
+            is PathF -> MapItem(
+                visibleGpsCoordinate.transform(item.shape),
+                item.paint,
+            )
+            else -> throw IllegalStateException("Unknown shape type ${item.shape}")
+        }
+
+
     private fun cutOutNotVisible() {
-        visibleGpsCoordinate = ViewCoordinates.create(centerGpsCoordinate, zoom, width, height)
+        visibleGpsCoordinate = ViewCoordinates.create(
+            centerGpsCoordinate,
+            zoom,
+            width,
+            height,
+        )
+
+        if (preventedGoingOutsideWorld()) {
+//            cutOutNotVisible()
+            return
+        }
 
         renderList = objectList
             .asSequence()
@@ -89,30 +160,7 @@ class MapView @JvmOverloads constructor(
                     else -> throw IllegalStateException("Unknown shape type ${item.shape}")
                 }
             }
-            .map { item ->
-                @Suppress("IMPLICIT_CAST_TO_ANY")
-                when (item.shape) {
-                    is PointF -> MapItem(
-                        visibleGpsCoordinate.transform(item.shape),
-                        item.paint,
-                    )
-                    is RectF -> MapItem(
-                        visibleGpsCoordinate.transform(item.shape),
-                        item.paint,
-                        item.onClick,
-                    )
-                    is PolygonF -> MapItem(
-                        visibleGpsCoordinate.transform(item.shape),
-                        item.paint,
-                        item.onClick,
-                    )
-                    is PathF -> MapItem(
-                        visibleGpsCoordinate.transform(item.shape),
-                        item.paint,
-                    )
-                    else -> throw IllegalStateException("Unknown shape type ${item.shape}")
-                }
-            }
+            .map(::transform)
             .filter { item ->
                 when (item.shape) {
                     is PathsF -> item.shape.list.isNotEmpty()
@@ -121,6 +169,10 @@ class MapView @JvmOverloads constructor(
             }
             .toList()
 
+        logVisibleShapes()
+    }
+
+    private fun logVisibleShapes() {
         if (BuildConfig.DEBUG) {
             Log.i(
                 "dupa",
