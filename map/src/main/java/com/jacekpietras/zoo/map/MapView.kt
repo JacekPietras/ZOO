@@ -17,6 +17,10 @@ internal class MapView @JvmOverloads constructor(
     var maxZoom: Float = 10f
     var minZoom: Float = 2f
     var worldRectangle: RectF = RectF(10f, 10f, 30f, 30f)
+        set(value) {
+            field = value
+            centerGpsCoordinate = PointF(worldRectangle.centerX(), worldRectangle.centerY())
+        }
     var objectList: List<MapItem> = emptyList()
         set(value) {
             field = value
@@ -25,7 +29,8 @@ internal class MapView @JvmOverloads constructor(
         }
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
-    private var centerGpsCoordinate: PointF = PointF(20f, 20f)
+    private var centerGpsCoordinate: PointF =
+        PointF(worldRectangle.centerX(), worldRectangle.centerY())
     private var zoom: Float = 5f
     private lateinit var renderList: List<MapItem>
 
@@ -85,30 +90,33 @@ internal class MapView @JvmOverloads constructor(
         val rightMargin = worldRectangle.right - visibleGpsCoordinate.visibleRect.right
         val topMargin = visibleGpsCoordinate.visibleRect.top - worldRectangle.top
         val bottomMargin = worldRectangle.bottom - visibleGpsCoordinate.visibleRect.bottom
+        var result = false
 
-        if (leftMargin < 0 && rightMargin < 0) {
-            zoom = zoom.times(0.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            return true
-        } else if (leftMargin < 0) {
+        if (leftMargin + rightMargin < 0) {
+            zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+            centerGpsCoordinate = PointF(worldRectangle.centerX(), centerGpsCoordinate.y)
+            result = true
+        } else if (leftMargin < -0.00001) {
             centerGpsCoordinate -= PointF(leftMargin, 0f)
-            return true
-        } else if (rightMargin < 0) {
+            result = true
+        } else if (rightMargin < -0.00001) {
             centerGpsCoordinate += PointF(rightMargin, 0f)
-            return true
+            result = true
         }
 
-        if (topMargin < 0 && bottomMargin < 0) {
-            zoom = zoom.times(0.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            return true
-        } else if (topMargin < 0) {
+        if (topMargin + bottomMargin < 0) {
+            zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+            centerGpsCoordinate = PointF(centerGpsCoordinate.x, worldRectangle.centerY())
+            result = true
+        } else if (topMargin < -0.00001) {
             centerGpsCoordinate -= PointF(0f, topMargin)
-            return true
-        } else if (bottomMargin < 0) {
+            result = true
+        } else if (bottomMargin < -0.00001) {
             centerGpsCoordinate += PointF(0f, bottomMargin)
-            return true
+            result = true
         }
 
-        return false
+        return result
     }
 
     private fun transform(item: MapItem): MapItem =
@@ -145,7 +153,7 @@ internal class MapView @JvmOverloads constructor(
         )
 
         if (preventedGoingOutsideWorld()) {
-//            cutOutNotVisible()
+            cutOutNotVisible()
             return
         }
 
