@@ -1,15 +1,19 @@
-package com.jacekpietras.zoo.map
+package com.jacekpietras.zoo.map.ui
 
 import android.graphics.*
+import com.jacekpietras.zoo.map.model.MapPaint
+import com.jacekpietras.zoo.map.model.PathF
+import com.jacekpietras.zoo.map.model.PathsF
+import com.jacekpietras.zoo.map.model.PolygonF
 
 internal class MapItem {
     val shape: Any
-    val paint: Paint
+    val paint: MapPaint
     val onClick: ((x: Float, y: Float) -> Unit)?
 
     constructor(
         polygon: PolygonF,
-        paint: Paint,
+        paint: MapPaint,
         onClick: ((x: Float, y: Float) -> Unit)? = null,
     ) {
         this.shape = polygon
@@ -19,7 +23,7 @@ internal class MapItem {
 
     constructor(
         path: PathF,
-        paint: Paint,
+        paint: MapPaint,
     ) {
         this.shape = path
         this.onClick = null
@@ -28,7 +32,7 @@ internal class MapItem {
 
     constructor(
         paths: PathsF,
-        paint: Paint,
+        paint: MapPaint,
     ) {
         this.shape = paths
         this.onClick = null
@@ -37,7 +41,7 @@ internal class MapItem {
 
     constructor(
         rect: RectF,
-        paint: Paint,
+        paint: MapPaint,
         onClick: ((x: Float, y: Float) -> Unit)? = null,
     ) {
         this.shape = rect
@@ -47,7 +51,7 @@ internal class MapItem {
 
     constructor(
         rect: Rect,
-        paint: Paint,
+        paint: MapPaint,
         onClick: ((x: Float, y: Float) -> Unit)? = null,
     ) {
         this.shape = rect
@@ -57,7 +61,7 @@ internal class MapItem {
 
     constructor(
         point: PointF,
-        paint: Paint,
+        paint: MapPaint,
     ) {
         this.shape = point
         this.onClick = null
@@ -66,7 +70,7 @@ internal class MapItem {
 
     constructor(
         point: Point,
-        paint: Paint,
+        paint: MapPaint,
     ) {
         this.shape = point
         this.onClick = null

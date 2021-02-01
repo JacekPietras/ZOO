@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map
+package com.jacekpietras.zoo.map.model
 
 import android.graphics.Point
 import android.graphics.PointF
@@ -6,6 +6,8 @@ import android.graphics.Rect
 import android.graphics.RectF
 import androidx.core.graphics.contains
 import androidx.core.graphics.toPointF
+import com.jacekpietras.zoo.map.containsLine
+import com.jacekpietras.zoo.map.cutOut
 
 internal class ViewCoordinates(
     val visibleRect: RectF,

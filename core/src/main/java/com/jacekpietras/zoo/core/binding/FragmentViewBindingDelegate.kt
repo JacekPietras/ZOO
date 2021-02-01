@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.core
+package com.jacekpietras.zoo.core.binding
 
 import android.view.View
 import androidx.fragment.app.Fragment

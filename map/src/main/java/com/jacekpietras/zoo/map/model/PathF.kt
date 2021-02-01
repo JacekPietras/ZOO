@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map
+package com.jacekpietras.zoo.map.model
 
 import android.graphics.Canvas
 import android.graphics.Paint

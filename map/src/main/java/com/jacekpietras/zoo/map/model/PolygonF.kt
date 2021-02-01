@@ -1,6 +1,7 @@
-package com.jacekpietras.zoo.map
+package com.jacekpietras.zoo.map.model
 
 import android.graphics.*
+import com.jacekpietras.zoo.map.containsLine
 
 internal class PolygonF(val list: List<PointF>) {
 

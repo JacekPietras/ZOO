@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map
+package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
 import android.graphics.*
@@ -8,6 +8,8 @@ import androidx.core.graphics.contains
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
 import androidx.core.graphics.toRectF
+import com.jacekpietras.zoo.map.BuildConfig
+import com.jacekpietras.zoo.map.model.*
 import kotlin.math.sqrt
 
 internal class MapView @JvmOverloads constructor(
@@ -32,7 +34,7 @@ internal class MapView @JvmOverloads constructor(
     private var centerGpsCoordinate: PointF =
         PointF(worldRectangle.centerX(), worldRectangle.centerY())
     private var zoom: Float = 5f
-    private lateinit var renderList: List<MapItem>
+    private lateinit var renderList: List<RenderItem>
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -175,6 +177,7 @@ internal class MapView @JvmOverloads constructor(
                     else -> true
                 }
             }
+            .map { item -> RenderItem(item.shape, item.paint.toCanvasPaint(context)) }
             .toList()
 
         logVisibleShapes()
@@ -198,4 +201,10 @@ internal class MapView @JvmOverloads constructor(
             )
         }
     }
+
+    private class RenderItem(
+        val shape: Any,
+        val paint: Paint,
+        val onClick: ((Float, Float) -> Unit)? = null,
+    )
 }

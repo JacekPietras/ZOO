@@ -70,7 +70,7 @@
         android:background="#11000000"
         tools:ignore="HardcodedText">
 
-        <com.jacekpietras.zoo.map.MapView
+        <com.jacekpietras.zoo.map.ui.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
