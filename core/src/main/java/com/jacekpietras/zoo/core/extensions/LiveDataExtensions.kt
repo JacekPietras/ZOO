@@ -8,3 +8,7 @@ val <T> MutableLiveData<T>.safeValue: T
 fun <T> MutableLiveData<T>.update(block: (T) -> T) {
     value = block(safeValue)
 }
+
+fun <T> MutableLiveData<T>.reduce(block: T.() -> T) {
+    value = block(safeValue)
+}

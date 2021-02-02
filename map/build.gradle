@@ -5,5 +5,4 @@ apply from: "$rootDir/presentation.gradle"
 dependencies {
     implementation project(':core')
     implementation project(':domain')
-    implementation project(':data')
 }

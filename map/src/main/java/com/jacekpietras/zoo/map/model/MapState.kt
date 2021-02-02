@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.map.model
 
 import android.graphics.Color
+import com.jacekpietras.zoo.domain.model.LatLon
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 
@@ -12,6 +13,8 @@ internal data class MapState(
     val buildingPaint: MapPaint = redPaint,
     val roadPaint: MapPaint = strokePaint,
     val takenRoutePaint: MapPaint = dashedPaint,
+
+    val userPosition: LatLon = LatLon(0.0, 0.0),
 )
 
 private val redPaint: MapPaint

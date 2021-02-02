@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.PointF
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
 import com.jacekpietras.zoo.map.BuildConfig
@@ -15,6 +14,7 @@ import com.jacekpietras.zoo.map.model.PathF
 import com.jacekpietras.zoo.map.model.PolygonF
 import com.jacekpietras.zoo.map.model.ViewCoordinates
 import com.jacekpietras.zoo.map.utils.drawPath
+import timber.log.Timber
 import kotlin.math.sqrt
 
 internal class MapView @JvmOverloads constructor(
@@ -31,6 +31,7 @@ internal class MapView @JvmOverloads constructor(
     private var _objectList: List<RenderItem> = emptyList()
     var objectList: List<MapItem> = emptyList()
         set(value) {
+            Timber.v("Content changed")
             field = value
             _objectList =
                 value.map { item ->
@@ -184,16 +185,14 @@ internal class MapView @JvmOverloads constructor(
 
     private fun logVisibleShapes() {
         if (BuildConfig.DEBUG) {
-            Log.i(
-                "dupa",
-                System.currentTimeMillis().toString() + "     " + renderList.map { item ->
-                    when (item.shape) {
-                        is PathF -> "PathsF " + item.shape.vertices.size.toString()
-                        is PolygonF -> "PolygonF " + item.shape.vertices.size.toString()
-                        else -> "Unknown"
-                    }
-                }.toString()
-            )
+            val message = "Preparing render list: " + renderList.map { item ->
+                when (item.shape) {
+                    is PathF -> "PathsF " + item.shape.vertices.size
+                    is PolygonF -> "PolygonF " + item.shape.vertices.size
+                    else -> "Unknown"
+                }
+            }
+            Timber.v(message)
         }
     }
 

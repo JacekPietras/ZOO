@@ -19,6 +19,6 @@ open class BaseViewModel<S, VS>(
         get() = state.safeValue
 
     protected fun updateState(reduce: S.() -> S) {
-        state.update { it.reduce() }
+        state.update { reduce(it) }
     }
 }

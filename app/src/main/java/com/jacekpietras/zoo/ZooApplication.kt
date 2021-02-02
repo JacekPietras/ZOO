@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.map.di.mapModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import timber.log.Timber
 
 class ZooApplication : Application() {
 
@@ -17,6 +18,10 @@ class ZooApplication : Application() {
             androidLogger()
             androidContext(this@ZooApplication)
             modules(dataModule + domainModule + mapModule)
+        }
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
         }
     }
 }

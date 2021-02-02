@@ -40,18 +40,14 @@ internal class ViewCoordinates(
         path
             .vertices
             .cutOut { a, b -> visibleRect.containsLine(a, b) }
-            .map { it.map { point -> transform(point).toPointF() } }
-            .map { PathF(it) }
+            .map { PathF(it.map { point -> transform(point).toPointF() }) }
 
     fun transform(polygon: PolygonF): PolygonF? =
-        if (intersects(polygon)) {
+        if (polygon.intersects(visibleRect)) {
             PolygonF(polygon.vertices.map { point -> transform(point).toPointF() })
         } else {
             null
         }
-
-    private fun intersects(polygon: PolygonF): Boolean =
-        polygon.intersects(visibleRect)
 
     private fun transform(p: PointF): Point =
         Point(

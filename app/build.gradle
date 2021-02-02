@@ -19,11 +19,11 @@ android {
 
 dependencies {
     implementation project(':core')
+    implementation project(':domain')
+    implementation project(':data')
     implementation project(':catalogue')
     implementation project(':map')
     implementation project(':planner')
-    implementation project(':data')
-    implementation project(':domain')
 
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"

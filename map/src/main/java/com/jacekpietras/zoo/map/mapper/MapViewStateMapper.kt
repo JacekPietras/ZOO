@@ -11,7 +11,7 @@ internal class MapViewStateMapper {
 
     fun from(state: MapState): MapViewState =
         MapViewState(
-            state.buildings.map { polygon ->
+            mapData = state.buildings.map { polygon ->
                 MapItem(
                     PolygonF(polygon.vertices.map {
                         PointF(it.lat.toFloat(), it.lon.toFloat())
@@ -25,6 +25,7 @@ internal class MapViewStateMapper {
                     }),
                     state.roadPaint
                 )
-            }
+            },
+            userPosition = state.userPosition,
         )
 }

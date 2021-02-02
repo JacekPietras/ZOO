@@ -15,6 +15,7 @@ val mapModule = module {
         MapViewModel(
             viewStateMapper = get(),
             getMapDataUseCase = get(),
+            getUserPosition = get(),
         )
     }
 }
