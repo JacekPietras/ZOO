@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
+import com.jacekpietras.zoo.domain.model.LatLon
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.model.DrawableOnCanvas
 import com.jacekpietras.zoo.map.model.PathF
@@ -50,6 +51,12 @@ internal class MapView @JvmOverloads constructor(
                 }
             cutOutNotVisible()
             invalidate()
+        }
+
+    var userPosition: LatLon? = null
+        set(value) {
+            Timber.v("Position changed ${value?.lat}")
+            field = value
         }
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates

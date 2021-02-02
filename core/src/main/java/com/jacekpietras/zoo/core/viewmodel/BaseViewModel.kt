@@ -12,13 +12,14 @@ open class BaseViewModel<S, VS>(
     mapper: (S) -> VS,
 ) : ViewModel() {
 
-    private val state: MutableLiveData<S> = MutableLiveData(initialState)
-    val viewState: LiveData<VS> = Transformations.map(state, mapper)
-
-    protected val currentState: S
-        get() = state.safeValue
-
-    protected fun updateState(reduce: S.() -> S) {
-        state.update { reduce(it) }
-    }
+//    private val state: MutableLiveData<S> = MutableLiveData(initialState)
+////    val viewState: LiveData<VS> = Transformations.map(state, mapper)
+//    val viewState: VS = mapper(state)
+//
+//    protected val currentState: S
+//        get() = state.safeValue
+//
+//    protected fun updateState(reduce: S.() -> S) {
+//        state.update { reduce(it) }
+//    }
 }
