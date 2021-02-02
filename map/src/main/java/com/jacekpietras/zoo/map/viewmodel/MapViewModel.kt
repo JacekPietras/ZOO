@@ -2,18 +2,17 @@
 
 package com.jacekpietras.zoo.map.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
+import com.jacekpietras.zoo.core.extensions.catchAndLog
 import com.jacekpietras.zoo.core.viewmodel.BaseViewModel
 import com.jacekpietras.zoo.domain.interactor.GetMapDataUseCase
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
+import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapState
 import com.jacekpietras.zoo.map.model.MapViewState
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -38,12 +37,8 @@ internal class MapViewModel(
                         )
                     }
                 }
-                .catch { Log.e(tag, it.toString()) }
+                .catchAndLog()
                 .launchIn(this)
         }
-    }
-
-    companion object {
-        private val tag = MapViewModel::class.java.simpleName
     }
 }

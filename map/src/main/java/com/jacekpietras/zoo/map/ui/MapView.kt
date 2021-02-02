@@ -1,15 +1,20 @@
 package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PointF
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.Log
-import androidx.core.graphics.contains
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
-import androidx.core.graphics.toRectF
 import com.jacekpietras.zoo.map.BuildConfig
-import com.jacekpietras.zoo.map.model.*
+import com.jacekpietras.zoo.map.model.DrawableOnCanvas
+import com.jacekpietras.zoo.map.model.PathF
+import com.jacekpietras.zoo.map.model.PolygonF
+import com.jacekpietras.zoo.map.model.ViewCoordinates
+import com.jacekpietras.zoo.map.utils.drawPath
 import kotlin.math.sqrt
 
 internal class MapView @JvmOverloads constructor(
@@ -23,9 +28,25 @@ internal class MapView @JvmOverloads constructor(
             field = value
             centerGpsCoordinate = PointF(worldRectangle.centerX(), worldRectangle.centerY())
         }
+    private var _objectList: List<RenderItem> = emptyList()
     var objectList: List<MapItem> = emptyList()
         set(value) {
             field = value
+            _objectList =
+                value.map { item ->
+                    when (item.shape) {
+                        is PathF -> RenderItem(
+                            item.shape,
+                            item.paint.toCanvasPaint(context)
+                        )
+                        is PolygonF -> RenderItem(
+                            item.shape,
+                            item.paint.toCanvasPaint(context),
+                            item.onClick
+                        )
+                        else -> throw IllegalStateException("Unknown shape type ${item.shape}")
+                    }
+                }
             cutOutNotVisible()
             invalidate()
         }
@@ -59,16 +80,12 @@ internal class MapView @JvmOverloads constructor(
     override fun onClick(x: Float, y: Float) {
         val point = PointF(x, y)
         renderList.forEach { item ->
-            when (item.shape) {
-                is Rect -> {
-                    if (item.onClick != null && item.shape.toRectF().contains(point)) {
-                        item.onClick.invoke(x, y)
+            item.onClick?.let {
+                when (item.shape) {
+                    is PolygonF -> if (item.shape.contains(point)) {
+                        it.invoke(x, y)
                     }
-                }
-                is PolygonF -> {
-                    if (item.onClick != null && item.shape.contains(point)) {
-                        item.onClick.invoke(x, y)
-                    }
+                    else -> throw IllegalStateException("Unknown shape type ${item.shape}")
                 }
             }
         }
@@ -79,8 +96,7 @@ internal class MapView @JvmOverloads constructor(
 
         renderList.forEach { item ->
             when (item.shape) {
-                is Rect -> canvas.drawRect(item.shape, item.paint)
-                is PathsF -> canvas.drawPath(item.shape, item.paint)
+                is PathF -> canvas.drawPath(item.shape, item.paint)
                 is PolygonF -> canvas.drawPath(item.shape, item.paint)
                 else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
@@ -121,31 +137,6 @@ internal class MapView @JvmOverloads constructor(
         return result
     }
 
-    private fun transform(item: MapItem): MapItem =
-        @Suppress("IMPLICIT_CAST_TO_ANY")
-        when (item.shape) {
-            is PointF -> MapItem(
-                visibleGpsCoordinate.transform(item.shape),
-                item.paint,
-            )
-            is RectF -> MapItem(
-                visibleGpsCoordinate.transform(item.shape),
-                item.paint,
-                item.onClick,
-            )
-            is PolygonF -> MapItem(
-                visibleGpsCoordinate.transform(item.shape),
-                item.paint,
-                item.onClick,
-            )
-            is PathF -> MapItem(
-                visibleGpsCoordinate.transform(item.shape),
-                item.paint,
-            )
-            else -> throw IllegalStateException("Unknown shape type ${item.shape}")
-        }
-
-
     private fun cutOutNotVisible() {
         visibleGpsCoordinate = ViewCoordinates.create(
             centerGpsCoordinate,
@@ -159,27 +150,35 @@ internal class MapView @JvmOverloads constructor(
             return
         }
 
-        renderList = objectList
-            .asSequence()
-            .filter { item ->
-                when (item.shape) {
-                    is PointF -> visibleGpsCoordinate.contains(item.shape)
-                    is RectF -> visibleGpsCoordinate.intersects(item.shape)
-                    is PolygonF -> visibleGpsCoordinate.intersects(item.shape)
-                    is PathF -> true
-                    else -> throw IllegalStateException("Unknown shape type ${item.shape}")
-                }
-            }
-            .map(::transform)
-            .filter { item ->
-                when (item.shape) {
-                    is PathsF -> item.shape.list.isNotEmpty()
-                    else -> true
-                }
-            }
-            .map { item -> RenderItem(item.shape, item.paint.toCanvasPaint(context)) }
-            .toList()
+        val temp = mutableListOf<RenderItem>()
 
+        _objectList.forEach { item ->
+            when (item.shape) {
+                is PolygonF -> {
+                    visibleGpsCoordinate.transform(item.shape)?.let {
+                        temp.add(
+                            RenderItem(
+                                PolygonF(it.vertices),
+                                item.paint,
+                                item.onClick
+                            )
+                        )
+                    }
+                }
+                is PathF -> {
+                    visibleGpsCoordinate.transform(item.shape).forEach {
+                        temp.add(
+                            RenderItem(
+                                PathF(it.vertices),
+                                item.paint
+                            )
+                        )
+                    }
+                }
+            }
+        }
+
+        renderList = temp
         logVisibleShapes()
     }
 
@@ -189,12 +188,8 @@ internal class MapView @JvmOverloads constructor(
                 "dupa",
                 System.currentTimeMillis().toString() + "     " + renderList.map { item ->
                     when (item.shape) {
-                        is RectF -> "RectF"
-                        is PointF -> "PointF"
-                        is Rect -> "Rect"
-                        is Point -> "Point"
-                        is PathsF -> "PathsF " + item.shape.list.map { it.size }.toString()
-                        is PolygonF -> "PolygonF " + item.shape.list.size.toString()
+                        is PathF -> "PathsF " + item.shape.vertices.size.toString()
+                        is PolygonF -> "PolygonF " + item.shape.vertices.size.toString()
                         else -> "Unknown"
                     }
                 }.toString()
@@ -203,8 +198,8 @@ internal class MapView @JvmOverloads constructor(
     }
 
     private class RenderItem(
-        val shape: Any,
+        val shape: DrawableOnCanvas,
         val paint: Paint,
-        val onClick: ((Float, Float) -> Unit)? = null,
+        val onClick: ((x: Float, y: Float) -> Unit)? = null,
     )
 }

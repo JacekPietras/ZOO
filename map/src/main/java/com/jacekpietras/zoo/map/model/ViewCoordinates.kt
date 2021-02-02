@@ -2,12 +2,10 @@ package com.jacekpietras.zoo.map.model
 
 import android.graphics.Point
 import android.graphics.PointF
-import android.graphics.Rect
 import android.graphics.RectF
-import androidx.core.graphics.contains
 import androidx.core.graphics.toPointF
-import com.jacekpietras.zoo.map.containsLine
 import com.jacekpietras.zoo.map.cutOut
+import com.jacekpietras.zoo.map.utils.containsLine
 
 internal class ViewCoordinates(
     val visibleRect: RectF,
@@ -38,36 +36,26 @@ internal class ViewCoordinates(
         }
     }
 
-    fun transform(rect: RectF): Rect =
-        Rect(
-            ((rect.left - visibleRect.left) * horizontalScale).toInt(),
-            ((rect.top - visibleRect.top) * verticalScale).toInt(),
-            ((rect.right - visibleRect.left) * horizontalScale).toInt(),
-            ((rect.bottom - visibleRect.top) * verticalScale).toInt()
-        )
+    fun transform(path: PathF): List<PathF> =
+        path
+            .vertices
+            .cutOut { a, b -> visibleRect.containsLine(a, b) }
+            .map { it.map { point -> transform(point).toPointF() } }
+            .map { PathF(it) }
 
-    fun transform(p: PointF): Point =
+    fun transform(polygon: PolygonF): PolygonF? =
+        if (intersects(polygon)) {
+            PolygonF(polygon.vertices.map { point -> transform(point).toPointF() })
+        } else {
+            null
+        }
+
+    private fun intersects(polygon: PolygonF): Boolean =
+        polygon.intersects(visibleRect)
+
+    private fun transform(p: PointF): Point =
         Point(
             ((p.x - visibleRect.left) * horizontalScale).toInt(),
             ((p.y - visibleRect.top) * verticalScale).toInt()
         )
-
-    fun transform(path: PathF): PathsF =
-        PathsF(
-            path.list
-                .cutOut { a, b -> visibleRect.containsLine(a, b) }
-                .map { it.map { point -> transform(point).toPointF() } }
-        )
-
-    fun transform(polygon: PolygonF): PolygonF =
-        PolygonF(polygon.list.map { point -> transform(point).toPointF() })
-
-    fun intersects(rect: RectF): Boolean =
-        visibleRect.intersects(rect.left, rect.top, rect.right, rect.bottom)
-
-    fun intersects(polygon: PolygonF): Boolean =
-        polygon.intersects(visibleRect)
-
-    fun contains(p: PointF): Boolean =
-        visibleRect.contains(p)
 }
