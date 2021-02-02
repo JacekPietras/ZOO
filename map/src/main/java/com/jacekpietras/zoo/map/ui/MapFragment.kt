@@ -24,14 +24,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         setObservers()
     }
 
+    //todo those distinctUntilChanged are shit
     private fun setObservers() {
         viewModel.viewModelScope.launch {
-            viewModel.viewState.userPosition.distinctUntilChanged().collect {
+            viewModel.viewState.userPosition.distinctUntilChanged { old, new -> old == new }.collect {
                 binding.mapView.userPosition = it
             }
         }
         viewModel.viewModelScope.launch {
-            viewModel.viewState.mapData.distinctUntilChanged().collect {
+            viewModel.viewState.mapData.distinctUntilChanged { old, new -> old.size == new.size }.collect {
                 binding.mapView.objectList = it
             }
         }
