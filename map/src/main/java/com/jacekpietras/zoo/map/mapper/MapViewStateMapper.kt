@@ -7,12 +7,12 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.ui.MapItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 internal class MapViewStateMapper {
 
-    suspend fun from(state: MapState, viewState: MapViewState) {
+    fun from(state: MapState): MapViewState {
         val buildings: Flow<List<MapItem>> = combine(
             state.buildings,
             state.buildingPaint,
@@ -34,13 +34,12 @@ internal class MapViewStateMapper {
             taken,
         ) { a, b, c -> a + b + c }
 
-        complex.collect {
-            viewState.mapData.value = it
-        }
+        val userPosition = state.userPosition.map(::fromPosition)
 
-        state.userPosition.collect {
-            viewState.userPosition.value = fromPosition(it)
-        }
+        return MapViewState(
+            mapData = complex,
+            userPosition = userPosition,
+        )
     }
 
     private fun fromPosition(position: LatLon): LatLon =
