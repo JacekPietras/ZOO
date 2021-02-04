@@ -1,13 +1,13 @@
 package com.jacekpietras.zoo.domain.interactor
 
-import com.jacekpietras.zoo.domain.model.MapItemEntity
+import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetMapDataUseCase(
+class GetRoadsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    suspend operator fun invoke(): Flow<List<MapItemEntity>> =
-        mapRepository.getMapDataUseCase()
+    operator fun invoke(): Flow<List<PathEntity>> =
+        mapRepository.getRoadsUseCase()
 }

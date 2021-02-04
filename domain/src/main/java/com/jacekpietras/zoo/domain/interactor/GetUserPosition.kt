@@ -14,8 +14,8 @@ class GetUserPosition {
             while (true) {
                 emit(
                     LatLon(
-                        lat = 5 + sin(System.currentTimeMillis() / 10000000.0),
-                        lon = 5 + cos(System.currentTimeMillis() / 10000000.0),
+                        lat = 5 + sin(System.currentTimeMillis() / 1000.0),
+                        lon = 5 + cos(System.currentTimeMillis() / 1000.0),
                     )
                 )
                 delay(500)

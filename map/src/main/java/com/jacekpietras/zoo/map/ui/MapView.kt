@@ -34,21 +34,7 @@ internal class MapView @JvmOverloads constructor(
         set(value) {
             Timber.v("Content changed")
             field = value
-            _objectList =
-                value.map { item ->
-                    when (item.shape) {
-                        is PathF -> RenderItem(
-                            item.shape,
-                            item.paint.toCanvasPaint(context)
-                        )
-                        is PolygonF -> RenderItem(
-                            item.shape,
-                            item.paint.toCanvasPaint(context),
-                            item.onClick
-                        )
-                        else -> throw IllegalStateException("Unknown shape type ${item.shape}")
-                    }
-                }
+            _objectList = value.toRenderItems()
             cutOutNotVisible()
             invalidate()
         }
@@ -111,6 +97,21 @@ internal class MapView @JvmOverloads constructor(
         }
     }
 
+    private fun List<MapItem>.toRenderItems(): List<RenderItem> = map { item ->
+        when (item.shape) {
+            is PathF -> RenderItem(
+                item.shape,
+                item.paint.toCanvasPaint(context)
+            )
+            is PolygonF -> RenderItem(
+                item.shape,
+                item.paint.toCanvasPaint(context),
+                item.onClick
+            )
+            else -> throw IllegalStateException("Unknown shape type ${item.shape}")
+        }
+    }
+
     private fun preventedGoingOutsideWorld(): Boolean {
         val leftMargin = visibleGpsCoordinate.visibleRect.left - worldRectangle.left
         val rightMargin = worldRectangle.right - visibleGpsCoordinate.visibleRect.right
@@ -146,6 +147,8 @@ internal class MapView @JvmOverloads constructor(
     }
 
     private fun cutOutNotVisible() {
+        if (width == 0 || height == 0) return
+
         visibleGpsCoordinate = ViewCoordinates.create(
             centerGpsCoordinate,
             zoom,
