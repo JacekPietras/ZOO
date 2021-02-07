@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="location_service_notification_title">Tracking GPS location</string>
+    <string name="location_service_notification_description">Navigate inside ZOO. It will stop when you leave us.</string>
+    <string name="notification_channel_name">Zoo Application</string>
+    <string name="notification_channel_description">Foreground services of Zoo App</string>
+    <string name="location_service_stop_text">Stop tracking</string>
+</resources>

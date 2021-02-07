@@ -1,6 +1,11 @@
 apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
+apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation project(':domain')
+
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }

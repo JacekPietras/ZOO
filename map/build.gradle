@@ -5,6 +5,7 @@ apply from: "$rootDir/presentation.gradle"
 dependencies {
     implementation project(':core')
     implementation project(':domain')
+    implementation project(':tracking')
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"

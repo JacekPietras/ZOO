@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.map.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,12 +11,15 @@ import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.databinding.FragmentMapBinding
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
+import com.jacekpietras.zoo.tracking.GpsPermissionChecker
+import com.jacekpietras.zoo.tracking.GpsPermissionChecker.Callback
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val viewModel by viewModel<MapViewModel>()
     private val binding: FragmentMapBinding by viewBinding(FragmentMapBinding::bind)
+    private val permissionChecker = GpsPermissionChecker(fragment = this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +46,19 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun setListeners() = with(binding) {
         uploadButton.setOnClickListener { viewModel.onUploadClicked() }
-        myLocationButton.setOnClickListener { viewModel.onMyLocationClicked() }
+        myLocationButton.setOnClickListener {
+            permissionChecker.checkPermissions(
+                Callback(
+                    onDescriptionNeeded = { toast("description needed $it") },
+                    onFailed = { toast("failed") },
+                    onPermission = { toast("success") },
+                    onRequested = { toast("requested $it") },
+                )
+            )
+        }
+    }
+
+    private fun toast(text: String) {
+        Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
     }
 }

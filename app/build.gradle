@@ -25,6 +25,7 @@ dependencies {
     implementation project(':map')
     implementation project(':planner')
     implementation project(':logger')
+    implementation project(':tracking')
 
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"
@@ -35,4 +36,5 @@ dependencies {
 
     //Memory Leak finder
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+
 }

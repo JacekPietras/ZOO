@@ -6,7 +6,7 @@ import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
 import com.jacekpietras.zoo.domain.interactor.GetBuildingsUseCase
 import com.jacekpietras.zoo.domain.interactor.GetRoadsUseCase
-import com.jacekpietras.zoo.domain.interactor.GetUserPosition
+import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapEffect
@@ -18,12 +18,12 @@ internal class MapViewModel(
     getBuildingsUseCase: GetBuildingsUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     getRoadsUseCase: GetRoadsUseCase,
-    getUserPosition: GetUserPosition,
+    getUserPositionUseCase: GetUserPositionUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
     private val state = MapState(
-        userPosition = getUserPosition(),
+        userPosition = getUserPositionUseCase(),
         buildings = getBuildingsUseCase(),
         roads = getRoadsUseCase()
     )
