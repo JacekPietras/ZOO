@@ -2,4 +2,5 @@
 <resources>
     <string name="around_you">Around you</string>
     <string name="my_location">My location</string>
+    <string name="upload">Upload</string>
 </resources>

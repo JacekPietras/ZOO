@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -73,17 +73,28 @@
         <com.jacekpietras.zoo.map.ui.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/uploadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/upload"
+            android:src="@drawable/ic_upload_24"
+            app:backgroundTint="?colorSurface"
+            app:tint="?colorOnSurface" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
-            app:tint="?colorOnSurface"
-            app:backgroundTint="?colorSurface"
             android:contentDescription="@string/my_location"
-            android:src="@drawable/ic_my_location_24" />
+            android:src="@drawable/ic_my_location_24"
+            app:backgroundTint="?colorSurface"
+            app:tint="?colorOnSurface" />
 
     </FrameLayout>
 </LinearLayout>

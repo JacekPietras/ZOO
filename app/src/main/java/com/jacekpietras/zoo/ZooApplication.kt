@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo
 
 import android.app.Application
+import com.jacekpietras.logger.DebugUtilsContextHolder
 import com.jacekpietras.zoo.data.di.dataModule
 import com.jacekpietras.zoo.domain.di.domainModule
 import com.jacekpietras.zoo.map.di.mapModule
@@ -9,6 +10,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
+@Suppress("unused")
 class ZooApplication : Application() {
 
     override fun onCreate() {
@@ -20,8 +22,16 @@ class ZooApplication : Application() {
             modules(dataModule + domainModule + mapModule)
         }
 
+        DebugUtilsContextHolder.init(this)
+
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        Timber.plant(FileLoggingTree())
+    }
+
+    override fun onTerminate() {
+        DebugUtilsContextHolder.destroy()
+        super.onTerminate()
     }
 }

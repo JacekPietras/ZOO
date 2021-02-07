@@ -24,6 +24,7 @@ dependencies {
     implementation project(':catalogue')
     implementation project(':map')
     implementation project(':planner')
+    implementation project(':logger')
 
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"

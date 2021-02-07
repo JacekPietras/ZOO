@@ -1,3 +1,4 @@
+include ':logger'
 include ':core'
 include ':planner'
 include ':map'
