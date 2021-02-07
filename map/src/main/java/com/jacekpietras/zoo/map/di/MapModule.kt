@@ -17,6 +17,7 @@ val mapModule = module {
             getBuildingsUseCase = get(),
             getRoadsUseCase = get(),
             getUserPosition = get(),
+            uploadHistoryUseCase = get(),
         )
     }
 }
