@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
@@ -37,14 +39,25 @@ class GpsPermissionChecker(private val fragment: Fragment) {
             if (isGranted.filter { it.value }.isNotEmpty()) checkPermissions(callbacks)
             else callbacks.onFailed()
         }
-//    private val storeResult =
-//        fragment.registerForActivityResult(RequestMultiplePermissions()) { isGranted ->
-//            if (isGranted.filter { it.value }.isNotEmpty()) checkPermissions(callbacks)
-//            else callbacks.onFailed()
-//        }
     private lateinit var callbacks: Callback
 
-    fun checkPermissions(callbacks: Callback) {
+    fun checkPermissions(
+        onDescriptionNeeded: (String) -> Unit,
+        onPermission: () -> Unit,
+        onFailed: () -> Unit,
+        onRequested: (Int) -> Unit,
+    ) {
+        checkPermissions(
+            Callback(
+                onDescriptionNeeded = onDescriptionNeeded,
+                onFailed = onFailed,
+                onPermission = onPermission,
+                onRequested = onRequested,
+            )
+        )
+    }
+
+    private fun checkPermissions(callbacks: Callback) {
         this.callbacks = callbacks
         this.activity = fragment.requireActivity().unwrap()
         when {
@@ -117,7 +130,7 @@ class GpsPermissionChecker(private val fragment: Fragment) {
             val settingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             settingsIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             activity.startActivity(settingsIntent)
-            callbacks.onRequested(SETTING_ACTIVITY)
+            observeReturn()
         } else {
             // playServicesAvailable - there are no play services installed,
             // maybe this is device without possibility of it
@@ -127,7 +140,7 @@ class GpsPermissionChecker(private val fragment: Fragment) {
                 val result = googleAPI.isGooglePlayServicesAvailable(activity)
                 if (result != ConnectionResult.SUCCESS && googleAPI.isUserResolvableError(result)) {
                     showErrorDialog(googleAPI, result)
-                    callbacks.onRequested(PLAY_SERVICES_RESOLUTION_REQUEST)
+                    observeReturn()
                 } else {
                     callbacks.onFailed()
                 }
@@ -189,10 +202,27 @@ class GpsPermissionChecker(private val fragment: Fragment) {
         throw IllegalArgumentException("AppCompatActivity required")
     }
 
+    private fun observeReturn() {
+        fragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            private var stopped = false
+
+            override fun onStop(owner: LifecycleOwner) {
+                super.onStop(owner)
+                stopped = true
+            }
+
+            override fun onResume(owner: LifecycleOwner) {
+                if (stopped) {
+                    checkPermissions(callbacks)
+                    fragment.lifecycle.removeObserver(this)
+                }
+            }
+        })
+    }
+
     companion object {
         const val PLAY_SERVICES_RESOLUTION_REQUEST = 6670
         const val REQUEST_CHECK_SETTINGS = 6680
-        const val SETTING_ACTIVITY = 6690
     }
 
     class Callback(

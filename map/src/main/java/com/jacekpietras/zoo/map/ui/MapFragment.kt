@@ -13,7 +13,6 @@ import com.jacekpietras.zoo.map.databinding.FragmentMapBinding
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionChecker
-import com.jacekpietras.zoo.tracking.GpsPermissionChecker.Callback
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
@@ -30,18 +29,20 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         setListeners()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+        if (checkInProgress == requestCode && resultCode == RESULT_OK) {
+            checkGpsPermission()
+        }
+    }
+
     private fun setObservers() = with(viewModel.viewState) {
         observe(userPosition) { binding.mapView.userPosition = it }
         observe(mapData) { binding.mapView.objectList = it }
         observe(effect) {
             when (it) {
-                is MapEffect.ShowToast -> {
-                    Toast.makeText(
-                        requireContext(),
-                        it.text,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                is MapEffect.ShowToast -> toast(it.text)
             }
         }
     }
@@ -51,27 +52,17 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         myLocationButton.setOnClickListener { checkGpsPermission() }
     }
 
-    fun checkGpsPermission() {
+    private fun checkGpsPermission() {
         checkInProgress = 0
         permissionChecker.checkPermissions(
-            Callback(
-                onDescriptionNeeded = { toast("description needed $it") },
-                onFailed = { toast("failed") },
-                onPermission = { toast("success") },
-                onRequested = {
-                    toast("requested $it")
-                    checkInProgress = it
-                },
-            )
+            onDescriptionNeeded = { toast("description needed $it") },
+            onFailed = { toast("failed") },
+            onPermission = { toast("success") },
+            onRequested = {
+                toast("requested $it")
+                checkInProgress = it
+            },
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-        if (checkInProgress == requestCode && resultCode == RESULT_OK) {
-            checkGpsPermission()
-        }
     }
 
     private fun toast(text: String) {
