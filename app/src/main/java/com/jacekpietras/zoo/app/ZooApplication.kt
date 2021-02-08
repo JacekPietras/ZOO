@@ -1,8 +1,10 @@
-package com.jacekpietras.zoo
+package com.jacekpietras.zoo.app
 
 import android.app.Application
 import com.jacekpietras.logger.DebugUtilsContextHolder
 import com.jacekpietras.logger.LogSupport
+import com.jacekpietras.zoo.BuildConfig
+import com.jacekpietras.zoo.app.di.appModule
 import com.jacekpietras.zoo.data.di.dataModule
 import com.jacekpietras.zoo.domain.di.domainModule
 import com.jacekpietras.zoo.map.di.mapModule
@@ -20,7 +22,7 @@ class ZooApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@ZooApplication)
-            modules(dataModule + domainModule + mapModule)
+            modules(dataModule + domainModule + mapModule + appModule)
         }
 
         if (BuildConfig.DEBUG) {

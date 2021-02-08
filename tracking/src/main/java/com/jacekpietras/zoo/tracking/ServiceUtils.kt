@@ -13,7 +13,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.jacekpietras.zoo.tracking.TrackingService.Companion.ACTION_STOP_SERVICE
 import timber.log.Timber
 

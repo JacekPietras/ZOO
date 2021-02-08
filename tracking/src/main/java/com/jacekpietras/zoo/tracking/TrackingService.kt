@@ -7,11 +7,6 @@ import android.content.Intent
 import android.location.LocationManager
 import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
-import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
-import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -20,15 +15,13 @@ class TrackingService : Service() {
 
     //TODO try listener from google play
 
-    val insertUserPositionUseCase: InsertUserPositionUseCase by inject()
+    val onLocationUpdate: OnLocationUpdate by inject()
 
     private var serviceUtils: ServiceUtils? = null
     private var locationManager: LocationManager? = null
     private val gpsLocationListener = GpsLocationListenerCompat(
         onLocationChanged = { time, lat, lon ->
-            CoroutineScope(Dispatchers.IO).launch {
-                insertUserPositionUseCase(GpsHistoryEntity(time, lat, lon))
-            }
+            onLocationUpdate(time, lat, lon)
         },
         onGpsStatusChanged = { enabled ->
             if (enabled) Timber.i("Gps Status Enabled (a)")

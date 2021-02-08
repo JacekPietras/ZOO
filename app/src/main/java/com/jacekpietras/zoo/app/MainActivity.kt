@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo
+package com.jacekpietras.zoo.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.jacekpietras.zoo.R
 import com.jacekpietras.zoo.core.binding.viewBinding
 import com.jacekpietras.zoo.databinding.ActivityMainBinding
 

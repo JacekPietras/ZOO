@@ -2,13 +2,8 @@ apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
 
 dependencies {
-    implementation project(':domain')
-
-    // for automatically connecting with native gps
     implementation "com.google.android.gms:play-services-location:$gms_version"
-    implementation "com.google.android.gms:play-services-gcm:$gms_version"
 
-    implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycle_version}"

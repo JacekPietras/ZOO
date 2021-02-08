@@ -22,7 +22,7 @@ class GpsLocationListenerCompat(
     private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
 ) {
 
-    private val haveGooglePlay = true
+    private val haveGooglePlay = false
 
     fun addLocationListener(context: Context) {
         if (haveGooglePlay) addListenerWithGMS(context)
@@ -148,6 +148,5 @@ class GpsLocationListenerCompat(
         locationCallback = null
         fusedLocationClient = null
     }
-
     //endregion
 }
