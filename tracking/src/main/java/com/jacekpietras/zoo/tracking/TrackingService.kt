@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.location.LocationManager
 import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
 import org.koin.android.ext.android.inject
@@ -13,12 +12,8 @@ import timber.log.Timber
 @SuppressLint("Registered")
 class TrackingService : Service() {
 
-    //TODO try listener from google play
-
-    val onLocationUpdate: OnLocationUpdate by inject()
-
+    private val onLocationUpdate: OnLocationUpdate by inject()
     private var serviceUtils: ServiceUtils? = null
-    private var locationManager: LocationManager? = null
     private val gpsLocationListener = GpsLocationListenerCompat(
         onLocationChanged = { time, lat, lon ->
             onLocationUpdate(time, lat, lon)
@@ -68,7 +63,6 @@ class TrackingService : Service() {
     private fun navigationStart() {
         if (gpsLocationListener.noPermissions(this)) return
 
-        locationManager = getSystemService(LOCATION_SERVICE) as? LocationManager
         gpsLocationListener.addLocationListener(this)
         gpsStatusListener.addStatusListener(this)
     }
