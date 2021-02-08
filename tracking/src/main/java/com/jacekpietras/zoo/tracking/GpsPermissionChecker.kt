@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.tracking
 
 import android.Manifest.permission.*
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Context
 import android.content.ContextWrapper
@@ -12,7 +13,9 @@ import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.provider.Settings
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
@@ -39,20 +42,23 @@ class GpsPermissionChecker(private val fragment: Fragment) {
             if (isGranted.filter { it.value }.isNotEmpty()) checkPermissions(callbacks)
             else callbacks.onFailed()
         }
+    private val resolutionResult =
+        fragment.registerForActivityResult(StartIntentSenderForResult()) { isGranted ->
+            if (isGranted.resultCode == RESULT_OK) checkPermissions(callbacks)
+            else callbacks.onFailed()
+        }
     private lateinit var callbacks: Callback
 
     fun checkPermissions(
         onDescriptionNeeded: (String) -> Unit,
         onPermission: () -> Unit,
         onFailed: () -> Unit,
-        onRequested: (Int) -> Unit,
     ) {
         checkPermissions(
             Callback(
                 onDescriptionNeeded = onDescriptionNeeded,
                 onFailed = onFailed,
                 onPermission = onPermission,
-                onRequested = onRequested,
             )
         )
     }
@@ -111,8 +117,9 @@ class GpsPermissionChecker(private val fragment: Fragment) {
             try {
                 val resolvable = (e as? ResolvableApiException)
                 if (resolvable != null) {
-                    resolvable.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS)
-                    callbacks.onRequested(REQUEST_CHECK_SETTINGS)
+                    resolutionResult.launch(
+                        IntentSenderRequest.Builder(resolvable.resolution).build()
+                    )
                 } else {
                     callbacks.onFailed()
                 }
@@ -220,15 +227,13 @@ class GpsPermissionChecker(private val fragment: Fragment) {
         })
     }
 
-    companion object {
+    private companion object {
         const val PLAY_SERVICES_RESOLUTION_REQUEST = 6670
-        const val REQUEST_CHECK_SETTINGS = 6680
     }
 
     class Callback(
         val onDescriptionNeeded: (String) -> Unit,
         val onPermission: () -> Unit,
         val onFailed: () -> Unit,
-        val onRequested: (Int) -> Unit,
     )
 }
