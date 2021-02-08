@@ -9,10 +9,6 @@ import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
 import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
-import com.jacekpietras.zoo.tracking.GpsLocationListenerCompat.Companion.addLocationListener
-import com.jacekpietras.zoo.tracking.GpsLocationListenerCompat.Companion.removeLocationListener
-import com.jacekpietras.zoo.tracking.GpsStatusListenerCompat.Companion.addStatusListener
-import com.jacekpietras.zoo.tracking.GpsStatusListenerCompat.Companion.removeStatusListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,15 +76,15 @@ class TrackingService : Service() {
         if (gpsLocationListener.noPermissions(this)) return
 
         locationManager = getSystemService(LOCATION_SERVICE) as? LocationManager
-        locationManager?.addLocationListener(this, gpsLocationListener)
-        locationManager?.addStatusListener(gpsStatusListener)
+        gpsLocationListener.addLocationListener(this)
+        gpsStatusListener.addStatusListener(this)
     }
 
     private fun navigationStop() {
         serviceUtils?.removeNotification()
         stopForeground(true)
-        locationManager?.removeLocationListener(gpsLocationListener)
-        locationManager?.removeStatusListener(gpsStatusListener)
+        gpsLocationListener.removeLocationListener()
+        gpsStatusListener.removeStatusListener()
     }
 
     companion object {

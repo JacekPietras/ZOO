@@ -3,21 +3,43 @@ package com.jacekpietras.zoo.tracking
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
+import android.app.Service
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.location.LocationManager.*
-import androidx.core.content.ContextCompat
+import android.os.Looper
+import androidx.core.content.ContextCompat.checkSelfPermission
+import com.google.android.gms.location.*
 import timber.log.Timber
+
 
 @SuppressLint("MissingPermission")
 class GpsLocationListenerCompat(
-    onLocationChanged: (time: Long, lat: Double, lon: Double) -> Unit,
-    onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
+    private val onLocationChanged: (time: Long, lat: Double, lon: Double) -> Unit,
+    private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
 ) {
 
+    private val haveGooglePlay = true
+
+    fun addLocationListener(context: Context) {
+        if (haveGooglePlay) addListenerWithGMS(context)
+        else addListenerWithoutGMS(context)
+    }
+
+    fun removeLocationListener() {
+        if (haveGooglePlay) removeListenerWithGMS()
+        else removeListenerWithoutGMS()
+    }
+
+    fun noPermissions(context: Context): Boolean =
+        checkSelfPermission(context, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED &&
+                checkSelfPermission(context, ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED
+
+    //region Without Google Play
+    private var locationManager: LocationManager? = null
     private val locationListener = object : LocationListener {
 
         override fun onLocationChanged(location: Location) {
@@ -71,24 +93,61 @@ class GpsLocationListenerCompat(
         if (location != null) locationListener.onLocationChanged(location)
     }
 
-    fun noPermissions(context: Context): Boolean =
-        !granted(context, ACCESS_FINE_LOCATION) && !granted(context, ACCESS_COARSE_LOCATION)
-
-    private fun granted(context: Context, permission: String): Boolean =
-        ContextCompat.checkSelfPermission(context, permission) == PERMISSION_GRANTED
-
-    companion object {
-
-        fun LocationManager.addLocationListener(
-            context: Context,
-            listener: GpsLocationListenerCompat,
-        ): Boolean {
-            removeUpdates(listener.locationListener)
-            return listener.requestLocationUpdates(context, this)
-        }
-
-        fun LocationManager.removeLocationListener(listener: GpsLocationListenerCompat) {
-            removeUpdates(listener.locationListener)
+    private fun addListenerWithoutGMS(context: Context) {
+        locationManager = context.getSystemService(Service.LOCATION_SERVICE) as? LocationManager
+        locationManager?.let {
+            it.removeUpdates(locationListener)
+            requestLocationUpdates(context, it)
         }
     }
+
+    private fun removeListenerWithoutGMS() {
+        locationManager?.removeUpdates(locationListener)
+        locationManager = null
+    }
+    //endregion
+
+    //region With Google Play
+    private var fusedLocationClient: FusedLocationProviderClient? = null
+    private var locationCallback: LocationCallback? = null
+
+    private fun buildLocationRequest() =
+        LocationRequest().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 100
+            fastestInterval = 100
+            smallestDisplacement = 1f
+        }
+
+    private fun buildLocationCallBack() =
+        object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                for (location in locationResult.locations) {
+                    onLocationChanged(
+                        location.time,
+                        location.latitude,
+                        location.longitude,
+                    )
+                }
+            }
+        }
+
+    private fun addListenerWithGMS(context: Context) {
+        val client = LocationServices.getFusedLocationProviderClient(context)
+        fusedLocationClient = client
+        locationCallback = buildLocationCallBack()
+        client.requestLocationUpdates(
+            buildLocationRequest(),
+            locationCallback,
+            Looper.getMainLooper(),
+        )
+    }
+
+    private fun removeListenerWithGMS() {
+        fusedLocationClient?.removeLocationUpdates(locationCallback)
+        locationCallback = null
+        fusedLocationClient = null
+    }
+
+    //endregion
 }

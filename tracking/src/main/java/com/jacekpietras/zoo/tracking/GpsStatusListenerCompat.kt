@@ -4,6 +4,8 @@
 package com.jacekpietras.zoo.tracking
 
 import android.annotation.SuppressLint
+import android.app.Service
+import android.content.Context
 import android.location.GnssStatus
 import android.location.GpsStatus
 import android.location.LocationManager
@@ -12,6 +14,7 @@ import timber.log.Timber
 
 class GpsStatusListenerCompat(onStatusChanged: (enabled: Boolean) -> Unit) {
 
+    private var locationManager: LocationManager? = null
     private val statusListener: Any = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         object : GnssStatus.Callback() {
             override fun onSatelliteStatusChanged(status: GnssStatus) {
@@ -28,30 +31,29 @@ class GpsStatusListenerCompat(onStatusChanged: (enabled: Boolean) -> Unit) {
         }
     }
 
-    companion object {
-
-        fun LocationManager.addStatusListener(listener: GpsStatusListenerCompat) {
-            try {
-                if (listener.statusListener is GpsStatus.Listener) {
-                    addGpsStatusListener(listener.statusListener)
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-                    listener.statusListener is GnssStatus.Callback
-                ) {
-                    registerGnssStatusCallback(listener.statusListener)
-                }
-            } catch (e: SecurityException) {
-                Timber.w(e, "Location permissions not granted")
-            }
-        }
-
-        fun LocationManager.removeStatusListener(listener: GpsStatusListenerCompat) {
-            if (listener.statusListener is GpsStatus.Listener) {
-                removeGpsStatusListener(listener.statusListener)
+    fun addStatusListener(context: Context) {
+        locationManager = context.getSystemService(Service.LOCATION_SERVICE) as? LocationManager
+        try {
+            if (statusListener is GpsStatus.Listener) {
+                locationManager?.addGpsStatusListener(statusListener)
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-                listener.statusListener is GnssStatus.Callback
+                statusListener is GnssStatus.Callback
             ) {
-                unregisterGnssStatusCallback(listener.statusListener)
+                locationManager?.registerGnssStatusCallback(statusListener)
             }
+        } catch (e: SecurityException) {
+            Timber.w(e, "Location permissions not granted")
         }
+    }
+
+    fun removeStatusListener() {
+        if (statusListener is GpsStatus.Listener) {
+            locationManager?.removeGpsStatusListener(statusListener)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+            statusListener is GnssStatus.Callback
+        ) {
+            locationManager?.unregisterGnssStatusCallback(statusListener)
+        }
+        locationManager = null
     }
 }
