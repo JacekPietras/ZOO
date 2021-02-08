@@ -35,7 +35,7 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.tasks.Task
 
-class GpsPermissionChecker(private val fragment: Fragment) {
+class GpsPermissionRequester(private val fragment: Fragment) {
 
     private lateinit var activity: AppCompatActivity
     private var promptForUpdatePlayServicesWasShown = false
@@ -241,9 +241,7 @@ class GpsPermissionChecker(private val fragment: Fragment) {
     }
 
     private fun havePermissions(): Boolean =
-        granted(ACCESS_FINE_LOCATION) &&
-                granted(ACCESS_COARSE_LOCATION) &&
-                (SDK_INT < VERSION_CODES.Q || granted(ACCESS_BACKGROUND_LOCATION))
+        granted(ACCESS_FINE_LOCATION) && granted(ACCESS_COARSE_LOCATION)
 
     private fun granted(permission: String): Boolean =
         ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED

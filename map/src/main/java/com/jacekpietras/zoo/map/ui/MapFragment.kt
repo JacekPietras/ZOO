@@ -11,14 +11,14 @@ import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.databinding.FragmentMapBinding
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
-import com.jacekpietras.zoo.tracking.GpsPermissionChecker
+import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val viewModel by viewModel<MapViewModel>()
     private val binding: FragmentMapBinding by viewBinding(FragmentMapBinding::bind)
-    private val permissionChecker = GpsPermissionChecker(fragment = this)
+    private val permissionChecker = GpsPermissionRequester(fragment = this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

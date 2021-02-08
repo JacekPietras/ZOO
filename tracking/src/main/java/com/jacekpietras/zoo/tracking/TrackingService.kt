@@ -1,20 +1,18 @@
 package com.jacekpietras.zoo.tracking
 
-import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.location.*
-import android.location.LocationManager.*
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES
+import android.location.LocationManager
 import android.os.IBinder
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startForegroundService
 import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
+import com.jacekpietras.zoo.tracking.GpsLocationListenerCompat.Companion.addLocationListener
+import com.jacekpietras.zoo.tracking.GpsLocationListenerCompat.Companion.removeLocationListener
+import com.jacekpietras.zoo.tracking.GpsStatusListenerCompat.Companion.addStatusListener
+import com.jacekpietras.zoo.tracking.GpsStatusListenerCompat.Companion.removeStatusListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,47 +24,25 @@ class TrackingService : Service() {
 
     //TODO try listener from google play
 
+    val insertUserPositionUseCase: InsertUserPositionUseCase by inject()
+
     private var serviceUtils: ServiceUtils? = null
     private var locationManager: LocationManager? = null
-    private val locationListener = object : LocationListener {
-
-        override fun onLocationChanged(location: Location) {
+    private val gpsLocationListener = GpsLocationListenerCompat(
+        onLocationChanged = { time, lat, lon ->
             CoroutineScope(Dispatchers.IO).launch {
-                insertUserPositionUseCase(
-                    GpsHistoryEntity(
-                        location.time,
-                        location.latitude,
-                        location.longitude
-                    )
-                )
+                insertUserPositionUseCase(GpsHistoryEntity(time, lat, lon))
             }
-        }
-
-        override fun onProviderDisabled(provider: String) {
-            Timber.i("Gps Status Disabled")
-        }
-
-        override fun onProviderEnabled(provider: String) {
-            Timber.i("Gps Status Enabled")
-        }
+        },
+        onGpsStatusChanged = { enabled ->
+            if (enabled) Timber.i("Gps Status Enabled (a)")
+            else Timber.i("Gps Status Disabled (a)")
+        },
+    )
+    private val gpsStatusListener = GpsStatusListenerCompat { enabled ->
+        if (enabled) Timber.i("Gps Status Enabled (b)")
+        else Timber.i("Gps Status Disabled (b)")
     }
-
-    @Suppress("DEPRECATION")
-    private val statusListener: Any = if (SDK_INT >= VERSION_CODES.N) {
-        object : GnssStatus.Callback() {
-            override fun onSatelliteStatusChanged(status: GnssStatus) {
-                Timber.i("Gps Status $status")
-            }
-        }
-    } else {
-        GpsStatus.Listener {
-            when (it) {
-                GpsStatus.GPS_EVENT_STARTED -> Timber.i("Gps Status STARTED")
-                GpsStatus.GPS_EVENT_STOPPED -> Timber.i("Gps Status STOPPED")
-            }
-        }
-    }
-    val insertUserPositionUseCase: InsertUserPositionUseCase by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -84,15 +60,12 @@ class TrackingService : Service() {
 
     override fun onDestroy() {
         navigationStop()
-        stopForeground(true)
-        serviceUtils?.removeNotification()
         super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (ACTION_STOP_SERVICE == intent?.action) {
             navigationStop()
-            stopForeground(true)
             stopSelf()
         } else {
             navigationStart()
@@ -103,69 +76,20 @@ class TrackingService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun navigationStart(): Boolean {
-        if (noPermissions()) return false
+    private fun navigationStart() {
+        if (gpsLocationListener.noPermissions(this)) return
 
         locationManager = getSystemService(LOCATION_SERVICE) as? LocationManager
-        if (locationManager == null) return false
-        locationManager?.removeUpdates(locationListener)
-
-        val providerFound = locationManager?.requestLocationUpdates() ?: false
-        if (!providerFound) return false
-
-        try {
-            @Suppress("DEPRECATION")
-            if (statusListener is GpsStatus.Listener) {
-                locationManager?.addGpsStatusListener(statusListener)
-            } else if (SDK_INT >= VERSION_CODES.N && statusListener is GnssStatus.Callback) {
-                locationManager?.registerGnssStatusCallback(statusListener)
-            }
-        } catch (e: SecurityException) {
-            Timber.w(e, "Location permissions not granted")
-            return false
-        }
-
-        return true
+        locationManager?.addLocationListener(this, gpsLocationListener)
+        locationManager?.addStatusListener(gpsStatusListener)
     }
 
     private fun navigationStop() {
-        locationManager?.removeUpdates(locationListener)
-        @Suppress("DEPRECATION")
-        if (statusListener is GpsStatus.Listener) {
-            locationManager?.removeGpsStatusListener(statusListener)
-        } else if (SDK_INT >= VERSION_CODES.N && statusListener is GnssStatus.Callback) {
-            locationManager?.unregisterGnssStatusCallback(statusListener)
-        }
+        serviceUtils?.removeNotification()
+        stopForeground(true)
+        locationManager?.removeLocationListener(gpsLocationListener)
+        locationManager?.removeStatusListener(gpsStatusListener)
     }
-
-    private fun LocationManager.requestLocationUpdates(): Boolean =
-        requestLocationUpdates(GPS_PROVIDER)
-                || requestLocationUpdates(NETWORK_PROVIDER)
-                || requestLocationUpdates(PASSIVE_PROVIDER)
-
-    @SuppressLint("MissingPermission")
-    private fun LocationManager.requestLocationUpdates(provider: String): Boolean {
-        when {
-            noPermissions() -> Timber.e("Permissions not granted")
-            allProviders.contains(provider) -> {
-                try {
-                    requestLocationUpdates(provider, 5000, 0f, locationListener)
-                    return true
-                } catch (e: NullPointerException) {
-                    Timber.w(e, "Location cannot be accessed")
-                } catch (e: IllegalArgumentException) {
-                    Timber.w(e, "Location cannot be accessed")
-                }
-            }
-        }
-        return false
-    }
-
-    private fun noPermissions(): Boolean =
-        !granted(permission.ACCESS_FINE_LOCATION) && !granted(permission.ACCESS_COARSE_LOCATION)
-
-    private fun granted(permission: String): Boolean =
-        ContextCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED
 
     companion object {
         const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
