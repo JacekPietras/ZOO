@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.map.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -20,6 +21,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private val viewModel by viewModel<MapViewModel>()
     private val binding: FragmentMapBinding by viewBinding(FragmentMapBinding::bind)
     private val permissionChecker = GpsPermissionChecker(fragment = this)
+    var checkInProgress: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,15 +48,29 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun setListeners() = with(binding) {
         uploadButton.setOnClickListener { viewModel.onUploadClicked() }
-        myLocationButton.setOnClickListener {
-            permissionChecker.checkPermissions(
-                Callback(
-                    onDescriptionNeeded = { toast("description needed $it") },
-                    onFailed = { toast("failed") },
-                    onPermission = { toast("success") },
-                    onRequested = { toast("requested $it") },
-                )
+        myLocationButton.setOnClickListener { checkGpsPermission() }
+    }
+
+    fun checkGpsPermission() {
+        checkInProgress = 0
+        permissionChecker.checkPermissions(
+            Callback(
+                onDescriptionNeeded = { toast("description needed $it") },
+                onFailed = { toast("failed") },
+                onPermission = { toast("success") },
+                onRequested = {
+                    toast("requested $it")
+                    checkInProgress = it
+                },
             )
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+        if (checkInProgress == requestCode && resultCode == RESULT_OK) {
+            checkGpsPermission()
         }
     }
 

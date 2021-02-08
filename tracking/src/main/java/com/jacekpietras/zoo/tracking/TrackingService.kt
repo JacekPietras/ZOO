@@ -6,10 +6,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.location.GnssStatus
-import android.location.GpsStatus
-import android.location.LocationListener
-import android.location.LocationManager
+import android.location.*
 import android.location.LocationManager.*
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
@@ -27,11 +24,30 @@ import timber.log.Timber
 @SuppressLint("Registered")
 class TrackingService : Service() {
 
+    //TODO try listener from google play
+
     private var serviceUtils: ServiceUtils? = null
     private var locationManager: LocationManager? = null
-    private val locationListener = LocationListener {
-        CoroutineScope(Dispatchers.IO).launch {
-            insertUserPositionUseCase(GpsHistoryEntity(it.time, it.latitude, it.longitude))
+    private val locationListener = object : LocationListener {
+
+        override fun onLocationChanged(location: Location) {
+            CoroutineScope(Dispatchers.IO).launch {
+                insertUserPositionUseCase(
+                    GpsHistoryEntity(
+                        location.time,
+                        location.latitude,
+                        location.longitude
+                    )
+                )
+            }
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            Timber.i("Gps Status Disabled")
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            Timber.i("Gps Status Enabled")
         }
     }
 
@@ -64,9 +80,6 @@ class TrackingService : Service() {
             actionRes = R.string.location_service_stop_text,
             actionBroadcast = ACTION_STOP_SERVICE,
         )
-
-        val success = navigationStart()
-        if(!success) stopSelf()
     }
 
     override fun onDestroy() {
@@ -76,11 +89,13 @@ class TrackingService : Service() {
         super.onDestroy()
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (ACTION_STOP_SERVICE == intent.action) {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (ACTION_STOP_SERVICE == intent?.action) {
             navigationStop()
             stopForeground(true)
             stopSelf()
+        } else {
+            navigationStart()
         }
 
         return START_STICKY
@@ -134,7 +149,7 @@ class TrackingService : Service() {
             noPermissions() -> Timber.e("Permissions not granted")
             allProviders.contains(provider) -> {
                 try {
-                    requestLocationUpdates(GPS_PROVIDER, 5000, 0f, locationListener)
+                    requestLocationUpdates(provider, 5000, 0f, locationListener)
                     return true
                 } catch (e: NullPointerException) {
                     Timber.w(e, "Location cannot be accessed")
@@ -151,10 +166,6 @@ class TrackingService : Service() {
 
     private fun granted(permission: String): Boolean =
         ContextCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED
-
-    private fun isGpsEnabled(): Boolean {
-        return locationManager?.isProviderEnabled(GPS_PROVIDER) ?: false
-    }
 
     companion object {
         const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
