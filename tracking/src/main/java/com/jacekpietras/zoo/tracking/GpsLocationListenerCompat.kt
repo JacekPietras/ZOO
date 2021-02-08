@@ -12,6 +12,8 @@ import android.location.LocationManager
 import android.location.LocationManager.*
 import android.os.Looper
 import androidx.core.content.ContextCompat.checkSelfPermission
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.*
 import timber.log.Timber
 
@@ -22,9 +24,12 @@ class GpsLocationListenerCompat(
     private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
 ) {
 
-    private val haveGooglePlay = false
+    private var haveGooglePlay = false
 
     fun addLocationListener(context: Context) {
+        haveGooglePlay = GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
+
         if (haveGooglePlay) addListenerWithGMS(context)
         else addListenerWithoutGMS(context)
     }
