@@ -3,10 +3,10 @@ package com.jacekpietras.zoo.map.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.jacekpietras.zoo.core.binding.viewBinding
 import com.jacekpietras.zoo.core.extensions.observe
+import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.databinding.FragmentMapBinding
 import com.jacekpietras.zoo.map.model.MapEffect
@@ -48,21 +48,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             rationaleContent = R.string.gps_permission_rationale_content,
             deniedTitle = R.string.gps_permission_denied_title,
             deniedContent = R.string.gps_permission_denied_content,
-            onFailed = {
-                toast(R.string.location_unavailable)
-            },
-            onPermission = {
-                toast("success")
-                viewModel.onMyLocationClicked()
-            },
+            onFailed = { if (BuildConfig.DEBUG) toast("Location denied") },
+            onPermission = { viewModel.onMyLocationClicked() },
         )
     }
 
     private fun toast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
-    }
-
-    private fun toast(@StringRes textRes: Int) {
-        toast(getString(textRes))
     }
 }

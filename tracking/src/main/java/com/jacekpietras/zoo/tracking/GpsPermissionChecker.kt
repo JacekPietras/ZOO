@@ -52,24 +52,28 @@ class GpsPermissionChecker(private val fragment: Fragment) {
             else callbacks.onFailed()
         }
     private lateinit var callbacks: Callback
-    private lateinit var rationaleTitle: String
-    private lateinit var rationaleContent: String
-    private lateinit var deniedTitle: String
-    private lateinit var deniedContent: String
+    private var rationaleTitle: String = ""
+    private var rationaleContent: String = ""
+    private var deniedTitle: String = ""
+    private var deniedContent: String = ""
 
     fun checkPermissions(
-        @StringRes rationaleTitle: Int,
-        @StringRes rationaleContent: Int,
-        @StringRes deniedTitle: Int,
-        @StringRes deniedContent: Int,
+        @StringRes rationaleTitle: Int = 0,
+        @StringRes rationaleContent: Int = 0,
+        @StringRes deniedTitle: Int = 0,
+        @StringRes deniedContent: Int = 0,
         onPermission: () -> Unit,
-        onFailed: () -> Unit,
+        onFailed: () -> Unit = {},
     ) {
         this.activity = fragment.requireActivity().unwrap()
-        this.rationaleTitle = activity.getString(rationaleTitle)
-        this.rationaleContent = activity.getString(rationaleContent)
-        this.deniedTitle = activity.getString(deniedTitle)
-        this.deniedContent = activity.getString(deniedContent)
+        if (rationaleTitle != 0) {
+            this.rationaleTitle = activity.getString(rationaleTitle)
+            this.rationaleContent = activity.getString(rationaleContent)
+        }
+        if (deniedTitle != 0) {
+            this.deniedTitle = activity.getString(deniedTitle)
+            this.deniedContent = activity.getString(deniedContent)
+        }
 
         this.callbacks = Callback(
             onFailed = onFailed,
@@ -97,7 +101,7 @@ class GpsPermissionChecker(private val fragment: Fragment) {
             shouldDescribe(ACCESS_FINE_LOCATION) ||
                     shouldDescribe(ACCESS_COARSE_LOCATION) ||
                     (SDK_INT >= VERSION_CODES.Q && shouldDescribe(ACCESS_BACKGROUND_LOCATION)) -> {
-
+                // do nothing, dialog is shown
             }
             else -> askForPermissions()
         }
@@ -179,16 +183,24 @@ class GpsPermissionChecker(private val fragment: Fragment) {
     private fun shouldDescribe(permission: String): Boolean {
         val result = shouldShowRequestPermissionRationale(activity, permission)
         if (result) {
-            showRationale()
-            return true
+            return if (rationaleTitle.isNotEmpty()) {
+                showRationale()
+                true
+            } else {
+                false
+            }
         }
 
         return if (isFirstTimeAskingPermission(permission)) {
             firstTimeAskingPermission(permission, false)
             false
         } else {
-            showDenied()
-            true
+            if (deniedTitle.isNotEmpty()) {
+                showDenied()
+                true
+            } else {
+                false
+            }
         }
     }
 
