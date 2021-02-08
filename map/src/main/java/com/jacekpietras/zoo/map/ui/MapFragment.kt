@@ -44,9 +44,17 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun checkGpsPermission() {
         permissionChecker.checkPermissions(
-            onDescriptionNeeded = { toast("description needed $it") },
-            onFailed = { toast(R.string.location_unavailable) },
-            onPermission = { viewModel.onMyLocationClicked() },
+            rationaleTitle = R.string.gps_permission_rationale_title,
+            rationaleContent = R.string.gps_permission_rationale_content,
+            deniedTitle = R.string.gps_permission_denied_title,
+            deniedContent = R.string.gps_permission_denied_content,
+            onFailed = {
+                toast(R.string.location_unavailable)
+            },
+            onPermission = {
+                toast("success")
+                viewModel.onMyLocationClicked()
+            },
         )
     }
 

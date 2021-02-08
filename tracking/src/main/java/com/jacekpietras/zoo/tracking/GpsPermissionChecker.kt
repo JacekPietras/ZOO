@@ -2,20 +2,24 @@ package com.jacekpietras.zoo.tracking
 
 import android.Manifest.permission.*
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.provider.Settings
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
@@ -39,35 +43,46 @@ class GpsPermissionChecker(private val fragment: Fragment) {
     private var errorDialog: Dialog? = null
     private val permissionResult =
         fragment.registerForActivityResult(RequestMultiplePermissions()) { isGranted ->
-            if (isGranted.filter { it.value }.isNotEmpty()) checkPermissions(callbacks)
+            if (isGranted.filter { it.value }.isNotEmpty()) checkPermissionsAgain()
             else callbacks.onFailed()
         }
     private val resolutionResult =
         fragment.registerForActivityResult(StartIntentSenderForResult()) { isGranted ->
-            if (isGranted.resultCode == RESULT_OK) checkPermissions(callbacks)
+            if (isGranted.resultCode == RESULT_OK) checkPermissionsAgain()
             else callbacks.onFailed()
         }
     private lateinit var callbacks: Callback
+    private lateinit var rationaleTitle: String
+    private lateinit var rationaleContent: String
+    private lateinit var deniedTitle: String
+    private lateinit var deniedContent: String
 
     fun checkPermissions(
-        onDescriptionNeeded: (String) -> Unit,
+        @StringRes rationaleTitle: Int,
+        @StringRes rationaleContent: Int,
+        @StringRes deniedTitle: Int,
+        @StringRes deniedContent: Int,
         onPermission: () -> Unit,
         onFailed: () -> Unit,
     ) {
-        checkPermissions(
-            Callback(
-                onDescriptionNeeded = onDescriptionNeeded,
-                onFailed = onFailed,
-                onPermission = onPermission,
-            )
+        this.activity = fragment.requireActivity().unwrap()
+        this.rationaleTitle = activity.getString(rationaleTitle)
+        this.rationaleContent = activity.getString(rationaleContent)
+        this.deniedTitle = activity.getString(deniedTitle)
+        this.deniedContent = activity.getString(deniedContent)
+
+        this.callbacks = Callback(
+            onFailed = onFailed,
+            onPermission = onPermission,
         )
+        checkPermissionsAgain()
     }
 
-    private fun checkPermissions(callbacks: Callback) {
-        this.callbacks = callbacks
-        this.activity = fragment.requireActivity().unwrap()
+    private fun checkPermissionsAgain() {
         when {
             havePermissions() -> {
+                resetFirstTimeAsking()
+
                 if (isGpsEnabled()) {
                     callbacks.onPermission()
                     TrackingService.start(activity)
@@ -79,25 +94,24 @@ class GpsPermissionChecker(private val fragment: Fragment) {
                     }
                 }
             }
-            shouldDescribe(ACCESS_FINE_LOCATION) -> {
-                callbacks.onDescriptionNeeded(ACCESS_FINE_LOCATION)
+            shouldDescribe(ACCESS_FINE_LOCATION) ||
+                    shouldDescribe(ACCESS_COARSE_LOCATION) ||
+                    (SDK_INT >= VERSION_CODES.Q && shouldDescribe(ACCESS_BACKGROUND_LOCATION)) -> {
+
             }
-            shouldDescribe(ACCESS_COARSE_LOCATION) -> {
-                callbacks.onDescriptionNeeded(ACCESS_COARSE_LOCATION)
-            }
-            SDK_INT >= VERSION_CODES.Q && shouldDescribe(ACCESS_BACKGROUND_LOCATION) -> {
-                callbacks.onDescriptionNeeded(ACCESS_BACKGROUND_LOCATION)
-            }
-            else -> {
-                permissionResult.launch(
-                    listOfNotNull(
-                        ACCESS_FINE_LOCATION,
-                        ACCESS_COARSE_LOCATION,
-                        if (SDK_INT >= VERSION_CODES.Q) ACCESS_BACKGROUND_LOCATION else null
-                    ).toTypedArray()
-                )
-            }
+            else -> askForPermissions()
         }
+    }
+
+    private fun askForPermissions() {
+        askedForPermission()
+        permissionResult.launch(
+            listOfNotNull(
+                ACCESS_FINE_LOCATION,
+                ACCESS_COARSE_LOCATION,
+                if (SDK_INT >= VERSION_CODES.Q) ACCESS_BACKGROUND_LOCATION else null
+            ).toTypedArray()
+        )
     }
 
     private fun askForGps(callbacks: Callback) {
@@ -162,11 +176,62 @@ class GpsPermissionChecker(private val fragment: Fragment) {
             .isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    private fun shouldDescribe(permission: String): Boolean =
-        shouldShowRequestPermissionRationale(activity, permission)
+    private fun shouldDescribe(permission: String): Boolean {
+        val result = shouldShowRequestPermissionRationale(activity, permission)
+        if (result) {
+            showRationale()
+            return true
+        }
+
+        return if (isFirstTimeAskingPermission(permission)) {
+            firstTimeAskingPermission(permission, false)
+            false
+        } else {
+            showDenied()
+            true
+        }
+    }
+
+    private fun showRationale() {
+        AlertDialog.Builder(activity)
+            .setTitle(rationaleTitle)
+            .setMessage(rationaleContent)
+            .setPositiveButton(activity.getString(android.R.string.ok)) { dialog, _ ->
+                askForPermissions()
+                dialog.dismiss()
+            }
+            .setNegativeButton(activity.getString(android.R.string.cancel)) { dialog, _ ->
+                callbacks.onFailed()
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showDenied() {
+        AlertDialog.Builder(activity)
+            .setTitle(deniedTitle)
+            .setMessage(deniedContent)
+            .setPositiveButton(activity.getString(android.R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.fromParts("package", activity.packageName, null)
+                activity.startActivity(intent)
+                observeReturn()
+            }
+            .setNegativeButton(activity.getString(android.R.string.cancel)) { dialog, _ ->
+                callbacks.onFailed()
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
 
     private fun havePermissions(): Boolean =
-        granted(ACCESS_FINE_LOCATION) && granted(ACCESS_COARSE_LOCATION)
+        granted(ACCESS_FINE_LOCATION) &&
+                granted(ACCESS_COARSE_LOCATION) &&
+                (SDK_INT < VERSION_CODES.Q || granted(ACCESS_BACKGROUND_LOCATION))
 
     private fun granted(permission: String): Boolean =
         ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
@@ -220,19 +285,42 @@ class GpsPermissionChecker(private val fragment: Fragment) {
 
             override fun onResume(owner: LifecycleOwner) {
                 if (stopped) {
-                    checkPermissions(callbacks)
+                    checkPermissionsAgain()
                     fragment.lifecycle.removeObserver(this)
                 }
             }
         })
     }
 
+    private fun resetFirstTimeAsking() {
+        firstTimeAskingPermission(ACCESS_FINE_LOCATION, false)
+        firstTimeAskingPermission(ACCESS_COARSE_LOCATION, false)
+        if (SDK_INT >= VERSION_CODES.Q) {
+            firstTimeAskingPermission(ACCESS_BACKGROUND_LOCATION, false)
+        }
+    }
+
+    private fun askedForPermission() {
+        firstTimeAskingPermission(ACCESS_FINE_LOCATION, true)
+        firstTimeAskingPermission(ACCESS_COARSE_LOCATION, true)
+        if (SDK_INT >= VERSION_CODES.Q) {
+            firstTimeAskingPermission(ACCESS_BACKGROUND_LOCATION, false)
+        }
+    }
+
+    private fun firstTimeAskingPermission(permission: String, firstTime: Boolean) {
+        val sharedPreference = activity.getSharedPreferences("GPS_PERMISSIONS", MODE_PRIVATE)
+        sharedPreference.edit().putBoolean(permission, firstTime).apply()
+    }
+
+    private fun isFirstTimeAskingPermission(permission: String) =
+        activity.getSharedPreferences("GPS_PERMISSIONS", MODE_PRIVATE).getBoolean(permission, true);
+
     private companion object {
         const val PLAY_SERVICES_RESOLUTION_REQUEST = 6670
     }
 
     class Callback(
-        val onDescriptionNeeded: (String) -> Unit,
         val onPermission: () -> Unit,
         val onFailed: () -> Unit,
     )
