@@ -28,6 +28,7 @@ val domainModule = module {
     factory {
         UploadHistoryUseCase(
             mailGateway = get(),
+            gpsRepository = get(),
         )
     }
 }
