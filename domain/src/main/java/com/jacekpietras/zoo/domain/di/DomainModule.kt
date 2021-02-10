@@ -11,6 +11,11 @@ val domainModule = module {
         )
     }
     factory {
+        GetWorldSpaceUseCase(
+            mapRepository = get()
+        )
+    }
+    factory {
         GetRoadsUseCase(
             mapRepository = get()
         )

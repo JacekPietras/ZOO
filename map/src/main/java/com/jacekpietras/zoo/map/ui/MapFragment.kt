@@ -30,6 +30,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun setObservers() = with(viewModel.viewState) {
         observe(userPosition) { binding.mapView.userPosition = it }
         observe(mapData) { binding.mapView.objectList = it }
+        observe(worldSpace) { binding.mapView.worldRectangle = it }
         observe(effect) {
             when (it) {
                 is MapEffect.ShowToast -> toast(it.text)

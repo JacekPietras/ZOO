@@ -126,6 +126,11 @@ class GpsLocationListenerCompat(
 
     private fun buildLocationCallBack() =
         object : LocationCallback() {
+
+            override fun onLocationAvailability(available: LocationAvailability?) {
+                onGpsStatusChanged(available?.isLocationAvailable ?: false)
+            }
+
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
                     onLocationChanged(

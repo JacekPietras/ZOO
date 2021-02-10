@@ -9,5 +9,5 @@ class GetRoadsUseCase(
 ) {
 
     operator fun invoke(): Flow<List<PathEntity>> =
-        mapRepository.getRoadsUseCase()
+        mapRepository.getRoads()
 }

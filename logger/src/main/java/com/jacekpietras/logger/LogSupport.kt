@@ -72,7 +72,6 @@ object LogSupport {
             ?: emptyList()
     }
 
-
     fun purgeStaleFiles(logChannel: LogChannel) = CoroutineScope(Dispatchers.IO).launch {
         val staleFiles = getLogsDirectory().listFiles(
             FileFilterByCreationDate(

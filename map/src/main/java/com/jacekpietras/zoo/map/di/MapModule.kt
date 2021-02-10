@@ -14,6 +14,7 @@ val mapModule = module {
     viewModel {
         MapViewModel(
             viewStateMapper = get(),
+            getWorldSpaceUseCase = get(),
             getBuildingsUseCase = get(),
             getRoadsUseCase = get(),
             getUserPositionUseCase = get(),

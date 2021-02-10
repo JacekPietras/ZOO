@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.map.model
 
+import android.graphics.RectF
 import com.jacekpietras.zoo.domain.model.LatLon
 import com.jacekpietras.zoo.map.ui.MapItem
 import kotlinx.coroutines.channels.Channel
@@ -7,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class MapViewState(
+    val worldSpace: Flow<RectF> = MutableStateFlow(RectF()),
     val mapData: Flow<List<MapItem>> = MutableStateFlow(emptyList()),
     val userPosition: Flow<LatLon> = MutableStateFlow(LatLon(0.0, 0.0)),
     val effect: Channel<MapEffect> = Channel()

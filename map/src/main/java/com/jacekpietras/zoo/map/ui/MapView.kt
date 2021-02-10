@@ -1,10 +1,7 @@
 package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PointF
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
@@ -16,6 +13,7 @@ import com.jacekpietras.zoo.map.model.PolygonF
 import com.jacekpietras.zoo.map.model.ViewCoordinates
 import com.jacekpietras.zoo.map.utils.drawPath
 import timber.log.Timber
+import kotlin.math.min
 import kotlin.math.sqrt
 
 internal class MapView @JvmOverloads constructor(
@@ -27,7 +25,10 @@ internal class MapView @JvmOverloads constructor(
     var worldRectangle: RectF = RectF(10f, 10f, 30f, 30f)
         set(value) {
             field = value
-            centerGpsCoordinate = PointF(worldRectangle.centerX(), worldRectangle.centerY())
+            centerGpsCoordinate = PointF(value.centerX(), value.centerY())
+            maxZoom = min(value.width(), value.height()) / 2
+            minZoom = maxZoom / 6
+            zoom = maxZoom / 3
         }
     private var _objectList: List<RenderItem> = emptyList()
     var objectList: List<MapItem> = emptyList()
@@ -50,6 +51,11 @@ internal class MapView @JvmOverloads constructor(
         PointF(worldRectangle.centerX(), worldRectangle.centerY())
     private var zoom: Float = 5f
     private lateinit var renderList: List<RenderItem>
+    private val debugTextPaint = Paint()
+        .apply {
+            color = Color.parseColor("#88000000")
+            textSize = 30f
+        }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -94,6 +100,20 @@ internal class MapView @JvmOverloads constructor(
                 is PolygonF -> canvas.drawPath(item.shape, item.paint)
                 else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
+        }
+        renderDebug(canvas)
+    }
+
+    private fun renderDebug(canvas: Canvas) {
+        if (BuildConfig.DEBUG) {
+            canvas.drawText("world:" + worldRectangle.toShortString(), 10f, 40f, debugTextPaint)
+            canvas.drawText(
+                "current:${visibleGpsCoordinate.visibleRect.toShortString()}",
+                10f,
+                80f,
+                debugTextPaint
+            )
+            canvas.drawText("zoom:($minZoom) $zoom ($maxZoom)", 10f, 120f, debugTextPaint)
         }
     }
 
@@ -201,7 +221,7 @@ internal class MapView @JvmOverloads constructor(
                     is PolygonF -> "PolygonF " + item.shape.vertices.size
                     else -> "Unknown"
                 }
-            }
+            } + " (${objectList.size})"
             Timber.v(message)
         }
     }

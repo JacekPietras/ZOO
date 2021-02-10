@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.map.mapper
 
 import android.graphics.PointF
+import android.graphics.RectF
 import com.jacekpietras.zoo.domain.model.LatLon
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
@@ -35,8 +36,10 @@ internal class MapViewStateMapper {
         ) { a, b, c -> a + b + c }
 
         val userPosition = state.userPosition.map(::fromPosition)
+        val worldSpace = state.worldSpace.map(::fromWorldSpace)
 
         return MapViewState(
+            worldSpace = worldSpace,
             mapData = complex,
             userPosition = userPosition,
         )
@@ -44,6 +47,9 @@ internal class MapViewStateMapper {
 
     private fun fromPosition(position: LatLon): LatLon =
         position
+
+    private fun fromWorldSpace(worldSpace: RectF): RectF =
+        worldSpace
 
     private fun fromPolygons(
         polygons: List<PolygonEntity>,
