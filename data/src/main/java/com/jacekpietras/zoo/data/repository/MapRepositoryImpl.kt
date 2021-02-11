@@ -56,8 +56,7 @@ class MapRepositoryImpl(
         flowOf(buildings.map(::PolygonEntity))
 
     override fun getRoads(): Flow<List<PathEntity>> =
-//        flowOf(paths.map(::PathEntity))
-        flowOf(emptyList())
+        flowOf(paths.map(::PathEntity))
 
     override fun getWorldSpace(): Flow<RectD> =
         flowOf(worldRect)
