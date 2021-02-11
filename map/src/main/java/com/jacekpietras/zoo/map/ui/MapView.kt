@@ -12,6 +12,7 @@ import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.utils.drawPath
 import timber.log.Timber
+import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sqrt
 
@@ -25,7 +26,7 @@ internal class MapView @JvmOverloads constructor(
         set(value) {
             field = value
             centerGpsCoordinate = PointD(value.centerX(), value.centerY())
-            maxZoom = min(value.width(), value.height()) / 2
+            maxZoom = min(abs(value.width()), abs(value.height())) / 2
             minZoom = maxZoom / 6
             zoom = maxZoom / 3
         }
@@ -176,8 +177,7 @@ internal class MapView @JvmOverloads constructor(
         )
 
         if (preventedGoingOutsideWorld()) {
-            //todo take it back
-//            cutOutNotVisible()
+            cutOutNotVisible()
             return
         }
 

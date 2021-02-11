@@ -35,7 +35,7 @@ class MapRepositoryImpl(
         lines = parser.map.getValue("lines").map { it.map { p -> transformation(p) } }
         paths = parser.map.getValue("paths").map { it.map { p -> transformation(p) } }
         val tags = parser.texts.getValue("tags")
-        
+
     }
 
     private fun getTransformation(before: RectD, after: RectD): (PointD) -> PointD {
@@ -114,6 +114,13 @@ class MapRepositoryImpl(
                 }
             }
             worldRect = coords.parseRect()
+                .run {
+                    val lat1 = left
+                    val lat2 = right
+                    val lon1 = top
+                    val lon2 = bottom
+                    RectD(lon1, lat2, lon2, lat1)
+                }
         }
 
         private fun String.parsePoly(): List<PointD> =
