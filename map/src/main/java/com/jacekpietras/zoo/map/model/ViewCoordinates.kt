@@ -19,7 +19,9 @@ internal class ViewCoordinates(
             viewWidth: Int,
             viewHeight: Int
         ): ViewCoordinates {
-            val ratioZoom = zoom * (viewHeight / viewWidth.toFloat())
+            val haversineCorrection = 1 //todo count that!
+            val ratioZoom = zoom * (viewHeight / viewWidth.toFloat()) * haversineCorrection
+
             val visibleGpsCoordinate = RectD(
                 centerGpsCoordinate.x - zoom,
                 centerGpsCoordinate.y + ratioZoom,
