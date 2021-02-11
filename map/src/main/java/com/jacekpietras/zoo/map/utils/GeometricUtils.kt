@@ -15,8 +15,13 @@ internal fun RectD.containsLine(p1: PointD, p2: PointD): Boolean {
     }
 
     // Find the intersection of the segment's and rectangle's x-projections
-    if (maxX > right) maxX = right
-    if (minX < left) minX = left
+    if (right > left) {
+        if (maxX > right) maxX = right
+        if (minX < left) minX = left
+    } else {
+        if (maxX > left) maxX = left
+        if (minX < right) minX = right
+    }
 
     // If their projections do not intersect return false
     if (minX > maxX) return false
@@ -38,8 +43,13 @@ internal fun RectD.containsLine(p1: PointD, p2: PointD): Boolean {
     }
 
     // Find the intersection of the segment's and rectangle's y-projections
-    if (maxY > bottom) maxY = bottom
-    if (minY < top) minY = top
+    if (bottom > top) {
+        if (maxY > bottom) maxY = bottom
+        if (minY < top) minY = top
+    } else {
+        if (maxY > top) maxY = top
+        if (minY < bottom) minY = bottom
+    }
 
     return minY <= maxY
 }

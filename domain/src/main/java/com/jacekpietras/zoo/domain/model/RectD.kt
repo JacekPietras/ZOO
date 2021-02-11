@@ -18,7 +18,19 @@ data class RectD(
     fun centerY(): Double = (top + bottom) * 0.5
 
     fun contains(x: Double, y: Double): Boolean =
-        left < right && top < bottom && x >= left && x < right && y >= top && y < bottom
+        if (top < bottom) {
+            if (left < right) {
+                x >= left && x < right && y >= top && y < bottom
+            } else {
+                x >= right && x < left && y >= top && y < bottom
+            }
+        } else {
+            if (left < right) {
+                x >= left && x < right && y >= bottom && y < top
+            } else {
+                x >= right && x < left && y >= bottom && y < top
+            }
+        }
 
     fun toFloat(): RectF =
         RectF(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())

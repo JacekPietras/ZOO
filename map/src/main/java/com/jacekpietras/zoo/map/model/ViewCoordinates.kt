@@ -22,9 +22,9 @@ internal class ViewCoordinates(
             val ratioZoom = zoom * (viewHeight / viewWidth.toFloat())
             val visibleGpsCoordinate = RectD(
                 centerGpsCoordinate.x - zoom,
-                centerGpsCoordinate.y - ratioZoom,
+                centerGpsCoordinate.y + ratioZoom,
                 centerGpsCoordinate.x + zoom,
-                centerGpsCoordinate.y + ratioZoom
+                centerGpsCoordinate.y - ratioZoom
             )
             return ViewCoordinates(
                 visibleRect = visibleGpsCoordinate,
@@ -47,7 +47,7 @@ internal class ViewCoordinates(
             null
         }
 
-    private fun transform(p: PointD): PointD =
+    fun transform(p: PointD): PointD =
         PointD(
             ((p.x - visibleRect.left) * horizontalScale),
             ((p.y - visibleRect.top) * verticalScale)

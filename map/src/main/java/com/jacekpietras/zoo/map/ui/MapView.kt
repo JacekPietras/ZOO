@@ -105,9 +105,9 @@ internal class MapView @JvmOverloads constructor(
 
     private fun renderDebug(canvas: Canvas) {
         if (BuildConfig.DEBUG) {
-            canvas.drawText("wrld:" + worldRectangle.toShortString(), 10f, 40f, debugTextPaint)
+            canvas.drawText("wrld: " + worldRectangle.toShortString(), 10f, 40f, debugTextPaint)
             canvas.drawText(
-                "curr:${visibleGpsCoordinate.visibleRect.toShortString()}",
+                "curr: ${visibleGpsCoordinate.visibleRect.toShortString()}",
                 10f,
                 80f,
                 debugTextPaint
@@ -184,7 +184,7 @@ internal class MapView @JvmOverloads constructor(
         )
 
 //        if (preventedGoingOutsideWorld()) {
-////            cutOutNotVisible()
+//            cutOutNotVisible()
 //            return
 //        }
 
