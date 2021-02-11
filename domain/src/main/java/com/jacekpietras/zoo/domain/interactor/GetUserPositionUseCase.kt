@@ -10,7 +10,7 @@ class GetUserPositionUseCase(
 ) {
 
     operator fun invoke(): Flow<PointD> =
-        gpsRepository.observeLatestPosition().map { PointD(it.lat, it.lon) }
+        gpsRepository.observeLatestPosition().map { PointD(it.lon, it.lat) }
 
 
 //        flow {

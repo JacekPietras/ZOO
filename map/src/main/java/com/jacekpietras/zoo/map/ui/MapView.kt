@@ -19,6 +19,7 @@ import kotlin.math.sqrt
 internal class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
+    //  [19.940416, 50.083510] [19.948745, 50.075829]
 
     var maxZoom: Double = 10.0
     var minZoom: Double = 2.0
@@ -113,7 +114,12 @@ internal class MapView @JvmOverloads constructor(
                 80f,
                 debugTextPaint
             )
-            canvas.drawText("zoom:($minZoom) $zoom ($maxZoom)", 10f, 120f, debugTextPaint)
+            canvas.drawText(
+                "zoom:(${minZoom * 1000}) ${zoom * 1000} (${maxZoom * 1000})",
+                10f,
+                120f,
+                debugTextPaint
+            )
         }
     }
 
@@ -177,7 +183,7 @@ internal class MapView @JvmOverloads constructor(
         )
 
         if (preventedGoingOutsideWorld()) {
-            cutOutNotVisible()
+//            cutOutNotVisible()
             return
         }
 
