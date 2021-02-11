@@ -10,7 +10,7 @@ data class RectD(
     val bottom: Double = 0.0,
 ) {
 
-    fun toShortString(): String = "[$left,$top][$right,$bottom]"
+    fun toShortString(): String = "[${left.form()},${top.form()}][${right.form()},${bottom.form()}]"
     fun isEmpty(): Boolean = left >= right || top >= bottom
     fun width(): Double = right - left
     fun height(): Double = bottom - top
@@ -25,4 +25,6 @@ data class RectD(
 
     fun toInt(): Rect =
         Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
+
+    private fun Double.form() = "%.6f".format(this)
 }

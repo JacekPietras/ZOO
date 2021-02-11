@@ -1,10 +1,7 @@
 package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PointF
+import android.graphics.*
 import android.util.AttributeSet
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
@@ -55,6 +52,7 @@ internal class MapView @JvmOverloads constructor(
     private val debugTextPaint = Paint()
         .apply {
             color = Color.parseColor("#88000000")
+            typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
             textSize = 30f
         }
 
@@ -107,21 +105,24 @@ internal class MapView @JvmOverloads constructor(
 
     private fun renderDebug(canvas: Canvas) {
         if (BuildConfig.DEBUG) {
-            canvas.drawText("world:" + worldRectangle.toShortString(), 10f, 40f, debugTextPaint)
+            canvas.drawText("wrld:" + worldRectangle.toShortString(), 10f, 40f, debugTextPaint)
             canvas.drawText(
-                "current:${visibleGpsCoordinate.visibleRect.toShortString()}",
+                "curr:${visibleGpsCoordinate.visibleRect.toShortString()}",
                 10f,
                 80f,
                 debugTextPaint
             )
+
             canvas.drawText(
-                "zoom:(${minZoom * 1000}) ${zoom * 1000} (${maxZoom * 1000})",
+                "zoom: ${((zoom - minZoom) / (maxZoom - minZoom)).form()}",
                 10f,
                 120f,
                 debugTextPaint
             )
         }
     }
+
+    private fun Double.form() = "%.6f".format(this)
 
     private fun List<MapItem>.toRenderItems(): List<RenderItem> = map { item ->
         when (item.shape) {
@@ -182,10 +183,10 @@ internal class MapView @JvmOverloads constructor(
             height,
         )
 
-        if (preventedGoingOutsideWorld()) {
-//            cutOutNotVisible()
-            return
-        }
+//        if (preventedGoingOutsideWorld()) {
+////            cutOutNotVisible()
+//            return
+//        }
 
         val temp = mutableListOf<RenderItem>()
 
@@ -223,8 +224,10 @@ internal class MapView @JvmOverloads constructor(
         if (BuildConfig.DEBUG) {
             val message = "Preparing render list: " + renderList?.map { item ->
                 when (item.shape) {
-                    is PathD -> "PathsF " + item.shape.vertices.size
-                    is PolygonD -> "PolygonF " + item.shape.vertices.size
+                    is PathF -> "PathsF " + item.shape.vertices.size
+                    is PolygonF -> "PolygonF " + item.shape.vertices.size
+                    is PathD -> "PathD " + item.shape.vertices.size
+                    is PolygonD -> "PolygonD " + item.shape.vertices.size
                     else -> "Unknown"
                 }
             } + " (${objectList.size})"
