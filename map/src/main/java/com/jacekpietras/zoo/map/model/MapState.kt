@@ -1,10 +1,10 @@
 package com.jacekpietras.zoo.map.model
 
 import android.graphics.Color
-import android.graphics.RectF
-import com.jacekpietras.zoo.domain.model.LatLon
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.model.PointD
+import com.jacekpietras.zoo.domain.model.RectD
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -17,9 +17,9 @@ internal data class MapState(
     val roadPaint: Flow<MapPaint> = flowOf(strokePaint),
     val takenRoutePaint: Flow<MapPaint> = flowOf(dashedPaint),
 
-    val userPosition: Flow<LatLon>,
+    val userPosition: Flow<PointD>,
 
-    val worldSpace: Flow<RectF>,
+    val worldSpace: Flow<RectD>,
 )
 
 private val redPaint: MapPaint

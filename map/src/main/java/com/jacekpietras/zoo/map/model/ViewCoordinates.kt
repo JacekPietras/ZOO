@@ -1,28 +1,26 @@
 package com.jacekpietras.zoo.map.model
 
-import android.graphics.Point
-import android.graphics.PointF
-import android.graphics.RectF
-import androidx.core.graphics.toPointF
+import com.jacekpietras.zoo.domain.model.PointD
+import com.jacekpietras.zoo.domain.model.RectD
 import com.jacekpietras.zoo.map.cutOut
 import com.jacekpietras.zoo.map.utils.containsLine
 
 internal class ViewCoordinates(
-    val visibleRect: RectF,
-    val horizontalScale: Float,
-    val verticalScale: Float,
+    val visibleRect: RectD,
+    val horizontalScale: Double,
+    val verticalScale: Double,
 ) {
 
     companion object {
 
         fun create(
-            centerGpsCoordinate: PointF,
-            zoom: Float,
+            centerGpsCoordinate: PointD,
+            zoom: Double,
             viewWidth: Int,
             viewHeight: Int
         ): ViewCoordinates {
             val ratioZoom = zoom * (viewHeight / viewWidth.toFloat())
-            val visibleGpsCoordinate = RectF(
+            val visibleGpsCoordinate = RectD(
                 centerGpsCoordinate.x - zoom,
                 centerGpsCoordinate.y - ratioZoom,
                 centerGpsCoordinate.x + zoom,
@@ -36,22 +34,22 @@ internal class ViewCoordinates(
         }
     }
 
-    fun transform(path: PathF): List<PathF> =
+    fun transform(path: PathD): List<PathD> =
         path
             .vertices
             .cutOut { a, b -> visibleRect.containsLine(a, b) }
-            .map { PathF(it.map { point -> transform(point).toPointF() }) }
+            .map { PathD(it.map { point -> transform(point) }) }
 
-    fun transform(polygon: PolygonF): PolygonF? =
+    fun transform(polygon: PolygonD): PolygonD? =
         if (polygon.intersects(visibleRect)) {
-            PolygonF(polygon.vertices.map { point -> transform(point).toPointF() })
+            PolygonD(polygon.vertices.map { point -> transform(point) })
         } else {
             null
         }
 
-    private fun transform(p: PointF): Point =
-        Point(
-            ((p.x - visibleRect.left) * horizontalScale).toInt(),
-            ((p.y - visibleRect.top) * verticalScale).toInt()
+    private fun transform(p: PointD): PointD =
+        PointD(
+            ((p.x - visibleRect.left) * horizontalScale),
+            ((p.y - visibleRect.top) * verticalScale)
         )
 }

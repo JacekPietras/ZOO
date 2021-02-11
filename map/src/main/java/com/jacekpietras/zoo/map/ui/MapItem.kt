@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.map.ui
 
 import com.jacekpietras.zoo.map.model.MapPaint
-import com.jacekpietras.zoo.map.model.PathF
-import com.jacekpietras.zoo.map.model.PolygonF
+import com.jacekpietras.zoo.map.model.PathD
+import com.jacekpietras.zoo.map.model.PolygonD
 
 internal class MapItem {
     val shape: Any
@@ -10,7 +10,7 @@ internal class MapItem {
     val onClick: ((x: Float, y: Float) -> Unit)?
 
     constructor(
-        polygon: PolygonF,
+        polygon: PolygonD,
         paint: MapPaint,
         onClick: ((x: Float, y: Float) -> Unit)? = null,
     ) {
@@ -20,7 +20,7 @@ internal class MapItem {
     }
 
     constructor(
-        path: PathF,
+        path: PathD,
         paint: MapPaint,
     ) {
         this.shape = path

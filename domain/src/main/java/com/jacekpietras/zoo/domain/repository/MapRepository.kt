@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.repository
 import android.graphics.RectF
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.model.RectD
 import kotlinx.coroutines.flow.Flow
 
 interface MapRepository {
@@ -11,5 +12,5 @@ interface MapRepository {
 
     fun getRoads(): Flow<List<PathEntity>>
 
-    fun getWorldSpace(): Flow<RectF>
+    fun getWorldSpace(): Flow<RectD>
 }

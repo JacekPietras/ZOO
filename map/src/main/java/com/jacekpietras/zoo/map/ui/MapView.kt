@@ -1,15 +1,16 @@
 package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
-import androidx.core.graphics.minus
-import androidx.core.graphics.plus
-import com.jacekpietras.zoo.domain.model.LatLon
+import com.jacekpietras.zoo.domain.model.PointD
+import com.jacekpietras.zoo.domain.model.RectD
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.model.DrawableOnCanvas
-import com.jacekpietras.zoo.map.model.PathF
-import com.jacekpietras.zoo.map.model.PolygonF
+import com.jacekpietras.zoo.map.model.PathD
+import com.jacekpietras.zoo.map.model.PolygonD
 import com.jacekpietras.zoo.map.model.ViewCoordinates
 import com.jacekpietras.zoo.map.utils.drawPath
 import timber.log.Timber
@@ -20,12 +21,12 @@ internal class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
 
-    var maxZoom: Float = 10f
-    var minZoom: Float = 2f
-    var worldRectangle: RectF = RectF(10f, 10f, 30f, 30f)
+    var maxZoom: Double = 10.0
+    var minZoom: Double = 2.0
+    var worldRectangle: RectD = RectD()
         set(value) {
             field = value
-            centerGpsCoordinate = PointF(value.centerX(), value.centerY())
+            centerGpsCoordinate = PointD(value.centerX(), value.centerY())
             maxZoom = min(value.width(), value.height()) / 2
             minZoom = maxZoom / 6
             zoom = maxZoom / 3
@@ -40,16 +41,16 @@ internal class MapView @JvmOverloads constructor(
             invalidate()
         }
 
-    var userPosition: LatLon? = null
+    var userPosition: PointD? = null
         set(value) {
-            Timber.v("Position changed ${value?.lat}")
+            Timber.v("Position changed ${value?.x}")
             field = value
         }
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
-    private var centerGpsCoordinate: PointF =
-        PointF(worldRectangle.centerX(), worldRectangle.centerY())
-    private var zoom: Float = 5f
+    private var centerGpsCoordinate: PointD =
+        PointD(worldRectangle.centerX(), worldRectangle.centerY())
+    private var zoom: Double = 5.0
     private lateinit var renderList: List<RenderItem>
     private val debugTextPaint = Paint()
         .apply {
@@ -69,7 +70,7 @@ internal class MapView @JvmOverloads constructor(
     }
 
     override fun onScroll(vX: Float, vY: Float) {
-        centerGpsCoordinate += PointF(
+        centerGpsCoordinate += PointD(
             vX / visibleGpsCoordinate.horizontalScale,
             vY / visibleGpsCoordinate.verticalScale
         )
@@ -78,11 +79,11 @@ internal class MapView @JvmOverloads constructor(
     }
 
     override fun onClick(x: Float, y: Float) {
-        val point = PointF(x, y)
+        val point = PointD(x, y)
         renderList.forEach { item ->
             item.onClick?.let {
                 when (item.shape) {
-                    is PolygonF -> if (item.shape.contains(point)) {
+                    is PolygonD -> if (item.shape.contains(point)) {
                         it.invoke(x, y)
                     }
                     else -> throw IllegalStateException("Unknown shape type ${item.shape}")
@@ -96,8 +97,8 @@ internal class MapView @JvmOverloads constructor(
 
         renderList.forEach { item ->
             when (item.shape) {
-                is PathF -> canvas.drawPath(item.shape, item.paint)
-                is PolygonF -> canvas.drawPath(item.shape, item.paint)
+                is PathD -> canvas.drawPath(item.shape, item.paint)
+                is PolygonD -> canvas.drawPath(item.shape, item.paint)
                 else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
         }
@@ -119,11 +120,11 @@ internal class MapView @JvmOverloads constructor(
 
     private fun List<MapItem>.toRenderItems(): List<RenderItem> = map { item ->
         when (item.shape) {
-            is PathF -> RenderItem(
+            is PathD -> RenderItem(
                 item.shape,
                 item.paint.toCanvasPaint(context)
             )
-            is PolygonF -> RenderItem(
+            is PolygonD -> RenderItem(
                 item.shape,
                 item.paint.toCanvasPaint(context),
                 item.onClick
@@ -141,25 +142,25 @@ internal class MapView @JvmOverloads constructor(
 
         if (leftMargin + rightMargin < 0) {
             zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            centerGpsCoordinate = PointF(worldRectangle.centerX(), centerGpsCoordinate.y)
+            centerGpsCoordinate = PointD(worldRectangle.centerX(), centerGpsCoordinate.y)
             result = true
         } else if (leftMargin < -0.00001) {
-            centerGpsCoordinate -= PointF(leftMargin, 0f)
+            centerGpsCoordinate -= PointD(leftMargin, 0.0)
             result = true
         } else if (rightMargin < -0.00001) {
-            centerGpsCoordinate += PointF(rightMargin, 0f)
+            centerGpsCoordinate += PointD(rightMargin, 0.0)
             result = true
         }
 
         if (topMargin + bottomMargin < 0) {
             zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            centerGpsCoordinate = PointF(centerGpsCoordinate.x, worldRectangle.centerY())
+            centerGpsCoordinate = PointD(centerGpsCoordinate.x, worldRectangle.centerY())
             result = true
         } else if (topMargin < -0.00001) {
-            centerGpsCoordinate -= PointF(0f, topMargin)
+            centerGpsCoordinate -= PointD(0.0, topMargin)
             result = true
         } else if (bottomMargin < -0.00001) {
-            centerGpsCoordinate += PointF(0f, bottomMargin)
+            centerGpsCoordinate += PointD(0.0, bottomMargin)
             result = true
         }
 
@@ -185,22 +186,22 @@ internal class MapView @JvmOverloads constructor(
 
         _objectList.forEach { item ->
             when (item.shape) {
-                is PolygonF -> {
+                is PolygonD -> {
                     visibleGpsCoordinate.transform(item.shape)?.let {
                         temp.add(
                             RenderItem(
-                                PolygonF(it.vertices),
+                                PolygonD(it.vertices),
                                 item.paint,
                                 item.onClick
                             )
                         )
                     }
                 }
-                is PathF -> {
+                is PathD -> {
                     visibleGpsCoordinate.transform(item.shape).forEach {
                         temp.add(
                             RenderItem(
-                                PathF(it.vertices),
+                                PathD(it.vertices),
                                 item.paint
                             )
                         )
@@ -217,8 +218,8 @@ internal class MapView @JvmOverloads constructor(
         if (BuildConfig.DEBUG) {
             val message = "Preparing render list: " + renderList.map { item ->
                 when (item.shape) {
-                    is PathF -> "PathsF " + item.shape.vertices.size
-                    is PolygonF -> "PolygonF " + item.shape.vertices.size
+                    is PathD -> "PathsF " + item.shape.vertices.size
+                    is PolygonD -> "PolygonF " + item.shape.vertices.size
                     else -> "Unknown"
                 }
             } + " (${objectList.size})"

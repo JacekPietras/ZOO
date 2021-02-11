@@ -1,10 +1,9 @@
 package com.jacekpietras.zoo.map.mapper
 
-import android.graphics.PointF
-import android.graphics.RectF
-import com.jacekpietras.zoo.domain.model.LatLon
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.model.PointD
+import com.jacekpietras.zoo.domain.model.RectD
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.ui.MapItem
 import kotlinx.coroutines.flow.Flow
@@ -45,10 +44,10 @@ internal class MapViewStateMapper {
         )
     }
 
-    private fun fromPosition(position: LatLon): LatLon =
+    private fun fromPosition(position: PointD): PointD =
         position
 
-    private fun fromWorldSpace(worldSpace: RectF): RectF =
+    private fun fromWorldSpace(worldSpace: RectD): RectD =
         worldSpace
 
     private fun fromPolygons(
@@ -57,9 +56,7 @@ internal class MapViewStateMapper {
     ): List<MapItem> =
         polygons.map { polygon ->
             MapItem(
-                PolygonF(polygon.vertices.map {
-                    PointF(it.lat.toFloat(), it.lon.toFloat())
-                }),
+                PolygonD(polygon.vertices),
                 paint
             )
         }
@@ -67,9 +64,7 @@ internal class MapViewStateMapper {
     private fun fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem> =
         paths.map { polygon ->
             MapItem(
-                PathF(polygon.vertices.map {
-                    PointF(it.lat.toFloat(), it.lon.toFloat())
-                }),
+                PathD(polygon.vertices),
                 paint
             )
         }
