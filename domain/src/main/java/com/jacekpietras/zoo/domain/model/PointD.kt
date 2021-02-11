@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.model
 
 import android.graphics.Point
+import android.graphics.PointF
 
 data class PointD(
     var x: Double = 0.0,
@@ -10,6 +11,9 @@ data class PointD(
     constructor(xFloat: Float, yFloat: Float) : this(xFloat.toDouble(), yFloat.toDouble())
 
     constructor(pair:Pair<Number, Number>) : this(pair.first.toDouble(), pair.second.toDouble())
+
+    fun toFloat(): PointF =
+        PointF(x.toFloat(), y.toFloat())
 
     fun toInt(): Point =
         Point(x.toInt(), y.toInt())

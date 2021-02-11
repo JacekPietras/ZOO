@@ -4,14 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PointF
 import android.util.AttributeSet
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
 import com.jacekpietras.zoo.map.BuildConfig
-import com.jacekpietras.zoo.map.model.DrawableOnCanvas
-import com.jacekpietras.zoo.map.model.PathD
-import com.jacekpietras.zoo.map.model.PolygonD
-import com.jacekpietras.zoo.map.model.ViewCoordinates
+import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.utils.drawPath
 import timber.log.Timber
 import kotlin.math.min
@@ -51,7 +49,7 @@ internal class MapView @JvmOverloads constructor(
     private var centerGpsCoordinate: PointD =
         PointD(worldRectangle.centerX(), worldRectangle.centerY())
     private var zoom: Double = 5.0
-    private lateinit var renderList: List<RenderItem>
+    private var renderList: List<RenderItem>? = null
     private val debugTextPaint = Paint()
         .apply {
             color = Color.parseColor("#88000000")
@@ -79,11 +77,11 @@ internal class MapView @JvmOverloads constructor(
     }
 
     override fun onClick(x: Float, y: Float) {
-        val point = PointD(x, y)
-        renderList.forEach { item ->
+        val point = PointF(x, y)
+        renderList?.forEach { item ->
             item.onClick?.let {
                 when (item.shape) {
-                    is PolygonD -> if (item.shape.contains(point)) {
+                    is PolygonF -> if (item.shape.contains(point)) {
                         it.invoke(x, y)
                     }
                     else -> throw IllegalStateException("Unknown shape type ${item.shape}")
@@ -95,10 +93,10 @@ internal class MapView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        renderList.forEach { item ->
+        renderList?.forEach { item ->
             when (item.shape) {
-                is PathD -> canvas.drawPath(item.shape, item.paint)
-                is PolygonD -> canvas.drawPath(item.shape, item.paint)
+                is PathF -> canvas.drawPath(item.shape, item.paint)
+                is PolygonF -> canvas.drawPath(item.shape, item.paint)
                 else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
         }
@@ -178,7 +176,8 @@ internal class MapView @JvmOverloads constructor(
         )
 
         if (preventedGoingOutsideWorld()) {
-            cutOutNotVisible()
+            //todo take it back
+//            cutOutNotVisible()
             return
         }
 
@@ -190,7 +189,7 @@ internal class MapView @JvmOverloads constructor(
                     visibleGpsCoordinate.transform(item.shape)?.let {
                         temp.add(
                             RenderItem(
-                                PolygonD(it.vertices),
+                                PolygonF(it.vertices.map { p -> p.toFloat() }),
                                 item.paint,
                                 item.onClick
                             )
@@ -201,7 +200,7 @@ internal class MapView @JvmOverloads constructor(
                     visibleGpsCoordinate.transform(item.shape).forEach {
                         temp.add(
                             RenderItem(
-                                PathD(it.vertices),
+                                PathF(it.vertices.map { p -> p.toFloat() }),
                                 item.paint
                             )
                         )
@@ -216,7 +215,7 @@ internal class MapView @JvmOverloads constructor(
 
     private fun logVisibleShapes() {
         if (BuildConfig.DEBUG) {
-            val message = "Preparing render list: " + renderList.map { item ->
+            val message = "Preparing render list: " + renderList?.map { item ->
                 when (item.shape) {
                     is PathD -> "PathsF " + item.shape.vertices.size
                     is PolygonD -> "PolygonF " + item.shape.vertices.size

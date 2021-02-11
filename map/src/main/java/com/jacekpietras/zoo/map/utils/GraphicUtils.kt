@@ -4,9 +4,11 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import com.jacekpietras.zoo.map.model.PathD
+import com.jacekpietras.zoo.map.model.PathF
 import com.jacekpietras.zoo.map.model.PolygonD
+import com.jacekpietras.zoo.map.model.PolygonF
 
-internal fun Canvas.drawPath(path: PathD, paint: Paint) {
+internal fun Canvas.drawPath(path: PathF, paint: Paint) {
     val toDraw = Path()
     path.vertices.forEachIndexed { i, point ->
         if (i == 0) {
@@ -19,7 +21,7 @@ internal fun Canvas.drawPath(path: PathD, paint: Paint) {
 }
 
 
-internal fun Canvas.drawPath(polygon: PolygonD, paint: Paint) {
+internal fun Canvas.drawPath(polygon: PolygonF, paint: Paint) {
     val toDraw = Path()
     polygon.vertices.forEachIndexed { i, point ->
         if (i == 0) {

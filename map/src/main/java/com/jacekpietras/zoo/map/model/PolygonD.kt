@@ -17,4 +17,7 @@ internal class PolygonD(val vertices: List<PointD>) : DrawableOnCanvas {
 
     fun contains(point: PointD): Boolean =
         contains(vertices, point)
+
+    fun toFloat(): PolygonF =
+        PolygonF(vertices.map { it.toFloat() })
 }
