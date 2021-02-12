@@ -20,6 +20,7 @@ val mapModule = module {
             getRoadsUseCase = get(),
             getUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
+            getRegionsInUserPositionUseCase = get(),
         )
     }
 }

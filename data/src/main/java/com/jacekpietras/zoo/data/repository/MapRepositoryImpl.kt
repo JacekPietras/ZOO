@@ -9,6 +9,7 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
 import com.jacekpietras.zoo.domain.repository.MapRepository
+import com.jacekpietras.zoo.domain.utils.contains
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.xmlpull.v1.XmlPullParser.*
@@ -19,7 +20,7 @@ class MapRepositoryImpl(
 ) : MapRepository {
 
     private val worldRect: RectD
-    private val regions: List<List<PointD>>
+    private val regions: List<Pair<String, PolygonEntity>>
     private val buildings: List<List<PointD>>
     private val lines: List<List<PointD>>
     private val paths: List<List<PointD>>
@@ -28,13 +29,19 @@ class MapRepositoryImpl(
         val parser = Parser(context, R.xml.mapa_zabinca)
 
         val transformation = getTransformation(parser.rect, parser.worldRect)
+        val tags = parser.texts.getValue("tags")
+            .map {it.copy( position = transformation(it.position)) }
 
         worldRect = parser.worldRect
         regions = parser.map.getValue("regions").map { it.map { p -> transformation(p) } }
+            .map { region ->
+                val containingTags = tags.filter { tag -> contains(region, tag.position) }
+                if (containingTags.size != 1) throw IllegalStateException("wrong size of region")
+                containingTags.first().content to PolygonEntity(region)
+            }
         buildings = parser.map.getValue("buildings").map { it.map { p -> transformation(p) } }
         lines = parser.map.getValue("lines").map { it.map { p -> transformation(p) } }
         paths = parser.map.getValue("paths").map { it.map { p -> transformation(p) } }
-        val tags = parser.texts.getValue("tags")
     }
 
     private fun getTransformation(cartesian: RectD, world: RectD): (PointD) -> PointD {
@@ -58,13 +65,16 @@ class MapRepositoryImpl(
     override fun getRoads(): Flow<List<PathEntity>> =
         flowOf(paths.map(::PathEntity))
 
+    override fun getCurrentRegions(): List<Pair<String, PolygonEntity>> =
+        regions
+
     override fun getWorldBounds(): Flow<RectD> =
         flowOf(worldRect)
 
     private fun <T> List<Pair<String, T>>.getValue(key: String): List<T> =
         filter { it.first == key }.map { it.second }
 
-    private class Tag(val position: PointD, val content: String)
+    private data class Tag(val position: PointD, val content: String)
 
     private class Parser(context: Context, @XmlRes xmlRes: Int) {
         lateinit var rect: RectD

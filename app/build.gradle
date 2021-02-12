@@ -18,12 +18,12 @@ android {
 }
 
 dependencies {
-    implementation project(':core')
+    implementation project(':presentation-core')
     implementation project(':domain')
     implementation project(':data')
-    implementation project(':catalogue')
-    implementation project(':map')
-    implementation project(':planner')
+    implementation project(':presentation-catalogue')
+    implementation project(':presentation-map')
+    implementation project(':presentation-planner')
     implementation project(':logger')
     implementation project(':tracking')
 

@@ -34,13 +34,12 @@ internal class MapViewStateMapper {
             taken,
         ) { a, b, c -> a + b + c }
 
-        val userPosition = state.userPosition.map(::fromPosition)
-        val worldBounds = state.worldBounds.map(::fromWorldSpace)
 
         return MapViewState(
-            worldBounds = worldBounds,
+            currentRegionIds = state.regionsInUserPosition.map(::fromRegionId),
+            worldBounds = state.worldBounds.map(::fromWorldSpace),
             mapData = complex,
-            userPosition = userPosition,
+            userPosition = state.userPosition.map(::fromPosition),
         )
     }
 
@@ -49,6 +48,9 @@ internal class MapViewStateMapper {
 
     private fun fromWorldSpace(worldSpace: RectD): RectD =
         worldSpace
+
+    private fun fromRegionId(regionIds: List<String>): String =
+        regionIds.joinToString(separator = ", ")
 
     private fun fromPolygons(
         polygons: List<PolygonEntity>,

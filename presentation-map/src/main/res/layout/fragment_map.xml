@@ -19,8 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/around_you"
-            android:textAppearance="?textAppearanceHeadline6"
-            tools:ignore="HardcodedText" />
+            android:textAppearance="?textAppearanceHeadline6"/>
+
+        <TextView
+            android:id="@+id/regionIds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="?textAppearanceBody1"/>
 
         <LinearLayout
             android:layout_width="match_parent"

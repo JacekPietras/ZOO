@@ -28,6 +28,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun setObservers() = with(viewModel.viewState) {
+        observe(currentRegionIds) { binding.regionIds.text = it }
         observe(userPosition) { binding.mapView.userPosition = it }
         observe(mapData) { binding.mapView.objectList = it }
         observe(worldBounds) { binding.mapView.worldBounds = it }

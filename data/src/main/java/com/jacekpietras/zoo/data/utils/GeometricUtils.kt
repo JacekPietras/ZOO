@@ -1,58 +1,9 @@
-package com.jacekpietras.zoo.map.utils
+package com.jacekpietras.zoo.domain.utils
 
 import android.graphics.PointF
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
 import kotlin.math.*
-
-internal fun RectD.containsLine(p1: PointD, p2: PointD): Boolean {
-    // Find min and max X for the segment
-    var minX = p1.x
-    var maxX = p2.x
-    if (p1.x > p2.x) {
-        minX = p2.x
-        maxX = p1.x
-    }
-
-    // Find the intersection of the segment's and rectangle's x-projections
-    if (right > left) {
-        if (maxX > right) maxX = right
-        if (minX < left) minX = left
-    } else {
-        if (maxX > left) maxX = left
-        if (minX < right) minX = right
-    }
-
-    // If their projections do not intersect return false
-    if (minX > maxX) return false
-
-    // Find corresponding min and max Y for min and max X we found before
-    var minY = p1.y
-    var maxY = p2.y
-    val dx = p2.x - p1.x
-    if (abs(dx) > 0.0000001) {
-        val a = (p2.y - p1.y) / dx
-        val b = p1.y - a * p1.x
-        minY = a * minX + b
-        maxY = a * maxX + b
-    }
-    if (minY > maxY) {
-        val tmp = maxY
-        maxY = minY
-        minY = tmp
-    }
-
-    // Find the intersection of the segment's and rectangle's y-projections
-    if (bottom > top) {
-        if (maxY > bottom) maxY = bottom
-        if (minY < top) minY = top
-    } else {
-        if (maxY > top) maxY = top
-        if (minY < bottom) minY = bottom
-    }
-
-    return minY <= maxY
-}
 
 internal fun contains(list: List<PointD>, point: PointD): Boolean {
     // ray casting algorithm http://rosettacode.org/wiki/Ray-casting_algorithm
@@ -75,7 +26,6 @@ internal fun contains(list: List<PointD>, point: PointD): Boolean {
     // odd number of crossings?
     return crossings % 2 == 1
 }
-
 
 internal fun contains(list: List<PointF>, point: PointF): Boolean {
     // ray casting algorithm http://rosettacode.org/wiki/Ray-casting_algorithm
@@ -174,15 +124,3 @@ private fun rayCrossesSegment(point: PointF, a: PointF, b: PointF): Boolean {
         blue >= red
     }
 }
-
-fun haversine(p1x: Double, p1y: Double, p2x: Double, p2y: Double): Double {
-    val dLat: Double = Math.toRadians(p2y - p1y)
-    val dLon: Double = Math.toRadians(p2x - p1x)
-    val lat1R = Math.toRadians(p1y)
-    val lat2R = Math.toRadians(p2y)
-
-    val a = sin(dLat * 0.5).pow2() + sin(dLon * 0.5).pow2() * cos(lat1R) * cos(lat2R)
-    return 12745.6 * asin(sqrt(a))
-}
-
-private fun Double.pow2(): Double = this * this

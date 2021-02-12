@@ -6,6 +6,12 @@ import org.koin.dsl.module
 val domainModule = module {
 
     factory {
+        GetRegionsInUserPositionUseCase(
+            mapRepository = get(),
+            gpsRepository = get(),
+        )
+    }
+    factory {
         GetBuildingsUseCase(
             mapRepository = get()
         )
