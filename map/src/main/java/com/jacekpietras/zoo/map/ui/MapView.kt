@@ -11,7 +11,6 @@ import com.jacekpietras.zoo.map.utils.drawPath
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min
-import kotlin.math.sqrt
 
 internal class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -43,17 +42,24 @@ internal class MapView @JvmOverloads constructor(
             Timber.v("Position changed ${value?.x}")
             field = value
         }
+    var userPositionOnScreen: PointF? = null
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD =
         PointD(worldBounds.centerX(), worldBounds.centerY())
     private var zoom: Double = 5.0
+    private var zoomOnStart: Double = 5.0
     private var renderList: List<RenderItem>? = null
     private val debugTextPaint = Paint()
         .apply {
-            color = Color.parseColor("#88000000")
+            color = Color.parseColor("#88444444")
             typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
             textSize = 30f
+        }
+    private val userPositionPaint = Paint()
+        .apply {
+            color = Color.MAGENTA
+            style = Paint.Style.FILL
         }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -61,8 +67,13 @@ internal class MapView @JvmOverloads constructor(
         cutOutNotVisible()
     }
 
+    override fun onScaleBegin(x: Float, y: Float) {
+        zoomOnStart = zoom
+    }
+
     override fun onScale(scale: Float) {
-        zoom = zoom.div(sqrt(scale)).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+        val zoomPoint = (maxZoom - minZoom) / 2
+        zoom = (zoomOnStart + zoomPoint * (1 - scale)).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
         cutOutNotVisible()
         invalidate()
     }
@@ -100,6 +111,10 @@ internal class MapView @JvmOverloads constructor(
                 else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
         }
+        userPositionOnScreen?.let {
+            canvas.drawCircle(it.x, it.y, 15f, userPositionPaint)
+        }
+
         renderDebug(canvas)
     }
 
@@ -119,6 +134,14 @@ internal class MapView @JvmOverloads constructor(
                 120f,
                 debugTextPaint
             )
+            userPosition?.let {
+                canvas.drawText(
+                    "upos: [${it.x.form()},${it.y.form()}]",
+                    10f,
+                    160f,
+                    debugTextPaint
+                )
+            }
         }
     }
 
@@ -253,6 +276,9 @@ internal class MapView @JvmOverloads constructor(
                     }
                 }
             }
+        }
+        userPosition?.let {
+            userPositionOnScreen = visibleGpsCoordinate.transform(it).toFloat()
         }
 
         renderList = temp

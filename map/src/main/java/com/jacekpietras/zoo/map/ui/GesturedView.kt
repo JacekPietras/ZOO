@@ -22,6 +22,8 @@ abstract class GesturedView @JvmOverloads constructor(
         return true;
     }
 
+    abstract fun onScaleBegin(x: Float, y: Float)
+
     abstract fun onScale(scale: Float)
 
     abstract fun onScroll(vX: Float, vY: Float)
@@ -50,7 +52,10 @@ abstract class GesturedView @JvmOverloads constructor(
     }
 
     private inner class OnScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener {
-        override fun onScaleBegin(detector: ScaleGestureDetector?) = true
+        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+            onScaleBegin(detector?.focusX ?: 0f, detector?.focusY ?: 0f)
+            return true
+        }
 
         override fun onScaleEnd(detector: ScaleGestureDetector?) = Unit
 
