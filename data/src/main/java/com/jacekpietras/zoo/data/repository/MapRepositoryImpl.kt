@@ -58,7 +58,7 @@ class MapRepositoryImpl(
     override fun getRoads(): Flow<List<PathEntity>> =
         flowOf(paths.map(::PathEntity))
 
-    override fun getWorldSpace(): Flow<RectD> =
+    override fun getWorldBounds(): Flow<RectD> =
         flowOf(worldRect)
 
     private fun <T> List<Pair<String, T>>.getValue(key: String): List<T> =

@@ -12,7 +12,7 @@ class ViewCoordinatesTest {
     private val viewHeight = 1240
 
     //rect 19.943274236185708, 50.08119582013791, 19.945834569519043, 50.078256178083464
-    private val tested = ViewCoordinates.create(
+    private val tested = ViewCoordinates(
         centerGpsCoordinate = center,
         zoom = 0.0012801666666663418,
         viewWidth = viewWidth,

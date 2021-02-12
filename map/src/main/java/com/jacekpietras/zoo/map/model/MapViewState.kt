@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class MapViewState(
-    val worldSpace: Flow<RectD> = MutableStateFlow(RectD()),
+    val worldBounds: Flow<RectD> = MutableStateFlow(RectD()),
     val mapData: Flow<List<MapItem>> = MutableStateFlow(emptyList()),
     val userPosition: Flow<PointD> = MutableStateFlow(PointD()),
     val effect: Channel<MapEffect> = Channel()

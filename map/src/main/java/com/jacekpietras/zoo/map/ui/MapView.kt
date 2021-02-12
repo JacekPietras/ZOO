@@ -20,7 +20,7 @@ internal class MapView @JvmOverloads constructor(
 
     var maxZoom: Double = 10.0
     var minZoom: Double = 2.0
-    var worldRectangle: RectD = RectD()
+    var worldBounds: RectD = RectD()
         set(value) {
             field = value
             centerGpsCoordinate = PointD(value.centerX(), value.centerY())
@@ -46,7 +46,7 @@ internal class MapView @JvmOverloads constructor(
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD =
-        PointD(worldRectangle.centerX(), worldRectangle.centerY())
+        PointD(worldBounds.centerX(), worldBounds.centerY())
     private var zoom: Double = 5.0
     private var renderList: List<RenderItem>? = null
     private val debugTextPaint = Paint()
@@ -105,7 +105,7 @@ internal class MapView @JvmOverloads constructor(
 
     private fun renderDebug(canvas: Canvas) {
         if (BuildConfig.DEBUG) {
-            canvas.drawText("wrld: " + worldRectangle.toShortString(), 10f, 40f, debugTextPaint)
+            canvas.drawText("wrld: " + worldBounds.toShortString(), 10f, 40f, debugTextPaint)
             canvas.drawText(
                 "curr: ${visibleGpsCoordinate.visibleRect.toShortString()}",
                 10f,
@@ -140,33 +140,72 @@ internal class MapView @JvmOverloads constructor(
     }
 
     private fun preventedGoingOutsideWorld(): Boolean {
-        val leftMargin = visibleGpsCoordinate.visibleRect.left - worldRectangle.left
-        val rightMargin = worldRectangle.right - visibleGpsCoordinate.visibleRect.right
-        val topMargin = visibleGpsCoordinate.visibleRect.top - worldRectangle.top
-        val bottomMargin = worldRectangle.bottom - visibleGpsCoordinate.visibleRect.bottom
+        val reversedV = worldBounds.top > worldBounds.bottom
+        val reversedH = worldBounds.left > worldBounds.right
+
+        val leftMargin =
+            if (reversedH) {
+                worldBounds.left - visibleGpsCoordinate.visibleRect.left
+            } else {
+                visibleGpsCoordinate.visibleRect.left - worldBounds.left
+            }
+        val rightMargin =
+            if (reversedH) {
+                visibleGpsCoordinate.visibleRect.right - worldBounds.right
+            } else {
+                worldBounds.right - visibleGpsCoordinate.visibleRect.right
+            }
+        val topMargin =
+            if (reversedV) {
+                worldBounds.top - visibleGpsCoordinate.visibleRect.top
+            } else {
+                visibleGpsCoordinate.visibleRect.top - worldBounds.top
+            }
+        val bottomMargin =
+            if (reversedV) {
+                visibleGpsCoordinate.visibleRect.bottom - worldBounds.bottom
+            } else {
+                worldBounds.bottom - visibleGpsCoordinate.visibleRect.bottom
+            }
         var result = false
 
         if (leftMargin + rightMargin < 0) {
             zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            centerGpsCoordinate = PointD(worldRectangle.centerX(), centerGpsCoordinate.y)
+            centerGpsCoordinate = PointD(worldBounds.centerX(), centerGpsCoordinate.y)
             result = true
         } else if (leftMargin < -0.00001) {
-            centerGpsCoordinate -= PointD(leftMargin, 0.0)
+            if (reversedH) {
+                centerGpsCoordinate += PointD(leftMargin, 0.0)
+            } else {
+                centerGpsCoordinate -= PointD(leftMargin, 0.0)
+            }
             result = true
         } else if (rightMargin < -0.00001) {
-            centerGpsCoordinate += PointD(rightMargin, 0.0)
+            if (reversedH) {
+                centerGpsCoordinate -= PointD(rightMargin, 0.0)
+            } else {
+                centerGpsCoordinate += PointD(rightMargin, 0.0)
+            }
             result = true
         }
 
         if (topMargin + bottomMargin < 0) {
             zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            centerGpsCoordinate = PointD(centerGpsCoordinate.x, worldRectangle.centerY())
+            centerGpsCoordinate = PointD(centerGpsCoordinate.x, worldBounds.centerY())
             result = true
         } else if (topMargin < -0.00001) {
-            centerGpsCoordinate -= PointD(0.0, topMargin)
+            if (reversedV) {
+                centerGpsCoordinate += PointD(0.0, topMargin)
+            } else {
+                centerGpsCoordinate -= PointD(0.0, topMargin)
+            }
             result = true
         } else if (bottomMargin < -0.00001) {
-            centerGpsCoordinate += PointD(0.0, bottomMargin)
+            if (reversedV) {
+                centerGpsCoordinate -= PointD(0.0, bottomMargin)
+            } else {
+                centerGpsCoordinate += PointD(0.0, bottomMargin)
+            }
             result = true
         }
 
@@ -176,17 +215,17 @@ internal class MapView @JvmOverloads constructor(
     private fun cutOutNotVisible() {
         if (width == 0 || height == 0) return
 
-        visibleGpsCoordinate = ViewCoordinates.create(
+        visibleGpsCoordinate = ViewCoordinates(
             centerGpsCoordinate,
             zoom,
             width,
             height,
         )
 
-//        if (preventedGoingOutsideWorld()) {
-//            cutOutNotVisible()
-//            return
-//        }
+        if (preventedGoingOutsideWorld()) {
+            cutOutNotVisible()
+            return
+        }
 
         val temp = mutableListOf<RenderItem>()
 

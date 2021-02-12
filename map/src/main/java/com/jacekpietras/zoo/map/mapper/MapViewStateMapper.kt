@@ -35,10 +35,10 @@ internal class MapViewStateMapper {
         ) { a, b, c -> a + b + c }
 
         val userPosition = state.userPosition.map(::fromPosition)
-        val worldSpace = state.worldSpace.map(::fromWorldSpace)
+        val worldBounds = state.worldBounds.map(::fromWorldSpace)
 
         return MapViewState(
-            worldSpace = worldSpace,
+            worldBounds = worldBounds,
             mapData = complex,
             userPosition = userPosition,
         )

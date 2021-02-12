@@ -3,7 +3,7 @@ package com.jacekpietras.zoo.map.utils
 import android.graphics.PointF
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
-import kotlin.math.abs
+import kotlin.math.*
 
 internal fun RectD.containsLine(p1: PointD, p2: PointD): Boolean {
     // Find min and max X for the segment
@@ -174,3 +174,15 @@ private fun rayCrossesSegment(point: PointF, a: PointF, b: PointF): Boolean {
         blue >= red
     }
 }
+
+fun haversine(p1x: Double, p1y: Double, p2x: Double, p2y: Double): Double {
+    val dLat: Double = Math.toRadians(p2y - p1y)
+    val dLon: Double = Math.toRadians(p2x - p1x)
+    val lat1R = Math.toRadians(p1y)
+    val lat2R = Math.toRadians(p2y)
+
+    val a = sin(dLat * 0.5).pow2() + sin(dLon * 0.5).pow2() * cos(lat1R) * cos(lat2R)
+    return 12745.6 * asin(sqrt(a))
+}
+
+private fun Double.pow2(): Double = this * this

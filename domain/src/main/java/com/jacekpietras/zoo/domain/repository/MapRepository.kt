@@ -12,5 +12,5 @@ interface MapRepository {
 
     fun getRoads(): Flow<List<PathEntity>>
 
-    fun getWorldSpace(): Flow<RectD>
+    fun getWorldBounds(): Flow<RectD>
 }

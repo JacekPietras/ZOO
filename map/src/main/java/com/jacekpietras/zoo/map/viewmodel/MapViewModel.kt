@@ -16,12 +16,12 @@ internal class MapViewModel(
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     getRoadsUseCase: GetRoadsUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
-    getWorldSpaceUseCase: GetWorldSpaceUseCase,
+    getWorldBoundsUseCase: GetWorldBoundsUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
     private val state = MapState(
-        worldSpace = getWorldSpaceUseCase(),
+        worldBounds = getWorldBoundsUseCase(),
         userPosition = getUserPositionUseCase(),
         buildings = getBuildingsUseCase(),
         roads = getRoadsUseCase()

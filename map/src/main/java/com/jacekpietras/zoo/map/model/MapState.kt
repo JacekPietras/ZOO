@@ -19,7 +19,7 @@ internal data class MapState(
 
     val userPosition: Flow<PointD>,
 
-    val worldSpace: Flow<RectD>,
+    val worldBounds: Flow<RectD>,
 )
 
 private val redPaint: MapPaint
