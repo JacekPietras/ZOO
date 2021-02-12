@@ -14,6 +14,7 @@ internal class MapViewModel(
     viewStateMapper: MapViewStateMapper,
     getBuildingsUseCase: GetBuildingsUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
+    getTakenRouteUseCase: GetTakenRouteUseCase,
     getRoadsUseCase: GetRoadsUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
     getWorldBoundsUseCase: GetWorldBoundsUseCase,
@@ -24,7 +25,8 @@ internal class MapViewModel(
         worldBounds = getWorldBoundsUseCase(),
         userPosition = getUserPositionUseCase(),
         buildings = getBuildingsUseCase(),
-        roads = getRoadsUseCase()
+        roads = getRoadsUseCase(),
+        takenRoute = getTakenRouteUseCase(),
     )
     var viewState = viewStateMapper.from(state)
 

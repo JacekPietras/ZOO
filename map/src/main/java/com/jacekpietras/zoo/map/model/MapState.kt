@@ -28,7 +28,7 @@ private val redPaint: MapPaint
     )
 private val dashedPaint: MapPaint
     get() = MapPaint.DashedStroke(
-        strokeColor = MapColor.Hard(Color.GREEN),
+        strokeColor = MapColor.Hard(Color.YELLOW),
         width = MapDimension.Screen(2),
         pattern = MapDimension.Screen(8)
     )

@@ -16,6 +16,9 @@ internal class GpsRepositoryImpl(
     override fun observeLatestPosition(): Flow<GpsHistoryEntity> =
         gpsDao.getLatest().filterNotNull().map(gpsHistoryMapper::from)
 
+    override fun observeAllPositions(): Flow<List<List<GpsHistoryEntity>>> =
+        gpsDao.observeAll().map { listOf(it.map(gpsHistoryMapper::from)) }
+
     override suspend fun getAllPositions(): List<GpsHistoryEntity> =
         gpsDao.getAll().map(gpsHistoryMapper::from)
 

@@ -16,6 +16,7 @@ val mapModule = module {
             viewStateMapper = get(),
             getWorldBoundsUseCase = get(),
             getBuildingsUseCase = get(),
+            getTakenRouteUseCase = get(),
             getRoadsUseCase = get(),
             getUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
