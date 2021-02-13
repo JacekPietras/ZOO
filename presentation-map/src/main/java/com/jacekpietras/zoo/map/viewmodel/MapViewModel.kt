@@ -43,6 +43,8 @@ internal class MapViewModel(
     }
 
     fun onMyLocationClicked() {
-        //TODO("Not yet implemented")
+        viewModelScope.launch(dispatcherProvider.main) {
+            viewState.effect.send(MapEffect.CenterAtUser)
+        }
     }
 }

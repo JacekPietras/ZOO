@@ -1,8 +1,10 @@
 package com.jacekpietras.zoo.map.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
 import com.jacekpietras.zoo.map.BuildConfig
@@ -11,6 +13,7 @@ import com.jacekpietras.zoo.map.utils.drawPath
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min
+
 
 internal class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -41,6 +44,9 @@ internal class MapView @JvmOverloads constructor(
         set(value) {
             Timber.v("Position changed ${value?.x}")
             field = value
+            if (centeringAtUser) {
+                centerAtUserPosition()
+            }
         }
     var userPositionOnScreen: PointF? = null
 
@@ -50,6 +56,7 @@ internal class MapView @JvmOverloads constructor(
     private var zoom: Double = 5.0
     private var zoomOnStart: Double = 5.0
     private var renderList: List<RenderItem>? = null
+    private var centeringAtUser = false
     private val debugTextPaint = Paint()
         .apply {
             color = Color.parseColor("#88444444")
@@ -61,6 +68,33 @@ internal class MapView @JvmOverloads constructor(
             color = Color.MAGENTA
             style = Paint.Style.FILL
         }
+
+    fun centerAtUserPosition(animation: Boolean = true) {
+        centeringAtUser = true
+        val desiredPosition = userPosition ?: throw IllegalStateException("no user position")
+
+        if (animation) {
+            val previousPosition = centerGpsCoordinate
+            ValueAnimator.ofFloat(1f)
+                .apply {
+                    duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+                    interpolator = AccelerateDecelerateInterpolator()
+                    addUpdateListener { animation ->
+                        animation.animatedFraction
+                        centerGpsCoordinate = previousPosition * (1f - animation.animatedFraction) +
+                                desiredPosition * animation.animatedFraction
+
+                        cutOutNotVisible()
+                        invalidate()
+                    }
+                    start()
+                }
+        } else {
+            centerGpsCoordinate = desiredPosition
+            cutOutNotVisible()
+            invalidate()
+        }
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -79,6 +113,7 @@ internal class MapView @JvmOverloads constructor(
     }
 
     override fun onScroll(vX: Float, vY: Float) {
+        centeringAtUser = false
         centerGpsCoordinate += PointD(
             vX / visibleGpsCoordinate.horizontalScale,
             vY / visibleGpsCoordinate.verticalScale
@@ -192,44 +227,52 @@ internal class MapView @JvmOverloads constructor(
             }
         var result = false
 
-        if (leftMargin + rightMargin < 0) {
-            zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            centerGpsCoordinate = PointD(worldBounds.centerX(), centerGpsCoordinate.y)
-            result = true
-        } else if (leftMargin < -0.00001) {
-            if (reversedH) {
-                centerGpsCoordinate += PointD(leftMargin, 0.0)
-            } else {
-                centerGpsCoordinate -= PointD(leftMargin, 0.0)
+        when {
+            leftMargin + rightMargin < 0 -> {
+                zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+                centerGpsCoordinate = PointD(worldBounds.centerX(), centerGpsCoordinate.y)
+                result = true
             }
-            result = true
-        } else if (rightMargin < -0.00001) {
-            if (reversedH) {
-                centerGpsCoordinate -= PointD(rightMargin, 0.0)
-            } else {
-                centerGpsCoordinate += PointD(rightMargin, 0.0)
+            leftMargin < -0.00001 -> {
+                if (reversedH) {
+                    centerGpsCoordinate += PointD(leftMargin, 0.0)
+                } else {
+                    centerGpsCoordinate -= PointD(leftMargin, 0.0)
+                }
+                result = true
             }
-            result = true
+            rightMargin < -0.00001 -> {
+                if (reversedH) {
+                    centerGpsCoordinate -= PointD(rightMargin, 0.0)
+                } else {
+                    centerGpsCoordinate += PointD(rightMargin, 0.0)
+                }
+                result = true
+            }
         }
 
-        if (topMargin + bottomMargin < 0) {
-            zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-            centerGpsCoordinate = PointD(centerGpsCoordinate.x, worldBounds.centerY())
-            result = true
-        } else if (topMargin < -0.00001) {
-            if (reversedV) {
-                centerGpsCoordinate += PointD(0.0, topMargin)
-            } else {
-                centerGpsCoordinate -= PointD(0.0, topMargin)
+        when {
+            topMargin + bottomMargin < 0 -> {
+                zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+                centerGpsCoordinate = PointD(centerGpsCoordinate.x, worldBounds.centerY())
+                result = true
             }
-            result = true
-        } else if (bottomMargin < -0.00001) {
-            if (reversedV) {
-                centerGpsCoordinate -= PointD(0.0, bottomMargin)
-            } else {
-                centerGpsCoordinate += PointD(0.0, bottomMargin)
+            topMargin < -0.00001 -> {
+                if (reversedV) {
+                    centerGpsCoordinate += PointD(0.0, topMargin)
+                } else {
+                    centerGpsCoordinate -= PointD(0.0, topMargin)
+                }
+                result = true
             }
-            result = true
+            bottomMargin < -0.00001 -> {
+                if (reversedV) {
+                    centerGpsCoordinate -= PointD(0.0, bottomMargin)
+                } else {
+                    centerGpsCoordinate += PointD(0.0, bottomMargin)
+                }
+                result = true
+            }
         }
 
         return result

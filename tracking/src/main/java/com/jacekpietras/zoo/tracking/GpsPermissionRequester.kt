@@ -324,7 +324,7 @@ class GpsPermissionRequester(private val fragment: Fragment) {
     }
 
     private fun isFirstTimeAskingPermission(permission: String) =
-        activity.getSharedPreferences("GPS_PERMISSIONS", MODE_PRIVATE).getBoolean(permission, true);
+        activity.getSharedPreferences("GPS_PERMISSIONS", MODE_PRIVATE).getBoolean(permission, true)
 
     private companion object {
         const val PLAY_SERVICES_RESOLUTION_REQUEST = 6670

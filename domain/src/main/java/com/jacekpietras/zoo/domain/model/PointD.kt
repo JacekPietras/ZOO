@@ -10,7 +10,7 @@ data class PointD(
 
     constructor(xFloat: Float, yFloat: Float) : this(xFloat.toDouble(), yFloat.toDouble())
 
-    constructor(pair:Pair<Number, Number>) : this(pair.first.toDouble(), pair.second.toDouble())
+    constructor(pair: Pair<Number, Number>) : this(pair.first.toDouble(), pair.second.toDouble())
 
     fun toFloat(): PointF =
         PointF(x.toFloat(), y.toFloat())
@@ -23,8 +23,40 @@ data class PointD(
         y -= right.y
     }
 
-    operator fun plusAssign(right: PointD) {
-        x += right.x
-        y += right.y
+    operator fun timesAssign(times: Double) {
+        x *= times
+        y *= times
     }
+
+    operator fun timesAssign(times: Float) {
+        x *= times
+        y *= times
+    }
+
+    operator fun times(times: Double): PointD =
+        PointD(
+            x * times,
+            y * times
+        )
+
+    operator fun times(times: Float): PointD =
+        PointD(
+            x * times,
+            y * times
+        )
+
+    operator fun plus(second: PointD): PointD =
+        PointD(
+            x + second.x,
+            y + second.y
+        )
+
+    fun toShortString(): String = "[${x.form()},${y.form()}]"
+
+    private fun Double.form() = "%.6f".format(this)
 }
+
+
+fun PointF.toDouble(): PointD =
+    PointD(x.toDouble(), y.toDouble())
+

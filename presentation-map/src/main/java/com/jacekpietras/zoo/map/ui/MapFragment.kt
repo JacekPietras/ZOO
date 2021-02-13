@@ -35,6 +35,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         observe(effect) {
             when (it) {
                 is MapEffect.ShowToast -> toast(it.text)
+                is MapEffect.CenterAtUser -> binding.mapView.centerAtUserPosition()
             }
         }
     }
