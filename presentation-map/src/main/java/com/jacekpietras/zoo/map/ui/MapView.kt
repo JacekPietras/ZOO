@@ -8,6 +8,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
 import com.jacekpietras.zoo.map.BuildConfig
+import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.utils.drawPath
 import timber.log.Timber
@@ -65,7 +66,7 @@ internal class MapView @JvmOverloads constructor(
         }
     private val userPositionPaint = Paint()
         .apply {
-            color = Color.MAGENTA
+            color = MapColor.Attribute(R.attr.colorPrimary).toColorInt(context)
             style = Paint.Style.FILL
         }
 
@@ -186,12 +187,14 @@ internal class MapView @JvmOverloads constructor(
         when (item.shape) {
             is PathD -> RenderItem(
                 item.shape,
-                item.paint.toCanvasPaint(context)
+                item.paint.toCanvasPaint(context),
+                item.paint.toBorderCanvasPaint(context),
             )
             is PolygonD -> RenderItem(
                 item.shape,
                 item.paint.toCanvasPaint(context),
-                item.onClick
+                item.paint.toBorderCanvasPaint(context),
+                item.onClick,
             )
             else -> throw IllegalStateException("Unknown shape type ${item.shape}")
         }
@@ -293,29 +296,51 @@ internal class MapView @JvmOverloads constructor(
             return
         }
 
-        val temp = mutableListOf<RenderItem>()
+        val borders = mutableListOf<RenderItem>()
+        val insides = mutableListOf<RenderItem>()
 
         _objectList.forEach { item ->
             when (item.shape) {
                 is PolygonD -> {
                     visibleGpsCoordinate.transform(item.shape)?.let {
-                        temp.add(
+                        val polygon = PolygonF(it.vertices.map { p -> p.toFloat() })
+                        insides.add(
                             RenderItem(
-                                PolygonF(it.vertices.map { p -> p.toFloat() }),
+                                polygon,
                                 item.paint,
-                                item.onClick
+                                null,
+                                item.onClick,
                             )
                         )
+                        if (item.outerPaint != null) {
+                            borders.add(
+                                RenderItem(
+                                    polygon,
+                                    item.outerPaint,
+                                    null,
+                                    item.onClick,
+                                )
+                            )
+                        }
                     }
                 }
                 is PathD -> {
                     visibleGpsCoordinate.transform(item.shape).forEach {
-                        temp.add(
+                        val path = PathF(it.vertices.map { p -> p.toFloat() })
+                        insides.add(
                             RenderItem(
-                                PathF(it.vertices.map { p -> p.toFloat() }),
-                                item.paint
+                                path,
+                                item.paint,
                             )
                         )
+                        if (item.outerPaint != null) {
+                            borders.add(
+                                RenderItem(
+                                    path,
+                                    item.outerPaint,
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -324,7 +349,7 @@ internal class MapView @JvmOverloads constructor(
             userPositionOnScreen = visibleGpsCoordinate.transform(it).toFloat()
         }
 
-        renderList = temp
+        renderList = borders + insides
         logVisibleShapes()
     }
 
@@ -346,6 +371,7 @@ internal class MapView @JvmOverloads constructor(
     private class RenderItem(
         val shape: DrawableOnCanvas,
         val paint: Paint,
+        val outerPaint: Paint? = null,
         val onClick: ((x: Float, y: Float) -> Unit)? = null,
     )
 }

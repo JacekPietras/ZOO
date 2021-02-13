@@ -30,5 +30,6 @@ internal fun Canvas.drawPath(polygon: PolygonF, paint: Paint) {
             toDraw.lineTo(point.x, point.y)
         }
     }
+    toDraw.close()
     drawPath(toDraw, paint)
 }

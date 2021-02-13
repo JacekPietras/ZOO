@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Theme.ZOO" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!-- Primary brand color. -->
@@ -10,6 +11,14 @@
         <item name="colorSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/main_green</item>
+
+        <!-- Map Colors -->
+        <item name="colorMapBackground">#f8f9fa</item>
+        <item name="colorMapBuilding">#f1f3f4</item>
+        <item name="colorMapBuildingBorder">#D7DBDD</item>
+        <item name="colorMapRoute">#ffffff</item>
+        <item name="colorMapRouteBorder">#D7DBDD</item>
+        <item name="colorMapTaken">?colorPrimary</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>

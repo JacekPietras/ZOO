@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorMapBackground" format="color|reference" />
+    <attr name="colorMapBuilding" format="color|reference" />
+    <attr name="colorMapBuildingBorder" format="color|reference" />
+    <attr name="colorMapRoute" format="color|reference" />
+    <attr name="colorMapRouteBorder" format="color|reference" />
+    <attr name="colorMapTaken" format="color|reference" />
+</resources>

@@ -78,6 +78,7 @@
 
         <com.jacekpietras.zoo.map.ui.MapView
             android:id="@+id/mapView"
+            android:background="?colorMapBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

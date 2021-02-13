@@ -5,6 +5,7 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.PointD
 import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.zoo.map.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -15,28 +16,30 @@ internal data class MapState(
     val roads: Flow<List<PathEntity>> = flowOf(emptyList()),
     val takenRoute: Flow<List<PathEntity>> = flowOf(emptyList()),
 
-    val buildingPaint: Flow<MapPaint> = flowOf(redPaint),
-    val roadPaint: Flow<MapPaint> = flowOf(strokePaint),
-    val takenRoutePaint: Flow<MapPaint> = flowOf(dashedPaint),
+    val buildingPaint: Flow<MapPaint> = flowOf(
+        MapPaint.FillWithBorder(
+            fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
+            borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
+            borderWidth = MapDimension.Screen(1),
+        )
+    ),
+    val roadPaint: Flow<MapPaint> = flowOf(
+        MapPaint.StrokeWithBorder(
+            strokeColor = MapColor.Attribute(R.attr.colorMapRoute),
+            width = MapDimension.Screen(2),
+            borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
+            borderWidth = MapDimension.Screen(1),
+        )
+    ),
+    val takenRoutePaint: Flow<MapPaint> = flowOf(
+        MapPaint.DashedStroke(
+            strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
+            width = MapDimension.Screen(2),
+            pattern = MapDimension.Screen(8)
+        )
+    ),
 
     val userPosition: Flow<PointD>,
 
     val worldBounds: Flow<RectD>,
 )
-
-private val redPaint: MapPaint
-    get() = MapPaint.Fill(
-        fillColor = MapColor.Hard(Color.RED)
-    )
-private val dashedPaint: MapPaint
-    get() = MapPaint.DashedStroke(
-        strokeColor = MapColor.Hard(Color.YELLOW),
-        width = MapDimension.Screen(2),
-        pattern = MapDimension.Screen(8)
-    )
-private val strokePaint: MapPaint
-    get() = MapPaint.Stroke(
-        strokeColor = MapColor.Hard(Color.GREEN),
-        width = MapDimension.Screen(2),
-    )
-

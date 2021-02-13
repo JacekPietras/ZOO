@@ -1,17 +1,18 @@
 package com.jacekpietras.zoo.map.model
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.util.TypedValue
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
+import com.google.android.material.color.MaterialColors
 
 internal sealed class MapPaint {
 
     abstract fun toCanvasPaint(context: Context): Paint
+    open fun toBorderCanvasPaint(context: Context): Paint? = null
 
     data class Stroke(
         val width: MapDimension,
@@ -25,6 +26,32 @@ internal sealed class MapPaint {
 
                 color = strokeColor.toColorInt(context)
                 strokeWidth = width.toPixels(context)
+            }
+    }
+
+    data class StrokeWithBorder(
+        val width: MapDimension,
+        val strokeColor: MapColor,
+        val borderWidth: MapDimension,
+        val borderColor: MapColor,
+    ) : MapPaint() {
+
+        override fun toCanvasPaint(context: Context): Paint =
+            Paint().apply {
+                style = Paint.Style.STROKE
+                isAntiAlias = true
+
+                color = strokeColor.toColorInt(context)
+                strokeWidth = width.toPixels(context)
+            }
+
+        override fun toBorderCanvasPaint(context: Context): Paint =
+            Paint().apply {
+                style = Paint.Style.STROKE
+                isAntiAlias = true
+
+                color = borderColor.toColorInt(context)
+                strokeWidth = width.toPixels(context) + 2 * borderWidth.toPixels(context)
             }
     }
 
@@ -62,6 +89,30 @@ internal sealed class MapPaint {
                 color = fillColor.toColorInt(context)
             }
     }
+
+    data class FillWithBorder(
+        val fillColor: MapColor,
+        val borderWidth: MapDimension,
+        val borderColor: MapColor,
+    ) : MapPaint() {
+
+        override fun toCanvasPaint(context: Context): Paint =
+            Paint().apply {
+                style = Paint.Style.FILL
+                isAntiAlias = true
+
+                color = fillColor.toColorInt(context)
+            }
+
+        override fun toBorderCanvasPaint(context: Context): Paint =
+            Paint().apply {
+                style = Paint.Style.FILL_AND_STROKE
+                isAntiAlias = true
+
+                color = borderColor.toColorInt(context)
+                strokeWidth = borderWidth.toPixels(context) * 2
+            }
+    }
 }
 
 internal sealed class MapDimension {
@@ -88,14 +139,15 @@ internal sealed class MapDimension {
             context.resources.getDimension(dimenRes)
     }
 
-    class World(
-        private val meters: Double
-    ) : MapDimension() {
-
-        override fun toPixels(context: Context): Float {
-            TODO("Not yet implemented")
-        }
-    }
+    //todo it will be hard to implement
+//    class World(
+//        private val meters: Double
+//    ) : MapDimension() {
+//
+//        override fun toPixels(context: Context): Float {
+//            TODO("Not yet implemented")
+//        }
+//    }
 }
 
 internal sealed class MapColor {
@@ -104,15 +156,37 @@ internal sealed class MapColor {
     abstract fun toColorInt(context: Context): Int
 
     class Res(
-        @ColorRes private val colorRes: Int
+        @ColorRes private val colorRes: Int,
     ) : MapColor() {
 
         override fun toColorInt(context: Context): Int =
             ContextCompat.getColor(context, colorRes)
     }
 
+    class Attribute(
+        @AttrRes private val attrRes: Int,
+    ) : MapColor() {
+
+        override fun toColorInt(context: Context): Int =
+            MaterialColors.getColor(context, attrRes, Color.MAGENTA)
+    }
+
+    class StyleAttribute(
+        @AttrRes private val colorAttr: Int,
+        @StyleRes private val styleAttr: Int,
+    ) : MapColor() {
+
+        override fun toColorInt(context: Context): Int {
+            val attrs = intArrayOf(colorAttr)
+            val ta = context.theme.obtainStyledAttributes(styleAttr, attrs)
+            val textColor = ta.getColor(0, Color.MAGENTA)
+            ta.recycle()
+            return textColor
+        }
+    }
+
     class Hard(
-        @ColorInt private val color: Int
+        @ColorInt private val color: Int,
     ) : MapColor() {
 
         override fun toColorInt(context: Context): Int = color
