@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map
+package com.jacekpietras.mapview.utils
 
 internal inline fun <T> Iterable<T>.cutOut(
     predicate: (a: T, b: T) -> Boolean,

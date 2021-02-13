@@ -1,0 +1,11 @@
+apply plugin: "com.android.library"
+apply from: "$rootDir/common.gradle"
+apply plugin: "de.mannodermaus.android-junit5"
+
+dependencies {
+    implementation project(':core')
+    implementation "com.google.android.material:material:$material_version"
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+}

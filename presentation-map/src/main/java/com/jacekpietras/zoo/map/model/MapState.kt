@@ -4,6 +4,9 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.mapview.model.MapColor
+import com.jacekpietras.mapview.model.MapDimension
+import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.zoo.map.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

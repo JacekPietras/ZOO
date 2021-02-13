@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map.ui
+package com.jacekpietras.mapview.ui
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -7,16 +7,15 @@ import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.zoo.map.BuildConfig
-import com.jacekpietras.zoo.map.R
-import com.jacekpietras.zoo.map.model.*
-import com.jacekpietras.zoo.map.utils.drawPath
+import com.jacekpietras.mapview.R
+import com.jacekpietras.mapview.model.*
+import com.jacekpietras.mapview.BuildConfig
+import com.jacekpietras.mapview.utils.drawPath
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min
 
-
-internal class MapView @JvmOverloads constructor(
+class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
     //  [19.940416, 50.083510] [19.948745, 50.075829]

@@ -4,8 +4,11 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.mapview.model.MapPaint
+import com.jacekpietras.mapview.model.PathD
+import com.jacekpietras.mapview.model.PolygonD
 import com.jacekpietras.zoo.map.model.*
-import com.jacekpietras.zoo.map.ui.MapItem
+import com.jacekpietras.mapview.model.MapItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map

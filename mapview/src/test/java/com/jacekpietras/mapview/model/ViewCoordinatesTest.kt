@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map.model
+package com.jacekpietras.mapview.model
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.containsLine
@@ -36,7 +36,7 @@ class ViewCoordinatesTest {
     fun `points are on on screen`() {
         assertTrue(tested.visibleRect.contains(19.944, 50.08))
         assertTrue(tested.visibleRect.contains(19.945, 50.08))
-        assertTrue(tested.visibleRect.contains(19.945, 50.081))
+        assertTrue(tested.visibleRect.contains(19.945, 50.079))
     }
 
     @Test
@@ -48,26 +48,34 @@ class ViewCoordinatesTest {
 
     @Test
     fun `lines are on on screen`() {
-        assertTrue(tested.visibleRect.containsLine(
-            PointD(19.944, 50.08),
-            PointD(19.945, 50.08),
-        ))
-        assertTrue(tested.visibleRect.containsLine(
-            PointD(119.944, 150.08),
-            PointD(19.945, 50.08),
-        ))
+        assertTrue(
+            tested.visibleRect.containsLine(
+                PointD(19.944, 50.08),
+                PointD(19.945, 50.08),
+            )
+        )
+        assertTrue(
+            tested.visibleRect.containsLine(
+                PointD(119.944, 150.08),
+                PointD(19.945, 50.08),
+            )
+        )
     }
 
     @Test
     fun `lines are not on on screen`() {
-        assertFalse(tested.visibleRect.containsLine(
-            PointD(119.944, 50.08),
-            PointD(119.945, 50.08),
-        ))
-        assertFalse(tested.visibleRect.containsLine(
-            PointD(19.944, -50.08),
-            PointD(19.945, -50.08),
-        ))
+        assertFalse(
+            tested.visibleRect.containsLine(
+                PointD(119.944, 50.08),
+                PointD(119.945, 50.08),
+            )
+        )
+        assertFalse(
+            tested.visibleRect.containsLine(
+                PointD(19.944, -50.08),
+                PointD(19.945, -50.08),
+            )
+        )
     }
 
     @Test

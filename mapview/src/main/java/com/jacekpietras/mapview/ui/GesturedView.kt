@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map.ui
+package com.jacekpietras.mapview.ui
 
 import android.annotation.SuppressLint
 import android.content.Context

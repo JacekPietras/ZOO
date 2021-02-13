@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.map.model
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.zoo.map.ui.MapItem
+import com.jacekpietras.mapview.model.MapItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,12 +1,10 @@
-package com.jacekpietras.zoo.map.utils
+package com.jacekpietras.mapview.utils
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import com.jacekpietras.zoo.map.model.PathD
-import com.jacekpietras.zoo.map.model.PathF
-import com.jacekpietras.zoo.map.model.PolygonD
-import com.jacekpietras.zoo.map.model.PolygonF
+import com.jacekpietras.mapview.model.PathF
+import com.jacekpietras.mapview.model.PolygonF
 
 internal fun Canvas.drawPath(path: PathF, paint: Paint) {
     val toDraw = Path()

@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map.model
+package com.jacekpietras.mapview.model
 
 import android.content.Context
 import android.graphics.Color
@@ -9,7 +9,7 @@ import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import com.google.android.material.color.MaterialColors
 
-internal sealed class MapPaint {
+sealed class MapPaint {
 
     abstract fun toCanvasPaint(context: Context): Paint
     open fun toBorderCanvasPaint(context: Context): Paint? = null
@@ -115,7 +115,7 @@ internal sealed class MapPaint {
     }
 }
 
-internal sealed class MapDimension {
+sealed class MapDimension {
 
     abstract fun toPixels(context: Context): Float
 
@@ -150,7 +150,7 @@ internal sealed class MapDimension {
 //    }
 }
 
-internal sealed class MapColor {
+sealed class MapColor {
 
     @ColorInt
     abstract fun toColorInt(context: Context): Int

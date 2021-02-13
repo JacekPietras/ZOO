@@ -1,10 +1,6 @@
-package com.jacekpietras.zoo.map.ui
+package com.jacekpietras.mapview.model
 
-import com.jacekpietras.zoo.map.model.MapPaint
-import com.jacekpietras.zoo.map.model.PathD
-import com.jacekpietras.zoo.map.model.PolygonD
-
-internal class MapItem {
+class MapItem {
     val shape: Any
     val paint: MapPaint
     val onClick: ((x: Float, y: Float) -> Unit)?

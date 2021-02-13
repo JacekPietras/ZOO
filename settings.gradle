@@ -1,3 +1,4 @@
+include ':mapview'
 include ':core'
 include ':tracking'
 include ':logger'

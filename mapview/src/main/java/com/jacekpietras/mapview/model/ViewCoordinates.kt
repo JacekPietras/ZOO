@@ -1,8 +1,8 @@
-package com.jacekpietras.zoo.map.model
+package com.jacekpietras.mapview.model
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.zoo.map.cutOut
+import com.jacekpietras.mapview.utils.cutOut
 import com.jacekpietras.core.containsLine
 import com.jacekpietras.core.haversine
 
