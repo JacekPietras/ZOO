@@ -38,5 +38,13 @@ data class RectD(
     fun toInt(): Rect =
         Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
 
+    fun toPoints(): List<PointD> =
+        listOf(
+            PointD(left, top),
+            PointD(right, top),
+            PointD(right, bottom),
+            PointD(left, bottom),
+        )
+
     private fun Double.form() = "%.6f".format(this)
 }

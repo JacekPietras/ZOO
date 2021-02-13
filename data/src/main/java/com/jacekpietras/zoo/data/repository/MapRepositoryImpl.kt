@@ -3,13 +3,13 @@ package com.jacekpietras.zoo.data.repository
 import android.content.Context
 import android.content.res.XmlResourceParser
 import androidx.annotation.XmlRes
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
+import com.jacekpietras.core.contains
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.repository.MapRepository
-import com.jacekpietras.core.contains
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.xmlpull.v1.XmlPullParser.*
@@ -30,7 +30,7 @@ class MapRepositoryImpl(
 
         val transformation = getTransformation(parser.rect, parser.worldRect)
         val tags = parser.texts.getValue("tags")
-            .map {it.copy( position = transformation(it.position)) }
+            .map { it.copy(position = transformation(it.position)) }
 
         worldRect = parser.worldRect
         regions = parser.map.getValue("regions").map { it.map { p -> transformation(p) } }
@@ -89,6 +89,7 @@ class MapRepositoryImpl(
         private var group: String? = null
         private var coords = ""
 
+        //        <rect x="808.551" y="176.785" transform="matrix(0.7336 -0.6796 0.6796 0.7336 94.3205 598.8163)" fill="#ED1F24" width="4.645" height="4.659"/>
         init {
             with(context.resources.getXml(xmlRes)) {
                 while (eventType != END_DOCUMENT) {
@@ -96,13 +97,22 @@ class MapRepositoryImpl(
                         START_TAG -> {
                             when (name) {
                                 GROUP_TAG -> group = attr("id")
-                                MAIN_TAG -> rect = attr("viewBox").parseRect()
+                                MAIN_TAG -> rect = attr("viewBox").parseBox()
                                 POLYGON_TAG,
                                 POLYLINE_TAG -> map.add(group!! to attr("points").parsePoly())
+                                RECT_TAG -> {
+                                    val rect = RectD(
+                                        attrD("x"),
+                                        attrD("y"),
+                                        attrD("x") + attrD("width"),
+                                        attrD("y") + attrD("height")
+                                    )
+                                    map.add(group!! to rect.toPoints())
+                                }
                                 LINE_TAG -> {
                                     val list = listOf(
-                                        PointD(attr("x1").toDouble(), attr("y1").toDouble()),
-                                        PointD(attr("x2").toDouble(), attr("y2").toDouble()),
+                                        PointD(attrD("x1"), attrD("y1")),
+                                        PointD(attrD("x2"), attrD("y2")),
                                     )
                                     map.add(group!! to list)
                                 }
@@ -126,7 +136,7 @@ class MapRepositoryImpl(
                     next()
                 }
             }
-            worldRect = coords.parseRect()
+            worldRect = coords.parseBox()
                 .run {
                     RectD(
                         left = top,
@@ -151,7 +161,7 @@ class MapRepositoryImpl(
                 .split(" ")
                 .run { PointD(get(0).toDouble(), get(1).toDouble()) }
 
-        private fun String.parseRect(): RectD =
+        private fun String.parseBox(): RectD =
             this
                 .replace(",", " ")
                 .replace(pattern, " ")
@@ -160,14 +170,19 @@ class MapRepositoryImpl(
                 .map { it.toDouble() }
                 .run { RectD(get(0), get(1), get(2), get(3)) }
 
+
         private fun XmlResourceParser.attr(name: String): String =
             getAttributeValue(null, name)
+
+        private fun XmlResourceParser.attrD(name: String): Double =
+            getAttributeValue(null, name).toDouble()
 
         private companion object {
             const val GROUP_TAG = "g"
             const val MAIN_TAG = "svg"
             const val POLYGON_TAG = "polygon"
             const val POLYLINE_TAG = "polyline"
+            const val RECT_TAG = "rect"
             const val LINE_TAG = "line"
             const val TEXT_TAG = "text"
             private val pattern = "\\s+".toRegex()
