@@ -2,6 +2,18 @@ apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
 apply plugin: 'kotlin-kapt'
 
+android {
+    flavorDimensions("module-dimension")
+    productFlavors {
+        create("cracow_zoo") {
+            setDimension("module-dimension")
+        }
+        create("zabiniec") {
+            setDimension("module-dimension")
+        }
+    }
+}
+
 dependencies {
     implementation project(':domain')
 

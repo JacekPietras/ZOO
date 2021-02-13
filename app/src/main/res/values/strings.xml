@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">ZOO</string>
     <string name="title_map">Map</string>
     <string name="title_catalogue">Animals</string>
     <string name="title_planner">Planner</string>

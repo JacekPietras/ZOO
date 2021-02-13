@@ -26,7 +26,7 @@ class MapRepositoryImpl(
     private val paths: List<List<PointD>>
 
     init {
-        val parser = Parser(context, R.xml.mapa_zabinca)
+        val parser = Parser(context, R.xml.map)
 
         val transformation = getTransformation(parser.rect, parser.worldRect)
         val tags = parser.texts.getValue("tags")

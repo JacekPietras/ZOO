@@ -15,6 +15,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    
+    flavorDimensions("app-dimension")
+    productFlavors {
+        create("cracow_zoo") {
+            setDimension("app-dimension")
+            missingDimensionStrategy("module-dimension", "cracow_zoo")
+            missingDimensionStrategy("feature-dimension", "cracow_zoo")
+            applicationIdSuffix ".cracow"
+        }
+        create("zabiniec") {
+            setDimension("app-dimension")
+            missingDimensionStrategy("module-dimension", "zabiniec")
+            missingDimensionStrategy("feature-dimension", "zabiniec")
+            applicationIdSuffix ".zabiniec"
+        }
+    }
 }
 
 dependencies {
