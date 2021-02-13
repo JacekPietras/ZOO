@@ -1,10 +1,9 @@
 package com.jacekpietras.zoo.map.model
 
-import android.graphics.Color
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.map.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.map.ui.MapItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

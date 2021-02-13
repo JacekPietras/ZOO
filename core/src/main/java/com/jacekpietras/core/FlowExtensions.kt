@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.core.extensions
+package com.jacekpietras.core
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope

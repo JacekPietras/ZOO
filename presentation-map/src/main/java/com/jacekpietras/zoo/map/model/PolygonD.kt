@@ -1,9 +1,8 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.domain.model.RectD
-import com.jacekpietras.zoo.map.utils.contains
-import com.jacekpietras.zoo.map.utils.containsLine
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
+import com.jacekpietras.core.containsLine
 
 internal class PolygonD(val vertices: List<PointD>) : DrawableOnCanvas {
 
@@ -16,7 +15,7 @@ internal class PolygonD(val vertices: List<PointD>) : DrawableOnCanvas {
     }
 
     fun contains(point: PointD): Boolean =
-        contains(vertices, point)
+        com.jacekpietras.core.contains(vertices, point)
 
     fun toFloat(): PolygonF =
         PolygonF(vertices.map { it.toFloat() })

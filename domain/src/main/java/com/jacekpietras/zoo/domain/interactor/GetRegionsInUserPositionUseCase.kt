@@ -1,9 +1,9 @@
 package com.jacekpietras.zoo.domain.interactor
 
-import com.jacekpietras.zoo.domain.model.PointD
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.contains
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
-import com.jacekpietras.zoo.domain.utils.contains
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

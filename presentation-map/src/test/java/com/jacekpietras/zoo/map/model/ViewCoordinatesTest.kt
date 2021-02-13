@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.map.utils.containsLine
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.containsLine
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

@@ -1,10 +1,10 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.map.cutOut
-import com.jacekpietras.zoo.map.utils.containsLine
-import com.jacekpietras.zoo.map.utils.haversine
+import com.jacekpietras.core.containsLine
+import com.jacekpietras.core.haversine
 
 internal class ViewCoordinates(
     centerGpsCoordinate: PointD,

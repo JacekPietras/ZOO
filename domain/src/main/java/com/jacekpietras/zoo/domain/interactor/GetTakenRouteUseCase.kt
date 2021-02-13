@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.zoo.domain.model.MapItemEntity
-import com.jacekpietras.zoo.domain.model.PointD
+import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

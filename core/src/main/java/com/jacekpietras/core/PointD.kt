@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.model
+package com.jacekpietras.core
 
 import android.graphics.Point
 import android.graphics.PointF
@@ -56,7 +56,5 @@ data class PointD(
     private fun Double.form() = "%.6f".format(this)
 }
 
-
 fun PointF.toDouble(): PointD =
     PointD(x.toDouble(), y.toDouble())
-

@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.interactor
 
-import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
 

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.jacekpietras.core.observe
 import com.jacekpietras.zoo.core.binding.viewBinding
-import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.databinding.FragmentMapBinding

@@ -4,6 +4,7 @@ apply from: "$rootDir/presentation.gradle"
 apply plugin: "de.mannodermaus.android-junit5"
 
 dependencies {
+    implementation project(':core')
     implementation project(':presentation-core')
     implementation project(':domain')
     implementation project(':tracking')

@@ -5,8 +5,8 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.*

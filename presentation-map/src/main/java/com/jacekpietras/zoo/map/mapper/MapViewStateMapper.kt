@@ -2,8 +2,8 @@ package com.jacekpietras.zoo.map.mapper
 
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.ui.MapItem
 import kotlinx.coroutines.flow.Flow

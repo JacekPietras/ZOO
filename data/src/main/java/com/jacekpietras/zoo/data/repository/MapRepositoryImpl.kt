@@ -6,10 +6,10 @@ import androidx.annotation.XmlRes
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.domain.model.PointD
-import com.jacekpietras.zoo.domain.model.RectD
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.repository.MapRepository
-import com.jacekpietras.zoo.domain.utils.contains
+import com.jacekpietras.core.contains
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.xmlpull.v1.XmlPullParser.*

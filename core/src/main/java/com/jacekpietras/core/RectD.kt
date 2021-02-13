@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.model
+package com.jacekpietras.core
 
 import android.graphics.Rect
 import android.graphics.RectF
