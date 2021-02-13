@@ -18,7 +18,6 @@ internal fun Canvas.drawPath(path: PathF, paint: Paint) {
     drawPath(toDraw, paint)
 }
 
-
 internal fun Canvas.drawPath(polygon: PolygonF, paint: Paint) {
     val toDraw = Path()
     polygon.vertices.forEachIndexed { i, point ->

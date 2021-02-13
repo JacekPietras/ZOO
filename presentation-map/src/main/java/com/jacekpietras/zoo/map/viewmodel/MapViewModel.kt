@@ -26,9 +26,9 @@ internal class MapViewModel(
         regionsInUserPosition = getRegionsInUserPositionUseCase(),
         worldBounds = getWorldBoundsUseCase(),
         userPosition = getUserPositionUseCase(),
-        buildings = getBuildingsUseCase(),
+//        buildings = getBuildingsUseCase(),
         roads = getRoadsUseCase(),
-        takenRoute = getTakenRouteUseCase(),
+//        takenRoute = getTakenRouteUseCase(),
     )
     var viewState = viewStateMapper.from(state)
 

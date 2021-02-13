@@ -1,12 +1,12 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
+import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
+import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.map.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -22,22 +22,22 @@ internal data class MapState(
         MapPaint.FillWithBorder(
             fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
             borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
-            borderWidth = MapDimension.Screen(1),
+            borderWidth = MapDimension.Static.Screen(1),
         )
     ),
     val roadPaint: Flow<MapPaint> = flowOf(
         MapPaint.StrokeWithBorder(
             strokeColor = MapColor.Attribute(R.attr.colorMapRoute),
-            width = MapDimension.Screen(2),
+            width = MapDimension.Dynamic.World(2.0),
             borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
-            borderWidth = MapDimension.Screen(1),
+            borderWidth = MapDimension.Static.Screen(1),
         )
     ),
     val takenRoutePaint: Flow<MapPaint> = flowOf(
         MapPaint.DashedStroke(
             strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
-            width = MapDimension.Screen(2),
-            pattern = MapDimension.Screen(8)
+            width = MapDimension.Static.Screen(2),
+            pattern = MapDimension.Static.Screen(8)
         )
     ),
 

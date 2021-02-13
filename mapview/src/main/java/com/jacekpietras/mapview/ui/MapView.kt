@@ -7,9 +7,9 @@ import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
-import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.utils.drawPath
 import timber.log.Timber
 import kotlin.math.abs
@@ -55,7 +55,7 @@ class MapView @JvmOverloads constructor(
         PointD(worldBounds.centerX(), worldBounds.centerY())
     private var zoom: Double = 5.0
     private var zoomOnStart: Double = 5.0
-    private var renderList: List<RenderItem>? = null
+    private var renderList: List<RenderItem2>? = null
     private var centeringAtUser = false
     private val debugTextPaint = Paint()
         .apply {
@@ -182,20 +182,33 @@ class MapView @JvmOverloads constructor(
 
     private fun Double.form() = "%.6f".format(this)
 
-    private fun List<MapItem>.toRenderItems(): List<RenderItem> = map { item ->
-        when (item.shape) {
-            is PathD -> RenderItem(
-                item.shape,
-                item.paint.toCanvasPaint(context),
-                item.paint.toBorderCanvasPaint(context),
-            )
-            is PolygonD -> RenderItem(
-                item.shape,
-                item.paint.toCanvasPaint(context),
-                item.paint.toBorderCanvasPaint(context),
-                item.onClick,
-            )
-            else -> throw IllegalStateException("Unknown shape type ${item.shape}")
+    private fun List<MapItem>.toRenderItems(): List<RenderItem> {
+        val innerPaints = mutableMapOf<MapPaint, PaintHolder>()
+        val borderPaints = mutableMapOf<MapPaint, PaintHolder?>()
+
+        return map { item ->
+            when (item.shape) {
+                is PathD -> RenderItem(
+                    item.shape,
+                    innerPaints[item.paint]
+                        ?: item.paint.toCanvasPaint(context)
+                            .also { innerPaints[item.paint] = it },
+                    borderPaints[item.paint]
+                        ?: item.paint.toBorderCanvasPaint(context)
+                            .also { borderPaints[item.paint] = it },
+                )
+                is PolygonD -> RenderItem(
+                    item.shape,
+                    innerPaints[item.paint]
+                        ?: item.paint.toCanvasPaint(context)
+                            .also { innerPaints[item.paint] = it },
+                    borderPaints[item.paint]
+                        ?: item.paint.toBorderCanvasPaint(context)
+                            .also { borderPaints[item.paint] = it },
+                    item.onClick,
+                )
+                else -> throw IllegalStateException("Unknown shape type ${item.shape}")
+            }
         }
     }
 
@@ -280,6 +293,17 @@ class MapView @JvmOverloads constructor(
         return result
     }
 
+    private fun PaintHolder.takePaint(dynamicPaints: MutableMap<PaintHolder.Dynamic, Paint>): Paint {
+        return when (this) {
+            is PaintHolder.Static -> paint
+            is PaintHolder.Dynamic -> {
+                dynamicPaints[this]
+                    ?: block(zoom, centerGpsCoordinate)
+                        .also { dynamicPaints[this] = it }
+            }
+        }
+    }
+
     private fun cutOutNotVisible() {
         if (width == 0 || height == 0) return
 
@@ -295,8 +319,9 @@ class MapView @JvmOverloads constructor(
             return
         }
 
-        val borders = mutableListOf<RenderItem>()
-        val insides = mutableListOf<RenderItem>()
+        val borders = mutableListOf<RenderItem2>()
+        val insides = mutableListOf<RenderItem2>()
+        val dynamicPaints = mutableMapOf<PaintHolder.Dynamic, Paint>()
 
         _objectList.forEach { item ->
             when (item.shape) {
@@ -304,19 +329,17 @@ class MapView @JvmOverloads constructor(
                     visibleGpsCoordinate.transform(item.shape)?.let {
                         val polygon = PolygonF(it.vertices.map { p -> p.toFloat() })
                         insides.add(
-                            RenderItem(
+                            RenderItem2(
                                 polygon,
-                                item.paint,
-                                null,
+                                item.paintHolder.takePaint(dynamicPaints),
                                 item.onClick,
                             )
                         )
-                        if (item.outerPaint != null) {
+                        if (item.outerPaintHolder != null) {
                             borders.add(
-                                RenderItem(
+                                RenderItem2(
                                     polygon,
-                                    item.outerPaint,
-                                    null,
+                                    item.outerPaintHolder.takePaint(dynamicPaints),
                                     item.onClick,
                                 )
                             )
@@ -327,16 +350,16 @@ class MapView @JvmOverloads constructor(
                     visibleGpsCoordinate.transform(item.shape).forEach {
                         val path = PathF(it.vertices.map { p -> p.toFloat() })
                         insides.add(
-                            RenderItem(
+                            RenderItem2(
                                 path,
-                                item.paint,
+                                item.paintHolder.takePaint(dynamicPaints),
                             )
                         )
-                        if (item.outerPaint != null) {
+                        if (item.outerPaintHolder != null) {
                             borders.add(
-                                RenderItem(
+                                RenderItem2(
                                     path,
-                                    item.outerPaint,
+                                    item.outerPaintHolder.takePaint(dynamicPaints),
                                 )
                             )
                         }
@@ -369,8 +392,14 @@ class MapView @JvmOverloads constructor(
 
     private class RenderItem(
         val shape: DrawableOnCanvas,
+        val paintHolder: PaintHolder,
+        val outerPaintHolder: PaintHolder? = null,
+        val onClick: ((x: Float, y: Float) -> Unit)? = null,
+    )
+
+    private class RenderItem2(
+        val shape: DrawableOnCanvas,
         val paint: Paint,
-        val outerPaint: Paint? = null,
         val onClick: ((x: Float, y: Float) -> Unit)? = null,
     )
 }
