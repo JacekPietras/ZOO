@@ -298,7 +298,7 @@ class MapView @JvmOverloads constructor(
             is PaintHolder.Static -> paint
             is PaintHolder.Dynamic -> {
                 dynamicPaints[this]
-                    ?: block(zoom, centerGpsCoordinate)
+                    ?: block(zoom, centerGpsCoordinate, width)
                         .also { dynamicPaints[this] = it }
             }
         }

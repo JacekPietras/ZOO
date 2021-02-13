@@ -7,5 +7,6 @@ internal sealed class PaintHolder {
 
     class Static(val paint: Paint) : PaintHolder()
 
-    class Dynamic(val block: (zoom: Double, position: PointD) -> Paint) : PaintHolder()
+    class Dynamic(val block: (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Paint) :
+        PaintHolder()
 }

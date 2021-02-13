@@ -9,6 +9,7 @@ import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import com.google.android.material.color.MaterialColors
 import com.jacekpietras.core.PointD
+import com.jacekpietras.core.haversine
 
 sealed class MapPaint {
 
@@ -33,13 +34,13 @@ sealed class MapPaint {
                         }
                     )
                 is MapDimension.Dynamic ->
-                    PaintHolder.Dynamic { zoom, position ->
+                    PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                         Paint().apply {
                             style = Paint.Style.STROKE
                             isAntiAlias = true
 
                             color = strokeColor.toColorInt(context)
-                            strokeWidth = width.toPixels(zoom, position)
+                            strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
                         }
                     }
             }
@@ -65,13 +66,13 @@ sealed class MapPaint {
                         }
                     )
                 is MapDimension.Dynamic ->
-                    PaintHolder.Dynamic { zoom, position ->
+                    PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                         Paint().apply {
                             style = Paint.Style.STROKE
                             isAntiAlias = true
 
                             color = strokeColor.toColorInt(context)
-                            strokeWidth = width.toPixels(zoom, position)
+                            strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
                         }
                     }
             }
@@ -90,13 +91,13 @@ sealed class MapPaint {
                         }
                     )
                 is MapDimension.Dynamic ->
-                    PaintHolder.Dynamic { zoom, position ->
+                    PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                         Paint().apply {
                             style = Paint.Style.STROKE
                             isAntiAlias = true
 
                             color = borderColor.toColorInt(context)
-                            strokeWidth = width.toPixels(zoom, position) +
+                            strokeWidth = width.toPixels(zoom, position, screenWidthInPixels) +
                                     2 * borderWidth.toPixels(context)
                         }
                     }
@@ -200,14 +201,19 @@ sealed class MapDimension {
 
     abstract class Dynamic : MapDimension() {
 
-        abstract fun toPixels(zoom: Double, position: PointD): Float
+        abstract fun toPixels(zoom: Double, position: PointD, screenWidthInPixels: Int): Float
 
         class World(
             private val meters: Double
         ) : MapDimension.Dynamic() {
 
-            override fun toPixels(zoom: Double, position: PointD): Float {
-                return 30f
+            override fun toPixels(zoom: Double, position: PointD, screenWidthInPixels: Int): Float {
+                val screenWidthInMeters = haversine(
+                    position.x - zoom, position.y,
+                    position.x + zoom, position.y,
+                )
+                val screenPart = meters / screenWidthInMeters
+                return (screenPart * screenWidthInPixels).toFloat()
             }
         }
     }
