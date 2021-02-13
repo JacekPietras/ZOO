@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.map.model
 
+import android.graphics.Color
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.model.MapColor
@@ -16,6 +17,7 @@ internal data class MapState(
 
     val buildings: Flow<List<PolygonEntity>> = flowOf(emptyList()),
     val roads: Flow<List<PathEntity>> = flowOf(emptyList()),
+    val lines: Flow<List<PathEntity>> = flowOf(emptyList()),
     val takenRoute: Flow<List<PathEntity>> = flowOf(emptyList()),
 
     val buildingPaint: Flow<MapPaint> = flowOf(
@@ -31,6 +33,12 @@ internal data class MapState(
             width = MapDimension.Dynamic.World(2.0),
             borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
             borderWidth = MapDimension.Static.Screen(1),
+        )
+    ),
+    val linesPaint: Flow<MapPaint> = flowOf(
+        MapPaint.Stroke(
+            strokeColor = MapColor.Hard(Color.BLUE),
+            width = MapDimension.Dynamic.World(0.5),
         )
     ),
     val takenRoutePaint: Flow<MapPaint> = flowOf(

@@ -11,6 +11,8 @@ interface MapRepository {
 
     fun getRoads(): Flow<List<PathEntity>>
 
+    fun getLines(): Flow<List<PathEntity>>
+
     fun getCurrentRegions(): List<Pair<String, PolygonEntity>>
 
     fun getWorldBounds(): Flow<RectD>

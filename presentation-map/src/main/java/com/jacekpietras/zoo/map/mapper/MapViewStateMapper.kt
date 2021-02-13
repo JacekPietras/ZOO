@@ -26,6 +26,11 @@ internal class MapViewStateMapper {
             state.roadPaint,
         ) { route, paint -> fromPaths(route, paint) }
 
+        val lines = combine(
+            state.lines,
+            state.linesPaint,
+        ) { route, paint -> fromPaths(route, paint) }
+
         val taken = combine(
             state.takenRoute,
             state.takenRoutePaint,
@@ -34,9 +39,9 @@ internal class MapViewStateMapper {
         val complex = combine(
             buildings,
             roads,
+            lines,
             taken,
-        ) { a, b, c -> a + b + c }
-
+        ) { a, b, c, d -> a + b + c + d }
 
         return MapViewState(
             currentRegionIds = state.regionsInUserPosition.map(::fromRegionId),

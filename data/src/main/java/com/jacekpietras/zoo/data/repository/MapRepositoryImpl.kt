@@ -65,6 +65,9 @@ class MapRepositoryImpl(
     override fun getRoads(): Flow<List<PathEntity>> =
         flowOf(paths.map(::PathEntity))
 
+    override fun getLines(): Flow<List<PathEntity>> =
+        flowOf(lines.map(::PathEntity))
+
     override fun getCurrentRegions(): List<Pair<String, PolygonEntity>> =
         regions
 
