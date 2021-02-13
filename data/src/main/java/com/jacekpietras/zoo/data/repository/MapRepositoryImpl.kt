@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
 import android.content.res.XmlResourceParser
+import android.graphics.Matrix
 import androidx.annotation.XmlRes
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
@@ -89,7 +90,6 @@ class MapRepositoryImpl(
         private var group: String? = null
         private var coords = ""
 
-        //        <rect x="808.551" y="176.785" transform="matrix(0.7336 -0.6796 0.6796 0.7336 94.3205 598.8163)" fill="#ED1F24" width="4.645" height="4.659"/>
         init {
             with(context.resources.getXml(xmlRes)) {
                 while (eventType != END_DOCUMENT) {
@@ -107,7 +107,9 @@ class MapRepositoryImpl(
                                         attrD("x") + attrD("width"),
                                         attrD("y") + attrD("height")
                                     )
-                                    map.add(group!! to rect.toPoints())
+                                    val matrix = attr("transform").parseMatrix()
+                                    val points = rect.toPoints().applyMatrix(matrix)
+                                    map.add(group!! to points)
                                 }
                                 LINE_TAG -> {
                                     val list = listOf(
@@ -170,6 +172,30 @@ class MapRepositoryImpl(
                 .map { it.toDouble() }
                 .run { RectD(get(0), get(1), get(2), get(3)) }
 
+        private fun String.parseMatrix(): Matrix? =
+            this
+                .takeIf { it.isNotEmpty() }
+                ?.run {
+                    replace("matrix(", "")
+                        .replace(")", "")
+                        .split(" ")
+                        .map { it.toFloat() }
+                        .run {
+                            val fullArray = floatArrayOf(
+                                get(0), get(2), get(4),
+                                get(1), get(3), get(5),
+                                0f, 0f, 1f
+                            )
+                            Matrix().apply { setValues(fullArray) }
+                        }
+                }
+
+        private fun List<PointD>.applyMatrix(matrix: Matrix?): List<PointD> {
+            if (matrix == null) return this
+            val pointsArray = map { listOf(it.x.toFloat(), it.y.toFloat()) }.flatten().toFloatArray()
+            matrix.mapPoints(pointsArray)
+            return pointsArray.toList().windowed(size = 2, step = 2).map { PointD(it[0], it[1]) }
+        }
 
         private fun XmlResourceParser.attr(name: String): String =
             getAttributeValue(null, name)
