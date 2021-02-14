@@ -19,6 +19,7 @@ class MapRepositoryImpl(
     private val worldRect: RectD
     private val regions: List<Pair<String, PolygonEntity>>
     private val buildings: List<List<PointD>>
+    private val aviary: List<List<PointD>>
     private val technical: List<List<PointD>>
     private val lines: List<List<PointD>>
     private val roads: List<List<PointD>>
@@ -29,6 +30,7 @@ class MapRepositoryImpl(
         worldRect = parser.worldRect
         regions = parser.regions
         buildings = parser.getPointsByGroup("buildings")
+        aviary = parser.getPointsByGroup("aviary")
         technical = parser.getPointsByGroup("technical")
         lines = parser.getPointsByGroup("lines")
         roads = parser.getPointsByGroup("paths")
@@ -36,6 +38,9 @@ class MapRepositoryImpl(
 
     override fun getBuildings(): Flow<List<PolygonEntity>> =
         flowOf(buildings.map(::PolygonEntity))
+
+    override fun getAviary(): Flow<List<PolygonEntity>> =
+        flowOf(aviary.map(::PolygonEntity))
 
     override fun getRoads(): Flow<List<PathEntity>> =
         flowOf(roads.map(::PathEntity))

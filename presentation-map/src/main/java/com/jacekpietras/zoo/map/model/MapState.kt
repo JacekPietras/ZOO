@@ -16,6 +16,7 @@ internal data class MapState(
     val regionsInUserPosition: Flow<List<String>> = flowOf(emptyList()),
 
     val buildings: Flow<List<PolygonEntity>> = flowOf(emptyList()),
+    val aviary: Flow<List<PolygonEntity>> = flowOf(emptyList()),
     val roads: Flow<List<PathEntity>> = flowOf(emptyList()),
     val lines: Flow<List<PathEntity>> = flowOf(emptyList()),
     val takenRoute: Flow<List<PathEntity>> = flowOf(emptyList()),
@@ -26,6 +27,11 @@ internal data class MapState(
             fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
             borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
             borderWidth = MapDimension.Static.Screen(1),
+        )
+    ),
+    val aviaryPaint: Flow<MapPaint> = flowOf(
+        MapPaint.Fill(
+            fillColor = MapColor.Hard(Color.BLUE),
         )
     ),
     val roadPaint: Flow<MapPaint> = flowOf(

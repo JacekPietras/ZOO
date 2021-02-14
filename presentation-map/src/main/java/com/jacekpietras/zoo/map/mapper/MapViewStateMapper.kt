@@ -20,7 +20,12 @@ internal class MapViewStateMapper {
         val buildings: Flow<List<MapItem>> = combine(
             state.buildings,
             state.buildingPaint,
-        ) { route, paint -> fromPolygons(route, paint) }
+            state.aviary,
+            state.aviaryPaint,
+        ) { building, buildingPaint, aviary, aviaryPaint ->
+            fromPolygons(aviary, aviaryPaint) +
+                    fromPolygons(building, buildingPaint)
+        }
 
         val roads = combine(
             state.roads,

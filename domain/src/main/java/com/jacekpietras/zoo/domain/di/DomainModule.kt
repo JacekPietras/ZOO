@@ -17,6 +17,11 @@ val domainModule = module {
         )
     }
     factory {
+        GetAviaryUseCase(
+            mapRepository = get()
+        )
+    }
+    factory {
         ObserveWorldBoundsUseCase(
             mapRepository = get()
         )

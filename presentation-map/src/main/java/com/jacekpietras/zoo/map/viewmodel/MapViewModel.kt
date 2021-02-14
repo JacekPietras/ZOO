@@ -12,15 +12,16 @@ import kotlinx.coroutines.launch
 
 internal class MapViewModel(
     viewStateMapper: MapViewStateMapper,
-    getBuildingsUseCase: GetBuildingsUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
-    getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
+    getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
+    getUserPositionUseCase: GetUserPositionUseCase,
+    observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
+    getBuildingsUseCase: GetBuildingsUseCase,
+    getAviaryUseCase: GetAviaryUseCase,
     getRoadsUseCase: GetRoadsUseCase,
     getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
     getLinesUseCase: GetLinesUseCase,
-    getUserPositionUseCase: GetUserPositionUseCase,
-    observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
@@ -29,6 +30,7 @@ internal class MapViewModel(
         worldBounds = observeWorldBoundsUseCase(),
         userPosition = getUserPositionUseCase(),
         buildings = getBuildingsUseCase(),
+        aviary = getAviaryUseCase(),
         roads = getRoadsUseCase(),
         technicalRoute = getTechnicalRoadsUseCase(),
         lines = getLinesUseCase(),

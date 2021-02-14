@@ -9,6 +9,8 @@ interface MapRepository {
 
     fun getBuildings(): Flow<List<PolygonEntity>>
 
+    fun getAviary(): Flow<List<PolygonEntity>>
+
     fun getRoads(): Flow<List<PathEntity>>
 
     fun getTechnicalRoads(): Flow<List<PathEntity>>
