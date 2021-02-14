@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg enable-background="new 0 0 1129.359 718.41"
+	xmlns="http://www.w3.org/2000/svg"
 	height="718.41px"
+	y="0px"
 	version="1.1"
 	viewBox="0 0 1129.359 718.41"
 	width="1129.359px"
 	x="0px"
-	xmlns="http://www.w3.org/2000/svg"
-	y="0px"
 	xml:space="preserve">
 <g display="none" id="regions">
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="728.188,242.542 734.688,259.5 766.125,245.208 757.688,228.938
+	<polygon fill="#69BD45" opacity="0.5" points="728.188,242.542 734.688,259.5 766.125,245.208 757.688,228.938
 		"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="730.625,238.188 708.5,239.542 714.167,264.208 738.521,253.508
+	<polygon fill="#69BD45" opacity="0.5" points="730.625,238.188 708.5,239.542 714.167,264.208 738.521,253.508
 		"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="708.5,239.542 686.187,247.163 697.917,271.192 718.223,262.427
+	<polygon fill="#69BD45" opacity="0.5" points="708.5,239.542 686.187,247.163 697.917,271.192 718.223,262.427
 		"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="703.102,259.543 681.667,269.158 693.5,291 722.278,273.117 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="694.833,243.705 672.091,252.8 675.085,262 688.667,267.25
+	<polygon fill="#69BD45" opacity="0.5" points="703.102,259.543 681.667,269.158 693.5,291 722.278,273.117 	"/>
+	<polygon fill="#69BD45" opacity="0.5" points="694.833,243.705 672.091,252.8 675.085,262 688.667,267.25
 		704.751,260.711 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="662.224,231.014 609.981,250 618.333,267.25 656.917,251.103
+	<polygon fill="#69BD45" opacity="0.5" points="662.224,231.014 609.981,250 618.333,267.25 656.917,251.103
 		670.333,261.131 681.25,251.833 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="579,269.792 611,255.224 661.5,241.003 683.851,264.208
+	<polygon fill="#69BD45" opacity="0.5" points="579,269.792 611,255.224 661.5,241.003 683.851,264.208
 		680.501,278.13 620,307.375 594.167,300.536 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="568.167,286 589.605,280 594,298.282 574.262,301.005 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="557.655,275.625 529.292,291 532.917,305.458 568.167,301.292 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="486.75,301.863 531.621,289.738 536.014,305.458 496.667,320.208
+	<polygon fill="#69BD45" opacity="0.5" points="568.167,286 589.605,280 594,298.282 574.262,301.005 	"/>
+	<polygon fill="#69BD45" opacity="0.5" points="557.655,275.625 529.292,291 532.917,305.458 568.167,301.292 	"/>
+	<polygon fill="#69BD45" opacity="0.5" points="486.75,301.863 531.621,289.738 536.014,305.458 496.667,320.208
 		"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="409.167,327.625 485.372,298.208 500.504,320.573 424.833,356.813
+	<polygon fill="#69BD45" opacity="0.5" points="409.167,327.625 485.372,298.208 500.504,320.573 424.833,356.813
 			"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="426.833,339.708 442.5,375.087 467.167,378.784 528.5,351.601
+	<polygon fill="#69BD45" opacity="0.5" points="426.833,339.708 442.5,375.087 467.167,378.784 528.5,351.601
 		496.333,312.421 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="536.013,295.811 511.223,306.68 530.333,349.375 564.716,337.313
+	<polygon fill="#69BD45" opacity="0.5" points="536.013,295.811 511.223,306.68 530.333,349.375 564.716,337.313
 		"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="477.667,483.862 517.196,444.185 594,427.227 609.535,457.276
+	<polygon fill="#69BD45" opacity="0.5" points="477.667,483.862 517.196,444.185 594,427.227 609.535,457.276
 		546.113,520 	"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="702.706,180.675 730.233,185.843 734.708,166.468 706.682,162.175
+	<polygon fill="#69BD45" opacity="0.5" points="702.706,180.675 730.233,185.843 734.708,166.468 706.682,162.175
 			"/>
-	<polygon display="inline" fill="#69BD45" opacity="0.5" points="564.68,268.576 577.262,264.208 583.451,276 569.833,280.745 	"/>
+	<polygon fill="#69BD45" opacity="0.5" points="564.68,268.576 577.262,264.208 583.451,276 569.833,280.745 	"/>
 </g>
 	<g display="none" id="strange">
 
-		<rect display="inline" fill="#69BD45" height="3.698" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -52.2924 311.8937)" width="6.645" x="680.97" y="273.211"/>
+		<rect fill="#69BD45" height="3.698" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -52.2924 311.8937)" width="6.645" x="680.97" y="273.211"/>
 
-		<rect display="inline" fill="#ED1F24" height="4.811" transform="matrix(0.6905 -0.7233 0.7233 0.6905 -227.7037 489.4226)" width="3.983" x="456.061" y="508.384"/>
+		<rect fill="#ED1F24" height="4.811" transform="matrix(0.6905 -0.7233 0.7233 0.6905 -227.7037 489.4226)" width="3.983" x="456.061" y="508.384"/>
 
-		<rect display="inline" fill="#ED1F24" height="9.082" transform="matrix(0.7324 -0.6809 0.6809 0.7324 -247.27 498.1146)" width="4.481" x="507.758" y="559.059"/>
+		<rect fill="#ED1F24" height="9.082" transform="matrix(0.7324 -0.6809 0.6809 0.7324 -247.27 498.1146)" width="4.481" x="507.758" y="559.059"/>
 </g>
 	<g id="aviary">
 	<polyline fill="#3953A4" points="711.445,254.466 711.389,260.438 733.625,250.688 728.996,246.399 	"/>
@@ -298,25 +298,25 @@
 		<polyline fill="none" points="760.973,246.63 753.292,250.107 751.017,245.59 	" stroke="#000000" stroke-miterlimit="10"/>
 </g>
 	<g display="none" id="tags">
-	<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 744.0215 241.604)">wejscie</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 713.667 242.5415)">papugi</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 703.1016 246.979)">pazurzatki</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 690.8525 282.0596)">flemingi</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 684.293 251.103)">surykatki</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 643.9165 242.0415)">ptaki_ladowe</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 600 278.875)">ptaki_wodne</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 575.2725 297.0713)">wydry</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 543.5 288.375)">male_koty</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 500.8335 303.5415)">psowate</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 425 330.5415)">wilki</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 454.835 351.6011)">tapiry_strusie_zebry</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 524.6665 322.7085)">sowy_male_drapiezniki</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 506 474.042)">wielkie_koty</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 708.5 167.7915)">wc_1</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 568.939 271.1924)">wc_2</text>
+	<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 744.0215 241.604)">wejscie</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 713.667 242.5415)">papugi</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 703.1016 246.979)">pazurzatki</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 690.8525 282.0596)">flemingi</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 684.293 251.103)">surykatki</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 643.9165 242.0415)">ptaki_ladowe</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 600 278.875)">ptaki_wodne</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 575.2725 297.0713)">wydry</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 543.5 288.375)">male_koty</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 500.8335 303.5415)">psowate</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 425 330.5415)">wilki</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 454.835 351.6011)">tapiry_strusie_zebry</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 524.6665 322.7085)">sowy_male_drapiezniki</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 506 474.042)">wielkie_koty</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 708.5 167.7915)">wc_1</text>
+		<text font-family="'MyriadPro-Regular'" font-size="4" transform="matrix(1 0 0 1 568.939 271.1924)">wc_2</text>
 </g>
 	<g display="none" id="coords">
-	<text display="inline" font-family="'MyriadPro-Regular'" font-size="17.4789" transform="matrix(1 0 0 1 6.2046 21.5215)">50.05787, 19.84128</text>
-		<text display="inline" font-family="'MyriadPro-Regular'" font-size="17.4789" transform="matrix(1 0 0 1 6.2051 44.8267)">50.04996, 19.86057</text>
+	<text font-family="'MyriadPro-Regular'" font-size="17.4789" transform="matrix(1 0 0 1 6.2046 21.5215)">50.05787, 19.84128</text>
+		<text font-family="'MyriadPro-Regular'" font-size="17.4789" transform="matrix(1 0 0 1 6.2051 44.8267)">50.04996, 19.86057</text>
 </g>
 </svg>
