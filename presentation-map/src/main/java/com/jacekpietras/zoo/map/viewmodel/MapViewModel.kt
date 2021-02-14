@@ -17,6 +17,7 @@ internal class MapViewModel(
     getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
     getRoadsUseCase: GetRoadsUseCase,
+    getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
     getLinesUseCase: GetLinesUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
@@ -29,6 +30,7 @@ internal class MapViewModel(
         userPosition = getUserPositionUseCase(),
         buildings = getBuildingsUseCase(),
         roads = getRoadsUseCase(),
+        technicalRoute = getTechnicalRoadsUseCase(),
         lines = getLinesUseCase(),
         takenRoute = observeTakenRouteUseCase(),
     )

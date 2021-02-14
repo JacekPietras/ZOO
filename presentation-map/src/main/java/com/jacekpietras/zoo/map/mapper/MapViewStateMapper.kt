@@ -1,14 +1,15 @@
 package com.jacekpietras.zoo.map.mapper
 
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
-import com.jacekpietras.zoo.map.model.*
-import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
+import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.map.model.MapState
+import com.jacekpietras.zoo.map.model.MapViewState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -26,6 +27,11 @@ internal class MapViewStateMapper {
             state.roadPaint,
         ) { route, paint -> fromPaths(route, paint) }
 
+        val technical = combine(
+            state.technicalRoute,
+            state.technicalPaint,
+        ) { route, paint -> fromPaths(route, paint) }
+
         val lines = combine(
             state.lines,
             state.linesPaint,
@@ -38,10 +44,11 @@ internal class MapViewStateMapper {
 
         val complex = combine(
             buildings,
+            technical,
             roads,
             lines,
             taken,
-        ) { a, b, c, d -> a + b + c + d }
+        ) { a, b, c, d, e -> a + b + c + d + e }
 
         return MapViewState(
             currentRegionIds = state.regionsInUserPosition.map(::fromRegionId),

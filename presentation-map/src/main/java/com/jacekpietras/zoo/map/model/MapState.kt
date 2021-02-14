@@ -19,6 +19,7 @@ internal data class MapState(
     val roads: Flow<List<PathEntity>> = flowOf(emptyList()),
     val lines: Flow<List<PathEntity>> = flowOf(emptyList()),
     val takenRoute: Flow<List<PathEntity>> = flowOf(emptyList()),
+    val technicalRoute: Flow<List<PathEntity>> = flowOf(emptyList()),
 
     val buildingPaint: Flow<MapPaint> = flowOf(
         MapPaint.FillWithBorder(
@@ -35,6 +36,14 @@ internal data class MapState(
             borderWidth = MapDimension.Static.Screen(1),
         )
     ),
+    val technicalPaint: Flow<MapPaint> = flowOf(
+        MapPaint.StrokeWithBorder(
+            strokeColor = MapColor.Attribute(R.attr.colorMapRoute),
+            width = MapDimension.Dynamic.World(2.0),
+            borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
+            borderWidth = MapDimension.Static.Screen(1),
+        )
+    ),
     val linesPaint: Flow<MapPaint> = flowOf(
         MapPaint.Stroke(
             strokeColor = MapColor.Hard(Color.BLUE),
@@ -44,7 +53,7 @@ internal data class MapState(
     val takenRoutePaint: Flow<MapPaint> = flowOf(
         MapPaint.Stroke(
             strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
-            width = MapDimension.Static.Screen(1),
+            width = MapDimension.Static.Screen(0.5),
 //            pattern = MapDimension.Static.Screen(8)
         )
     ),

@@ -32,6 +32,11 @@ val domainModule = module {
         )
     }
     factory {
+        GetTechnicalRoadsUseCase(
+            mapRepository = get()
+        )
+    }
+    factory {
         GetLinesUseCase(
             mapRepository = get()
         )

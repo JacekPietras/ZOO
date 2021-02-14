@@ -99,7 +99,6 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
         filter { it.first == key }.map { it.second }
 
     private fun getTransformation(cartesian: RectD, world: RectD): (PointD) -> PointD {
-        //  [19.940416, 50.083510] [19.948745, 50.075829]
         val wRatio = world.width() / cartesian.width()
         val hRatio = world.height() / cartesian.height()
         val xShift = world.left - cartesian.left

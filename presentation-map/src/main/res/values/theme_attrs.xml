@@ -5,5 +5,7 @@
     <attr name="colorMapBuildingBorder" format="color|reference" />
     <attr name="colorMapRoute" format="color|reference" />
     <attr name="colorMapRouteBorder" format="color|reference" />
+    <attr name="colorMapTechnical" format="color|reference" />
+    <attr name="colorMapTechnicalBorder" format="color|reference" />
     <attr name="colorMapTaken" format="color|reference" />
 </resources>

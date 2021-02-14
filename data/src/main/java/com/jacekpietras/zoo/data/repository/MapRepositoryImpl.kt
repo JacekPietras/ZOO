@@ -19,8 +19,9 @@ class MapRepositoryImpl(
     private val worldRect: RectD
     private val regions: List<Pair<String, PolygonEntity>>
     private val buildings: List<List<PointD>>
+    private val technical: List<List<PointD>>
     private val lines: List<List<PointD>>
-    private val paths: List<List<PointD>>
+    private val roads: List<List<PointD>>
 
     init {
         val parser = SvgParser(context, R.xml.map)
@@ -28,15 +29,19 @@ class MapRepositoryImpl(
         worldRect = parser.worldRect
         regions = parser.regions
         buildings = parser.getPointsByGroup("buildings")
+        technical = parser.getPointsByGroup("technical")
         lines = parser.getPointsByGroup("lines")
-        paths = parser.getPointsByGroup("paths")
+        roads = parser.getPointsByGroup("paths")
     }
 
     override fun getBuildings(): Flow<List<PolygonEntity>> =
         flowOf(buildings.map(::PolygonEntity))
 
     override fun getRoads(): Flow<List<PathEntity>> =
-        flowOf(paths.map(::PathEntity))
+        flowOf(roads.map(::PathEntity))
+
+    override fun getTechnicalRoads(): Flow<List<PathEntity>> =
+        flowOf(technical.map(::PathEntity))
 
     override fun getLines(): Flow<List<PathEntity>> =
         flowOf(lines.map(::PathEntity))

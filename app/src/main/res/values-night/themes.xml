@@ -19,6 +19,8 @@
         <item name="colorMapRoute">#4E5C6C</item>
         <item name="colorMapRouteBorder">#0E141E</item>
         <item name="colorMapTaken">?colorPrimary</item>
+        <item name="colorMapTechnical">#6C4E4E</item>
+        <item name="colorMapTechnicalBorder">#0E141E</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
