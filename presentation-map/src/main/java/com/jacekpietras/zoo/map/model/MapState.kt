@@ -42,10 +42,10 @@ internal data class MapState(
         )
     ),
     val takenRoutePaint: Flow<MapPaint> = flowOf(
-        MapPaint.DashedStroke(
+        MapPaint.Stroke(
             strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
-            width = MapDimension.Static.Screen(2),
-            pattern = MapDimension.Static.Screen(8)
+            width = MapDimension.Static.Screen(1),
+//            pattern = MapDimension.Static.Screen(8)
         )
     ),
 

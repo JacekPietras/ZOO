@@ -1,12 +1,15 @@
 package com.jacekpietras.zoo.data.gps
 
 import android.content.Context
+import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import androidx.annotation.RawRes
+import com.jacekpietras.core.cutOut
+import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 
 internal class TxtParser(context: Context, @RawRes rawRes: Int) {
 
-    val result: List<GpsHistoryEntity>
+    val result: List<List<GpsHistoryEntity>>
 
     init {
         context.resources.openRawResource(rawRes)
@@ -15,6 +18,10 @@ internal class TxtParser(context: Context, @RawRes rawRes: Int) {
                 result = reader
                     .readLines()
                     .map { parseEntity(it) }
+                    .cutOut { prev, next ->
+                        next.timestamp - prev.timestamp < MINUTE_IN_MILLIS &&
+                                haversine(prev.lon, prev.lat, next.lon, next.lat) < 20
+                    }
             }
     }
 

@@ -1,6 +1,6 @@
-package com.jacekpietras.mapview.utils
+package com.jacekpietras.core
 
-internal inline fun <T> Iterable<T>.cutOut(
+inline fun <T> Iterable<T>.cutOut(
     predicate: (a: T, b: T) -> Boolean,
 ): List<List<T>> {
     val iterator = iterator()

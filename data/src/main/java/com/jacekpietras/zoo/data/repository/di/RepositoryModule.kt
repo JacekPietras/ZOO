@@ -10,13 +10,13 @@ import org.koin.dsl.module
 
 internal val repositoryModule = module {
 
-    factory<MapRepository> {
+    single<MapRepository> {
         MapRepositoryImpl(
             context = androidContext(),
         )
     }
 
-    factory<GpsRepository> {
+    single<GpsRepository> {
         GpsRepositoryImpl(
             context = androidContext(),
             gpsDao = get<ZooDatabase>().gpsDao(),

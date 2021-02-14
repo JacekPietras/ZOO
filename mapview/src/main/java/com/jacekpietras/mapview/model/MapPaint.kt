@@ -179,7 +179,7 @@ sealed class MapDimension {
         abstract fun toPixels(context: Context): Float
 
         class Screen(
-            private val dp: Int
+            private val dp: Number
         ) : MapDimension.Static() {
 
             override fun toPixels(context: Context): Float =

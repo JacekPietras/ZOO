@@ -1,7 +1,9 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
-import android.text.format.DateUtils.DAY_IN_MILLIS
+import android.text.format.DateUtils
+import com.jacekpietras.core.cutOut
+import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.data.BuildConfig
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.database.dao.GpsDao
@@ -22,13 +24,8 @@ internal class GpsRepositoryImpl(
     init {
         debugHistory = if (BuildConfig.DEBUG) {
             val ola1 = TxtParser(context, R.raw.ola_14_02_21)
-            val jacek1 = TxtParser(context, R.raw.jacek_14_02_21)
-            flowOf(
-                listOf(
-                    ola1.result.map { it.copy(timestamp = it.timestamp - DAY_IN_MILLIS) },
-                    jacek1.result,
-                )
-            )
+            val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
+            flowOf(ola1.result + jack1.result)
         } else {
             flowOf(emptyList())
         }
@@ -37,15 +34,20 @@ internal class GpsRepositoryImpl(
     override fun observeLatestPosition(): Flow<GpsHistoryEntity> =
         gpsDao.getLatest().filterNotNull().map(gpsHistoryMapper::from)
 
-    override fun observeAllPositions(): Flow<List<List<GpsHistoryEntity>>> =
-        if (BuildConfig.DEBUG) {
-            val dbFlow = gpsDao.observeAll().map { listOf(it.map(gpsHistoryMapper::from)) }
-            combine(debugHistory, dbFlow) { debug, db ->
-                debug + db
-            }
-        } else {
-            gpsDao.observeAll().map { listOf(it.map(gpsHistoryMapper::from)) }
+    override fun observeAllPositions(): Flow<List<List<GpsHistoryEntity>>> {
+        val dbFlow = gpsDao.observeAll().map {
+            it.map(gpsHistoryMapper::from)
+                .cutOut { prev, next ->
+                    next.timestamp - prev.timestamp < DateUtils.MINUTE_IN_MILLIS &&
+                            haversine(prev.lon, prev.lat, next.lon, next.lat) < 20
+                }
         }
+        return if (BuildConfig.DEBUG) {
+            combine(debugHistory, dbFlow) { debug, db -> debug + db }
+        } else {
+            dbFlow
+        }
+    }
 
     override suspend fun getAllPositions(): List<GpsHistoryEntity> =
         gpsDao.getAll().map(gpsHistoryMapper::from)

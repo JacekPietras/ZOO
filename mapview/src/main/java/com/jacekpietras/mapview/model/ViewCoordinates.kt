@@ -1,10 +1,6 @@
 package com.jacekpietras.mapview.model
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
-import com.jacekpietras.mapview.utils.cutOut
-import com.jacekpietras.core.containsLine
-import com.jacekpietras.core.haversine
+import com.jacekpietras.core.*
 
 internal class ViewCoordinates(
     centerGpsCoordinate: PointD,
