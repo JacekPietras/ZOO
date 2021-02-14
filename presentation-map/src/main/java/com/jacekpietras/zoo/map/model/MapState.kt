@@ -30,8 +30,10 @@ internal data class MapState(
         )
     ),
     val aviaryPaint: Flow<MapPaint> = flowOf(
-        MapPaint.Fill(
-            fillColor = MapColor.Hard(Color.BLUE),
+        MapPaint.FillWithBorder(
+            fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
+            borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
+            borderWidth = MapDimension.Static.Screen(1),
         )
     ),
     val roadPaint: Flow<MapPaint> = flowOf(
@@ -44,9 +46,9 @@ internal data class MapState(
     ),
     val technicalPaint: Flow<MapPaint> = flowOf(
         MapPaint.StrokeWithBorder(
-            strokeColor = MapColor.Attribute(R.attr.colorMapRoute),
+            strokeColor = MapColor.Attribute(R.attr.colorMapTechnical),
             width = MapDimension.Dynamic.World(2.0),
-            borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
+            borderColor = MapColor.Attribute(R.attr.colorMapTechnicalBorder),
             borderWidth = MapDimension.Static.Screen(1),
         )
     ),
