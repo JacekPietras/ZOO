@@ -19,14 +19,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/around_you"
-            android:textAppearance="?textAppearanceHeadline6"/>
+            android:textAppearance="?textAppearanceHeadline6" />
 
         <TextView
             android:id="@+id/regionIds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textAppearance="?textAppearanceBody1"/>
+            android:textAppearance="?textAppearanceBody1"
+            android:textColor="?colorOnSurface" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +41,8 @@
                 android:background="#22000000"
                 android:importantForAccessibility="no"
                 android:padding="16dp"
-                android:src="@drawable/ic_camera_24" />
+                android:src="@drawable/ic_camera_24"
+                app:tint="?colorOnSurface" />
 
             <Space
                 android:layout_width="16dp"
@@ -52,7 +54,8 @@
                 android:background="#22000000"
                 android:importantForAccessibility="no"
                 android:padding="16dp"
-                android:src="@drawable/ic_camera_24" />
+                android:src="@drawable/ic_camera_24"
+                app:tint="?colorOnSurface" />
 
             <Space
                 android:layout_width="16dp"
@@ -64,7 +67,8 @@
                 android:background="#22000000"
                 android:importantForAccessibility="no"
                 android:padding="16dp"
-                android:src="@drawable/ic_camera_24" />
+                android:src="@drawable/ic_camera_24"
+                app:tint="?colorOnSurface" />
 
 
         </LinearLayout>
@@ -78,9 +82,9 @@
 
         <com.jacekpietras.mapview.ui.MapView
             android:id="@+id/mapView"
-            android:background="?colorMapBackground"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="?colorMapBackground" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/uploadButton"

@@ -14,9 +14,9 @@
 
         <!-- Map Colors -->
         <item name="colorMapBackground">#121a26</item>
-        <item name="colorMapBuilding">#0E141E</item>
-        <item name="colorMapBuildingBorder">#080C12</item>
-        <item name="colorMapRoute">#2f3a47</item>
+        <item name="colorMapBuilding">#2f3a47</item>
+        <item name="colorMapBuildingBorder">#0E141E</item>
+        <item name="colorMapRoute">#4E5C6C</item>
         <item name="colorMapRouteBorder">#0E141E</item>
         <item name="colorMapTaken">?colorPrimary</item>
 
