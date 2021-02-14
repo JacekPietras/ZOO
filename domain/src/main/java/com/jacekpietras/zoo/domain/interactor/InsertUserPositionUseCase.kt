@@ -5,9 +5,13 @@ import com.jacekpietras.zoo.domain.repository.GpsRepository
 
 class InsertUserPositionUseCase(
     private val gpsRepository: GpsRepository,
+    private val worldBoundsUseCase: GetWorldBoundsUseCase,
 ) {
 
     suspend operator fun invoke(position: GpsHistoryEntity) {
-        gpsRepository.insertPosition(position)
+        val bounds = worldBoundsUseCase()
+        if (bounds.contains(position.lon, position.lat)) {
+            gpsRepository.insertPosition(position)
+        }
     }
 }

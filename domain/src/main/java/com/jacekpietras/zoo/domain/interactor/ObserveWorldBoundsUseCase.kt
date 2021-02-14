@@ -2,11 +2,12 @@ package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.repository.MapRepository
+import kotlinx.coroutines.flow.Flow
 
-class GetWorldBoundsUseCase(
+class ObserveWorldBoundsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    operator fun invoke(): RectD =
-        mapRepository.getWorldBounds()
+    operator fun invoke(): Flow<RectD> =
+        mapRepository.observeWorldBounds()
 }

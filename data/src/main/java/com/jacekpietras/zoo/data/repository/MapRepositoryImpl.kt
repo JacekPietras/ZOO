@@ -72,8 +72,11 @@ class MapRepositoryImpl(
     override fun getCurrentRegions(): List<Pair<String, PolygonEntity>> =
         regions
 
-    override fun getWorldBounds(): Flow<RectD> =
+    override fun observeWorldBounds(): Flow<RectD> =
         flowOf(worldRect)
+
+    override fun getWorldBounds(): RectD =
+        worldRect
 
     private fun <T> List<Pair<String, T>>.getValue(key: String): List<T> =
         filter { it.first == key }.map { it.second }
@@ -192,7 +195,8 @@ class MapRepositoryImpl(
 
         private fun List<PointD>.applyMatrix(matrix: Matrix?): List<PointD> {
             if (matrix == null) return this
-            val pointsArray = map { listOf(it.x.toFloat(), it.y.toFloat()) }.flatten().toFloatArray()
+            val pointsArray =
+                map { listOf(it.x.toFloat(), it.y.toFloat()) }.flatten().toFloatArray()
             matrix.mapPoints(pointsArray)
             return pointsArray.toList().windowed(size = 2, step = 2).map { PointD(it[0], it[1]) }
         }

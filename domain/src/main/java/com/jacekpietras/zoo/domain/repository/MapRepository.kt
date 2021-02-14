@@ -15,5 +15,7 @@ interface MapRepository {
 
     fun getCurrentRegions(): List<Pair<String, PolygonEntity>>
 
-    fun getWorldBounds(): Flow<RectD>
+    fun observeWorldBounds(): Flow<RectD>
+
+    fun getWorldBounds(): RectD
 }

@@ -17,6 +17,11 @@ val domainModule = module {
         )
     }
     factory {
+        ObserveWorldBoundsUseCase(
+            mapRepository = get()
+        )
+    }
+    factory {
         GetWorldBoundsUseCase(
             mapRepository = get()
         )
@@ -44,6 +49,7 @@ val domainModule = module {
     factory {
         InsertUserPositionUseCase(
             gpsRepository = get(),
+            worldBoundsUseCase = get(),
         )
     }
     factory {

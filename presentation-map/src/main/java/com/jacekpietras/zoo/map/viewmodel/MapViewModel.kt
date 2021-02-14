@@ -19,13 +19,13 @@ internal class MapViewModel(
     getRoadsUseCase: GetRoadsUseCase,
     getLinesUseCase: GetLinesUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
-    getWorldBoundsUseCase: GetWorldBoundsUseCase,
+    observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
     private val state = MapState(
         regionsInUserPosition = getRegionsInUserPositionUseCase(),
-        worldBounds = getWorldBoundsUseCase(),
+        worldBounds = observeWorldBoundsUseCase(),
         userPosition = getUserPositionUseCase(),
         buildings = getBuildingsUseCase(),
         roads = getRoadsUseCase(),
