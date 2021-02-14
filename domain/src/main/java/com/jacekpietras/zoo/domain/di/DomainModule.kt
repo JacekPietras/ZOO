@@ -37,7 +37,7 @@ val domainModule = module {
         )
     }
     factory {
-        GetTakenRouteUseCase(
+        ObserveTakenRouteUseCase(
             gpsRepository = get()
         )
     }

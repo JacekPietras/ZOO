@@ -30,8 +30,8 @@ class GpsLocationListenerCompat(
         haveGooglePlay = GoogleApiAvailability.getInstance()
             .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
 
-        if (haveGooglePlay) addListenerWithGMS(context)
-        else addListenerWithoutGMS(context)
+        if (haveGooglePlay) addListenerWithGMS(context.applicationContext)
+        else addListenerWithoutGMS(context.applicationContext)
     }
 
     fun removeLocationListener() {

@@ -32,7 +32,8 @@ class GpsStatusListenerCompat(onStatusChanged: (enabled: Boolean) -> Unit) {
     }
 
     fun addStatusListener(context: Context) {
-        locationManager = context.getSystemService(Service.LOCATION_SERVICE) as? LocationManager
+        locationManager = context.applicationContext
+            .getSystemService(Service.LOCATION_SERVICE) as? LocationManager
         try {
             if (statusListener is GpsStatus.Listener) {
                 locationManager?.addGpsStatusListener(statusListener)

@@ -10,7 +10,7 @@ import com.jacekpietras.core.contains
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import org.xmlpull.v1.XmlPullParser
 
-internal class Parser(context: Context, @XmlRes xmlRes: Int) {
+internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
 
     val worldRect: RectD
     val regions: List<Pair<String, MapItemEntity.PolygonEntity>>

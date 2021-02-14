@@ -18,6 +18,7 @@ internal val repositoryModule = module {
 
     factory<GpsRepository> {
         GpsRepositoryImpl(
+            context = androidContext(),
             gpsDao = get<ZooDatabase>().gpsDao(),
             gpsHistoryMapper = get(),
         )
