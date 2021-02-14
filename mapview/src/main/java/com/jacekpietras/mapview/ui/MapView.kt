@@ -71,7 +71,7 @@ class MapView @JvmOverloads constructor(
 
     fun centerAtUserPosition(animation: Boolean = true) {
         centeringAtUser = true
-        val desiredPosition = userPosition ?: throw IllegalStateException("no user position")
+        val desiredPosition = userPosition ?: return
 
         if (animation) {
             val previousPosition = centerGpsCoordinate
