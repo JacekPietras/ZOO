@@ -103,12 +103,14 @@ class GpsPermissionRequester(private val fragment: Fragment) {
                     (SDK_INT >= VERSION_CODES.Q && shouldDescribe(ACCESS_BACKGROUND_LOCATION)) -> {
                 // do nothing, dialog is shown
             }
-            else -> askForPermissions()
+            else -> {
+                askedForPermission()
+                askForPermissions()
+            }
         }
     }
 
     private fun askForPermissions() {
-        askedForPermission()
         permissionResult.launch(
             listOfNotNull(
                 ACCESS_FINE_LOCATION,
@@ -314,7 +316,7 @@ class GpsPermissionRequester(private val fragment: Fragment) {
         firstTimeAskingPermission(ACCESS_FINE_LOCATION, true)
         firstTimeAskingPermission(ACCESS_COARSE_LOCATION, true)
         if (SDK_INT >= VERSION_CODES.Q) {
-            firstTimeAskingPermission(ACCESS_BACKGROUND_LOCATION, false)
+            firstTimeAskingPermission(ACCESS_BACKGROUND_LOCATION, true)
         }
     }
 

@@ -27,8 +27,8 @@ class MapView @JvmOverloads constructor(
             field = value
             centerGpsCoordinate = PointD(value.centerX(), value.centerY())
             maxZoom = min(abs(value.width()), abs(value.height())) / 2
-            minZoom = maxZoom / 6
-            zoom = maxZoom / 3
+            minZoom = maxZoom / 8
+            zoom = maxZoom / 4
         }
     private var _objectList: List<RenderItem> = emptyList()
     var objectList: List<MapItem> = emptyList()
@@ -154,7 +154,7 @@ class MapView @JvmOverloads constructor(
     }
 
     private fun renderDebug(canvas: Canvas) {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && :: visibleGpsCoordinate.isInitialized) {
             canvas.drawText("wrld: " + worldBounds.toShortString(), 10f, 40f, debugTextPaint)
             canvas.drawText(
                 "curr: ${visibleGpsCoordinate.visibleRect.toShortString()}",
@@ -306,6 +306,7 @@ class MapView @JvmOverloads constructor(
 
     private fun cutOutNotVisible() {
         if (width == 0 || height == 0) return
+        if (worldBounds.width() == 0.0 || worldBounds.height() == 0.0) return
 
         visibleGpsCoordinate = ViewCoordinates(
             centerGpsCoordinate,

@@ -28,11 +28,17 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun setObservers() = with(viewModel.viewState) {
-        observe(currentRegionIds) { binding.regionIds.text = it }
-        observe(userPosition) { binding.mapView.userPosition = it }
-        observe(mapData) { binding.mapView.objectList = it }
-        observe(worldBounds) { binding.mapView.worldBounds = it }
-        observe(effect) {
+//        observe(currentRegionIds) { binding.regionIds.text = it }
+//        observe(userPosition) { binding.mapView.userPosition = it }
+//        observe(mapData) { binding.mapView.objectList = it }
+//        observe(worldBounds) { binding.mapView.worldBounds = it }
+
+        currentRegionIds.observe(viewLifecycleOwner) { binding.regionIds.text = it }
+        userPosition.observe(viewLifecycleOwner) { binding.mapView.userPosition = it }
+        mapData.observe(viewLifecycleOwner) { binding.mapView.objectList = it }
+        worldBounds.observe(viewLifecycleOwner) { binding.mapView.worldBounds = it }
+
+        effect.observe(viewLifecycleOwner) {
             when (it) {
                 is MapEffect.ShowToast -> toast(it.text)
                 is MapEffect.CenterAtUser -> binding.mapView.centerAtUserPosition()

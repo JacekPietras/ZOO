@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
 internal class MapViewModel(
@@ -36,21 +37,22 @@ internal class MapViewModel(
         lines = getLinesUseCase(),
         takenRoute = observeTakenRouteUseCase(),
     )
-    var viewState = viewStateMapper.from(state)
+    private val effect : Channel<MapEffect> = Channel()
+    var viewState = viewStateMapper.from(state,  effect)
 
     fun onUploadClicked() {
         try {
             uploadHistoryUseCase()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
             viewModelScope.launch(dispatcherProvider.main) {
-                viewState.effect.send(MapEffect.ShowToast("Upload failed"))
+                effect.send(MapEffect.ShowToast("Upload failed"))
             }
         }
     }
 
     fun onMyLocationClicked() {
         viewModelScope.launch(dispatcherProvider.main) {
-            viewState.effect.send(MapEffect.CenterAtUser)
+            effect.send(MapEffect.CenterAtUser)
         }
     }
 }
