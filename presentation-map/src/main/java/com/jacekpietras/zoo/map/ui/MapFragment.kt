@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.jacekpietras.core.observe
 import com.jacekpietras.zoo.core.binding.viewBinding
-import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.databinding.FragmentMapBinding
 import com.jacekpietras.zoo.map.model.MapEffect
@@ -28,11 +27,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun setObservers() = with(viewModel.viewState) {
-//        observe(currentRegionIds) { binding.regionIds.text = it }
-//        observe(userPosition) { binding.mapView.userPosition = it }
-//        observe(mapData) { binding.mapView.objectList = it }
-//        observe(worldBounds) { binding.mapView.worldBounds = it }
-
         currentRegionIds.observe(viewLifecycleOwner) { binding.regionIds.text = it }
         userPosition.observe(viewLifecycleOwner) { binding.mapView.userPosition = it }
         mapData.observe(viewLifecycleOwner) { binding.mapView.objectList = it }
@@ -57,7 +51,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             rationaleContent = R.string.gps_permission_rationale_content,
             deniedTitle = R.string.gps_permission_denied_title,
             deniedContent = R.string.gps_permission_denied_content,
-            onFailed = { if (BuildConfig.DEBUG) toast("Location denied") },
+            onFailed = { viewModel.onLocationDenied() },
             onPermission = { viewModel.onMyLocationClicked() },
         )
     }

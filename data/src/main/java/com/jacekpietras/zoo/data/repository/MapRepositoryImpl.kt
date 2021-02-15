@@ -3,12 +3,15 @@ package com.jacekpietras.zoo.data.repository
 import android.content.Context
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.zoo.data.BuildConfig
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.svg.SvgParser
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.repository.MapRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 
@@ -43,7 +46,15 @@ class MapRepositoryImpl(
         flowOf(aviary.map(::PolygonEntity))
 
     override fun getRoads(): Flow<List<PathEntity>> =
-        flowOf(roads.map(::PathEntity))
+        if (BuildConfig.DEBUG) {
+            flow {
+                emit(emptyList())
+                delay(5000L)
+                emit(roads.map(::PathEntity))
+            }
+        } else {
+            flowOf(roads.map(::PathEntity))
+        }
 
     override fun getTechnicalRoads(): Flow<List<PathEntity>> =
         flowOf(technical.map(::PathEntity))
