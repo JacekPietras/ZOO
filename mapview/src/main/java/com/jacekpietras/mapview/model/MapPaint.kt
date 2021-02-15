@@ -59,6 +59,7 @@ sealed class MapPaint {
                     PaintHolder.Static(
                         Paint().apply {
                             style = Paint.Style.STROKE
+                            strokeCap = Paint.Cap.ROUND
                             isAntiAlias = true
 
                             color = strokeColor.toColorInt(context)
@@ -69,6 +70,7 @@ sealed class MapPaint {
                     PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                         Paint().apply {
                             style = Paint.Style.STROKE
+                            strokeCap = Paint.Cap.ROUND
                             isAntiAlias = true
 
                             color = strokeColor.toColorInt(context)
@@ -83,6 +85,7 @@ sealed class MapPaint {
                     PaintHolder.Static(
                         Paint().apply {
                             style = Paint.Style.STROKE
+                            strokeCap = Paint.Cap.ROUND
                             isAntiAlias = true
 
                             color = borderColor.toColorInt(context)
@@ -94,6 +97,7 @@ sealed class MapPaint {
                     PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                         Paint().apply {
                             style = Paint.Style.STROKE
+                            strokeCap = Paint.Cap.ROUND
                             isAntiAlias = true
 
                             color = borderColor.toColorInt(context)
