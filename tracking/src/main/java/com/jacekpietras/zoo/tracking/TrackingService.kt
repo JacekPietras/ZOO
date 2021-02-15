@@ -68,10 +68,10 @@ class TrackingService : Service() {
     }
 
     private fun navigationStop() {
-        serviceUtils?.removeNotification()
-        stopForeground(true)
         gpsLocationListener.removeLocationListener()
         gpsStatusListener.removeStatusListener()
+        serviceUtils?.removeNotification()
+        stopForeground(true)
     }
 
     companion object {
