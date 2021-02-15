@@ -20,6 +20,27 @@ class MainActivity : AppCompatActivity() {
         setViews()
     }
 
+    override fun onBackPressed() {
+        // https://issuetracker.google.com/issues/139738913
+        if (isTaskRoot
+            && supportFragmentManager.primaryNavigationFragment
+                ?.childFragmentManager?.backStackEntryCount == 0
+            && supportFragmentManager.backStackEntryCount == 0
+        ) {
+            finishAfterTransition()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        // https://issuetracker.google.com/issues/139738913
+        if (isTaskRoot) {
+            finishAfterTransition()
+        }
+        super.onDestroy()
+    }
+
     private fun setViews() {
         binding.navView.setupWithNavController(findNavController())
     }
