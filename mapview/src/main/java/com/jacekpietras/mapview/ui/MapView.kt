@@ -299,12 +299,7 @@ class MapView @JvmOverloads constructor(
         if (width == 0 || height == 0) return
         if (worldBounds.width() == 0.0 || worldBounds.height() == 0.0) return
 
-        visibleGpsCoordinate = ViewCoordinates(
-            centerGpsCoordinate,
-            zoom,
-            width,
-            height,
-        )
+        visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, width, height)
 
         if (preventedGoingOutsideWorld()) {
             cutOutNotVisible()
@@ -320,45 +315,13 @@ class MapView @JvmOverloads constructor(
                 visibleGpsCoordinate
                     .transformPolygon(item.shape)
                     ?.let { polygon ->
-                        insides.add(
-                            RenderItem2(
-                                polygon,
-                                item.paintHolder.takePaint(dynamicPaints),
-                                item.onClick,
-                                item.close,
-                            )
-                        )
-                        if (item.outerPaintHolder != null) {
-                            borders.add(
-                                RenderItem2(
-                                    polygon,
-                                    item.outerPaintHolder.takePaint(dynamicPaints),
-                                    item.onClick,
-                                    item.close,
-                                )
-                            )
-                        }
+                        item.addToRender2(polygon, borders, insides, dynamicPaints)
                     }
             } else {
                 visibleGpsCoordinate
                     .transformPath(item.shape)
                     .forEach { path ->
-                        insides.add(
-                            RenderItem2(
-                                path,
-                                item.paintHolder.takePaint(dynamicPaints),
-                                close = false,
-                            )
-                        )
-                        if (item.outerPaintHolder != null) {
-                            borders.add(
-                                RenderItem2(
-                                    path,
-                                    item.outerPaintHolder.takePaint(dynamicPaints),
-                                    close = false,
-                                )
-                            )
-                        }
+                        item.addToRender2(path, borders, insides, dynamicPaints)
                     }
             }
         }
@@ -370,6 +333,32 @@ class MapView @JvmOverloads constructor(
         logVisibleShapes()
     }
 
+    private fun RenderItem.addToRender2(
+        array: FloatArray,
+        borders: MutableList<RenderItem2>,
+        insides: MutableList<RenderItem2>,
+        dynamicPaints: MutableMap<PaintHolder.Dynamic, Paint>,
+    ) {
+        insides.add(
+            RenderItem2(
+                array,
+                paintHolder.takePaint(dynamicPaints),
+                onClick,
+                close
+            )
+        )
+        if (outerPaintHolder != null) {
+            borders.add(
+                RenderItem2(
+                    array,
+                    outerPaintHolder.takePaint(dynamicPaints),
+                    onClick,
+                    close
+                )
+            )
+        }
+    }
+
     private fun logVisibleShapes() {
         if (BuildConfig.DEBUG) {
             val message = "Preparing render list: " +
@@ -377,6 +366,15 @@ class MapView @JvmOverloads constructor(
                     " (${objectList.size})"
             Timber.v(message)
         }
+    }
+
+    private fun pointsToFloatArray(list: List<PointD>): FloatArray {
+        val result = FloatArray(list.size * 2)
+        for (i in list.indices) {
+            result[i shl 1] = list[i].x.toFloat()
+            result[(i shl 1) + 1] = list[i].y.toFloat()
+        }
+        return result
     }
 
     private class RenderItem(
@@ -395,11 +393,3 @@ class MapView @JvmOverloads constructor(
     )
 }
 
-private fun pointsToFloatArray(list: List<PointD>): FloatArray {
-    val result = FloatArray(list.size * 2)
-    for (i in list.indices) {
-        result[i shl 1] = list[i].x.toFloat()
-        result[(i shl 1) + 1] = list[i].y.toFloat()
-    }
-    return result
-}
