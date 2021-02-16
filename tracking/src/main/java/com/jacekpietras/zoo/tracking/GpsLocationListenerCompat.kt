@@ -16,6 +16,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.*
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
 
 @SuppressLint("MissingPermission")
@@ -83,6 +84,10 @@ class GpsLocationListenerCompat(
     }
 
     private fun addListenerWithoutGMS(context: Context) {
+        locationListener?.let { listener ->
+            locationManager?.removeUpdates(listener)
+        }
+
         locationManager = context.getSystemService(Service.LOCATION_SERVICE) as? LocationManager
         locationListener = LocationListenerImpl(onLocationChanged, onGpsStatusChanged)
         locationManager?.let { manager ->
@@ -94,8 +99,8 @@ class GpsLocationListenerCompat(
     }
 
     private fun removeListenerWithoutGMS() {
-        locationListener?.let {
-            locationManager?.removeUpdates(it)
+        locationListener?.let { listener ->
+            locationManager?.removeUpdates(listener)
         }
         locationListener = null
         locationManager = null
@@ -137,11 +142,15 @@ class GpsLocationListenerCompat(
         }
 
     private fun addListenerWithGMS(context: Context) {
+        fusedLocationClient?.removeLocationUpdates(locationCallback)
+
         val client = LocationServices.getFusedLocationProviderClient(context)
         fusedLocationClient = client
-        locationCallback = LocationCallbackImpl(
-            onLocationChanged,
-            onGpsStatusChanged,
+        locationCallback = WeakLocationCallback(
+            LocationCallbackImpl(
+                onLocationChanged,
+                onGpsStatusChanged,
+            )
         )
         client.requestLocationUpdates(
             buildLocationRequest(),
@@ -173,6 +182,15 @@ class GpsLocationListenerCompat(
                     location.longitude,
                 )
             }
+        }
+    }
+
+    class WeakLocationCallback(locationCallback: LocationCallback) : LocationCallback() {
+
+        private val weakLocationCallback = WeakReference(locationCallback)
+        override fun onLocationResult(result: LocationResult) {
+            super.onLocationResult(result)
+            weakLocationCallback.get()?.onLocationResult(result)
         }
     }
     //endregion

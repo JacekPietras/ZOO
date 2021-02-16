@@ -5,6 +5,8 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.os.Process
+import android.os.Process.killProcess
 import androidx.core.content.ContextCompat.startForegroundService
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -72,6 +74,9 @@ class TrackingService : Service() {
         gpsStatusListener.removeStatusListener()
         serviceUtils?.removeNotification()
         stopForeground(true)
+        if (!isActivityRunning(this)) {
+            killProcess(Process.myPid())
+        }
     }
 
     companion object {

@@ -3,6 +3,8 @@ package com.jacekpietras.zoo.app
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.os.Process
+import android.os.Process.killProcess
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         if (isTaskRoot && SDK_INT == VERSION_CODES.Q) {
             finishAfterTransition()
             if (!isServiceRunning(this, TrackingService::class.java)) {
-                android.os.Process.killProcess(android.os.Process.myPid())
+                killProcess(Process.myPid())
             }
         }
         super.onDestroy()

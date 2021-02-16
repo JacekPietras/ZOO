@@ -152,3 +152,16 @@ fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
     }
     return false
 }
+
+fun isActivityRunning(context: Context): Boolean {
+    val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+    if (manager != null) {
+        @Suppress("DEPRECATION")
+        for (task in manager.getRunningTasks(Int.MAX_VALUE)) {
+            if (context.packageName == task.baseActivity?.packageName) {
+                return true
+            }
+        }
+    }
+    return false
+}
