@@ -7,6 +7,7 @@ internal class ViewCoordinates(
     zoom: Double,
     viewWidth: Int,
     viewHeight: Int,
+    worldRotation: Float,
 ) {
 
     val visibleRect: RectD
@@ -25,15 +26,28 @@ internal class ViewCoordinates(
         val haversineCorrection = haversineW / haversineH
         val ratioZoom = zoom * (viewHeight / viewWidth.toFloat()) * haversineCorrection
 
-        val visibleGpsCoordinate = RectD(
-            centerGpsCoordinate.x - zoom,
-            centerGpsCoordinate.y + ratioZoom,
-            centerGpsCoordinate.x + zoom,
-            centerGpsCoordinate.y - ratioZoom
-        )
-        visibleRect = visibleGpsCoordinate
-        horizontalScale = viewWidth / visibleGpsCoordinate.width()
-        verticalScale = viewHeight / visibleGpsCoordinate.height()
+        if (worldRotation != 0f) {
+            val visibleGpsCoordinate =  RectD(
+                centerGpsCoordinate.x - zoom,
+                centerGpsCoordinate.y + ratioZoom,
+                centerGpsCoordinate.x + zoom,
+                centerGpsCoordinate.y - ratioZoom,
+            )
+            visibleRect = visibleGpsCoordinate
+            horizontalScale = viewWidth / visibleGpsCoordinate.width()
+            verticalScale = viewHeight / visibleGpsCoordinate.height()
+
+        } else {
+            val visibleGpsCoordinate =  RectD(
+                centerGpsCoordinate.x - zoom,
+                centerGpsCoordinate.y + ratioZoom,
+                centerGpsCoordinate.x + zoom,
+                centerGpsCoordinate.y - ratioZoom,
+            )
+            visibleRect = visibleGpsCoordinate
+            horizontalScale = viewWidth / visibleGpsCoordinate.width()
+            verticalScale = viewHeight / visibleGpsCoordinate.height()
+        }
     }
 
     fun transformPath(array: FloatArray): List<FloatArray> {
@@ -72,6 +86,42 @@ internal class ViewCoordinates(
         return result
     }
 
+    fun transformPath(array: DoubleArray): List<DoubleArray> {
+        val rectF = visibleRect
+        val result = mutableListOf<DoubleArray>()
+        var part: DoubleArray? = null
+        var pos = 0
+
+        for (i in 0 until (array.size - 2) step 2) {
+            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
+                if (part != null) {
+                    part[pos] = array[i + 2].transformX()
+                    part[pos + 1] = array[i + 3].transformY()
+                    pos += 2
+                } else {
+                    part = DoubleArray(array.size)
+
+                    part[0] = array[i].transformX()
+                    part[1] = array[i + 1].transformY()
+                    part[2] = array[i + 2].transformX()
+                    part[3] = array[i + 3].transformY()
+                    pos = 4
+                }
+            } else {
+                if (part != null) {
+                    result.add(part.copyOfRange(0, pos))
+                }
+                part = null
+            }
+        }
+
+        if (part != null) {
+            result.add(part.copyOfRange(0, pos))
+        }
+
+        return result
+    }
+
     fun transformPolygon(array: FloatArray): FloatArray? =
         if (intersectsPolygon(array)) {
             val result = FloatArray(array.size)
@@ -85,11 +135,27 @@ internal class ViewCoordinates(
             null
         }
 
+    fun transformPolygon(array: DoubleArray): DoubleArray? =
+        if (intersectsPolygon(array)) {
+            val result = DoubleArray(array.size)
+
+            for (i in array.indices step 2) {
+                result[i] = array[i].transformX()
+                result[i + 1] = array[i + 1].transformY()
+            }
+            result
+        } else {
+            null
+        }
+
     fun transformPoint(p: PointD): PointD =
-        PointD(
-            ((p.x - visibleRect.left) * horizontalScale),
-            ((p.y - visibleRect.top) * verticalScale)
-        )
+        PointD(p.x.transformX(), p.y.transformY())
+
+    private fun Double.transformX(): Double =
+        ((this - visibleRect.left) * horizontalScale)
+
+    private fun Double.transformY(): Double =
+        ((this - visibleRect.top) * verticalScale)
 
     private fun Float.transformX(): Float =
         ((this - visibleRect.left) * horizontalScale).toFloat()
@@ -108,6 +174,26 @@ internal class ViewCoordinates(
 
         for (i in 0 until (array.size - 2) step 2) {
             if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) return true
+        }
+        return false
+    }
+
+    private fun intersectsPolygon(array: DoubleArray): Boolean {
+        if (polygonContains(
+                array,
+                visibleRect.left,
+                visibleRect.top
+            )
+        ) return true
+
+        for (i in 0 until (array.size - 2) step 2) {
+            if (visibleRect.containsLine(
+                    array[i],
+                    array[i + 1],
+                    array[i + 2],
+                    array[i + 3]
+                )
+            ) return true
         }
         return false
     }

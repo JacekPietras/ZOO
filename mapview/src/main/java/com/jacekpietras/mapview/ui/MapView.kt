@@ -55,6 +55,8 @@ class MapView @JvmOverloads constructor(
         PointD(worldBounds.centerX(), worldBounds.centerY())
     private var zoom: Double = 5.0
     private var zoomOnStart: Double = 5.0
+    private var worldRotation: Float = 0f
+    private var worldRotationOnStart: Float = 0f
     private var renderList: List<RenderItem2>? = null
     private var centeringAtUser = false
     private val debugTextPaint = Paint()
@@ -110,6 +112,14 @@ class MapView @JvmOverloads constructor(
         zoom = (zoomOnStart + zoomPoint * (1 - scale)).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
         cutOutNotVisible()
         invalidate()
+    }
+
+    override fun onRotateBegin() {
+        worldRotationOnStart = worldRotation
+    }
+
+    override fun onRotate(rotate: Float) {
+        worldRotation = rotate + worldRotationOnStart
     }
 
     override fun onScroll(vX: Float, vY: Float) {
@@ -186,13 +196,13 @@ class MapView @JvmOverloads constructor(
 
             when (item.shape) {
                 is PathD -> RenderItem(
-                    pointsToFloatArray(item.shape.vertices),
+                    pointsToDoubleArray(item.shape.vertices),
                     inner,
                     border,
                     close = false,
                 )
                 is PolygonD -> RenderItem(
-                    pointsToFloatArray(item.shape.vertices),
+                    pointsToDoubleArray(item.shape.vertices),
                     inner,
                     border,
                     item.onClick,
@@ -299,7 +309,8 @@ class MapView @JvmOverloads constructor(
         if (width == 0 || height == 0) return
         if (worldBounds.width() == 0.0 || worldBounds.height() == 0.0) return
 
-        visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, width, height)
+        visibleGpsCoordinate =
+            ViewCoordinates(centerGpsCoordinate, zoom, width, height, worldRotation)
 
         if (preventedGoingOutsideWorld()) {
             cutOutNotVisible()
@@ -310,16 +321,31 @@ class MapView @JvmOverloads constructor(
         val insides = mutableListOf<RenderItem2>()
         val dynamicPaints = mutableMapOf<PaintHolder.Dynamic, Paint>()
 
+        val matrix = Matrix()
+            .apply {
+                setRotate(
+                    -worldRotation,
+                    width / 2.toFloat(),
+                    height / 2.toFloat(),
+//                    centerGpsCoordinate.x.toFloat(),
+//                    centerGpsCoordinate.y.toFloat(),
+                )
+            }
+
         _objectList.forEach { item ->
             if (item.close) {
                 visibleGpsCoordinate
                     .transformPolygon(item.shape)
+                    ?.toFloatArray()
+                    ?.withMatrix(matrix, worldRotation)
                     ?.let { polygon ->
                         item.addToRender2(polygon, borders, insides, dynamicPaints)
                     }
             } else {
                 visibleGpsCoordinate
                     .transformPath(item.shape)
+                    .map { it.toFloatArray() }
+                    .map { it.withMatrix(matrix, worldRotation) }
                     .forEach { path ->
                         item.addToRender2(path, borders, insides, dynamicPaints)
                     }
@@ -332,6 +358,42 @@ class MapView @JvmOverloads constructor(
         renderList = borders + insides
         logVisibleShapes()
     }
+
+    private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {
+        return if (worldRotation != 0f) {
+            val result = FloatArray(size)
+            matrix.mapPoints(result, this)
+            result
+        } else {
+            this
+        }
+    }
+
+//    private fun RenderItem.addToRender2(
+//        array: DoubleArray,
+//        borders: MutableList<RenderItem2>,
+//        insides: MutableList<RenderItem2>,
+//        dynamicPaints: MutableMap<PaintHolder.Dynamic, Paint>,
+//    ) {
+//        insides.add(
+//            RenderItem2(
+//                array.toFloatArray(),
+//                paintHolder.takePaint(dynamicPaints),
+//                onClick,
+//                close
+//            )
+//        )
+//        if (outerPaintHolder != null) {
+//            borders.add(
+//                RenderItem2(
+//                    array.toFloatArray(),
+//                    outerPaintHolder.takePaint(dynamicPaints),
+//                    onClick,
+//                    close
+//                )
+//            )
+//        }
+//    }
 
     private fun RenderItem.addToRender2(
         array: FloatArray,
@@ -377,8 +439,23 @@ class MapView @JvmOverloads constructor(
         return result
     }
 
+    private fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
+        val result = DoubleArray(list.size * 2)
+        for (i in list.indices) {
+            result[i shl 1] = list[i].x
+            result[(i shl 1) + 1] = list[i].y
+        }
+        return result
+    }
+
+    private fun DoubleArray.toFloatArray(): FloatArray {
+        val result = FloatArray(size)
+        for (i in indices) result[i] = this[i].toFloat()
+        return result
+    }
+
     private class RenderItem(
-        val shape: FloatArray,
+        val shape: DoubleArray,
         val paintHolder: PaintHolder,
         val outerPaintHolder: PaintHolder? = null,
         val onClick: ((x: Float, y: Float) -> Unit)? = null,
@@ -392,4 +469,5 @@ class MapView @JvmOverloads constructor(
         val close: Boolean,
     )
 }
+
 

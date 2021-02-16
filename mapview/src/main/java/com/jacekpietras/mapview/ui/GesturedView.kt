@@ -7,6 +7,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import com.jacekpietras.mapview.utils.RotationGestureDetector
 
 abstract class GesturedView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -14,17 +15,23 @@ abstract class GesturedView @JvmOverloads constructor(
 
     private var swipeDetector = GestureDetector(context, OnGestureListener())
     private var pinchDetector = ScaleGestureDetector(context, OnScaleGestureListener())
+    private var rotateDetector = RotationGestureDetector(OnRotationGestureListener())
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         pinchDetector.onTouchEvent(event)
         swipeDetector.onTouchEvent(event)
-        return true;
+        rotateDetector.onTouchEvent(event)
+        return true
     }
 
     abstract fun onScaleBegin(x: Float, y: Float)
 
     abstract fun onScale(scale: Float)
+
+    abstract fun onRotate(rotate: Float)
+
+    abstract fun onRotateBegin()
 
     abstract fun onScroll(vX: Float, vY: Float)
 
@@ -62,6 +69,18 @@ abstract class GesturedView @JvmOverloads constructor(
         override fun onScale(detector: ScaleGestureDetector?): Boolean {
             onScale(detector?.scaleFactor ?: 1f)
             return false
+        }
+    }
+
+    private inner class OnRotationGestureListener :
+        RotationGestureDetector.OnRotationGestureListener {
+
+        override fun onRotation(rotationDetector: RotationGestureDetector?) {
+            onRotate(rotationDetector?.angle ?: 0f)
+        }
+
+        override fun onRotationStart(rotationDetector: RotationGestureDetector?) {
+            onRotateBegin()
         }
     }
 }
