@@ -14,7 +14,9 @@ import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.drawPath
 import timber.log.Timber
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.min
+import kotlin.math.sin
 
 class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -124,9 +126,10 @@ class MapView @JvmOverloads constructor(
 
     override fun onScroll(vX: Float, vY: Float) {
         centeringAtUser = false
+        val radians = Math.toRadians(-worldRotation.toDouble())
         centerGpsCoordinate += PointD(
-            vX / visibleGpsCoordinate.horizontalScale,
-            vY / visibleGpsCoordinate.verticalScale
+            (sin(radians) * vY + cos(radians) * vX) / visibleGpsCoordinate.horizontalScale,
+            (-sin(radians) * vX + cos(radians) * vY) / visibleGpsCoordinate.verticalScale
         )
         cutOutNotVisible()
         invalidate()
@@ -169,11 +172,17 @@ class MapView @JvmOverloads constructor(
                 120f,
                 debugTextPaint
             )
+            canvas.drawText(
+                "rot:  [${worldRotation.toDouble().form()}]",
+                10f,
+                160f,
+                debugTextPaint
+            )
             userPosition?.let {
                 canvas.drawText(
                     "upos: [${it.x.form()},${it.y.form()}]",
                     10f,
-                    160f,
+                    200f,
                     debugTextPaint
                 )
             }

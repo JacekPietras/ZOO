@@ -1,6 +1,7 @@
 package com.jacekpietras.mapview.model
 
 import com.jacekpietras.core.*
+import kotlin.math.max
 
 internal class ViewCoordinates(
     centerGpsCoordinate: PointD,
@@ -27,11 +28,13 @@ internal class ViewCoordinates(
         val ratioZoom = zoom * (viewHeight / viewWidth.toFloat()) * haversineCorrection
 
         if (worldRotation != 0f) {
+            val bigger1:Double = max(zoom, ratioZoom)
+            val bigger2 = max(viewWidth, viewHeight)
             val visibleGpsCoordinate =  RectD(
-                centerGpsCoordinate.x - zoom,
-                centerGpsCoordinate.y + ratioZoom,
-                centerGpsCoordinate.x + zoom,
-                centerGpsCoordinate.y - ratioZoom,
+                centerGpsCoordinate.x - bigger1,
+                centerGpsCoordinate.y + bigger1,
+                centerGpsCoordinate.x + bigger1,
+                centerGpsCoordinate.y - bigger1,
             )
             visibleRect = visibleGpsCoordinate
             horizontalScale = viewWidth / visibleGpsCoordinate.width()
