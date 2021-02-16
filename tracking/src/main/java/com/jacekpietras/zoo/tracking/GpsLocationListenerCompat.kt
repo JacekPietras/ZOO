@@ -45,24 +45,7 @@ class GpsLocationListenerCompat(
 
     //region Without Google Play
     private var locationManager: LocationManager? = null
-    private val locationListener = object : LocationListener {
-
-        override fun onLocationChanged(location: Location) {
-            onLocationChanged(
-                location.time,
-                location.latitude,
-                location.longitude
-            )
-        }
-
-        override fun onProviderDisabled(provider: String) {
-            onGpsStatusChanged(false)
-        }
-
-        override fun onProviderEnabled(provider: String) {
-            onGpsStatusChanged(true)
-        }
-    }
+    private var locationListener: LocationListenerImpl? = null
 
     private fun requestLocationUpdates(
         context: Context,
@@ -76,6 +59,7 @@ class GpsLocationListenerCompat(
         context: Context,
         provider: String
     ): Boolean {
+        val locationListener = locationListener ?: return false
         when {
             noPermissions(context) -> Timber.e("Permissions not granted")
             allProviders.contains(provider) -> {
@@ -95,20 +79,48 @@ class GpsLocationListenerCompat(
 
     private fun updateWithLastKnownLocation(locationManager: LocationManager, provider: String) {
         val location = locationManager.getLastKnownLocation(provider)
-        if (location != null) locationListener.onLocationChanged(location)
+        if (location != null) locationListener?.onLocationChanged(location)
     }
 
     private fun addListenerWithoutGMS(context: Context) {
         locationManager = context.getSystemService(Service.LOCATION_SERVICE) as? LocationManager
-        locationManager?.let {
-            it.removeUpdates(locationListener)
-            requestLocationUpdates(context, it)
+        locationListener = LocationListenerImpl(onLocationChanged, onGpsStatusChanged)
+        locationManager?.let { manager ->
+            locationListener?.let { listener ->
+                manager.removeUpdates(listener)
+            }
+            requestLocationUpdates(context, manager)
         }
     }
 
     private fun removeListenerWithoutGMS() {
-        locationManager?.removeUpdates(locationListener)
+        locationListener?.let {
+            locationManager?.removeUpdates(it)
+        }
+        locationListener = null
         locationManager = null
+    }
+
+    private class LocationListenerImpl(
+        private val onLocationChanged: (time: Long, lat: Double, lon: Double) -> Unit,
+        private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
+    ) : LocationListener {
+
+        override fun onLocationChanged(location: Location) {
+            onLocationChanged(
+                location.time,
+                location.latitude,
+                location.longitude
+            )
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            onGpsStatusChanged(false)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            onGpsStatusChanged(true)
+        }
     }
     //endregion
 
@@ -124,28 +136,13 @@ class GpsLocationListenerCompat(
             smallestDisplacement = 1f
         }
 
-    private fun buildLocationCallBack() =
-        object : LocationCallback() {
-
-            override fun onLocationAvailability(available: LocationAvailability?) {
-                onGpsStatusChanged(available?.isLocationAvailable ?: false)
-            }
-
-            override fun onLocationResult(locationResult: LocationResult) {
-                for (location in locationResult.locations) {
-                    onLocationChanged(
-                        location.time,
-                        location.latitude,
-                        location.longitude,
-                    )
-                }
-            }
-        }
-
     private fun addListenerWithGMS(context: Context) {
         val client = LocationServices.getFusedLocationProviderClient(context)
         fusedLocationClient = client
-        locationCallback = buildLocationCallBack()
+        locationCallback = LocationCallbackImpl(
+            onLocationChanged,
+            onGpsStatusChanged,
+        )
         client.requestLocationUpdates(
             buildLocationRequest(),
             locationCallback,
@@ -157,6 +154,26 @@ class GpsLocationListenerCompat(
         fusedLocationClient?.removeLocationUpdates(locationCallback)
         locationCallback = null
         fusedLocationClient = null
+    }
+
+    private class LocationCallbackImpl(
+        private val onLocationChanged: (time: Long, lat: Double, lon: Double) -> Unit,
+        private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
+    ) : LocationCallback() {
+
+        override fun onLocationAvailability(available: LocationAvailability?) {
+            onGpsStatusChanged(available?.isLocationAvailable ?: false)
+        }
+
+        override fun onLocationResult(locationResult: LocationResult) {
+            for (location in locationResult.locations) {
+                onLocationChanged(
+                    location.time,
+                    location.latitude,
+                    location.longitude,
+                )
+            }
+        }
     }
     //endregion
 }

@@ -140,14 +140,15 @@ internal fun initTrackingNotificationChannel(context: Context, channelId: String
     }
 }
 
-//fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
-//    val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
-//    if (manager != null) {
-//        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-//            if (serviceClass.name == service.service.className) {
-//                return true
-//            }
-//        }
-//    }
-//    return false
-//}
+fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
+    val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+    if (manager != null) {
+        @Suppress("DEPRECATION")
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+    }
+    return false
+}

@@ -10,18 +10,14 @@ import android.location.GnssStatus
 import android.location.GpsStatus
 import android.location.LocationManager
 import android.os.Build
+import androidx.annotation.RequiresApi
 import timber.log.Timber
 
 class GpsStatusListenerCompat(onStatusChanged: (enabled: Boolean) -> Unit) {
 
     private var locationManager: LocationManager? = null
     private val statusListener: Any = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        object : GnssStatus.Callback() {
-            override fun onSatelliteStatusChanged(status: GnssStatus) {
-                Timber.i("Gps Status $status")
-                onStatusChanged(status.satelliteCount > 3)
-            }
-        }
+        GnssStatusCallback(onStatusChanged)
     } else {
         GpsStatus.Listener {
             when (it) {
@@ -56,5 +52,16 @@ class GpsStatusListenerCompat(onStatusChanged: (enabled: Boolean) -> Unit) {
             locationManager?.unregisterGnssStatusCallback(statusListener)
         }
         locationManager = null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private class GnssStatusCallback(
+        private val onStatusChanged: (enabled: Boolean) -> Unit
+    ) : GnssStatus.Callback() {
+
+        override fun onSatelliteStatusChanged(status: GnssStatus) {
+            Timber.i("Gps Status $status")
+            onStatusChanged(status.satelliteCount > 3)
+        }
     }
 }

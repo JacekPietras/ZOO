@@ -1,5 +1,7 @@
 package com.jacekpietras.zoo.app
 
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -9,6 +11,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.jacekpietras.zoo.R
 import com.jacekpietras.zoo.core.binding.viewBinding
 import com.jacekpietras.zoo.databinding.ActivityMainBinding
+import com.jacekpietras.zoo.tracking.TrackingService
+import com.jacekpietras.zoo.tracking.isServiceRunning
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             && supportFragmentManager.primaryNavigationFragment
                 ?.childFragmentManager?.backStackEntryCount == 0
             && supportFragmentManager.backStackEntryCount == 0
+            && SDK_INT == VERSION_CODES.Q
         ) {
             finishAfterTransition()
         } else {
@@ -35,8 +40,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         // https://issuetracker.google.com/issues/139738913
-        if (isTaskRoot) {
+        if (isTaskRoot && SDK_INT == VERSION_CODES.Q) {
             finishAfterTransition()
+            if (!isServiceRunning(this, TrackingService::class.java)) {
+                android.os.Process.killProcess(android.os.Process.myPid())
+            }
         }
         super.onDestroy()
     }
