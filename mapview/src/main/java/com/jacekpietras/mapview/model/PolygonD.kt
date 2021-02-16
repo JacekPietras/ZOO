@@ -3,8 +3,9 @@ package com.jacekpietras.mapview.model
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.core.containsLine
+import com.jacekpietras.core.polygonContains
 
-class PolygonD(val vertices: List<PointD>) : DrawableOnCanvas {
+class PolygonD(val vertices: List<PointD>) {
 
     fun intersects(rect: RectD): Boolean {
         if (contains(PointD(rect.left, rect.top))) return true
@@ -15,8 +16,5 @@ class PolygonD(val vertices: List<PointD>) : DrawableOnCanvas {
     }
 
     fun contains(point: PointD): Boolean =
-        com.jacekpietras.core.contains(vertices, point)
-
-   internal fun toFloat(): PolygonF =
-        PolygonF(vertices.map { it.toFloat() })
+        polygonContains(vertices, point)
 }

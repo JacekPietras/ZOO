@@ -55,6 +55,3 @@ data class PointD(
 
     private fun Double.form() = "%.6f".format(this)
 }
-
-fun PointF.toDouble(): PointD =
-    PointD(x.toDouble(), y.toDouble())

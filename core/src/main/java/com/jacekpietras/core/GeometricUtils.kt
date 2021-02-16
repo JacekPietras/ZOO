@@ -1,6 +1,6 @@
 package com.jacekpietras.core
 
-import android.graphics.PointF
+import android.graphics.RectF
 import kotlin.math.*
 
 fun RectD.containsLine(p1: PointD, p2: PointD): Boolean {
@@ -52,7 +52,57 @@ fun RectD.containsLine(p1: PointD, p2: PointD): Boolean {
     return minY <= maxY
 }
 
-fun contains(list: List<PointD>, point: PointD): Boolean {
+
+fun RectF.containsLine(p1x: Float, p1y: Float, p2x: Float, p2y: Float): Boolean {
+    // Find min and max X for the segment
+    var minX = p1x
+    var maxX = p2x
+    if (p1x > p2x) {
+        minX = p2x
+        maxX = p1x
+    }
+
+    // Find the intersection of the segment's and rectangle's x-projections
+    if (right > left) {
+        if (maxX > right) maxX = right
+        if (minX < left) minX = left
+    } else {
+        if (maxX > left) maxX = left
+        if (minX < right) minX = right
+    }
+
+    // If their projections do not intersect return false
+    if (minX > maxX) return false
+
+    // Find corresponding min and max Y for min and max X we found before
+    var minY = p1y
+    var maxY = p2y
+    val dx = p2x - p1x
+    if (abs(dx) > 0.0000001) {
+        val a = (p2y - p1y) / dx
+        val b = p1y - a * p1x
+        minY = a * minX + b
+        maxY = a * maxX + b
+    }
+    if (minY > maxY) {
+        val tmp = maxY
+        maxY = minY
+        minY = tmp
+    }
+
+    // Find the intersection of the segment's and rectangle's y-projections
+    if (bottom > top) {
+        if (maxY > bottom) maxY = bottom
+        if (minY < top) minY = top
+    } else {
+        if (maxY > top) maxY = top
+        if (minY < bottom) minY = bottom
+    }
+
+    return minY <= maxY
+}
+
+fun polygonContains(list: List<PointD>, point: PointD): Boolean {
     // ray casting algorithm http://rosettacode.org/wiki/Ray-casting_algorithm
     var crossings = 0
 
@@ -74,20 +124,22 @@ fun contains(list: List<PointD>, point: PointD): Boolean {
     return crossings % 2 == 1
 }
 
-fun contains(list: List<PointF>, point: PointF): Boolean {
+fun polygonContains(list: FloatArray, px: Float, py: Float): Boolean {
     // ray casting algorithm http://rosettacode.org/wiki/Ray-casting_algorithm
     var crossings = 0
 
     // for each edge
-    for (i in list.indices) {
-        val a: PointF = list[i]
-        var j = i + 1
+    for (i in list.indices step 2) {
+        val ax = list[i]
+        val ay = list[i + 1]
+        var j = i + 2
         //to close the last edge, you have to take the first point of your polygon
         if (j >= list.size) {
             j = 0
         }
-        val b: PointF = list[j]
-        if (rayCrossesSegment(point, a, b)) {
+        val bx = list[j]
+        val by = list[j + 1]
+        if (rayCrossesSegment(px, py, ax, ay, bx, by)) {
             crossings++
         }
     }
@@ -134,31 +186,27 @@ private fun rayCrossesSegment(point: PointD, a: PointD, b: PointD): Boolean {
     }
 }
 
-private fun rayCrossesSegment(point: PointF, a: PointF, b: PointF): Boolean {
+private fun rayCrossesSegment(
+    px: Float,
+    py: Float,
+    ax: Float,
+    ay: Float,
+    bx: Float,
+    by: Float,
+): Boolean {
     // Ray Casting algorithm checks, for each segment, if the point is
     // 1) to the left of the segment and
     // 2) not above nor below the segment. If these two conditions are met, it returns true
-    var px: Float = point.x
-    var py: Float = point.y
-    var ax: Float = a.x
-    var ay: Float = a.y
-    var bx: Float = b.x
-    var by: Float = b.y
-    if (ay > by) {
-        ax = b.x
-        ay = b.y
-        bx = a.x
-        by = a.y
-    }
-    // alter longitude to cater for 180 degree crossings
-    if (px < 0 || ax < 0 || bx < 0) {
-        px += 360f
-        ax += 360f
-        bx += 360f
-    }
-    // if the point has the same latitude as a or b, increase slightly py
-    if (py == ay || py == by) py += 0.00000001f
+    if (ay > by)
+        return rayCrossesSegment(px, py, bx, by, ax, ay)
 
+    // alter longitude to cater for 180 degree crossings
+    if (px < 0 || ax < 0 || bx < 0)
+        return rayCrossesSegment(px + 360f, py, ax + 360f, ay, bx + 360f, by)
+
+    // if the point has the same latitude as a or b, increase slightly py
+    if (py == ay || py == by)
+        return rayCrossesSegment(px, py + 0.00001f, ax, ay, bx, by)
 
     // if the point is above, below or to the right of the segment, it returns false
     return if (py > by || py < ay || px > ax.coerceAtLeast(bx)) {

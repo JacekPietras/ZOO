@@ -6,7 +6,7 @@ import android.graphics.Matrix
 import androidx.annotation.XmlRes
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.core.contains
+import com.jacekpietras.core.polygonContains
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import org.xmlpull.v1.XmlPullParser
 
@@ -86,7 +86,7 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
 
         regions = map.getValue("regions").map { it.map { p -> transformation(p) } }
             .map { region ->
-                val containingTags = tags.filter { tag -> contains(region, tag.position) }
+                val containingTags = tags.filter { tag -> polygonContains(region, tag.position) }
                 if (containingTags.size != 1) throw IllegalStateException("wrong size of region")
                 containingTags.first().content to MapItemEntity.PolygonEntity(region)
             }

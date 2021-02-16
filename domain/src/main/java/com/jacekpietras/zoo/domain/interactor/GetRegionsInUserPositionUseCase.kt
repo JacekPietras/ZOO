@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.core.contains
+import com.jacekpietras.core.polygonContains
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +16,7 @@ class GetRegionsInUserPositionUseCase(
         gpsRepository.observeLatestPosition().map { position ->
             val point = PointD(position.lon, position.lat)
             mapRepository.getCurrentRegions()
-                .filter { region -> contains(region.second.vertices, point) }
+                .filter { region -> polygonContains(region.second.vertices, point) }
                 .map { it.first }
         }
 }

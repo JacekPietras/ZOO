@@ -36,22 +36,79 @@ internal class ViewCoordinates(
         verticalScale = viewHeight / visibleGpsCoordinate.height()
     }
 
-    fun transform(path: PathD): List<PathD> =
-        path
-            .vertices
-            .cutOut { a, b -> visibleRect.containsLine(a, b) }
-            .map { PathD(it.map { point -> transform(point) }) }
+    fun transformPath(array: FloatArray): List<FloatArray> {
+        val rectF = visibleRect.toFloat()
+        val result = mutableListOf<FloatArray>()
+        var part: FloatArray? = null
+        var pos = 0
 
-    fun transform(polygon: PolygonD): PolygonD? =
-        if (polygon.intersects(visibleRect)) {
-            PolygonD(polygon.vertices.map { point -> transform(point) })
+        for (i in 0 until (array.size - 2) step 2) {
+            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
+                if (part != null) {
+                    part[pos] = array[i + 2].transformX()
+                    part[pos + 1] = array[i + 3].transformY()
+                    pos += 2
+                } else {
+                    part = FloatArray(array.size)
+
+                    part[0] = array[i].transformX()
+                    part[1] = array[i + 1].transformY()
+                    part[2] = array[i + 2].transformX()
+                    part[3] = array[i + 3].transformY()
+                    pos = 4
+                }
+            } else {
+                if (part != null) {
+                    result.add(part.copyOfRange(0, pos))
+                }
+                part = null
+            }
+        }
+
+        if (part != null) {
+            result.add(part.copyOfRange(0, pos))
+        }
+
+        return result
+    }
+
+    fun transformPolygon(array: FloatArray): FloatArray? =
+        if (intersectsPolygon(array)) {
+            val result = FloatArray(array.size)
+
+            for (i in array.indices step 2) {
+                result[i] = array[i].transformX()
+                result[i + 1] = array[i + 1].transformY()
+            }
+            result
         } else {
             null
         }
 
-    fun transform(p: PointD): PointD =
+    fun transformPoint(p: PointD): PointD =
         PointD(
             ((p.x - visibleRect.left) * horizontalScale),
             ((p.y - visibleRect.top) * verticalScale)
         )
+
+    private fun Float.transformX(): Float =
+        ((this - visibleRect.left) * horizontalScale).toFloat()
+
+    private fun Float.transformY(): Float =
+        ((this - visibleRect.top) * verticalScale).toFloat()
+
+    private fun intersectsPolygon(array: FloatArray): Boolean {
+        if (polygonContains(
+                array,
+                visibleRect.left.toFloat(),
+                visibleRect.top.toFloat()
+            )
+        ) return true
+        val rectF = visibleRect.toFloat()
+
+        for (i in 0 until (array.size - 2) step 2) {
+            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) return true
+        }
+        return false
+    }
 }
