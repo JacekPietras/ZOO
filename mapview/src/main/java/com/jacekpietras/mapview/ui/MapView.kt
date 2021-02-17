@@ -342,7 +342,6 @@ class MapView @JvmOverloads constructor(
             if (item.close) {
                 visibleGpsCoordinate
                     .transformPolygon(item.shape)
-                    ?.toFloatArray()
                     ?.withMatrix(matrix, worldRotation)
                     ?.let { polygon ->
                         item.addToRender2(polygon, borders, insides, dynamicPaints)
@@ -350,7 +349,6 @@ class MapView @JvmOverloads constructor(
             } else {
                 visibleGpsCoordinate
                     .transformPath(item.shape)
-                    .map { it.toFloatArray() }
                     .map { it.withMatrix(matrix, worldRotation) }
                     .forEach { path ->
                         item.addToRender2(path, borders, insides, dynamicPaints)
@@ -366,13 +364,10 @@ class MapView @JvmOverloads constructor(
     }
 
     private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {
-        return if (worldRotation != 0f) {
-            val result = FloatArray(size)
-            matrix.mapPoints(result, this)
-            result
-        } else {
-            this
+        if (worldRotation != 0f) {
+            matrix.mapPoints(this)
         }
+        return this
     }
 
     private fun RenderItem.addToRender2(
@@ -416,12 +411,6 @@ class MapView @JvmOverloads constructor(
             result[i shl 1] = list[i].x
             result[(i shl 1) + 1] = list[i].y
         }
-        return result
-    }
-
-    private fun DoubleArray.toFloatArray(): FloatArray {
-        val result = FloatArray(size)
-        for (i in indices) result[i] = this[i].toFloat()
         return result
     }
 
