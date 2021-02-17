@@ -63,9 +63,13 @@ internal class MapViewStateMapper {
             worldBounds = state.worldBounds.map(::fromWorldSpace),
             mapData = complex,
             userPosition = state.userPosition.map(::fromPosition),
+            compass = state.compass.map(::fromCompass),
             effect = effect.receiveAsFlow()
         )
     }
+
+    private fun fromCompass(compass: Float): Float =
+        compass
 
     private fun fromPosition(position: PointD): PointD =
         position

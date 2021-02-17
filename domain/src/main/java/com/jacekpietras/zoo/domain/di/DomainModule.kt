@@ -68,4 +68,14 @@ val domainModule = module {
             gpsRepository = get(),
         )
     }
+    factory {
+        ObserveCompassUseCase(
+            gpsRepository = get(),
+        )
+    }
+    factory {
+        InsertUserCompassUseCase(
+            gpsRepository = get(),
+        )
+    }
 }

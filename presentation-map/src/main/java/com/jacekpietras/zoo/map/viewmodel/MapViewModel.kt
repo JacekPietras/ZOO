@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 internal class MapViewModel(
     viewStateMapper: MapViewStateMapper,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
+    observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
     getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
@@ -37,6 +38,7 @@ internal class MapViewModel(
         technicalRoute = getTechnicalRoadsUseCase(),
         lines = getLinesUseCase(),
         takenRoute = observeTakenRouteUseCase(),
+        compass = observeCompassUseCase(),
     )
     private val effect: Channel<MapEffect> = Channel()
     var viewState = viewStateMapper.from(state, effect)

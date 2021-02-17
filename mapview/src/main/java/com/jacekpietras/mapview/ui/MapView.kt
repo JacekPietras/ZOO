@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
+import com.google.android.material.color.MaterialColors
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.core.polygonContains
@@ -50,7 +51,14 @@ class MapView @JvmOverloads constructor(
                 centerAtUserPosition()
             }
         }
-    var userPositionOnScreen: PointF? = null
+    var userPositionOnScreen: FloatArray? = null
+    var compass: Float = 0f
+        set(value) {
+            field = value
+            if (centeringAtUser) {
+                centerAtUserCompass()
+            }
+        }
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD =
@@ -63,8 +71,9 @@ class MapView @JvmOverloads constructor(
     private var centeringAtUser = false
     private val debugTextPaint = Paint()
         .apply {
-            color = Color.parseColor("#88444444")
+            color = MaterialColors.getColor(context, R.attr.colorControlActivated, Color.MAGENTA)
             typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+            alpha = 128
             textSize = 30f
         }
     private val userPositionPaint = Paint()
@@ -84,7 +93,6 @@ class MapView @JvmOverloads constructor(
                     duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
                     interpolator = AccelerateDecelerateInterpolator()
                     addUpdateListener { animation ->
-                        animation.animatedFraction
                         centerGpsCoordinate = previousPosition * (1f - animation.animatedFraction) +
                                 desiredPosition * animation.animatedFraction
 
@@ -95,6 +103,35 @@ class MapView @JvmOverloads constructor(
                 }
         } else {
             centerGpsCoordinate = desiredPosition
+            cutOutNotVisible()
+            invalidate()
+        }
+    }
+
+    private fun centerAtUserCompass(animation: Boolean = true) {
+        if (animation) {
+            val diff = worldRotation - compass
+            val previousPosition = when {
+                diff > 180 -> worldRotation - 360
+                diff < -180 -> worldRotation + 360
+                else -> worldRotation
+            }
+
+            ValueAnimator.ofFloat(1f)
+                .apply {
+                    duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+                    interpolator = AccelerateDecelerateInterpolator()
+                    addUpdateListener { animation ->
+                        worldRotation = (previousPosition * (1f - animation.animatedFraction) +
+                                compass * animation.animatedFraction) % 360f
+
+                        cutOutNotVisible()
+                        invalidate()
+                    }
+                    start()
+                }
+        } else {
+            worldRotation = compass
             cutOutNotVisible()
             invalidate()
         }
@@ -150,7 +187,7 @@ class MapView @JvmOverloads constructor(
 
         renderList?.forEach { canvas.drawPath(it.shape, it.paint, it.close) }
         userPositionOnScreen?.let {
-            canvas.drawCircle(it.x, it.y, 15f, userPositionPaint)
+            canvas.drawCircle(it[0], it[1], 15f, userPositionPaint)
         }
 
         renderDebug(canvas)
@@ -356,7 +393,9 @@ class MapView @JvmOverloads constructor(
             }
         }
         userPosition?.let {
-            userPositionOnScreen = visibleGpsCoordinate.transformPoint(it).toFloat()
+            userPositionOnScreen = visibleGpsCoordinate
+                .transformPoint(it)
+                .withMatrix(matrix, worldRotation)
         }
 
         renderList = borders + insides

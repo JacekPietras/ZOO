@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jacekpietras.zoo">
 
+    <uses-feature
+        android:name="android.hardware.sensor.compass"
+        android:required="false" />
+
     <application
         android:name=".app.ZooApplication"
         android:allowBackup="true"

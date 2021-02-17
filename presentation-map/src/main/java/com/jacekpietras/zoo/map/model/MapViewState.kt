@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 internal class MapViewState(
     val currentRegionIds: Flow<String>,
+    val compass: Flow<Float>,
     val worldBounds: Flow<RectD>,
     val mapData: Flow<List<MapItem>>,
     val userPosition: Flow<PointD>,

@@ -97,8 +97,12 @@ internal class ViewCoordinates(
             null
         }
 
-    fun transformPoint(p: PointD): PointD =
-        PointD(p.x.transformX(), p.y.transformY())
+    fun transformPoint(p: PointD): FloatArray {
+        val result = FloatArray(2)
+        result[0] = p.x.transformX()
+        result[1] = p.y.transformY()
+        return result
+    }
 
     private fun Double.transformX(): Float =
         ((this - visibleRect.left) * horizontalScale).toFloat()

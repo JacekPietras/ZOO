@@ -31,6 +31,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         userPosition.observe(viewLifecycleOwner) { binding.mapView.userPosition = it }
         mapData.observe(viewLifecycleOwner) { binding.mapView.objectList = it }
         worldBounds.observe(viewLifecycleOwner) { binding.mapView.worldBounds = it }
+        compass.observe(viewLifecycleOwner) { binding.mapView.compass = it }
 
         effect.observe(viewLifecycleOwner) {
             when (it) {

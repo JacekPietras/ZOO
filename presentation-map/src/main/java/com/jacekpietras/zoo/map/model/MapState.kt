@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.flowOf
 
 internal data class MapState(
     val regionsInUserPosition: Flow<List<String>> = flowOf(emptyList()),
+    val compass: Flow<Float> = flowOf(0f),
 
     val buildings: Flow<List<PolygonEntity>> = flowOf(emptyList()),
     val aviary: Flow<List<PolygonEntity>> = flowOf(emptyList()),

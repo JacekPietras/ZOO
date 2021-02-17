@@ -15,6 +15,7 @@ import timber.log.Timber
 class TrackingService : Service() {
 
     private val onLocationUpdate: OnLocationUpdate by inject()
+    private val onCompassUpdate: OnCompassUpdate by inject()
     private var serviceUtils: ServiceUtils? = null
     private val gpsLocationListener = GpsLocationListenerCompat(
         onLocationChanged = { time, lat, lon ->
@@ -28,6 +29,10 @@ class TrackingService : Service() {
     private val gpsStatusListener = GpsStatusListenerCompat { enabled ->
         if (enabled) Timber.i("Gps Status Enabled (b)")
         else Timber.i("Gps Status Disabled (b)")
+    }
+    private val compassListener = CompassListenerCompat { angle ->
+        Timber.i("Compass angle $angle")
+        onCompassUpdate(angle)
     }
 
     override fun onCreate() {
@@ -67,11 +72,14 @@ class TrackingService : Service() {
 
         gpsLocationListener.addLocationListener(this)
         gpsStatusListener.addStatusListener(this)
+        compassListener.addCompassListener(this)
     }
 
     private fun navigationStop() {
         gpsLocationListener.removeLocationListener()
         gpsStatusListener.removeStatusListener()
+        compassListener.removeCompassListener()
+
         serviceUtils?.removeNotification()
         stopForeground(true)
         if (!isActivityRunning(this)) {

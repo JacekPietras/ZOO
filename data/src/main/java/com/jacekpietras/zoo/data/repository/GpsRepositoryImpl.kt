@@ -20,6 +20,7 @@ internal class GpsRepositoryImpl(
 ) : GpsRepository {
 
     private val debugHistory: Flow<List<List<GpsHistoryEntity>>>
+    private val compass = MutableStateFlow(0f)
 
     init {
         debugHistory = if (BuildConfig.DEBUG) {
@@ -54,5 +55,12 @@ internal class GpsRepositoryImpl(
 
     override suspend fun insertPosition(position: GpsHistoryEntity) {
         gpsDao.insert(gpsHistoryMapper.from(position))
+    }
+
+    override fun getCompass(): Flow<Float> =
+        compass
+
+    override suspend fun insertCompass(angle: Float) {
+        compass.emit(angle)
     }
 }
