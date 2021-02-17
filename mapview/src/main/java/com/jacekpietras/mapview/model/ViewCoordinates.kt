@@ -1,7 +1,8 @@
 package com.jacekpietras.mapview.model
 
 import com.jacekpietras.core.*
-import kotlin.math.max
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 internal class ViewCoordinates(
     centerGpsCoordinate: PointD,
@@ -11,7 +12,10 @@ internal class ViewCoordinates(
     worldRotation: Float,
 ) {
 
+    val temp = zoom
+
     val visibleRect: RectD
+    val visibleRect2: RectD
     val horizontalScale: Double
     val verticalScale: Double
 
@@ -25,72 +29,66 @@ internal class ViewCoordinates(
             centerGpsCoordinate.x + zoom, centerGpsCoordinate.y,
         )
         val haversineCorrection = haversineW / haversineH
-        val ratioZoom = zoom * (viewHeight / viewWidth.toFloat()) * haversineCorrection
+        val zoomSquare = zoom * (viewHeight / viewWidth.toFloat())
+        val ratioZoom = zoomSquare * haversineCorrection
 
-        if (worldRotation != 0f) {
-            val bigger1:Double = max(zoom, ratioZoom)
-            val bigger2 = max(viewWidth, viewHeight)
-            val visibleGpsCoordinate =  RectD(
-                centerGpsCoordinate.x - bigger1,
-                centerGpsCoordinate.y + bigger1,
-                centerGpsCoordinate.x + bigger1,
-                centerGpsCoordinate.y - bigger1,
-            )
-            visibleRect = visibleGpsCoordinate
-            horizontalScale = viewWidth / visibleGpsCoordinate.width()
-            verticalScale = viewHeight / visibleGpsCoordinate.height()
+        val circularCorrection = sqrt((ratioZoom / 2).pow(2) + (zoom / 2).pow(2)) / (ratioZoom / 2)
 
-        } else {
-            val visibleGpsCoordinate =  RectD(
-                centerGpsCoordinate.x - zoom,
-                centerGpsCoordinate.y + ratioZoom,
-                centerGpsCoordinate.x + zoom,
-                centerGpsCoordinate.y - ratioZoom,
-            )
-            visibleRect = visibleGpsCoordinate
-            horizontalScale = viewWidth / visibleGpsCoordinate.width()
-            verticalScale = viewHeight / visibleGpsCoordinate.height()
-        }
+        visibleRect = RectD(
+            centerGpsCoordinate.x - zoom,
+            centerGpsCoordinate.y + ratioZoom,
+            centerGpsCoordinate.x + zoom,
+            centerGpsCoordinate.y - ratioZoom,
+        )
+        visibleRect2 = RectD(
+            centerGpsCoordinate.x - zoomSquare * circularCorrection,
+            centerGpsCoordinate.y + ratioZoom * circularCorrection,
+            centerGpsCoordinate.x + zoomSquare * circularCorrection,
+            centerGpsCoordinate.y - ratioZoom * circularCorrection,
+        )
+
+        horizontalScale = viewWidth / visibleRect.width()
+        verticalScale = viewHeight / visibleRect.height()
     }
-
-    fun transformPath(array: FloatArray): List<FloatArray> {
-        val rectF = visibleRect.toFloat()
-        val result = mutableListOf<FloatArray>()
-        var part: FloatArray? = null
-        var pos = 0
-
-        for (i in 0 until (array.size - 2) step 2) {
-            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
-                if (part != null) {
-                    part[pos] = array[i + 2].transformX()
-                    part[pos + 1] = array[i + 3].transformY()
-                    pos += 2
-                } else {
-                    part = FloatArray(array.size)
-
-                    part[0] = array[i].transformX()
-                    part[1] = array[i + 1].transformY()
-                    part[2] = array[i + 2].transformX()
-                    part[3] = array[i + 3].transformY()
-                    pos = 4
-                }
-            } else {
-                if (part != null) {
-                    result.add(part.copyOfRange(0, pos))
-                }
-                part = null
-            }
-        }
-
-        if (part != null) {
-            result.add(part.copyOfRange(0, pos))
-        }
-
-        return result
-    }
+//
+//    fun transformPath(array: FloatArray): List<FloatArray> {
+//        val rectF = visibleRect.toFloat()
+//        val result = mutableListOf<FloatArray>()
+//        var part: FloatArray? = null
+//        var pos = 0
+//
+//        for (i in 0 until (array.size - 2) step 2) {
+//            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
+//                if (part != null) {
+//                    part[pos] = array[i + 2].transformX()
+//                    part[pos + 1] = array[i + 3].transformY()
+//                    pos += 2
+//                } else {
+//                    part = FloatArray(array.size)
+//
+//                    part[0] = array[i].transformX()
+//                    part[1] = array[i + 1].transformY()
+//                    part[2] = array[i + 2].transformX()
+//                    part[3] = array[i + 3].transformY()
+//                    pos = 4
+//                }
+//            } else {
+//                if (part != null) {
+//                    result.add(part.copyOfRange(0, pos))
+//                }
+//                part = null
+//            }
+//        }
+//
+//        if (part != null) {
+//            result.add(part.copyOfRange(0, pos))
+//        }
+//
+//        return result
+//    }
 
     fun transformPath(array: DoubleArray): List<DoubleArray> {
-        val rectF = visibleRect
+        val rectF = visibleRect2
         val result = mutableListOf<DoubleArray>()
         var part: DoubleArray? = null
         var pos = 0
@@ -125,18 +123,18 @@ internal class ViewCoordinates(
         return result
     }
 
-    fun transformPolygon(array: FloatArray): FloatArray? =
-        if (intersectsPolygon(array)) {
-            val result = FloatArray(array.size)
-
-            for (i in array.indices step 2) {
-                result[i] = array[i].transformX()
-                result[i + 1] = array[i + 1].transformY()
-            }
-            result
-        } else {
-            null
-        }
+//    fun transformPolygon(array: FloatArray): FloatArray? =
+//        if (intersectsPolygon(array)) {
+//            val result = FloatArray(array.size)
+//
+//            for (i in array.indices step 2) {
+//                result[i] = array[i].transformX()
+//                result[i + 1] = array[i + 1].transformY()
+//            }
+//            result
+//        } else {
+//            null
+//        }
 
     fun transformPolygon(array: DoubleArray): DoubleArray? =
         if (intersectsPolygon(array)) {
@@ -160,37 +158,38 @@ internal class ViewCoordinates(
     private fun Double.transformY(): Double =
         ((this - visibleRect.top) * verticalScale)
 
-    private fun Float.transformX(): Float =
-        ((this - visibleRect.left) * horizontalScale).toFloat()
-
-    private fun Float.transformY(): Float =
-        ((this - visibleRect.top) * verticalScale).toFloat()
-
-    private fun intersectsPolygon(array: FloatArray): Boolean {
-        if (polygonContains(
-                array,
-                visibleRect.left.toFloat(),
-                visibleRect.top.toFloat()
-            )
-        ) return true
-        val rectF = visibleRect.toFloat()
-
-        for (i in 0 until (array.size - 2) step 2) {
-            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) return true
-        }
-        return false
-    }
+//    private fun Float.transformX(): Float =
+//        ((this - visibleRect.left) * horizontalScale).toFloat()
+//
+//    private fun Float.transformY(): Float =
+//        ((this - visibleRect.top) * verticalScale).toFloat()
+//
+//    private fun intersectsPolygon(array: FloatArray): Boolean {
+//        if (polygonContains(
+//                array,
+//                visibleRect.left.toFloat(),
+//                visibleRect.top.toFloat()
+//            )
+//        ) return true
+//        val rectF = visibleRect.toFloat()
+//
+//        for (i in 0 until (array.size - 2) step 2) {
+//            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) return true
+//        }
+//        return false
+//    }
 
     private fun intersectsPolygon(array: DoubleArray): Boolean {
+        val rectF = visibleRect2
         if (polygonContains(
                 array,
-                visibleRect.left,
-                visibleRect.top
+                rectF.left,
+                rectF.top
             )
         ) return true
 
         for (i in 0 until (array.size - 2) step 2) {
-            if (visibleRect.containsLine(
+            if (rectF.containsLine(
                     array[i],
                     array[i + 1],
                     array[i + 2],
