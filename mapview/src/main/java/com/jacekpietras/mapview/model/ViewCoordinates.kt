@@ -9,13 +9,11 @@ internal class ViewCoordinates(
     zoom: Double,
     viewWidth: Int,
     viewHeight: Int,
-    worldRotation: Float,
 ) {
 
-    val temp = zoom
 
     val visibleRect: RectD
-    val visibleRect2: RectD
+    private val visibleRect2: RectD
     val horizontalScale: Double
     val verticalScale: Double
 

@@ -318,8 +318,7 @@ class MapView @JvmOverloads constructor(
         if (width == 0 || height == 0) return
         if (worldBounds.width() == 0.0 || worldBounds.height() == 0.0) return
 
-        visibleGpsCoordinate =
-            ViewCoordinates(centerGpsCoordinate, zoom, width, height, worldRotation)
+        visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, width, height)
 
         if (preventedGoingOutsideWorld()) {
             cutOutNotVisible()
