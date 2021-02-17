@@ -335,8 +335,6 @@ class MapView @JvmOverloads constructor(
                     -worldRotation,
                     width / 2.toFloat(),
                     height / 2.toFloat(),
-//                    centerGpsCoordinate.x.toFloat(),
-//                    centerGpsCoordinate.y.toFloat(),
                 )
             }
 
@@ -377,32 +375,6 @@ class MapView @JvmOverloads constructor(
         }
     }
 
-//    private fun RenderItem.addToRender2(
-//        array: DoubleArray,
-//        borders: MutableList<RenderItem2>,
-//        insides: MutableList<RenderItem2>,
-//        dynamicPaints: MutableMap<PaintHolder.Dynamic, Paint>,
-//    ) {
-//        insides.add(
-//            RenderItem2(
-//                array.toFloatArray(),
-//                paintHolder.takePaint(dynamicPaints),
-//                onClick,
-//                close
-//            )
-//        )
-//        if (outerPaintHolder != null) {
-//            borders.add(
-//                RenderItem2(
-//                    array.toFloatArray(),
-//                    outerPaintHolder.takePaint(dynamicPaints),
-//                    onClick,
-//                    close
-//                )
-//            )
-//        }
-//    }
-
     private fun RenderItem.addToRender2(
         array: FloatArray,
         borders: MutableList<RenderItem2>,
@@ -436,15 +408,6 @@ class MapView @JvmOverloads constructor(
                     " (${objectList.size})"
             Timber.v(message)
         }
-    }
-
-    private fun pointsToFloatArray(list: List<PointD>): FloatArray {
-        val result = FloatArray(list.size * 2)
-        for (i in list.indices) {
-            result[i shl 1] = list[i].x.toFloat()
-            result[(i shl 1) + 1] = list[i].y.toFloat()
-        }
-        return result
     }
 
     private fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
