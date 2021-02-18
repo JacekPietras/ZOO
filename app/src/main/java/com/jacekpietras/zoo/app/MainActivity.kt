@@ -11,7 +11,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.jacekpietras.zoo.R
-import com.jacekpietras.zoo.core.binding.viewBinding
 import com.jacekpietras.zoo.databinding.ActivityMainBinding
 import com.jacekpietras.zoo.tracking.TrackingService
 import com.jacekpietras.zoo.tracking.isServiceRunning
@@ -19,12 +18,11 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding by viewBinding(ActivityMainBinding::inflate)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setViews()
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.navView.setupWithNavController(findNavController())
+        setContentView(binding.root)
     }
 
     override fun onBackPressed() {
@@ -64,10 +62,6 @@ class MainActivity : AppCompatActivity() {
         get() = supportFragmentManager.primaryNavigationFragment
             ?.childFragmentManager?.backStackEntryCount == 0
                 && supportFragmentManager.backStackEntryCount == 0
-
-    private fun setViews() {
-        binding.navView.setupWithNavController(findNavController())
-    }
 
     private fun findNavController(): NavController {
         val navHostFragment =
