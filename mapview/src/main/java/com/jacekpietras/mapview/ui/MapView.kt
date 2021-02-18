@@ -67,6 +67,12 @@ class MapView @JvmOverloads constructor(
             }
         }
 
+    private val interesting: List<PointD> = listOf(
+//        PointD(19.851969189859027, 50.05453865253824), PointD(19.84918406297732, 50.053710591445)
+
+    )
+    private var interestingOnScreen: FloatArray? = null
+
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD =
         PointD(worldBounds.centerX(), worldBounds.centerY())
@@ -91,6 +97,12 @@ class MapView @JvmOverloads constructor(
     private val terminalPaint = Paint()
         .apply {
             color = Color.RED
+            alpha = 128
+            style = Paint.Style.FILL
+        }
+    private val interestingPaint = Paint()
+        .apply {
+            color = Color.BLUE
             alpha = 128
             style = Paint.Style.FILL
         }
@@ -205,6 +217,11 @@ class MapView @JvmOverloads constructor(
         terminalPointsOnScreen?.let { array ->
             for (i in array.indices step 2) {
                 canvas.drawCircle(array[i], array[i + 1], 15f, terminalPaint)
+            }
+        }
+        interestingOnScreen?.let { array ->
+            for (i in array.indices step 2) {
+                canvas.drawCircle(array[i], array[i + 1], 15f, interestingPaint)
             }
         }
 
@@ -418,6 +435,11 @@ class MapView @JvmOverloads constructor(
         if (terminalPoints.isNotEmpty()) {
             terminalPointsOnScreen = visibleGpsCoordinate
                 .transformPoints(terminalPoints)
+                .withMatrix(matrix, worldRotation)
+        }
+        if (interesting.isNotEmpty()) {
+            interestingOnScreen = visibleGpsCoordinate
+                .transformPoints(interesting)
                 .withMatrix(matrix, worldRotation)
         }
 

@@ -337,8 +337,9 @@ fun haversine(p1x: Double, p1y: Double, p2x: Double, p2y: Double): Double {
     val lat1R = Math.toRadians(p1y)
     val lat2R = Math.toRadians(p2y)
 
-    val a = sin(dLat * 0.5).pow2() + sin(dLon * 0.5).pow2() * cos(lat1R) * cos(lat2R)
+    val a = sin(dLat * 0.5).pow2 + sin(dLon * 0.5).pow2 * cos(lat1R) * cos(lat2R)
     return 12745600 * asin(sqrt(a))
 }
 
-private fun Double.pow2(): Double = this * this
+val Double.pow2: Double
+    get() = this * this
