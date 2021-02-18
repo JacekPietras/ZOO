@@ -5,7 +5,7 @@ import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.data.BuildConfig
 import com.jacekpietras.zoo.data.R
-import com.jacekpietras.zoo.data.svg.SvgParser
+import com.jacekpietras.zoo.data.parser.SvgParser
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.repository.MapRepository
@@ -49,7 +49,7 @@ class MapRepositoryImpl(
         if (BuildConfig.DEBUG) {
             flow {
                 emit(emptyList())
-                delay(5000L)
+                delay(1000L)
                 emit(roads.map(::PathEntity))
             }
         } else {

@@ -11,6 +11,7 @@ internal class MapViewState(
     val worldBounds: Flow<RectD>,
     val mapData: Flow<List<MapItem>>,
     val userPosition: Flow<PointD>,
+    val terminalPoints: Flow<List<PointD>>,
     val effect: Flow<MapEffect>,
 )
 

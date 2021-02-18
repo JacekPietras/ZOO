@@ -78,4 +78,10 @@ val domainModule = module {
             gpsRepository = get(),
         )
     }
+    factory {
+        GetTerminalNodesUseCase(
+            getRoadsUseCase = get(),
+            getTechnicalRoadsUseCase = get(),
+        )
+    }
 }

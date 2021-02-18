@@ -23,11 +23,15 @@ internal class MapViewStateMapper {
         val buildings: Flow<List<MapItem>> = combine(
             state.buildings,
             state.buildingPaint,
+        ) { building, buildingPaint ->
+            fromPolygons(building, buildingPaint)
+        }
+
+        val aviary: Flow<List<MapItem>> = combine(
             state.aviary,
             state.aviaryPaint,
-        ) { building, buildingPaint, aviary, aviaryPaint ->
-            fromPolygons(aviary, aviaryPaint) +
-                    fromPolygons(building, buildingPaint)
+        ) { aviary, aviaryPaint ->
+            fromPolygons(aviary, aviaryPaint)
         }
 
         val roads = combine(
@@ -50,19 +54,21 @@ internal class MapViewStateMapper {
             state.takenRoutePaint,
         ) { route, paint -> fromPaths(route, paint) }
 
-        val complex = combine(
+        val complex = combineSum(
             buildings,
+            aviary,
             technical,
             roads,
             lines,
             taken,
-        ) { a, b, c, d, e -> a + b + c + d + e }
+        )
 
         return MapViewState(
             currentRegionIds = state.regionsInUserPosition.map(::fromRegionId),
             worldBounds = state.worldBounds.map(::fromWorldSpace),
             mapData = complex,
             userPosition = state.userPosition.map(::fromPosition),
+            terminalPoints = state.terminalPoints.map(::fromPoints),
             compass = state.compass.map(::fromCompass),
             effect = effect.receiveAsFlow()
         )
@@ -73,6 +79,9 @@ internal class MapViewStateMapper {
 
     private fun fromPosition(position: PointD): PointD =
         position
+
+    private fun fromPoints(points: List<PointD>): List<PointD> =
+        points
 
     private fun fromWorldSpace(worldSpace: RectD): RectD =
         worldSpace
@@ -98,4 +107,7 @@ internal class MapViewStateMapper {
                 paint
             )
         }
+
+    private fun <T> combineSum(vararg flow: Flow<List<T>>): Flow<List<T>> =
+        combine(flow.toList()) { a -> a.toList().flatten() }
 }

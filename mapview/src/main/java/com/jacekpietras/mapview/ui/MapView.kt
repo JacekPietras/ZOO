@@ -51,6 +51,13 @@ class MapView @JvmOverloads constructor(
                 centerAtUserPosition()
             }
         }
+    var terminalPoints: List<PointD> = emptyList()
+        set(value) {
+            field = value
+            cutOutNotVisible()
+            invalidate()
+        }
+    var terminalPointsOnScreen: FloatArray? = null
     var userPositionOnScreen: FloatArray? = null
     var compass: Float = 0f
         set(value) {
@@ -79,6 +86,12 @@ class MapView @JvmOverloads constructor(
     private val userPositionPaint = Paint()
         .apply {
             color = MapColor.Attribute(R.attr.colorPrimary).toColorInt(context)
+            style = Paint.Style.FILL
+        }
+    private val terminalPaint = Paint()
+        .apply {
+            color = Color.RED
+            alpha = 128
             style = Paint.Style.FILL
         }
 
@@ -188,6 +201,11 @@ class MapView @JvmOverloads constructor(
         renderList?.forEach { canvas.drawPath(it.shape, it.paint, it.close) }
         userPositionOnScreen?.let {
             canvas.drawCircle(it[0], it[1], 15f, userPositionPaint)
+        }
+        terminalPointsOnScreen?.let { array ->
+            for (i in array.indices step 2) {
+                canvas.drawCircle(array[i], array[i + 1], 15f, terminalPaint)
+            }
         }
 
         renderDebug(canvas)
@@ -395,6 +413,11 @@ class MapView @JvmOverloads constructor(
         userPosition?.let {
             userPositionOnScreen = visibleGpsCoordinate
                 .transformPoint(it)
+                .withMatrix(matrix, worldRotation)
+        }
+        if (terminalPoints.isNotEmpty()) {
+            terminalPointsOnScreen = visibleGpsCoordinate
+                .transformPoints(terminalPoints)
                 .withMatrix(matrix, worldRotation)
         }
 

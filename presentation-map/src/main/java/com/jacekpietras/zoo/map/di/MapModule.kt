@@ -24,6 +24,7 @@ val mapModule = module {
             getLinesUseCase = get(),
             getUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
+            getTerminalNodesUseCase = get(),
             getRegionsInUserPositionUseCase = get(),
         )
     }

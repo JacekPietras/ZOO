@@ -29,6 +29,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun setObservers() = with(viewModel.viewState) {
         currentRegionIds.observe(viewLifecycleOwner) { binding.regionIds.text = it }
         userPosition.observe(viewLifecycleOwner) { binding.mapView.userPosition = it }
+        terminalPoints.observe(viewLifecycleOwner) { binding.mapView.terminalPoints = it }
         mapData.observe(viewLifecycleOwner) { binding.mapView.objectList = it }
         worldBounds.observe(viewLifecycleOwner) { binding.mapView.worldBounds = it }
         compass.observe(viewLifecycleOwner) { binding.mapView.compass = it }

@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.data.gps
+package com.jacekpietras.zoo.data.parser
 
 import android.content.Context
 import android.text.format.DateUtils.MINUTE_IN_MILLIS

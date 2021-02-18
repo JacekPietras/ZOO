@@ -104,6 +104,15 @@ internal class ViewCoordinates(
         return result
     }
 
+    fun transformPoints(list: List<PointD>): FloatArray {
+        val result = FloatArray(list.size * 2)
+        list.forEachIndexed { i, p ->
+            result[i * 2] = p.x.transformX()
+            result[i * 2 + 1] = p.y.transformY()
+        }
+        return result
+    }
+
     private fun Double.transformX(): Float =
         ((this - visibleRect.left) * horizontalScale).toFloat()
 

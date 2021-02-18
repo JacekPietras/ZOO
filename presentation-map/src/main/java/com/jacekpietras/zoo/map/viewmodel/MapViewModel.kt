@@ -24,6 +24,7 @@ internal class MapViewModel(
     getAviaryUseCase: GetAviaryUseCase,
     getRoadsUseCase: GetRoadsUseCase,
     getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
+    getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
@@ -36,6 +37,7 @@ internal class MapViewModel(
         aviary = getAviaryUseCase(),
         roads = getRoadsUseCase(),
         technicalRoute = getTechnicalRoadsUseCase(),
+        terminalPoints = getTerminalNodesUseCase(),
         lines = getLinesUseCase(),
         takenRoute = observeTakenRouteUseCase(),
         compass = observeCompassUseCase(),

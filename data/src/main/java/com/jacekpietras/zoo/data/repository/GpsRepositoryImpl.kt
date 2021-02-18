@@ -8,7 +8,7 @@ import com.jacekpietras.zoo.data.BuildConfig
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.database.dao.GpsDao
 import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
-import com.jacekpietras.zoo.data.gps.TxtParser
+import com.jacekpietras.zoo.data.parser.TxtParser
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import kotlinx.coroutines.flow.*

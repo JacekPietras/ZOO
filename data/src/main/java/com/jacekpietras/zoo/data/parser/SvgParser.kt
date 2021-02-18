@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.data.svg
+package com.jacekpietras.zoo.data.parser
 
 import android.content.Context
 import android.content.res.XmlResourceParser
@@ -177,4 +177,6 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
         const val TEXT_TAG = "text"
         private val pattern = "\\s+".toRegex()
     }
+
+    private data class Tag(val position: PointD, val content: String)
 }

@@ -30,3 +30,14 @@ inline fun <T> Iterable<T>.cutOut(
     }
     return result
 }
+
+inline fun <T> Iterable<T>.forEachWithNext(block: (a: T, b: T) -> Unit) {
+    val iterator = iterator()
+    if (!iterator.hasNext()) return
+    var current = iterator.next()
+    while (iterator.hasNext()) {
+        val next = iterator.next()
+        block(current, next)
+        current = next
+    }
+}

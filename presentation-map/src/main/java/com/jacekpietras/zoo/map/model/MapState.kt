@@ -22,6 +22,7 @@ internal data class MapState(
     val lines: Flow<List<PathEntity>> = flowOf(emptyList()),
     val takenRoute: Flow<List<PathEntity>> = flowOf(emptyList()),
     val technicalRoute: Flow<List<PathEntity>> = flowOf(emptyList()),
+    val terminalPoints: Flow<List<PointD>> = flowOf(emptyList()),
 
     val buildingPaint: Flow<MapPaint> = flowOf(
         MapPaint.FillWithBorder(
