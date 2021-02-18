@@ -33,7 +33,8 @@ class GraphAnalyzer(roads: List<PathEntity>) {
     fun getTerminalPoints(): List<PointD> =
         nodes
             .asSequence()
-            .filter { it.edges.size <= 1 }
+            .filter { it.edges.size > 2 }
+//            .filter { it.edges.size <= 1 }
             .map { it.point }
             .toList()
 
@@ -82,10 +83,10 @@ class GraphAnalyzer(roads: List<PathEntity>) {
     }
 
     private fun isOnEdge(point: Node, edge1: Node, edge2: Node): Boolean =
-         distance(edge1, point) + distance(edge2, point) - distance(edge1, edge2) < 0.000000001
+        distance(edge1, point) + distance(edge2, point) - distance(edge1, edge2) < 0.000000001
 
     private fun distance(a: Node, b: Node): Double =
-        sqrt( (a.x-b.x).pow2 + (a.y-b.y).pow2 )
+        sqrt((a.x - b.x).pow2 + (a.y - b.y).pow2)
 
     private fun distanceFromLine(point: Node, edge1: Node, edge2: Node): Double {
         val A = point.x - edge1.x // position of point rel one end of line

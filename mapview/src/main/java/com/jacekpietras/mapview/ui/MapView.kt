@@ -97,13 +97,11 @@ class MapView @JvmOverloads constructor(
     private val terminalPaint = Paint()
         .apply {
             color = Color.RED
-            alpha = 128
             style = Paint.Style.FILL
         }
     private val interestingPaint = Paint()
         .apply {
             color = Color.BLUE
-            alpha = 128
             style = Paint.Style.FILL
         }
 
@@ -216,12 +214,12 @@ class MapView @JvmOverloads constructor(
         }
         terminalPointsOnScreen?.let { array ->
             for (i in array.indices step 2) {
-                canvas.drawCircle(array[i], array[i + 1], 15f, terminalPaint)
+                canvas.drawCircle(array[i], array[i + 1], 5f, terminalPaint)
             }
         }
         interestingOnScreen?.let { array ->
             for (i in array.indices step 2) {
-                canvas.drawCircle(array[i], array[i + 1], 15f, interestingPaint)
+                canvas.drawCircle(array[i], array[i + 1], 5f, interestingPaint)
             }
         }
 
