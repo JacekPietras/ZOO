@@ -1,16 +1,13 @@
 package com.jacekpietras.mapview.model
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
-import com.jacekpietras.core.containsLine
-import com.jacekpietras.core.polygonContains
+import com.jacekpietras.core.*
 
 class PolygonD(val vertices: List<PointD>) {
 
     fun intersects(rect: RectD): Boolean {
         if (contains(PointD(rect.left, rect.top))) return true
-        vertices.zipWithNext().forEach {
-            if (rect.containsLine(it.first, it.second)) return true
+        vertices.forEachWithNext { first, second ->
+            if (rect.containsLine(first, second)) return true
         }
         return false
     }
