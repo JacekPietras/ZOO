@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.map.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
 import com.jacekpietras.zoo.domain.interactor.*
@@ -26,6 +27,7 @@ internal class MapViewModel(
     getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
+    private val getSnappedToRoadUseCase: GetSnappedToRoadUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
@@ -66,6 +68,13 @@ internal class MapViewModel(
             viewModelScope.launch(dispatcherProvider.main) {
                 effect.send(MapEffect.ShowToast("Location denied"))
             }
+        }
+    }
+
+    fun onPointPlaced(point: PointD) {
+        viewModelScope.launch(dispatcherProvider.main) {
+            val snapped = getSnappedToRoadUseCase(point)
+            state.snappedPoint.emit(snapped)
         }
     }
 }

@@ -26,6 +26,7 @@ val mapModule = module {
             uploadHistoryUseCase = get(),
             getTerminalNodesUseCase = get(),
             getRegionsInUserPositionUseCase = get(),
+            getSnappedToRoadUseCase = get(),
         )
     }
 }

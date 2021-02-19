@@ -23,6 +23,7 @@ class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
 
+    var setOnPointPlacedListener: ((PointD)->Unit)?=null
     var maxZoom: Double = 10.0
     var minZoom: Double = 2.0
     var worldBounds: RectD = RectD()
@@ -72,6 +73,14 @@ class MapView @JvmOverloads constructor(
 
     )
     private var interestingOnScreen: FloatArray? = null
+
+    var clickOnWorld: PointD? = null
+        set(value) {
+            field = value
+            cutOutNotVisible()
+            invalidate()
+        }
+    private var clickOnScreen: FloatArray? = null
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD =
@@ -203,6 +212,13 @@ class MapView @JvmOverloads constructor(
                 }
             }
         }
+
+        if (BuildConfig.DEBUG) {
+            setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(x, y))
+//            clickOnWorld = visibleGpsCoordinate.deTransformPoint(x, y)
+//            cutOutNotVisible()
+//            invalidate()
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -221,6 +237,9 @@ class MapView @JvmOverloads constructor(
             for (i in array.indices step 2) {
                 canvas.drawCircle(array[i], array[i + 1], 5f, interestingPaint)
             }
+        }
+        clickOnScreen?.let {
+            canvas.drawCircle(it[0], it[1], 15f, interestingPaint)
         }
 
         renderDebug(canvas)
@@ -427,6 +446,11 @@ class MapView @JvmOverloads constructor(
         }
         userPosition?.let {
             userPositionOnScreen = visibleGpsCoordinate
+                .transformPoint(it)
+                .withMatrix(matrix, worldRotation)
+        }
+        clickOnWorld?.let {
+            clickOnScreen = visibleGpsCoordinate
                 .transformPoint(it)
                 .withMatrix(matrix, worldRotation)
         }

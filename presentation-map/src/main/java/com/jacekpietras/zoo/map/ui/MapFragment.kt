@@ -33,6 +33,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapData.observe(viewLifecycleOwner) { binding.mapView.objectList = it }
         worldBounds.observe(viewLifecycleOwner) { binding.mapView.worldBounds = it }
         compass.observe(viewLifecycleOwner) { binding.mapView.compass = it }
+        snappedPoint.observe(viewLifecycleOwner) { binding.mapView.clickOnWorld = it }
 
         effect.observe(viewLifecycleOwner) {
             when (it) {
@@ -45,6 +46,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun setListeners() = with(binding) {
         uploadButton.setOnClickListener { viewModel.onUploadClicked() }
         myLocationButton.setOnClickListener { checkGpsPermission() }
+        mapView.setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) }
     }
 
     private fun checkGpsPermission() {

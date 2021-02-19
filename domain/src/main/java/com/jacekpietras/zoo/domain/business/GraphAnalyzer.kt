@@ -4,30 +4,35 @@ import com.jacekpietras.core.PointD
 import com.jacekpietras.core.pow2
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import timber.log.Timber
-import kotlin.math.abs
 import kotlin.math.sqrt
 
-class GraphAnalyzer(roads: List<PathEntity>) {
+object GraphAnalyzer {
 
     private val nodes = mutableSetOf<Node>()
-//    private val overLine = mutableSetOf<Node>()
 
-    init {
-        roads.forEach { path ->
+    fun initialize(roads: List<PathEntity>, technical: List<PathEntity>) {
+        nodes.clear()
+
+        addAllToGraph(roads, technical = false)
+        addAllToGraph(technical, technical = true)
+
+        checkNodesOnEdges()
+    }
+
+    private fun addAllToGraph(list: List<PathEntity>, technical: Boolean) {
+        list.forEach { path ->
             var prevNode: Node? = null
             path.vertices
                 .forEach { point ->
                     val nextNode = addToGraph(point)
                     if (prevNode != null) {
-                        nextNode.connect(prevNode!!)
-                        prevNode!!.connect(nextNode)
+                        nextNode.connect(prevNode!!, technical)
+                        prevNode!!.connect(nextNode, technical)
                     }
 
                     prevNode = nextNode
                 }
         }
-
-        checkNodesOnEdges()
     }
 
     fun getTerminalPoints(): List<PointD> =
@@ -38,11 +43,6 @@ class GraphAnalyzer(roads: List<PathEntity>) {
             .map { it.point }
             .toList()
 
-//    fun getOverLine(): List<PointD> =
-//        overLine
-//            .map { it.point }
-//            .toList()
-
     private fun checkNodesOnEdges() {
         nodes.forEach { first ->
             checkNodesOnEdges(first)
@@ -52,15 +52,16 @@ class GraphAnalyzer(roads: List<PathEntity>) {
     private fun checkNodesOnEdges(first: Node) {
         nodes.forEach { second ->
             if (second != first) {
-                second.edges.forEach { third ->
+                second.edges.forEach { twoToThird ->
+                    val third = twoToThird.node
                     if (third != first) {
                         if (isOnEdge(first, second, third)) {
                             Timber.e("dupa found $second $third")
-//                            overLine.add(first)
-                            first.connect(second)
-                            first.connect(third)
-                            second.connect(first)
-                            third.connect(first)
+
+                            first.connect(second, technical = twoToThird.technical)
+                            first.connect(third, technical = twoToThird.technical)
+                            second.connect(first, technical = twoToThird.technical)
+                            third.connect(first, technical = twoToThird.technical)
                             second.disconnect(third)
                             third.disconnect(second)
                             return
@@ -88,21 +89,21 @@ class GraphAnalyzer(roads: List<PathEntity>) {
     private fun distance(a: Node, b: Node): Double =
         sqrt((a.x - b.x).pow2 + (a.y - b.y).pow2)
 
-    private fun distanceFromLine(point: Node, edge1: Node, edge2: Node): Double {
-        val A = point.x - edge1.x // position of point rel one end of line
-        val B = point.y - edge1.y
-        val C = edge2.x - edge1.x // vector along line
-        val D = edge2.y - edge1.y
-        val E = -D // orthogonal vector
-        val dot = A * E + B * C
-        val len_sq = E * E + C * C
-        return abs(dot) / sqrt(len_sq)
-//        return dot * dot / len_sq // faster
-    }
+//    private fun distanceFromLine(point: Node, edge1: Node, edge2: Node): Double {
+//        val A = point.x - edge1.x // position of point rel one end of line
+//        val B = point.y - edge1.y
+//        val C = edge2.x - edge1.x // vector along line
+//        val D = edge2.y - edge1.y
+//        val E = -D // orthogonal vector
+//        val dot = A * E + B * C
+//        val len_sq = E * E + C * C
+//        return abs(dot) / sqrt(len_sq)
+////        return dot * dot / len_sq // faster
+//    }
 
     private class Node(
         val point: PointD,
-        val edges: MutableSet<Node> = mutableSetOf()
+        val edges: MutableSet<Edge> = mutableSetOf()
     ) {
 
         val x: Double
@@ -111,14 +112,20 @@ class GraphAnalyzer(roads: List<PathEntity>) {
         val y: Double
             get() = point.y
 
-        fun connect(node: Node) {
-            edges.add(node)
+        fun connect(node: Node, technical: Boolean) {
+            edges.add(Edge(node, technical))
         }
 
         fun disconnect(node: Node) {
-            edges.remove(node)
+            edges.remove(edges.first { it.node == node })
         }
 
         override fun toString() = "PointD($x, $y),"
     }
+
+    private class Edge(
+        val node: Node,
+        val technical: Boolean,
+        var length: Double = 0.0,
+    )
 }

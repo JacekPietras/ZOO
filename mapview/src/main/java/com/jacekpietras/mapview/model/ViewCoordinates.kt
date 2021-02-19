@@ -104,6 +104,12 @@ internal class ViewCoordinates(
         return result
     }
 
+    fun deTransformPoint(x: Float, y: Float): PointD =
+        PointD(
+            x = x.deTransformX(),
+            y = y.deTransformY(),
+        )
+
     fun transformPoints(list: List<PointD>): FloatArray {
         val result = FloatArray(list.size * 2)
         list.forEachIndexed { i, p ->
@@ -118,6 +124,12 @@ internal class ViewCoordinates(
 
     private fun Double.transformY(): Float =
         ((this - visibleRect.top) * verticalScale).toFloat()
+
+    private fun Float.deTransformX(): Double =
+        (this / horizontalScale) + visibleRect.left
+
+    private fun Float.deTransformY(): Double =
+        (this / verticalScale) + visibleRect.top
 
     private fun intersectsPolygon(array: DoubleArray): Boolean {
         val rectF = visibleRectRotated

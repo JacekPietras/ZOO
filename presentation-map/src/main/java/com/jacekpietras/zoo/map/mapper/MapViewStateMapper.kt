@@ -12,10 +12,7 @@ import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapState
 import com.jacekpietras.zoo.map.model.MapViewState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 
 internal class MapViewStateMapper {
 
@@ -67,9 +64,10 @@ internal class MapViewStateMapper {
             currentRegionIds = state.regionsInUserPosition.map(::fromRegionId),
             worldBounds = state.worldBounds.map(::fromWorldSpace),
             mapData = complex,
-            userPosition = state.userPosition.map(::fromPosition),
+            userPosition = state.userPosition.map(::fromPoint),
             terminalPoints = state.terminalPoints.map(::fromPoints),
             compass = state.compass.map(::fromCompass),
+            snappedPoint = state.snappedPoint.filterNotNull().map(::fromPoint),
             effect = effect.receiveAsFlow()
         )
     }
@@ -77,7 +75,7 @@ internal class MapViewStateMapper {
     private fun fromCompass(compass: Float): Float =
         compass
 
-    private fun fromPosition(position: PointD): PointD =
+    private fun fromPoint(position: PointD): PointD =
         position
 
     private fun fromPoints(points: List<PointD>): List<PointD> =

@@ -10,6 +10,7 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.map.R
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 
 internal data class MapState(
@@ -71,4 +72,6 @@ internal data class MapState(
     val userPosition: Flow<PointD>,
 
     val worldBounds: Flow<RectD>,
+
+    val snappedPoint: MutableStateFlow<PointD?> = MutableStateFlow(null),
 )
