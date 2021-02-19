@@ -28,6 +28,7 @@ internal class MapViewModel(
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
     private val getSnappedToRoadUseCase: GetSnappedToRoadUseCase,
+    private val getShortestPathUseCase: GetShortestPathUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
@@ -73,8 +74,13 @@ internal class MapViewModel(
 
     fun onPointPlaced(point: PointD) {
         viewModelScope.launch(dispatcherProvider.main) {
+            //todo call usecase if polygon was clicked
+
             val snapped = getSnappedToRoadUseCase(point)
             state.snappedPoint.emit(snapped)
+
+            val shortestPath = getShortestPathUseCase(point)
+            state.shortestPath.emit(shortestPath)
         }
     }
 }

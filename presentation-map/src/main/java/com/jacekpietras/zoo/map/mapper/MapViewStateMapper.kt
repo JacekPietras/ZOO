@@ -68,6 +68,7 @@ internal class MapViewStateMapper {
             terminalPoints = state.terminalPoints.map(::fromPoints),
             compass = state.compass.map(::fromCompass),
             snappedPoint = state.snappedPoint.filterNotNull().map(::fromPoint),
+            shortestPath = state.shortestPath.map(::fromPoints),
             effect = effect.receiveAsFlow()
         )
     }

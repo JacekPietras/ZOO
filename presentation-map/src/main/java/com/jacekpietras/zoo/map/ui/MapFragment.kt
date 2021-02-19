@@ -34,6 +34,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         worldBounds.observe(viewLifecycleOwner) { binding.mapView.worldBounds = it }
         compass.observe(viewLifecycleOwner) { binding.mapView.compass = it }
         snappedPoint.observe(viewLifecycleOwner) { binding.mapView.clickOnWorld = it }
+        shortestPath.observe(viewLifecycleOwner) { binding.mapView.shortestPath = it }
 
         effect.observe(viewLifecycleOwner) {
             when (it) {

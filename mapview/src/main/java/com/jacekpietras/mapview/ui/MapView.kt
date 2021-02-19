@@ -8,7 +8,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import com.google.android.material.color.MaterialColors
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.core.polygonContains
 import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
@@ -23,7 +22,7 @@ class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
 
-    var setOnPointPlacedListener: ((PointD)->Unit)?=null
+    var setOnPointPlacedListener: ((PointD) -> Unit)? = null
     var maxZoom: Double = 10.0
     var minZoom: Double = 2.0
     var worldBounds: RectD = RectD()
@@ -58,7 +57,7 @@ class MapView @JvmOverloads constructor(
             cutOutNotVisible()
             invalidate()
         }
-    var terminalPointsOnScreen: FloatArray? = null
+    private var terminalPointsOnScreen: FloatArray? = null
     var userPositionOnScreen: FloatArray? = null
     var compass: Float = 0f
         set(value) {
@@ -80,6 +79,13 @@ class MapView @JvmOverloads constructor(
             cutOutNotVisible()
             invalidate()
         }
+    var shortestPath: List<PointD> = emptyList()
+        set(value) {
+            field = value
+            cutOutNotVisible()
+            invalidate()
+        }
+    private var shortestPathOnScreen: FloatArray? = null
     private var clickOnScreen: FloatArray? = null
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
@@ -107,6 +113,12 @@ class MapView @JvmOverloads constructor(
         .apply {
             color = Color.RED
             style = Paint.Style.FILL
+        }
+    private val shortestPaint = Paint()
+        .apply {
+            strokeWidth = 4f
+            color = Color.BLUE
+            style = Paint.Style.STROKE
         }
     private val interestingPaint = Paint()
         .apply {
@@ -205,20 +217,7 @@ class MapView @JvmOverloads constructor(
     }
 
     override fun onClick(x: Float, y: Float) {
-        renderList?.forEach { item ->
-            item.onClick?.let {
-                if (polygonContains(item.shape, x, y)) {
-                    it.invoke(x, y)
-                }
-            }
-        }
-
-        if (BuildConfig.DEBUG) {
-            setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(x, y))
-//            clickOnWorld = visibleGpsCoordinate.deTransformPoint(x, y)
-//            cutOutNotVisible()
-//            invalidate()
-        }
+        setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(x, y))
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -232,6 +231,9 @@ class MapView @JvmOverloads constructor(
             for (i in array.indices step 2) {
                 canvas.drawCircle(array[i], array[i + 1], 5f, terminalPaint)
             }
+        }
+        shortestPathOnScreen?.let { array ->
+            canvas.drawPath(array, shortestPaint, false)
         }
         interestingOnScreen?.let { array ->
             for (i in array.indices step 2) {
@@ -303,7 +305,6 @@ class MapView @JvmOverloads constructor(
                     pointsToDoubleArray(item.shape.vertices),
                     inner,
                     border,
-                    item.onClick,
                     close = true,
                 )
                 else -> throw IllegalStateException("Unknown shape type ${item.shape}")
@@ -459,6 +460,11 @@ class MapView @JvmOverloads constructor(
                 .transformPoints(terminalPoints)
                 .withMatrix(matrix, worldRotation)
         }
+        if (shortestPath.isNotEmpty()) {
+            shortestPathOnScreen = visibleGpsCoordinate
+                .transformPoints(shortestPath)
+                .withMatrix(matrix, worldRotation)
+        }
         if (interesting.isNotEmpty()) {
             interestingOnScreen = visibleGpsCoordinate
                 .transformPoints(interesting)
@@ -486,7 +492,6 @@ class MapView @JvmOverloads constructor(
             RenderItem2(
                 array,
                 paintHolder.takePaint(dynamicPaints),
-                onClick,
                 close
             )
         )
@@ -495,7 +500,6 @@ class MapView @JvmOverloads constructor(
                 RenderItem2(
                     array,
                     outerPaintHolder.takePaint(dynamicPaints),
-                    onClick,
                     close
                 )
             )
@@ -524,14 +528,12 @@ class MapView @JvmOverloads constructor(
         val shape: DoubleArray,
         val paintHolder: PaintHolder,
         val outerPaintHolder: PaintHolder? = null,
-        val onClick: ((x: Float, y: Float) -> Unit)? = null,
         val close: Boolean,
     )
 
     private class RenderItem2(
         val shape: FloatArray,
         val paint: Paint,
-        val onClick: ((x: Float, y: Float) -> Unit)? = null,
         val close: Boolean,
     )
 }

@@ -12,6 +12,7 @@ internal class MapViewState(
     val mapData: Flow<List<MapItem>>,
     val userPosition: Flow<PointD>,
     val snappedPoint: Flow<PointD>,
+    val shortestPath: Flow<List<PointD>>,
     val terminalPoints: Flow<List<PointD>>,
     val effect: Flow<MapEffect>,
 )

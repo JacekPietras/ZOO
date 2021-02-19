@@ -40,6 +40,11 @@ val domainModule = module {
         GetSnappedToRoadUseCase()
     }
     factory {
+        GetShortestPathUseCase(
+            getUserPositionUseCase = get(),
+        )
+    }
+    factory {
         GetTechnicalRoadsUseCase(
             mapRepository = get()
         )

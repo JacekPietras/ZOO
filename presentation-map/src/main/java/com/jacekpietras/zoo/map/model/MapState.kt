@@ -74,4 +74,6 @@ internal data class MapState(
     val worldBounds: Flow<RectD>,
 
     val snappedPoint: MutableStateFlow<PointD?> = MutableStateFlow(null),
+
+    val shortestPath: MutableStateFlow<List<PointD>> = MutableStateFlow(emptyList()),
 )
