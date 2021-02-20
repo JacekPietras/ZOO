@@ -217,7 +217,20 @@ class MapView @JvmOverloads constructor(
     }
 
     override fun onClick(x: Float, y: Float) {
-        setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(x, y))
+        val point = FloatArray(2)
+        point[0] = x
+        point[1] = y
+        val matrix = Matrix()
+            .apply {
+                setRotate(
+                    worldRotation,
+                    width / 2.toFloat(),
+                    height / 2.toFloat(),
+                )
+            }
+        matrix.mapPoints(point)
+
+        setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(point[0], point[1]))
     }
 
     override fun onDraw(canvas: Canvas) {

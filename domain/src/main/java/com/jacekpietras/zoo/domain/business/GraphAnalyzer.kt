@@ -3,8 +3,6 @@ package com.jacekpietras.zoo.domain.business
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.business.Snapper.Snapped
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
-import timber.log.Timber
-import kotlin.system.measureTimeMillis
 
 object GraphAnalyzer {
 
@@ -37,7 +35,7 @@ object GraphAnalyzer {
             snapB.near1.point -> snapB.near1
             snapB.near2.point -> snapB.near2
             else -> {
-                 createAndConnect(snapB)
+                createAndConnect(snapB)
                     .also { cleanupList.add(it) }
             }
         }
@@ -51,31 +49,8 @@ object GraphAnalyzer {
             }
         }
 
-        var result: List<PointD>? = null
-
-        //todo it's stress test
-        var time1 = measureTimeMillis {
-            for (i in 0..50) {
-                result = Dijkstra(nodes, start, end).getPath()
-                    .map { PointD(it.x, it.y) }
-            }
-        }
-
-        val time2 = measureTimeMillis {
-            for (i in 0..100) {
-                result = DijkstraTest(nodes, start, end).getPath()
-                    .map { PointD(it.x, it.y) }
-            }
-        }
-
-        time1 += measureTimeMillis {
-            for (i in 0..50) {
-                result = Dijkstra(nodes, start, end).getPath()
-                    .map { PointD(it.x, it.y) }
-            }
-        }
-
-        Timber.e("Dijkstra: $time1, test: $time2, diff ${time1 - time2}")
+        val result = Dijkstra(nodes, start, end).getPath()
+            .map { PointD(it.x, it.y) }
 
         cleanupList.forEach { fake ->
             val edges = fake.edges.toList()
@@ -89,10 +64,10 @@ object GraphAnalyzer {
             nodes.remove(fake)
         }
 
-        return result!!
+        return result
     }
 
-    private fun createAndConnect(snap: Snapped):Node{
+    private fun createAndConnect(snap: Snapped): Node {
         val node = Node(snap.point)
         val edge = snap.near1.edges.first { it.node == snap.near2 }
 

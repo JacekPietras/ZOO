@@ -76,8 +76,8 @@ internal class MapViewModel(
         viewModelScope.launch(dispatcherProvider.default) {
             //todo call usecase if polygon was clicked
 
-            val snapped = getSnappedToRoadUseCase(point)
-            state.snappedPoint.emit(snapped)
+//            val snapped = getSnappedToRoadUseCase(point)
+            state.snappedPoint.emit(point)
 
             val shortestPath = getShortestPathUseCase(point)
             state.shortestPath.emit(shortestPath)
