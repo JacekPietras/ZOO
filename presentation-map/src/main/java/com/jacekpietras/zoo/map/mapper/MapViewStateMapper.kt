@@ -17,20 +17,6 @@ import kotlinx.coroutines.flow.*
 internal class MapViewStateMapper {
 
     fun from(state: MapState, effect: Channel<MapEffect>): MapViewState {
-        val buildings: Flow<List<MapItem>> = combine(
-            state.buildings,
-            state.buildingPaint,
-        ) { building, buildingPaint ->
-            fromPolygons(building, buildingPaint)
-        }
-
-        val aviary: Flow<List<MapItem>> = combine(
-            state.aviary,
-            state.aviaryPaint,
-        ) { aviary, aviaryPaint ->
-            fromPolygons(aviary, aviaryPaint)
-        }
-
         val roads = combine(
             state.roads,
             state.roadPaint,
@@ -51,12 +37,26 @@ internal class MapViewStateMapper {
             state.takenRoutePaint,
         ) { route, paint -> fromPaths(route, paint) }
 
+        val buildings: Flow<List<MapItem>> = combine(
+            state.buildings,
+            state.buildingPaint,
+        ) { building, buildingPaint ->
+            fromPolygons(building, buildingPaint)
+        }
+
+        val aviary: Flow<List<MapItem>> = combine(
+            state.aviary,
+            state.aviaryPaint,
+        ) { aviary, aviaryPaint ->
+            fromPolygons(aviary, aviaryPaint)
+        }
+
         val complex = combineSum(
-            buildings,
-            aviary,
             technical,
             roads,
             lines,
+            buildings,
+            aviary,
             taken,
         )
 
