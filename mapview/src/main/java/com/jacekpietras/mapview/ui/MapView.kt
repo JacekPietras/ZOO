@@ -1,16 +1,17 @@
 package com.jacekpietras.mapview.ui
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
+import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.drawPath
+import com.jacekpietras.mapview.utils.form
+import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.cos
@@ -32,14 +33,13 @@ class MapView @JvmOverloads constructor(
             minZoom = maxZoom / 8
             zoom = maxZoom / 4
         }
-    private var _objectList: List<RenderItem> = emptyList()
+    private var _objectList: List<ObjectItem> = emptyList()
     var objectList: List<MapItem> = emptyList()
         set(value) {
             Timber.v("Content changed")
             field = value
             _objectList = value.toRenderItems()
             cutOutNotVisible()
-            invalidate()
         }
 
     var userPosition: PointD? = null
@@ -54,7 +54,6 @@ class MapView @JvmOverloads constructor(
         set(value) {
             field = value
             cutOutNotVisible()
-            invalidate()
         }
     private var terminalPointsOnScreen: FloatArray? = null
     var userPositionOnScreen: FloatArray? = null
@@ -66,23 +65,18 @@ class MapView @JvmOverloads constructor(
             }
         }
 
-    private val interesting: List<PointD> = listOf(
-//        PointD(19.851969189859027, 50.05453865253824), PointD(19.84918406297732, 50.053710591445)
-
-    )
+    private val interesting: List<PointD> = listOf()
     private var interestingOnScreen: FloatArray? = null
 
     var clickOnWorld: PointD? = null
         set(value) {
             field = value
             cutOutNotVisible()
-            invalidate()
         }
     var shortestPath: List<PointD> = emptyList()
         set(value) {
             field = value
             cutOutNotVisible()
-            invalidate()
         }
     private var shortestPathOnScreen: FloatArray? = null
     private var clickOnScreen: FloatArray? = null
@@ -94,7 +88,7 @@ class MapView @JvmOverloads constructor(
     private var zoomOnStart: Double = 5.0
     private var worldRotation: Float = 0f
     private var worldRotationOnStart: Float = 0f
-    private var renderList: List<RenderItem2>? = null
+    private var renderList: List<RenderItem>? = null
     private var centeringAtUser = false
     private val debugTextPaint = Paint()
         .apply {
@@ -128,61 +122,31 @@ class MapView @JvmOverloads constructor(
     fun centerAtUserPosition(animation: Boolean = true) {
         centeringAtUser = true
         val desiredPosition = userPosition ?: return
+        val previousPosition = centerGpsCoordinate
 
-        if (animation) {
-            val previousPosition = centerGpsCoordinate
-            ValueAnimator.ofFloat(1f)
-                .apply {
-                    duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
-                    interpolator = AccelerateDecelerateInterpolator()
-                    addUpdateListener { animation ->
-                        centerGpsCoordinate = previousPosition * (1f - animation.animatedFraction) +
-                                desiredPosition * animation.animatedFraction
-
-                        cutOutNotVisible()
-                        invalidate()
-                    }
-                    start()
-                }
-        } else {
-            centerGpsCoordinate = desiredPosition
+        doAnimation(animation) { progress, left ->
+            centerGpsCoordinate = previousPosition * left + desiredPosition * progress
             cutOutNotVisible()
-            invalidate()
         }
     }
 
     private fun centerAtUserCompass(animation: Boolean = true) {
-        if (animation) {
-            val diff = worldRotation - compass
-            val previousPosition = when {
-                diff > 180 -> worldRotation - 360
-                diff < -180 -> worldRotation + 360
-                else -> worldRotation
-            }
+        val diff = worldRotation - compass
+        val previousPosition = when {
+            diff > 180 -> worldRotation - 360
+            diff < -180 -> worldRotation + 360
+            else -> worldRotation
+        }
 
-            ValueAnimator.ofFloat(1f)
-                .apply {
-                    duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
-                    interpolator = AccelerateDecelerateInterpolator()
-                    addUpdateListener { animation ->
-                        worldRotation = (previousPosition * (1f - animation.animatedFraction) +
-                                compass * animation.animatedFraction) % 360f
-
-                        cutOutNotVisible()
-                        invalidate()
-                    }
-                    start()
-                }
-        } else {
-            worldRotation = compass
+        doAnimation(animation) { progress, left ->
+            worldRotation = (previousPosition * left + compass * progress) % 360f
             cutOutNotVisible()
-            invalidate()
         }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        cutOutNotVisible()
+        cutOutNotVisible(invalidate = false)
     }
 
     override fun onScaleBegin(x: Float, y: Float) {
@@ -193,7 +157,6 @@ class MapView @JvmOverloads constructor(
         val zoomPoint = (maxZoom - minZoom) / 2
         zoom = (zoomOnStart + zoomPoint * (1 - scale)).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
         cutOutNotVisible()
-        invalidate()
     }
 
     override fun onRotateBegin() {
@@ -212,7 +175,6 @@ class MapView @JvmOverloads constructor(
             (-sin(radians) * vX + cos(radians) * vY) / visibleGpsCoordinate.verticalScale
         )
         cutOutNotVisible()
-        invalidate()
     }
 
     override fun onClick(x: Float, y: Float) {
@@ -292,9 +254,7 @@ class MapView @JvmOverloads constructor(
         }
     }
 
-    private fun Double.form() = "%.6f".format(this)
-
-    private fun List<MapItem>.toRenderItems(): List<RenderItem> {
+    private fun List<MapItem>.toRenderItems(): List<ObjectItem> {
         val innerPaints = mutableMapOf<MapPaint, PaintHolder>()
         val borderPaints = mutableMapOf<MapPaint, PaintHolder?>()
 
@@ -307,13 +267,13 @@ class MapView @JvmOverloads constructor(
                     .also { borderPaints[item.paint] = it }
 
             when (item.shape) {
-                is PathD -> RenderItem(
+                is PathD -> ObjectItem(
                     pointsToDoubleArray(item.shape.vertices),
                     inner,
                     border,
                     close = false,
                 )
-                is PolygonD -> RenderItem(
+                is PolygonD -> ObjectItem(
                     pointsToDoubleArray(item.shape.vertices),
                     inner,
                     border,
@@ -416,19 +376,19 @@ class MapView @JvmOverloads constructor(
         }
     }
 
-    private fun cutOutNotVisible() {
+    private fun cutOutNotVisible(invalidate: Boolean = true) {
         if (width == 0 || height == 0) return
         if (worldBounds.width() == 0.0 || worldBounds.height() == 0.0) return
 
         visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, width, height)
 
         if (preventedGoingOutsideWorld()) {
-            cutOutNotVisible()
+            cutOutNotVisible(false)
             return
         }
 
-        val borders = mutableListOf<RenderItem2>()
-        val insides = mutableListOf<RenderItem2>()
+        val borders = mutableListOf<RenderItem>()
+        val insides = mutableListOf<RenderItem>()
         val dynamicPaints = mutableMapOf<PaintHolder.Dynamic, Paint>()
 
         val matrix = Matrix()
@@ -446,14 +406,14 @@ class MapView @JvmOverloads constructor(
                     .transformPolygon(item.shape)
                     ?.withMatrix(matrix, worldRotation)
                     ?.let { polygon ->
-                        item.addToRender2(polygon, borders, insides, dynamicPaints)
+                        item.addToRender(polygon, borders, insides, dynamicPaints)
                     }
             } else {
                 visibleGpsCoordinate
                     .transformPath(item.shape)
                     .map { it.withMatrix(matrix, worldRotation) }
                     .forEach { path ->
-                        item.addToRender2(path, borders, insides, dynamicPaints)
+                        item.addToRender(path, borders, insides, dynamicPaints)
                     }
             }
         }
@@ -485,6 +445,7 @@ class MapView @JvmOverloads constructor(
 
         renderList = borders + insides
         logVisibleShapes()
+        if (invalidate) invalidate()
     }
 
     private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {
@@ -494,14 +455,14 @@ class MapView @JvmOverloads constructor(
         return this
     }
 
-    private fun RenderItem.addToRender2(
+    private fun ObjectItem.addToRender(
         array: FloatArray,
-        borders: MutableList<RenderItem2>,
-        insides: MutableList<RenderItem2>,
+        borders: MutableList<RenderItem>,
+        insides: MutableList<RenderItem>,
         dynamicPaints: MutableMap<PaintHolder.Dynamic, Paint>,
     ) {
         insides.add(
-            RenderItem2(
+            RenderItem(
                 array,
                 paintHolder.takePaint(dynamicPaints),
                 close
@@ -509,7 +470,7 @@ class MapView @JvmOverloads constructor(
         )
         if (outerPaintHolder != null) {
             borders.add(
-                RenderItem2(
+                RenderItem(
                     array,
                     outerPaintHolder.takePaint(dynamicPaints),
                     close
@@ -527,27 +488,16 @@ class MapView @JvmOverloads constructor(
         }
     }
 
-    private fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
-        val result = DoubleArray(list.size * 2)
-        for (i in list.indices) {
-            result[i shl 1] = list[i].x
-            result[(i shl 1) + 1] = list[i].y
-        }
-        return result
-    }
-
-    private class RenderItem(
+    private class ObjectItem(
         val shape: DoubleArray,
         val paintHolder: PaintHolder,
         val outerPaintHolder: PaintHolder? = null,
         val close: Boolean,
     )
 
-    private class RenderItem2(
+    private class RenderItem(
         val shape: FloatArray,
         val paint: Paint,
         val close: Boolean,
     )
 }
-
-
