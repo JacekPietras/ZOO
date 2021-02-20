@@ -11,6 +11,7 @@ import com.jacekpietras.zoo.map.databinding.FragmentMapBinding
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
+import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
@@ -27,16 +28,16 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun setObservers() = with(viewModel.viewState) {
-        currentRegionIds.observe(viewLifecycleOwner) { binding.regionIds.text = it }
-        userPosition.observe(viewLifecycleOwner) { binding.mapView.userPosition = it }
-        terminalPoints.observe(viewLifecycleOwner) { binding.mapView.terminalPoints = it }
-        mapData.observe(viewLifecycleOwner) { binding.mapView.objectList = it }
-        worldBounds.observe(viewLifecycleOwner) { binding.mapView.worldBounds = it }
-        compass.observe(viewLifecycleOwner) { binding.mapView.compass = it }
-        snappedPoint.observe(viewLifecycleOwner) { binding.mapView.clickOnWorld = it }
-        shortestPath.observe(viewLifecycleOwner) { binding.mapView.shortestPath = it }
+        currentRegionIds.observe { binding.regionIds.text = it }
+        userPosition.observe { binding.mapView.userPosition = it }
+        terminalPoints.observe { binding.mapView.terminalPoints = it }
+        mapData.observe { binding.mapView.objectList = it }
+        worldBounds.observe { binding.mapView.worldBounds = it }
+        compass.observe { binding.mapView.compass = it }
+        snappedPoint.observe { binding.mapView.clickOnWorld = it }
+        shortestPath.observe { binding.mapView.shortestPath = it }
 
-        effect.observe(viewLifecycleOwner) {
+        effect.observe {
             when (it) {
                 is MapEffect.ShowToast -> toast(it.text)
                 is MapEffect.CenterAtUser -> binding.mapView.centerAtUserPosition()
@@ -46,22 +47,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun setListeners() = with(binding) {
         uploadButton.setOnClickListener { viewModel.onUploadClicked() }
-        myLocationButton.setOnClickListener { checkGpsPermission() }
+        myLocationButton.setOnClickListener { viewModel.onLocationButtonClicked(permissionChecker) }
         mapView.setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) }
-    }
-
-    private fun checkGpsPermission() {
-        permissionChecker.checkPermissions(
-            rationaleTitle = R.string.gps_permission_rationale_title,
-            rationaleContent = R.string.gps_permission_rationale_content,
-            deniedTitle = R.string.gps_permission_denied_title,
-            deniedContent = R.string.gps_permission_denied_content,
-            onFailed = { viewModel.onLocationDenied() },
-            onPermission = { viewModel.onMyLocationClicked() },
-        )
     }
 
     private fun toast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
+    }
+
+    private inline fun <T> Flow<T>.observe(crossinline block: (T) -> Unit) {
+        observe(viewLifecycleOwner, block)
     }
 }

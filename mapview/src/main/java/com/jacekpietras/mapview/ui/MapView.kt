@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.google.android.material.color.MaterialColors
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.BuildConfig
@@ -99,7 +98,7 @@ class MapView @JvmOverloads constructor(
     private var centeringAtUser = false
     private val debugTextPaint = Paint()
         .apply {
-            color = MaterialColors.getColor(context, R.attr.colorControlActivated, Color.MAGENTA)
+            color = Color.MAGENTA
             typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
             alpha = 128
             textSize = 30f
@@ -202,7 +201,7 @@ class MapView @JvmOverloads constructor(
     }
 
     override fun onRotate(rotate: Float) {
-        worldRotation = rotate + worldRotationOnStart
+        worldRotation = (rotate + worldRotationOnStart) % 360
     }
 
     override fun onScroll(vX: Float, vY: Float) {

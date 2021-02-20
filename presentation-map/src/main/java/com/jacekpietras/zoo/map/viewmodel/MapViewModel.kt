@@ -7,9 +7,11 @@ import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.map.BuildConfig
+import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapState
+import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
@@ -58,20 +60,6 @@ internal class MapViewModel(
         }
     }
 
-    fun onMyLocationClicked() {
-        viewModelScope.launch(dispatcherProvider.main) {
-            effect.send(MapEffect.CenterAtUser)
-        }
-    }
-
-    fun onLocationDenied() {
-        if (BuildConfig.DEBUG) {
-            viewModelScope.launch(dispatcherProvider.main) {
-                effect.send(MapEffect.ShowToast("Location denied"))
-            }
-        }
-    }
-
     fun onPointPlaced(point: PointD) {
         viewModelScope.launch(dispatcherProvider.default) {
             //todo call usecase if polygon was clicked
@@ -81,6 +69,31 @@ internal class MapViewModel(
 
             val shortestPath = getShortestPathUseCase(point)
             state.shortestPath.emit(shortestPath)
+        }
+    }
+
+    fun onLocationButtonClicked(permissionChecker: GpsPermissionRequester) {
+        permissionChecker.checkPermissions(
+            rationaleTitle = R.string.gps_permission_rationale_title,
+            rationaleContent = R.string.gps_permission_rationale_content,
+            deniedTitle = R.string.gps_permission_denied_title,
+            deniedContent = R.string.gps_permission_denied_content,
+            onFailed = { onLocationDenied() },
+            onPermission = { onMyLocationClicked() },
+        )
+    }
+
+    private fun onMyLocationClicked() {
+        viewModelScope.launch(dispatcherProvider.main) {
+            effect.send(MapEffect.CenterAtUser)
+        }
+    }
+
+    private fun onLocationDenied() {
+        if (BuildConfig.DEBUG) {
+            viewModelScope.launch(dispatcherProvider.main) {
+                effect.send(MapEffect.ShowToast("Location denied"))
+            }
         }
     }
 }
