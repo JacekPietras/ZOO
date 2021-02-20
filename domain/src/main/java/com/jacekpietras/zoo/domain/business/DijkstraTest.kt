@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.business
 
-internal class Dijkstra(
+internal class DijkstraTest(
     vertices: Set<Node>,
     private val start: Node,
     private val end: Node,

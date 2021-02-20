@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.core.PointD
+import com.jacekpietras.core.haversine
 
 internal class Node(
     val point: PointD,
@@ -15,6 +16,10 @@ internal class Node(
 
     fun connect(node: Node, technical: Boolean, backward:Boolean) {
         edges.add(Edge(node, technical, backward))
+    }
+
+    fun connectAndCalc(node: Node, technical: Boolean, backward:Boolean) {
+        edges.add(Edge(node, technical, backward, haversine(this.x, this.y, node.x, node.y)))
     }
 
     fun disconnect(node: Node) {

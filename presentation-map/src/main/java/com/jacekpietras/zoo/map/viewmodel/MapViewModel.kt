@@ -73,7 +73,7 @@ internal class MapViewModel(
     }
 
     fun onPointPlaced(point: PointD) {
-        viewModelScope.launch(dispatcherProvider.main) {
+        viewModelScope.launch(dispatcherProvider.default) {
             //todo call usecase if polygon was clicked
 
             val snapped = getSnappedToRoadUseCase(point)
