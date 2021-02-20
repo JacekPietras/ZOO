@@ -4,6 +4,7 @@ internal class Dijkstra(
     vertices: Set<Node>,
     private val start: Node,
     private val end: Node,
+    technicalAllowed: Boolean = false,
 ) {
 
     private val previous: MutableMap<Node, Node?> = vertices.map { it to null }.toMutableMap()
@@ -16,6 +17,8 @@ internal class Dijkstra(
         // subset of vertices, for which we know true distance
         val s: MutableSet<Node> = mutableSetOf()
 
+        var outsideTechnical = technicalAllowed
+
         while (s != vertices) {
             // closest vertex that has not yet been visited
             val v: Node = delta
@@ -25,8 +28,14 @@ internal class Dijkstra(
                 .key
 
             v.edges.forEach { neighbor ->
-                if (neighbor.node !in s) {
+                if (neighbor.node !in s &&
+                    (technicalAllowed || !outsideTechnical || !neighbor.technical)
+                ) {
                     val newPath = delta.getValue(v) + neighbor.length
+
+                    if (!neighbor.technical) {
+                        outsideTechnical = true
+                    }
 
                     if (newPath < delta.getValue(neighbor.node)) {
                         delta[neighbor.node] = newPath

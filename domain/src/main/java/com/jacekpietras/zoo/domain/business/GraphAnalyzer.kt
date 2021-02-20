@@ -23,33 +23,37 @@ object GraphAnalyzer {
     fun getSnapped(point: PointD): PointD =
         snapper.getSnappedPoint(nodes, point)
 
-    fun getShortestPath(endPoint: PointD, startPoint: PointD?): List<PointD> {
+    fun getShortestPath(
+        endPoint: PointD,
+        startPoint: PointD?,
+        technicalAllowed: Boolean = false,
+    ): List<PointD> {
         if (startPoint == null) return listOf(endPoint)
 
-        val snapA = snapper.getSnappedEdge(nodes, endPoint)
-        val snapB = snapper.getSnappedEdge(nodes, startPoint)
+        val snapStart = snapper.getSnappedEdge(nodes, startPoint, technicalAllowed = true)
+        val snapEnd = snapper.getSnappedEdge(nodes, endPoint, technicalAllowed = technicalAllowed)
 
         val cleanupList: MutableList<Node> = mutableListOf()
 
-        val start = when (snapB.point) {
-            snapB.near1.point -> snapB.near1
-            snapB.near2.point -> snapB.near2
+        val start = when (snapStart.point) {
+            snapStart.near1.point -> snapStart.near1
+            snapStart.near2.point -> snapStart.near2
             else -> {
-                createAndConnect(snapB)
+                createAndConnect(snapStart)
                     .also { cleanupList.add(it) }
             }
         }
 
-        val end = when (snapA.point) {
-            snapA.near1.point -> snapA.near1
-            snapA.near2.point -> snapA.near2
+        val end = when (snapEnd.point) {
+            snapEnd.near1.point -> snapEnd.near1
+            snapEnd.near2.point -> snapEnd.near2
             else -> {
-                createAndConnect(snapA)
+                createAndConnect(snapEnd)
                     .also { cleanupList.add(it) }
             }
         }
 
-        val result = Dijkstra(nodes, start, end).getPath()
+        val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed).getPath()
             .map { PointD(it.x, it.y) }
 
         cleanupList.forEach { fake ->

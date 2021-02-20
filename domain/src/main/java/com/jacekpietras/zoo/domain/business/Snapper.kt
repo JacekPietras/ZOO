@@ -6,16 +6,22 @@ import com.jacekpietras.core.pow2
 
 internal class Snapper {
 
-    fun getSnappedEdge(nodes: Iterable<Node>, source: PointD): Snapped {
+    fun getSnappedEdge(
+        nodes: Iterable<Node>,
+        source: PointD,
+        technicalAllowed: Boolean,
+    ): Snapped {
         var result: Snapped? = null
         var shortest: Double = Double.MAX_VALUE
 
-        nodes.forAllEdges { p1, p2 ->
-            val found = getSnappedToEdge(source, p1.point, p2.point)
-            val foundToSource = haversine(source.x, source.y, found.x, found.y)
-            if (foundToSource < shortest) {
-                shortest = foundToSource
-                result = Snapped(found, p1, p2)
+        nodes.forAllEdges { p1, p2, technical ->
+            if (technicalAllowed || !technical) {
+                val found = getSnappedToEdge(source, p1.point, p2.point)
+                val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                if (foundToSource < shortest) {
+                    shortest = foundToSource
+                    result = Snapped(found, p1, p2)
+                }
             }
         }
         return result!!
@@ -25,7 +31,7 @@ internal class Snapper {
         var result: PointD? = null
         var shortest: Double = Double.MAX_VALUE
 
-        nodes.forAllEdges { p1, p2 ->
+        nodes.forAllEdges { p1, p2, _ ->
             val found = getSnappedToEdge(source, p1.point, p2.point)
             val foundToSource = haversine(source.x, source.y, found.x, found.y)
             if (foundToSource < shortest) {
