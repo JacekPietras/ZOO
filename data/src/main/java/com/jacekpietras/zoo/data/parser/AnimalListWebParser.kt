@@ -16,8 +16,7 @@ internal class AnimalListWebParser(inputStream: InputStream) {
             .parseAll()
     }
 
-    fun getContent(): List<String> =
-        result.map { it.filter.division + " / " + it.name + " " + it.www + " " + it.photo }
+    fun getContent(): List<Animal> = result
 
     private fun XmlPullParser.parseAll() {
         while (eventType != END_DOCUMENT) {

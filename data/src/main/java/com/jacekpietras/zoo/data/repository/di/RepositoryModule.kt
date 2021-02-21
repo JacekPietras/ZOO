@@ -7,10 +7,18 @@ import com.jacekpietras.zoo.data.repository.MapRepositoryImpl
 import com.jacekpietras.zoo.domain.repository.AnimalRepository
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 internal val repositoryModule = module {
+
+    single<Moshi> {
+        Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+    }
 
     single<MapRepository> {
         MapRepositoryImpl(
@@ -28,7 +36,7 @@ internal val repositoryModule = module {
 
     single<AnimalRepository> {
         AnimalRepositoryImpl(
-            context = androidContext(),
+            moshi = get(),
         )
     }
 }

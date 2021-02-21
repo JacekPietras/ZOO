@@ -1,23 +1,24 @@
 package com.jacekpietras.zoo.domain.model
 
-import com.jacekpietras.zoo.domain.model.Division.MAMMAL
+import com.jacekpietras.zoo.domain.model.Division.*
 import java.util.*
 
 data class AnimalEntity(
     val id: AnimalId = AnimalId("id"),
     val language: String = "pl",
-    val name: String = "name",
-    val nameLatin: String = "name",
-    val occurrence: String = "occurrence",
-    val environment: String = "environment",
-    val food: String = "food",
-    val division: Division = MAMMAL,
-    val multiplication: String = "multiplication",
-    val protectionAndThreats: String = "protection and threats",
-    val facts: String = "facts",
-    val wiki: String = "www",
-    val web: String = "www",
-    val photos: List<String> = emptyList(),
+    val name: String,
+    val nameLatin: String,
+    val occurrence: String,
+    val environment: String,
+    val food: String,
+    val division: Division,
+    val multiplication: String,
+    val protectionAndThreats: String,
+    val facts: String,
+    val wiki: String = "todo",
+    val web: String,
+    val regionInZoo: String = "todo",
+    val photos: List<String>,
 )
 
 class AnimalId(id: String) {
@@ -53,3 +54,14 @@ enum class Division {
     REPTILE,
     FISH,
 }
+
+fun divisionFromPolishTag(tag: String): Division =
+    when (tag) {
+        "ssaki" -> MAMMAL
+        "ptaki" -> BIRD
+        "gady" -> REPTILE
+        "plazy" -> AMPHIBIAN
+        "ryby" -> FISH
+        else -> throw IllegalArgumentException("unknown animal division $tag")
+    }
+
