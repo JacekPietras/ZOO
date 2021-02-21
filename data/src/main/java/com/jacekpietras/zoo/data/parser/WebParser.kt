@@ -20,6 +20,19 @@ internal class WebParser(context: Context, @RawRes rawRes: Int) {
     fun getContent(): List<WebContent> =
         result
 
+    fun getFirstParagraph(): WebContent.Paragraph =
+        result
+            .filterIsInstance(WebContent.Paragraph::class.java)
+            .first ()
+
+    fun getParagraph(title: String): WebContent.Paragraph =
+        result
+            .filterIsInstance(WebContent.Paragraph::class.java)
+            .first { it.title == title }
+
+    fun getPictures(): List<WebContent.Image> =
+        result.filterIsInstance(WebContent.Image::class.java)
+
     private fun XmlPullParser.parseAll() {
         while (eventType != END_DOCUMENT) {
             when (eventType) {
@@ -117,11 +130,11 @@ internal class WebParser(context: Context, @RawRes rawRes: Int) {
 
         data class Paragraph(
             val title: String,
-            var content: String? = null,
+            var content: String = "",
         ) : WebContent() {
 
             fun addContent(text: String) {
-                if (content == null) {
+                if (content.isEmpty()) {
                     content = text
                 } else {
                     content += " $text"
