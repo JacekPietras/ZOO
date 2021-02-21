@@ -26,10 +26,19 @@ internal class AnimalWebParser(inputStream: InputStream) {
     fun getParagraph(title: String): WebContent.Paragraph =
         result
             .filterIsInstance(WebContent.Paragraph::class.java)
-            .first { it.title == title }
+            .firstOrNull { it.title == title }
+            ?: result
+                .filterIsInstance(WebContent.Paragraph::class.java)
+                .firstOrNull { diffCount(it.title, title) <= 2 }
+            ?: throw IllegalStateException("Cannot find title $title in ${getAllTitles()}")
 
     fun getPictures(): List<WebContent.Image> =
         result.filterIsInstance(WebContent.Image::class.java)
+
+    private fun getAllTitles(): List<String> =
+        result
+            .filterIsInstance(WebContent.Paragraph::class.java)
+            .map { it.title }
 
     private fun XmlPullParser.parseAll() {
         while (eventType != END_DOCUMENT) {

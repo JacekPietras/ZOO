@@ -36,6 +36,7 @@ internal val repositoryModule = module {
 
     single<AnimalRepository> {
         AnimalRepositoryImpl(
+            context = androidContext(),
             moshi = get(),
         )
     }

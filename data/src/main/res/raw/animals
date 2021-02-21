@@ -1,0 +1,3251 @@
+[
+	{
+		"id": {
+			"id": "pirania-czerwona"
+		},
+		"language": "pl",
+		"name": "Pirania czerwona",
+		"nameLatin": "Pygocentrus nattereri",
+		"occurrence": "Ameryka Południowa.",
+		"environment": "Dorzecze Amazonki, Orinoko, La Platy.",
+		"food": "Ryby, mięczaki, ptaki i ssaki. Żyje i żeruje w dużych stadach (ławicach) wykazując niezwykłą żarłoczność. W poszukiwaniu ofiary kieruje się przede wszystkim węchem.",
+		"division": "FISH",
+		"multiplication": "Samica składa ikrę w zagłębieniu podłoża. Jest ona pilnowana przez rodziców.",
+		"protectionAndThreats": "Gatunek nie jest zagrożony wyginięciem.",
+		"facts": "Żyje w stadach liczących 20-30 osobników. Jest uważana za najbardziej niebezpieczną i agresywną piranię. W Brazylii wprowadza się specjalne strefy ochronne, w celu zabezpieczenia zażywających kąpieli osób przed atakami ryb.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/pirania-czerwona/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pirania-czerwona1-e1467996458213.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "antias-pomaranczowy"
+		},
+		"language": "pl",
+		"name": "Antias pomarańczowy",
+		"nameLatin": "Anthias squamipinnis",
+		"occurrence": "Indopacyfik.",
+		"environment": "Rafy koralowe.",
+		"food": "Zooplankton.",
+		"division": "FISH",
+		"multiplication": "Ryby te rozpoczynają życie jako samice. Dorastając niektóre z nich zmieniają płeć. Samiec tworzy harem. Jeśli zginie &#8211; samica może zmienić płeć aby go zastąpić.",
+		"protectionAndThreats": "Ryba nie jest zagrożona wyginięciem.",
+		"facts": "Żyje stadnie. Tworzy duże ławice. Często przebywa w pobliżu wraków statków. Od tego pochodzi jej inna nazwa &#8222;antias wrakówka&#8221;.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/antias/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/antias-pomaranczowy1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pyszczak-zolty"
+		},
+		"language": "pl",
+		"name": "Pyszczak żołty",
+		"nameLatin": "Labidochromis caeruleus",
+		"occurrence": "Jezioro Malawi w południowo - wschodniej Afryce.",
+		"environment": "Strefa przybrzeżna i głębsze strefy litoralu skalistego.",
+		"food": "Małe ryby i skorupiaki.",
+		"division": "FISH",
+		"multiplication": "Ryba jajorodna.",
+		"protectionAndThreats": "Gatunek nie jest zagrożony wyginięciem.",
+		"facts": "Przedstawiciel rodziny pielęgnicowatych. Osiąga około 10 cm długości.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/pyszczak-zolty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pyszczak1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "szczelinowiec-z-burundi"
+		},
+		"language": "pl",
+		"name": "Szczelinowiec z Burundi",
+		"nameLatin": "Neolamprologus brichardi",
+		"occurrence": "Afryka - wody jeziora Tanganika.",
+		"environment": "Skalista strefa przybrzeżna, na głębokości 5-10 metrów.",
+		"food": "Zooplankton.",
+		"division": "FISH",
+		"multiplication": "Tarło odbywa w szczelinach skalnych. Samica składa do 200 sztuk ikry. W okresie rozrodu ryba ta bywa agresywna.",
+		"protectionAndThreats": "Gatunek nie jest zagrożony wyginięciem.",
+		"facts": "Przedstawiciel rodziny pielęgnicowatych. Gatunek terytorialny. Osiąga około 10 cm długości.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/szczelinowiec-z-burundi/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/szczelinowiec-z-Burundi3-e1468259557483.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pokolec-krolewski"
+		},
+		"language": "pl",
+		"name": "Pokolec królewski",
+		"nameLatin": "Paracanthurus hepatus",
+		"occurrence": "Indopacyfik.",
+		"environment": "Przybrzeżne rafy koralowe.",
+		"food": "Wszystkożerna. Żywi się zooplanktonem i glonami.",
+		"division": "FISH",
+		"multiplication": "Gatunek jajorodny. W czasie tarła samce bywają bardzo agresywne wobec samic.",
+		"protectionAndThreats": "Ryba nie jest zagrożona wyginięciem.",
+		"facts": "U nasady płetwy ogonowej posiada wysuwane ostrze, służące do obrony przed wrogami. Osiąga 25 cm długości. Przedstawiciel rodziny pokolcowatych.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/pokolec-krolewski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pokolec-krolewski11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pokolec-krolewski2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "amfiprion-okoniowy"
+		},
+		"language": "pl",
+		"name": "Amfiprion okoniowy",
+		"nameLatin": "Amphiprion ocellaris",
+		"occurrence": "Indopacyfik.",
+		"environment": "Spotykany w płytkich wodach, w pobliżu rafy koralowej.",
+		"food": "Glony, drobny zooplankton.",
+		"division": "FISH",
+		"multiplication": "Samica składa do 25 000 ziaren ikry, którą opiekuje się samiec.",
+		"protectionAndThreats": "Gatunek nie jest zagrożony wymarciem.",
+		"facts": "Bytują pojedynczo, w parach lub w małych ławicach. Żyją w symbiozie z ukwiałami, co przynosi obopólne korzyści. Amfiprion jest bezpieczny wśród parzących czułków ukwiała. Obecność ryby zwabia zwierzęta, które mogą stać się pożywieniem koralowca.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/amfiprion-okoniowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/amfiprion-okoniowy11-e1468263546408.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "stadnik-zoltoogonowy"
+		},
+		"language": "pl",
+		"name": "Stadnik żółtoogonowy",
+		"nameLatin": "Chrysiptera parasema",
+		"occurrence": "Indopacyfik.",
+		"environment": "Rafy koralowe, bytuje na głębokości do około 16 metrów.",
+		"food": "Wszystkożerna.",
+		"division": "FISH",
+		"multiplication": "Ryba jajorodna.",
+		"protectionAndThreats": "Gatunek nie jest zagrożony wyginięciem.",
+		"facts": "Ryby dorastają do 7 cm długości ciała. Przedstawiciel rodziny garbikowatych. Jedna z nielicznych tropikalnych ryb morskich, którą udało się rozmnożyć w akwarium. Żyje w niewielkich grupach.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/stadnik-zoltoogonowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/stadnik-zoltoogonowy1-e1468337007304.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "drzewolaz-zloty"
+		},
+		"language": "pl",
+		"name": "Drzewołaz złoty",
+		"nameLatin": "Dendrobates auratus",
+		"occurrence": "Ameryka Środkowa i Południowa: od południowej Nikaragui przez Kostarykę i Panamę do północnej Kolumbii.",
+		"environment": "Wilgotne lasy równikowe, plantacje.",
+		"food": "Owadożerny.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Samce w okresie godowym wydają charakterystyczne dźwięki, którymi wabią samice. Samica składa 4–12 jaj, z których po 10–15 dniach wykluwają się kijanki.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "W skórze tego płaza znajdują się gruczoły produkujące silną neurotoksynę.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/drzewolaz-zloty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-zloty1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "drzewolaz-zoltopasy"
+		},
+		"language": "pl",
+		"name": "Drzewołaz żółtopasy",
+		"nameLatin": "Dendrobates leucomelas",
+		"occurrence": "Ameryka Południowa - Wenezuela na południe od Orinoko oraz przyległe obszary Gujany i Brazylii.",
+		"environment": "Dno wilgotnego lasu równikowego. Preferuje bardzo wilgotne środowisko. Spotykany między kamieniami korzeniami i liśćmi.",
+		"food": "Małe owady.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Gody przypadają w porze deszczowej. Samce wabią samice wydając krótkie, trelujące głosy godowe. Samica składa do 13 jaj w małych zagłębieniach w ziemi z wodą lub w pochwach liści. Po 12-15 dniach wylęgają się kijanki.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Samce są nieco mniejsze i smuklejsze od samic. Samice bywają wobec siebie agresywne.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/drzewolaz-zoltopasy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-zoltopasy11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-zoltopasy2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "drzewolaz-malarski"
+		},
+		"language": "pl",
+		"name": "Drzewołaz malarski",
+		"nameLatin": "Dendrobates tinctorius",
+		"occurrence": "Ameryka Południowa - od Gujany po Brazylię.",
+		"environment": "Dno wilgotnego lasu równikowego.",
+		"food": "Owady.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Okres godowy przypada na porę deszczową. Samica składa 5–10 jaj, z których po 14–18 dniach wykluwają się kijanki. Samiec zwilża złożone jaja i przenosi kijanki do zbiornika z wodą.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Drzewołaz malarski jest gatunkiem o bardzo dużej zmienności osobniczej. Osobniki obydwu płci łatwo odróżnić: zgrubienia na końcach palców przednich kończyn samców są większe niż na palcach samic i mają kształt sercowaty.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/drzewolaz-malarski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-malarski11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-malarski2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kumak-dalekowschodni"
+		},
+		"language": "pl",
+		"name": "Kumak dalekowschodni",
+		"nameLatin": "Bombina orientalis",
+		"occurrence": "Wschodnia Syberia, północno - wschodnie Chiny, północna Korea oraz japońskie wyspy Tushima i Kiusiu.",
+		"environment": "Pola ryżowe, rowy melioracyjne, stawy, mniejsze zbiorniki wody stojącej, małe cieki wodne, wypełnione wodą koleiny.",
+		"food": "Owady, inne stawonogi, dżdżownice, małe ślimaki.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Samica składa do 100 jaj. Samiec natychmiast je zapładnia. Samica przykleja jaja do powierzchni kamieni i roślin wodnych. Po 3-6 dniach wylęgają się z nich kijanki, które przeobrażają się po 4-6 tygodniach (zależnie od temperatury wody).",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jaskrawe ubarwienie strony brzusznej wskazuje na toksyczność i przykry smak tego płaza. Odstrasza to potencjalne drapieżniki.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kumak-dalekowschodni/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kumak-dalekowschodni1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "rzekotka-czerwonooka"
+		},
+		"language": "pl",
+		"name": "Rzekotka czerwonooka",
+		"nameLatin": "Agalychnis callidryas",
+		"occurrence": "Ameryka Środkowa - od Meksyku do Panamy.",
+		"environment": "Wilgotny las równikowy.",
+		"food": "Owadożerna.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Okres godowy przypada na porę deszczową. Samica składa pakiety jaj liczące nawet do 70 sztuk. Są one przytwierdzone do roślin znajdujących się tuż nad zbiornikiem wodnym. Kijanki wykluwają się po około tygodniu i wpadają do wody, gdzie trwa ich dalszy rozwój.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Palce tego płaza zakończone są przylgami. Samce są nieco mniejsze od samic. Są aktywne nocą.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/rzekotka-czerwonooka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/rzekotka-czerwonooka1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "rzekotka-szmaragdowa"
+		},
+		"language": "pl",
+		"name": "Rzekotka szmaragdowa",
+		"nameLatin": "Pelodryas caerulea",
+		"occurrence": "Australia.",
+		"environment": "Wilgotne lasy tropikalne, środowiska zurbanizowane.",
+		"food": "Owady, dżdżownice, małe płazy i gady, mysie noworodki.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Gatunek ten rozmnaża się w porze deszczowej. Samica składa jaja w kłębach liczących do około 200 sztuk. Rozwój zarodkowy przebiega szybko, kijanki wylęgają się w ciągu 48 godzin. Przeobrażają się w młode rzekotki już po 4-8 tygodniach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jest jednym z największych przedstawicieli australijskich płazów bezogonowych – osiąga 10 cm długości. W niewoli dożywa nawet do 16 lat.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/rzekotka-szmaragdowa/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/rzekotka-szmaragdowa1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zolw-zabuti"
+		},
+		"language": "pl",
+		"name": "Żółw żabuti",
+		"nameLatin": "Chelonoidis carbonaria",
+		"occurrence": "Ameryka Południowa od północnej Brazylii po północną Argentynę i Boliwię.",
+		"environment": "Tropikalne lasy deszczowe, płytkie sadzawki.",
+		"food": "Wszystkożerny. Żywi się głównie zielonymi częściami roślin i owocami. Dietę uzupełnia rybami i innymi drobnymi kręgowcami.",
+		"division": "REPTILE",
+		"multiplication": "Samica składa od 5 do 15 jaj, z których młode wylęgają się po upływie około 5 miesięcy.",
+		"protectionAndThreats": "Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Karapaks (grzbietowa część pancerza) prezentowanego w naszym Zoo osobnika mierzy 40 cm długości. Ma on ponad 50 lat.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zolw-zabuti/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/żółw-żabuti1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zolw-stepowy"
+		},
+		"language": "pl",
+		"name": "Żółw stepowy",
+		"nameLatin": "Testudo horsfieldii",
+		"occurrence": "Południowo-wschodnia Rosja, Kazachstan, Uzbekistan, Azerbejdżan, Kirgistan, Pakistan, Turkmenistan, Iran, Mongolia, Chiny.",
+		"environment": "Suche, trawiaste obszary o skalnym podłożu.",
+		"food": "Świeże pędy roślin stepowych, zioła, trawy, kwiaty i owoce.",
+		"division": "REPTILE",
+		"multiplication": "Samica składa jaja po okresie 6-8 tygodni od zakończenia okresu hibernacji (spoczynku zimowego). Inkubacja trwa od 60 do nawet 85 dni (zależnie od temperatury).",
+		"protectionAndThreats": "Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Cechą odróżniającą ten gatunek od żółwia greckiego jest podzielona na pół tarczka nadogonowa. Żółwie bardzo często kopią nory, co pomaga ścierać nieustannie rosnące pazury.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zolw-stepowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/żółw-stepowy1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zolw-papuaski"
+		},
+		"language": "pl",
+		"name": "Żółw papuaski",
+		"nameLatin": "Elseya novaeguineae",
+		"occurrence": "Australia, Nowa Gwinea.",
+		"environment": "Ciepłe laguny.",
+		"food": "Roślinność wodna, owady, skorupiaki, ryby.",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Gady te są przedstawicielami rodziny żółwi wężoszyjnych. Ich charakterystyczną cechą jest nieproporcjonalnie długa szyja, którą zwierzęta potrafią zginać w bok.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zolw-papuaski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zolw-papuaski11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zolw-papuaski1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kajman-karzelkowaty"
+		},
+		"language": "pl",
+		"name": "Kajman karzełkowaty",
+		"nameLatin": "Paleosuchus palpebrosus",
+		"occurrence": "Ameryka Południowa.",
+		"environment": "Śródleśne strumienie oraz rzeki o kamienistym dnie.",
+		"food": "Ryby, ptaki, drobne ssaki, płazy.",
+		"division": "REPTILE",
+		"multiplication": "Samica kopie bardzo obszerne gniazdo, do którego składa kilkanaście jaj. Temperatura panująca w gnieździe wynosi około 30 C i wpływa na determinację płci. Po około 90 dniach z jaj wylęgają się młode osobniki. Matka wraca do miejsca złożenia jaj, nawoływana przez młode kajmany charakterystycznymi odgłosami i pomaga im wydostać się z gniazda.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Jeden z najmniejszych krokodyli. Jest najbardziej opancerzonym przedstawicielem rzędu. Dorasta do około 140 cm długości.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kajman-karzelkowaty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kajman1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kajman11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kajman2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kajman3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kajman4.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "agama-zaglowa-filipinska"
+		},
+		"language": "pl",
+		"name": "Agama żaglowa filipińska",
+		"nameLatin": "Hydrosaurus pustulatus",
+		"occurrence": "Północna część Filipin. Gatunek endemiczny.",
+		"environment": "Brzegi rzek oraz płytkich zbiorników wodnych, lasy.",
+		"food": "Małe ptaki, jaja, ryby, duże owady, owoce oraz zielone części roślin.",
+		"division": "REPTILE",
+		"multiplication": "Samica składa jaja, z których po około 110 dniach wykluwają się młode osobniki.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie.",
+		"facts": "Cechą charakterystyczną gatunku jest charakterystyczny „żagiel” u nasady ogona, dobrze widoczny zwłaszcza u samca. Doskonale pływa, nurkuje oraz sprawnie wspina się na konary drzew. Od roku 2007 w naszym Zoo agamy filipińskie regularnie składają jaja, czego rezultatem są liczne przychówki.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/agama-zaglowa-filipinska/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/agama-zaglowa-filipinska21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/agama-zaglowa-filipinska11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/agama-zaglowa-filipinska3.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "gekon-lamparci"
+		},
+		"language": "pl",
+		"name": "Gekon lamparci",
+		"nameLatin": "Eublepharis macularius",
+		"occurrence": "Azja środkowo-wschodnia, Iran, Pakistan.",
+		"environment": "Tereny pustynne i półpustynne.",
+		"food": "Owady, oseski gryzoni.",
+		"division": "REPTILE",
+		"multiplication": "Samica składa 2 jaja, z których po około 80 dniach wykluwają się młode osobniki. Płeć młodych zależy od temperatury inkubacji.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Żyje około 12 lat. Jest aktywny głównie w nocy.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/gekon-lamparci/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/gekon-lamparci1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/gekon-lamparci11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/gekon-lamparci2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "gekon-madagaskarski"
+		},
+		"language": "pl",
+		"name": "Gekon madagaskarski",
+		"nameLatin": "Phelsuma madagascariensis grandis",
+		"occurrence": "Madagaskar",
+		"environment": "Lasy w północnej i wschodniej części wyspy.",
+		"food": "Owady, dojrzałe owoce, nektar.",
+		"division": "REPTILE",
+		"multiplication": "Samica kilka razy w roku składa 2 jaja.",
+		"protectionAndThreats": "Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Nazywana jest dniówką ze względu na dzienny tryb życia. Bardzo szybko przemieszcza się po pionowych powierzchniach. Osiąga 30 cm długości ciała.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/gekon-madagaskarski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/gekon-madagaskarski1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bazyliszek-platkoglowy"
+		},
+		"language": "pl",
+		"name": "Bazyliszek płatkogłowy",
+		"nameLatin": "Basiliscus plumifrons",
+		"occurrence": "Kostaryka.",
+		"environment": "Lasy w pobliżu rzek.",
+		"food": "Owady i inne bezkręgowce, drobne kręgowce, owoce.",
+		"division": "REPTILE",
+		"multiplication": "Samica składa kilkanaście jaj. Inkubacja trwa około 2 miesiące.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Nazywana jest jaszczurką Jezusa ze względu na umiejętność biegania po wodzie. Dorasta do 75 cm długości.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bazyliszek-platkoglowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazyliszek-platkoglowy1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazyliszek-platkoglowy11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazyliszek-platkoglowy2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "scynk-wielki"
+		},
+		"language": "pl",
+		"name": "Scynk wielki",
+		"nameLatin": "Tiliqua gigas",
+		"occurrence": "Nowa Gwinea i okoliczne wyspy.",
+		"environment": "Preferuje suche, ciepłe, urozmaicone środowiska.",
+		"food": "Wszystkożerna. Żywi się ślimakami, stawonogami, mniejszymi jaszczurkami, padliną.",
+		"division": "REPTILE",
+		"multiplication": "Żyworodna. Samica rodzi do 10 młodych.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Dorasta do 50 cm długości. Posiada duży, mięsisty język w kolorze niebieskim.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/scynk-wielki/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/scynk-wielki1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "waran-lesny"
+		},
+		"language": "pl",
+		"name": "Waran leśny",
+		"nameLatin": "Varanus salvator",
+		"occurrence": "Azja południowo-wschodnia. Od Cejlonu po Filipiny oraz Chiny.",
+		"environment": "Podmokłe lasy, sąsiedztwo dużych zbiorników wodnych.",
+		"food": "Kręgowce: głównie ryby i ptaki, ptasie jaja i pisklęta.",
+		"division": "REPTILE",
+		"multiplication": "Gatunek jajorodny. Samica składa kilkadziesiąt (do 30) jaj w wykopanych przez siebie głębokich norach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Doskonale pływa i nurkuje. Bardzo sprawnie wspina się na drzewa. Jego bronią poza ostrymi pazurami oraz zębami jest mocno umięśniony ogon, którym potrafi zadawać potężne ciosy. Jest drugim co do wielkości waranem. Pod tym względem ustępuje tylko waranowi z Komodo. Osiąga do 3 m długości.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/waran-lesny/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/waran-leśny1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/waran-leśny2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/waran-leśny3.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "boa-dusiciel"
+		},
+		"language": "pl",
+		"name": "Boa dusiciel",
+		"nameLatin": "Boa constrictor",
+		"occurrence": "Ameryka Środkowa i Południowa.",
+		"environment": "Lasy tropikalne.",
+		"food": "Małe i średniej wielkości ssaki, ptaki, gady, płazy oraz ryby.",
+		"division": "REPTILE",
+		"multiplication": "Żyworodny. Po ciąży trwającej 110-200 dni samica rodzi nawet do 50 młodych.",
+		"protectionAndThreats": "Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Dorasta do 3,5 metra długości. Samca można odróżnić od samicy dzięki obecności parzystych pazurków odbytowych występujących po obu stronach kloaki.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/boa-dusiciel/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/boa-dusiciel1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/boa-dusiciel11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "boa-psioglowy"
+		},
+		"language": "pl",
+		"name": "Boa psiogłowy",
+		"nameLatin": "Corallus caninus",
+		"occurrence": "Ameryka Południowa - Brazylia, Gujana, Peru.",
+		"environment": "Lasy deszczowe. Najchętniej przebywa w koronach drzew większość czasu spędzając w charakterystycznej pozycji zwinięty na poziomej gałęzi.",
+		"food": "Głównie małe ssaki i ptaki.",
+		"division": "REPTILE",
+		"multiplication": "Gatunek żyworodny. Młode węże od chwili urodzenia aż do pierwszego roku życia mają jaskrawy pomarańczowy lub czerwony kolor. Po upływie roku przyjmują zielone ubarwienie.",
+		"protectionAndThreats": "Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Aktywny o zmierzchu i nocą. Osiąga 2 metry długości.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/boa-psioglowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/boa-psiogłowy1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "anakonda-zolta"
+		},
+		"language": "pl",
+		"name": "Anakonda żółta",
+		"nameLatin": "Eunectes notaeus",
+		"occurrence": "Ameryka Południowa: Paragwaj, Argentyna, Brazylia.",
+		"environment": "Różnego rodzaju zbiorniki wodne, strumienie, podmokłe siedliska w lasach tropikalnych, mokradła, tereny bagienne.",
+		"food": "Ssaki, ptaki, ryby.",
+		"division": "REPTILE",
+		"multiplication": "Wąż żyworodny. Samica po 6 miesięcznej ciąży rodzi do 40 młodych.",
+		"protectionAndThreats": "Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Potrafi godzinami leżeć w wodzie bez ruchu wystawiając jedynie nozdrza i oczy ponad powierzchnię. Może przebywać pod wodą ponad 10 minut. Osiąga 3 metry długości. Bywa bardzo agresywny.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/anakonda-zolta/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/anakonda-żółta1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/anakonda-żółta11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lancetoglow-mleczny"
+		},
+		"language": "pl",
+		"name": "Lancetogłów mleczny",
+		"nameLatin": "Lampropeltis triangulum sinaloae",
+		"occurrence": "Zachodnia część Meksyku.",
+		"environment": "Lasy, obszary trawiaste, półpustynie.",
+		"food": "Gryzonie, płazy, małe ptaki, inne węże, jaszczurki, bezkręgowce.",
+		"division": "REPTILE",
+		"multiplication": "Samica składa 5-16 jaj. Inkubacja trwa 35-66 dni.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Dorasta do 120 cm długości. Jest aktywny nocą – w ciągu dnia odpoczywa w ukryciu.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lancetoglow-mleczny/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/lancetoglow-mleczny1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/lancetoglow-mleczny4.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "strus-afrykanski"
+		},
+		"language": "pl",
+		"name": "Struś afrykański",
+		"nameLatin": "Struthio camelus",
+		"occurrence": "Afryka na terenie południowej Sahary, Sudan, Etiopia, Somalia po Kenię, południowa Kenia po Tanzanię i Afryka Południowa.",
+		"environment": "Pustynie, półpustynie, sawanny",
+		"food": "Roślinożerne. Dietę uzupełniają owadami i niewielkimi kręgowcami.",
+		"division": "BIRD",
+		"multiplication": "Samcowi towarzyszy harem samic. Gniazdo ma postać płytkiego dołu o średnicy 3 m, wygrzebanego w piasku lub ziemi. W gnieździe znajdują się jaja wszystkich 2-5 samic haremu. Wysiadywane są 42-46 dni przez dominującą samicę, którą zmienia samiec.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Populacja żyjąca na Saharze, w Somalii, Kenii i Tanzanii objęta jest I załącznikiem Konwencji Waszyngtońskiej.",
+		"facts": "Największy ptak żyjący obecnie na ziemi, najszybszy spośród nielotnych ptaków lądowych. Na dłuższych dystansach biega z prędkością 50 km/h, a na krótszych &#8211; nawet do 70 km/h. Jego stopy zakończone są tylko 2 palcami. Ma doskonały wzrok – widzi dobrze na odległość do około 5 km.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/strus-afrykanski-2/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/strus-afrykanski41.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/strus-afrykanski31.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/strus-afrykanski22.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/strus-afrykanski11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/strus-afrykanski5.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "nandu-szare"
+		},
+		"language": "pl",
+		"name": "Nandu szare",
+		"nameLatin": "Rhea americana",
+		"occurrence": "Wschodnia część Ameryki Południowej. Brazylia, Paragwaj, Urugwaj, Argentyna.",
+		"environment": "Stepy i sawanny.",
+		"food": "Liście, nasiona, korzenie i owoce. Dieta jest uzupełniana owadami, a także jaszczurkami, żabami, małymi ptakami i wężami.",
+		"division": "BIRD",
+		"multiplication": "Jeden samiec łączy się z 6-15 samicami. Broni swego haremu i terytorium przed innymi dorosłymi samcami. Samice składają do wspólnego gniazda 15-30 jaj. Wysiaduje je tylko samiec przez 35-40 dni. Samiec również opiekuje się pisklętami, które zaraz po wykluciu są samodzielne.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT (bliski zagrożenia). Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Nandu posiadają doskonały wzrok, dobrze pływają i szybko biegają (mogą przekraczać prędkość 40 km/godz). Długie skrzydła wykorzystują do gwałtownej zmiany kierunku.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/nandu-szare-2/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/nandu-szare2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/nandu-szare11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "emu"
+		},
+		"language": "pl",
+		"name": "Emu",
+		"nameLatin": "Dromaius novaehollandiae",
+		"occurrence": "Australia",
+		"environment": "Krzaczaste stepy, otwarte równiny, mało zwarte lasy w suchych okolicach.",
+		"food": "Głównie nasiona, owady i owoce.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo umieszczone jest na ziemi. W zniesieniu 5-15 jaj, wysiadywanych przez samca 56 dni. Samiec również sprawuje opiekę nad pisklętami.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Jest drugim po strusiu afrykańskim największym żyjącym ptakiem. Biega bardzo szybko, osiągając prędkość do 50 km/h . W razie zagrożenia broni się uderzając napastnika nogami. Potrafi pływać. Jest hodowany dla mięsa, oleju i skór.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/emu-2/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/emu21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/emu.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/emu1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "perliczka"
+		},
+		"language": "pl",
+		"name": "Perliczka",
+		"nameLatin": "Numida meleagris",
+		"occurrence": "Afryka na południe od Sahary.",
+		"environment": "Zamieszkuje zróżnicowane środowiska oprócz lasu równikowego i pustyń.",
+		"food": "Nasiona, bulwy, jagody, bezkręgowce.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo znajduje się na ziemi. Samica składa do 12 jaj i wysiaduje je przez 24 do 27 dni. Samiec pomaga wychowywać młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Prowadzi naziemny tryb życia, w sytuacji zagrożenia częściej ucieka pieszo niż fruwa. Jest wytrwałym biegaczem. Poza sezonem lęgowym tworzy stada liczące około 25 osobników. W wielu krajach jest hodowana jako ptak udomowiony dla smacznego mięsa i jaj.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/perliczka-2/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/perliczka1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/perliczka11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "perlica-sepia"
+		},
+		"language": "pl",
+		"name": "Perlica sępia",
+		"nameLatin": "Acryllium vulturinum",
+		"occurrence": "Wschodnia Afryka – Etiopia, Somalia, Kenia, Uganda, Tanzania.",
+		"environment": "Zamieszkuje sawanny, półsuche tereny trawiaste z krzewami i nadrzeczne zarośla.",
+		"food": "Nasiona, liście traw i ziół, owoce, pączki, bulwy, owady, pająki, ślimaki.",
+		"division": "BIRD",
+		"multiplication": "W sezonie lęgowym ptaki łączą się w pary. Gniazdo ma postać zagłębienia w ziemi, często znajduje się pod osłoną roślinności. W zniesieniu nawet do 15 jaj. Inkubacja trwa 23-25 dni, wysiaduje samica.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Największa perlica. Ze względu na to, że głowa i szyja tego ptaka pozbawione są piór perlica ta została nazwana sępią.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/perlica-sepia/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/perlica-sepia.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "uszak-siwy"
+		},
+		"language": "pl",
+		"name": "Uszak siwy",
+		"nameLatin": "Crossoptilon auritum",
+		"occurrence": "Chiny.",
+		"environment": "Zamieszkuje lasy iglaste i mieszane, łąki powyżej granicy lasu (do wysokości 3 500 m n.p.m.).",
+		"food": "Głównie pokarm roślinny-pączki i liście, owoce, nasiona. Dietę uzupełnia owadami.",
+		"division": "BIRD",
+		"multiplication": "Gatunek monogamiczny – kogut łączy się z jedną kurą. Gniazdo zakłada na ziemi, w zagłębieniu pod osłoną roślinności. W zniesieniu 6-12 jaj, wysiaduje tylko samica 24-28 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Poza okresem lęgowym ptaki te łączą się w niewielkie stada. Uszak siwy jest najpospolitszym gatunkiem spośród wszystkich gatunków uszaków utrzymywanych przez w hodowców.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/uszak-siwy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/uszak-siwy1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "olsniak-himalajski"
+		},
+		"language": "pl",
+		"name": "Olśniak himalajski",
+		"nameLatin": "Lophophorus impejanus",
+		"occurrence": "Azja od wschodniego Afganistanu przez Himalaje, Kaszmir, północne Indie, Nepal, południowy Tybet i Butan.",
+		"environment": "Zamieszkuje górskie lasy iglaste i mieszane na wysokości od 2100 do 4500 m.",
+		"food": "Nasiona, bulwy, korzonki, owoce, bezkręgowce.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo znajduje się na ziemi, w zagłębieniu, często pod osłoną roślinności. W zniesieniu 3-8 jaj, wysiaduje samica około 27 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na I załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Olśniak himalajski to narodowy ptak i symbol Nepalu. Jego łacińska nazwa upamiętnia Lady Mary Impey, małżonkę prezesa brytyjskiego sądu najwyższego Bengalu, sir Elijaha Impey.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/olsniak-himalajski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/olsniak-himalajski2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/olsniak-himalajski11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bazant-annamski"
+		},
+		"language": "pl",
+		"name": "Bażant annamski",
+		"nameLatin": "Lophura edwardsi",
+		"occurrence": "Centralny Wietnam.",
+		"environment": "Zamieszkuje górskie lasy, gęste zarośla w pobliżu strumieni.",
+		"food": "Różne części roślin, owoce, nasiona i rożne drobne owady.",
+		"division": "BIRD",
+		"multiplication": "Samica składa 4-7 jaj i wysiaduje je w gnieździe znajdującym się na ziemi przez 21-22 dni, a następnie opiekuje się pisklętami. Młode osiągają dojrzałość płciową w wieku 2 lat.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii CR – krytycznie zagrożony. Ze względu na wycinkę drzew i degradację naturalnego środowiska ptak ten jest obecnie gatunkiem objętym projektami ochrony w naturze. Na I załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Jest to słabo poznany gatunek. Zawdzięcza swoją nazwę francuskiemu zoologowi Alfonsowi Milne-Edwardsowi.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bazant-annamski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazant-annamski11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazant-annamski.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bazant-srebrzysty"
+		},
+		"language": "pl",
+		"name": "Bażant srebrzysty",
+		"nameLatin": "Lophura nycthemera",
+		"occurrence": "Zamieszkuje Tajlandię, Wietnam, Birmę, Laos, południowe Chiny i wyspę Hajnan.",
+		"environment": "Lasy liściaste i bambusowe, głównie na wysokości 1500-2000 m n.p.m, pola uprawne.",
+		"food": "Różne części roślin, owoce, nasiona. Dietę uzupełnia owadami.",
+		"division": "BIRD",
+		"multiplication": "W zniesieniu 6-8 jaj. Wysiaduje samica przez około 25 dni. Pisklęta są wodzone przez matkę, czasami samiec jej w tym pomaga.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Bażant ten jest idealnym ptakiem dla początkującego hodowcy.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bazant-srebrzysty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazant-srebrzysty1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "paw"
+		},
+		"language": "pl",
+		"name": "Paw",
+		"nameLatin": "Pavo cristatus",
+		"occurrence": "Sri Lanka, Pakistan, Indie",
+		"environment": "Lasy liściaste, nadrzeczne zarośla, tereny uprawne",
+		"food": "Wszystkożerny, zjada nasiona, owoce oraz zwierzęta – zarówno bezkręgowce jak i drobne kręgowce, w tym węże, inne małe gady i ssaki.",
+		"division": "BIRD",
+		"multiplication": "W zniesieniu 3-6 jaj. Inkubacja trwa około 30 dni, wysiaduje tylko samica. Gniazdo umieszczone jest na ziemi, pod osłoną roślinności, wyścielone mchem i korzonkami.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Jest to narodowy ptak Indii. Pawie były hodowane już w czasach egipskich faraonów i Cesarstwa Rzymskiego.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/paw/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/paw31.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/paw21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/paw11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/paw4.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "tragopan-temmincka"
+		},
+		"language": "pl",
+		"name": "Tragopan Temmincka",
+		"nameLatin": "Tragopan temminckii",
+		"occurrence": "Indie, Wietnam, Tybet, północne Chiny.",
+		"environment": "Lasy mieszane, zarośla bambusowe i rododendrodowe do wysokości 2500 m n.p.m.",
+		"food": "Liście, kwiaty, źdźbła traw, pędy bambusa, nasiona różnych roślin, owady.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo znajduje się na drzewie na wysokości 0,5 – 8 m nad ziemią. W zniesieniu 3-8 jaj, wysiaduje tylko samica przez 26-28 dni.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Zwyczaj gniazdowania na drzewach, charakterystyczny dla tragopanów jest niespotykany u innych przedstawicieli rodziny bażantowatych.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/tragopan-temmincka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/tragopan-Temmincka1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/tragopan-Temmincka11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bernikla-kanadyjska"
+		},
+		"language": "pl",
+		"name": "Bernikla kanadyjska",
+		"nameLatin": "Branta canadensis",
+		"occurrence": "Ameryka Północna (od Alaski aż po Wielkie Jeziora). W Europie hodowana jako ptak ozdobny. Uciekinierzy z niewoli dali początek populacjom, które występują obecnie w Wielkiej Brytanii, Skandynawii oraz Europie Zachodniej.",
+		"environment": "Zamieszkuje tereny położone w pobliżu morskich brzegów, dużych rzek albo jezior, bagna, łąki, pastwiska, a nawet parki miejskie.",
+		"food": "Przeważnie pokarm roślinny: trawy, korzonki, liście, owoce, zielone części roślin wodnych, ziarno, wodorosty.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo znajduje się na ziemi w pobliżu wody. W zniesieniu zwykle 4-7 jaj, inkubacja trwa około 30 dni. Pisklęta są zagniazdownikami, co oznacza, że bardzo szybko po wykluciu z jaja są zdolne do samodzielnego życia, sprawnie chodzą, biegają i pływają.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Ptak obserwowany na terenie Polski. Zalatuje, zimuje i sporadycznie gniazduje w naszym kraju. Bernikla kanadyjska uznawana jest za jeden z najgroźniejszych gatunków obcych w Europie ze względu na rozszerzający się zasięg i zagrożenie dla rodzimych, europejskich gatunków gęsi.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bernikla-kanadyjska/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-kanadyjska31.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-kanadyjska21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-kanadyjska11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-kanadyjska4.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bernikla-bialolica"
+		},
+		"language": "pl",
+		"name": "Bernikla białolica",
+		"nameLatin": "Branta leucopsis",
+		"occurrence": "Grenlandia, Archipelag Svalbard, północna część Norwegii. Zimuje na wybrzeżach Morza Północnego i Zatoki Biskajskiej, a nawet na Półwyspie Iberyjskim.",
+		"environment": "Skaliste wybrzeża północnych mórz, tundra w sąsiedztwie bagien i jezior. Zimuje na łąkach i pastwiskach położonych w pobliżu morza.",
+		"food": "Przeważnie pokarm roślinny zbierany na lądzie. Na zimowisku dieta uzupełniana jest mięczakami i skorupiakami morskimi.",
+		"division": "BIRD",
+		"multiplication": "Gnieździ się kolonijnie na skałach w pobliżu morza. Wyprowadza 1 lęg w roku, w zniesieniu znajduje się 4-5 jaj. Wysiaduje samica przez 24-25 dni.",
+		"protectionAndThreats": "Gatunek niezagrożony.",
+		"facts": "Ptak sporadycznie obserwowany na terenie Polski.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bernikla-bialolica/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-bialolica1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bernikla-rdzawoszyja"
+		},
+		"language": "pl",
+		"name": "Bernikla rdzawoszyja",
+		"nameLatin": "Branta ruficollis",
+		"occurrence": "Zachodnia Syberia. Zimuje na wybrzeżu Morza Kaspijskiego i Zatoki Perskiej.",
+		"environment": "Tundra, lasotundra, step, mokradła i bagna, starorzecza, stawy hodowlane.",
+		"food": "Przeważnie pokarm roślinny zbierany na lądzie: trawy, zboża, liście, zielone części roślin wodnych.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w luźnych koloniach, często w sąsiedztwie miejsc lęgowych ptaków drapieżnych i sów, które zwiększają bezpieczeństwo bernikli i ich lęgu. W zniesieniu zwykle 6-7 jaj. Samica wysiaduje przez około 25 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Jest to gatunek sporadycznie obserwowany na terenie naszego kraju.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bernikla-rdzawoszyja/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-rdzawoszyja1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "ges-hawajska"
+		},
+		"language": "pl",
+		"name": "Gęś hawajska",
+		"nameLatin": "Branta sandvicensis",
+		"occurrence": "Hawaje",
+		"environment": "Stoki gór wulkanicznych do wysokości 2500 m n.p.m, łąki.",
+		"food": "Głównie pokarm roślinny: trawy, zioła, jagody, zielone części roślin, liście.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo znajduje się na ziemi, w zagłębieniach terenu, często pomiędzy blokami lawy. W zniesieniu 3-5 jaj, okres inkubacji trwa około 29 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Pod koniec XVIII wieku liczebność tego gatunku wynosiła ponad 25 tysięcy sztuk, jednak na skutek masowych polowań zmniejszyła się, osiągając w roku 1952 zaledwie 30 osobników. Dzięki hodowli w ośrodkach zamkniętych gatunek został uratowany przed zagładą.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/ges-hawajska/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ges-hawajska1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "labedz-czarny"
+		},
+		"language": "pl",
+		"name": "Łabędź czarny",
+		"nameLatin": "Cygnus atratus",
+		"occurrence": "Australia, Tasmania, Nowa Zelandia",
+		"environment": "Różnego rodzaju stojące i wolno płynące wody śródlądowe, zatoki morskie i laguny, zbiorniki wodne w parkach.",
+		"food": "Różne części roślin wodnych, wodorosty. Żerują również na pastwiskach i okresowo zalewanych polach.",
+		"division": "BIRD",
+		"multiplication": "Gniazda zakładają na suchym lądzie lub wśród roślinności bagiennej. W zniesieniu zwykle 5-6 jaj, okres inkubacji wynosi 36-40 dni. Często gniazduje w koloniach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "W Europie odnotowano przypadki pomyślnego gniazdowania łabędzi czarnych zbiegłych z niewoli. Pod względem wymagań środowiskowych jest to gatunek zbliżony do łabędzia niemego.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/labedz-czarny/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/labedz-czarny1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/labedz-czarny11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/labedz-czarny2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "ohar"
+		},
+		"language": "pl",
+		"name": "Ohar",
+		"nameLatin": "Tadorna tadorna",
+		"occurrence": "Obszary położone w pobliżu wybrzeża Bałtyku, Morza Północnego i Atlantyku aż po Morze Śródziemne. W Polsce na Półwyspie Helskim",
+		"environment": "Bagna i rozlewiska",
+		"food": "Głównie pokarm zwierzęcy &#8211; skorupiaki, mięczaki, owady wodne. Dietę uzupełnia pokarmem roślinnym.",
+		"division": "BIRD",
+		"multiplication": "Ptaki łączą się w pary na całe życie. Gniazda zakładają w dziuplach lub opuszczonych norach innych zwierząt. W zniesieniu 8-10 jaj, inkubacja trwa około 30 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) i Polskiej Czerwonej Księgi gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Ptaki obu płci wyglądają podobnie, u samca pojawia się w okresie letnim czerwona, guzowata narośl u nasady dzioba.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/ohar/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ohar.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ohar11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "mandarynka"
+		},
+		"language": "pl",
+		"name": "Mandarynka",
+		"nameLatin": "Aix galericulata",
+		"occurrence": "Dorzecze rzeki Amur, Sachalin, Japonia, Mandżuria, południowo - wschodnie Chiny",
+		"environment": "Rzeki z zalesionymi wysepkami, jeziora śródleśne, laski łęgowe, parki",
+		"food": "Pokarm roślinny: nasiona, rośliny wodne. Dietę uzupełnia pokarmem zwierzęcym: zjada owady, małe gady i ryby.",
+		"division": "BIRD",
+		"multiplication": "Toki samca są bardzo urozmaicone i widowiskowe. Gniazdo zakłada w dziupli drzewa w pobliżu wody. Po wylęgu kaczęta wyskakują z dziupli bezpośrednio do wody.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Hodowana jako ptak ozdobny. Z powodu oryginalnego upierzenia stała się jednym z ulubionych ptaków, utrzymywanych w parkach w wielu krajach Europy.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/mandarynka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/mandarynka2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/mandarynka11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "karolinka"
+		},
+		"language": "pl",
+		"name": "Karolinka",
+		"nameLatin": "Aix sponsa",
+		"occurrence": "Ameryka Północna (licznie w stanie Karolina), Kuba",
+		"environment": "Bagna, rozlewiska, jeziora, rzeki",
+		"food": "Skorupiaki, owady, rośliny wodne.",
+		"division": "BIRD",
+		"multiplication": "W zniesieniu 8-12 jaj, wysiadywanych przez samicę w dziupli przez 28-30 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Kaczka ta nazywana jest w Ameryce Północnej kaczką leśną. Jej nazwa pochodzi od stanu Karolina w USA, gdzie żyje najliczniejsza populacja. Z piór karolinki wytwarzano przynęty na pstrągi, dlatego też na przełomie XIX i XX wieku była gatunkiem zagrożonym.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/karolinka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/karolinka.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/karolinka11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "dziwonos"
+		},
+		"language": "pl",
+		"name": "Dziwonos",
+		"nameLatin": "Sarkidiornis melanotos",
+		"occurrence": "Środkowa i południowa Afryka, Madagaskar, południowa Azja.",
+		"environment": "Bagna, rzeki, jeziora i otwarte tereny podmokłe.",
+		"food": "Trawa, nasiona zbóż, rośliny wodne, bezkręgowce.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w dziuplach drzew lub na ziemi. W zniesieniu 6-20 jaj. Inkubacja trwa 28-30 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Żyje w parach lub małych stadach. U gatunku tego w ystępuje wyraźny dymorfizm płciowy. Samce posiadają nad dziobem charakterystyczny, okrągły wyrostek, który znacznie powiększa się przed okresem lęgowym.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/dziwonos/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/dziwonos1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/dziwonos11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "podgorzalka"
+		},
+		"language": "pl",
+		"name": "Podgorzałka",
+		"nameLatin": "Aythia nyroca",
+		"occurrence": "Południowo – wschodnia Europa, Azja środkowa, północna Afryka.",
+		"environment": "Płytkie stawy i jeziora z pasem trzcinowisk, czasem bardzo małe zbiorniki wodne.",
+		"food": "Rośliny wodne, owady i ich larwy, ślimaki, kijanki i młode żabki. W poszukiwaniu pożywienia nurkuje.",
+		"division": "BIRD",
+		"multiplication": "Do gniazda zbudowanego w gęstych szuwarach samica składa 7-11 jaj. Okres inkubacji wynosi około 25 dni. Lęgi poprzedzone są bardzo widowiskowymi tokami.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Według Polskiej Czerwonej Księgi jest to gatunek silnie zagrożony wyginięciem na terenie Polski.",
+		"facts": "W Polsce jest nielicznym ptakiem lęgowym.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/podgorzalka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/podgorzalka11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/podgorzalka2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "helmiatka"
+		},
+		"language": "pl",
+		"name": "Hełmiatka",
+		"nameLatin": "Netta rufina",
+		"occurrence": "Od Półwyspu Iberyjskiego po Azję Środkową. Zimuje w basenie Morza Śródziemnego.",
+		"environment": "Jeziora zarośnięte szuwarami, otwarte zbiorniki wodne nieporośnięte roślinnością, zimą również zatoki morskie.",
+		"food": "Głównie zielone części roślin wodnych, młode pędy, korzonki, nasiona, kłącza. Dietę uzupełnia pokarmem zwierzęcym – mięczakami, skorupiakami, owadami, małymi rybami, płazami. Żeruje na wodzie, czasem nurkuje na głębokość do 4 m.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje pojedynczo lub w małych koloniach w pobliżu zbiorników wodnych. W zniesieniu znajduje się 7-10 jaj, wysiadywanych przez 28 dni. Matka wodzi kaczęta przez okres około 2 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) i Polskiej Czerwonej Księgi gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "W Polsce jest nielicznym ptakiem lęgowym. Gnieździ się na Mazurach, w pozostałych rejonach kraju bardzo rzadka.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/helmiatka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/helmiatka-3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/helmiatka.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/helmiatka11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/helmiatka2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/helmiatka3.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "flaming-rozowy"
+		},
+		"language": "pl",
+		"name": "Flaming różowy",
+		"nameLatin": "Phoenicopterus ruber roseus",
+		"occurrence": "Południowa Europa, zachodnie wybrzeże Atlantyku, Afryka, Indie.  Jest najszerzej rozprzestrzenionym gatunkiem flaminga.",
+		"environment": "Słone laguny, brzegi jezior, rozlewiska rzek.",
+		"food": "Drobne mięczaki, skorupiaki, owady i pokarm roślinny.",
+		"division": "BIRD",
+		"multiplication": "Do gniazda w kształcie kopca, zbudowanego z mułu samica składa zazwyczaj 1 jajo. Szaro upierzone młode wylęgają się po okresie inkubacji trwającym około 30 dni. Dojrzałość płciową uzyskują po 5-6 latach. Gatunek ten gniazduje w koloniach, liczących nawet do kilku tysięcy osobników.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Dziób flaminga jest mocno zakrzywiony. Po zanurzeniu w wodzie płaska szczęka górna znajduje się u dołu, a znacznie masywniejsza żuchwa u góry. Pompującymi ruchami gardła ptak wciąga wodę końcem dzioba i wyciska ją u jego nasady. Grzebyki rogowych blaszek na brzegach dzioba działają jak filtry, odcedzając pokarm.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/flaming-rozowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/flamingi1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/flamingi2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/flamingi3.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bocian-bialy"
+		},
+		"language": "pl",
+		"name": "Bocian biały",
+		"nameLatin": "Ciconia ciconia",
+		"occurrence": "Gniazduje w Europie (na północy po Finlandię),  w północno-zachodniej Afryce i Azji południowo-zachodniej (na wschodzie po południowy Kazachstan). Zimuje w Afryce od tropikalnej Afryki Subsaharyjskiej po Republikę Południowej Afryki i w Indiach.",
+		"environment": "Tereny podmokłe z grupami drzew, krajobraz rolniczy w pobliżu siedzib ludzkich.",
+		"food": "Gryzonie, ssaki owadożerne, płazy, duże owady, ryby, dżdżownice, jaja i pisklęta ptaków.",
+		"division": "BIRD",
+		"multiplication": "W zniesieniu 3-6 jaj, wysiadywanych przez 33-34 dni przez oboje rodziców. Pisklęta przebywają w gnieździe 2 miesiące, rodzice wspólnie się nimi opiekują. Gniazda budowane są na drzewach, wieżach, dachach domów, na słupach telegraficznych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Już w sierpniu i wrześniu bociany gromadzą się w duże stada, liczące nawet około 50 osobników. Zgromadzenia te nazywane &#8222;sejmikami bocianimi&#8221; poprzedzają wędrówkę z letnich lęgowisk na zimowiska w Afryce.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bocian-bialy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-bialy11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-bialy2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "bocian-czarny"
+		},
+		"language": "pl",
+		"name": "Bocian czarny",
+		"nameLatin": "Ciconia nigra",
+		"occurrence": "Azja, środkowa i wschodnia Europa oraz Półwysep Iberyjski. Zimuje w Afryce i Azji południowej.",
+		"environment": "Rozległe, podmokłe lasy, obfitujące w zbiorniki wodne, śródleśne bagna i łąki, brzegi rzek w dolinach górskich.",
+		"food": "Ryby, płazy, inne drobne kręgowce i owady.",
+		"division": "BIRD",
+		"multiplication": "W zniesieniu 3-5 jaj, okres inkubacji wynosi 30-40 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB. Wokół zajętych gniazd tego gatunku obowiązują w Polsce strefy ochronne.",
+		"facts": "W naszym kraju jest nielicznym ptakiem lęgowym. Unika sąsiedztwa człowieka, jest dużo bardziej płochliwy od bociana białego.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/bocian-czarny/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-czarny1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-czarny11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "marabut-afrykanski"
+		},
+		"language": "pl",
+		"name": "Marabut afrykański",
+		"nameLatin": "Leptoptilos crumeniferus",
+		"occurrence": "Środkowa i wschodnia Afryka.",
+		"environment": "Sawanna, mokradła, brzegi zbiorników wodnych, spotykany również w pobliżu osad rybackich, rzeźni i na wysypiskach śmieci.",
+		"food": "Głównie padlina. Dietę uzupełnia rybami, gryzoniami, jaszczurkami, wężami, ptakami, owadami.",
+		"division": "BIRD",
+		"multiplication": "Gniazda zakłada wysoko na drzewach. Tworzy kolonie liczące 20-60 par. W zniesieniu 2-3 jaja, po około 30 dniach wykluwają się pisklęta.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Potężny krewniak naszego bociana, osiągający 150 cm wzrostu i do 9 kg masy ciała. Rozpiętość skrzydeł u tego gatunku dochodzi do 3 metrów.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/marabut-afrykanski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/marabut-afrykanski.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/marabut-afrykanski1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/marabut-afrykanski21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "ibis-purpurowy"
+		},
+		"language": "pl",
+		"name": "Ibis purpurowy",
+		"nameLatin": "Eudocimus ruber",
+		"occurrence": "Północna część Ameryki Południowej.",
+		"environment": "Mokradła, pola ryżowe, zarośla mangrowe, płytkie jeziora.",
+		"food": "Skorupiaki, owady, mięczaki, narybek.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w koloniach, często wspólnie z innymi gatunkami ibisów i czaplami. Gniazdo budowane jest na drzewie. W zniesieniu znajdują się zwykle 2 jaja, okres inkubacji wynosi 21-23 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Dziób ibisa – cienki, długi i łukowato zagięty w dół jest narzędziem służącym do sondowania miękkich mułów lub wody w poszukiwaniu pożywienia.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/ibis-purpurowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ibis-purpurowy1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ibis-purpurowy11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "czapla-nadobna"
+		},
+		"language": "pl",
+		"name": "Czapla nadobna",
+		"nameLatin": "Egretta garzetta",
+		"occurrence": "Południowa Europa, południowa Azja, wschodnia i zachodnia Afryka, wchodnia Australia.",
+		"environment": "Tereny położone nad ujściami rzek, bagna i inne obszary podmokłe.",
+		"food": "Ryby, żaby, owady wodne, szarańczaki, ważki, drobne zwierzęta lądowe. W wodzie wypłaszają zwierzęta wodne z ich kryjówek poruszając szybko długimi palcami nóg.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje kolonijnie, często z innymi gatunkami ptaków brodzących, a także z kormoranami. Wyprowadza 1 lęg w roku. W zniesieniu znajduje się najczęściej 3-5 jaj, wysiadywanych 21-22 dni. Młode przebywają w gnieździe około 30 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Na początku XX wieku panowała moda na kapelusze z ozdobnymi piórami czapli nadobnych. Spowodowało to zniszczenie wielu kolonii i śmierć ptaków, od których pozyskiwano pióra.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/czapla-nadobna/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/czapla-nadobna1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/czapla-nadobna11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kondor-wielki"
+		},
+		"language": "pl",
+		"name": "Kondor wielki",
+		"nameLatin": "Vultur gryphus",
+		"occurrence": "Andy od Wenezueli do Ziemi Ognistej.",
+		"environment": "Wysokie partie gór do wysokości 5000 m n.p.m.",
+		"food": "Głównie padlina ssaków lądowych i morskich, ptasie jaja. Zdobyczy wypatruje szybując wysoko w powietrzu.",
+		"division": "BIRD",
+		"multiplication": "Gnieździ się we wnękach półek skalnych na wysokich urwiskach. W zniesieniu 1 jajo, wysiadywane przez oboje rodziców około 60 dni. Młode osiąga zdolność do lotu po około 6 miesiącach, a dojrzałość płciową dopiero po 6 latach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na I Załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Największy ptak drapieżny świata o rozpiętości skrzydeł do 3, 2 m i wadze do 15 kg. Regularne przychówki od tego gatunku są wielkim sukcesem hodowlanym naszego Zoo.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kondor-wielki/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki4.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki5.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki6.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "sep-kasztanowaty"
+		},
+		"language": "pl",
+		"name": "Sęp kasztanowaty",
+		"nameLatin": "Aegypius monachus",
+		"occurrence": "Południowa Palearktyka. Zamieszkuje Półwysep Iberyjski, Bałkany, pasma górskie Azji aż po Pacyfik. Zimuje w Sudanie, Pakistanie, Indiach, Korei, na Środkowym Wschodzie.",
+		"environment": "Wyżej położone zadrzewione obszary, lasy górskie, łąki, stepy.",
+		"food": "Głównie padlina, rzadziej poluje na żywe zwierzęta.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo zakłada najczęściej wysoko na drzewach, rzadziej na skałach. W zniesieniu zwykle 1 jajo, okres inkubacji trwa 54-56 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na II Załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Przypuszcza się, że ptak ten mógł w XIX wieku gnieździć się w Tatrach.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/sep-kasztanowaty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sep-kasztanowaty.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sep-kasztanowaty11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "orzel-cesarski"
+		},
+		"language": "pl",
+		"name": "Orzeł cesarski",
+		"nameLatin": "Aquila heliaca",
+		"occurrence": "Europa południowo-wschodnia, Półwysep Pirenejski, południowo-zachodnia i środkowa Azja.",
+		"environment": "Stepy i inne otwarte tereny nizinne porośnięte niewielkimi lasami.",
+		"food": "Susły, chomiki, króliki i ptaki średniej wielkości.",
+		"division": "BIRD",
+		"multiplication": "Łączy się w pary na całe życie. W zniesieniu zwykle 2-3 jaja, wysiadywane przez samicę przez 43 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU &#8211; narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Zagraża mu zagospodarowywanie stepów, powodujące ograniczenie bazy pokarmowej.",
+		"facts": "Orły cesarskie żyjące w Europie są ptakami wędrownymi, zimują w Afryce i Azji. Do Polski zalatują wyjątkowo.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/orzel-cesarski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-cesarski1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zuraw-koroniasty-wschodni"
+		},
+		"language": "pl",
+		"name": "Żuraw koroniasty wschodni",
+		"nameLatin": "Balearica regulorum gibbericeps",
+		"occurrence": "Wschodnia i południowa Afryka.",
+		"environment": "Podmokłe tereny w pobliżu jezior i rzek.",
+		"food": "Małe kręgowce, owady, pokarm roślinny.",
+		"division": "BIRD",
+		"multiplication": "Gniazdo buduje najczęściej na ziemi, bardzo rzadko na drzewie. Samica składa 1-4 jaja. Ich wysiadywaniem i opieką nad potomstwem zajmują się oboje rodzice. Inkubacja trwa 28-31 dni. Młode osiągają dojrzałość płciową w trzecim roku życia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Podobizna tego ptaka stanowi element godła państwowego Ugandy.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zuraw-koroniasty-wschodni/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty3.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zuraw-mandzurski"
+		},
+		"language": "pl",
+		"name": "Żuraw mandżurski",
+		"nameLatin": "Grus japonensis",
+		"occurrence": "Japońska wyspa Hokkaido, północno-wschodnie Chiny, południowo-wschodnia Rosja. Zimuje w Korei i we wschodnich Chinach.",
+		"environment": "Bagna, pola ryżowe, podmokłe łąki.",
+		"food": "Ryby, gryzonie, płazy, owady, trawy i inne rośliny.",
+		"division": "BIRD",
+		"multiplication": "W okresie godowym żurawie wykonują bardzo efektowne tańce. Samica składa 2 jaja, inkubacja trwa 29-34 dni. Młode osiągają dojrzałość płciową w wieku 3-4 lat.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP. Liczebność populacji tych ptaków szacuje się na zaledwie 1700-2000 osobników.",
+		"facts": "Jest to drugi pod względem wielkości przedstawiciel rodziny żurawiowatych.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zuraw-mandzurski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-mandzurski11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-mandzurski2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "golabek-diamentowy"
+		},
+		"language": "pl",
+		"name": "Gołąbek diamentowy",
+		"nameLatin": "Geopelia cuneata",
+		"occurrence": "Rozległe obszary Australii, z wyjątkiem wybrzeża na południu, wschodzie i zachodzie.",
+		"environment": "Tereny porośnięte krzewami, chętnie w pobliżu rzek lub zbiorników wodnych, łąki.",
+		"food": "Nasiona, młode pędy roślin, larwy owadów. Żeruje najczęściej na ziemi.",
+		"division": "BIRD",
+		"multiplication": "Niedbale wykonane gniazdo budują oboje rodzice, na zmianę wysiadują jaja i wspólnie opiekują się młodymi. W zniesieniu znajdują się 2 jaja, okres inkubacji wynosi 13 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Gatunek chętnie hodowany w domach jako ptak ozdobny. W naturze doskonale przystosowany do gorącego i suchego klimatu wnętrza kontynentu australijskiego.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/golabek-diamentowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/golabek-diamentowy1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "koroniec-plamoczuby"
+		},
+		"language": "pl",
+		"name": "Koroniec plamoczuby",
+		"nameLatin": "Goura victoria",
+		"occurrence": "Nowa Gwinea",
+		"environment": "Tereny podmokłe, bagna, lasy.",
+		"food": "Głównie jagody i nasiona.",
+		"division": "BIRD",
+		"multiplication": "W zniesieniu 1 jajo, okres inkubacji wynosi 30 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB. W naturze zagrożony z powodu degradacji środowiska, nielegalnych odłowów i polowań.",
+		"facts": "Największy z żyjących gołębi. Jest ptakiem naziemnym, w razie niebezpieczeństwa chroni się na drzewach.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/koroniec-plamoczuby/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/koroniec-plamoczuby1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/koroniec-plamoczuby11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/koroniec-plamoczuby2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lorysa-gorska"
+		},
+		"language": "pl",
+		"name": "Lorysa górska",
+		"nameLatin": "Trichoglossus haematodus",
+		"occurrence": "Wschodnie, północne i południowe wybrzeża Australii, Tasmania, Nowa Gwinea, Nowa Kaledonia, okoliczne wyspy Pacyfiku.",
+		"environment": "Obrzeża lasów, lasy różnego typu, zadrzewione tereny podmokłe, sawanna, plantacje palm kokosowych, tereny położone w pobliżu siedzib ludzkich.",
+		"food": "Owoce, nasiona, nektar.",
+		"division": "BIRD",
+		"multiplication": "Gnieździ się w dziuplach drzew. Na małych atolach wolnych od drapieżników zakłada gniazda na ziemi. W zniesieniu 1-3 jaj, okres inkubacji wynosi około 25 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Wyróżniono 20 podgatunków lorysy górskiej, różniących się ubarwieniem.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lorysa-gorska/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/lorysa-gorska1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "aleksandretta-rozana"
+		},
+		"language": "pl",
+		"name": "Aleksandretta różana",
+		"nameLatin": "Psittacula alexandri",
+		"occurrence": "Północne Indie, Nepal, Birma, Tajlandia, południowe Chiny.",
+		"environment": "Lasy do wysokości około 2000 m n.p.m, plantacje ryżu.",
+		"food": "Nasiona, orzechy, owoce.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w dziuplach. Samica składa 3-4 jaja, wysiaduje je około 28 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Żyje w stadach. Może wyrządzać znaczne szkody na plantacjach ryżu.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/aleksandretta-rozana/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/aleksandretta-rozana1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zako-kongijskie"
+		},
+		"language": "pl",
+		"name": "Żako kongijskie",
+		"nameLatin": "Psittacus erithacus",
+		"occurrence": "Środkowo-zachodnia Afryka.",
+		"environment": "Wilgotne lasy nizinne, galeriowe, mangrowe, sawanna z rzadka porośnięta drzewami, obszary uprawne.",
+		"food": "Owoce, nasiona, ziarno zbóż, ryżu i kukurydzy.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w dziupli wysokiego drzewa. W zniesieniu 2-4 jaja. Inkubacja trwa 21-30 dni. Młode opuszczają gniazdo po około 10 tygodniach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "W niewoli szybko się oswaja. Doskonale potrafi naśladować ludzką mowę.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zako-kongijskie/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zako-kongijskie1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zako-kongijskie11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "ara-zielona"
+		},
+		"language": "pl",
+		"name": "Ara zielona",
+		"nameLatin": "Ara militaris",
+		"occurrence": "Meksyk, Kolumbia, Ekwador, Peru, Boliwia, Argentyna.",
+		"environment": "Lasy deszczowe i górskie do wysokości 2600 m n.p.m.",
+		"food": "Nasiona palm, orzechy, owoce. Ptaki te mogą wyrządzać szkody na plantacjach kukurydzy i w sadach.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w dziuplach i szczelinach klifów i skarp. W zniesieniu 2-3 jaja.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU &#8211; narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Papuga ta jest znana w Europie od początku XVII wieku. Trzymana w domach oswojona ara zielona jest wyjątkowo łagodna, skora do zabawy i pieszczot. Cierpliwie uczona, potrafi naśladować mowę człowieka.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/ara-zielona/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ara-zielona1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "mnicha"
+		},
+		"language": "pl",
+		"name": "Mnicha",
+		"nameLatin": "Myiopsitta monachus",
+		"occurrence": "Argentyna, Paragwaj, Urugwaj, Boliwia, Brazylia. Introdukowana w wielu rejonach świata (m.in. w Wielkiej Brytanii i Hiszpanii).",
+		"environment": "Lasy, tereny rolnicze. Przystosowała się do życia w miastach.",
+		"food": "Nasiona, owoce, młode pędy drzew, owady i ich larwy.",
+		"division": "BIRD",
+		"multiplication": "Gnieździ się w koloniach, buduje duże gniazda z patyków, których waga może dochodzić do 200 kg. Bywają one zasiedlane przez kilka par zajmujących odrębne komory lęgowe. W zniesieniu do 11 jaj, okres inkubacji wynosi około 24 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Jest gatunkiem dobrze przystosowanym do chłodnego klimatu. Wyhodowano kilka odmian kolorystycznych.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/mnicha/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/mnicha1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "konura-nandaj"
+		},
+		"language": "pl",
+		"name": "Konura nandaj",
+		"nameLatin": "Nandayus nenday",
+		"occurrence": "Boliwia, Brazylia, Paragwaj, Argentyna.",
+		"environment": "Lasy galeriowe, sawanny, pastwiska, zarośla.",
+		"food": "Nasiona, owoce, kwiaty, pączki drzew i krzewów.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w dziuplach drzew. W zniesieniu zwykle 4 jaja, okres inkubacji wynosi 21-23 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "W hodowli ptaki te szybko się oswajają. Są bardzo hałaśliwe.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/konura-nandaj/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/konura-nandaj1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "puchacz"
+		},
+		"language": "pl",
+		"name": "Puchacz",
+		"nameLatin": "Bubo bubo",
+		"occurrence": "Europa i Azja z wyjątkiem obszarów położonych na północy tych kontynentów.",
+		"environment": "Duże kompleksy leśne, często w pobliżu terenów otwartych lub dużych śródleśnych jezior, również olsy, łęgi.",
+		"food": "Małe i średniej wielkości ssaki i ptaki. Poluje m. in. na jeże, wiewórki, gryzonie, gołębie, kuropatwy, wrony, kaczki, łyski.",
+		"division": "BIRD",
+		"multiplication": "Gnieździ się w opuszczonych gniazdach ptaków drapieżnych, pod wykrotami na ziemi lub na półce skalnej. W zniesieniu 2-4 jaja, wysiadywane przez samicę 34-36 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Według Polskiej Czerwonej Księgi jest to gatunek bliski zagrożenia wyginięciem na terenie Polski.",
+		"facts": "To największa sowa europejska. Jest monogamiczna, pary przebywają razem przez całe życie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/puchacz/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puchacz1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "sowa-sniezna"
+		},
+		"language": "pl",
+		"name": "Sowa śnieżna",
+		"nameLatin": "Nyctea scandiaca",
+		"occurrence": "Północne rejony Eurazji i Ameryki Północnej.",
+		"environment": "Tundra, wrzosowiska, tereny przybrzeżne.",
+		"food": "Gryzonie, głównie lemingi, ptaki, sporadycznie ryby, płazy, skorupiaki, chrząszcze.",
+		"division": "BIRD",
+		"multiplication": "Gnieździ się na wyżej położonych, pagórkowatych torfowiskach i w zagłębieniach terenu. Samica składa od 3 do 10 jaj. Po 31-33 dniach wykluwają się szarobiałe pisklęta. Samiec aktywnie uczestniczy w odchowie młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "W gatunku tego występuje dymorfizm płciowy – samiec jest niemal całkowicie biało ubarwiony, samica jest większa, obficie cętkowana. W Polsce bardzo rzadko obserwowana na północy kraju.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/sowa-sniezna/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sowa-sniezna.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sowa-sniezna1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sowa-sniezna21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "puszczyk"
+		},
+		"language": "pl",
+		"name": "Puszczyk",
+		"nameLatin": "Strix aluco",
+		"occurrence": "Niemal cała Europa, północna Afryka, Azja (północno-zachodnie Indie, południowe Chiny, Korea, Tajwan).",
+		"environment": "Lasy liściaste i mieszane, parki, zadrzewienia w pobliżu siedzib ludzkich. Spotykany nawet w centrum dużych miast.",
+		"food": "Gryzonie, ptaki do wielkości bażanta, żaby, owady, padlina.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w obszernych dziuplach, opuszczonych gniazdach innych ptaków, szczelinach skalnych, zabudowaniach. Chętnie zajmuje odpowiednie skrzynki lęgowe. W zniesieniu 2-4 jaja, inkubacja trwa 28-30 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Puszczyk jest najpospolitszą sową Palearktyki. Prowadzi najbardziej nocny tryb życia spośród wszystkich sów Europy.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/puszczyk/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "puszczyk-mszarny"
+		},
+		"language": "pl",
+		"name": "Puszczyk mszarny",
+		"nameLatin": "Strix nebulosa",
+		"occurrence": "Północne rejony Europy, Azji i Ameryki Północnej.",
+		"environment": "Tajga, borealne regiony górskie, torfowiska, lasotundra z gęstymi zaroślami.",
+		"food": "Głównie gryzonie. Poluje również na ptaki, żaby, duże owady, wiewiórki, zające.",
+		"division": "BIRD",
+		"multiplication": "Gniazduje w opuszczonych gniazdach ptaków drapieżnych, czasem odbierając je prawowitym właścicielom. Gnieździ się również w złomach grubych pni drzew. W zniesieniu zwykle 3-4 jaja, samica wysiaduje je 28-30 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) i Polskiej Czerwonej Księgi gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "W Polsce po roku 1945 gatunek ten pojawiał się nieregularnie na terenie Puszczy Białowieskiej. Po roku 2010 stwierdzono jego lęgi na Polesiu Lubelskim.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/puszczyk-mszarny/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-mszarny1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-mszarny11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "puszczyk-uralski"
+		},
+		"language": "pl",
+		"name": "Puszczyk uralski",
+		"nameLatin": "Strix uralensis",
+		"occurrence": "Eurazja: od Skandynawii i krajów nadbałtyckich aż po Morze Japońskie oraz wyspowe obszary Karpat, Alp i Gór Dynarskich.",
+		"environment": "Puszcze, duże kompleksy leśne, zarówno iglaste, jak i mieszane.",
+		"food": "Gryzonie leśne, młode zające, drobne i średniej wielkości ptaki. Dietę uzupełnia płazami, jaszczurkami, owadami.",
+		"division": "BIRD",
+		"multiplication": "Gnieździ się w dużych dziuplach lub opuszczonych gniazdach ptaków drapieżnych. W zniesieniu zwykle 2-4 jaja, wysiadywane przez samicę 28-34 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) i Polskiej Czerwonej Księgi gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Nasz ogród uczestniczył w programie reintrodukcji puszczyka uralskiego, realizowanym od roku 2009 w północno-wschodnich Alpach. Celem było przywrócenie tego gatunku na obszary dawnego występowania.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/puszczyk-uralski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-uralski1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-uralski11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "wiklacz-ognisty"
+		},
+		"language": "pl",
+		"name": "Wikłacz ognisty",
+		"nameLatin": "Euplectes orix",
+		"occurrence": "Środkowa i południowa Afryka",
+		"environment": "Suche sawanny, lasy galeriowe, uprawy w pobliżu osad ludzkich i zakrzewienia wzdłuż strumieni.",
+		"food": "Głównie nasiona traw i innych roślin, nektar, jagody, owady. Powodują duże straty w uprawach.",
+		"division": "BIRD",
+		"multiplication": "Samiec łączy się z 2-3 samicami. Charakterystyczne gniazdo wikłaczy ma kształt spłaszczonej kuli. W zniesieniu 2-4 jaja. Wysiaduje tylko samica przez 12-15 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc &#8211; oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Wikłacze gromadzą się w duże, hałaśliwe stada. Nazwa tego ptaka związana jest ze sposobem, w jaki buduje on swoje kunsztowne gniazdo.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/wiklacz-ognisty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/wiklacz-ogniasty1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kuskus-ziemny"
+		},
+		"language": "pl",
+		"name": "Kuskus ziemny",
+		"nameLatin": "Phalanger gymnotis",
+		"occurrence": "Nowa Gwinea i wyspa Aru.",
+		"environment": "Lasy równikowe.",
+		"food": "Zwierzę wszystkożerne. Chętnie zjada liście, pąki i pędy roślin, a także pokarm zwierzęcy &#8211; ptasie jaja, pisklęta i owady.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 2 tygodnie. Po tym czasie rodzi się młode, którego dalszy rozwój przebiega w matczynej torbie.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kuskus-ziemny/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kuskus-ziemny2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kuskus-ziemny12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lotopalanka-mala"
+		},
+		"language": "pl",
+		"name": "Lotopałanka mała",
+		"nameLatin": "Petaurus breviceps",
+		"occurrence": "Australia, Nowa Gwinea.",
+		"environment": "Lasy deszczowe, plantacje orzechów kokosowych, zarośla.",
+		"food": "Małe bezkręgowce oraz soki roślinne i owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 21 dni. Samica rodzi 2-3 młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Charakterystyczną cechą tego zwierzęcia jest występowanie fałdów skórnych, znajdujących się po bokach ciała pomiędzy przednimi, a tylnymi kończynami. Dzięki temu powstaje powierzchnia nośna, która pozwala lotopałance przemieszczać się lotem ślizgowym na odległość do około 50 metrów",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lotopalanka-mala/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lotopałanka-mała.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "walabia-benetta"
+		},
+		"language": "pl",
+		"name": "Walabia Benetta",
+		"nameLatin": "Macropus rufogriseus",
+		"occurrence": "Wschodnia i południowo-wschodnia Australia oraz Tasmania.",
+		"environment": "Zamieszkuje otwarte tereny przybrzeżne.",
+		"food": "Typowy roślinożerca. Żywi się głównie liśćmi i trawą.",
+		"division": "MAMMAL",
+		"multiplication": "Po krótkim, około 35 – dniowym okresie ciąży samica rodzi młode wielkości ziarna fasoli, nagie i ślepe. Wędruje ono wzdłuż wylizanej przez matkę trasy od jej dróg rodnych do wnętrza torby. Tam obejmuje pyszczkiem sutek matki i rozwija się dalej przez około 7 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "W naszym ZOO regularnie się rozmnaża Poczucie bezpieczeństwa w torbie matki jest tak mocne, że w razie niebezpieczeństwa nawet już wyrośnięty, prawie dorosły osobnik szuka tam schronienia.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/walabia-benetta/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/walabia-Benetta2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "slon-indyjski"
+		},
+		"language": "pl",
+		"name": "Słoń indyjski",
+		"nameLatin": "Elephas maximus",
+		"occurrence": "Indie, Chiny, Cejlon, Sumatra, Borneo.",
+		"environment": "Słoń indyjski zamieszkuje zróżnicowane środowiska  – od gęstej dżungli po otwarte tereny trawiaste.",
+		"food": "Trawa, liście, miękkie pędy roślin, owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 21 miesięcy. Rodzi się jedno młode ważące do 100 kg.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Objęty programem EEP.",
+		"facts": "W Azji wykorzystywany jako zwierzę pociągowe, juczne i wierzchowe. Słonie prowadzą stadny tryb życia. Przewodnikiem stada jest stara samica.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/slon-indyjski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/słonie-indyjskie1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/słonie-indyjskie11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/slon-indyjski1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pancernik-wlochaty"
+		},
+		"language": "pl",
+		"name": "Pancernik włochaty",
+		"nameLatin": "Chaetophractus villosus",
+		"occurrence": "Argentyna, Boliwia, Chile i Urugwaj.",
+		"environment": "Zamieszkuje łąki, lasy, sawanny, tereny rolnicze, pampy - typowe dla Ameryki Południowej środowisko o charakterze stepowym.",
+		"food": "Głównie bezkręgowce, a także małe kręgowce, owoce, padlina.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 2 miesiące rodzą się najczęściej 2 młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jest zwierzęciem doskonale przystosowanym do kopania podziemnych korytarzy. Aktywny głównie nocą.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/pancernik-wlochaty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pancernik-włochaty3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pancernik-włochaty11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "leniwiec-dwupalczasty"
+		},
+		"language": "pl",
+		"name": "Leniwiec dwupalczasty",
+		"nameLatin": "Choloepus didactylus",
+		"occurrence": "Wenezuela, Gujana i północna Brazylia.",
+		"environment": "Wilgotne lasy nizinne.",
+		"food": "Liście, pędy roślin i owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 10 miesięcy. W miocie tylko jedno młode, które przyczepia się do włosów na piersi i brzuchu matki.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Jego przednie, dwupalczaste kończyny zakończone są potężnymi pazurami. Długie, wełniste futro leniwców żyjących na wolności porośnięte jest glonami, a pomiędzy włosami bytują ćmy i chrząszcze.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/leniwiec-dwupalczasty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/leniwiec-dwupalczasty2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lemur-czerwonobrzuchy"
+		},
+		"language": "pl",
+		"name": "Lemur czerwonobrzuchy",
+		"nameLatin": "Eulemur rubriventer",
+		"occurrence": "Madagaskar.",
+		"environment": "Lasy deszczowe.",
+		"food": "Owoce, pędy, bezkręgowce, drobne kręgowce.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 120 dni samica rodzi jedno młode, które jest noszone przez rodziców do około 35 dnia życia. Później opiekuje się nim głównie samiec. Matka karmi młode do piątego miesiąca życia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Żyje w grupach liczących 2 do 6 osobników. Grupa zajmuje terytorium około 20 ha.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lemur-czerwonobrzuchy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lemur-czerwonobrzuchy3.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lemur-katta"
+		},
+		"language": "pl",
+		"name": "Lemur katta",
+		"nameLatin": "Lemur catta",
+		"occurrence": "Południowo-zachodnia część Madagaskaru.",
+		"environment": "Suche, otwarte tereny, rzadziej lasy.",
+		"food": "Owoce, nasiona, liście, młode pędy roślin, kwiaty i drobne bezkręgowce.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 134-138 dni. Samica rodzi zazwyczaj 1, czasem 2 młode o masie 50-80 g, które po urodzeniu przyczepiają się do futra matki. Matka opiekuje się młodymi przez 6 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Lemur katta jest jedynym lemurem prowadzącym naziemny tryb życia. Jak wszystkie lemury należy do małpiatek &#8211; najprymitywniejszej grupy zwierząt naczelnych. Jest aktywny w dzień, co jest cechą rzadko spotykaną u lemurowatych. Żyje w grupach liczących od 5 do 20 osobników.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lemur-katta/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lemur-katta3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lemur-katta12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lemur-katta21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lemur-wari"
+		},
+		"language": "pl",
+		"name": "Lemur wari",
+		"nameLatin": "Varecia rubra",
+		"occurrence": "Wschodni Madagaskar.",
+		"environment": "Tropikalne lasy deszczowe.",
+		"food": "Roślinożerny. Chętnie zjada owoce. Dietę uzupełnia nasionami, liśćmi i nektarem.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 100 dni samica rodzi zwykle 2-3 młode, które początkowo przebywają w gnieździe zbudowanym na drzewie.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii CR – krytycznie zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, Europejskim Programem Hodowlanym EEP.",
+		"facts": "Największy spośród lemurów. Dawniej czczony jako zwierzę święte. Jest aktywny nocą. Żyje w grupach liczących 2 do 5 osobników.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/wari-rudy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wari-rudy2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lori-maly"
+		},
+		"language": "pl",
+		"name": "Lori mały",
+		"nameLatin": "Nycticebus pygmaeus",
+		"occurrence": "Wietnam, Laos, Chiny i Kambodża.",
+		"environment": "Lasy deszczowe.",
+		"food": "Owady, mięczaki, jaja, jaszczurki, ptaki, małe ssaki, owoce i inne części roślin.",
+		"division": "MAMMAL",
+		"multiplication": "Po trwającej ok. 190 dni ciąży samica rodzi 1–2 młode, które karmi mlekiem przez około 9 miesięcy. Młode po narodzinach są w pełni rozwinięte i pokryte futrem.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, Europejskim Programem Hodowlanym EEP.",
+		"facts": "Prowadzą nocny tryb życia, dzień przesypiają zwinięte w kłębek. Żyją w luźnych stadach złożonych z 1 samca i kilku samic. Mają doskonale rozwinięty zmysł wzroku i węchu.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lori-maly/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lori-mały2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lori-mały12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "marmozeta-bialoczelna"
+		},
+		"language": "pl",
+		"name": "Marmozeta białoczelna",
+		"nameLatin": "Callithrix geoffroyi",
+		"occurrence": "Południowo-wschodnia Brazylia.",
+		"environment": "Wilgotne lasy nizinne.",
+		"food": "Owoce, owady, żywica drzew, rzadziej kwiaty, nektar, ślimaki, pająki oraz drobne kręgowce.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 140 dni rodzą się 1-3 młode. Młodymi opiekują się zarówno matka jak i ojciec.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, Europejskim Programem Hodowlanym EEP.",
+		"facts": "Doskonale wspina się po drzewach. Żyje w grupach rodzinnych liczących zwykle od 8 do 10 osobników.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/marmozeta-bialoczelna/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/marmozeta-białoczelna12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lwiatka-zlota"
+		},
+		"language": "pl",
+		"name": "Lwiatka złota",
+		"nameLatin": "Leontopithecus rosalia",
+		"occurrence": "Południowo-wschodnia Brazylia.",
+		"environment": "Nizinny las deszczowy.",
+		"food": "Owoce, nasiona, kwiaty, nektar, żywica, ślimaki, jaszczurki, pająki, owady.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 125-132 dni rodzi się 1-3 młodych, którymi opiekuje się ojciec i matka.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, Europejskim Programem Hodowlanym EEP.",
+		"facts": "Prawie całe swoje życie spędzają na drzewach. Prowadzą dzienny tryb życia. Tworzą grupy złożone z 2-8 osobników. Typowa rodzina składa się z rodziców i ich potomstwa.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lwiatka-zlota/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lwiatka-złota2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "tamaryna-bialoczuba"
+		},
+		"language": "pl",
+		"name": "Tamaryna białoczuba",
+		"nameLatin": "Saguinus oedipus",
+		"occurrence": "Północno-zachodnia Kolumbia.",
+		"environment": "Lasy deszczowe.",
+		"food": "Owoce, owady, pająki, małe kręgowce, ptasie jaja.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 6 miesięcy. Samica rodzi 1-2 młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii CR – krytycznie zagrożony. Na I załączniku Konwencji Waszyngtońskiej. Objęty programem EEP.",
+		"facts": "Prowadzi nadrzewny tryb życia. Jest aktywna w ciągu dnia. Żyje w grupach rodzinnych",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/tamaryna-bialoczuba/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tamaryna-białoczuba-12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tamaryna-białoczuba1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "sajmiri-wiewiorcza"
+		},
+		"language": "pl",
+		"name": "Sajmiri wiewiórcza",
+		"nameLatin": "Saimiri sciureus",
+		"occurrence": "Północna i środkowa część Ameryki Południowej.",
+		"environment": "Wilgotne lasy dorzecza Amazonki.",
+		"food": "Owoce, owady, nektar, pająki, ptasie jaja, młode ptaki, nietoperze.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 160-170 dni rodzi się 1 młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Objęty programem EEP.",
+		"facts": "Małpka sajmiri znana jest z filmu o Pipi Lansztrung. Jej inna nazwa – &#8222;trupia główka&#8221; pochodzi od charakterystycznego rysunku na pysku, przypominającego ludzką czaszkę.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/sajmiri-wiewiorcza/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/sajmiri-wiewiórcza4.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/sajmiri-wiewiórcza11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "mangaba-czarna"
+		},
+		"language": "pl",
+		"name": "Mangaba czarna",
+		"nameLatin": "Lophocebus aterrimus",
+		"occurrence": "Afryka Centralna, na południe od rzeki Kongo.",
+		"environment": "Lasy.",
+		"food": "Głównie owoce i nasiona. Dietę uzupełnia młodymi liśćmi, nektarem, kwiatami, owadami, małymi gadami.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 170 dni. Samica rodzi zazwyczaj jedno młode, które pozostaje pod jej opieką około 1,5 roku.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Małpy te żyją w stadach liczących od kilku do kilkunastu osobników. Mangaby czarne porozumiewają się między sobą wykorzystując mimikę twarzy.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/mangaba-czarna/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mangaba-czarna2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "mandryl"
+		},
+		"language": "pl",
+		"name": "Mandryl",
+		"nameLatin": "Mandrillus sphinx",
+		"occurrence": "Afryka od południowego Kamerunu po Kongo.",
+		"environment": "Lasy równikowe.",
+		"food": "Owoce, nasiona, bulwy, orzechy oraz owady i małe kręgowce.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 250 dni na świat przychodzi jedno młode, którym opiekuje się matka, nosząc je na brzuchu, a potem na grzbiecie.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Żyje w grupach rodzinnych, liczących do 20 osobników, którym przewodzi doświadczony samiec. Czasem kilka takich grup łączy się w duże, luźne zgrupowania.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/mandryl/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mandryl3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mandryl12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mandryl21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "gereza-abisynska"
+		},
+		"language": "pl",
+		"name": "Gereza abisyńska",
+		"nameLatin": "Colobus guereza",
+		"occurrence": "Środkowa i wschodnia Afryka: Kamerun, Nigeria, Etiopia, Kenia, Tanzania i Czad.",
+		"environment": "Lasy deszczowe, górskie i nizinne centralnej i wschodniej Afryki do wysokości 3300 m n.p.m.",
+		"food": "Liście (najchętniej młode), owoce, pączki liści i kwiatów.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 160-170 dni rodzi się jedno młode. W przeciwieństwie do osobników dorosłych, skóra noworodka jest różowa, a jego futerko białe. W trzecim tygodniu życia uszy i skóra na twarzy malucha zaczynają stopniowo zmieniać kolor na szary. Z czasem młode coraz bardziej upodabnia się do dorosłych, czarno-białych małp.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Gerezy prowadzą dzienny tryb życia. Posiadają tylko cztery palce u każdej ręki. Kciuk jest nieobecny, lub zastąpiony przez niewielki paliczkowy guzek, co może być formą przystosowania do sprawniejszego poruszania się po drzewach.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/gereza-abisynska/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gereza-abisyńska-12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gereza-abisyńska3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gereza-abisyńska23.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lutung-jawajski"
+		},
+		"language": "pl",
+		"name": "Lutung jawajski",
+		"nameLatin": "Trachypithecus auratus auratus",
+		"occurrence": "Jawa, Bali i Indonezja.",
+		"environment": "Lasy deszczowe.",
+		"food": "Głównie młode liście z niską zawartością włókna, owoce, kwiaty i owady.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża u tego gatunku trwa 6 miesięcy. Młode po urodzeniu ma zawsze intensywnie pomarańczowy kolor sierści. Opiekują się nim wszystkie samice w grupie.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Małpy te występują w dwóch odmianach barwnych – czarnej i pomarańczowej. Żyją w grupach złożonych z jednego samca i kilku samic z młodymi. Młode samce tworzą grupy kawalerskie lub wędrują samotnie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lutung-jawajski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lutung-s.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "gibbon-bialoreki"
+		},
+		"language": "pl",
+		"name": "Gibbon białoręki",
+		"nameLatin": "Hylobates lar",
+		"occurrence": "Półwysep Indochiński i Sumatra.",
+		"environment": "Wilgotne lasy nizinne, a także lasy górskie do wysokości około 2000 m n.p.m.",
+		"food": "Owoce, liście, pąki, kwiaty, ptasie jaja, młode ptaki, pająki, owady.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 6 miesięcy rodzi się jedno młode, którym początkowo opiekuje się wyłącznie matka, a następnie również ojciec.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Doskonale wspina się i skacze. Porusza się na zasadzie brachiacji &#8211; ruchami wahadłowymi przenosi ciężar ciała z jednej ręki na drugą. Żyje w grupach rodzinnych, liczących do 6 osobników, złożonych z rodziców i młodych",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/gibbon-bialoreki/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gibbon-białoręki3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gibbon-białoręki11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "szympans"
+		},
+		"language": "pl",
+		"name": "Szympans",
+		"nameLatin": "Pan troglodytes",
+		"occurrence": "Środkowa Afryka.",
+		"environment": "Dżungla, sucha sawanna, górskie lasy.",
+		"food": "Pokarm roślinny, owady, małe i średniej wielkości ssaki.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 230 dni przychodzi na świat najczęściej jedno młode, które przez kilka lat zachowuje bliskie więzy z matką.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Żyje we wspólnotach składających się z kilkudziesięciu osobników, podzielonych na luźne grupy o różnej wielkości i strukturze zmieniającej się w czasie. Znaczny rozwój mózgu pozwala szympansom prowadzić bogate życie społeczne i umożliwia im posługiwanie się narzędziami.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/szympans/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/szympans2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "wiewiorka-trojbarwna"
+		},
+		"language": "pl",
+		"name": "Wiewiórka trójbarwna",
+		"nameLatin": "Callosciurus prevostii",
+		"occurrence": "Tajlandia, Indonezja, Malezja.",
+		"environment": "Lasy.",
+		"food": "Owoce, nasiona, orzechy, pączki drzew i krzewów, owady, jaja ptaków.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 40 dni. Młode początkowo przebywają w gnieździe znajdującym się w dziupli lub w rozgałęzieniu konarów drzewa. Jest ono wyścielone miękkimi gałązkami i liśćmi.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Prowadzi nadrzewny tryb życia. Jest aktywna w ciągu dnia.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/wiewiorka-trojbarwna/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wiewiórka-trójbarwna-3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wiewiórka-trójbarwna2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "jezozwierz-indyjski"
+		},
+		"language": "pl",
+		"name": "Jeżozwierz indyjski",
+		"nameLatin": "Hystrix indica",
+		"occurrence": "Azja południowo-zachodnia: Indie, Cejlon, Turkiestan.",
+		"environment": "Suche tereny skaliste, lasy i sawanny.",
+		"food": "Pokarm roślinny, chętnie owoce. Dietę uzupełnia owadami.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 100 dni. Samica rodzi 2–4 młodych, pokrytych miękkimi białymi kolcami.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jego ciało pokryte jest grubymi, szczeciniastymi włosami, które na plecach i ogonie przekształcone są w kolce. Zagrożony, stroszy je, odwraca się do napastnika tyłem i skutecznie broni się miotając ogonem. Jest aktywny nocą.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/jezozwierz-indyjski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/jeżozwierzs.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "rudawka-nilowa"
+		},
+		"language": "pl",
+		"name": "Rudawka nilowa",
+		"nameLatin": "Rousettus aegyptiacus",
+		"occurrence": "Cypr, Afryka, Bliski i Środkowy Wschód po Pakistan.",
+		"environment": "Na schronienia wybiera głównie drzewa i jaskinie.",
+		"food": "Owoce, kwiaty, liście, nektar.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 4 miesięcy rodzi się zwykle jedno młode. Rzadko zdarzają się porody bliźniąt.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Posługuje się echolokacją. Żyje w koloniach.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/rudawka-nilowa/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/rudawka-nilowa2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "karakal"
+		},
+		"language": "pl",
+		"name": "Karakal",
+		"nameLatin": "Caracal caracal",
+		"occurrence": "Afryka, Półwysep Arabski, Azja (Afganistan, Pakistan, Iran, Indie).",
+		"environment": "Sawanny, półpustynie, krzaczaste zarośla.",
+		"food": "Małe ssaki, ptaki, węże, płazy. .",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 70 dni rodzą się 1-3 młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na I Załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Jego zmysły wzroku, słuchu i węchu są doskonale rozwinięte. W dawnych czasach, w Indiach i na Bliskim Wschodzie towarzyszył człowiekowi w polowaniach na zwierzynę płową. Po turecku słowo karakulak oznacza czarne ucho i stąd właśnie wywodzi się nazwa gatunku. Kot ten zwany jest również rysiem stepowym ze względu na obecność charakterystycznych pędzelków na końcach uszu.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/karakal/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/karakal4.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/karakal11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/karakal21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "chaus"
+		},
+		"language": "pl",
+		"name": "Chaus",
+		"nameLatin": "Felis chaus",
+		"occurrence": "Występuje w Egipcie oraz zachodniej, środkowej i południowej Azji aż po Płw. Indochiński.",
+		"environment": "Zamieszkuje gęsto zakrzewione i porośnięte trzcinami brzegi wód.",
+		"food": "Ryby, płazy, małe gady, gryzonie i ptaki. Poluje w dzień i nocą.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 63-68 dni na świat przychodzi 3-5 młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia Na II Załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Chaus zwany kotem bagiennym, błotnym lub trzcinowym został uwieczniony obok kota nubijskiego na ścianach świątyń i papirusach przez starożytnych Egipcjan.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/chaus/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/chaus2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "manul"
+		},
+		"language": "pl",
+		"name": "Manul",
+		"nameLatin": "Otocolobus manul",
+		"occurrence": "Azja Środkowa, Iran, Afganistan, Pakistan,",
+		"environment": "Zamieszkuje stepy, skaliste pustynie, równiny i góry do wysokości 4500 m n.p.m.",
+		"food": "Drobne gryzonie (myszoskoczki, karczowniki, chomiki, wiewiórki),       a także zające i ptaki.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 66-75 dni. W kwietniu lub maju samica rodzi od 4 do 6 młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Angielska nazwa tego kota, &#8222;Pallas cat&#8221;, pochodzi od nazwiska niemieckiego przyrodnika Petera Pallasa, który pierwszy opisał ten gatunek. Manul prowadzi nocny tryb życia. W ciągu dnia ukrywa się w norach innych zwierząt, małych jaskiniach i rozpadlinach skalnych.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/manul/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/manul2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/manul12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zbik"
+		},
+		"language": "pl",
+		"name": "Żbik",
+		"nameLatin": "Felis silvestris",
+		"occurrence": "Południowa i środkowa Europa, Azja Mniejsza, Kaukaz, północna Afryka.",
+		"environment": "Lasy mieszane i liściaste z bogatym podszytem, zakrzaczenia śródpolne, doliny potoków i rzek.",
+		"food": "Drobne gryzonie, ssaki owadożerne, kuraki leśne i inne ptaki, zające, padlina.",
+		"division": "MAMMAL",
+		"multiplication": "Samica po ciąży trwającej 63-68 dni rodzi raz w roku 1-7 kociąt na przełomie maja i czerwca. Matka karmi kocięta przez około 1,5 miesiąca. Młode usamodzielniają się po 5-6 miesiącach, dojrzałość płciową osiągają po 10-12 miesiącach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Według „Polskiej Czerwonej Księgi” jest to gatunek silnie zagrożony wyginięciem na terenie Polski.",
+		"facts": "Żbik przypomina burego kota domowego, jest jednak od niego większy i masywniej zbudowany. Jest samotnikiem aktywnym nocą. Doskonale wspina się po drzewach.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zbik/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żbik3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żbik11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kot-argentynski"
+		},
+		"language": "pl",
+		"name": "Kot argentyński",
+		"nameLatin": "Leopardus geoffroyi",
+		"occurrence": "Boliwijskie i argentyńskie Andy, południowa część Paragwaju i Brazylii, zachodnia część Urugwaju i Chile.",
+		"environment": "Zamieszkuje stepy, lasy, tereny górzyste do wysokości 3300 m n.p.m.",
+		"food": "Gryzonie, ryby, żaby, ptaki, zające.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 62-76 dni samica rodzi 1-3 młode, które osiągają dojrzałość płciową w wieku około 18 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na I Załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Prowadzi nocny tryb życia, dzień przesypia w gęstych zaroślach. Doskonale wspina się po drzewach i świetnie pływa. Gatunek samotniczy, prowadzi nocny tryb życia. Żyje do 15 lat.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kot-argentynski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kot-argentyński3.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kot-arabski"
+		},
+		"language": "pl",
+		"name": "Kot arabski",
+		"nameLatin": "Felis margarita",
+		"occurrence": "Sahara, Półwysep Arabski, zachodni Egipt, pogranicze Pakistanu i Afganistanu.",
+		"environment": "Głównie pustynie, spotykany również na równinach ubogich w roślinność i skalistych dolinach.",
+		"food": "Myszoskoczki, nornikowate, zające, pająki, jaszczurki, ptaki, owady oraz węże.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 59-67 dni na świat przychodzi 2-5 kociąt (najczęściej 3). Dojrzałość płciową osiągają w wieku 9-14 miesięcy",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na II Załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Niektóre plemiona Beduinów uważają kota arabskiego za zwierzę święte.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kot-arabski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kot-arabski2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "ocelot"
+		},
+		"language": "pl",
+		"name": "Ocelot",
+		"nameLatin": "Leopardus pardalis",
+		"occurrence": "Ameryka Środkowa i północna część Ameryki Południowej.",
+		"environment": "Głównie lasy deszczowe, rzadziej spotykany na obszarach porośniętych ciernistymi zaroślami.",
+		"food": "Gryzonie, oposy, króliki, ptaki, małe naczelne, ryby, żaby, owady.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 79-82 dni rodzi się najczęściej 1 młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na I Załączniku Konwencji Waszyngtońskiej. Ze względu na wyjątkowo piękne i cenne futro na koty te intensywnie polowano.",
+		"facts": "Prowadzi nocny tryb życia, dzień przesypia w gęstych zaroślach. Doskonale wspina się po drzewach, dobrze pływa.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/ocelot/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ocelot2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "serwal"
+		},
+		"language": "pl",
+		"name": "Serwal",
+		"nameLatin": "Leptailurus serval",
+		"occurrence": "Afryka na południe od Sahary.",
+		"environment": "Zakrzewione sawanny, stepy.",
+		"food": "Ptaki, gryzonie, zające, płazy, gady, ryby, owady. W czasie polowania siedzi zaczajony w trawie, lokalizuje swoją ofiarę nasłuchując i w pewnym momencie wyskakuje wysoko, spadając na ziemię z wyciągniętymi pazurami dokładnie w miejscu, gdzie znajduje się zdobycz.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 68-74 dni. Przed porodem samica przygotowuje gniazdo w gęstej roślinności lub w gnieździe innego zwierzęcia. W miocie     1-4 kociąt (zwykle 2). W 4 tygodniu młode zaczynają jeść mięso.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II Załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Ma niezwykle czuły słuch. Prowadzi samotniczy tryb życia.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/serwal/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/serwal2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "rys"
+		},
+		"language": "pl",
+		"name": "Ryś",
+		"nameLatin": "Lynx lynx",
+		"occurrence": "Od środkowej Europy i Skandynawii, poprzez Turcję, Irak, Iran, Rosję i Mongolię aż do Mandżurii.",
+		"environment": "Lasy, rzadziej tereny bardziej otwarte, półpustynne, słabiej zadrzewione i obszary górskie.",
+		"food": "Dzikie ssaki kopytne (głównie sarna). W górach kozice. Jego ofiarą padają również łosie, renifery, jelenie, dziki, zające, kuraki, drobne gryzonie.",
+		"division": "MAMMAL",
+		"multiplication": "Ruja przypada na luty i marzec. Po ciąży trwającej 67-74 dni rodzą się najczęściej 2-3 młode. Matka karmi je mlekiem 70-80 dni. W wieku około 3 miesięcy młode opuszczają gniazdo i podążają za matką. Przebywają z nią do 10 miesiąca życia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II Załączniku Konwencji Waszyngtońskiej. Według Polskiej Czerwonej Księgi jest to gatunek bliski zagrożenia wyginięciem na terenie Polski. Rysie urodzone w naszym Zoo brały udział w programie reintrodukcji tego gatunku w Puszczy Kampinoskiej.",
+		"facts": "Dobrze wspina się po drzewach i doskonale skacze. Długość skoków dochodzi do 5 m. Za wzlatującymi ptakami potrafi skoczyć do wysokości 2 m. Ryś jest aktywny głównie o zmroku i nocą, a w ciągu dnia śpi i odpoczywa.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/rys/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ryś-1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ryś11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ryś22.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "jaguarundi"
+		},
+		"language": "pl",
+		"name": "Jaguarundi",
+		"nameLatin": "Puma yagouaroundi",
+		"occurrence": "Od południowego Teksasu do północnej Argentyny i Brazylii.",
+		"environment": "Las deszczowy, cierniste zarośla, pastwiska, tereny podmokłe.",
+		"food": "Gryzonie, ptaki, gady, króliki, owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 72-75 dni rodzi się 1-4 młodych. Kocięta przychodzą na świat w gnieździe znajdującym się w gęstej roślinności lub w dziupli drzewa. Dojrzałość płciową osiągają po 1,5-2 latach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na I Załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Z uwagi na podobieństwo do niektórych przedstawicieli rodziny łasicowatych nazywany jest &#8222;kotem łasicowatym&#8221;.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/jaguarundi/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/jaguarundi2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "lew-azjatycki"
+		},
+		"language": "pl",
+		"name": "Lew azjatycki",
+		"nameLatin": "Panthera leo persica",
+		"occurrence": "Rezerwat Gir w prowincji Gujarat na północnym zachodzie Indii.",
+		"environment": "Lasy, obszary porośnięte krzewami.",
+		"food": "Ssaki kopytne, bydło domowe, antylopy, gazele.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 110 dni rodzi się 1-4 kociąt. Stają się całkowicie niezależne od matki w wieku około dwóch i pół roku.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) podgatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Podgatunek objęty regionalnym, europejskim programem hodowlanym EEP. W ostatnim naturalnym siedlisku żyje zaledwie około 500 lwów azjatyckich.",
+		"facts": "Lwy azjatyckie są nieco mniejsze od swoich afrykańskich kuzynów.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/lew-azjatycki/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lew-azjatycki3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/DSC_7363-—-kopia.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "jaguar"
+		},
+		"language": "pl",
+		"name": "Jaguar",
+		"nameLatin": "Panthera onca",
+		"occurrence": "Ameryka Środkowa, północna i środkowa część Ameryki Południowej.",
+		"environment": "Brzegi rzek, obrzeża lasów, różnego rodzaju tereny podmokłe.",
+		"food": "Duże i średniej wielkości ssaki: kapibary, jelenie, tapiry, pekari, a także kajmany i inne gady oraz ptaki i ryby.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 100 dni. W miocie rodzą się 1-3 ślepe młode, którymi matka opiekuje się przez 2 lata.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Jest świetnym pływakiem. Od lamparta odróżnia go krępa budowa ciała, krótszy ogon i obecność plamek wewnątrz rozetek na tułowiu.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/jaguar/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/jaguar2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pantera-chinska"
+		},
+		"language": "pl",
+		"name": "Pantera chińska",
+		"nameLatin": "Panthera pardus japonensis",
+		"occurrence": "Chiny.",
+		"environment": "Nizinne lasy tropikalne, zadrzewione stepy oraz górskie lasy.",
+		"food": "Ssaki różnej wielkości, ptaki, gady.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 96 dni rodzi się najczęściej od 1 do 3 kociąt. Dojrzałość płciową osiągają w wieku 2-3 lat.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) podgatunek zaliczony do kategorii VU – narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Podgatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Znakomicie pływa i wspina się na drzewa.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/pantera-chinska-3/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-chińska2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "tygrys-amurski"
+		},
+		"language": "pl",
+		"name": "Tygrys amurski",
+		"nameLatin": "Panthera tigris altaica",
+		"occurrence": "Wschodnie regiony Rosji, pogranicze rosyjsko-chińskie, w dolnym biegu rzeki Amur.",
+		"environment": "Tajga, górskie lasy iglaste i mieszane, często w pobliżu rzek i potoków.",
+		"food": "Jeleniowate, dziki, mniejsze ssaki, ptaki, gady, ryby. Poluje głównie nocą. Ocenia się, że jeden atak na dwadzieścia kończy się sukcesem.",
+		"division": "MAMMAL",
+		"multiplication": "Po 105-dniowej ciąży rodzą się 2-3 młode. Matkę opuszczają w wieku 2 lat. Samiec nie bierze udziału w wychowywaniu młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) podgatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Podgatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Tygrys amurski jest największym ze współcześnie żyjących kotów: osiąga masę do 320 kg, długość ciała do 2,5 m. Posiada najjaśniejsze i najdłuższe futro spośród tygrysów. Prowadzi samotniczy tryb życia. Jeden osobnik zajmuje terytorium do 1000 km2.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/tygrys-amurski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tygrys-amurski.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tygrys-amurski1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pantera-sniezna"
+		},
+		"language": "pl",
+		"name": "Pantera śnieżna",
+		"nameLatin": "Uncia uncia",
+		"occurrence": "Góry środkowej Azji do wysokości 6000 m n.p.m.",
+		"environment": "Zamieszkuje tereny położone na znacznych wysokościach, aż do granicy wiecznego śniegu, dochodząc do wysokości nawet 6 000 m n.p.m.",
+		"food": "Owce górskie, koziorożce, jelonki piżmowe, młode jaki, bażanty i świstaki, zwierzęta domowe.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 94-103 dni samica rodzi od 1 do 5 kociąt. Młode osiągają dojrzałość płciową w wieku 2-3 lat.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Ubarwienie futra doskonale maskuje ją wśród skał i śniegu, zwiększając szansę na skuteczne polowanie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/pantera-sniezna/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna4-e1592200746602.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna31.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zeneta-polnocna"
+		},
+		"language": "pl",
+		"name": "Żeneta północna",
+		"nameLatin": "Genetta genetta",
+		"occurrence": "Północno-zachodnia Afryka, Półwysep Pirenejski, południowo-zachodnia Francja.",
+		"environment": "Stepy, sawanny, lasy, tereny skaliste pozbawione drzew, czasem w pobliżu ludzkich siedzib.",
+		"food": "Drobne gryzonie, ptaki, owady.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 70-77 dni samica rodzi 1-5 młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jest przedstawicielem rodziny łasz. Prowadzi nocny tryb życia. Znakomicie wspina się na drzewa, dobrze pływa.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zeneta-polnocna/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żeneta-północna2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żeneta-północna12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "surykatka"
+		},
+		"language": "pl",
+		"name": "Surykatka",
+		"nameLatin": "Suricata suricatta",
+		"occurrence": "Południowa Afryka.",
+		"environment": "Suche, otwarte obszary.",
+		"food": "Owady, skorpiony, pająki, drobne kręgowce, małe węże, jaszczurki, jaja gadów i ptaków oraz bulwy roślin.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 70 dni. W miocie rodzi się zwykle 3-7 młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jest to przedstawiciel rodziny mangustowatych. Drapieżniki te żyją w grupach rodzinnych, w których panuje hierarchia. Nad bezpieczeństwem grupy czuwa osobnik, który wypatruje niebezpieczeństwa i na widok zagrożenia daje pobratymcom głośny sygnał do ucieczki. Cała kolonia znika wówczas pod ziemią w bezpiecznym systemie jam i korytarzy.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/surykatka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/surykatka2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/surykatka12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/surykatki11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "wilk-grzywiasty"
+		},
+		"language": "pl",
+		"name": "Wilk grzywiasty",
+		"nameLatin": "Chrysocyon brachyurus",
+		"occurrence": "Ameryka Południowa: południowa Brazylia, Paragwaj, Boliwia.",
+		"environment": "Trawiaste pampy (formacje roślinne o charakterze stepowym).",
+		"food": "Gryzonie i inne niewielkie ssaki, ptaki, owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 65 dni. W miocie jest zwykle 1-7 szczeniąt.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Z uwagi na podobieństwo do lisa, Indianie nazwali go „dużym lisem”. Nazwa wilk grzywiasty pochodzi od charakterystycznej grzywy, którą zwierzę stroszy w chwili zaniepokojenia.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/wilk-grzywiasty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty-31.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "otocjon"
+		},
+		"language": "pl",
+		"name": "Otocjon",
+		"nameLatin": "Otocyon megalotis",
+		"occurrence": "Afryka południowa i wschodnia.",
+		"environment": "Sawanna, suche obszary trawiaste.",
+		"food": "Owady – głównie termity i chrząszcze. Zdobycz lokalizowana jest słuchem, a następnie szybko odkopywana. Dietę uzupełnia owocami, jajami, gadami i ptakami.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 70 dni rodzi się 1-6 szczeniąt.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Posiadają od 46 do 50 drobnych zębów (najwięcej spośród wszystkich ssaków). Żyją w parach lub grupach rodzinnych.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/otocjon/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/otocjon5.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/otocjon12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/otocjon22.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/otocjon-s.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "fennek"
+		},
+		"language": "pl",
+		"name": "Fennek",
+		"nameLatin": "Vulpes zerda",
+		"occurrence": "Półwysep Arabski i północna Afryka.",
+		"environment": "Obszary pustynne.",
+		"food": "Małe gryzonie, ptaki, jaja, jaszczurki, owady, a także pokarm roślinny.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 50 dni. Samica rodzi w jednym miocie 1-4 młodych. Szczenięta pozostają pod opieką matki przez około 9 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Najmniejszy gatunek spośród psowatych. Wyjątkowo długie uszy służą do regulacji temperatury ciała w niekorzystnych warunkach panujących na pustyni oraz znakomicie wspomagają lokalizację zdobyczy. Posiada owłosione podeszwy, umożliwiające poruszanie się po rozgrzanym piasku.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/fennek/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/fennek2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/fennek12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "uchatka-patagonska"
+		},
+		"language": "pl",
+		"name": "Uchatka patagońska",
+		"nameLatin": "Otaria flavescens",
+		"occurrence": "Wybrzeże Ameryki Południowej od Peru po przylądek Horn.",
+		"environment": "Żyją w środowisku wodnym, ale również sprawnie poruszają się po lądzie.",
+		"food": "Ryby i głowonogi.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa ok. 11 miesięcy, samica rodzi 1 młode, które osiąga dojrzałość płciową pomiędzy 4 i 5 rokiem życia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Uchatki są najsprawniej poruszającymi się na lądzie płetwonogimi. Posiadają niewielkie małżowiny uszne, od obecności których pochodzi nazwa zwierzęcia. Inna nazwa &#8211; lew morski uzasadniona jest charakterystycznym, grzmiącym rykiem wydawanym przez samce i grzywą, porastającą ich grzbiet i kark. Pod wodą uchatki przebywają zwykle około 5 minut, nurkują na głębokość do 100 metrów.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/uchatka-patagonska/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/uchatka-patagońska4.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/uchatka-patagońska11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/uchatka-patagońska21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "wydra-europejska"
+		},
+		"language": "pl",
+		"name": "Wydra europejska",
+		"nameLatin": "Lutra lutra",
+		"occurrence": "Europa, Azja, północna Afryka.",
+		"environment": "Wybrzeża morskie, jeziora, stawy, rzeki, strumienie, bagna i torfowiska oraz kanały melioracyjne.",
+		"food": "Głównie ryby, a także żaby, raki, mięczaki i owady. Sporadycznie polują na drobne ssaki i ptaki.",
+		"division": "MAMMAL",
+		"multiplication": "Dane o przebiegu ciąży są sprzeczne. Według niektórych badaczy ciąża trwa około 60 dni, inni uważają, że u wydry występuje zjawisko zahamowania rozwoju zarodka i związana z tym ciąża przedłużona, trwająca około 13 miesięcy. Wielkość miotu wynosi 2-4 młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Drapieżniki te mają dobrze rozwinięty zmysł wzroku, słuchu i węchu. Są samotnikami, za wyjątkiem samic wychowujących młode",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/wydra/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wydra2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "hirara"
+		},
+		"language": "pl",
+		"name": "Hirara",
+		"nameLatin": "Eira barbara",
+		"occurrence": "Zamieszkuje Amerykę Środkową, Meksyk i Amerykę Południową po Paragwaj i Argentynę oraz Wyspy Trynidad.",
+		"environment": "Las tropikalny, plantacje, pola uprawne.",
+		"food": "Małe ssaki i ptaki, jaja ptasie, owady, owoce, miód dzikich pszczół.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 63-67 dni, rodzą się 1-3 ślepe młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Przedstawiciel rodziny łasicowatych. Prowadzi nocny tryb życia. Znakomicie porusza się wśród gałęzi drzew.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/hirara/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hirara2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "borsuk"
+		},
+		"language": "pl",
+		"name": "Borsuk",
+		"nameLatin": "Meles meles",
+		"occurrence": "Europa z wyjątkiem północnej Skandynawii, Azja.",
+		"environment": "Tereny leśne w pobliżu łąk i pól, zadrzewienia śródpolne, obrzeża większych lasów.",
+		"food": "Drobne gryzonie, płazy, ślimaki, dżdżownice, kłącza, bulwy, owoce, nasiona, grzyby.",
+		"division": "MAMMAL",
+		"multiplication": "U borsuków występuje zjawisko ciąży przedłużonej, rozwój zapłodnionej komórki jajowej zatrzymuje się na kilka miesięcy. Cały okres ciąży trwa około 10 miesięcy, a nawet dłużej. Młode (najczęściej 3-4) rodzą się w okresie od stycznia do kwietnia. Dojrzałość płciową uzyskują w wieku 14 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Borsuki żyją w grupach rodzinnych, których członkowie są blisko spokrewnieni. Każda grupa zamieszkuje terytorium, w obrębie którego znajdują się nory i wydeptane ścieżki, uczęszczane przez te zwierzęta.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/borsuk/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/borsuk3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/borsuk11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "koati-poludniowy"
+		},
+		"language": "pl",
+		"name": "Koati południowy",
+		"nameLatin": "Nasua nasua",
+		"occurrence": "Północna i środkowa część Ameryki Południowej.",
+		"environment": "Lasy deszczowe i zadrzewienia do wysokości 2500 m n.p.m.",
+		"food": "Owady, owoce, skorpiony, pająki, gryzonie, ryby, pokarm roślinny.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 77 dni; w jednym miocie rodzi się najczęściej 3-4 młodych.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jest to przedstawiciel rodziny szopowatych. Cechą charakterystyczną tego gatunku jest prążkowany ogon. Grupy liczące zwykle 5-50 osobników złożone są z samic i ich młodych. Samce dołączają do grupy w okresie godowym. Aktywny w dzień.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/koati-poludniowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koati-południowy3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koati-południowy11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "szop-pracz"
+		},
+		"language": "pl",
+		"name": "Szop pracz",
+		"nameLatin": "Procyon lotor",
+		"occurrence": "Ameryka Północna i Środkowa. Introdukowany w Europie w początkach lat 30-tych XX wieku, w Polsce pojawił się w latach 80-tych.",
+		"environment": "Zadrzewione tereny w pobliżu wody, obszary zurbanizowane.",
+		"food": "Ślimaki, żaby, ryby i raki oraz orzechy, nasiona, owoce. Ma charakterystyczny zwyczaj płukania pokarmu w wodzie, stąd wywodzi się jego nazwa.",
+		"division": "MAMMAL",
+		"multiplication": "Po około 65-dniowej ciąży rodzi się   1-7 młodych. Matka karmi je mlekiem przez 2-3 miesiące. Po tym czasie młode szopy zaczynają samodzielnie poszukiwać pożywienia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Aktywny nocą, dzień spędza w kryjówkach. Dobrze wspina się na drzewa, bardzo dobrze pływa. Poza okresem godowym żyje samotnie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/szop-pracz/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/szop-pracz2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "panda-mala"
+		},
+		"language": "pl",
+		"name": "Panda mała",
+		"nameLatin": "Ailurus fulgens",
+		"occurrence": "Północna Birma, zachodni Sichuan i Yunnan.",
+		"environment": "Lasy liściaste i iglaste na wysokości od 2200 do 4800 m n.p.m.",
+		"food": "Liście bambusa, jagody, ptasie jaja. .",
+		"division": "MAMMAL",
+		"multiplication": "Pora godowa przypada na wczesną zimę. Młode (od 1 do 4) rodzą się po pięciomiesięcznej ciąży. Gniazda zakłada w dziuplach lub w szczelinach skał.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I Załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Jedyny przedstawiciel rodziny pandowatych. Żyje w małych grupach rodzinnych. Naturalnym wrogiem tego zwierzęcia jest pantera śnieżna. Żyje do 14 lat.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/panda-mala/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/panda-mała13.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/panda-mała3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/panda-mała-22.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "osiol-domowy"
+		},
+		"language": "pl",
+		"name": "Osioł domowy",
+		"nameLatin": "Equus asinus",
+		"occurrence": "Zwierzę użytkowane przez człowieka w wielu regionach świata.",
+		"environment": "Zwierzę udomowione.",
+		"food": "Trawa, gałęzie, kora. Posiada duże płaskie zęby przystosowane do rozrywania i żucia pokarmu.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 12 miesięcy. Samica rodzi zwykle jedno źrebię, które zaraz po urodzeniu może podążać za matką.",
+		"protectionAndThreats": "&#8211;",
+		"facts": "Osioł został udomowiony już w starożytnym Egipcie. Jest bardzo wytrzymały i mało wymagający. Ceniony jako zwierzę juczne, pociągowe i wierzchowe. Pochodzi od dzikiego osła, żyjącego w północnej Afryce.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/osiol-domowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/osioł-domowy2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/osioł-domowy12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zebra-chapmana"
+		},
+		"language": "pl",
+		"name": "Zebra Chapmana",
+		"nameLatin": "Equus burchelli chapmanni",
+		"occurrence": "Afryka południowa, Zimbabwe, Botswana.",
+		"environment": "Sawanny i stepy.",
+		"food": "Głównie trawy i rośliny zielne.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 12 miesięcy rodzi się jedno młode. Samice uzyskują dojrzałość płciową między 2 a 3 rokiem życia. Ogiery po osiągnięciu wieku około 5 lat zaczynają utrzymywać harem klaczy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) podgatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "W niebezpieczeństwie zebra ratuje się ucieczką rozwijając prędkość do 65 km/h. Naturalnymi wrogami zebr są lwy, lamparty, gepardy i hieny. Zwierzę to zostało nazwane zebrą Chapmana na cześć przyrodnika Jamesa Chapmana.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/zebra-chapmana/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/zebra-Chapmana3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/zebra-Chapmana11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kuc-szetlandzki"
+		},
+		"language": "pl",
+		"name": "Kuc szetlandzki",
+		"nameLatin": "Equus caballus",
+		"occurrence": "Rasa koni hodowana na całym świecie, pochodząca z Wysp Szetlandzkich.",
+		"environment": "Zwierzę udomowione.",
+		"food": "Kuce szetlandzkie są niewybredne w doborze pokarmu. Żywią się głównie sianem i trawą.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 338-342 dni. Zazwyczaj rodzi się 1 źrebak.",
+		"protectionAndThreats": "&#8211;",
+		"facts": "W Anglii wykorzystywano je do pracy w kopalniach węgla. Obecnie służą dzieciom do jazdy wierzchem, ciągną małe bryczki, są także użytkowane jako zwierzęta juczne.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kuc-szetlandzki/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kuc-szetlandzki2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kon-przewalskiego"
+		},
+		"language": "pl",
+		"name": "Koń Przewalskiego",
+		"nameLatin": "Equus przewalskii",
+		"occurrence": "Reintrodukowany w parkach narodowych Mongolii. Program przywrócenia tego gatunku do natury rozpoczął się w roku 1992 w Parku Narodowym Hustain Nuruu.",
+		"environment": "Stepy.",
+		"food": "Trawa i roślinność stepowa.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 330-350 dni rodzi się 1 młode. Klacze osiągają dojrzałość płciową w wieku 2 lat, ogiery w 3 roku życia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Konie Przewalskiego to dzicy przodkowie konia domowego. Po raz ostatni obserwowano je na wolności na pograniczu Mongolii i Chin w roku 1968. Zanim wyginęły w naturze, odłowiono wiele osobników i umieszczono w ogrodach zoologicznych na świecie. Dzięki programowi reintrodukcji prowadzonemu w Mongolii, konie te powróciły na wolność.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kon-przewalskiego/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koń-Przewalskiego4.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koń-Przewalskiego11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koń-Przewalskiego21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kulan"
+		},
+		"language": "pl",
+		"name": "Kułan",
+		"nameLatin": "Equus hemionus kulan",
+		"occurrence": "Kazachstan i Turkmenistan.",
+		"environment": "Stepy i półpustynie.",
+		"food": "Trawy, roślinność stepowa, zioła, gałęzie krzewów, korzenie.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa 11 miesięcy. Klacz rodzi 1 źrebię. Laktacja trwa 6-8 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) podgatunek zaliczony do kategorii NT – bliski zagrożenia Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Jest to przedstawiciel rodziny koniowatych, blisko spokrewniony z kiangiem i onagerem. Posiada cechy typowe dla koni i osłów.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kulan/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kułan-21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kułan2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kułan12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "tapir-anta"
+		},
+		"language": "pl",
+		"name": "Tapir anta",
+		"nameLatin": "Tapirus terrestris",
+		"occurrence": "Środkowa i północna część Ameryki Południowej.",
+		"environment": "Nizinne tropikalne lasy deszczowe.",
+		"food": "Liście, rośliny wodne i bagienne, trawy, owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 13-14 miesięcy na świat przychodzi jedno młode (bliźnięta rodzą się bardzo rzadko). Młode są charakterystycznie ubarwione – ich brązowa sierść aż do 9 miesiąca życia pokryta jest białymi pasami i plamkami. Maluchy są dzięki temu niewidoczne w gęstwinie leśnej.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Górna warga wraz z nosem tworzą krótką, silnie umięśnioną trąbę. Są świetnie przystosowane do pokonywania gęstych zarośli – mają gładką skórę, szczeciniastą sierść, klinowatą głowę i mocno umięśnione nogi. Tapir uważany jest przez wielu przyrodników za &#8222;żywą skamielinę&#8221;, ponieważ prawie nie różni się od swoich przodków występujących licznie na ziemi w środkowym trzeciorzędzie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/tapir-anta/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tapir-anta3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tapir-anta21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "swinia-zwislobrzucha"
+		},
+		"language": "pl",
+		"name": "Świnia zwisłobrzucha",
+		"nameLatin": "Sus scrofa domestica",
+		"occurrence": "Rasa świń pochodząca z Azji.",
+		"environment": "Jedna z wielu ras hodowanej również u nas świni domowej.",
+		"food": "Zboże, jarzyny, otręby, płatki owsiane, zielonka.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 115 dni. Locha w ciągu roku może dać dwa mioty liczące ponad 10 młodych w każdym.",
+		"protectionAndThreats": "&#8211;",
+		"facts": "Świnkę tą nazwano zwisłobrzuchą ze względu na fakt, że brzuch zwierzęcia niemal dotyka ziemi. Inaczej świnia ta nazywana jest wietnamską",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/swinia-zwislobrzucha/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/świnia-zwisłobrzucha2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/świnia-zwisłobrzucha12.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "hipopotam-karlowaty"
+		},
+		"language": "pl",
+		"name": "Hipopotam karłowaty",
+		"nameLatin": "Hexaprotodon liberiensis",
+		"occurrence": "Afryka zachodnia: Sierra Leone, Liberia, Wybrzeże Kości Słoniowej.",
+		"environment": "Lasy i podmokłe tereny nad brzegami rzek.",
+		"food": "Pędy roślin, kłącza, korzenie i inne części roślin.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 6 miesięcy przychodzi na świat jedno młode (rzadziej bliźnięta). Niedługo po urodzeniu młode jest w pełni sprawne i podąża za matką.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Hipopotam karłowaty pomimo niewielkich rozmiarów posiada groźną broń – duże kły, którymi może zadawać bardzo głębokie rany. Prowadzi nocny tryb życia przebywając w ciągu dnia w ukryciu w pobliżu wody. Żyje samotnie, z wyjątkiem okresu rui i opieki nad młodym.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/hipopotam-karlowaty/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hipopotam-karłowaty6.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hipopotam-karłowaty11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hipopotam-karłowaty21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hipopotam-karłowaty31.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hipopotam-karłowaty41.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "wielblad-dwugarbny"
+		},
+		"language": "pl",
+		"name": "Wielbłąd dwugarbny",
+		"nameLatin": "Camelus bactrianus",
+		"occurrence": "W stanie dzikim – głównie na pustyni Gobi i na półpustyniach Chin. W formie udomowionej – rozprzestrzeniony w wielu krajach.",
+		"environment": "Pustynie i półpustynie, suche stepy.",
+		"food": "Roślinność pustynna, nawet suche pędy, nie zjadane przez inne ssaki. Zwierzę to jest bardzo odporne na brak wody.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 13 miesięcy rodzi się zwykle 1 młode, które w chwili narodzin waży średnio około 35 kg.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) dziki wielbłąd dwugarbny (Camelus bactrianus ferus) zaliczony jest do kategorii CR – krytycznie zagrożony wyginięciem.",
+		"facts": "Jest wykorzystywany jako zwierzę juczne i wierzchowe, rzadziej użytkowany jako siła pociągowa, dostarcza także mleka, mięsa, wełny i skóry. Wielbłąd dwugarbny porusza się inochodem &#8211; to znaczy, że nogi jednej strony ciała poruszają się jednocześnie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/wielblad-dwugarbny/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wielbłąd-dwugarbny2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wielbłąd-dwugarbny1-1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "alpaka"
+		},
+		"language": "pl",
+		"name": "Alpaka",
+		"nameLatin": "Lama pacos",
+		"occurrence": "Zwierzęta udomowione. Hodowane na zboczach Andów w Ekwadorze, Boliwii, Peru i Chile.",
+		"environment": "Górskie zbocza - spotykane na wysokościach od 4000 do 4700 m n.p.m.",
+		"food": "Trawa, liście i zielone części innych roślin.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 390 dni, rodzi się zazwyczaj jedno młode.",
+		"protectionAndThreats": "&#8211;",
+		"facts": "Alpaki hodowane są dla wełny oraz dla mięsa, które jest uważane przez andyjskich mieszkańców za przysmak. Z wełny tego zwierzęcia produkuje się koce, poncza i dobrej jakości odzież.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/alpaka/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/alpaka2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "wikunia"
+		},
+		"language": "pl",
+		"name": "Wikunia",
+		"nameLatin": "Vicugna vicugna",
+		"occurrence": "Andy od środkowego Peru na północy po północne Chile i Argentynę na południu.",
+		"environment": "Stepowe płaskowyża powyżej granicy lasów, na wysokości do 5500 m n.p.m.",
+		"food": "Trawa, liście oraz pączki krzewów.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej 330-350 dni rodzi się jedno młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na I załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Tworzy haremowe grupy rodzinne złożone z 6-19 osobników (samca i samic z młodymi). Wikunie są aktywne w ciągu dnia. Mają niezwykle duże serce, którego masa jest o około 50% większa niż u innych ssaków tej samej wielkości, co jest przystosowaniem do przebywania na dużych wysokościach. Ich wełna o doskonałej jakości była powodem intensywnych polowań na te zwierzęta.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/wikunia/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wikunie-21.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wikunie3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wikunie11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "renifer"
+		},
+		"language": "pl",
+		"name": "Renifer",
+		"nameLatin": "Rangifer tarandus",
+		"occurrence": "Północne rejony Ameryki Północnej i Eurazji.",
+		"environment": "Arktyczna tundra i lasotundra.",
+		"food": "Porosty, mchy, trawy, liście, pączki drzew i krzewów.",
+		"division": "MAMMAL",
+		"multiplication": "Młode rodzą się na przełomie maja i czerwca, po ciąży trwającej 221-237 dni. Laktacja trwa około 6 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Charakterystyczną cechą reniferów jest obecność poroża u osobników obu płci. Jest ono półkoliście zakrzywione, zakończone rozgałęzieniami, nieco mniejsze u samic. Renifery odbywają dalekie wędrówki, nawet na odległość do 2000 km.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/renifer/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/renifer2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/renifery3.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/renifery11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/renifery21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "daniel-plowy"
+		},
+		"language": "pl",
+		"name": "Daniel płowy",
+		"nameLatin": "Dama dama",
+		"occurrence": "Zachodnia i środkowa Europa. Introdukowany na inne kontynenty (Afryka, Ameryka Północna, Ameryka Południowa, Australia). W Polsce najliczniej występuje w zachodniej części kraju.",
+		"environment": "Lasy liściaste i mieszane z polanami, w sąsiedztwie łąk, niższe góry, otwarte tereny trawiaste.",
+		"food": "Trawy, dwuliścienne rośliny zielne, pędy drzew i krzewów, kora drzew.",
+		"division": "MAMMAL",
+		"multiplication": "Okres godowy (bekowisko) przypada na październik i listopad. Podczas rui samce gromadzą wokół siebie łanie i bronią ich przed konkurentami. Ciąża trwa 230-245 dni. Samica rodzi na początku czerwca zwykle jedno, bardzo rzadko dwa młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "W Polsce daniel był od średniowiecza hodowany w parkach i menażeriach jako zwierzę ozdobne.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/daniel-plowy/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/daniel-płowy1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/daniel-płowy11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "barasinga"
+		},
+		"language": "pl",
+		"name": "Barasinga",
+		"nameLatin": "Rucervus duvaucelii",
+		"occurrence": "Północne Indie.",
+		"environment": "Podmokłe tereny trawiaste, unika zwartych lasów.",
+		"food": "Trawa, liście, kora i młode pędy.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 250 dni rodzi się 1 młode, które pozostaje w ukryciu przez 10-15 dni. Matka karmi je do 6 miesiąca życia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Aktywny rano i wieczorem, dzień spędza w ukryciu. Naturalnym wrogiem osobników dorosłych jest tygrys bengalski, młodych również szakal.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/barasinga/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/barasinga1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "mundzak-chinski"
+		},
+		"language": "pl",
+		"name": "Mundżak chiński",
+		"nameLatin": "Muntiacus reevesi",
+		"occurrence": "Południowo-wschodnie Chiny, Tajwan. Introdukowany w Anglii na początku XX wieku.",
+		"environment": "Lasy i zarośla. Spotykany na wysokości do 3 500 m n.p.m.",
+		"food": "Rośliny zielne, liście krzewów, gałązki, owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Rozmnaża się w ciągu całego roku. Po ciąży trwającej około 210 dni rodzi się jedno młode, które pozostaje pod opieką matki do 4 miesiąca życia.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Jest jednym z najmniejszych przedstawicieli rodziny jeleniowatych. Żyje do 13 lat. W sytuacji zagrożenia podnosi ogon i wydaje donośny odgłos przypominający szczekanie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/mundzak-chinski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "sitatunga"
+		},
+		"language": "pl",
+		"name": "Sitatunga",
+		"nameLatin": "Tragelaphus spekei gratus",
+		"occurrence": "Afryka Środkowa.",
+		"environment": "Podmokłe tereny i wilgotne lasy równikowe.",
+		"food": "Trawy, roślinność bagienna.",
+		"division": "MAMMAL",
+		"multiplication": "Po około 8 – miesięcznej ciąży samica rodzi młode, które może z nią pozostać nawet do narodzin kolejnego potomka.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Charakterystyczną cechą gatunku jest wyraźnie zaznaczony dymorfizm płciowy. Samce są większe od samic, tylko one posiadają rogi, różnią się także ubarwieniem. Antylopy te prowadzą osiadły tryb życia. Są doskonałymi pływakami.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/sitatunga/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/sitatunga1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "arui"
+		},
+		"language": "pl",
+		"name": "Arui",
+		"nameLatin": "Ammotragus lervia",
+		"occurrence": "Północna Afryka: Maroko, Algieria, Tunezja, Libia, Sudan, Egipt.",
+		"environment": "Góry do wysokości 4000 m n.p.m., tereny pustynne.",
+		"food": "Dieta zróżnicowana: trawa, gałązki, pędy drzew i krzewów, porosty. Jest odporny na brak wody i bardzo wytrzymały.",
+		"division": "MAMMAL",
+		"multiplication": "Ruja przypada na listopad. Po ciąży trwającej 150-165 dni rodzi się 1-2 młode.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na II załączniku Konwencji Waszyngtońskiej.",
+		"facts": "Żyje w stadach. Bardzo zwinnie porusza się po skalistym terenie.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/arui/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/arui.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/arui1.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/arui2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "takin-miszmi"
+		},
+		"language": "pl",
+		"name": "Takin miszmi",
+		"nameLatin": "Budorcas taxicolor",
+		"occurrence": "Wschodnia część Himalajów i Wyżyny Tybetańskiej do wysokości 3500 m n.p.m.",
+		"environment": "Skaliste obszary, skąpo porośnięte trawami i krzewami, lasy.",
+		"food": "Trawy i inne rośliny,  pędy i kora drzew, krzewów.",
+		"division": "MAMMAL",
+		"multiplication": "Okres godowy przypada na sierpień i wrzesień. W marcu lub kwietniu samica rodzi zwykle jedno młode po ciąży trwającej około 210 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
+		"facts": "Przy dużej dostępności pokarmu aktywny jedynie wieczorem i o świcie. W okresach niedostatku pożywienia żeruje również w ciągu dnia. Jest spokrewniony z wołem piżmowym.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/takin-miszmi/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/takin-2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/takin1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "markur-turkmenski"
+		},
+		"language": "pl",
+		"name": "Markur turkmeński",
+		"nameLatin": "Capra falconeri heptneri",
+		"occurrence": "Góry Azji (południowa Rosja, Afganistan, północne Indie oraz Kaszmir).",
+		"environment": "Tereny górskie do wysokości 3600 m n.p.m.",
+		"food": "Liście drzew i krzewów, trawa, żołędzie.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 170 dni rodzą się 1-2 młode, które osiągają  dojrzałość płciową po 3 latach.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii NT – bliski zagrożenia. Na I Załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Jest gatunkiem doskonale przystosowanym do wspinania się po skałach. Jego naturalnym wrogiem jest pantera śnieżna.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/markur-turkmenski/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/markur-turkmeński.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/markur-turkmeński1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "koza-karlowata"
+		},
+		"language": "pl",
+		"name": "Koza karłowata",
+		"nameLatin": "Capra hircus hircus",
+		"occurrence": "Zwierzę udomowione około 10 tysięcy lat temu na terenie Azji Mniejszej, Mezopotamii i Egiptu.",
+		"environment": "Hodowana przez człowieka.",
+		"food": "Zielone części roślin, gałązki, trawa.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 140 dni samica rodzi od 2 do 4 koźląt.",
+		"protectionAndThreats": "&#8211;",
+		"facts": "Koza karłowata jest hodowana dla mleka, mięsa, jako zwierzę juczne. Jest to jedna z najmniejszych ras kóz.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/koza-karlowata/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koza-karłowata1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kob-sniady"
+		},
+		"language": "pl",
+		"name": "Kob śniady",
+		"nameLatin": "Kobus ellipsiprymnus",
+		"occurrence": "Południowo-wschodnia  Afryka.",
+		"environment": "Sawanny i zarośla w pobliżu wody.",
+		"food": "Trawa i liście.",
+		"division": "MAMMAL",
+		"multiplication": "Ciąża trwa około 8 miesięcy. Po tym czasie rodzi się jedno młode, które początkowo przebywa w ukryciu, a od 4 tygodnia życia podąża za matką. Okres rozrodu trwa przez cały rok.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+		"facts": "Żyje w stadach złożonych z kilkunastu osobników. W razie zagrożenia ratuje się ucieczką do wody.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kob-sniady/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-śniady1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kob-liczi"
+		},
+		"language": "pl",
+		"name": "Kob liczi",
+		"nameLatin": "Kobus leche",
+		"occurrence": "Afryka: wschodnia Angola, wschodnia Namibia i północna Botswana.",
+		"environment": "Tereny bagniste, położone blisko rzek i jezior.",
+		"food": "Trawa oraz rośliny bagienne i wodne.",
+		"division": "MAMMAL",
+		"multiplication": "Okres godowy przypada na porę deszczową (grudzień-marzec). Po ciąży trwającej około 8 miesięcy rodzi się jedno młode o wadze około      6 kg. Laktacja trwa do 7 miesięcy.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Na II załączniku Konwencji Waszyngtońskiej. Gatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Zagrożona na lądzie ucieka do wody, dlatego też często nazywana jest kobem wodnym. Świetnie pływa.",
+		"wiki": "todo",
+		"web": "https://zoo-krakow.pl/kob-liczi/",
+		"regionInZoo": "todo",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-liczi4.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-liczi11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-liczi21.jpg"
+		]
+	},
+	{
+    	"id": {
+    		"id": "drzewolaz-skoczny"
+    	},
+    	"language": "pl",
+    	"name": "Drzewołaz skoczny",
+    	"nameLatin": "Phyllobates vittatus",
+    	"occurrence": "Ameryka Środkowa - od Kostaryki do zachodniej Panamy.",
+    	"environment": "Tropikalne lasy deszczowe. Bytuje głównie między kamieniami, korzeniami drzew i pod liśćmi.",
+    	"food": "Owadożerny.",
+    	"division": "AMPHIBIAN",
+    	"multiplication": "Samiec w porze godowej wabi partnerkę wydając trelujący głos. Samica składa do 25 jaj. Samiec zapładnia je, strzeże i zwilża wodą. Po 9-17 dniach z jaj wylęgają się kijanki. Samiec przenosi je do zbiornika z wodą.",
+    	"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na II załączniku Konwencji Waszyngtońskiej.",
+    	"facts": "Jest to jeden z najczęściej hodowanych przedstawicieli rodziny drzewołazowatych.",
+    	"wiki": "todo",
+    	"web": "https://zoo-krakow.pl/drzewolaz-skoczny/",
+    	"regionInZoo": "todo",
+    	"photos": [
+    		"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-skoczny1.jpg"
+    	]
+    },
+    {
+    	"id": {
+    		"id": "zaba-pomidorowa"
+    	},
+    	"language": "pl",
+    	"name": "Żaba pomidorowa",
+    	"nameLatin": "Dyscophus guineti",
+    	"occurrence": "Wschodnie wybrzeże Madagaskaru.",
+    	"environment": "Podmokłe lasy, pola uprawne, plantacje, ogrody.",
+    	"food": "Owady, dżdżownice, małe gryzonie.",
+    	"division": "AMPHIBIAN",
+    	"multiplication": "Samica składa do 1500 jaj. Kijanki wylęgają się z nich po około 36 godzinach. Po 45 dniach opuszczają wodę, przekształcone w małe żabki.",
+    	"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.",
+    	"facts": "Gatunek ten bywa hodowany w domowych terrariach. Samce dorastają do 6 cm, samice mogą osiągnąć długość nawet ponad 10 cm. Młode żabki są jaśniejsze od dorosłych osobników.",
+    	"wiki": "todo",
+    	"web": "https://zoo-krakow.pl/zaba-pomidorowa/",
+    	"regionInZoo": "todo",
+    	"photos": [
+    		"https://zoo-krakow.pl/wp-content/uploads/2016/05/zaba-pomidorowa1.jpg"
+    	]
+    }
+]

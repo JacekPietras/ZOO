@@ -168,6 +168,56 @@ fun makeStreamFromUrl(url: String) =
         .inputStream
         .cleanupHtml()
 
+fun difference(str1: String, str2: String): String {
+    val at = indexOfDifference(str1, str2)
+    return if (at == -1) ""
+    else str2.substring(at)
+}
+
+private fun indexOfDifference(str1: String, str2: String): Int {
+    if (str1 === str2) return -1
+
+    var i = 0
+    while (i < str1.length && i < str2.length) {
+        if (str1[i] != str2[i]) {
+            break
+        }
+        ++i
+    }
+    return if (i < str2.length || i < str1.length) i
+    else -1
+}
+
+fun diffCount(a: String, b: String) =
+    diff(a, b).run { (first + second).length }
+
+fun diff(a: String, b: String): Pair<String, String> =
+    diffHelper(a, b, HashMap())
+
+private fun diffHelper(
+    a: String,
+    b: String,
+    lookup: MutableMap<Long, Pair<String, String>>
+): Pair<String, String> {
+    val key = a.length.toLong() shl 32 or b.length.toLong()
+    if (!lookup.containsKey(key)) {
+        lookup[key] = if (a.isEmpty() || b.isEmpty()) {
+            Pair(a, b)
+        } else if (a[0] == b[0]) {
+            diffHelper(a.substring(1), b.substring(1), lookup)
+        } else {
+            val aa = diffHelper(a.substring(1), b, lookup)
+            val bb = diffHelper(a, b.substring(1), lookup)
+            if (aa.first.length + aa.second.length < bb.first.length + bb.second.length) {
+                Pair(a[0] + aa.first, aa.second)
+            } else {
+                Pair(bb.first, b[0] + bb.second)
+            }
+        }
+    }
+    return lookup[key]!!
+}
+
 private val docTypeLineReplacePattern = "<!(doctype|DOCTYPE)[^>]*>".toRegex()
 private val scriptLineReplacePattern = "(<script[^>]*>)(.*)(</script>)".toRegex()
 private val scriptBeginPattern = "(?:.*)(<script[^>]*>)(.*)".toRegex()
