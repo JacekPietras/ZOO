@@ -5,16 +5,31 @@ import android.util.Xml
 import androidx.annotation.RawRes
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParser.*
+import java.net.HttpURLConnection
+import java.net.URL
 
-internal class WebParser(context: Context, @RawRes rawRes: Int) {
+internal class WebParser {
 
     private var result: MutableList<WebContent> = mutableListOf()
 
-    init {
+    constructor(context: Context, @RawRes rawRes: Int) {
         val inputStream = context.resources.openRawResource(rawRes).cleanupHtml()
-        val parser = Xml.newPullParser().apply { setInput(inputStream, null) }
 
-        parser.parseAll()
+        Xml.newPullParser().apply { setInput(inputStream, null) }.parseAll()
+    }
+
+    constructor(url: String) {
+        val inputStream = (URL(url).openConnection() as HttpURLConnection)
+            .apply {
+                setRequestProperty("User-Agent", "")
+                requestMethod = "POST"
+                doInput = true
+                connect()
+            }
+            .inputStream
+            .cleanupHtml()
+
+        Xml.newPullParser().apply { setInput(inputStream, null) }.parseAll()
     }
 
     fun getContent(): List<WebContent> =
@@ -23,7 +38,7 @@ internal class WebParser(context: Context, @RawRes rawRes: Int) {
     fun getFirstParagraph(): WebContent.Paragraph =
         result
             .filterIsInstance(WebContent.Paragraph::class.java)
-            .first ()
+            .first()
 
     fun getParagraph(title: String): WebContent.Paragraph =
         result

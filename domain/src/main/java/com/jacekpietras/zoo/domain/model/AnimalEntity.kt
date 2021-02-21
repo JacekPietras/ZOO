@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.model
 
+import com.jacekpietras.zoo.domain.model.Division.MAMMAL
 import java.util.*
 
 data class AnimalEntity(
@@ -10,6 +11,7 @@ data class AnimalEntity(
     val occurrence: String = "occurrence",
     val environment: String = "environment",
     val food: String = "food",
+    val division: Division = MAMMAL,
     val multiplication: String = "multiplication",
     val protectionAndThreats: String = "protection and threats",
     val facts: String = "facts",
@@ -40,6 +42,14 @@ class AnimalId(id: String) {
         .replace("Ś", "s")
         .replace("Ź", "z")
         .replace("Ń", "n")
-        .replace(" ", "_")
+        .replace(" ", "-")
         .toLowerCase(Locale.US)
+}
+
+enum class Division {
+    MAMMAL,
+    BIRD,
+    AMPHIBIAN,
+    REPTILE,
+    FISH,
 }

@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
-import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.parser.WebParser
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
@@ -16,7 +15,9 @@ class AnimalRepositoryImpl(
 
     override suspend fun getMyszojelen(): AnimalEntity =
         withContext(Dispatchers.Default) {
-            val parser = WebParser(context, R.raw.myszojelen)
+//            val parser = WebParser(context, R.raw.myszojelen)
+            val parser = WebParser("https://zoo-krakow.pl/mundzak-chinski/")
+
             Timber.e("Scrapper ------------------------------")
             parser.getContent().forEach { Timber.e("Scrapper $it") }
 

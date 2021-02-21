@@ -63,6 +63,7 @@ internal fun InputStream.cleanupHtml(): InputStream {
     bufferedReader().forEachLine { line ->
         outputStream.write(
             line
+                .replace(docTypeLineReplacePattern, "")
                 .replace(scriptLineReplacePattern, "")
                 .replace(linkLine1ReplacePattern, "")
                 .replace(linkLine2ReplacePattern, "")
@@ -136,6 +137,7 @@ internal fun InputStream.cleanupHtml(): InputStream {
     return ByteArrayInputStream(outputStream.toByteArray())
 }
 
+private val docTypeLineReplacePattern = "<!(doctype|DOCTYPE)[^>]*>".toRegex()
 private val scriptLineReplacePattern = "(<script[^>]*>)(.*)(</script>)".toRegex()
 private val scriptBeginPattern = "(?:.*)(<script[^>]*>)(.*)".toRegex()
 private val scriptBeginReplacePattern = "(<script[^>]*>)(.*)".toRegex()
