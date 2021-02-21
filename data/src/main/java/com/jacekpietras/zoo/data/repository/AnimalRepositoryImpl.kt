@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-
 class AnimalRepositoryImpl(
     private val context: Context,
     private val moshi: Moshi,
@@ -36,11 +35,8 @@ class AnimalRepositoryImpl(
             runCatching { adapter.fromJson(jsonText) }
                 .onSuccess { storedAnimals = it ?: emptyList() }
 
-
-            Timber.e("Scrapper ${storedAnimals.size} animals preloaded")
+            Timber.v("Scrapper ${storedAnimals.size} animals preloaded")
         }
-
-        scrapAllAnimals()
     }
 
     override suspend fun scrapAllAnimals() =
@@ -54,7 +50,7 @@ class AnimalRepositoryImpl(
                 .filter { !webs.contains(it.www) }
                 .forEach { basic ->
                     try {
-                        val parser = AnimalWebParser(makeStreamFromUrl(basic.www))
+                        val parser = AnimalWebParser(makeStreamFromUrl(basic.www, print = false))
 
                         val animal = AnimalEntity(
                             id = AnimalId(parser.getFirstParagraph().title),

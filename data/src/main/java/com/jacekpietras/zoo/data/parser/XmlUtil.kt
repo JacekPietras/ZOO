@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.XmlResourceParser
 import androidx.annotation.RawRes
 import org.xmlpull.v1.XmlPullParser
+import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -57,10 +58,11 @@ internal fun String.removeLast(toRemove: String, times: Int = 1): String {
     return result
 }
 
-internal fun InputStream.cleanupHtml(): InputStream {
+internal fun InputStream.cleanupHtml(print: Boolean = false): InputStream {
     val outputStream = ByteArrayOutputStream()
     var insideScript = false
     var insideImg = false
+    var insideP = false
     var openedDiv = 0
     var closedDiv = 0
 
@@ -79,6 +81,21 @@ internal fun InputStream.cleanupHtml(): InputStream {
                 .run {
                     if (imgLinePattern matches this) {
                         this.replace(imgLineReplacePattern, "<img $1 />")
+                    } else {
+                        this
+                    }
+                }
+                .run {
+                    if (insideP && this.contains("<") && !this.contains("</p>")) {
+                        insideP = false
+                        "</p>$this <!-- added p -->"
+                    } else if (!this.contains("</p>") && pBeginPattern matches this) {
+                        Timber.e("Scrapper read -> <!-- started at: $this -->")
+                        insideP = true
+                        "$this <!-- started p -->"
+                    } else if (insideP && this.contains("</p>")) {
+                        insideP = false
+                        "$this <!-- finished p -->"
                     } else {
                         this
                     }
@@ -130,10 +147,10 @@ internal fun InputStream.cleanupHtml(): InputStream {
                         this
                     }
                 }
-//                .also {
-//                    if (it.isNotEmpty())
-//                        Timber.e("Scrapper read -> $it")
-//                }
+                .also {
+                    if (print && it.isNotEmpty())
+                        Timber.e("Scrapper read -> $it")
+                }
                 .toByteArray()
         )
     }
@@ -157,7 +174,7 @@ fun XmlPullParser.skip() {
 fun makeStreamFromFile(context: Context, @RawRes rawRes: Int) =
     context.resources.openRawResource(rawRes).cleanupHtml()
 
-fun makeStreamFromUrl(url: String) =
+fun makeStreamFromUrl(url: String, print: Boolean = false) =
     (URL(url).openConnection() as HttpURLConnection)
         .apply {
             setRequestProperty("User-Agent", "")
@@ -166,7 +183,7 @@ fun makeStreamFromUrl(url: String) =
             connect()
         }
         .inputStream
-        .cleanupHtml()
+        .cleanupHtml(print)
 
 fun difference(str1: String, str2: String): String {
     val at = indexOfDifference(str1, str2)
@@ -232,3 +249,4 @@ private val commentLineReplacePattern = "(<!--)([^-]*)(-->)".toRegex()
 private val imgLinePattern = "(?:.*)(<img[^>]+)(?<!/)>(?:.*)".toRegex()
 private val imgLineReplacePattern = "<img\\s+(([a-z]+=\".*?\")+\\s*)>".toRegex()
 private val imgBeginPattern = "(?:.*)(<img[^>]*)".toRegex()
+private val pBeginPattern = "(?:.*)(<p)(>| [^/>]+>)(?:.*)".toRegex()
