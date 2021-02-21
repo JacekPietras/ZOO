@@ -1,10 +1,14 @@
 package com.jacekpietras.zoo.data.parser
 
+import android.content.Context
 import android.content.res.XmlResourceParser
+import androidx.annotation.RawRes
 import org.xmlpull.v1.XmlPullParser
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 internal fun XmlResourceParser.attr(name: String): String =
     getAttributeValue(null, name) ?: ""
@@ -136,6 +140,33 @@ internal fun InputStream.cleanupHtml(): InputStream {
 
     return ByteArrayInputStream(outputStream.toByteArray())
 }
+
+fun XmlPullParser.skip() {
+    var deep = 0
+    while (true) {
+        when (eventType) {
+            XmlPullParser.START_TAG -> deep++
+            XmlPullParser.END_TAG -> deep--
+        }
+        if (deep == 0) return
+        next()
+    }
+}
+
+@Suppress("unused")
+fun makeStreamFromFile(context: Context, @RawRes rawRes: Int) =
+    context.resources.openRawResource(rawRes).cleanupHtml()
+
+fun makeStreamFromUrl(url: String) =
+    (URL(url).openConnection() as HttpURLConnection)
+        .apply {
+            setRequestProperty("User-Agent", "")
+            requestMethod = "POST"
+            doInput = true
+            connect()
+        }
+        .inputStream
+        .cleanupHtml()
 
 private val docTypeLineReplacePattern = "<!(doctype|DOCTYPE)[^>]*>".toRegex()
 private val scriptLineReplacePattern = "(<script[^>]*>)(.*)(</script>)".toRegex()

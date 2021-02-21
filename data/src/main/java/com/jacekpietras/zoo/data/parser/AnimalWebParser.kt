@@ -1,35 +1,18 @@
 package com.jacekpietras.zoo.data.parser
 
-import android.content.Context
 import android.util.Xml
-import androidx.annotation.RawRes
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParser.*
-import java.net.HttpURLConnection
-import java.net.URL
+import java.io.InputStream
 
-internal class WebParser {
+internal class AnimalWebParser(inputStream: InputStream) {
 
-    private var result: MutableList<WebContent> = mutableListOf()
+    private var result = mutableListOf<WebContent>()
 
-    constructor(context: Context, @RawRes rawRes: Int) {
-        val inputStream = context.resources.openRawResource(rawRes).cleanupHtml()
-
-        Xml.newPullParser().apply { setInput(inputStream, null) }.parseAll()
-    }
-
-    constructor(url: String) {
-        val inputStream = (URL(url).openConnection() as HttpURLConnection)
-            .apply {
-                setRequestProperty("User-Agent", "")
-                requestMethod = "POST"
-                doInput = true
-                connect()
-            }
-            .inputStream
-            .cleanupHtml()
-
-        Xml.newPullParser().apply { setInput(inputStream, null) }.parseAll()
+    init {
+        Xml.newPullParser()
+            .apply { setInput(inputStream, null) }
+            .parseAll()
     }
 
     fun getContent(): List<WebContent> =
@@ -116,20 +99,6 @@ internal class WebParser {
                     }
                     deep++
                 }
-                END_TAG -> {
-                    deep--
-                }
-            }
-            if (deep == 0) return
-            next()
-        }
-    }
-
-    private fun XmlPullParser.skip() {
-        var deep = 0
-        while (true) {
-            when (eventType) {
-                START_TAG -> deep++
                 END_TAG -> deep--
             }
             if (deep == 0) return
