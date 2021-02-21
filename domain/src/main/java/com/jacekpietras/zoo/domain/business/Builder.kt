@@ -3,7 +3,6 @@ package com.jacekpietras.zoo.domain.business
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.domain.model.MapItemEntity
-import timber.log.Timber
 
 internal class Builder(
     roads: List<MapItemEntity.PathEntity>,
@@ -54,8 +53,6 @@ internal class Builder(
                     val third = twoToThird.node
                     if (third != first) {
                         if (isOnEdge(first, secnd, third)) {
-                            Timber.e("dupa found $secnd $third")
-
                             first.connect(secnd, twoToThird.technical, backward = false)
                             secnd.connect(first, twoToThird.technical, backward = true)
                             first.connect(third, twoToThird.technical, backward = false)

@@ -29,6 +29,7 @@ internal class MapViewModel(
     getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
+    getMyszojelenUseCase: GetMyszojelenUseCase,
     private val getSnappedToRoadUseCase: GetSnappedToRoadUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
@@ -49,6 +50,12 @@ internal class MapViewModel(
     )
     private val effect: Channel<MapEffect> = Channel()
     var viewState = viewStateMapper.from(state, effect)
+
+    init{
+        viewModelScope.launch(dispatcherProvider.default) {
+            getMyszojelenUseCase()
+        }
+    }
 
     fun onUploadClicked() {
         try {

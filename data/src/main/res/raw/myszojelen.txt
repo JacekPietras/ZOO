@@ -1,0 +1,1223 @@
+<html lang="pl-PL" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <title>Krakowski Ogród Zoologiczny</title>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"> gvybuyb </script><testexp1/>
+
+    <link href="https://zoo-krakow.pl/wp-content/themes/zoo/css/rockox.css" rel="stylesheet">
+
+    <!-- animation -->
+    <link href="https://zoo-krakow.pl/wp-content/themes/zoo/css/animate.css" rel="stylesheet">
+
+
+    <!-- piecharts -->
+    <link rel="stylesheet" href="https://zoo-krakow.pl/wp-content/themes/zoo/css/pie-charts-style.css">
+
+
+    <!-- Add fancyBox -->
+    <link rel="stylesheet" href="https://zoo-krakow.pl/wp-content/themes/zoo/css/flexslider.css" media="screen">
+
+    <!-- jcarousel styling -->
+    <link rel="stylesheet" href="https://zoo-krakow.pl/wp-content/themes/zoo/css/skin.css">
+
+    <!-- Bootstrap -->
+    <link href="https://zoo-krakow.pl/wp-content/themes/zoo/css/bootstrap.css" rel="stylesheet">
+    <!-- CSS STYLE -->
+    <link rel="stylesheet" type="text/css" href="https://zoo-krakow.pl/wp-content/themes/zoo/css/revolution_style.css" media="screen" />
+
+
+    <link href="https://zoo-krakow.pl/wp-content/themes/zoo/css/custom.css" rel="stylesheet" type="text/css">
+
+
+    <!-- REVOLUTION BANNER CSS SETTINGS -->
+    <link rel="stylesheet" type="text/css" href="https://zoo-krakow.pl/wp-content/themes/zoo/css/settings.css" media="screen" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"><testnoexp/></script><testexp2/>
+   <testexp3/> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!--[if lt IE 9]>
+    <![endif]-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kolejna witryna oparta na WordPressie">
+
+    <link rel='dns-prefetch' href='//s.w.org' />
+    <testexp4/><script type="text/javascript">
+    <testnoexp/>
+        window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/zoo-krakow.pl\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.6.1"}};
+        !function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([55357,56424,8205,55356,57212],[55357,56424,8203,55356,57212])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+    </script><testexp5/>
+    <style type="text/css">
+        img.wp-smiley,
+        img.emoji {
+        display: inline !important;
+        border: none !important;
+        box-shadow: none !important;
+        height: 1em !important;
+        width: 1em !important;
+        margin: 0 .07em !important;
+        vertical-align: -0.1em !important;
+        background: none !important;
+        padding: 0 !important;
+        }
+    </style>
+    <link rel='stylesheet' id='wp-block-library-css'  href='https://zoo-krakow.pl/wp-includes/css/dist/block-library/style.min.css?ver=5.6.1' media='all' />
+    <link rel='stylesheet' id='contact-form-7-css'  href='https://zoo-krakow.pl/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=5.3.2' media='all' />
+    <link rel='stylesheet' id='cookie-law-info-css'  href='https://zoo-krakow.pl/wp-content/plugins/cookie-law-info/public/css/cookie-law-info-public.css?ver=1.9.5' media='all' />
+    <link rel='stylesheet' id='cookie-law-info-gdpr-css'  href='https://zoo-krakow.pl/wp-content/plugins/cookie-law-info/public/css/cookie-law-info-gdpr.css?ver=1.9.5' media='all' />
+    <link rel='stylesheet' id='normalize-css'  href='https://zoo-krakow.pl/wp-content/themes/zoo/normalize.css?ver=1.0' media='all' />
+    <link rel='stylesheet' id='html5blank-css'  href='https://zoo-krakow.pl/wp-content/themes/zoo/style.css?ver=1.0' media='all' />
+    <link rel='stylesheet' id='fancybox-css'  href='https://zoo-krakow.pl/wp-content/plugins/easy-fancybox/css/jquery.fancybox.min.css?ver=1.3.24' media='screen' />
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-content/plugins/enable-jquery-migrate-helper/js/jquery/jquery-1.12.4-wp.js?ver=1.12.4-wp' id='jquery-core-js'></script>
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-content/plugins/enable-jquery-migrate-helper/js/jquery-migrate/jquery-migrate-1.4.1-wp.js?ver=1.4.1-wp' id='jquery-migrate-js'></script>
+    <script type='text/javascript' id='cookie-law-info-js-extra'>
+        /* <![CDATA[ */
+var Cli_Data = {"nn_cookie_ids":[],"cookielist":[],"ccpaEnabled":"","ccpaRegionBased":"","ccpaBarEnabled":"","ccpaType":"gdpr","js_blocking":"","custom_integration":"","triggerDomRefresh":""};
+var cli_cookiebar_settings = {"animate_speed_hide":"500","animate_speed_show":"500","background":"#fff","border":"#444","border_on":"","button_1_button_colour":"#000","button_1_button_hover":"#000000","button_1_link_colour":"#fff","button_1_as_button":"1","button_1_new_win":"","button_2_button_colour":"#333","button_2_button_hover":"#292929","button_2_link_colour":"#444","button_2_as_button":"","button_2_hidebar":"","button_3_button_colour":"#3566bb","button_3_button_hover":"#2a5296","button_3_link_colour":"#fff","button_3_as_button":"1","button_3_new_win":"","button_4_button_colour":"#000","button_4_button_hover":"#000000","button_4_link_colour":"#333333","button_4_as_button":"","font_family":"inherit","header_fix":"","notify_animate_hide":"1","notify_animate_show":"","notify_div_id":"#cookie-law-info-bar","notify_position_horizontal":"right","notify_position_vertical":"bottom","scroll_close":"","scroll_close_reload":"","accept_close_reload":"","reject_close_reload":"","showagain_tab":"","showagain_background":"#fff","showagain_border":"#000","showagain_div_id":"#cookie-law-info-again","showagain_x_position":"100px","text":"#000","show_once_yn":"","show_once":"10000","logging_on":"","as_popup":"","popup_overlay":"1","bar_heading_text":"","cookie_bar_as":"banner","popup_showagain_position":"bottom-right","widget_position":"left"};
+var log_object = {"ajax_url":"https:\/\/zoo-krakow.pl\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+    </script>
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-content/plugins/cookie-law-info/public/js/cookie-law-info-public.js?ver=1.9.5' id='cookie-law-info-js'></script>
+    <link rel="https://api.w.org/" href="https://zoo-krakow.pl/wp-json/" /><link rel="alternate" type="application/json" href="https://zoo-krakow.pl/wp-json/wp/v2/posts/472" /><link rel="alternate" type="application/json+oembed" href="https://zoo-krakow.pl/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fzoo-krakow.pl%2Fmundzak-chinski%2F" />
+    <link rel="alternate" type="text/xml+oembed" href="https://zoo-krakow.pl/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fzoo-krakow.pl%2Fmundzak-chinski%2F&#038;format=xml" />
+
+    <script type="text/javascript">
+        var jQueryMigrateHelperHasSentDowngrade = false;
+
+        window.onerror = function( msg, url, line, col, error ) {
+        // Break out early, do not processing if a downgrade reqeust was already sent.
+        if ( jQueryMigrateHelperHasSentDowngrade ) {
+        return true;
+        }
+
+        var xhr = new XMLHttpRequest();
+        var nonce = '604423a2f0';
+        var jQueryFunctions = [
+        'andSelf',
+        'browser',
+        'live',
+        'boxModel',
+        'support.boxModel',
+        'size',
+        'swap',
+        'clean',
+        'sub',
+        ];
+        var match_pattern = /\)\.(.+?) is not a function/;
+        var erroredFunction = msg.match( match_pattern );
+
+        // If there was no matching functions, do not try to downgrade.
+        if ( typeof erroredFunction !== 'object' || typeof erroredFunction[1] === "undefined" || -1 === jQueryFunctions.indexOf( erroredFunction[1] ) ) {
+        return true;
+        }
+
+        // Set that we've now attempted a downgrade request.
+        jQueryMigrateHelperHasSentDowngrade = true;
+
+        xhr.open( 'POST', 'https://zoo-krakow.pl/wp-admin/admin-ajax.php' );
+        xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+        xhr.onload = function () {
+        var response,
+        reload = false;
+
+        if ( 200 === xhr.status ) {
+        try {
+        response = JSON.parse( xhr.response );
+
+        reload = response.data.reload;
+        } catch ( e ) {
+        reload = false;
+        }
+        }
+
+        // Automatically reload the page if a deprecation caused an automatic downgrade, ensure visitors get the best possible experience.
+        if ( reload ) {
+        location.reload();
+        }
+        };
+
+        xhr.send( encodeURI( 'action=jquery-migrate-downgrade-version&_wpnonce=' + nonce ) );
+
+        // Suppress error alerts in older browsers
+        return true;
+        }
+    </script>
+
+    <link rel="amphtml" href="https://zoo-krakow.pl/mundzak-chinski/amp/">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-78895743-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-78895743-1');
+    </script>
+
+
+</head>
+
+
+<body class="fixed-header home-page" data-spy="scroll" data-target=".navbar">
+
+    <div id="wrapper" style="background: #e2f1cf;">
+        <!-- BEGIN HEADER -->
+        <header id="home">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+
+                    <div class="logotyp col-md-3">
+                        <a class="navbar-brand" href="https://zoo-krakow.pl">
+                            <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/logo.png" alt="" class="logo"  />
+                        </a>
+                        <span class="menu-button" >
+                            <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/menu.png" alt="" class="menu"  />
+                        </span>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class=" col-md-9">
+                        <!-- BEGIN NAVIGATION -->
+                        <ul class="nav navbar-nav">
+                            <li><a href="https://zoo-krakow.pl/o-nas">O NAS</a></li>
+                            <li ><a href="https://zoo-krakow.pl/aktualnosci">AKTUALNOŚCI</a></li>
+                            <li><a href="https://zoo-krakow.pl/zwierzeta">ZWIERZĘTA</a></li>
+                            <li><a href="https://zoo-krakow.pl/zostan-sponsorem">ZOSTAŃ SPONSOREM</a></li>
+                            <li><a href="https://zoo-krakow.pl/przetargi">PRZETARGI</a></li>
+                            <li><a href="https://zoo-krakow.pl/rodo/ ">RODO</a></li>
+
+                            <li><a href="https://zoo-krakow.pl/kontakt">KONTAKT</a></li>
+                            <li class="mobile"><a href=""><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Youtube_icon.svg/768px-Youtube_icon.svg.png" style="width: 35px;" /></a>
+
+                                <a href=""><img src="https://www.petconnectrescue.org/wp-content/uploads/2016/10/FB-icon.png" style="width: 35px;" /></a>  </li>
+                            <li>	<div id="google_translate_element"></div><script type="text/javascript">
+                                function googleTranslateElementInit() {
+                                new google.translate.TranslateElement({pageLanguage: 'pl', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+                                }
+                            </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+                            </li>
+
+                        </ul>
+                        <!-- END NAVIGATION -->
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+        </header>
+        <!-- END HEADER -->
+        <!-- BEGIN BANNER -->
+        ssaki
+
+
+        <br/><br/><br/><br/><br/>
+        <!-- BEGIN PORTFOLIO CONTAINER -->
+
+        <div class="container">
+
+
+            <h3 style="text-align: center; font-size: 40px;"></h3>
+            <p  style="text-align: center; font-size: 16px; font-style: italic ; padding-bottom: 5px;"></p>
+
+            <span style="display: block; background: #000; height: 1px; width: 20%; margin: 0 auto;"></span>
+            <br/> <br/>
+            <div class="col-sm-7">
+
+
+                <div class="flexslider">
+                    <ul class="slides">
+
+                        <li>
+
+                            <img src="https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński.jpg" />
+
+                            <div class="caption">
+                                <div class="col-sm-10">
+                                    <p><strong>Mundżak chiński //</strong><em>Muntiacus reevesi</em></p>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    |
+                                    <a href="https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński4.jpg" rel="fancybox-thumb" style="color: #fff;"><i class="fa fa-search" aria-hidden="true"></i></a>
+
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+
+                            <img src="https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński1.jpg" />
+
+                            <div class="caption">
+                                <div class="col-sm-10">
+                                    <p><strong>Mundżak chiński //</strong><em>Muntiacus reevesi</em></p>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    |
+                                    <a href="https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński11.jpg" rel="fancybox-thumb" style="color: #fff;"><i class="fa fa-search" aria-hidden="true"></i></a>
+
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+
+                            <img src="https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński2.jpg" />
+
+                            <div class="caption">
+                                <div class="col-sm-10">
+                                    <p><strong>Mundżak chiński //</strong><em>Muntiacus reevesi</em></p>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    |
+                                    <a href="https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński21.jpg" rel="fancybox-thumb" style="color: #fff;"><i class="fa fa-search" aria-hidden="true"></i></a>
+
+                                </div>
+
+                            </div>
+                        </li>
+
+
+
+
+
+
+
+                    </ul>
+
+                    <a href="#" class="prev"><img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/arrow-left.png"   /></a>
+
+                    <a href="#" class="next"><img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/arrow-right.png"  /></a>
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+            <div class="col-sm-5">
+
+                <h2 style="border-left: 2px solid #777;  padding: 0px 10px; margin-bottom: 20px; margin-top: 15px;">
+                    <p style="color:#1c8a5e; font-size: 40px; padding-top: 0;">Mundżak chiński</p>
+                    <p style="color:#000; font-size: 21px; font-style: italic; line-height: 16px; padding-top: 8px; margin-bottom: 0;">Muntiacus reevesi</p>
+
+                </h2>
+                <p >
+
+                </p>
+
+                <ul class="all-desc-gady">
+                    <li>
+                        <h3 style="color: #19954a">Występowanie</h3>
+                        <p>Południowo-wschodnie Chiny, Tajwan. Introdukowany w Anglii na początku XX wieku. </p>
+                    </li>
+
+
+                    <li>
+                        <h3 style="color: #19954a">Środowisko życia</h3>
+                        <p>Lasy i zarośla. Spotykany na wysokości do 3 500 m n.p.m.</p>
+                    </li>
+
+
+                </ul>
+
+            </div>
+
+            <div style="clear: both;"></div>
+            <div class="col-sm-12 all-desc-gady">
+
+                <p class="content-animal-paragraph">
+                </p>
+
+
+
+
+                <div class="col-sm-3">
+
+                    <h3 class="green" style="font-size: 26px;">Pożywienie</h3>
+                    <div class="content-animal-paragraph "><p>Rośliny zielne, liście krzewów, gałązki, owoce.</p>
+                        <p>&nbsp;</p>
+                    </div>
+
+                    <ul class="case-animal-list">
+
+                        <li></li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-sm-3">
+
+                    <h3 class="green" style="font-size: 26px;">Rozmnażanie</h3>
+                    <div class="content-animal-paragraph "><p>Rozmnaża się w ciągu całego roku. Po ciąży trwającej około 210 dni rodzi się jedno młode, które pozostaje pod opieką matki do 4 miesiąca życia.</p>
+                    </div>
+
+                    <ul class="case-animal-list">
+
+                        <li></li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-sm-3">
+
+                    <h3 class="green" style="font-size: 26px;">Ochrona i zagrożenia</h3>
+                    <div class="content-animal-paragraph "><p>Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony<br />
+                        Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia.</p>
+                    </div>
+
+                    <ul class="case-animal-list">
+
+                        <li></li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="col-sm-3">
+
+                    <h3 class="green" style="font-size: 26px;">Ciekawostki</h3>
+                    <div class="content-animal-paragraph "><p>Jest jednym z najmniejszych przedstawicieli rodziny jeleniowatych.</p>
+                    </div>
+
+                    <ul class="case-animal-list">
+
+                        <li><p>Żyje do 13 lat. W sytuacji<br />
+                            zagrożenia podnosi ogon i wydaje donośny odgłos przypominający szczekanie.</p>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+        <div style="clear: both;"></div>
+
+
+
+        <div class="container">
+
+
+
+            <div class="flexslider1">
+
+                <h3 style="text-align: center; "><a href="#" class="prev1"><img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/arrow-left-news.png" style="vertical-align:middle; padding-right: 30px;"  /></a>
+                    AKTUALNOŚCI
+                    <a href="#" class="next1"><img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/arrow-right-news.png" style="vertical-align:middle; padding-left: 30px;" /></a>
+                </h3>
+
+                <ul class="slides">
+
+
+
+
+
+
+
+
+                    <li class="col-sm-4">
+                        <div class="over-news">
+                            <div class="col-sm-6">
+                                <img src="https://zoo-krakow.pl/wp-content/uploads/2021/02/lemur-katta1-1-150x150.jpg" class="attachment-120x140 size-120x140 wp-post-image" alt="" loading="lazy" />      </div>
+
+                            <div class="col-sm-6">
+                                Krakowski Ogród Zoologiczny przygotowuje się do kolej...      </div>
+                        </div>
+
+                        <div style="clear: both; padding: 7px 0;"> </div>
+                        <div>
+                            <a href="https://zoo-krakow.pl/aktualnosci/maluchy-na-wage-zlota/">
+                                <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/more-news.png" />
+                            </a>
+                        </div>
+                    </li>
+
+
+
+
+
+
+
+
+
+                    <li class="col-sm-4">
+                        <div class="over-news">
+                            <div class="col-sm-6">
+                                <img src="https://zoo-krakow.pl/wp-content/uploads/2021/01/wosp-150x150.jpg" class="attachment-120x140 size-120x140 wp-post-image" alt="" loading="lazy" />      </div>
+
+                            <div class="col-sm-6">
+                                Krakowski Ogród Zoologiczny zagra w 29. Finale Wielkie...      </div>
+                        </div>
+
+                        <div style="clear: both; padding: 7px 0;"> </div>
+                        <div>
+                            <a href="https://zoo-krakow.pl/aktualnosci/gramy-z-wielka-orkiestra-swiatecznej-pomocy-wylicytuj-nocne-zwiedzanie-zoo/">
+                                <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/more-news.png" />
+                            </a>
+                        </div>
+                    </li>
+
+
+
+
+
+
+
+
+
+                    <li class="col-sm-4">
+                        <div class="over-news">
+                            <div class="col-sm-6">
+                                <img src="https://zoo-krakow.pl/wp-content/uploads/2020/12/irbis-150x150.jpg" class="attachment-120x140 size-120x140 wp-post-image" alt="" loading="lazy" />      </div>
+
+                            <div class="col-sm-6">
+                                W czasie zbliżających się ferii zapraszamy rodziny z...      </div>
+                        </div>
+
+                        <div style="clear: both; padding: 7px 0;"> </div>
+                        <div>
+                            <a href="https://zoo-krakow.pl/aktualnosci/ferie-w-zoo-3/">
+                                <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/more-news.png" />
+                            </a>
+                        </div>
+                    </li>
+
+
+
+
+
+
+
+
+
+                    <li class="col-sm-4">
+                        <div class="over-news">
+                            <div class="col-sm-6">
+                                <img src="https://zoo-krakow.pl/wp-content/uploads/2020/12/zyczenia-150x150.jpg" class="attachment-120x140 size-120x140 wp-post-image" alt="" loading="lazy" />      </div>
+
+                            <div class="col-sm-6">
+                                ...      </div>
+                        </div>
+
+                        <div style="clear: both; padding: 7px 0;"> </div>
+                        <div>
+                            <a href="https://zoo-krakow.pl/aktualnosci/wesolych-swiat/">
+                                <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/more-news.png" />
+                            </a>
+                        </div>
+                    </li>
+
+
+
+
+
+
+
+
+
+                    <li class="col-sm-4">
+                        <div class="over-news">
+                            <div class="col-sm-6">
+                                <img src="https://zoo-krakow.pl/wp-content/uploads/2020/12/szopka-150x150.jpg" class="attachment-120x140 size-120x140 wp-post-image" alt="" loading="lazy" />      </div>
+
+                            <div class="col-sm-6">
+                                Po raz pierwszy Krakowski Ogród Zoologiczny zaprasza w...      </div>
+                        </div>
+
+                        <div style="clear: both; padding: 7px 0;"> </div>
+                        <div>
+                            <a href="https://zoo-krakow.pl/aktualnosci/zywa-szopka-w-mini-zoo/">
+                                <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/more-news.png" />
+                            </a>
+                        </div>
+                    </li>
+
+
+
+
+
+
+
+
+
+                    <li class="col-sm-4">
+                        <div class="over-news">
+                            <div class="col-sm-6">
+                                <img src="https://zoo-krakow.pl/wp-content/uploads/2020/12/mapka-zimowa2020.-duża-150x150.jpg" class="attachment-120x140 size-120x140 wp-post-image" alt="" loading="lazy" />      </div>
+
+                            <div class="col-sm-6">
+                                Krakowski Ogród Zoologiczny zaprasza rodziny z dziećm...      </div>
+                        </div>
+
+                        <div style="clear: both; padding: 7px 0;"> </div>
+                        <div>
+                            <a href="https://zoo-krakow.pl/aktualnosci/zimowe-zwiedzanie-zoo/">
+                                <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/more-news.png" />
+                            </a>
+                        </div>
+                    </li>
+
+
+
+
+
+
+
+
+
+                    <li class="col-sm-4">
+                        <div class="over-news">
+                            <div class="col-sm-6">
+                                <img src="https://zoo-krakow.pl/wp-content/uploads/2020/12/lew-150x150.jpg" class="attachment-120x140 size-120x140 wp-post-image" alt="" loading="lazy" />      </div>
+
+                            <div class="col-sm-6">
+                                Grudzień, śnieg, magiczny czas. Mamy teraz wyjątkow�...      </div>
+                        </div>
+
+                        <div style="clear: both; padding: 7px 0;"> </div>
+                        <div>
+                            <a href="https://zoo-krakow.pl/aktualnosci/zoo-w-zimowej-odslonie/">
+                                <img src="https://zoo-krakow.pl/wp-content/themes/zoo/images/more-news.png" />
+                            </a>
+                        </div>
+                    </li>
+
+
+
+
+
+                </ul>
+
+
+
+
+            </div>	</div>
+
+    </div>
+
+    <footer class="footer" role="contentinfo">
+
+        <div class="top-foot"></div>
+        <div class="container">
+            <div class="col-sm-3 border-right top-margin">
+
+
+                <h3 style="color: #ffb400;">Szybki kontakt</h3>
+
+                Tel. <a href="tel:124253551" style="color: #fff;">12 425-35-51</a>, <a href="tel:124253552" style="color: #fff;">12 425-35-52</a><br/>
+
+                E-mail: <a href="mailto:zoo@zoo-krakow.pl" style="color: #fff;">zoo@zoo-krakow.pl</a><br/>
+
+
+
+            </div>
+
+
+
+            <div class="col-sm-8 top-margin last-foot" style="text-align: left;">
+                <img src="http://zoo-krakow.pl/wp-content/uploads/2020/12/ZOO-RZF.png"/>
+            </div>
+
+        </div>
+
+    </footer>
+    <div class="container">
+
+
+        <div style="clear: both; padding-top: 30px; padding-bottom: 0px;"> </div>
+
+        <div class="col-sm-7" style="text-align: left; float: left;">
+
+            <strong>INWESTOR:</strong> FUNDACJA MIEJSKI PARK I OGRÓD ZOOLOGICZNY W KRAKOWIE <BR/>
+
+
+        </div>
+
+        <div class="col-sm-5" style="text-align: right; float: right;">
+            <a style="overflow: auto;" href="https://emcgroup.pl/"><span style="color: #000; font-size: 14px; ">Koncepcja i realizacja:</span>
+                <img style="vertical-align: middle; width: 120px;" src="https://emcgroup.pl/wp-content/themes/emcnowe/images/logo.png" ></a>
+        </div>
+        <div style="clear: both; padding-top: 10px; padding-bottom: 15px;"> </div>
+    </div>
+    <!-- END FOOTER -->
+
+    <!-- BEGIN GO TO TOP --><a href="#." class="back-to-top" id="back-to-top"><i class="fa fa-angle-up"></i></a><!-- END GO TO TOP -->
+
+</div><!-- end #wrapper -->
+
+<div class="modal" id="myModal2" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+
+            <div class="modal-body" style="padding: 0 !important;">
+                <div class="owl-carousel owl-theme" id="owl-slider">
+                    <div class="item"><img src="https://zoo-krakow.pl/wp-content/uploads/2019/04/KSIAZKA_POPUP.jpg" style="width: 100%" /></div>
+                </div>
+                <img src="https://www.budopol.pl/mvc/view/js/carousel/arrow-right.png" class="right-arr">
+                <img src="https://www.budopol.pl/mvc/view/js/carousel/arrow-left.png" class="left-arr">
+            </div>
+            <div class="modal-footer" style="margin-top: 0;">
+                <button type="button" class="btn btn-primary" style="margin: 0; border:none; background: #e39820;">Kup teraz</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin: 0; border:none; background: #8baf5f; color: #fff;">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" /> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+
+<!-- jQuery KenBurn Slider  -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.flexslider.js"></script>
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.themepunch.plugins.min.js"></script>
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.themepunch.revolution.min.js"></script>
+
+<!-- parallax -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.stellar.js"></script>
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/custom.js"></script>
+
+<!-- jcarousel -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.jcarousel.min.js"></script>
+<!-- way point -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/waypoints.js"></script>
+
+<!-- Add piecharts -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.easypiechart.min.js"></script>
+<!-- navigation classes change on scroll -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/nimble.js"></script>
+
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/scrollspy.js"></script>
+<!-- fancybox -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.fancybox.pack.js"></script>
+<!-- appear -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.appear.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/bootstrap.min.js"></script>
+<!-- nimble effect -->
+
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/counters.js"></script>
+
+
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/bootstrap.js"></script>
+<!--Modernizr Js-->
+
+<!--Next Event Contdown Js-->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.plugin.js"></script>
+<!--Next Event Contdown Js-->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.countdown.js"></script>
+<!--Our Chrity Store JS-->
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/jquery.flexisel.js"></script>
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/isotop.js"></script>
+<script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/custom1.js"></script>
+<style>
+    .left-arr {
+    position: absolute;
+    left: 0;
+    top: 54%;
+    z-index: 4545;
+    background: rgba(255,255,255,0.2);
+    }
+
+    .right-arr {
+    position: absolute;
+    background: rgba(255,255,255,0.2);
+    right: 0;
+    top: 54%;
+    z-index: 4545;
+    }
+
+</style>
+
+<script>
+    //slider
+
+    jQuery(function() {
+
+    jQuery('#myModal').modal();
+
+    var owl1 = jQuery("#owl-slider");
+
+    owl1.owlCarousel({
+    navigation : true, // Show next and prev buttons
+    slideSpeed : 5000,
+    autoplay  : 1000,
+    stopOnHover : false,
+    items: 1,
+    loop: true,
+    dots: false
+    });
+
+    jQuery(".right-arr").click(function(){
+    owl1.trigger('next.owl.carousel');
+    })
+    jQuery(".left-arr").click(function(){
+    owl1.trigger('prev.owl.carousel');
+    })
+
+
+
+
+
+    //parallaax
+    jQuery.stellar({
+    horizontalScrolling: false,
+    responsive: true
+    });
+    //fancybox
+    jQuery(".fancybox").fancybox();
+    jQuery(".various").fancybox({
+    maxWidth	: 1100,
+    maxHeight	: 600,
+    fitToView	: false,
+    width		: '70%',
+    height		: '70%',
+    autoSize	: false,
+    closeClick	: false,
+    openEffect	: 'none',
+    closeEffect	: 'none'
+    });
+
+    jQuery('#mycarousel').jcarousel({
+    vertical: true
+    });
+
+    //smooth scroll to href value
+
+    jQuery(".tabs-btn ul li a, .navbar-nav li.href a").click(function(event){
+    event.preventDefault();
+    //calculate destination place
+    var dest=0;
+    if(jQuery(this.hash).offset().top > jQuery(document).height()-jQuery(window).height()){
+    dest=$(document).height()-jQuery(window).height();
+    }else{
+    dest=jQuery(this.hash).offset().top;
+    }
+    //go to destination
+    jQuery('html,body').animate({scrollTop:dest}, 1000,'swing');
+    });
+
+
+    //toggle map
+    jQuery(".map-title h4 span").click(function(e) {
+    jQuery(".map iframe").slideToggle();
+    jQuery(".map-title h4 span i").toggleClass("fa-angle-up fa-angle-down");
+    });
+
+    jQuery(window).scroll(function(){
+    if(jQuery(window).scrollTop() > 200){
+    jQuery("#back-to-top").fadeIn(200);
+    } else{
+    jQuery("#back-to-top").fadeOut(200);
+    }
+    });
+
+    jQuery('#back-to-top, .back-to-top').click(function() {
+    jQuery('html, body').animate({ scrollTop:0 }, '800');
+    return false;
+    });
+
+
+    //pie charts
+    jQuery('#pie-charts').waypoint(function(direction) {
+    jQuery('.chart').easyPieChart({
+    barColor: "#5ecae6",
+    onStep: function(from, to, percent) {
+    jQuery(this.el).find('.percent').text(Math.round(percent));
+    }
+    });
+    }, {
+    offset: function() {
+    return jQuery.waypoints('viewportHeight') - jQuery(this).height() + 100;
+    }
+    });
+
+    jQuery('#pie-charts').waypoint(function(direction) {
+    jQuery('.green-circle').easyPieChart({
+    barColor: "#bed431",
+    onStep: function(from, to, percent) {
+    jQuery(this.el).find('.percent').text(Math.round(percent));
+    }
+    });
+    }, {
+    offset: function() {
+    return jQuery.waypoints('viewportHeight') - jQuery(this).height() + 100;
+    }
+
+    });
+
+    jQuery('#pie-charts').waypoint(function(direction) {
+    jQuery('.red-circle').easyPieChart({
+    barColor: "#e11e24",
+    onStep: function(from, to, percent) {
+    jQuery(this.el).find('.percent').text(Math.round(percent));
+    }
+    });
+    }, {
+    offset: function() {
+    return jQuery.waypoints('viewportHeight') - jQuery(this).height() + 100;
+    }
+
+    });
+
+    jQuery('#pie-charts').waypoint(function(direction) {
+    jQuery('.yellow-circle').easyPieChart({
+    barColor: "#f6c715",
+    onStep: function(from, to, percent) {
+    jQuery(this.el).find('.percent').text(Math.round(percent));
+    }
+    });
+    }, {
+    offset: function() {
+    return jQuery.waypoints('viewportHeight') - jQuery(this).height() + 100;
+    }
+
+    });
+
+    jQuery('#pie-charts').waypoint(function(direction) {
+    jQuery('.purple-circle').easyPieChart({
+    barColor: "#7251a2",
+    onStep: function(from, to, percent) {
+    jQuery(this.el).find('.percent').text(Math.round(percent));
+    }
+    });
+    }, {
+    offset: function() {
+    return jQuery.waypoints('viewportHeight') - jQuery(this).height() + 100;
+    }
+
+    });
+
+    });
+    //form submit
+    function checkmail(input)
+    {
+    var pattern1=/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    if(pattern1.test(input)){ return true; }else{ return false; }
+    }
+    function proceed(){
+    var name = document.getElementById("name");
+    var email = document.getElementById("email");
+    var company = document.getElementById("company");
+    var web = document.getElementById("website");
+    var msg = document.getElementById("message");
+    var errors = "";
+
+    if(name.value == "")
+    {
+    name.className = 'error';
+    return false;
+    }
+
+    else if(email.value == "")
+    {
+    email.className = 'error';
+    return false;
+    }
+    else if(checkmail(email.value)==false)
+    {
+    alert('Please provide a valid email address.');
+    return false;
+
+    }
+    else if(company.value == "")
+    {
+    company.className = 'error';
+    return false;
+    }
+    else if(web.value == "")
+    {
+    web.className = 'error';
+    return false;
+    }
+    else if(msg.value == "")
+    {
+    msg.className = 'error';
+    return false;
+    }
+    else
+    {
+    $.ajax({
+    type: "POST",
+    url: "process.php",
+    data: $("#contact_form").serialize(),
+    success: function(msg)
+    {
+    //alert(msg);
+    if(msg){
+    jQuery('#contact_form').fadeOut(1000);
+    jQuery('#contact_message').fadeIn(2000);
+    document.getElementById("contact_message").innerHTML = "Your email has been sent.";
+    return true;
+    }
+    }
+    });
+    }
+    }
+
+
+</script>
+<script>
+
+    jQuery(window).load(function() {
+
+    jQuery('.flexslider').flexslider({
+    directionNav: false,
+    controlNav: false
+    })
+
+    jQuery('.prev').on('click', function(){
+    jQuery('.flexslider').flexslider('prev');
+    return false;
+    })
+
+    jQuery('.next').on('click', function(){
+    jQuery('.flexslider').flexslider('next');
+    return false;
+    })
+
+
+
+
+    jQuery('.flexslider1').flexslider({
+    directionNav: false,
+    controlNav: false,
+    animation: "slide",
+    animationLoop: false,
+    itemWidth: 210,
+    itemMargin: 5,
+    minItems: 2,
+    maxItems: 4
+    })
+
+    jQuery('.prev1').on('click', function(){
+    jQuery('.flexslider1').flexslider('prev');
+    return false;
+    })
+
+    jQuery('.next1').on('click', function(){
+    jQuery('.flexslider1').flexslider('next');
+    return false;
+    })
+
+
+
+    });
+
+
+</script>
+<!-- revolution code -->
+
+<script type="text/javascript">
+    var tpj=jQuery;
+    tpj.noConflict();
+
+    tpj(document).ready(function() {
+
+    if (tpj.fn.cssOriginal!=undefined)
+    tpj.fn.css = tpj.fn.cssOriginal;
+
+    tpj('.fullwidthbanner').revolution(
+    {
+    delay:9000,
+    startwidth:1920,
+    startheight:600,
+
+    onHoverStop:"on",			 			// Stop Banner Timet at Hover on Slide on/off
+
+    thumbWidth:100,							// Thumb With and Height and Amount (only if navigation Tyope set to thumb !)
+    thumbHeight:50,
+    thumbAmount:4,
+
+    hideThumbs:200,
+    navigationType:"both",					//bullet, thumb, none, both	 (No Shadow in Fullwidth Version !)
+    navigationArrows:"verticalcentered",		//nexttobullets, verticalcentered, none
+    navigationStyle:"round",				//round,square,navbar
+
+    touchenabled:"on",						// Enable Swipe Function : on/off
+
+    navOffsetHorizontal:0,
+    navOffsetVertical:20,
+
+    fullWidth:"on",
+
+    shadow:0								//0 = no Shadow, 1,2,3 = 3 Different Art of Shadows -  (No Shadow in Fullwidth Version !)
+
+    });
+    });
+</script>
+<script>
+
+    jQuery( document ).ready(function() {
+
+
+    jQuery( ".menu-button" ).click(function() {
+
+    jQuery( ".nav" ).toggle();
+
+    });
+
+    });
+</script>
+<!--
+<a href="https://pl.tripadvisor.com/Attraction_Review-g274772-d630247-Reviews-Ogrod_Zoologiczny-Krakow_Lesser_Poland_Province_Southern_Poland.html ">
+
+
+<img src="https://zoo-krakow.pl/wp-content/uploads/2020/05/trip.svg" style="height: 40px;
+	position: fixed;
+	right: 1px;
+	top: 150px;
+	z-index: 645645;" class="desktop">
+</a>
+-->
+
+
+
+<a href="https://www.youtube.com/channel/UC5IaHi9rCOQNn_Et9FKetHg "><img src="https://zoo-krakow.pl/wp-content/uploads/2020/05/yt.svg" style="height: 40px;
+	position: fixed;
+	right: 1px;
+	top: 250px;
+	z-index: 645645;" class="desktop"></a>
+<a href="https://www.facebook.com/zookrakow/?ref=br_rs"><img src="https://zoo-krakow.pl/wp-content/uploads/2020/05/fb.svg" style="height: 40px;
+	position: fixed;
+	right: 1px;
+	top: 300px;
+	z-index: 645645;" class="desktop"></a>
+
+<link rel="stylesheet" href="https://zoo-krakow.pl/wp-content/themes/zoo/css/owl.carousel.min.css">
+    <script src="https://zoo-krakow.pl/wp-content/themes/zoo/js/owl.carousel.min.js"> </script>
+
+    <script>
+        jQuery('.owl-carousel').owlCarousel({
+        loop:true,
+        margin:10,
+        nav:false,
+        responsive:{
+        0:{
+        items:1
+        },
+        600:{
+        items:1
+        }
+        }
+        })
+
+    </script>
+
+
+    <!--googleoff: all--><div id="cookie-law-info-bar" data-nosnippet="true"><span>Zapisujemy informację w plikach cookies w celu zapewnienia maksymalnej wygody w korzystaniu z serwisu .<br />Możesz określić warunki przechowywania lub dostępu do cookie w Twojej przeglądarce <a role='button' tabindex='0' data-cli_action="accept" id="cookie_action_close_header"  class="medium cli-plugin-button cli-plugin-main-button cookie_action_close_header cli_action_button" style="display:inline-block; ">Akceptuj</a></span></div><div id="cookie-law-info-again" style="display:none;" data-nosnippet="true"><span id="cookie_hdr_showagain">Privacy & Cookies Policy</span></div><div class="cli-modal" data-nosnippet="true" id="cliSettingsPopup" tabindex="-1" role="dialog" aria-labelledby="cliSettingsPopup" aria-hidden="true">
+    <div class="cli-modal-dialog" role="document">
+        <div class="cli-modal-content cli-bar-popup">
+            <button type="button" class="cli-modal-close" id="cliModalClose">
+                <svg class="" viewBox="0 0 24 24"><path d="M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z"></path><path d="M0 0h24v24h-24z" fill="none"></path></svg>
+                <span class="wt-cli-sr-only">Close</span>
+            </button>
+            <div class="cli-modal-body">
+                <div class="cli-container-fluid cli-tab-container">
+                    <div class="cli-row">
+                        <div class="cli-col-12 cli-align-items-stretch cli-px-0">
+                            <div class="cli-privacy-overview">
+                                <h4>Privacy Overview</h4>                <div class="cli-privacy-content">
+                                <div class="cli-privacy-content-text">This website uses cookies to improve your experience while you navigate through the website. Out of these, the cookies that are categorized as necessary are stored on your browser as they are essential for the working of basic functionalities of the website. We also use third-party cookies that help us analyze and understand how you use this website. These cookies will be stored in your browser only with your consent. You also have the option to opt-out of these cookies. But opting out of some of these cookies may affect your browsing experience.</div>
+                            </div>
+                                <a class="cli-privacy-readmore" data-readmore-text="Show more" data-readless-text="Show less"></a>            </div>
+                        </div>
+                        <div class="cli-col-12 cli-align-items-stretch cli-px-0 cli-tab-section-container">
+
+                            <div class="cli-tab-section">
+                                <div class="cli-tab-header">
+                                    <a role="button" tabindex="0" class="cli-nav-link cli-settings-mobile" data-target="necessary" data-toggle="cli-toggle-tab">
+                                        Necessary                            </a>
+                                    <div class="wt-cli-necessary-checkbox">
+                                        <input type="checkbox" class="cli-user-preference-checkbox"  id="wt-cli-checkbox-necessary" data-id="checkbox-necessary" checked="checked"  />
+                                        <label class="form-check-label" for="wt-cli-checkbox-necessary">Necessary</label>
+                                    </div>
+                                    <span class="cli-necessary-caption">Always Enabled</span>                         </div>
+                                <div class="cli-tab-content">
+                                    <div class="cli-tab-pane cli-fade" data-id="necessary">
+                                        <p>Necessary cookies are absolutely essential for the website to function properly. This category only includes cookies that ensures basic functionalities and security features of the website. These cookies do not store any personal information.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cli-tab-section">
+                                <div class="cli-tab-header">
+                                    <a role="button" tabindex="0" class="cli-nav-link cli-settings-mobile" data-target="non-necessary" data-toggle="cli-toggle-tab">
+                                        Non-necessary                            </a>
+                                    <div class="cli-switch">
+                                        <input type="checkbox" id="wt-cli-checkbox-non-necessary" class="cli-user-preference-checkbox"  data-id="checkbox-non-necessary"  checked='checked' />
+                                        <label for="wt-cli-checkbox-non-necessary" class="cli-slider" data-cli-enable="Enabled" data-cli-disable="Disabled"><span class="wt-cli-sr-only">Non-necessary</span></label>
+                                    </div>                        </div>
+                                <div class="cli-tab-content">
+                                    <div class="cli-tab-pane cli-fade" data-id="non-necessary">
+                                        <p>Any cookies that may not be particularly necessary for the website to function and is used specifically to collect user personal data via analytics, ads, other embedded contents are termed as non-necessary cookies. It is mandatory to procure user consent prior to running these cookies on your website.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="cli-modal-backdrop cli-fade cli-settings-overlay"></div>
+    <div class="cli-modal-backdrop cli-fade cli-popupbar-overlay"></div>
+    <!--googleon: all--><script type='text/javascript' src='https://zoo-krakow.pl/wp-includes/js/comment-reply.min.js?ver=5.6.1' id='comment-reply-js'></script>
+    <script type='text/javascript' id='contact-form-7-js-extra'>
+        /* <![CDATA[ */
+var wpcf7 = {"apiSettings":{"root":"https:\/\/zoo-krakow.pl\/wp-json\/contact-form-7\/v1","namespace":"contact-form-7\/v1"}};
+/* ]]> */
+    </script>
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=5.3.2' id='contact-form-7-js'></script>
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-content/plugins/easy-fancybox/js/jquery.fancybox.min.js?ver=1.3.24' id='jquery-fancybox-js'></script>
+    <script type='text/javascript' id='jquery-fancybox-js-after'>
+        var fb_timeout, fb_opts={'overlayShow':true,'hideOnOverlayClick':true,'showCloseButton':true,'margin':20,'centerOnScroll':true,'enableEscapeButton':true,'autoScale':true };
+        if(typeof easy_fancybox_handler==='undefined'){
+        var easy_fancybox_handler=function(){
+        jQuery('.nofancybox,a.wp-block-file__button,a.pin-it-button,a[href*="pinterest.com/pin/create"],a[href*="facebook.com/share"],a[href*="twitter.com/share"]').addClass('nolightbox');
+        /* IMG */
+        var fb_IMG_select='a[href*=".jpg"]:not(.nolightbox,li.nolightbox>a),area[href*=".jpg"]:not(.nolightbox),a[href*=".jpeg"]:not(.nolightbox,li.nolightbox>a),area[href*=".jpeg"]:not(.nolightbox),a[href*=".png"]:not(.nolightbox,li.nolightbox>a),area[href*=".png"]:not(.nolightbox)';
+        jQuery(fb_IMG_select).addClass('fancybox image');
+        var fb_IMG_sections=jQuery('.gallery,.wp-block-gallery,.tiled-gallery,.wp-block-jetpack-tiled-gallery');
+        fb_IMG_sections.each(function(){jQuery(this).find(fb_IMG_select).attr('rel','gallery-'+fb_IMG_sections.index(this));});
+        jQuery('a.fancybox,area.fancybox,li.fancybox a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'transitionIn':'elastic','easingIn':'easeOutBack','transitionOut':'elastic','easingOut':'easeInBack','opacity':false,'hideOnContentClick':true,'titleShow':true,'titlePosition':'over','titleFromAlt':true,'showNavArrows':true,'enableKeyboardNav':true,'cyclic':true}))});};
+        jQuery('a.fancybox-close').on('click',function(e){e.preventDefault();jQuery.fancybox.close()});
+        };
+        var easy_fancybox_auto=function(){setTimeout(function(){jQuery('#fancybox-auto').trigger('click')},1000);};
+        jQuery(easy_fancybox_handler);jQuery(document).on('post-load',easy_fancybox_handler);
+        jQuery(easy_fancybox_auto);
+    </script>
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-content/plugins/easy-fancybox/js/jquery.easing.min.js?ver=1.4.1' id='jquery-easing-js'></script>
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-content/plugins/easy-fancybox/js/jquery.mousewheel.min.js?ver=3.1.13' id='jquery-mousewheel-js'></script>
+    <script type='text/javascript' src='https://zoo-krakow.pl/wp-includes/js/wp-embed.min.js?ver=5.6.1' id='wp-embed-js'></script>
+
+</body>
+</html>
+

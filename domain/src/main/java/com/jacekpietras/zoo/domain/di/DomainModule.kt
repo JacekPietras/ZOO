@@ -46,17 +46,22 @@ val domainModule = module {
     }
     factory {
         GetTechnicalRoadsUseCase(
-            mapRepository = get()
+            mapRepository = get(),
         )
     }
     factory {
         GetLinesUseCase(
-            mapRepository = get()
+            mapRepository = get(),
+        )
+    }
+    factory {
+        GetMyszojelenUseCase(
+            animalRepository = get(),
         )
     }
     factory {
         ObserveTakenRouteUseCase(
-            gpsRepository = get()
+            gpsRepository = get(),
         )
     }
     factory {

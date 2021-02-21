@@ -28,6 +28,7 @@ val mapModule = module {
             getRegionsInUserPositionUseCase = get(),
             getSnappedToRoadUseCase = get(),
             getShortestPathUseCase = get(),
+            getMyszojelenUseCase = get(),
         )
     }
 }

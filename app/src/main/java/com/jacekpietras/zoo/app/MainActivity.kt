@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         // https://issuetracker.google.com/issues/139738913
-        Timber.e("leak hunt pause root:$isTaskRoot finishing:$isFinishing")
+        Timber.v("leak hunt pause root:$isTaskRoot finishing:$isFinishing")
         if (isTaskRoot && SDK_INT == VERSION_CODES.Q && isFinishing) {
             finishAfterTransition()
             if (!isServiceRunning(this, TrackingService::class.java)) {
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         // https://issuetracker.google.com/issues/139738913
-        Timber.e("leak hunt destroy root:$isTaskRoot")
+        Timber.v("leak hunt destroy root:$isTaskRoot")
         if (isTaskRoot && SDK_INT == VERSION_CODES.Q) {
             finishAfterTransition()
             if (!isServiceRunning(this, TrackingService::class.java)) {
