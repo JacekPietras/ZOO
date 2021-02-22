@@ -601,7 +601,7 @@
 		"facts": "Największy ptak żyjący obecnie na ziemi, najszybszy spośród nielotnych ptaków lądowych. Na dłuższych dystansach biega z prędkością 50 km/h, a na krótszych &#8211; nawet do 70 km/h. Jego stopy zakończone są tylko 2 palcami. Ma doskonały wzrok – widzi dobrze na odległość do około 5 km.",
 		"wiki": "https://pl.wikipedia.org/wiki/Stru%C5%9B_czerwonosk%C3%B3ry",
 		"web": "https://zoo-krakow.pl/strus-afrykanski-2/",
-		"regionInZoo": "todo",
+		"regionInZoo": "tapiry-strusie-zebry",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/strus-afrykanski41.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/strus-afrykanski31.jpg",
@@ -626,7 +626,7 @@
 		"facts": "Nandu posiadają doskonały wzrok, dobrze pływają i szybko biegają (mogą przekraczać prędkość 40 km/godz). Długie skrzydła wykorzystują do gwałtownej zmiany kierunku.",
 		"wiki": "https://en.wikipedia.org/wiki/Greater_rhea",
 		"web": "https://zoo-krakow.pl/nandu-szare-2/",
-		"regionInZoo": "todo",
+		"regionInZoo": "tapiry-strusie-zebry",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/nandu-szare2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/nandu-szare11.jpg"
@@ -693,7 +693,7 @@
 		"facts": "Największa perlica. Ze względu na to, że głowa i szyja tego ptaka pozbawione są piór perlica ta została nazwana sępią.",
 		"wiki": "https://pl.wikipedia.org/wiki/Perlica_s%C4%99pia",
 		"web": "https://zoo-krakow.pl/perlica-sepia/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/perlica-sepia.jpg"
 		]
@@ -714,9 +714,29 @@
 		"facts": "Poza okresem lęgowym ptaki te łączą się w niewielkie stada. Uszak siwy jest najpospolitszym gatunkiem spośród wszystkich gatunków uszaków utrzymywanych przez w hodowców.",
 		"wiki": "https://pl.wikipedia.org/wiki/Uszak_siwy",
 		"web": "https://zoo-krakow.pl/uszak-siwy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/uszak-siwy1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "uszak-brunatny"
+		},
+		"language": "pl",
+		"name": "Uszak Brunatny",
+		"nameLatin": "Crossoptilon mantchuricum",
+		"occurrence": "Chiny.",
+		"environment": "",
+		"food": "",
+		"division": "BIRD",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Uszak_brunatny",
+		"web": "",
+		"regionInZoo": "bazanty-papugi",
+		"photos": [
 		]
 	},
 	{
@@ -735,7 +755,7 @@
 		"facts": "Olśniak himalajski to narodowy ptak i symbol Nepalu. Jego łacińska nazwa upamiętnia Lady Mary Impey, małżonkę prezesa brytyjskiego sądu najwyższego Bengalu, sir Elijaha Impey.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ol%C5%9Bniak_himalajski",
 		"web": "https://zoo-krakow.pl/olsniak-himalajski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi|ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/olsniak-himalajski2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/olsniak-himalajski11.jpg"
@@ -757,7 +777,7 @@
 		"facts": "Jest to słabo poznany gatunek. Zawdzięcza swoją nazwę francuskiemu zoologowi Alfonsowi Milne-Edwardsowi.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ki%C5%9Bciec_annamski",
 		"web": "https://zoo-krakow.pl/bazant-annamski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi|ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazant-annamski11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazant-annamski.jpg"
@@ -779,7 +799,7 @@
 		"facts": "Bażant ten jest idealnym ptakiem dla początkującego hodowcy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ki%C5%9Bciec_srebrzysty",
 		"web": "https://zoo-krakow.pl/bazant-srebrzysty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazant-srebrzysty1.jpg"
 		]
@@ -800,7 +820,7 @@
 		"facts": "Jest to narodowy ptak Indii. Pawie były hodowane już w czasach egipskich faraonów i Cesarstwa Rzymskiego.",
 		"wiki": "https://pl.wikipedia.org/wiki/Paw_indyjski",
 		"web": "https://zoo-krakow.pl/paw/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/paw31.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/paw21.jpg",
@@ -824,7 +844,7 @@
 		"facts": "Zwyczaj gniazdowania na drzewach, charakterystyczny dla tragopanów jest niespotykany u innych przedstawicieli rodziny bażantowatych.",
 		"wiki": "https://pl.wikipedia.org/wiki/Tragopan_modrolicy",
 		"web": "https://zoo-krakow.pl/tragopan-temmincka/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/tragopan-Temmincka1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/tragopan-Temmincka11.jpg"
@@ -846,7 +866,7 @@
 		"facts": "Ptak obserwowany na terenie Polski. Zalatuje, zimuje i sporadycznie gniazduje w naszym kraju. Bernikla kanadyjska uznawana jest za jeden z najgroźniejszych gatunków obcych w Europie ze względu na rozszerzający się zasięg i zagrożenie dla rodzimych, europejskich gatunków gęsi.",
 		"wiki": "https://pl.wikipedia.org/wiki/Bernikla_kanadyjska",
 		"web": "https://zoo-krakow.pl/bernikla-kanadyjska/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-kanadyjska31.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-kanadyjska21.jpg",
@@ -870,7 +890,7 @@
 		"facts": "Ptak sporadycznie obserwowany na terenie Polski.",
 		"wiki": "https://pl.wikipedia.org/wiki/Bernikla_bia%C5%82olica",
 		"web": "https://zoo-krakow.pl/bernikla-bialolica/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-maly-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-bialolica1.jpg"
 		]
@@ -891,7 +911,7 @@
 		"facts": "Jest to gatunek sporadycznie obserwowany na terenie naszego kraju.",
 		"wiki": "https://pl.wikipedia.org/wiki/Bernikla_rdzawoszyja",
 		"web": "https://zoo-krakow.pl/bernikla-rdzawoszyja/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bernikla-rdzawoszyja1.jpg"
 		]
@@ -912,7 +932,7 @@
 		"facts": "Pod koniec XVIII wieku liczebność tego gatunku wynosiła ponad 25 tysięcy sztuk, jednak na skutek masowych polowań zmniejszyła się, osiągając w roku 1952 zaledwie 30 osobników. Dzięki hodowli w ośrodkach zamkniętych gatunek został uratowany przed zagładą.",
 		"wiki": "https://pl.wikipedia.org/wiki/Bernikla_hawajska",
 		"web": "https://zoo-krakow.pl/ges-hawajska/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ges-hawajska1.jpg"
 		]
@@ -933,7 +953,7 @@
 		"facts": "W Europie odnotowano przypadki pomyślnego gniazdowania łabędzi czarnych zbiegłych z niewoli. Pod względem wymagań środowiskowych jest to gatunek zbliżony do łabędzia niemego.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%81ab%C4%99d%C5%BA_czarny",
 		"web": "https://zoo-krakow.pl/labedz-czarny/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw|ptaki-wodne-maly-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/labedz-czarny1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/labedz-czarny11.jpg",
@@ -956,7 +976,7 @@
 		"facts": "Ptaki obu płci wyglądają podobnie, u samca pojawia się w okresie letnim czerwona, guzowata narośl u nasady dzioba.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ohar",
 		"web": "https://zoo-krakow.pl/ohar/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-maly-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ohar.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ohar11.jpg"
@@ -978,7 +998,7 @@
 		"facts": "Hodowana jako ptak ozdobny. Z powodu oryginalnego upierzenia stała się jednym z ulubionych ptaków, utrzymywanych w parkach w wielu krajach Europy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Mandarynka_(ptak)",
 		"web": "https://zoo-krakow.pl/mandarynka/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/mandarynka2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/mandarynka11.jpg"
@@ -1000,7 +1020,7 @@
 		"facts": "Kaczka ta nazywana jest w Ameryce Północnej kaczką leśną. Jej nazwa pochodzi od stanu Karolina w USA, gdzie żyje najliczniejsza populacja. Z piór karolinki wytwarzano przynęty na pstrągi, dlatego też na przełomie XIX i XX wieku była gatunkiem zagrożonym.",
 		"wiki": "https://pl.wikipedia.org/wiki/Karolinka",
 		"web": "https://zoo-krakow.pl/karolinka/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach|ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/karolinka.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/karolinka11.jpg"
@@ -1022,7 +1042,7 @@
 		"facts": "Żyje w parach lub małych stadach. U gatunku tego w ystępuje wyraźny dymorfizm płciowy. Samce posiadają nad dziobem charakterystyczny, okrągły wyrostek, który znacznie powiększa się przed okresem lęgowym.",
 		"wiki": "https://pl.wikipedia.org/wiki/Dziwonos_szaroboczny",
 		"web": "https://zoo-krakow.pl/dziwonos/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/dziwonos1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/dziwonos11.jpg"
@@ -1044,7 +1064,7 @@
 		"facts": "W Polsce jest nielicznym ptakiem lęgowym.",
 		"wiki": "https://pl.wikipedia.org/wiki/Podgorza%C5%82ka_zwyczajna",
 		"web": "https://zoo-krakow.pl/podgorzalka/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/podgorzalka11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/podgorzalka2.jpg"
@@ -1066,7 +1086,7 @@
 		"facts": "W Polsce jest nielicznym ptakiem lęgowym. Gnieździ się na Mazurach, w pozostałych rejonach kraju bardzo rzadka.",
 		"wiki": "https://pl.wikipedia.org/wiki/He%C5%82miatka_zwyczajna",
 		"web": "https://zoo-krakow.pl/helmiatka/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-maly-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/helmiatka-3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/helmiatka.jpg",
@@ -1091,7 +1111,7 @@
 		"facts": "Dziób flaminga jest mocno zakrzywiony. Po zanurzeniu w wodzie płaska szczęka górna znajduje się u dołu, a znacznie masywniejsza żuchwa u góry. Pompującymi ruchami gardła ptak wciąga wodę końcem dzioba i wyciska ją u jego nasady. Grzebyki rogowych blaszek na brzegach dzioba działają jak filtry, odcedzając pokarm.",
 		"wiki": "https://pl.wikipedia.org/wiki/Flaming_r%C3%B3%C5%BCowy",
 		"web": "https://zoo-krakow.pl/flaming-rozowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "flamingi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/flamingi1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/flamingi2.jpg",
@@ -1114,7 +1134,7 @@
 		"facts": "Już w sierpniu i wrześniu bociany gromadzą się w duże stada, liczące nawet około 50 osobników. Zgromadzenia te nazywane &#8222;sejmikami bocianimi&#8221; poprzedzają wędrówkę z letnich lęgowisk na zimowiska w Afryce.",
 		"wiki": "https://pl.wikipedia.org/wiki/Bocian_bia%C5%82y",
 		"web": "https://zoo-krakow.pl/bocian-bialy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-bialy11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-bialy2.jpg"
@@ -1136,7 +1156,7 @@
 		"facts": "W naszym kraju jest nielicznym ptakiem lęgowym. Unika sąsiedztwa człowieka, jest dużo bardziej płochliwy od bociana białego.",
 		"wiki": "https://pl.wikipedia.org/wiki/Bocian_czarny",
 		"web": "https://zoo-krakow.pl/bocian-czarny/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-czarny1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bocian-czarny11.jpg"
@@ -1158,7 +1178,7 @@
 		"facts": "Potężny krewniak naszego bociana, osiągający 150 cm wzrostu i do 9 kg masy ciała. Rozpiętość skrzydeł u tego gatunku dochodzi do 3 metrów.",
 		"wiki": "https://pl.wikipedia.org/wiki/Marabut_afryka%C5%84ski",
 		"web": "https://zoo-krakow.pl/marabut-afrykanski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/marabut-afrykanski.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/marabut-afrykanski1.jpg",
@@ -1181,7 +1201,7 @@
 		"facts": "Dziób ibisa – cienki, długi i łukowato zagięty w dół jest narzędziem służącym do sondowania miękkich mułów lub wody w poszukiwaniu pożywienia.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ibis_szkar%C5%82atny",
 		"web": "https://zoo-krakow.pl/ibis-purpurowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ibis-purpurowy1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ibis-purpurowy11.jpg"
@@ -1203,7 +1223,7 @@
 		"facts": "Na początku XX wieku panowała moda na kapelusze z ozdobnymi piórami czapli nadobnych. Spowodowało to zniszczenie wielu kolonii i śmierć ptaków, od których pozyskiwano pióra.",
 		"wiki": "https://pl.wikipedia.org/wiki/Czapla_nadobna",
 		"web": "https://zoo-krakow.pl/czapla-nadobna/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/czapla-nadobna1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/czapla-nadobna11.jpg"
@@ -1294,7 +1314,7 @@
 		"facts": "Podobizna tego ptaka stanowi element godła państwowego Ugandy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Koronnik_szary",
 		"web": "https://zoo-krakow.pl/zuraw-koroniasty-wschodni/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-wodne-duzy-staw|ptaki-wodne-maly-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty11.jpg",
@@ -1340,7 +1360,7 @@
 		"facts": "Gatunek chętnie hodowany w domach jako ptak ozdobny. W naturze doskonale przystosowany do gorącego i suchego klimatu wnętrza kontynentu australijskiego.",
 		"wiki": "https://pl.wikipedia.org/wiki/Go%C5%82%C4%85bek_diamentowy",
 		"web": "https://zoo-krakow.pl/golabek-diamentowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/golabek-diamentowy1.jpg"
 		]
@@ -1361,7 +1381,7 @@
 		"facts": "Największy z żyjących gołębi. Jest ptakiem naziemnym, w razie niebezpieczeństwa chroni się na drzewach.",
 		"wiki": "https://pl.wikipedia.org/wiki/Koroniec_plamoczuby",
 		"web": "https://zoo-krakow.pl/koroniec-plamoczuby/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/koroniec-plamoczuby1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/koroniec-plamoczuby11.jpg",
@@ -1384,7 +1404,7 @@
 		"facts": "Wyróżniono 20 podgatunków lorysy górskiej, różniących się ubarwieniem.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lorysa_g%C3%B3rska",
 		"web": "https://zoo-krakow.pl/lorysa-gorska/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/lorysa-gorska1.jpg"
 		]
@@ -1405,7 +1425,7 @@
 		"facts": "Żyje w stadach. Może wyrządzać znaczne szkody na plantacjach ryżu.",
 		"wiki": "https://pl.wikipedia.org/wiki/Aleksandretta_r%C3%B3%C5%BCana",
 		"web": "https://zoo-krakow.pl/aleksandretta-rozana/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/aleksandretta-rozana1.jpg"
 		]
@@ -1426,7 +1446,7 @@
 		"facts": "W niewoli szybko się oswaja. Doskonale potrafi naśladować ludzką mowę.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%BBako",
 		"web": "https://zoo-krakow.pl/zako-kongijskie/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zako-kongijskie1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zako-kongijskie11.jpg"
@@ -1448,7 +1468,7 @@
 		"facts": "Papuga ta jest znana w Europie od początku XVII wieku. Trzymana w domach oswojona ara zielona jest wyjątkowo łagodna, skora do zabawy i pieszczot. Cierpliwie uczona, potrafi naśladować mowę człowieka.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ara_zielona",
 		"web": "https://zoo-krakow.pl/ara-zielona/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/ara-zielona1.jpg"
 		]
@@ -1469,9 +1489,49 @@
 		"facts": "Jest gatunkiem dobrze przystosowanym do chłodnego klimatu. Wyhodowano kilka odmian kolorystycznych.",
 		"wiki": "https://pl.wikipedia.org/wiki/Mnicha",
 		"web": "https://zoo-krakow.pl/mnicha/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/mnicha1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "nierozlaczka"
+		},
+		"language": "pl",
+		"name": "Nierozłączka rudogłowa",
+		"nameLatin": "Agapornis fischeri",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "BIRD",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Nieroz%C5%82%C4%85czka_rudog%C5%82owa",
+		"web": "",
+		"regionInZoo": "bazanty-papugi",
+		"photos": [
+		]
+	},
+	{
+		"id": {
+			"id": "toko-czarnoskrzydly"
+		},
+		"language": "pl",
+		"name": "Toko czarnoskrzydły",
+		"nameLatin": "Tockus deckeni",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "BIRD",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "",
+		"web": "",
+		"regionInZoo": "bazanty-papugi",
+		"photos": [
 		]
 	},
 	{
@@ -1490,7 +1550,7 @@
 		"facts": "W hodowli ptaki te szybko się oswajają. Są bardzo hałaśliwe.",
 		"wiki": "https://pl.wikipedia.org/wiki/Konura_czarnog%C5%82owa",
 		"web": "https://zoo-krakow.pl/konura-nandaj/",
-		"regionInZoo": "todo",
+		"regionInZoo": "ptaki-w-wolierach",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/konura-nandaj1.jpg"
 		]
@@ -1620,7 +1680,7 @@
 		"facts": "Wikłacze gromadzą się w duże, hałaśliwe stada. Nazwa tego ptaka związana jest ze sposobem, w jaki buduje on swoje kunsztowne gniazdo.",
 		"wiki": "https://en.wikipedia.org/wiki/Southern_red_bishop",
 		"web": "https://zoo-krakow.pl/wiklacz-ognisty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "bazanty-papugi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/wiklacz-ogniasty1.jpg"
 		]
@@ -1858,9 +1918,10 @@
 		"facts": "Doskonale wspina się po drzewach. Żyje w grupach rodzinnych liczących zwykle od 8 do 10 osobników.",
 		"wiki": "https://pl.wikipedia.org/wiki/Uistiti",
 		"web": "https://zoo-krakow.pl/marmozeta-bialoczelna/",
-		"regionInZoo": "todo",
+		"regionInZoo": "pazurzatki",
 		"photos": [
-			"https://zoo-krakow.pl/wp-content/uploads/2016/04/marmozeta-białoczelna12.jpg"
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/marmozeta-białoczelna12.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/marmozeta-bia%C5%82oczelna13.jpg"
 		]
 	},
 	{
@@ -1879,9 +1940,10 @@
 		"facts": "Prawie całe swoje życie spędzają na drzewach. Prowadzą dzienny tryb życia. Tworzą grupy złożone z 2-8 osobników. Typowa rodzina składa się z rodziców i ich potomstwa.",
 		"wiki": "https://pl.wikipedia.org/wiki/Marmozeta_lwia",
 		"web": "https://zoo-krakow.pl/lwiatka-zlota/",
-		"regionInZoo": "todo",
+		"regionInZoo": "pazurzatki",
 		"photos": [
-			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lwiatka-złota2.jpg"
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lwiatka-złota2.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lwiatka-z%C5%82ota3.jpg"
 		]
 	},
 	{
@@ -1900,10 +1962,33 @@
 		"facts": "Prowadzi nadrzewny tryb życia. Jest aktywna w ciągu dnia. Żyje w grupach rodzinnych",
 		"wiki": "https://pl.wikipedia.org/wiki/Tamaryna_bia%C5%82oczuba",
 		"web": "https://zoo-krakow.pl/tamaryna-bialoczuba/",
-		"regionInZoo": "todo",
+		"regionInZoo": "pazurzatki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tamaryna-białoczuba-12.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tamaryna-białoczuba1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "tamaryna-cesarska"
+		},
+		"language": "pl",
+		"name": "Tamaryna cesarska",
+		"nameLatin": "Saguinus imperator subgrisescens",
+		"occurrence": "Brazylia, Boliwia i Peru.",
+		"environment": "Lasy deszczowe południowo-zachodniego dorzecza Amazonki.",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Żyje w grupach rodzinnych, prowadzi nadrzewny tryb życia. Żywi się owocami, nektarem i drobnymi bezkręgowcami. Gatunek ten został nazwany na cześć cesarza Niemiec – Wilhelma II, obdarzonego sumiastym wąsem.",
+		"wiki": "https://pl.wikipedia.org/wiki/Tamaryna_cesarska",
+		"web": "",
+		"regionInZoo": "pazurzatki",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/04/tamaryna-cesarska3.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/06/cesarska2_.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/06/cesarska1_.jpg",
 		]
 	},
 	{
@@ -2097,7 +2182,7 @@
 		"facts": "Jego ciało pokryte jest grubymi, szczeciniastymi włosami, które na plecach i ogonie przekształcone są w kolce. Zagrożony, stroszy je, odwraca się do napastnika tyłem i skutecznie broni się miotając ogonem. Jest aktywny nocą.",
 		"wiki": "https://pl.wikipedia.org/wiki/Je%C5%BCozwierz_indyjski",
 		"web": "https://zoo-krakow.pl/jezozwierz-indyjski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "jezozwierze-psowate",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/jeżozwierzs.jpg"
 		]
@@ -2139,7 +2224,7 @@
 		"facts": "Jego zmysły wzroku, słuchu i węchu są doskonale rozwinięte. W dawnych czasach, w Indiach i na Bliskim Wschodzie towarzyszył człowiekowi w polowaniach na zwierzynę płową. Po turecku słowo karakulak oznacza czarne ucho i stąd właśnie wywodzi się nazwa gatunku. Kot ten zwany jest również rysiem stepowym ze względu na obecność charakterystycznych pędzelków na końcach uszu.",
 		"wiki": "https://pl.wikipedia.org/wiki/Karakal_stepowy",
 		"web": "https://zoo-krakow.pl/karakal/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/karakal4.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/karakal11.jpg",
@@ -2227,7 +2312,7 @@
 		"facts": "Prowadzi nocny tryb życia, dzień przesypia w gęstych zaroślach. Doskonale wspina się po drzewach i świetnie pływa. Gatunek samotniczy, prowadzi nocny tryb życia. Żyje do 15 lat.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ocelot_argenty%C5%84ski",
 		"web": "https://zoo-krakow.pl/kot-argentynski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kot-argentyński3.jpg"
 		]
@@ -2269,7 +2354,7 @@
 		"facts": "Prowadzi nocny tryb życia, dzień przesypia w gęstych zaroślach. Doskonale wspina się po drzewach, dobrze pływa.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ocelot_wielki",
 		"web": "https://zoo-krakow.pl/ocelot/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ocelot2.jpg"
 		]
@@ -2290,7 +2375,7 @@
 		"facts": "Ma niezwykle czuły słuch. Prowadzi samotniczy tryb życia.",
 		"wiki": "https://pl.wikipedia.org/wiki/Serwal_sawannowy",
 		"web": "https://zoo-krakow.pl/serwal/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/serwal2.jpg"
 		]
@@ -2334,7 +2419,7 @@
 		"facts": "Z uwagi na podobieństwo do niektórych przedstawicieli rodziny łasicowatych nazywany jest &#8222;kotem łasicowatym&#8221;.",
 		"wiki": "https://pl.wikipedia.org/wiki/Jaguarundi_ameryka%C5%84ski",
 		"web": "https://zoo-krakow.pl/jaguarundi/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/jaguarundi2.jpg"
 		]
@@ -2487,7 +2572,7 @@
 		"facts": "Jest to przedstawiciel rodziny mangustowatych. Drapieżniki te żyją w grupach rodzinnych, w których panuje hierarchia. Nad bezpieczeństwem grupy czuwa osobnik, który wypatruje niebezpieczeństwa i na widok zagrożenia daje pobratymcom głośny sygnał do ucieczki. Cała kolonia znika wówczas pod ziemią w bezpiecznym systemie jam i korytarzy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Surykatka_szara",
 		"web": "https://zoo-krakow.pl/surykatka/",
-		"regionInZoo": "todo",
+		"regionInZoo": "surykatki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/surykatka2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/surykatka12.jpg",
@@ -2510,12 +2595,32 @@
 		"facts": "Z uwagi na podobieństwo do lisa, Indianie nazwali go „dużym lisem”. Nazwa wilk grzywiasty pochodzi od charakterystycznej grzywy, którą zwierzę stroszy w chwili zaniepokojenia.",
 		"wiki": "https://pl.wikipedia.org/wiki/Pampasowiec_grzywiasty",
 		"web": "https://zoo-krakow.pl/wilk-grzywiasty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "jezozwierze-psowate",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty-31.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty21.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "wilk-europejski"
+		},
+		"language": "pl",
+		"name": "Wilk Europejski",
+		"nameLatin": "Canis lupus lupus",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Wilk_europejski",
+		"web": "",
+		"regionInZoo": "wilki",
+		"photos": [
 		]
 	},
 	{
@@ -2534,7 +2639,7 @@
 		"facts": "Posiadają od 46 do 50 drobnych zębów (najwięcej spośród wszystkich ssaków). Żyją w parach lub grupach rodzinnych.",
 		"wiki": "https://pl.wikipedia.org/wiki/Otocjon_wielkouchy",
 		"web": "https://zoo-krakow.pl/otocjon/",
-		"regionInZoo": "todo",
+		"regionInZoo": "jezozwierze-psowate",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/otocjon5.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/otocjon12.jpg",
@@ -2645,7 +2750,7 @@
 		"facts": "Borsuki żyją w grupach rodzinnych, których członkowie są blisko spokrewnieni. Każda grupa zamieszkuje terytorium, w obrębie którego znajdują się nory i wydeptane ścieżki, uczęszczane przez te zwierzęta.",
 		"wiki": "https://pl.wikipedia.org/wiki/Borsuk_europejski",
 		"web": "https://zoo-krakow.pl/borsuk/",
-		"regionInZoo": "todo",
+		"regionInZoo": "jezozwierze-psowate",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/borsuk3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/borsuk11.jpg"
@@ -2755,7 +2860,7 @@
 		"facts": "W niebezpieczeństwie zebra ratuje się ucieczką rozwijając prędkość do 65 km/h. Naturalnymi wrogami zebr są lwy, lamparty, gepardy i hieny. Zwierzę to zostało nazwane zebrą Chapmana na cześć przyrodnika Jamesa Chapmana.",
 		"wiki": "https://pl.wikipedia.org/wiki/Zebra_stepowa",
 		"web": "https://zoo-krakow.pl/zebra-chapmana/",
-		"regionInZoo": "todo",
+		"regionInZoo": "tapiry-strusie-zebry",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/zebra-Chapmana3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/zebra-Chapmana11.jpg"
@@ -2844,7 +2949,7 @@
 		"facts": "Górna warga wraz z nosem tworzą krótką, silnie umięśnioną trąbę. Są świetnie przystosowane do pokonywania gęstych zarośli – mają gładką skórę, szczeciniastą sierść, klinowatą głowę i mocno umięśnione nogi. Tapir uważany jest przez wielu przyrodników za &#8222;żywą skamielinę&#8221;, ponieważ prawie nie różni się od swoich przodków występujących licznie na ziemi w środkowym trzeciorzędzie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Tapir_ameryka%C5%84ski",
 		"web": "https://zoo-krakow.pl/tapir-anta/",
-		"regionInZoo": "todo",
+		"regionInZoo": "tapiry-strusie-zebry",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tapir-anta3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tapir-anta21.jpg"
@@ -3264,7 +3369,7 @@
     	"facts": "Ptaki te coraz częściej spotykane są w pobliżu siedzib ludzkich, gdzie wyrządzają szkody na plantacjach kukurydzy, w sadach owocowych i uprawach kawy.",
     	"wiki": "https://pl.wikipedia.org/wiki/Ara_%C5%BC%C3%B3%C5%82toskrzyd%C5%82a",
     	"web": "https://zoo-krakow.pl/ara-zoltoskrzydla/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-w-wolierach",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/ara-zoltoskrzydla11.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/ara-zoltoskrzydla2.jpg"
@@ -3286,7 +3391,7 @@
     	"facts": "Amazonka jest papugą długowieczną. Niektóre osobniki potrafią znakomicie naśladować ludzką mowę.",
     	"wiki": "https://pl.wikipedia.org/wiki/Amazonka_niebieskoczelna",
     	"web": "https://zoo-krakow.pl/amazonka-niebieskoczelna/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-w-wolierach",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/amazonka-niebieskoczelna1.jpg"
     	]
@@ -3329,7 +3434,7 @@
     	"facts": "Gatunek o szerokim zasięgu występowania.",
     	"wiki": "https://pl.wikipedia.org/wiki/Drzewica_dwubarwna",
     	"web": "https://zoo-krakow.pl/drzewica-dwubarwna/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-w-wolierach",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewica-dwubarwna1.jpg"
     	]
@@ -3350,7 +3455,7 @@
     	"facts": "Samiec w upierzeniu godowym różni się od samicy obecnością czarnej obroży na szyi. Samica jest ponadto nieco mniejsza.",
     	"wiki": "https://pl.wikipedia.org/wiki/Kazarka_rdzawa",
     	"web": "https://zoo-krakow.pl/kazarka/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-wodne-duzy-staw|ptaki-wodne-maly-staw",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/kazarka1.jpg"
     	]
@@ -3394,7 +3499,7 @@
     	"facts": "Gatunek rzadko eksponowany w ogrodach zoologicznych. W Polsce można go zobaczyć tylko w naszym Zoo.",
     	"wiki": "https://pl.wikipedia.org/wiki/Ibis_czarnopi%C3%B3ry",
     	"web": "https://zoo-krakow.pl/ibis-australijski/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-w-wolierach|ptaki-wodne-duzy-staw",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/ibis-australijski1.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/ibis-australijski11.jpg"
@@ -3416,7 +3521,7 @@
     	"facts": "Gatunek łatwy do oznaczenia. Od innych warzęch o białym upierzeniu różni się różowymi nogami i różową skórą u nasady dzioba.",
     	"wiki": "https://pl.wikipedia.org/wiki/Warz%C4%99cha_czerwonolica",
     	"web": "https://zoo-krakow.pl/warzecha-czerwonolica/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-wodne-duzy-staw",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/warzecha-czerwonolica1.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/warzecha-czerwonolica-21.jpg"
@@ -3438,7 +3543,7 @@
     	"facts": "Dziób pelikana ma bardzo charakterystyczną budowę. Jego dolna część ma twarde brzegi, między którymi rozciąga się płat wiotkiej skóry. Kiedy ptak otwiera dziób pod wodą, skóra rozciąga się niczym wielka kieszeń, w którą pelikan łowi ryby. Może ona pomieścić około 10 litrów wody.",
     	"wiki": "https://pl.wikipedia.org/wiki/Pelikan_r%C3%B3%C5%BCowy",
     	"web": "https://zoo-krakow.pl/pelikan-rozowy/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-wodne-duzy-staw",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/pelikan-rozowy2.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/pelikan-rozowy.jpg",
@@ -3485,7 +3590,7 @@
     	"facts": "Zdarzają się barwne mutacje upierzenia – osobniki pozbawione żółtego barwnika są niebieskie, a ptaki nie mające barwnika niebieskiego – żółte.",
     	"wiki": "https://pl.wikipedia.org/wiki/Aleksandretta_obro%C5%BCna",
     	"web": "https://zoo-krakow.pl/aleksandretta-obrozna/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "bazanty-papugi|ptaki-w-wolierach",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/aleksandretta-obrozna1.jpg"
     	]
@@ -3506,7 +3611,7 @@
     	"facts": "Żyją w małych stadach. Oswojone ararauny trzymali w swoich wioskach Inkowie. Obecnie ararauna należy do najbardziej popularnych ar w hodowlach.",
     	"wiki": "https://pl.wikipedia.org/wiki/Ara_ararauna",
     	"web": "https://zoo-krakow.pl/ararauna-zwyczajna/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "ptaki-w-wolierach",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/ararauna-zwyczajna1.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/ararauna-zwyczajna2.jpg",
@@ -3529,7 +3634,7 @@
     	"facts": "Jest największym zimorodkiem. Wydaje bardzo charakterystyczny głos przypominający ludzki śmiech.",
     	"wiki": "https://pl.wikipedia.org/wiki/Kukabura_chichotliwa",
     	"web": "https://zoo-krakow.pl/kukabura/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "bazanty-papugi",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/kukabura1.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/kukabura11.jpg",
@@ -3552,7 +3657,7 @@
     	"facts": "Ptak ten potrafi znakomicie naśladować różne dźwięki, również mowę ludzką.",
     	"wiki": "https://pl.wikipedia.org/wiki/Gwarek_czczony",
     	"web": "https://zoo-krakow.pl/gwarek/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "bazanty-papugi",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/gwarek1.jpg"
     	]
@@ -3573,7 +3678,7 @@
     	"facts": "Błyszczak purpurowy jest lśniącym krewniakiem szpaka.",
     	"wiki": "https://pl.wikipedia.org/wiki/B%C5%82yszczak_purpurowy",
     	"web": "https://zoo-krakow.pl/blyszczak-purpurowy/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "bazanty-papugi",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/blyszczak-purpurowy2.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/blyszczak-purpurowy11.jpg"
