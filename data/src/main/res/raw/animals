@@ -648,7 +648,7 @@
 		"facts": "Jest drugim po strusiu afrykańskim największym żyjącym ptakiem. Biega bardzo szybko, osiągając prędkość do 50 km/h . W razie zagrożenia broni się uderzając napastnika nogami. Potrafi pływać. Jest hodowany dla mięsa, oleju i skór.",
 		"wiki": "https://pl.wikipedia.org/wiki/Emu_zwyczajne",
 		"web": "https://zoo-krakow.pl/emu-2/",
-		"regionInZoo": "todo",
+		"regionInZoo": "kangury-i-strusie-emu",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/emu21.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/emu.jpg",
@@ -737,6 +737,49 @@
 		"web": "",
 		"regionInZoo": "bazanty-papugi",
 		"photos": [
+		]
+	},
+	{
+		"id": {
+			"id": "zyrafa-rothschilda"
+		},
+		"language": "pl",
+		"name": "Żyrafa rothschilda",
+		"nameLatin": "Giraffa camelopardalis rothschildi",
+		"occurrence": "Afryka: południowy Sudan, północna Uganda, zachodnia Kenia.",
+		"environment": "Sawanny, zarośla akacjowe.",
+		"food": "Głównie liście roślin z rodzaju Acacia.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej około 450 dni rodzi się jedno młode o wadze około 100 kg i wzroście do 2 metrów. Laktacja trwa około 12 miesięcy. Dojrzałość płciową żyrafy osiągają w wieku 4-5 lat.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) podgatunek zaliczony do kategorii NT – bliski zagrożenia. Podgatunek objęty regionalnym, europejskim programem hodowlanym EEP.",
+		"facts": "Szyja żyrafy zawiera tylko 7 kręgów szyjnych, tak jak u większości ssaków. Naukowcy wyróżnili 9 podgatunków żyraf, zamieszkujących różne rejony Afryki i różniących są głównie układem, kolorem i wielkością plam na skórze. Porusza się inochodem. Samce żyrafy Rothschilda osiągają najwyższy wzrost spośród wszystkich podgatunków żyraf.",
+		"wiki": "https://pl.wikipedia.org/wiki/%C5%BByrafa_ugandyjska",
+		"web": "https://zoo-krakow.pl/zyrafa-rothschilda/",
+		"regionInZoo": "zyrafy",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/06/%C5%BCyrafa-Rothschilda.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/06/%C5%BCyrafa-Rothschilda1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zyrafa-siatkowana"
+		},
+		"language": "pl",
+		"name": "Żyrafa siatkowana",
+		"nameLatin": "Giraffa camelopardalis reticulata",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/%C5%BByrafa_siatkowana",
+		"web": "",
+		"regionInZoo": "zyrafy",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/07/zyrafki2.jpg"
 		]
 	},
 	{
@@ -1744,7 +1787,7 @@
 		"facts": "W naszym ZOO regularnie się rozmnaża Poczucie bezpieczeństwa w torbie matki jest tak mocne, że w razie niebezpieczeństwa nawet już wyrośnięty, prawie dorosły osobnik szuka tam schronienia.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kangur_rdzawoszyi",
 		"web": "https://zoo-krakow.pl/walabia-benetta/",
-		"regionInZoo": "todo",
+		"regionInZoo": "kangury-i-strusie-emu",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/walabia-Benetta2.jpg"
 		]
@@ -2685,7 +2728,7 @@
 		"facts": "Uchatki są najsprawniej poruszającymi się na lądzie płetwonogimi. Posiadają niewielkie małżowiny uszne, od obecności których pochodzi nazwa zwierzęcia. Inna nazwa &#8211; lew morski uzasadniona jest charakterystycznym, grzmiącym rykiem wydawanym przez samce i grzywą, porastającą ich grzbiet i kark. Pod wodą uchatki przebywają zwykle około 5 minut, nurkują na głębokość do 100 metrów.",
 		"wiki": "https://pl.wikipedia.org/wiki/Uchatka_patago%C5%84ska",
 		"web": "https://zoo-krakow.pl/uchatka-patagonska/",
-		"regionInZoo": "todo",
+		"regionInZoo": "uchatka-patagonska",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/uchatka-patagońska4.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/uchatka-patagońska11.jpg",
@@ -2708,7 +2751,7 @@
 		"facts": "Drapieżniki te mają dobrze rozwinięty zmysł wzroku, słuchu i węchu. Są samotnikami, za wyjątkiem samic wychowujących młode",
 		"wiki": "https://pl.wikipedia.org/wiki/Wydra_europejska",
 		"web": "https://zoo-krakow.pl/wydra/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wydry",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wydra2.jpg"
 		]
@@ -2815,7 +2858,7 @@
 		"facts": "Jedyny przedstawiciel rodziny pandowatych. Żyje w małych grupach rodzinnych. Naturalnym wrogiem tego zwierzęcia jest pantera śnieżna. Żyje do 14 lat.",
 		"wiki": "https://pl.wikipedia.org/wiki/Pandka_ruda",
 		"web": "https://zoo-krakow.pl/panda-mala/",
-		"regionInZoo": "todo",
+		"regionInZoo": "panda-mala",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/panda-mała13.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/panda-mała3.jpg",
@@ -3018,7 +3061,7 @@
 		"facts": "Jest wykorzystywany jako zwierzę juczne i wierzchowe, rzadziej użytkowany jako siła pociągowa, dostarcza także mleka, mięsa, wełny i skóry. Wielbłąd dwugarbny porusza się inochodem &#8211; to znaczy, że nogi jednej strony ciała poruszają się jednocześnie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Wielb%C5%82%C4%85d_dwugarbny",
 		"web": "https://zoo-krakow.pl/wielblad-dwugarbny/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wielblady-i-gwanko",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wielbłąd-dwugarbny2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wielbłąd-dwugarbny1-1.jpg"
@@ -3084,7 +3127,7 @@
 		"facts": "Charakterystyczną cechą reniferów jest obecność poroża u osobników obu płci. Jest ono półkoliście zakrzywione, zakończone rozgałęzieniami, nieco mniejsze u samic. Renifery odbywają dalekie wędrówki, nawet na odległość do 2000 km.",
 		"wiki": "https://pl.wikipedia.org/wiki/Renifer_tundrowy",
 		"web": "https://zoo-krakow.pl/renifer/",
-		"regionInZoo": "todo",
+		"regionInZoo": "renifer",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/renifer2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/renifery3.jpg",
@@ -3174,7 +3217,7 @@
 		"facts": "Charakterystyczną cechą gatunku jest wyraźnie zaznaczony dymorfizm płciowy. Samce są większe od samic, tylko one posiadają rogi, różnią się także ubarwieniem. Antylopy te prowadzą osiadły tryb życia. Są doskonałymi pływakami.",
 		"wiki": "https://pl.wikipedia.org/wiki/Sitatunga_sawannowa",
 		"web": "https://zoo-krakow.pl/sitatunga/",
-		"regionInZoo": "todo",
+		"regionInZoo": "sitatunga",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/sitatunga1.jpg"
 		]
@@ -3195,7 +3238,7 @@
 		"facts": "Żyje w stadach. Bardzo zwinnie porusza się po skalistym terenie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Arui_grzywiasta",
 		"web": "https://zoo-krakow.pl/arui/",
-		"regionInZoo": "todo",
+		"regionInZoo": "arui",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/arui.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/arui1.jpg",
@@ -3218,7 +3261,7 @@
 		"facts": "Przy dużej dostępności pokarmu aktywny jedynie wieczorem i o świcie. W okresach niedostatku pożywienia żeruje również w ciągu dnia. Jest spokrewniony z wołem piżmowym.",
 		"wiki": "https://pl.wikipedia.org/wiki/Takin_z%C5%82oty",
 		"web": "https://zoo-krakow.pl/takin-miszmi/",
-		"regionInZoo": "todo",
+		"regionInZoo": "takin-miszmi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/takin-2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/takin1.jpg"
@@ -3283,7 +3326,7 @@
 		"facts": "Żyje w stadach złożonych z kilkunastu osobników. W razie zagrożenia ratuje się ucieczką do wody.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kob_%C5%9Bniady",
 		"web": "https://zoo-krakow.pl/kob-sniady/",
-		"regionInZoo": "todo",
+		"regionInZoo": "kob-sniady",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-śniady1.jpg"
 		]
@@ -3304,7 +3347,7 @@
 		"facts": "Zagrożona na lądzie ucieka do wody, dlatego też często nazywana jest kobem wodnym. Świetnie pływa.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kob_moczarowy",
 		"web": "https://zoo-krakow.pl/kob-liczi/",
-		"regionInZoo": "todo",
+		"regionInZoo": "kob-liczi",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-liczi4.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-liczi11.jpg",
@@ -3476,7 +3519,7 @@
     	"facts": "Gatunek ten tworzy niezbyt liczne kolonie.",
     	"wiki": "https://pl.wikipedia.org/wiki/Pingwin_peruwia%C5%84ski",
     	"web": "https://zoo-krakow.pl/pingwiny-humboldta/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "pingwiny",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/06/pingwins-.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/06/pingwins1.jpg",
@@ -3700,7 +3743,7 @@
     	"facts": "Żyje w stadach, liczących do około 30 osobników, prowadzonych przez samca.",
     	"wiki": "https://pl.wikipedia.org/wiki/Gwanako_andyjskie",
     	"web": "https://zoo-krakow.pl/gwanako/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "wielblady-i-gwanko",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/gwanako2.jpg"
     	]
@@ -3787,7 +3830,7 @@
     	"facts": "Samiec osiąga wagę około 1000 kg. Jest to jedna z największych antylop. Podejmowano próby udomowienia tego gatunku.",
     	"wiki": "https://pl.wikipedia.org/wiki/Eland",
     	"web": "https://zoo-krakow.pl/eland/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "eland",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/eland.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/eland1.jpg",
@@ -3810,7 +3853,7 @@
     	"facts": "Żyje w stadach liczących 5-20 osobników. Jest aktywna rano, nocą i wieczorem, chroni się w ten sposób przed wysoką temperaturą dnia.",
     	"wiki": "https://pl.wikipedia.org/wiki/Adaks_pustynny",
     	"web": "https://zoo-krakow.pl/addaks/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "addaks",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/addaks.jpg"
     	]
