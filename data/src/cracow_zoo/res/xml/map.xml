@@ -10,64 +10,191 @@
     enable-background="new 0 0 1129.359 718.41"
     xml:space="preserve">
 <g id="regions">
-	<polygon opacity="0.5" fill="#69BD45"  points="728.188,242.542 734.688,259.5 766.125,245.208 
-		757.688,228.938 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="730.625,238.188 708.5,239.542 714.167,264.208 
-		738.521,253.508 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="708.5,239.542 686.188,247.163 697.917,271.192 
-		718.223,262.427 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="703.102,259.543 679.097,269.955 688.421,293.039 
-		723.199,276.291 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="694.833,243.705 672.091,252.8 675.085,262 
-		688.667,267.25 704.751,260.711 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="662.224,231.014 602.555,254.537 611.617,269.123 
-		656.917,251.103 670.333,261.131 681.25,251.833 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="604.68,264.208 667.482,239.122 689.516,275.511 
-		624.628,307.955 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="568.514,281.289 596.305,269.681 602.06,296.897 
-		575.65,296.516 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="557.655,275.625 529.292,291 532.917,305.458 
-		568.167,301.292 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="486.75,301.863 531.621,289.738 536.014,305.458 
-		496.667,320.208 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="409.167,327.625 485.372,298.208 500.504,320.573 
-		424.833,356.813 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="426.833,339.708 442.5,375.087 467.167,378.784 
-		528.5,351.601 496.333,312.421 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="536.013,295.811 511.223,306.68 530.333,349.375 
-		564.716,337.313 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="477.667,483.862 517.196,444.185 594,427.227 
-		609.535,457.276 546.113,520 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="702.706,180.675 730.233,185.843 734.708,166.468 
-		706.682,162.175 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="564.68,268.576 577.262,264.208 583.451,276 
-		569.833,280.745 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="734.688,259.5 740.872,270.622 772.263,255.478 
-		766.125,245.208 	"/>
-    <polygon opacity="0.5" fill="#69BD45"  points="589.805,274.518 612.46,264.208 625.813,295.393 
-		595.492,295.811 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="456.055,375.83 488.525,363.58 520.055,420.83 494.43,432.49 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="485.467,363.004 500.833,393.2 543.5,375.955 530.43,339.46 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="497.68,389.189 543.601,370.955 563.805,399.846 517.399,422.038 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="528.155,339.023 537.729,359.941 568.762,348.077 557.002,325.752 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="537.94,361.58 571.68,347.205 593.961,385.097 556.18,402.096 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="556.555,332.455 571.555,364.498 594.68,357.383 574.93,321.308 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="588.141,387.716 609.68,377.633 596.18,356.813 577.805,365.58 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="574.555,319.593 593.974,312.421 627.305,370.955 603.079,380.723 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="623.305,299.67 633.893,326.732 665.65,317.554 649.012,287.557 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="591.959,313.165 624.011,298.577 636.756,326.732 604.68,341.455 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="605.43,342.58 635.363,329.165 653.74,359.205 623.305,371.83 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="640.474,331.697 667.216,321.165 679.775,349.375 653.74,360.455 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="644.063,289.676 653.35,309.447 676.188,303.839 663.438,281.011 	"/>
-    <polygon opacity="0.5" fill="#69BD45" points="367.68,416.4 416.18,390.762 459.346,398.943 491.846,436.701 465.436,465.705 	"/>
+	
+		<polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		728.188,242.542 734.688,259.5 766.125,245.208 757.688,228.938 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		730.625,238.188 708.5,239.542 714.167,264.208 738.521,253.508 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		708.5,239.542 686.188,247.163 697.917,271.192 718.223,262.427 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		704.711,260.533 680.351,271.714 688.421,293.039 723.199,276.291 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		694.833,243.705 672.091,252.8 675.085,262 688.667,267.25 704.751,260.711 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		662.224,231.014 602.555,254.537 611.617,269.123 656.917,251.103 670.333,261.131 681.25,251.833 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		604.68,264.208 667.482,239.122 691.597,279.83 625.617,309.736 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		568.514,281.289 596.305,269.681 602.06,296.897 575.65,296.516 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		557.655,275.625 529.292,291 532.917,305.458 568.167,301.292 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		486.75,301.863 531.621,289.738 536.014,305.458 496.667,320.208 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		409.167,327.625 485.372,298.208 500.504,320.573 424.833,356.813 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		426.833,339.708 442.5,375.087 465.927,382.191 532.619,352.047 500.096,311.289 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		536.013,295.811 500.096,311.289 532.619,352.047 564.716,337.313 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		482.409,479.226 512.312,449.088 594,427.227 609.535,457.276 550.376,515.783 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		702.706,180.675 730.233,185.843 734.708,166.468 706.682,162.175 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		564.68,268.576 577.262,264.208 583.451,276 569.833,280.745 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		734.688,259.5 740.872,270.622 772.263,255.478 766.125,245.208 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		589.805,274.518 612.46,264.208 625.813,295.393 595.492,295.811 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		455.305,376.174 485.467,363.004 519.059,425.534 497.104,435.984 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		485.467,363.004 501.644,392.911 543.511,374.018 527.938,342.604 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		501.644,392.911 543.511,374.018 558.347,406.852 519.059,425.534 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		527.938,342.604 543.511,374.018 578.282,358.221 560.262,327.591 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		543.511,374.018 578.282,358.221 595.806,389.039 558.347,406.852 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		560.262,327.591 578.282,358.221 592.088,352.047 575.141,320.68 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		595.806,389.039 608.729,382.851 592.088,352.047 578.282,358.221 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		575.141,320.68 593.816,312.006 628.721,373.385 608.729,382.851 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		623.784,298.059 639.976,330.193 665.65,318.529 648.847,286.622 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		593.816,312.006 623.784,298.059 639.976,330.193 611.556,343.08 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		611.556,343.08 639.976,330.193 655.398,361.83 628.721,373.385 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		639.976,330.193 665.65,318.529 681.055,350.643 655.398,361.83 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		648.847,286.622 665.65,318.529 679.097,312.421 663.347,279.83 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		366.345,416.642 416.18,390.762 459.346,398.943 491.846,436.701 464.09,469.25 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		691.508,331.471 717.492,319.986 729.056,344.08 705.947,364.531 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		664.523,343.439 691.508,331.471 705.947,364.531 683.974,382.893 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		624.805,361.143 664.523,343.439 683.974,382.893 652.285,413.716 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		599.867,410.08 638.139,391.518 631.68,379.83 594.867,398.58 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		606.117,421.33 643.625,402.409 638.139,391.518 599.867,410.08 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		618.894,442.83 649.5,414.49 643.625,402.409 606.117,421.33 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		614.204,456.969 651.92,416.257 644.455,407.501 605.976,447.854 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		565.363,506.326 580.226,490.258 570.203,478.479 554.577,494.188 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		535.533,435.217 573.805,416.654 561.117,389.601 523.388,406.331 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		510.365,444.835 535.533,435.217 523.388,406.331 497.93,417.789 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		456.809,465.376 482.409,479.226 512.312,449.088 489.405,431.326 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		663.347,279.83 687.181,268.455 718.223,334.517 694.014,345.08 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		697.013,289.039 710.132,283.123 734.617,327.58 718.223,334.517 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		706.18,276.291 720.081,269.634 735.296,298.922 722.587,305.919 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		758.469,252.575 720.081,269.634 735.296,298.922 722.587,305.919 734.617,327.58 778.847,285.181 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		347.283,426.078 398.375,470.146 430.096,436.768 380.175,409.795 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		315.533,441.798 366.638,503.58 398.375,470.146 347.145,426.191 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		398.375,470.146 440.18,504.732 471.742,459.33 430.096,436.768 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		366.638,503.58 418.68,546.538 440.18,504.732 398.375,470.146 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		446.576,476.326 467.787,488.977 486.346,470.038 464.028,457.251 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		438.101,508.775 478.374,535.702 493.99,516.037 452.158,487.502 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		468.248,548.454 503.162,571.616 536.711,534.765 499.68,508.872 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		461.315,557.199 496.673,582.101 513.177,560.615 478.079,536.074 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		407.513,589.372 447.013,650.039 496.673,582.101 434.347,538.206 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		386.847,552.372 407.513,589.372 434.347,538.206 418.206,527.099 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		525.574,520 538.305,500.497 516.805,488.977 504.556,507.225 	"/>
+
+    <polygon opacity="0.5" fill="#69BD45" stroke="#03750D" stroke-width="0.5" stroke-miterlimit="10"  points="
+		411.055,405.705 438.93,412.305 445.399,396.3 418.094,391.124 	"/>
 </g>
     <g id="strange" display="none">
 	
-		<rect x="680.985" y="273.245" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1420.9221 238.3338)" display="inline" fill="#69BD45" width="6.645" height="3.698"/>
+		<rect x="680.971" y="273.26" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -52.3129 311.8985)" display="inline" fill="#69BD45" width="6.645" height="3.698"/>
 
-        <rect x="456.043" y="508.384" transform="matrix(-0.6906 0.7232 -0.7232 -0.6906 1143.7744 532.2872)" display="inline" fill="#ED1F24" width="3.983" height="4.81"/>
+        <rect x="456.062" y="508.382" transform="matrix(0.6907 -0.7231 0.7231 0.6907 -227.6943 489.1875)" display="inline" fill="#ED1F24" width="3.983" height="4.809"/>
 
-        <rect x="507.768" y="559.096" transform="matrix(-0.7324 0.6809 -0.6809 -0.7324 1267.3086 629.1474)" display="inline" fill="#ED1F24" width="4.48" height="9.082"/>
+        <rect x="507.758" y="559.063" transform="matrix(0.7324 -0.6809 0.6809 0.7324 -247.2722 498.1111)" display="inline" fill="#ED1F24" width="4.48" height="9.082"/>
 </g>
     <g id="aviary">
 	<polyline fill="#3953A4" points="711.477,254.466 711.42,260.438 733.656,250.688 729.027,246.399 	"/>
@@ -79,23 +206,23 @@
 		594.273,453.31 583.773,463.685 581.607,465.372 578.378,466.519 575.539,466.674 572.518,466.34 560.065,463.602 559.523,462.185 
 			"/>
 
-        <rect x="609.162" y="256.834" transform="matrix(-0.9224 0.3862 -0.3862 -0.9224 1278.229 261.099)" fill="#3953A4" width="7.446" height="4.25"/>
+        <rect x="609.171" y="256.807" transform="matrix(0.9224 -0.3862 0.3862 0.9224 -52.4479 256.7805)" fill="#3953A4" width="7.446" height="4.25"/>
 
-        <rect x="616.401" y="251.876" transform="matrix(-0.9224 0.3863 -0.3863 -0.9224 1298.8887 246.9997)" fill="#3953A4" width="16.454" height="4.249"/>
+        <rect x="616.384" y="251.879" transform="matrix(0.9224 -0.3863 0.3863 0.9224 -49.635 260.9959)" fill="#3953A4" width="16.454" height="4.249"/>
 
-        <rect x="640.385" y="243.713" transform="matrix(-0.9224 0.3863 -0.3863 -0.9224 1333.3672 223.7686)" fill="#3953A4" width="7.637" height="4.25"/>
+        <rect x="640.368" y="243.738" transform="matrix(0.9224 -0.3863 0.3863 0.9224 -44.9706 267.9443)" fill="#3953A4" width="7.637" height="4.25"/>
 
-        <rect x="632.62" y="246.974" transform="matrix(-0.9224 0.3862 -0.3862 -0.9224 1319.6917 233.0495)" fill="#3953A4" width="7.628" height="4.249"/>
+        <rect x="632.629" y="246.947" transform="matrix(0.9224 -0.3862 0.3862 0.9224 -46.8134 265.1092)" fill="#3953A4" width="7.628" height="4.249"/>
 
-        <rect x="704.386" y="284.618" transform="matrix(-0.8911 0.4538 -0.4538 -0.8911 1471.6514 227.3457)" fill="#3953A4" width="8.329" height="11.228"/>
+        <rect x="704.39" y="284.646" transform="matrix(0.8911 -0.4538 0.4538 0.8911 -54.56 353.1626)" fill="#3953A4" width="8.329" height="11.228"/>
 
-        <rect x="710.439" y="296.508" transform="matrix(-0.8911 0.4538 -0.4538 -0.8911 1488.4884 247.0358)" fill="#3953A4" width="8.328" height="11.22"/>
+        <rect x="710.44" y="296.495" transform="matrix(0.8911 -0.4538 0.4538 0.8911 -59.2796 357.1577)" fill="#3953A4" width="8.329" height="11.22"/>
 
-        <rect x="717.557" y="308.079" transform="matrix(-0.8911 0.4538 -0.4538 -0.8911 1508.2766 270.1717)" fill="#3953A4" width="8.329" height="15.962"/>
+        <rect x="717.558" y="308.067" transform="matrix(0.8911 -0.4538 0.4538 0.8911 -64.8312 361.9057)" fill="#3953A4" width="8.329" height="15.962"/>
 
-        <rect x="684.548" y="283.351" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1442.0864 294.6052)" fill="#3953A4" width="8.328" height="44.426"/>
+        <rect x="684.533" y="283.342" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -64.6605 316.5146)" fill="#3953A4" width="8.328" height="44.427"/>
 
-        <rect x="537.839" y="302.984" transform="matrix(-0.9054 0.4246 -0.4246 -0.9054 1164.3252 374.0035)" fill="#3953A4" width="5.303" height="27.499"/>
+        <rect x="537.828" y="302.976" transform="matrix(0.9054 -0.4245 0.4245 0.9054 -83.3377 259.4098)" fill="#3953A4" width="5.303" height="27.499"/>
 </g>
     <g id="buildings">
 	<polygon fill="#ED1F24" points="739.341,316.041 734.951,307.442 734.328,307.761 719.337,278.407 707.059,284.678 
@@ -103,109 +230,108 @@
         <polygon fill="#ED1F24" points="675.642,287.113 671.012,289.249 670.339,287.79 667.216,289.23 667.889,290.689 667.529,290.855 
 		678.186,313.958 686.297,310.216 	"/>
 
-        <rect x="667.378" y="307.131" transform="matrix(0.4187 0.9081 -0.9081 0.4187 673.791 -428.8359)" fill="#ED1F24" width="9.009" height="9.572"/>
+        <rect x="667.352" y="307.114" transform="matrix(-0.4187 -0.9081 0.9081 -0.4187 669.9527 1052.6222)" fill="#ED1F24" width="9.009" height="9.572"/>
 
-        <rect x="655.664" y="299.22" transform="matrix(-0.908 0.4191 -0.4191 -0.908 1382.9407 299.8707)" fill="#ED1F24" width="5.749" height="5.184"/>
+        <rect x="655.624" y="299.227" transform="matrix(0.908 -0.4191 0.4191 0.908 -65.871 303.7372)" fill="#ED1F24" width="5.749" height="5.184"/>
 
-        <rect x="661.522" y="296.938" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1392.5537 296.337)" fill="#ED1F24" width="4.464" height="8.122"/>
+        <rect x="661.508" y="296.919" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -65.0383 305.6533)" fill="#ED1F24" width="4.464" height="8.122"/>
 
-        <rect x="687.094" y="313.293" transform="matrix(-0.908 0.419 -0.419 -0.908 1449.4175 324.0545)" fill="#ED1F24" width="4.071" height="15.744"/>
+        <rect x="687.085" y="313.31" transform="matrix(0.908 -0.419 0.419 0.908 -71.1667 318.2731)" fill="#ED1F24" width="4.071" height="15.744"/>
 
-        <rect x="652.201" y="328.323" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1385.7798 356.7072)" fill="#ED1F24" width="3.079" height="4.245"/>
+        <rect x="652.188" y="328.293" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -78.2874 304.1751)" fill="#ED1F24" width="3.079" height="4.245"/>
 
-        <rect x="634.836" y="315.403" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1348.1898 340.2353)" fill="#ED1F24" width="3.839" height="5.346"/>
+        <rect x="634.822" y="315.391" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -74.675 295.9107)" fill="#ED1F24" width="3.839" height="5.346"/>
 
-        <rect x="632.75" y="332.41" transform="matrix(-0.908 0.419 -0.419 -0.908 1354.2798 380.5145)" fill="#ED1F24" width="5.226" height="13.069"/>
+        <rect x="632.74" y="332.435" transform="matrix(0.908 -0.419 0.419 0.908 -83.5656 297.3736)" fill="#ED1F24" width="5.226" height="13.069"/>
 
-        <rect x="608.491" y="278.053" transform="matrix(-0.908 0.419 -0.419 -0.908 1281.4539 280.4868)" fill="#ED1F24" width="2.875" height="5.796"/>
+        <rect x="608.482" y="278.045" transform="matrix(0.9079 -0.4191 0.4191 0.9079 -61.5941 281.5138)" fill="#ED1F24" width="2.875" height="5.797"/>
 
-        <rect x="585.389" y="271.967" transform="matrix(-0.908 0.4189 -0.4189 -0.908 1242.7771 274.6603)" fill="#ED1F24" width="11.697" height="3.579"/>
+        <rect x="585.409" y="271.969" transform="matrix(0.908 -0.4189 0.4189 0.908 -60.301 272.8599)" fill="#ED1F24" width="11.697" height="3.579"/>
 
-        <rect x="640.16" y="270.307" transform="matrix(-0.842 0.5395 -0.5395 -0.842 1332.0374 156.0401)" fill="#ED1F24" width="6.017" height="5.547"/>
+        <rect x="640.154" y="270.322" transform="matrix(0.842 -0.5395 0.5395 0.842 -45.7094 390.1207)" fill="#ED1F24" width="6.017" height="5.548"/>
 
-        <rect x="689.207" y="253.762" transform="matrix(-0.908 0.4189 -0.4189 -0.908 1429.9897 198.4973)" fill="#ED1F24" width="7.992" height="4.953"/>
+        <rect x="689.227" y="253.739" transform="matrix(0.908 -0.4189 0.4189 0.908 -43.5721 313.9856)" fill="#ED1F24" width="7.992" height="4.953"/>
 
-        <rect x="691.988" y="280.295" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1444.8689 247.1292)" fill="#ED1F24" width="6.645" height="3.698"/>
+        <rect x="691.973" y="280.261" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -54.2362 317.1002)" fill="#ED1F24" width="6.645" height="3.698"/>
 
-        <rect x="707.765" y="252.655" transform="matrix(-0.9083 0.4184 -0.4184 -0.9083 1459.9579 190.3722)" fill="#ED1F24" width="2.69" height="5.15"/>
+        <rect x="707.74" y="252.664" transform="matrix(0.9083 -0.4184 0.4184 0.9083 -41.7439 320.0786)" fill="#ED1F24" width="2.69" height="5.15"/>
 
-        <rect x="741.26" y="240.688" transform="matrix(-0.9081 0.4187 -0.4187 -0.9081 1525.0959 160.278)" fill="#ED1F24" width="7.405" height="13.567"/>
+        <rect x="741.276" y="240.681" transform="matrix(0.9081 -0.4187 0.4187 0.9081 -35.1669 334.6718)" fill="#ED1F24" width="7.405" height="13.567"/>
         <polygon fill="#ED1F24" points="725.945,243.705 722.831,247.233 721.678,247.979 719.764,243.831 715.491,245.802 
 		717.402,249.947 716.094,250.333 711.389,250.396 711.445,254.466 716.151,254.401 719.143,253.721 723.417,251.75 
 		725.881,249.927 728.996,246.399 	"/>
 
-        <rect x="755.472" y="269.128" transform="matrix(-0.8789 0.4769 -0.4769 -0.8789 1557.0286 157.7816)" fill="#ED1F24" width="6.036" height="14.738"/>
+        <rect x="755.512" y="269.124" transform="matrix(0.879 -0.4769 0.4769 0.879 -40.0501 395.1755)" fill="#ED1F24" width="6.036" height="14.737"/>
 
-        <rect x="587.614" y="354.126" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1283.0176 433.1846)" fill="#ED1F24" width="12.719" height="6.514"/>
+        <rect x="587.599" y="354.144" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -95.082 281.6028)" fill="#ED1F24" width="12.72" height="6.514"/>
 
-        <rect x="553.02" y="356.529" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1219.713 450.4435)" fill="#ED1F24" width="14.803" height="5.104"/>
+        <rect x="553.009" y="356.514" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -98.8668 267.7326)" fill="#ED1F24" width="14.803" height="5.105"/>
 
-        <rect x="540.37" y="351.3" transform="matrix(-0.9079 0.4191 -0.4191 -0.9079 1182.7271 447.9037)" fill="#ED1F24" width="3.599" height="5.104"/>
+        <rect x="540.392" y="351.313" transform="matrix(0.9079 -0.4191 0.4191 0.9079 -98.3907 259.8102)" fill="#ED1F24" width="3.599" height="5.104"/>
         <polygon fill="#ED1F24" points="556.085,345.325 554.876,353.342 554.583,353.89 551.726,355.208 550.375,352.28 547.525,353.594 
 		545.681,349.595 543.554,350.576 547.874,359.941 555.707,356.329 556.808,355.321 557.531,353.743 558.74,345.727 	"/>
 
-        <rect x="520.122" y="378.841" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1160.875 513.0855)" fill="#ED1F24" width="8.012" height="10.208"/>
+        <rect x="520.112" y="378.826" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -112.6136 254.7997)" fill="#ED1F24" width="8.012" height="10.208"/>
 
-        <rect x="499.972" y="389.446" transform="matrix(-0.908 0.4189 -0.4189 -0.908 1123.1467 541.2499)" fill="#ED1F24" width="4.378" height="8.933"/>
+        <rect x="499.986" y="389.466" transform="matrix(0.908 -0.4189 0.4189 0.908 -118.8327 246.5822)" fill="#ED1F24" width="4.378" height="8.933"/>
         <polygon fill="#ED1F24" points="512.087,428.279 508.198,430.29 507.906,431.148 509.02,433.305 509.757,433.305 510.041,433.854 
 		510.041,433.854 509.703,434.625 510.761,436.673 511.513,436.701 515.401,434.69 	"/>
 
-        <rect x="530.783" y="314.436" transform="matrix(-0.8898 0.4563 -0.4563 -0.8898 1153.7239 366.7901)" fill="#ED1F24" width="3.588" height="16.511"/>
+        <rect x="530.799" y="314.419" transform="matrix(0.8898 -0.4563 0.4563 0.8898 -88.5601 278.5975)" fill="#ED1F24" width="3.588" height="16.511"/>
         <polygon fill="#ED1F24" points="485.467,330.583 462.666,339.46 460.121,332.918 482.926,324.041 	"/>
 
-        <rect x="454.884" y="315.195" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1006.5779 412.3854)" fill="#ED1F24" width="6.301" height="2.918"/>
+        <rect x="454.871" y="315.198" transform="matrix(0.9081 -0.4188 0.4188 0.9081 -90.5187 220.9555)" fill="#ED1F24" width="6.301" height="2.918"/>
 
-        <rect x="498.105" y="307.209" transform="matrix(-0.9081 0.4187 -0.4187 -0.9081 1084.6399 380.7376)" fill="#ED1F24" width="4.886" height="4.316"/>
+        <rect x="498.117" y="307.223" transform="matrix(0.9082 -0.4186 0.4186 0.9082 -83.5414 237.9501)" fill="#ED1F24" width="4.886" height="4.316"/>
 
-        <rect x="509.566" y="302.243" transform="matrix(-0.9082 0.4186 -0.4186 -0.9082 1102.8203 366.8717)" fill="#ED1F24" width="3.207" height="4.316"/>
+        <rect x="509.55" y="302.232" transform="matrix(0.9082 -0.4186 0.4186 0.9082 -80.4798 241.9301)" fill="#ED1F24" width="3.208" height="4.316"/>
 
-        <rect x="504.86" y="304.542" transform="matrix(-0.9082 0.4185 -0.4185 -0.9082 1094.9126 373.2796)" fill="#ED1F24" width="3.33" height="4.315"/>
+        <rect x="504.868" y="304.558" transform="matrix(0.9082 -0.4185 0.4185 0.9082 -81.868 240.1236)" fill="#ED1F24" width="3.33" height="4.315"/>
 
-        <rect x="522.93" y="297.513" transform="matrix(-0.9081 0.4188 -0.4188 -0.9081 1126.3528 352.0968)" fill="#ED1F24" width="3.205" height="4.316"/>
+        <rect x="522.92" y="297.482" transform="matrix(0.9081 -0.4187 0.4187 0.9081 -77.2695 247.1606)" fill="#ED1F24" width="3.206" height="4.316"/>
 
-        <rect x="546.856" y="290.171" transform="matrix(-0.9082 0.4186 -0.4186 -0.9082 1168.9211 328.2329)" fill="#ED1F24" width="3.205" height="4.316"/>
+        <rect x="546.84" y="290.166" transform="matrix(0.9082 -0.4186 0.4186 0.9082 -72.0034 256.4112)" fill="#ED1F24" width="3.204" height="4.317"/>
 
-        <rect x="552.484" y="288.287" transform="matrix(-0.9082 0.4184 -0.4184 -0.9082 1180.0383 322.1284)" fill="#ED1F24" width="4.434" height="4.316"/>
+        <rect x="552.52" y="288.275" transform="matrix(0.9082 -0.4184 0.4184 0.9082 -70.6287 258.7754)" fill="#ED1F24" width="4.434" height="4.316"/>
 
-        <rect x="532.939" y="293.917" transform="matrix(-0.9425 0.3342 -0.3342 -0.9425 1137.7664 395.8321)" fill="#ED1F24" width="3.787" height="3.744"/>
+        <rect x="532.94" y="293.92" transform="matrix(0.9425 -0.3342 0.3342 0.9425 -68.1014 195.7461)" fill="#ED1F24" width="3.787" height="3.744"/>
 
-        <rect x="538.706" y="291.613" transform="matrix(-0.9425 0.3343 -0.3343 -0.9425 1149.8279 389.0601)" fill="#ED1F24" width="5.45" height="3.744"/>
+        <rect x="538.692" y="291.579" transform="matrix(0.9425 -0.3343 0.3343 0.9425 -66.9469 197.8521)" fill="#ED1F24" width="5.45" height="3.744"/>
 
-        <rect x="574.629" y="271.241" transform="matrix(-0.9425 0.3343 -0.3343 -0.9425 1211.176 337.798)" fill="#ED1F24" width="3.786" height="3.744"/>
+        <rect x="574.609" y="271.248" transform="matrix(0.9425 -0.3343 0.3343 0.9425 -58.1345 208.4227)" fill="#ED1F24" width="3.786" height="3.744"/>
 
-        <rect x="704.107" y="346.126" transform="matrix(-0.908 0.419 -0.419 -0.908 1494.2068 373.1043)" fill="#ED1F24" width="4.068" height="8.944"/>
+        <rect x="704.096" y="346.162" transform="matrix(0.908 -0.4191 0.4191 0.908 -81.9435 328.1755)" fill="#ED1F24" width="4.068" height="8.944"/>
         <polygon fill="#ED1F24" points="633.563,401.636 607.229,414.749 604.225,408.709 630.561,395.596 	"/>
 
-        <rect x="658.489" y="400.351" transform="matrix(-0.6851 0.7285 -0.7285 -0.6851 1404.7671 196.8239)" fill="#ED1F24" width="2.7" height="3.42"/>
+        <rect x="658.46" y="400.355" transform="matrix(0.6849 -0.7286 0.7286 0.6849 -85.0503 607.462)" fill="#ED1F24" width="2.701" height="3.42"/>
 
-        <rect x="673.334" y="383.608" transform="matrix(-0.6851 0.7285 -0.7285 -0.6851 1420.5106 157.1692)" fill="#ED1F24" width="5.899" height="4.04"/>
+        <rect x="673.309" y="383.627" transform="matrix(0.685 -0.7285 0.7285 0.685 -67.9402 614.1594)" fill="#ED1F24" width="5.899" height="4.041"/>
 
-        <rect x="340.711" y="381.772" transform="matrix(-1 -0.0036 0.0036 -1 690.4879 777.7224)" fill="#ED1F24" width="10.447" height="12.951"/>
+        <rect x="340.728" y="381.754" transform="matrix(1 0.0036 -0.0036 1 1.4176 -1.2586)" fill="#ED1F24" width="10.447" height="12.95"/>
+        <rect x="335.52" y="356.34" transform="matrix(1 0.004 -0.004 1 1.4535 -1.3577)" fill="#ED1F24" width="6.565" height="9.786"/>
 
-        <rect x="335.527" y="356.337" transform="matrix(-1 -0.004 0.004 -1 676.1666 723.8187)" fill="#ED1F24" width="6.565" height="9.786"/>
+        <rect x="366.824" y="356.503" transform="matrix(0.9549 -0.297 0.297 0.9549 -90.1626 127.0702)" fill="#ED1F24" width="12.43" height="7.418"/>
 
-        <rect x="366.848" y="356.514" transform="matrix(-0.9549 0.2971 -0.2971 -0.9549 836.2996 593.3522)" fill="#ED1F24" width="12.43" height="7.418"/>
+        <rect x="384.545" y="352.149" transform="matrix(0.9549 -0.2971 0.2971 0.9549 -88.0786 130.9936)" fill="#ED1F24" width="4.776" height="6.256"/>
 
-        <rect x="384.568" y="352.163" transform="matrix(-0.9549 0.2971 -0.2971 -0.9549 861.9945 579.5804)" fill="#ED1F24" width="4.776" height="6.256"/>
+        <rect x="347.372" y="355.759" transform="matrix(0.9548 -0.2971 0.2971 0.9548 -90.3124 119.8509)" fill="#ED1F24" width="3.542" height="2.573"/>
 
-        <rect x="347.357" y="355.741" transform="matrix(-0.9548 0.2971 -0.2971 -0.9548 788.5626 594.2091)" fill="#ED1F24" width="3.542" height="2.573"/>
+        <rect x="386.933" y="481.667" transform="matrix(0.6906 -0.7233 0.7233 0.6906 -229.1334 432.1407)" fill="#ED1F24" width="7.075" height="4.378"/>
 
-        <rect x="386.961" y="481.677" transform="matrix(-0.6906 0.7233 -0.7233 -0.6906 1010.1281 535.5659)" fill="#ED1F24" width="7.074" height="4.378"/>
+        <rect x="396.089" y="493.747" transform="matrix(0.6904 -0.7234 0.7234 0.6904 -235.3465 445.1612)" fill="#ED1F24" width="12.65" height="7.584"/>
 
-        <rect x="396.077" y="493.728" transform="matrix(-0.6904 0.7234 -0.7234 -0.6904 1040.1383 549.9283)" fill="#ED1F24" width="12.651" height="7.584"/>
-
-        <rect x="414.004" y="570.121" transform="matrix(-0.6906 0.7232 -0.7232 -0.6906 1118.8975 670.6744)" fill="#ED1F24" width="3.983" height="9.082"/>
+        <rect x="414.024" y="570.12" transform="matrix(0.6906 -0.7232 0.7232 0.6906 -286.8985 478.6626)" fill="#ED1F24" width="3.983" height="9.082"/>
         <polygon fill="#ED1F24" points="619.825,513.08 604.894,505.438 603.265,508.621 602.159,508.055 599.245,513.75 602.144,515.234 
 		599.567,520.268 604.364,522.723 604.082,523.278 604.174,525.021 605.126,526.484 606.682,527.275 608.425,527.183 
 		609.889,526.231 610.203,525.712 614.089,518.12 616.589,519.399 	"/>
         <polygon fill="#ED1F24" points="622.354,503.772 619.872,502.501 617.715,506.716 614.865,507.885 618.265,509.625 
 		618.265,509.625 619.132,510.069 	"/>
 
-        <rect x="710.776" y="169.379" transform="matrix(-0.9678 -0.2517 0.2517 -0.9678 1361.0962 518.642)" fill="#ED1F24" width="5.891" height="5.766"/>
+        <rect x="710.769" y="169.4" transform="matrix(0.9678 0.2517 -0.2517 0.9678 66.3245 -174.0636)" fill="#ED1F24" width="5.891" height="5.766"/>
         <polygon fill="#ED1F24" points="725.629,210.547 724.667,208.12 726.288,206.073 728.871,206.453 729.834,208.88 728.212,210.927 	
 		"/>
 
-        <rect x="796.1" y="220.337" transform="matrix(-0.6886 0.7251 -0.7251 -0.6886 1508.7721 -203.4779)" fill="#ED1F24" width="3.948" height="3.729"/>
+        <rect x="796.126" y="220.333" transform="matrix(0.6887 -0.7251 0.7251 0.6887 87.3502 647.8386)" fill="#ED1F24" width="3.948" height="3.729"/>
         <polygon fill="#ED1F24" points="860.605,209.466 856.802,205.466 849.352,212.559 843.04,218.566 843.04,218.566 834.174,227.007 
 		837.97,231.014 846.842,222.568 847.635,223.402 858.617,212.95 857.823,212.115 	"/>
         <polygon fill="#ED1F24" points="825.309,190.443 821.094,194.345 812.531,185.106 816.744,181.204 	"/>
@@ -216,15 +342,15 @@
         <polygon fill="#ED1F24" points="814.583,159.895 809.759,154.68 796.738,166.75 796.24,167.21 800.007,171.276 801.065,172.423 
 		801.067,172.421 805.161,176.84 810.278,172.104 806.181,167.682 	"/>
 
-        <rect x="794.711" y="143.978" transform="matrix(-0.7338 0.6793 -0.6793 -0.7338 1484.292 -286.1081)" fill="#ED1F24" width="6.973" height="7.51"/>
+        <rect x="794.733" y="143.946" transform="matrix(0.7339 -0.6793 0.6793 0.7339 112.108 581.5454)" fill="#ED1F24" width="6.973" height="7.51"/>
         <polygon fill="#ED1F24" points="804.77,153.018 798.813,158.537 795.9,155.386 801.854,149.867 	"/>
         <polygon fill="#ED1F24" points="795.832,154.183 788.486,165.208 780.979,160.195 788.32,149.173 	"/>
         <polygon fill="#ED1F24" points="793.871,135.387 781.073,156.79 775.914,153.682 788.706,132.285 	"/>
 
-        <rect x="786.167" y="118.263" transform="matrix(-0.5545 0.8322 -0.8322 -0.5545 1326.0459 -468.8265)" fill="#ED1F24" width="4.708" height="4.571"/>
+        <rect x="786.136" y="118.251" transform="matrix(0.5546 -0.8321 0.8321 0.5546 250.8902 709.8006)" fill="#ED1F24" width="4.708" height="4.571"/>
         <polygon fill="#ED1F24" points="762.445,112.21 757.9,119.033 754.1,116.494 758.643,109.673 	"/>
 
-        <rect x="809.581" y="176.19" transform="matrix(-0.7335 0.6797 -0.6797 -0.7335 1528.7748 -242.3743)" fill="#ED1F24" width="4.645" height="4.659"/>
+        <rect x="809.581" y="176.203" transform="matrix(0.7335 -0.6797 0.6797 0.7335 95.0229 599.4166)" fill="#ED1F24" width="4.645" height="4.659"/>
         <polygon fill="#ED1F24" points="457.354,404.586 456.211,405.45 454.974,403.813 456.115,402.949 455.395,401.995 453.108,403.282 
 		453.109,403.282 450.162,403 448.787,401.188 446.662,399.938 445.037,400.625 442.287,400.25 440.224,398.632 437.474,398.25 
 		435.849,400 433.537,399.563 431.412,397.5 430.849,397.813 431.412,398.938 429.789,399.864 427.349,397.125 425.305,396.455 
@@ -387,7 +513,7 @@
         <text transform="matrix(1 0 0 1 690.8525 282.0596)" font-family="'MyriadPro-Regular'" font-size="4">flamingi</text>
         <text transform="matrix(1 0 0 1 684.293 251.1025)" font-family="'MyriadPro-Regular'" font-size="4">surykatki</text>
         <text transform="matrix(1 0 0 1 643.916 242.042)" font-family="'MyriadPro-Regular'" font-size="4">ptaki-w-wolierach</text>
-        <text transform="matrix(1 0 0 1 636.4346 272.0415)" font-family="'MyriadPro-Regular'" font-size="4">ptaki-wodne-duzy-staw</text>
+        <text transform="matrix(1 0 0 1 636.4346 272.042)" font-family="'MyriadPro-Regular'" font-size="4">ptaki-wodne-duzy-staw</text>
         <text transform="matrix(1 0 0 1 582.1475 289.6982)" font-family="'MyriadPro-Regular'" font-size="4">wydry</text>
         <text transform="matrix(1 0 0 1 543.5 288.375)" font-family="'MyriadPro-Regular'" font-size="4">srednie-koty</text>
         <text transform="matrix(1 0 0 1 500.8335 303.542)" font-family="'MyriadPro-Regular'" font-size="4">jezozwierze-psowate</text>
@@ -398,7 +524,7 @@
         <text transform="matrix(1 0 0 1 708.5 167.792)" font-family="'MyriadPro-Regular'" font-size="4">wc_1</text>
         <text transform="matrix(1 0 0 1 568.9395 271.1924)" font-family="'MyriadPro-Regular'" font-size="4">wc-2</text>
         <text transform="matrix(1 0 0 1 756.6875 256.6045)" font-family="'MyriadPro-Regular'" font-size="4">wyjscie</text>
-        <text transform="matrix(1 0 0 1 601.7676 282.3882)" font-family="'MyriadPro-Regular'" font-size="4">ptaki-wodne-maly-staw</text>
+        <text transform="matrix(1 0 0 1 601.7676 282.3887)" font-family="'MyriadPro-Regular'" font-size="4">ptaki-wodne-maly-staw</text>
         <text transform="matrix(1 0 0 1 488.5254 393.9121)" font-family="'MyriadPro-Regular'" font-size="4">wielblady-i-gwanko</text>
         <text transform="matrix(1 0 0 1 527.2139 369.7539)" font-family="'MyriadPro-Regular'" font-size="4">kob-sniady</text>
         <text transform="matrix(1 0 0 1 539.4668 393.9121)" font-family="'MyriadPro-Regular'" font-size="4">eland</text>
@@ -408,14 +534,41 @@
         <text transform="matrix(1 0 0 1 574.1123 348.2539)" font-family="'MyriadPro-Regular'" font-size="4">takin-miszmi</text>
         <text transform="matrix(1 0 0 1 597.1504 338.5566)" font-family="'MyriadPro-Regular'" font-size="4">renifer</text>
         <text transform="matrix(1 0 0 1 615.25 324.041)" font-family="'MyriadPro-Regular'" font-size="4">sitatunga</text>
-        <text transform="matrix(1 0 0 1 639.1387 351.7622)" font-family="'MyriadPro-Regular'" font-size="4">kob-liczi</text>
-        <text transform="matrix(1 0 0 1 639.1387 312.3501)" font-family="'MyriadPro-Regular'" font-size="4">uchatka-patagonska</text>
-        <text transform="matrix(1 0 0 1 662.2344 300.5181)" font-family="'MyriadPro-Regular'" font-size="4">panda-mala</text>
+        <text transform="matrix(1 0 0 1 639.1387 351.7627)" font-family="'MyriadPro-Regular'" font-size="4">kob-liczi</text>
+        <text transform="matrix(1 0 0 1 639.1387 312.3506)" font-family="'MyriadPro-Regular'" font-size="4">uchatka-patagonska</text>
+        <text transform="matrix(1 0 0 1 662.2344 300.5186)" font-family="'MyriadPro-Regular'" font-size="4">panda-mala</text>
         <text transform="matrix(1 0 0 1 667.2158 339.46)" font-family="'MyriadPro-Regular'" font-size="4">arui</text>
+        <text transform="matrix(1 0 0 1 432.3589 431.7461)" font-family="'MyriadPro-Regular'" font-size="4">zyrafy</text>
+        <text transform="matrix(1 0 0 1 462.7539 483.8555)" font-family="'MyriadPro-Regular'" font-size="4">manul</text>
+        <text transform="matrix(1 0 0 1 380.9502 441.2021)" font-family="'MyriadPro-Regular'" font-size="4">kulany</text>
+        <text transform="matrix(1 0 0 1 340.7041 463.1885)" font-family="'MyriadPro-Regular'" font-size="4">jelenie</text>
+        <text transform="matrix(1 0 0 1 422.3516 466.6738)" font-family="'MyriadPro-Regular'" font-size="4">nilgau-markury</text>
+        <text transform="matrix(1 0 0 1 407.5132 502.501)" font-family="'MyriadPro-Regular'" font-size="4">daniele-barasinga</text>
+        <text transform="matrix(1 0 0 1 467.7871 511.8135)" font-family="'MyriadPro-Regular'" font-size="4">gastronomia</text>
+        <text transform="matrix(1 0 0 1 517.3799 433.8467)" font-family="'MyriadPro-Regular'" font-size="4">lemury</text>
+        <text transform="matrix(1 0 0 1 551.8203 419.9004)" font-family="'MyriadPro-Regular'" font-size="4">orly</text>
+        <text transform="matrix(1 0 0 1 411.3564 554.501)" font-family="'MyriadPro-Regular'" font-size="4">osly</text>
+        <text transform="matrix(1 0 0 1 456.0547 579.2373)" font-family="'MyriadPro-Regular'" font-size="4">milu</text>
+        <text transform="matrix(1 0 0 1 483.0371 566.5215)" font-family="'MyriadPro-Regular'" font-size="4">myszojelen</text>
+        <text transform="matrix(1 0 0 1 514.1602 538.2061)" font-family="'MyriadPro-Regular'" font-size="4">mini-zoo</text>
+        <text transform="matrix(1 0 0 1 520.0547 502.501)" font-family="'MyriadPro-Regular'" font-size="4">wc-4</text>
+        <text transform="matrix(1 0 0 1 562.5518 495.6299)" font-family="'MyriadPro-Regular'" font-size="4">ul</text>
+        <text transform="matrix(1 0 0 1 491.8457 455.3662)" font-family="'MyriadPro-Regular'" font-size="4">kondory</text>
+        <text transform="matrix(1 0 0 1 621.7461 421.3301)" font-family="'MyriadPro-Regular'" font-size="4">zurawie-mandzurskie</text>
+        <text transform="matrix(1 0 0 1 616.5029 410.0801)" font-family="'MyriadPro-Regular'" font-size="4">nocny-pawilon</text>
+        <text transform="matrix(1 0 0 1 609.5352 399.9102)" font-family="'MyriadPro-Regular'" font-size="4">srednie-drapiezniki</text>
+        <text transform="matrix(1 0 0 1 626.125 433.8477)" font-family="'MyriadPro-Regular'" font-size="4">sowy</text>
+        <text transform="matrix(1 0 0 1 654.8018 383.9297)" font-family="'MyriadPro-Regular'" font-size="4">przewalskiego</text>
+        <text transform="matrix(1 0 0 1 686.2969 363.0225)" font-family="'MyriadPro-Regular'" font-size="4">wikunie</text>
+        <text transform="matrix(1 0 0 1 708.3477 346.5718)" font-family="'MyriadPro-Regular'" font-size="4">hipopotamy</text>
+        <text transform="matrix(1 0 0 1 710.8926 311.9004)" font-family="'MyriadPro-Regular'" font-size="4">malpy</text>
+        <text transform="matrix(1 0 0 1 722.5381 290.7441)" font-family="'MyriadPro-Regular'" font-size="4">egzotarium</text>
+        <text transform="matrix(1 0 0 1 743.4775 295.811)" font-family="'MyriadPro-Regular'" font-size="4">slonie</text>
+        <text transform="matrix(1 0 0 1 691.5039 313.958)" font-family="'MyriadPro-Regular'" font-size="4">XXX</text>
+        <text transform="matrix(1 0 0 1 414.5 405.1729)" font-family="'MyriadPro-Regular'" font-size="4">wc-3</text>
 </g>
     <g id="coords" display="none">
 	<text transform="matrix(1 0 0 1 6.2051 21.5215)" display="inline" font-family="'MyriadPro-Regular'" font-size="17.4789">50.05787, 19.84128</text>
         <text transform="matrix(1 0 0 1 6.2051 44.8271)" display="inline" font-family="'MyriadPro-Regular'" font-size="17.4789">50.04996, 19.86057</text>
 </g>
-    <text transform="matrix(1 0 0 1 432.3589 431.7461)" font-family="'MyriadPro-Regular'" font-size="4">zyrafy</text>
 </svg>

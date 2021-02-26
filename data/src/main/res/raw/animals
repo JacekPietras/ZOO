@@ -249,7 +249,7 @@
 		"facts": "Palce tego płaza zakończone są przylgami. Samce są nieco mniejsze od samic. Są aktywne nocą.",
 		"wiki": "https://pl.wikipedia.org/wiki/Chwytnica_kolorowa",
 		"web": "https://zoo-krakow.pl/rzekotka-czerwonooka/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/rzekotka-czerwonooka1.jpg"
 		]
@@ -270,9 +270,140 @@
 		"facts": "Jest jednym z największych przedstawicieli australijskich płazów bezogonowych – osiąga 10 cm długości. W niewoli dożywa nawet do 16 lat.",
 		"wiki": "https://pl.wikipedia.org/wiki/Australorzekotka_szmaragdowa",
 		"web": "https://zoo-krakow.pl/rzekotka-szmaragdowa/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/rzekotka-szmaragdowa1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zolw-blotny"
+		},
+		"language": "pl",
+		"name": "Żółw Błotny",
+		"nameLatin": "Emys orbicularis",
+		"occurrence": "Europa, północna Afryka, Azja Mniejsza",
+		"environment": "",
+		"food": ".",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "Według „Polskiej Czerwonej Księgi Zwierząt” gatunek silnie zagrożony wyginięciem na terenie naszego kraju.",
+		"facts": "Nasz ogród brał udział w programie introdukcji tego gatunku po wykluciu się i odchowaniu małych żółwi, zostały one przekazane zespołowi naukowców, którzy dzięki naszej pomocy zwrócili naturze 62 okazy żółwia błotnego. Żółw błotny prowadzi ziemno – wodny tryb życia, zamieszkuje głównie bagna, stawy i jeziora. Na ląd wychodzi aby wygrzewać się w słońcu lub znieść jaja. Zimę spędza zagrzebany w mule na dnie zbiorników wodnych.",
+		"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_b%C5%82otny",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/%C5%BC%C3%B3%C5%82w-b%C5%82otny2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zolw-gwiazdzisty"
+		},
+		"language": "pl",
+		"name": "Żółw gwiaździsty",
+		"nameLatin": "Geochelone elegans",
+		"occurrence": "Azja",
+		"environment": "",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "Gatunek zagrożony wyginięciem, objęty II załącznikiem Konwencji Waszyngtońskiej",
+		"facts": "Żółw gwiaździsty jest jednym z najpiękniej ubarwionych żółwi lądowych. Jego pancerz pokryty jest płytkami zdobionymi promienistym rysunkiem, przypominającym gwiazdy – stąd pochodzi nazwa żółwia.",
+		"wiki": "https://pl.wikipedia.org/wiki/Geochelone",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": [
+		]
+	},
+	{
+		"id": {
+			"id": "iguana-iguana"
+		},
+		"language": "pl",
+		"name": "Legwan zielony",
+		"nameLatin": "Iguana iguana",
+		"occurrence": "tropikalne rejony Ameryki Środkowej i Południowej",
+		"environment": "",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "Gatunek zagrożony wyginięciem, objęty II załącznikiem Konwencji Waszyngtońskiej",
+		"facts": "Jaszczurka ta osiąga długość około 2 metrów i jest największym przedstawicielem legwanów. Prowadzi głównie nadrzewny tryb życia. Gady te dobrze pływają i świetnie nurkują, w czym pomaga im długi, mocno umięśniony ogon. Legwany są jajorodne, samica składa jaja w dołku wygrzebanym w ziemi. W zależności od temperatury otoczenia czas inkubacji wynosi około 70 dni.",
+		"wiki": "https://pl.wikipedia.org/wiki/Legwan_zielony",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/legwan-zielony2.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/legwan-zielony11.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "kameleon-jemenski"
+		},
+		"language": "pl",
+		"name": "Kameleon Jemeński",
+		"nameLatin": "Chamaeleo calyptratus",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Kameleon_jeme%C5%84ski",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/kameleon-jemenski11.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/kameleon-jemenski22.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/kameleon-jemenski3.jpg",
+		]
+	},
+	{
+		"id": {
+			"id": "pyton-tygrysi"
+		},
+		"language": "pl",
+		"name": "Pyton tygrysi ciemnoskóry",
+		"nameLatin": "Python molurus bivittatus",
+		"occurrence": "Chiny, Birma, Półwysep Indochiński, Indonezja",
+		"environment": "",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "Gatunek zagrożony wyginięciem, objęty II załącznikiem Konwencji Waszyngtońskiej",
+		"facts": "W naszym ogrodzie zwierzęta te rozmnażają się. Odchowaliśmy łącznie 65 młodych węży tego gatunku. Pytony są jajorodne. Samica składa od 10 do 100 jaj o charakterystycznej, miękkiej skorupie. Układa je w stożek, okręca się wokół nich i wysiaduje około 60 dni. W tym okresie nie przyjmuje żadnego pokarmu. Temperatura inkubacji może być regulowana dzięki drżeniu mięśni wysiadującej samicy.",
+		"wiki": "https://pl.wikipedia.org/wiki/Pyton_birma%C5%84ski",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": [
+		]
+	},
+	{
+		"id": {
+			"id": "pyton-zielony"
+		},
+		"language": "pl",
+		"name": "Pyton Zielony",
+		"nameLatin": "Morelia viridis",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Pyton_zielony",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/pyton-zielony1.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/pyton-zielony2.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/pyton-zielony12.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/pyton-zielony21.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/pyton-zielony3.jpg"
 		]
 	},
 	{
@@ -291,7 +422,7 @@
 		"facts": "Karapaks (grzbietowa część pancerza) prezentowanego w naszym Zoo osobnika mierzy 40 cm długości. Ma on ponad 50 lat.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%BBabuti_czarny",
 		"web": "https://zoo-krakow.pl/zolw-zabuti/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/żółw-żabuti1.jpg"
 		]
@@ -312,7 +443,7 @@
 		"facts": "Cechą odróżniającą ten gatunek od żółwia greckiego jest podzielona na pół tarczka nadogonowa. Żółwie bardzo często kopią nory, co pomaga ścierać nieustannie rosnące pazury.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_stepowy",
 		"web": "https://zoo-krakow.pl/zolw-stepowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/żółw-stepowy1.jpg"
 		]
@@ -333,7 +464,7 @@
 		"facts": "Gady te są przedstawicielami rodziny żółwi wężoszyjnych. Ich charakterystyczną cechą jest nieproporcjonalnie długa szyja, którą zwierzęta potrafią zginać w bok.",
 		"wiki": "https://pl.wikipedia.org/wiki/Elseya",
 		"web": "https://zoo-krakow.pl/zolw-papuaski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zolw-papuaski11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zolw-papuaski1.jpg"
@@ -355,7 +486,7 @@
 		"facts": "Jeden z najmniejszych krokodyli. Jest najbardziej opancerzonym przedstawicielem rzędu. Dorasta do około 140 cm długości.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kajman_kar%C5%82owaty",
 		"web": "https://zoo-krakow.pl/kajman-karzelkowaty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kajman1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kajman11.jpg",
@@ -380,7 +511,7 @@
 		"facts": "Cechą charakterystyczną gatunku jest charakterystyczny „żagiel” u nasady ogona, dobrze widoczny zwłaszcza u samca. Doskonale pływa, nurkuje oraz sprawnie wspina się na konary drzew. Od roku 2007 w naszym Zoo agamy filipińskie regularnie składają jaja, czego rezultatem są liczne przychówki.",
 		"wiki": "https://pl.wikipedia.org/wiki/Hydrosaurinae",
 		"web": "https://zoo-krakow.pl/agama-zaglowa-filipinska/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/agama-zaglowa-filipinska21.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/agama-zaglowa-filipinska11.jpg",
@@ -403,7 +534,7 @@
 		"facts": "Żyje około 12 lat. Jest aktywny głównie w nocy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Gekon_tygrysi",
 		"web": "https://zoo-krakow.pl/gekon-lamparci/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/gekon-lamparci1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/gekon-lamparci11.jpg",
@@ -426,7 +557,7 @@
 		"facts": "Nazywana jest dniówką ze względu na dzienny tryb życia. Bardzo szybko przemieszcza się po pionowych powierzchniach. Osiąga 30 cm długości ciała.",
 		"wiki": "https://pl.wikipedia.org/wiki/Dni%C3%B3wka_madagaskarska",
 		"web": "https://zoo-krakow.pl/gekon-madagaskarski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/gekon-madagaskarski1.jpg"
 		]
@@ -447,7 +578,7 @@
 		"facts": "Nazywana jest jaszczurką Jezusa ze względu na umiejętność biegania po wodzie. Dorasta do 75 cm długości.",
 		"wiki": "https://pl.wikipedia.org/wiki/Bazyliszek_p%C5%82atkog%C5%82owy",
 		"web": "https://zoo-krakow.pl/bazyliszek-platkoglowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazyliszek-platkoglowy1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/bazyliszek-platkoglowy11.jpg",
@@ -470,7 +601,7 @@
 		"facts": "Dorasta do 50 cm długości. Posiada duży, mięsisty język w kolorze niebieskim.",
 		"wiki": "https://en.wikipedia.org/wiki/Tiliqua_gigas",
 		"web": "https://zoo-krakow.pl/scynk-wielki/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/scynk-wielki1.jpg"
 		]
@@ -491,7 +622,7 @@
 		"facts": "Doskonale pływa i nurkuje. Bardzo sprawnie wspina się na drzewa. Jego bronią poza ostrymi pazurami oraz zębami jest mocno umięśniony ogon, którym potrafi zadawać potężne ciosy. Jest drugim co do wielkości waranem. Pod tym względem ustępuje tylko waranowi z Komodo. Osiąga do 3 m długości.",
 		"wiki": "https://pl.wikipedia.org/wiki/Waran_paskowany",
 		"web": "https://zoo-krakow.pl/waran-lesny/",
-		"regionInZoo": "https://pl.wikipedia.org/wiki/Waran_paskowany",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/waran-leśny1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/waran-leśny2.jpg",
@@ -514,7 +645,7 @@
 		"facts": "Dorasta do 3,5 metra długości. Samca można odróżnić od samicy dzięki obecności parzystych pazurków odbytowych występujących po obu stronach kloaki.",
 		"wiki": "https://pl.wikipedia.org/wiki/Boa_dusiciel",
 		"web": "https://zoo-krakow.pl/boa-dusiciel/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/boa-dusiciel1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/boa-dusiciel11.jpg"
@@ -536,7 +667,7 @@
 		"facts": "Aktywny o zmierzchu i nocą. Osiąga 2 metry długości.",
 		"wiki": "https://pl.wikipedia.org/wiki/Boa_psiog%C5%82owy",
 		"web": "https://zoo-krakow.pl/boa-psioglowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/boa-psiogłowy1.jpg"
 		]
@@ -557,7 +688,7 @@
 		"facts": "Potrafi godzinami leżeć w wodzie bez ruchu wystawiając jedynie nozdrza i oczy ponad powierzchnię. Może przebywać pod wodą ponad 10 minut. Osiąga 3 metry długości. Bywa bardzo agresywny.",
 		"wiki": "https://pl.wikipedia.org/wiki/Anakonda_%C5%BC%C3%B3%C5%82ta",
 		"web": "https://zoo-krakow.pl/anakonda-zolta/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/anakonda-żółta1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/anakonda-żółta11.jpg"
@@ -579,7 +710,7 @@
 		"facts": "Dorasta do 120 cm długości. Jest aktywny nocą – w ciągu dnia odpoczywa w ukryciu.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lancetog%C5%82%C3%B3w_mleczny",
 		"web": "https://zoo-krakow.pl/lancetoglow-mleczny/",
-		"regionInZoo": "todo",
+		"regionInZoo": "egzotarium",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/lancetoglow-mleczny1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/lancetoglow-mleczny4.jpg"
@@ -1288,7 +1419,7 @@
 		"facts": "Największy ptak drapieżny świata o rozpiętości skrzydeł do 3, 2 m i wadze do 15 kg. Regularne przychówki od tego gatunku są wielkim sukcesem hodowlanym naszego Zoo.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kondor_wielki",
 		"web": "https://zoo-krakow.pl/kondor-wielki/",
-		"regionInZoo": "todo",
+		"regionInZoo": "kondory",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki2.jpg",
@@ -1314,7 +1445,7 @@
 		"facts": "Przypuszcza się, że ptak ten mógł w XIX wieku gnieździć się w Tatrach.",
 		"wiki": "https://pl.wikipedia.org/wiki/S%C4%99p_kasztanowaty",
 		"web": "https://zoo-krakow.pl/sep-kasztanowaty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "orly",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sep-kasztanowaty.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sep-kasztanowaty11.jpg"
@@ -1381,7 +1512,7 @@
 		"facts": "Jest to drugi pod względem wielkości przedstawiciel rodziny żurawiowatych.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%BBuraw_mand%C5%BCurski",
 		"web": "https://zoo-krakow.pl/zuraw-mandzurski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "zurawie-mandzurskie",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-mandzurski11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-mandzurski2.jpg"
@@ -1614,7 +1745,7 @@
 		"facts": "To największa sowa europejska. Jest monogamiczna, pary przebywają razem przez całe życie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Puchacz_zwyczajny",
 		"web": "https://zoo-krakow.pl/puchacz/",
-		"regionInZoo": "todo",
+		"regionInZoo": "sowy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puchacz1.jpg"
 		]
@@ -1635,7 +1766,7 @@
 		"facts": "W gatunku tego występuje dymorfizm płciowy – samiec jest niemal całkowicie biało ubarwiony, samica jest większa, obficie cętkowana. W Polsce bardzo rzadko obserwowana na północy kraju.",
 		"wiki": "https://pl.wikipedia.org/wiki/Puchacz_%C5%9Bnie%C5%BCny",
 		"web": "https://zoo-krakow.pl/sowa-sniezna/",
-		"regionInZoo": "todo",
+		"regionInZoo": "sowy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sowa-sniezna.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sowa-sniezna1.jpg",
@@ -1658,7 +1789,7 @@
 		"facts": "Puszczyk jest najpospolitszą sową Palearktyki. Prowadzi najbardziej nocny tryb życia spośród wszystkich sów Europy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Puszczyk_zwyczajny",
 		"web": "https://zoo-krakow.pl/puszczyk/",
-		"regionInZoo": "todo",
+		"regionInZoo": "sowy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk1.jpg"
 		]
@@ -1679,7 +1810,7 @@
 		"facts": "W Polsce po roku 1945 gatunek ten pojawiał się nieregularnie na terenie Puszczy Białowieskiej. Po roku 2010 stwierdzono jego lęgi na Polesiu Lubelskim.",
 		"wiki": "https://pl.wikipedia.org/wiki/Puszczyk_mszarny",
 		"web": "https://zoo-krakow.pl/puszczyk-mszarny/",
-		"regionInZoo": "todo",
+		"regionInZoo": "sowy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-mszarny1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-mszarny11.jpg"
@@ -1701,7 +1832,7 @@
 		"facts": "Nasz ogród uczestniczył w programie reintrodukcji puszczyka uralskiego, realizowanym od roku 2009 w północno-wschodnich Alpach. Celem było przywrócenie tego gatunku na obszary dawnego występowania.",
 		"wiki": "https://pl.wikipedia.org/wiki/Puszczyk_uralski",
 		"web": "https://zoo-krakow.pl/puszczyk-uralski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "sowy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-uralski1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk-uralski11.jpg"
@@ -1744,7 +1875,7 @@
 		"facts": "",
 		"wiki": "https://en.wikipedia.org/wiki/Ground_cuscus",
 		"web": "https://zoo-krakow.pl/kuskus-ziemny/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nocny-pawilon",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kuskus-ziemny2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kuskus-ziemny12.jpg"
@@ -1766,7 +1897,7 @@
 		"facts": "Charakterystyczną cechą tego zwierzęcia jest występowanie fałdów skórnych, znajdujących się po bokach ciała pomiędzy przednimi, a tylnymi kończynami. Dzięki temu powstaje powierzchnia nośna, która pozwala lotopałance przemieszczać się lotem ślizgowym na odległość do około 50 metrów",
 		"wiki": "https://pl.wikipedia.org/wiki/Lotopa%C5%82anka_kar%C5%82owata",
 		"web": "https://zoo-krakow.pl/lotopalanka-mala/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nocny-pawilon",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lotopałanka-mała.jpg"
 		]
@@ -1808,7 +1939,7 @@
 		"facts": "W Azji wykorzystywany jako zwierzę pociągowe, juczne i wierzchowe. Słonie prowadzą stadny tryb życia. Przewodnikiem stada jest stara samica.",
 		"wiki": "https://pl.wikipedia.org/wiki/S%C5%82o%C5%84_indyjski",
 		"web": "https://zoo-krakow.pl/slon-indyjski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "slonie",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/słonie-indyjskie1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/słonie-indyjskie11.jpg",
@@ -1831,7 +1962,7 @@
 		"facts": "Jest zwierzęciem doskonale przystosowanym do kopania podziemnych korytarzy. Aktywny głównie nocą.",
 		"wiki": "https://pl.wikipedia.org/wiki/W%C5%82osopuklerznik_kosmaty",
 		"web": "https://zoo-krakow.pl/pancernik-wlochaty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nocny-pawilon",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pancernik-włochaty3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pancernik-włochaty11.jpg"
@@ -1853,7 +1984,7 @@
 		"facts": "Jego przednie, dwupalczaste kończyny zakończone są potężnymi pazurami. Długie, wełniste futro leniwców żyjących na wolności porośnięte jest glonami, a pomiędzy włosami bytują ćmy i chrząszcze.",
 		"wiki": "https://pl.wikipedia.org/wiki/Leniuchowiec_dwupalczasty",
 		"web": "https://zoo-krakow.pl/leniwiec-dwupalczasty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nocny-pawilon",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/leniwiec-dwupalczasty2.jpg"
 		]
@@ -1874,7 +2005,7 @@
 		"facts": "Żyje w grupach liczących 2 do 6 osobników. Grupa zajmuje terytorium około 20 ha.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lemuria_czerwonobrzucha",
 		"web": "https://zoo-krakow.pl/lemur-czerwonobrzuchy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "lemury",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lemur-czerwonobrzuchy3.jpg"
 		]
@@ -1895,7 +2026,7 @@
 		"facts": "Lemur katta jest jedynym lemurem prowadzącym naziemny tryb życia. Jak wszystkie lemury należy do małpiatek &#8211; najprymitywniejszej grupy zwierząt naczelnych. Jest aktywny w dzień, co jest cechą rzadko spotykaną u lemurowatych. Żyje w grupach liczących od 5 do 20 osobników.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lemur_katta",
 		"web": "https://zoo-krakow.pl/lemur-katta/",
-		"regionInZoo": "todo",
+		"regionInZoo": "lemury",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lemur-katta3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lemur-katta12.jpg",
@@ -1918,7 +2049,7 @@
 		"facts": "Największy spośród lemurów. Dawniej czczony jako zwierzę święte. Jest aktywny nocą. Żyje w grupach liczących 2 do 5 osobników.",
 		"wiki": "https://en.wikipedia.org/wiki/Red_ruffed_lemur",
 		"web": "https://zoo-krakow.pl/wari-rudy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "lemury",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wari-rudy2.jpg"
 		]
@@ -1939,7 +2070,7 @@
 		"facts": "Prowadzą nocny tryb życia, dzień przesypiają zwinięte w kłębek. Żyją w luźnych stadach złożonych z 1 samca i kilku samic. Mają doskonale rozwinięty zmysł wzroku i węchu.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kukang_ma%C5%82y",
 		"web": "https://zoo-krakow.pl/lori-maly/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nocny-pawilon",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lori-mały2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lori-mały12.jpg"
@@ -2050,7 +2181,7 @@
 		"facts": "Małpka sajmiri znana jest z filmu o Pipi Lansztrung. Jej inna nazwa – &#8222;trupia główka&#8221; pochodzi od charakterystycznego rysunku na pysku, przypominającego ludzką czaszkę.",
 		"wiki": "https://pl.wikipedia.org/wiki/Sajmiri_wiewi%C3%B3rcza",
 		"web": "https://zoo-krakow.pl/sajmiri-wiewiorcza/",
-		"regionInZoo": "todo",
+		"regionInZoo": "lemury",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/sajmiri-wiewiórcza4.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/sajmiri-wiewiórcza11.jpg"
@@ -2072,9 +2203,29 @@
 		"facts": "Małpy te żyją w stadach liczących od kilku do kilkunastu osobników. Mangaby czarne porozumiewają się między sobą wykorzystując mimikę twarzy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Mangabka_czarna",
 		"web": "https://zoo-krakow.pl/mangaba-czarna/",
-		"regionInZoo": "todo",
+		"regionInZoo": "malpy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mangaba-czarna2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pawian-plaszczowy"
+		},
+		"language": "pl",
+		"name": "Pawian płaszczowy",
+		"nameLatin": "Papio hamadryas",
+		"occurrence": "północno-zachodnie tereny Półwyspu Arabskiego, Egipt, Sudan i Somalia.",
+		"environment": "Półpustynie Etiopii.",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "Gatunek zagrożony wyginięciem, objęty II załącznikiem Konwencji Waszyngtońskiej.",
+		"facts": "W naszym ZOO regularnie się rozmnaża. Są to typowo naziemne małpy. Żyją w stadach, w których panuje ścisła hierarchia. Pojedyncza grupa zamieszkuje określone terytorium, którego broni przed innymi pawianami. Dawniej małpy te nazywano psiogłowcami ze względu na charakterystyczny wygląd części twarzowej. W starożytnym Egipcie uznawano je za zwierzęta święte.",
+		"wiki": "https://pl.wikipedia.org/wiki/Pawian_p%C5%82aszczowy",
+		"web": "",
+		"regionInZoo": "malpy",
+		"photos": [
 		]
 	},
 	{
@@ -2093,7 +2244,7 @@
 		"facts": "Żyje w grupach rodzinnych, liczących do 20 osobników, którym przewodzi doświadczony samiec. Czasem kilka takich grup łączy się w duże, luźne zgrupowania.",
 		"wiki": "https://pl.wikipedia.org/wiki/Mandryl_barwnolicy",
 		"web": "https://zoo-krakow.pl/mandryl/",
-		"regionInZoo": "todo",
+		"regionInZoo": "malpy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mandryl3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mandryl12.jpg",
@@ -2116,7 +2267,7 @@
 		"facts": "Gerezy prowadzą dzienny tryb życia. Posiadają tylko cztery palce u każdej ręki. Kciuk jest nieobecny, lub zastąpiony przez niewielki paliczkowy guzek, co może być formą przystosowania do sprawniejszego poruszania się po drzewach.",
 		"wiki": "https://pl.wikipedia.org/wiki/Gereza_abisy%C5%84ska",
 		"web": "https://zoo-krakow.pl/gereza-abisynska/",
-		"regionInZoo": "todo",
+		"regionInZoo": "malpy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gereza-abisyńska-12.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gereza-abisyńska3.jpg",
@@ -2139,7 +2290,7 @@
 		"facts": "Małpy te występują w dwóch odmianach barwnych – czarnej i pomarańczowej. Żyją w grupach złożonych z jednego samca i kilku samic z młodymi. Młode samce tworzą grupy kawalerskie lub wędrują samotnie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lutung_jawajski",
 		"web": "https://zoo-krakow.pl/lutung-jawajski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "malpy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lutung-s.jpg"
 		]
@@ -2160,7 +2311,7 @@
 		"facts": "Doskonale wspina się i skacze. Porusza się na zasadzie brachiacji &#8211; ruchami wahadłowymi przenosi ciężar ciała z jednej ręki na drugą. Żyje w grupach rodzinnych, liczących do 6 osobników, złożonych z rodziców i młodych",
 		"wiki": "https://pl.wikipedia.org/wiki/Gibbon_bia%C5%82or%C4%99ki",
 		"web": "https://zoo-krakow.pl/gibbon-bialoreki/",
-		"regionInZoo": "todo",
+		"regionInZoo": "malpy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gibbon-białoręki3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/gibbon-białoręki11.jpg"
@@ -2182,7 +2333,7 @@
 		"facts": "Żyje we wspólnotach składających się z kilkudziesięciu osobników, podzielonych na luźne grupy o różnej wielkości i strukturze zmieniającej się w czasie. Znaczny rozwój mózgu pozwala szympansom prowadzić bogate życie społeczne i umożliwia im posługiwanie się narzędziami.",
 		"wiki": "https://pl.wikipedia.org/wiki/Szympans_zwyczajny",
 		"web": "https://zoo-krakow.pl/szympans/",
-		"regionInZoo": "todo",
+		"regionInZoo": "malpy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/szympans2.jpg"
 		]
@@ -2246,7 +2397,7 @@
 		"facts": "Posługuje się echolokacją. Żyje w koloniach.",
 		"wiki": "https://pl.wikipedia.org/wiki/Rudawiec_nilowy",
 		"web": "https://zoo-krakow.pl/rudawka-nilowa/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nocny-pawilon",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/rudawka-nilowa2.jpg"
 		]
@@ -2290,7 +2441,7 @@
 		"facts": "Chaus zwany kotem bagiennym, błotnym lub trzcinowym został uwieczniony obok kota nubijskiego na ścianach świątyń i papirusach przez starożytnych Egipcjan.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kot_b%C5%82otny",
 		"web": "https://zoo-krakow.pl/chaus/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/chaus2.jpg"
 		]
@@ -2311,7 +2462,7 @@
 		"facts": "Angielska nazwa tego kota, &#8222;Pallas cat&#8221;, pochodzi od nazwiska niemieckiego przyrodnika Petera Pallasa, który pierwszy opisał ten gatunek. Manul prowadzi nocny tryb życia. W ciągu dnia ukrywa się w norach innych zwierząt, małych jaskiniach i rozpadlinach skalnych.",
 		"wiki": "https://pl.wikipedia.org/wiki/Manul_stepowy",
 		"web": "https://zoo-krakow.pl/manul/",
-		"regionInZoo": "todo",
+		"regionInZoo": "manul",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/manul2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/manul12.jpg"
@@ -2333,7 +2484,7 @@
 		"facts": "Żbik przypomina burego kota domowego, jest jednak od niego większy i masywniej zbudowany. Jest samotnikiem aktywnym nocą. Doskonale wspina się po drzewach.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%BBbik_europejski",
 		"web": "https://zoo-krakow.pl/zbik/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żbik3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żbik11.jpg"
@@ -2483,7 +2634,7 @@
 		"facts": "Lwy azjatyckie są nieco mniejsze od swoich afrykańskich kuzynów.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lew_azjatycki",
 		"web": "https://zoo-krakow.pl/lew-azjatycki/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wielkie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lew-azjatycki3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/DSC_7363-—-kopia.jpg"
@@ -2505,7 +2656,7 @@
 		"facts": "Jest świetnym pływakiem. Od lamparta odróżnia go krępa budowa ciała, krótszy ogon i obecność plamek wewnątrz rozetek na tułowiu.",
 		"wiki": "https://pl.wikipedia.org/wiki/Jaguar_ameryka%C5%84ski",
 		"web": "https://zoo-krakow.pl/jaguar/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wielkie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/jaguar2.jpg"
 		]
@@ -2526,7 +2677,7 @@
 		"facts": "Znakomicie pływa i wspina się na drzewa.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lampart_plamisty",
 		"web": "https://zoo-krakow.pl/pantera-chinska-3/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wielkie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-chińska2.jpg"
 		]
@@ -2547,7 +2698,7 @@
 		"facts": "Tygrys amurski jest największym ze współcześnie żyjących kotów: osiąga masę do 320 kg, długość ciała do 2,5 m. Posiada najjaśniejsze i najdłuższe futro spośród tygrysów. Prowadzi samotniczy tryb życia. Jeden osobnik zajmuje terytorium do 1000 km2.",
 		"wiki": "https://pl.wikipedia.org/wiki/Tygrys_syberyjski",
 		"web": "https://zoo-krakow.pl/tygrys-amurski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wielkie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tygrys-amurski.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tygrys-amurski1.jpg"
@@ -2569,7 +2720,7 @@
 		"facts": "Ubarwienie futra doskonale maskuje ją wśród skał i śniegu, zwiększając szansę na skuteczne polowanie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Irbis_%C5%9Bnie%C5%BCny",
 		"web": "https://zoo-krakow.pl/pantera-sniezna/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wielkie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna4-e1592200746602.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna12.jpg",
@@ -2706,7 +2857,7 @@
 		"facts": "Najmniejszy gatunek spośród psowatych. Wyjątkowo długie uszy służą do regulacji temperatury ciała w niekorzystnych warunkach panujących na pustyni oraz znakomicie wspomagają lokalizację zdobyczy. Posiada owłosione podeszwy, umożliwiające poruszanie się po rozgrzanym piasku.",
 		"wiki": "https://pl.wikipedia.org/wiki/Fenek_pustynny",
 		"web": "https://zoo-krakow.pl/fennek/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nocny-pawilon",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/fennek2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/fennek12.jpg"
@@ -2815,7 +2966,7 @@
 		"facts": "Jest to przedstawiciel rodziny szopowatych. Cechą charakterystyczną tego gatunku jest prążkowany ogon. Grupy liczące zwykle 5-50 osobników złożone są z samic i ich młodych. Samce dołączają do grupy w okresie godowym. Aktywny w dzień.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ostronos_rudy",
 		"web": "https://zoo-krakow.pl/koati-poludniowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koati-południowy3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koati-południowy11.jpg"
@@ -2837,7 +2988,7 @@
 		"facts": "Aktywny nocą, dzień spędza w kryjówkach. Dobrze wspina się na drzewa, bardzo dobrze pływa. Poza okresem godowym żyje samotnie.",
 		"wiki": "https://en.wikipedia.org/wiki/Raccoon",
 		"web": "https://zoo-krakow.pl/szop-pracz/",
-		"regionInZoo": "todo",
+		"regionInZoo": "srednie-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/szop-pracz2.jpg"
 		]
@@ -2881,7 +3032,7 @@
 		"facts": "Osioł został udomowiony już w starożytnym Egipcie. Jest bardzo wytrzymały i mało wymagający. Ceniony jako zwierzę juczne, pociągowe i wierzchowe. Pochodzi od dzikiego osła, żyjącego w północnej Afryce.",
 		"wiki": "https://pl.wikipedia.org/wiki/Osio%C5%82",
 		"web": "https://zoo-krakow.pl/osiol-domowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "osly",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/osioł-domowy2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/osioł-domowy12.jpg"
@@ -2946,7 +3097,7 @@
 		"facts": "Konie Przewalskiego to dzicy przodkowie konia domowego. Po raz ostatni obserwowano je na wolności na pograniczu Mongolii i Chin w roku 1968. Zanim wyginęły w naturze, odłowiono wiele osobników i umieszczono w ogrodach zoologicznych na świecie. Dzięki programowi reintrodukcji prowadzonemu w Mongolii, konie te powróciły na wolność.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ko%C5%84_Przewalskiego",
 		"web": "https://zoo-krakow.pl/kon-przewalskiego/",
-		"regionInZoo": "todo",
+		"regionInZoo": "przewalskiego",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koń-Przewalskiego4.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/koń-Przewalskiego11.jpg",
@@ -3036,7 +3187,7 @@
 		"facts": "Hipopotam karłowaty pomimo niewielkich rozmiarów posiada groźną broń – duże kły, którymi może zadawać bardzo głębokie rany. Prowadzi nocny tryb życia przebywając w ciągu dnia w ukryciu w pobliżu wody. Żyje samotnie, z wyjątkiem okresu rui i opieki nad młodym.",
 		"wiki": "https://pl.wikipedia.org/wiki/Hipopotamek_kar%C5%82owaty",
 		"web": "https://zoo-krakow.pl/hipopotam-karlowaty/",
-		"regionInZoo": "todo",
+		"regionInZoo": "hipopotamy",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hipopotam-karłowaty6.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hipopotam-karłowaty11.jpg",
@@ -3104,7 +3255,7 @@
 		"facts": "Tworzy haremowe grupy rodzinne złożone z 6-19 osobników (samca i samic z młodymi). Wikunie są aktywne w ciągu dnia. Mają niezwykle duże serce, którego masa jest o około 50% większa niż u innych ssaków tej samej wielkości, co jest przystosowaniem do przebywania na dużych wysokościach. Ich wełna o doskonałej jakości była powodem intensywnych polowań na te zwierzęta.",
 		"wiki": "https://pl.wikipedia.org/wiki/Wikunia_andyjska",
 		"web": "https://zoo-krakow.pl/wikunia/",
-		"regionInZoo": "todo",
+		"regionInZoo": "wikunie",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wikunie-21.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wikunie3.jpg",
@@ -3151,7 +3302,7 @@
 		"facts": "W Polsce daniel był od średniowiecza hodowany w parkach i menażeriach jako zwierzę ozdobne.",
 		"wiki": "https://pl.wikipedia.org/wiki/Daniel_zwyczajny",
 		"web": "https://zoo-krakow.pl/daniel-plowy/",
-		"regionInZoo": "todo",
+		"regionInZoo": "daniele-barasinga",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/daniel-płowy1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/daniel-płowy11.jpg"
@@ -3173,7 +3324,7 @@
 		"facts": "Aktywny rano i wieczorem, dzień spędza w ukryciu. Naturalnym wrogiem osobników dorosłych jest tygrys bengalski, młodych również szakal.",
 		"wiki": "https://pl.wikipedia.org/wiki/Barasinga_bagienna",
 		"web": "https://zoo-krakow.pl/barasinga/",
-		"regionInZoo": "todo",
+		"regionInZoo": "daniele-barasinga",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/barasinga1.jpg"
 		]
@@ -3194,7 +3345,7 @@
 		"facts": "Jest jednym z najmniejszych przedstawicieli rodziny jeleniowatych. Żyje do 13 lat. W sytuacji zagrożenia podnosi ogon i wydaje donośny odgłos przypominający szczekanie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Mund%C5%BCak_chi%C5%84ski",
 		"web": "https://zoo-krakow.pl/mundzak-chinski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "myszojelen",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński1.jpg",
@@ -3283,7 +3434,7 @@
 		"facts": "Jest gatunkiem doskonale przystosowanym do wspinania się po skałach. Jego naturalnym wrogiem jest pantera śnieżna.",
 		"wiki": "https://pl.wikipedia.org/wiki/Markur_%C5%9Bruborogi",
 		"web": "https://zoo-krakow.pl/markur-turkmenski/",
-		"regionInZoo": "todo",
+		"regionInZoo": "nilgau-markury",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/markur-turkmeński.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/markur-turkmeński1.jpg"
@@ -3610,7 +3761,7 @@
     	"facts": "W Polsce gnieździ się zaledwie około 30 par orłów przednich. Jest to gatunek objęty ścisłą ochroną. Wokół orlich gniazd obowiązuje strefa ochronna.",
     	"wiki": "https://pl.wikipedia.org/wiki/Orze%C5%82_przedni",
     	"web": "https://zoo-krakow.pl/orzel-przedni/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "orly",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-przedni11.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-przedni3.jpg",
@@ -3785,7 +3936,7 @@
     	"facts": "Jeleń ten został odkryty przez francuskiego misjonarza ojca Armanda Davida. Według chińskich opisów łączy w sobie cechy jelenia, krowy i osła. Opisano go jako nowy gatunek w roku 1866 we Francji. W następnych latach sprowadzono te zwierzęta do Europy.",
     	"wiki": "https://pl.wikipedia.org/wiki/Milu_chi%C5%84ski",
     	"web": "https://zoo-krakow.pl/milu/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "milu",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/milu4.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/milu11.jpg",
@@ -3808,7 +3959,7 @@
     	"facts": "Prowadzi dzienny tryb życia. Jest szkodnikiem plantacji trzciny cukrowej.",
     	"wiki": "https://pl.wikipedia.org/wiki/Nilgau_indyjski",
     	"web": "https://zoo-krakow.pl/nilgau/",
-    	"regionInZoo": "todo",
+    	"regionInZoo": "nilgau-markury",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/nilgau1.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/04/nilgau11.jpg"
