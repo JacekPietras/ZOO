@@ -5,6 +5,7 @@ import android.graphics.Matrix
 import androidx.annotation.XmlRes
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.core.mapPair
 import com.jacekpietras.core.polygonContains
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import org.xmlpull.v1.XmlPullParser
@@ -83,13 +84,28 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
         val tags = texts.getValue("tags")
             .map { it.copy(position = transformation(it.position)) }
 
-        regions = map.getValue("regions").map { it.map { p -> transformation(p) } }
-            .map { region ->
-                val containingTags = tags.filter { tag -> polygonContains(region, tag.position) }
-                if (containingTags.size != 1) throw IllegalStateException("wrong size of region")
-                containingTags.first().content to MapItemEntity.PolygonEntity(region)
+        val usedTags = mutableSetOf<Tag>()
+
+        regions = map.getValue("regions")
+            .map { it.map { p -> transformation(p) } }
+            .map { region -> region to tags.containingPolygon(region) }
+            .sortedBy { it.second.size }
+            .mapPair { region, containingTags ->
+                val unusedContainingTags = containingTags.filterNot { usedTags.contains(it) }
+                if (unusedContainingTags.isEmpty())
+                    throw IllegalStateException("region have no tags ")
+                if (unusedContainingTags.size > 1)
+                    throw IllegalStateException("region have multiple tags " +
+                            unusedContainingTags.map { it.content })
+
+                val currentTag = unusedContainingTags.first()
+                usedTags.add(currentTag)
+                currentTag.content to MapItemEntity.PolygonEntity(region)
             }
     }
+
+    private fun List<Tag>.containingPolygon(polygon: List<PointD>): List<Tag> =
+        filter { tag -> polygonContains(polygon, tag.position) }
 
     fun getPointsByGroup(group: String) =
         map.getValue(group).map { it.map { p -> transformation(p) } }
