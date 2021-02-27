@@ -146,12 +146,12 @@ class GpsLocationListenerCompat(
 
         val client = LocationServices.getFusedLocationProviderClient(context)
         fusedLocationClient = client
-        locationCallback = WeakLocationCallback(
+        locationCallback = //WeakLocationCallback(
             LocationCallbackImpl(
                 onLocationChanged,
                 onGpsStatusChanged,
             )
-        )
+       // )
         client.requestLocationUpdates(
             buildLocationRequest(),
             locationCallback,
@@ -185,7 +185,7 @@ class GpsLocationListenerCompat(
         }
     }
 
-    class WeakLocationCallback(locationCallback: LocationCallback) : LocationCallback() {
+    private class WeakLocationCallback(locationCallback: LocationCallback) : LocationCallback() {
 
         private val weakLocationCallback = WeakReference(locationCallback)
         override fun onLocationResult(result: LocationResult) {
