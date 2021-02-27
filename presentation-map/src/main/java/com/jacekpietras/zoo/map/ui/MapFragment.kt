@@ -29,6 +29,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun setObservers() = with(viewModel.viewState) {
         currentRegionIds.observe { binding.regionIds.text = it }
+        currentAnimals.observe { binding.animals.text = it }
         userPosition.observe { binding.mapView.userPosition = it }
         terminalPoints.observe { binding.mapView.terminalPoints = it }
         mapData.observe { binding.mapView.objectList = it }

@@ -25,17 +25,10 @@ class AnimalRepositoryImpl(
 
     override suspend fun scrapTestAnimals() {
         withContext(Dispatchers.IO) {
-
-            val jsonText = context.resources.openRawResource(R.raw.animals)
+            storedAnimals = context.resources.openRawResource(R.raw.animals)
                 .bufferedReader()
                 .readText()
-            val type =
-                Types.newParameterizedType(MutableList::class.java, AnimalEntity::class.java)
-            val adapter: JsonAdapter<List<AnimalEntity>> = moshi.adapter(type)
-            runCatching { adapter.fromJson(jsonText) }
-                .onSuccess { storedAnimals = it ?: emptyList() }
-
-            Timber.v("Scrapper ${storedAnimals.size} animals preloaded")
+                .parseJsonAnimals()
         }
     }
 
@@ -79,4 +72,12 @@ class AnimalRepositoryImpl(
 
     override fun getAnimalsInRegion(regionId: String): List<AnimalEntity> =
         storedAnimals.filter { it.regionInZoo.contains(regionId) }
+
+    private val animalJsonAdapter: JsonAdapter<List<AnimalEntity>>
+        get() = moshi.adapter(
+            Types.newParameterizedType(MutableList::class.java, AnimalEntity::class.java)
+        )
+
+    private fun String.parseJsonAnimals(): List<AnimalEntity> =
+        animalJsonAdapter.fromJson(this) ?: emptyList()
 }

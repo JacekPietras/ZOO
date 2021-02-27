@@ -6,6 +6,7 @@ import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
+import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.map.model.MapEffect
@@ -62,6 +63,7 @@ internal class MapViewStateMapper {
 
         return MapViewState(
             currentRegionIds = state.regionsInUserPosition.map(::fromRegionId),
+            currentAnimals = state.animalsInUserPosition.map(::fromAnimals),
             worldBounds = state.worldBounds.map(::fromWorldSpace),
             mapData = complex,
             userPosition = state.userPosition.map(::fromPoint),
@@ -87,6 +89,9 @@ internal class MapViewStateMapper {
 
     private fun fromRegionId(regionIds: List<String>): String =
         regionIds.joinToString(separator = ", ")
+
+    private fun fromAnimals(animals: List<AnimalEntity>): String =
+        animals.joinToString(separator = ", ") { it.name }
 
     private fun fromPolygons(
         polygons: List<PolygonEntity>,

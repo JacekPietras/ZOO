@@ -27,6 +27,12 @@ val domainModule = module {
         )
     }
     factory {
+        GetAnimalsInUserPositionUseCase(
+            getAnimalsInRegionUseCase = get(),
+            getRegionsInUserPositionUseCase = get(),
+        )
+    }
+    factory {
         GetAviaryUseCase(
             mapRepository = get()
         )
@@ -65,7 +71,7 @@ val domainModule = module {
         )
     }
     factory {
-        GetMyszojelenUseCase(
+        LoadAnimalsUseCase(
             animalRepository = get(),
         )
     }

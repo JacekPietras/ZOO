@@ -313,8 +313,7 @@
 		"wiki": "https://pl.wikipedia.org/wiki/Geochelone",
 		"web": "",
 		"regionInZoo": "egzotarium",
-		"photos": [
-		]
+		"photos": []
 	},
 	{
 		"id": {
@@ -358,7 +357,7 @@
 		"photos": [
 		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/kameleon-jemenski11.jpg",
 		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/kameleon-jemenski22.jpg",
-		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/kameleon-jemenski3.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/kameleon-jemenski3.jpg"
 		]
 	},
 	{
@@ -2162,7 +2161,7 @@
 		"photos": [
 		    "https://zoo-krakow.pl/wp-content/uploads/2016/04/tamaryna-cesarska3.jpg",
 		    "https://zoo-krakow.pl/wp-content/uploads/2016/06/cesarska2_.jpg",
-		    "https://zoo-krakow.pl/wp-content/uploads/2016/06/cesarska1_.jpg",
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/06/cesarska1_.jpg"
 		]
 	},
 	{

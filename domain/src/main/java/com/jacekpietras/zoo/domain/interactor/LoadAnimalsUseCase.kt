@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.zoo.domain.repository.AnimalRepository
 
-class GetMyszojelenUseCase(
+class LoadAnimalsUseCase(
     private val animalRepository: AnimalRepository,
 ) {
 

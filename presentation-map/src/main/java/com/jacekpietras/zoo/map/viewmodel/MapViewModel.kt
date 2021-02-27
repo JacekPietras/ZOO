@@ -21,6 +21,7 @@ internal class MapViewModel(
     observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
     getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
+    getAnimalsInUserPositionUseCase: GetAnimalsInUserPositionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
@@ -30,13 +31,14 @@ internal class MapViewModel(
     getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
-    getMyszojelenUseCase: GetMyszojelenUseCase,
+    loadAnimalsUseCase: LoadAnimalsUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
     private val state = MapState(
         regionsInUserPosition = getRegionsInUserPositionUseCase(),
+        animalsInUserPosition = getAnimalsInUserPositionUseCase(),
         worldBounds = observeWorldBoundsUseCase(),
         userPosition = getUserPositionUseCase(),
         buildings = getBuildingsUseCase(),
@@ -53,7 +55,7 @@ internal class MapViewModel(
 
     init {
         viewModelScope.launch(dispatcherProvider.default) {
-            getMyszojelenUseCase()
+            loadAnimalsUseCase()
         }
     }
 
