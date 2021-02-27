@@ -21,14 +21,14 @@ class AnimalRepositoryImpl(
     private val moshi: Moshi,
 ) : AnimalRepository {
 
-    private var storedAnimals: List<AnimalEntity> = emptyList()
-
     override suspend fun scrapTestAnimals() {
         withContext(Dispatchers.IO) {
-            storedAnimals = context.resources.openRawResource(R.raw.animals)
-                .bufferedReader()
-                .readText()
-                .parseJsonAnimals()
+            if (storedAnimals.isEmpty()) {
+                storedAnimals = context.resources.openRawResource(R.raw.animals)
+                    .bufferedReader()
+                    .readText()
+                    .parseJsonAnimals()
+            }
         }
     }
 
@@ -80,4 +80,8 @@ class AnimalRepositoryImpl(
 
     private fun String.parseJsonAnimals(): List<AnimalEntity> =
         animalJsonAdapter.fromJson(this) ?: emptyList()
+
+    companion object {
+        private var storedAnimals: List<AnimalEntity> = emptyList()
+    }
 }
