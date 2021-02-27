@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.data.parser.AnimalWebParser
 import com.jacekpietras.zoo.data.parser.makeStreamFromUrl
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.model.divisionFromPolishTag
 import com.jacekpietras.zoo.domain.repository.AnimalRepository
 import com.squareup.moshi.JsonAdapter
@@ -40,7 +41,7 @@ class AnimalRepositoryImpl(
 
             AnimalListWebParser(makeStreamFromUrl("https://zoo-krakow.pl/zwierzeta/"))
                 .getContent()
-                .filter { !webs.contains(it.www) }
+                .filterNot { webs.contains(it.www) }
                 .forEach { basic ->
                     try {
                         val parser = AnimalWebParser(makeStreamFromUrl(basic.www, print = false))
@@ -64,7 +65,6 @@ class AnimalRepositoryImpl(
                         Timber.e("Scrapper $json")
                     } catch (e: Throwable) {
                         Timber.e(e, "Scrapper failed for ${basic.name}")
-                        //todo remove return
                         return@withContext
                     }
                 }
@@ -72,6 +72,13 @@ class AnimalRepositoryImpl(
 
     override fun getAnimalsInRegion(regionId: String): List<AnimalEntity> =
         storedAnimals.filter { it.regionInZoo.contains(regionId) }
+
+    override fun getAnimalsByDivision(division: Division?): List<AnimalEntity> =
+        if (division == null) {
+            storedAnimals
+        } else {
+            storedAnimals.filter { it.division == division }
+        }
 
     private val animalJsonAdapter: JsonAdapter<List<AnimalEntity>>
         get() = moshi.adapter(

@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_catalogue"
-        android:name="com.jacekpietras.zoo.catalogue.CatalogueFragment"
+        android:name="com.jacekpietras.zoo.catalogue.ui.CatalogueFragment"
         android:label="@string/title_catalogue"
         tools:layout="@layout/fragment_catalogue" />
 
