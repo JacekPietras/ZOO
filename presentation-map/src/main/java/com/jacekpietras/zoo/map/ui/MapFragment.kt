@@ -52,7 +52,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun toast(text: String) {
-        Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
     }
 
     private inline fun <T> Flow<T>.observe(crossinline block: (T) -> Unit) {

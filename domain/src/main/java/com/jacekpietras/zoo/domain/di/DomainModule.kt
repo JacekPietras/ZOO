@@ -7,13 +7,23 @@ val domainModule = module {
 
     factory {
         GetRegionsInUserPositionUseCase(
-            mapRepository = get(),
+            getRegionsContainingPointUseCase = get(),
             gpsRepository = get(),
+        )
+    }
+    factory {
+        GetRegionsContainingPointUseCase(
+            mapRepository = get(),
         )
     }
     factory {
         GetBuildingsUseCase(
             mapRepository = get()
+        )
+    }
+    factory {
+        GetAnimalsInRegionUseCase(
+            animalRepository = get()
         )
     }
     factory {

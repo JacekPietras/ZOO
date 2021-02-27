@@ -21,6 +21,7 @@ internal class MapViewModel(
     observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
     getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
+    private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     getBuildingsUseCase: GetBuildingsUseCase,
@@ -30,7 +31,6 @@ internal class MapViewModel(
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
     getMyszojelenUseCase: GetMyszojelenUseCase,
-    private val getSnappedToRoadUseCase: GetSnappedToRoadUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
@@ -51,7 +51,7 @@ internal class MapViewModel(
     private val effect: Channel<MapEffect> = Channel()
     var viewState = viewStateMapper.from(state, effect)
 
-    init{
+    init {
         viewModelScope.launch(dispatcherProvider.default) {
             getMyszojelenUseCase()
         }
@@ -69,9 +69,11 @@ internal class MapViewModel(
 
     fun onPointPlaced(point: PointD) {
         viewModelScope.launch(dispatcherProvider.default) {
-            //todo call usecase if polygon was clicked
+            val regions = getRegionsContainingPointUseCase(point)
 
-//            val snapped = getSnappedToRoadUseCase(point)
+            if (regions.isNotEmpty())
+                effect.send(MapEffect.ShowToast(regions.toString()))
+
             state.snappedPoint.emit(point)
 
             val shortestPath = getShortestPathUseCase(point)
