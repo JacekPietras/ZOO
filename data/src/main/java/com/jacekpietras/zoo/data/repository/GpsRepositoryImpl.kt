@@ -19,17 +19,16 @@ internal class GpsRepositoryImpl(
     private val gpsHistoryMapper: GpsHistoryMapper,
 ) : GpsRepository {
 
-    private val debugHistory: Flow<List<List<GpsHistoryEntity>>>
     private val compass = MutableStateFlow(0f)
 
-    init {
-        debugHistory = if (BuildConfig.DEBUG) {
-            val ola1 = TxtParser(context, R.raw.ola_14_02_21)
-            val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
-            flowOf(ola1.result + jack1.result)
-        } else {
-            flowOf(emptyList())
-        }
+    private val debugHistory: Flow<List<List<GpsHistoryEntity>>> = if (BuildConfig.DEBUG) {
+        val ola1 = TxtParser(context, R.raw.ola_14_02_21)
+        val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
+        val ola2 = TxtParser(context, R.raw.ola_28_02_21)
+        val jack2 = TxtParser(context, R.raw.jacek_28_02_21)
+        flowOf(ola1.result + jack1.result + jack2.result + ola2.result)
+    } else {
+        flowOf(emptyList())
     }
 
     override fun observeLatestPosition(): Flow<GpsHistoryEntity> =

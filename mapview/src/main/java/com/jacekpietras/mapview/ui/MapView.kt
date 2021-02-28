@@ -30,8 +30,8 @@ class MapView @JvmOverloads constructor(
             field = value
             centerGpsCoordinate = PointD(value.centerX(), value.centerY())
             maxZoom = min(abs(value.width()), abs(value.height())) / 2
-            minZoom = maxZoom / 8
-            zoom = maxZoom / 4
+            minZoom = maxZoom / 10
+            zoom = maxZoom / 5
         }
     private var _objectList: List<ObjectItem> = emptyList()
     var objectList: List<MapItem> = emptyList()
