@@ -809,6 +809,25 @@
 	},
 	{
 		"id": {
+			"id": ""
+		},
+		"language": "pl",
+		"name": "Feniks Miniaturowy",
+		"nameLatin": "",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "BIRD",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "",
+		"web": "",
+		"regionInZoo": "mini-zoo",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "perlica-sepia"
 		},
 		"language": "pl",
@@ -979,6 +998,25 @@
 	},
 	{
 		"id": {
+			"id": "bazant-elliota"
+		},
+		"language": "pl",
+		"name": "Bażant Elliota",
+		"nameLatin": "Syrmaticus ellioti",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "BIRD",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Syrmaticus",
+		"web": "",
+		"regionInZoo": "ptaki-w-wolierach",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "paw"
 		},
 		"language": "pl",
@@ -1126,7 +1164,7 @@
 		"facts": "W Europie odnotowano przypadki pomyślnego gniazdowania łabędzi czarnych zbiegłych z niewoli. Pod względem wymagań środowiskowych jest to gatunek zbliżony do łabędzia niemego.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%81ab%C4%99d%C5%BA_czarny",
 		"web": "https://zoo-krakow.pl/labedz-czarny/",
-		"regionInZoo": "ptaki-wodne-duzy-staw|ptaki-wodne-maly-staw",
+		"regionInZoo": "ptaki-wodne-maly-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/labedz-czarny1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/labedz-czarny11.jpg",
@@ -1418,7 +1456,7 @@
 		"facts": "Największy ptak drapieżny świata o rozpiętości skrzydeł do 3, 2 m i wadze do 15 kg. Regularne przychówki od tego gatunku są wielkim sukcesem hodowlanym naszego Zoo.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kondor_wielki",
 		"web": "https://zoo-krakow.pl/kondor-wielki/",
-		"regionInZoo": "kondory",
+		"regionInZoo": "kondory|orly-1",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/kondor-wielki2.jpg",
@@ -1444,31 +1482,10 @@
 		"facts": "Przypuszcza się, że ptak ten mógł w XIX wieku gnieździć się w Tatrach.",
 		"wiki": "https://pl.wikipedia.org/wiki/S%C4%99p_kasztanowaty",
 		"web": "https://zoo-krakow.pl/sep-kasztanowaty/",
-		"regionInZoo": "orly",
+		"regionInZoo": "orly-1",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sep-kasztanowaty.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/sep-kasztanowaty11.jpg"
-		]
-	},
-	{
-		"id": {
-			"id": "orzel-cesarski"
-		},
-		"language": "pl",
-		"name": "Orzeł cesarski",
-		"nameLatin": "Aquila heliaca",
-		"occurrence": "Europa południowo-wschodnia, Półwysep Pirenejski, południowo-zachodnia i środkowa Azja.",
-		"environment": "Stepy i inne otwarte tereny nizinne porośnięte niewielkimi lasami.",
-		"food": "Susły, chomiki, króliki i ptaki średniej wielkości.",
-		"division": "BIRD",
-		"multiplication": "Łączy się w pary na całe życie. W zniesieniu zwykle 2-3 jaja, wysiadywane przez samicę przez 43 dni.",
-		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU &#8211; narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Zagraża mu zagospodarowywanie stepów, powodujące ograniczenie bazy pokarmowej.",
-		"facts": "Orły cesarskie żyjące w Europie są ptakami wędrownymi, zimują w Afryce i Azji. Do Polski zalatują wyjątkowo.",
-		"wiki": "https://pl.wikipedia.org/wiki/Orze%C5%82_cesarski",
-		"web": "https://zoo-krakow.pl/orzel-cesarski/",
-		"regionInZoo": "orly",
-		"photos": [
-			"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-cesarski1.jpg"
 		]
 	},
 	{
@@ -1487,7 +1504,7 @@
 		"facts": "Podobizna tego ptaka stanowi element godła państwowego Ugandy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Koronnik_szary",
 		"web": "https://zoo-krakow.pl/zuraw-koroniasty-wschodni/",
-		"regionInZoo": "ptaki-wodne-duzy-staw|ptaki-wodne-maly-staw",
+		"regionInZoo": "ptaki-wodne-duzy-staw",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zuraw-koroniasty11.jpg",
@@ -1744,7 +1761,7 @@
 		"facts": "To największa sowa europejska. Jest monogamiczna, pary przebywają razem przez całe życie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Puchacz_zwyczajny",
 		"web": "https://zoo-krakow.pl/puchacz/",
-		"regionInZoo": "sowy",
+		"regionInZoo": "orly-2",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puchacz1.jpg"
 		]
@@ -1788,7 +1805,7 @@
 		"facts": "Puszczyk jest najpospolitszą sową Palearktyki. Prowadzi najbardziej nocny tryb życia spośród wszystkich sów Europy.",
 		"wiki": "https://pl.wikipedia.org/wiki/Puszczyk_zwyczajny",
 		"web": "https://zoo-krakow.pl/puszczyk/",
-		"regionInZoo": "sowy",
+		"regionInZoo": "kondory",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/puszczyk1.jpg"
 		]
@@ -2353,7 +2370,7 @@
 		"facts": "Prowadzi nadrzewny tryb życia. Jest aktywna w ciągu dnia.",
 		"wiki": "https://pl.wikipedia.org/wiki/Wiewi%C3%B3rczak_tr%C3%B3jbarwny",
 		"web": "https://zoo-krakow.pl/wiewiorka-trojbarwna/",
-		"regionInZoo": "surykatki",
+		"regionInZoo": "male-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wiewiórka-trójbarwna-3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wiewiórka-trójbarwna2.jpg"
@@ -2440,7 +2457,7 @@
 		"facts": "Chaus zwany kotem bagiennym, błotnym lub trzcinowym został uwieczniony obok kota nubijskiego na ścianach świątyń i papirusach przez starożytnych Egipcjan.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kot_b%C5%82otny",
 		"web": "https://zoo-krakow.pl/chaus/",
-		"regionInZoo": "srednie-drapiezniki",
+		"regionInZoo": "srednie-koty",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/chaus2.jpg"
 		]
@@ -2483,7 +2500,7 @@
 		"facts": "Żbik przypomina burego kota domowego, jest jednak od niego większy i masywniej zbudowany. Jest samotnikiem aktywnym nocą. Doskonale wspina się po drzewach.",
 		"wiki": "https://pl.wikipedia.org/wiki/%C5%BBbik_europejski",
 		"web": "https://zoo-krakow.pl/zbik/",
-		"regionInZoo": "srednie-drapiezniki",
+		"regionInZoo": "male-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żbik3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/żbik11.jpg"
@@ -2505,7 +2522,7 @@
 		"facts": "Prowadzi nocny tryb życia, dzień przesypia w gęstych zaroślach. Doskonale wspina się po drzewach i świetnie pływa. Gatunek samotniczy, prowadzi nocny tryb życia. Żyje do 15 lat.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ocelot_argenty%C5%84ski",
 		"web": "https://zoo-krakow.pl/kot-argentynski/",
-		"regionInZoo": "srednie-koty",
+		"regionInZoo": "male-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kot-argentyński3.jpg"
 		]
@@ -2526,7 +2543,7 @@
 		"facts": "Niektóre plemiona Beduinów uważają kota arabskiego za zwierzę święte.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kot_pustynny",
 		"web": "https://zoo-krakow.pl/kot-arabski/",
-		"regionInZoo": "srednie-koty",
+		"regionInZoo": "male-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kot-arabski2.jpg"
 		]
@@ -2589,12 +2606,31 @@
 		"facts": "Dobrze wspina się po drzewach i doskonale skacze. Długość skoków dochodzi do 5 m. Za wzlatującymi ptakami potrafi skoczyć do wysokości 2 m. Ryś jest aktywny głównie o zmroku i nocą, a w ciągu dnia śpi i odpoczywa.",
 		"wiki": "https://pl.wikipedia.org/wiki/Ry%C5%9B_euroazjatycki",
 		"web": "https://zoo-krakow.pl/rys/",
-		"regionInZoo": "srednie-koty",
+		"regionInZoo": "srednie-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ryś-1.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ryś11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/ryś22.jpg"
 		]
+	},
+	{
+		"id": {
+			"id": "goralek-skalny"
+		},
+		"language": "pl",
+		"name": "Góralek Skalny",
+		"nameLatin": "",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/G%C3%B3ralek_skalny",
+		"web": "",
+		"regionInZoo": "nocny-pawilon",
+		"photos": []
 	},
 	{
 		"id": {
@@ -2774,6 +2810,25 @@
 	},
 	{
 		"id": {
+			"id": "mangustolisek-afrykanski"
+		},
+		"language": "pl",
+		"name": "Mangustolisek Afrykański",
+		"nameLatin": "Cynictis penicillata",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Mangustolisek_afryka%C5%84ski",
+		"web": "",
+		"regionInZoo": "surykatki",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "wilk-grzywiasty"
 		},
 		"language": "pl",
@@ -2788,7 +2843,7 @@
 		"facts": "Z uwagi na podobieństwo do lisa, Indianie nazwali go „dużym lisem”. Nazwa wilk grzywiasty pochodzi od charakterystycznej grzywy, którą zwierzę stroszy w chwili zaniepokojenia.",
 		"wiki": "https://pl.wikipedia.org/wiki/Pampasowiec_grzywiasty",
 		"web": "https://zoo-krakow.pl/wilk-grzywiasty/",
-		"regionInZoo": "jezozwierze-psowate",
+		"regionInZoo": "wilki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty-31.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/wilk-grzywiasty3.jpg",
@@ -2812,7 +2867,7 @@
 		"facts": "",
 		"wiki": "https://pl.wikipedia.org/wiki/Wilk_europejski",
 		"web": "",
-		"regionInZoo": "wilki",
+		"regionInZoo": "",
 		"photos": [
 		]
 	},
@@ -2842,6 +2897,25 @@
 	},
 	{
 		"id": {
+			"id": "lis-arktyczny"
+		},
+		"language": "pl",
+		"name": "Lis Arktyczny",
+		"nameLatin": "Vulpes lagopus",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Lis_polarny",
+		"web": "",
+		"regionInZoo": "jezozwierze-psowate",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "fennek"
 		},
 		"language": "pl",
@@ -2856,7 +2930,7 @@
 		"facts": "Najmniejszy gatunek spośród psowatych. Wyjątkowo długie uszy służą do regulacji temperatury ciała w niekorzystnych warunkach panujących na pustyni oraz znakomicie wspomagają lokalizację zdobyczy. Posiada owłosione podeszwy, umożliwiające poruszanie się po rozgrzanym piasku.",
 		"wiki": "https://pl.wikipedia.org/wiki/Fenek_pustynny",
 		"web": "https://zoo-krakow.pl/fennek/",
-		"regionInZoo": "nocny-pawilon",
+		"regionInZoo": "male-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/fennek2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/fennek12.jpg"
@@ -2922,7 +2996,7 @@
 		"facts": "Przedstawiciel rodziny łasicowatych. Prowadzi nocny tryb życia. Znakomicie porusza się wśród gałęzi drzew.",
 		"wiki": "https://pl.wikipedia.org/wiki/Hirara_ameryka%C5%84ska",
 		"web": "https://zoo-krakow.pl/hirara/",
-		"regionInZoo": "srednie-koty",
+		"regionInZoo": "male-drapiezniki",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/hirara2.jpg"
 		]
@@ -3031,7 +3105,7 @@
 		"facts": "Osioł został udomowiony już w starożytnym Egipcie. Jest bardzo wytrzymały i mało wymagający. Ceniony jako zwierzę juczne, pociągowe i wierzchowe. Pochodzi od dzikiego osła, żyjącego w północnej Afryce.",
 		"wiki": "https://pl.wikipedia.org/wiki/Osio%C5%82",
 		"web": "https://zoo-krakow.pl/osiol-domowy/",
-		"regionInZoo": "osly",
+		"regionInZoo": "osly|mini-zoo",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/osioł-domowy2.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/osioł-domowy12.jpg"
@@ -3075,7 +3149,7 @@
 		"facts": "W Anglii wykorzystywano je do pracy w kopalniach węgla. Obecnie służą dzieciom do jazdy wierzchem, ciągną małe bryczki, są także użytkowane jako zwierzęta juczne.",
 		"wiki": "https://pl.wikipedia.org/wiki/Kuc_szetlandzki",
 		"web": "https://zoo-krakow.pl/kuc-szetlandzki/",
-		"regionInZoo": "przewalskiego",
+		"regionInZoo": "mini-zoo",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kuc-szetlandzki2.jpg"
 		]
@@ -3344,7 +3418,7 @@
 		"facts": "Jest jednym z najmniejszych przedstawicieli rodziny jeleniowatych. Żyje do 13 lat. W sytuacji zagrożenia podnosi ogon i wydaje donośny odgłos przypominający szczekanie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Mund%C5%BCak_chi%C5%84ski",
 		"web": "https://zoo-krakow.pl/mundzak-chinski/",
-		"regionInZoo": "myszojelen",
+		"regionInZoo": "myszojelen|milu",
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/mundżak-chiński1.jpg",
@@ -3648,7 +3722,7 @@
     	"facts": "Samiec w upierzeniu godowym różni się od samicy obecnością czarnej obroży na szyi. Samica jest ponadto nieco mniejsza.",
     	"wiki": "https://pl.wikipedia.org/wiki/Kazarka_rdzawa",
     	"web": "https://zoo-krakow.pl/kazarka/",
-    	"regionInZoo": "ptaki-wodne-duzy-staw|ptaki-wodne-maly-staw",
+    	"regionInZoo": "ptaki-wodne-maly-staw",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/kazarka1.jpg"
     	]
@@ -3760,13 +3834,53 @@
     	"facts": "W Polsce gnieździ się zaledwie około 30 par orłów przednich. Jest to gatunek objęty ścisłą ochroną. Wokół orlich gniazd obowiązuje strefa ochronna.",
     	"wiki": "https://pl.wikipedia.org/wiki/Orze%C5%82_przedni",
     	"web": "https://zoo-krakow.pl/orzel-przedni/",
-    	"regionInZoo": "orly",
+    	"regionInZoo": "orly-1",
     	"photos": [
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-przedni11.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-przedni3.jpg",
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-przedni2.jpg"
     	]
     },
+	{
+		"id": {
+			"id": "orzel-cesarski"
+		},
+		"language": "pl",
+		"name": "Orzeł cesarski",
+		"nameLatin": "Aquila heliaca",
+		"occurrence": "Europa południowo-wschodnia, Półwysep Pirenejski, południowo-zachodnia i środkowa Azja.",
+		"environment": "Stepy i inne otwarte tereny nizinne porośnięte niewielkimi lasami.",
+		"food": "Susły, chomiki, króliki i ptaki średniej wielkości.",
+		"division": "BIRD",
+		"multiplication": "Łączy się w pary na całe życie. W zniesieniu zwykle 2-3 jaja, wysiadywane przez samicę przez 43 dni.",
+		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii VU &#8211; narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Zagraża mu zagospodarowywanie stepów, powodujące ograniczenie bazy pokarmowej.",
+		"facts": "Orły cesarskie żyjące w Europie są ptakami wędrownymi, zimują w Afryce i Azji. Do Polski zalatują wyjątkowo.",
+		"wiki": "https://pl.wikipedia.org/wiki/Orze%C5%82_cesarski",
+		"web": "https://zoo-krakow.pl/orzel-cesarski/",
+		"regionInZoo": "orly-2",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/orzel-cesarski1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "orzel-stepowy"
+		},
+		"language": "pl",
+		"name": "Orzeł Stepowy",
+		"nameLatin": "Aquila nipalensis",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "BIRD",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Orze%C5%82_stepowy",
+		"web": "",
+		"regionInZoo": "orly-2",
+		"photos": []
+	},
     {
     	"id": {
     		"id": "aleksandretta-obrozna"
