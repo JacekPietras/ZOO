@@ -213,6 +213,65 @@
 		]
 	},
 	{
+    	"id": {
+    		"id": "drzewolaz-skoczny"
+    	},
+    	"language": "pl",
+    	"name": "Drzewołaz skoczny",
+    	"nameLatin": "Phyllobates vittatus",
+    	"occurrence": "Ameryka Środkowa - od Kostaryki do zachodniej Panamy.",
+    	"environment": "Tropikalne lasy deszczowe. Bytuje głównie między kamieniami, korzeniami drzew i pod liśćmi.",
+    	"food": "Owadożerny.",
+    	"division": "AMPHIBIAN",
+    	"multiplication": "Samiec w porze godowej wabi partnerkę wydając trelujący głos. Samica składa do 25 jaj. Samiec zapładnia je, strzeże i zwilża wodą. Po 9-17 dniach z jaj wylęgają się kijanki. Samiec przenosi je do zbiornika z wodą.",
+    	"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na II załączniku Konwencji Waszyngtońskiej.",
+    	"facts": "Jest to jeden z najczęściej hodowanych przedstawicieli rodziny drzewołazowatych.",
+    	"wiki": "https://pl.wikipedia.org/wiki/Li%C5%9Bcio%C5%82az_paskowany",
+    	"web": "https://zoo-krakow.pl/drzewolaz-skoczny/",
+    	"regionInZoo": "egzotarium",
+    	"photos": [
+    		"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-skoczny1.jpg"
+    	]
+    },
+	{
+		"id": {
+			"id": "drzewolaz-blekitny"
+		},
+		"language": "pl",
+		"name": "Drzewołaz błękitny",
+		"nameLatin": "Dendrobates azureus",
+		"occurrence": "Ameryka Południowa",
+		"environment": "Lasy deszczowe",
+		"food": "Owadożerny.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Samica składa do 10 jaj, z których po 14 - 18 dniach wykluwają się kijanki. Dojrzałość płciową osiąga w wieku około 2 lat.",
+		"protectionAndThreats": "",
+		"facts": "W jego skórze znajdują się gruczoły produkujące wydzielinę zawierającą toksyczne alkaloidy. Dorasta do 4,5 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Drzewo%C5%82az_niebieski",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "wioslonog-brodawkowy"
+		},
+		"language": "pl",
+		"name": "Wiosłonóg Brodawkowy",
+		"nameLatin": "Theloderma corticale",
+		"occurrence": "Wietnam i Chiny",
+		"environment": "Lasy deszczowe",
+		"food": "Wisłonogi odżywiają się drobnymi bezkręgowcami.",
+		"division": "AMPHIBIAN",
+		"multiplication": "Samica składa od 10 do 40 jaj. Kojanki wylęgają się po 2-3 tygodniach.",
+		"protectionAndThreats": "",
+		"facts": "Zwany również żabą mszystą. Samiec osiąga 7cm, samica 8cm długości ciała.",
+		"wiki": "https://pl.wikipedia.org/wiki/Theloderma_corticale",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
 		"id": {
 			"id": "kumak-dalekowschodni"
 		},
@@ -275,65 +334,6 @@
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/rzekotka-szmaragdowa1.jpg"
 		]
 	},
-	{
-		"id": {
-			"id": "zolw-blotny"
-		},
-		"language": "pl",
-		"name": "Żółw Błotny",
-		"nameLatin": "Emys orbicularis",
-		"occurrence": "Europa, północna Afryka, Azja Mniejsza",
-		"environment": "",
-		"food": "",
-		"division": "REPTILE",
-		"multiplication": "",
-		"protectionAndThreats": "Według „Polskiej Czerwonej Księgi Zwierząt” gatunek silnie zagrożony wyginięciem na terenie naszego kraju.",
-		"facts": "Nasz ogród brał udział w programie introdukcji tego gatunku po wykluciu się i odchowaniu małych żółwi, zostały one przekazane zespołowi naukowców, którzy dzięki naszej pomocy zwrócili naturze 62 okazy żółwia błotnego. Żółw błotny prowadzi ziemno – wodny tryb życia, zamieszkuje głównie bagna, stawy i jeziora. Na ląd wychodzi aby wygrzewać się w słońcu lub znieść jaja. Zimę spędza zagrzebany w mule na dnie zbiorników wodnych.",
-		"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_b%C5%82otny",
-		"web": "",
-		"regionInZoo": "egzotarium",
-		"photos": [
-		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/%C5%BC%C3%B3%C5%82w-b%C5%82otny2.jpg"
-		]
-	},
-	{
-		"id": {
-			"id": "zolw-gwiazdzisty"
-		},
-		"language": "pl",
-		"name": "Żółw gwiaździsty",
-		"nameLatin": "Geochelone elegans",
-		"occurrence": "Azja",
-		"environment": "",
-		"food": "",
-		"division": "REPTILE",
-		"multiplication": "",
-		"protectionAndThreats": "Gatunek zagrożony wyginięciem, objęty II załącznikiem Konwencji Waszyngtońskiej",
-		"facts": "Żółw gwiaździsty jest jednym z najpiękniej ubarwionych żółwi lądowych. Jego pancerz pokryty jest płytkami zdobionymi promienistym rysunkiem, przypominającym gwiazdy – stąd pochodzi nazwa żółwia.",
-		"wiki": "https://pl.wikipedia.org/wiki/Geochelone",
-		"web": "",
-		"regionInZoo": "egzotarium",
-		"photos": []
-	},
-	{
-    	"id": {
-    		"id": "zolw-czerwonolicy"
-    	},
-    	"language": "pl",
-    	"name": "Żółw Czerwonolicy",
-    	"nameLatin": "Trachemys scripta elegans",
-    	"occurrence": "Ameryka Północna i Środkowa",
-    	"environment": "Zamieszkuje większe zbiorniki ze stojącą wodą",
-    	"food": "Żywi się drobnymi zwierzętami wodnymi i pokarmem roślinnym",
-    	"division": "REPTILE",
-    	"multiplication": "Do rozrodu przystępuje wczesną wiosną. Samica składa 4 - 20 jaj do dołka wygrzebanego w ziemi.",
-    	"protectionAndThreats": "",
-    	"facts": "Obecnie występuje również w Europie, gdzie uważa się go za gatunek inwazyjny. Zimuje w mule na dnie zbiorników wodnych.",
-    	"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_czerwonolicy",
-    	"web": "",
-    	"regionInZoo": "egzotarium",
-    	"photos": []
-    },
 	{
 		"id": {
 			"id": "iguana-iguana"
@@ -487,6 +487,25 @@
 	},
 	{
 		"id": {
+			"id": "zolw-grecki"
+		},
+		"language": "pl",
+		"name": "Żółw grecki",
+		"nameLatin": "Testudo hermanni",
+		"occurrence": "Południowa Europa",
+		"environment": "Występuje na nasłonecznionych terenach trawiastych",
+		"food": "Roślinożerny",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Charakteryzuje się podzieloną tarczką nadogonową. Samiec ma dłuższy ogon od samicy, zakończony kolcem. Osiąga 25 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_grecki",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "zolw-papuaski"
 		},
 		"language": "pl",
@@ -506,6 +525,103 @@
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zolw-papuaski11.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/zolw-papuaski1.jpg"
 		]
+	},
+	{
+		"id": {
+			"id": "zolw-blotny"
+		},
+		"language": "pl",
+		"name": "Żółw Błotny",
+		"nameLatin": "Emys orbicularis",
+		"occurrence": "Europa, północna Afryka, Azja Mniejsza",
+		"environment": "",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "Według „Polskiej Czerwonej Księgi Zwierząt” gatunek silnie zagrożony wyginięciem na terenie naszego kraju.",
+		"facts": "Nasz ogród brał udział w programie introdukcji tego gatunku po wykluciu się i odchowaniu małych żółwi, zostały one przekazane zespołowi naukowców, którzy dzięki naszej pomocy zwrócili naturze 62 okazy żółwia błotnego. Żółw błotny prowadzi ziemno – wodny tryb życia, zamieszkuje głównie bagna, stawy i jeziora. Na ląd wychodzi aby wygrzewać się w słońcu lub znieść jaja. Zimę spędza zagrzebany w mule na dnie zbiorników wodnych.",
+		"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_b%C5%82otny",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": [
+		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/%C5%BC%C3%B3%C5%82w-b%C5%82otny2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "zolw-gwiazdzisty"
+		},
+		"language": "pl",
+		"name": "Żółw gwiaździsty",
+		"nameLatin": "Geochelone elegans",
+		"occurrence": "Azja",
+		"environment": "",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "Gatunek zagrożony wyginięciem, objęty II załącznikiem Konwencji Waszyngtońskiej",
+		"facts": "Żółw gwiaździsty jest jednym z najpiękniej ubarwionych żółwi lądowych. Jego pancerz pokryty jest płytkami zdobionymi promienistym rysunkiem, przypominającym gwiazdy – stąd pochodzi nazwa żółwia.",
+		"wiki": "https://pl.wikipedia.org/wiki/Geochelone",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+    	"id": {
+    		"id": "zolw-czerwonolicy"
+    	},
+    	"language": "pl",
+    	"name": "Żółw Czerwonolicy",
+    	"nameLatin": "Trachemys scripta elegans",
+    	"occurrence": "Ameryka Północna i Środkowa",
+    	"environment": "Zamieszkuje większe zbiorniki ze stojącą wodą",
+    	"food": "Żywi się drobnymi zwierzętami wodnymi i pokarmem roślinnym",
+    	"division": "REPTILE",
+    	"multiplication": "Do rozrodu przystępuje wczesną wiosną. Samica składa 4 - 20 jaj do dołka wygrzebanego w ziemi.",
+    	"protectionAndThreats": "",
+    	"facts": "Obecnie występuje również w Europie, gdzie uważa się go za gatunek inwazyjny. Zimuje w mule na dnie zbiorników wodnych.",
+    	"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_czerwonolicy",
+    	"web": "",
+    	"regionInZoo": "egzotarium",
+    	"photos": []
+    },
+	{
+		"id": {
+			"id": "zolw-marokanski"
+		},
+		"language": "pl",
+		"name": "Żółw Marokański",
+		"nameLatin": "Testudo graeca",
+		"occurrence": "Występuje na Półwyspie Iberyjskim i w Afryce Północnej",
+		"environment": "Zamieszkuje środowiska suche, porośnięte trawami i zaroślami.",
+		"food": "",
+		"division": "REPTILE",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Od żółwia greckiego różni się niepodzieloną tarczką na-ogonową. Osiąga 30 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_%C5%9Br%C3%B3dziemnomorski",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "zolw-mccorda"
+		},
+		"language": "pl",
+		"name": "Żółw mccorda",
+		"nameLatin": "Chelodina mccordi",
+		"occurrence": "Wyspa Roti w Indonezji.",
+		"environment": "Podmokłe obszary wyspy.",
+		"food": "Żywi się pokarmem zwierzęcym.",
+		"division": "REPTILE",
+		"multiplication": "W okresie rozrodczym samica składa 6 - 20 jaj. Inkubacja trwa około 3 miesiące.",
+		"protectionAndThreats": "",
+		"facts": "Przedstawiciel rodziny żółwi wężoszyjnych. Gatunek opisany dla nauki w roku 1994 i po pięciu latach uznany za krytycznie zagrożony wyginięciem z powodu nielegalnego handlu i utraty siedlisk.",
+		"wiki": "https://pl.wikipedia.org/wiki/Chelodyna_rotia%C5%84ska",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
 	},
 	{
 		"id": {
@@ -555,6 +671,25 @@
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/agama-zaglowa-filipinska3.jpg"
 		]
 	},
+		{
+    		"id": {
+    			"id": "agama-gorska"
+    		},
+    		"language": "pl",
+    		"name": "Agama górska",
+    		"nameLatin": "Acanthosaura capra",
+    		"occurrence": "Kambodża, Laos i Wietnam.",
+    		"environment": "Zamieszkuje górskie lasy tropikalne oraz zarośla bambusowe",
+    		"food": "Żywi się głównie bezkręgowcami. W skład jej diety wchodzą również małe gryzonie.",
+    		"division": "REPTILE",
+    		"multiplication": "",
+    		"protectionAndThreats": "",
+    		"facts": "Samiec jest większy i masywniej zbudowany od samicy. W okresie godowym przybiera bardziej jaskrawe ubarwienie. Gatunek ten osiąga długość do około 35 cm",
+    		"wiki": "https://pl.wikipedia.org/wiki/Acanthosaura",
+    		"web": "",
+    		"regionInZoo": "egzotarium",
+    		"photos": []
+    	},
 	{
 		"id": {
 			"id": "gekon-lamparci"
@@ -666,6 +801,44 @@
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/waran-leśny3.jpg"
 		]
 	},
+	{
+		"id": {
+			"id": "waran-blekitny"
+		},
+		"language": "pl",
+		"name": "Waran Błękitny",
+		"nameLatin": "Varanus macraei",
+		"occurrence": "Nowa Gwinea",
+		"environment": "Las tropikalny",
+		"food": "Żywi się owadami i ptasimi jajami. Dietę uzupełnia owocami.",
+		"division": "REPTILE",
+		"multiplication": "Samica składa w wilgotnym podłożu 3 - 6 jaj, z których po około 180 dniach wylęgają się młode.",
+		"protectionAndThreats": "",
+		"facts": "Została odkryta w 2001 roku. Posiada chwytny ogon. Jest aktywna w ciągu dnia. Dorosłe samce osiągają długość o 110 cm, samice - do około 100 cm. Warany te żyją średnio 15 lat.",
+		"wiki": "https://pl.wikipedia.org/wiki/Varanus",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+		{
+    		"id": {
+    			"id": "scynk-wielki"
+    		},
+    		"language": "pl",
+    		"name": "Scynk Wielki",
+    		"nameLatin": "Tiliqua gigas",
+    		"occurrence": "Nowa Gwinea i okoliczne wyspy.",
+    		"environment": "Preferuje suche, ciepłe i urozmaicone środowiska.",
+    		"food": "Wszystkożerny. Jego pokarm stanowią ślimaki, stawonogi, mniejsze jaszczurki, padlina.",
+    		"division": "REPTILE",
+    		"multiplication": "",
+    		"protectionAndThreats": "",
+    		"facts": "Osiąga około 50 cm długości",
+    		"wiki": "https://pl.wikipedia.org/wiki/Tiliqua",
+    		"web": "",
+    		"regionInZoo": "egzotarium",
+    		"photos": []
+    	},
 	{
 		"id": {
 			"id": "ptasznik-kedzierzawy"
@@ -1117,12 +1290,12 @@
 		"language": "pl",
 		"name": "Bażant Elliota",
 		"nameLatin": "Syrmaticus ellioti",
-		"occurrence": "",
-		"environment": "",
-		"food": "",
+		"occurrence": "Południowo-Wschodnie Chiny",
+		"environment": "Zamieszkuje mieszane i iglaste lasy na wysokości 300-1500 m.",
+		"food": "Żywi się owocami, nasionami i młodymi pędami roślin. Zjada również mrówki i ich larwy.",
 		"division": "BIRD",
-		"multiplication": "",
-		"protectionAndThreats": "",
+		"multiplication": "Okres lęgowy rozpoczyna się w maju. Samica składa średnio 5-8 jaj, które wysiaduje 25 dni.",
+		"protectionAndThreats": "Gatunek ginący, ujęty w I załączniku Konwencji Waszyngtońskiej (CITES I). Jego populacja zmniejsza się z powodu wyrębu lasów i działalności rolniczej.",
 		"facts": "",
 		"wiki": "https://pl.wikipedia.org/wiki/Syrmaticus",
 		"web": "",
@@ -2222,7 +2395,7 @@
 	},
 	{
 		"id": {
-			"id": "lemur-wari"
+			"id": "lemur-wari-rudy"
 		},
 		"language": "pl",
 		"name": "Lemur wari",
@@ -2790,7 +2963,7 @@
 		},
 		"language": "pl",
 		"name": "Góralek Skalny",
-		"nameLatin": "",
+		"nameLatin": "Procavia capensis",
 		"occurrence": "",
 		"environment": "",
 		"food": "",
@@ -3068,18 +3241,18 @@
 	},
 	{
 		"id": {
-			"id": "lis-arktyczny"
+			"id": "lis-polarny"
 		},
 		"language": "pl",
-		"name": "Lis Arktyczny",
+		"name": "Lis Polarny",
 		"nameLatin": "Vulpes lagopus",
-		"occurrence": "",
-		"environment": "",
-		"food": "",
+		"occurrence": "Zamieszkuje tereny na północ od koła podbiegunowego.",
+		"environment": "Tundra i pustynia polarna. Chętnie przebywa w strefie przybrzeżnej.",
+		"food": "Odżywia się owadami, rybami, ptakami, drobnymi ssakami jak lemingi, szczątkami ssaków morskich, jagodami i jajami.",
 		"division": "MAMMAL",
-		"multiplication": "",
+		"multiplication": "Gatunek monogamiczny - tworzy pary na całe życie. W miocie jest do 14 młodych",
 		"protectionAndThreats": "",
-		"facts": "",
+		"facts": "Nazywany inaczej pieścem. Letnie futro jest szare, brązowe lub czarne. W zimie w ostrzejszym klimacie staje się jednolicie białe. Wtedy też spody łap pokrywają się gęstym futrem. Poluje w grupach rodzinnych. Kopie nory o powierzchni do 30 m², głębokie do 4 m.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lis_polarny",
 		"web": "",
 		"regionInZoo": "jezozwierze-psowate",
@@ -3236,6 +3409,25 @@
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/szop-pracz2.jpg"
 		]
+	},
+	{
+		"id": {
+			"id": "binturong-orientalny"
+		},
+		"language": "pl",
+		"name": "Binturong orientalny",
+		"nameLatin": "Arctictis binturong",
+		"occurrence": "Azja Połudiowa i Południowo-Wschodnia. Półwysep Indochiński, Nepal a taże na Borneo, Jawie i Sumatrze.",
+		"environment": "Gęste lasy.",
+		"food": "Wszystkożerny. Pokarm stanowią małe kręgowce, owady, jaja, pędy roślin i owoce.",
+		"division": "MAMMAL",
+		"multiplication": "Po ciąży trwającej ok. trzy miesiące samica rodzi średnio 2-3 młode.",
+		"protectionAndThreats": "Gatunek zagrożony wyginięciem.",
+		"facts": "Drapieżnik z rodziny wiwerowatych. Należy do najbardziej reliktowych przedstawicieli kotokształtnych. Prowadzi nadrzewny tryb życia. Aktywny głównie nocą. Posiada długi chwytny ogon. Tworzy niewielkie grupy rodzinne.",
+		"wiki": "https://pl.wikipedia.org/wiki/Binturong_orientalny",
+		"web": "",
+		"regionInZoo": "srednie-drapiezniki",
+		"photos": []
 	},
 	{
 		"id": {
@@ -3749,27 +3941,6 @@
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/kob-liczi21.jpg"
 		]
 	},
-	{
-    	"id": {
-    		"id": "drzewolaz-skoczny"
-    	},
-    	"language": "pl",
-    	"name": "Drzewołaz skoczny",
-    	"nameLatin": "Phyllobates vittatus",
-    	"occurrence": "Ameryka Środkowa - od Kostaryki do zachodniej Panamy.",
-    	"environment": "Tropikalne lasy deszczowe. Bytuje głównie między kamieniami, korzeniami drzew i pod liśćmi.",
-    	"food": "Owadożerny.",
-    	"division": "AMPHIBIAN",
-    	"multiplication": "Samiec w porze godowej wabi partnerkę wydając trelujący głos. Samica składa do 25 jaj. Samiec zapładnia je, strzeże i zwilża wodą. Po 9-17 dniach z jaj wylęgają się kijanki. Samiec przenosi je do zbiornika z wodą.",
-    	"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na II załączniku Konwencji Waszyngtońskiej.",
-    	"facts": "Jest to jeden z najczęściej hodowanych przedstawicieli rodziny drzewołazowatych.",
-    	"wiki": "https://pl.wikipedia.org/wiki/Li%C5%9Bcio%C5%82az_paskowany",
-    	"web": "https://zoo-krakow.pl/drzewolaz-skoczny/",
-    	"regionInZoo": "egzotarium",
-    	"photos": [
-    		"https://zoo-krakow.pl/wp-content/uploads/2016/05/drzewolaz-skoczny1.jpg"
-    	]
-    },
     {
     	"id": {
     		"id": "zaba-pomidorowa"
@@ -3791,6 +3962,25 @@
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/zaba-pomidorowa1.jpg"
     	]
     },
+	{
+		"id": {
+			"id": "zaba-gigant"
+		},
+		"language": "pl",
+		"name": "Żaba Gigant",
+		"nameLatin": "Leptodactylus fallax",
+		"occurrence": "Wyspy Karaibskie: Dominikane i Montserrat",
+		"environment": "Lasy deszczowe",
+		"food": "Żywi się owadami i małymi kręgowcami",
+		"division": "AMPHIBIAN",
+		"multiplication": "",
+		"protectionAndThreats": "Gatunek krytycznie zagrożony wyginięciem.",
+		"facts": "Prowadzi nocny tryb życia. Jest to jedna z największych żab na świecie - osiąga 21 cm długości i ciężar do 700 g.",
+		"wiki": "https://pl.wikipedia.org/wiki/Leptodactylus",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
     {
     	"id": {
     		"id": "ara-zoltoskrzydla"
@@ -3856,6 +4046,25 @@
     		"https://zoo-krakow.pl/wp-content/uploads/2016/05/heloderma-meksykanska2.jpg"
     	]
     },
+	{
+		"id": {
+			"id": "aksolotl"
+		},
+		"language": "pl",
+		"name": "Aksolotl",
+		"nameLatin": "Ambystoma mexicanum",
+		"occurrence": "Występuje jedynie w jeziorze Xochimilco na południe od stolicy Meksyku.",
+		"environment": "",
+		"food": "",
+		"division": "AMPHIBIAN",
+		"multiplication": "Postać larwalna jest zdolna do płciowego rozmnażania się, co określane jest mianem neotenii.",
+		"protectionAndThreats": "",
+		"facts": "Drapieżny płaz ogoniasty z rodziny ambystomowatych, Prowadzi nocny tryb życia. Charakterystyczne dla aksolotla są 3 pary skrzeli zewnętrznych, położone po obu stronach głowy.",
+		"wiki": "https://pl.wikipedia.org/wiki/Ambystoma_meksyka%C5%84ska",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
     {
     	"id": {
     		"id": "drzewica-dwubarwna"
