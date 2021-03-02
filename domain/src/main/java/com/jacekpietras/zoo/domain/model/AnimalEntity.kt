@@ -53,6 +53,8 @@ enum class Division {
     AMPHIBIAN,
     REPTILE,
     FISH,
+    ARTHROPOD,
+    MOLLUSCA,
 }
 
 fun divisionFromPolishTag(tag: String): Division =

@@ -316,6 +316,25 @@
 		"photos": []
 	},
 	{
+    	"id": {
+    		"id": "zolw-czerwonolicy"
+    	},
+    	"language": "pl",
+    	"name": "Żółw Czerwonolicy",
+    	"nameLatin": "Trachemys scripta elegans",
+    	"occurrence": "Ameryka Północna i Środkowa",
+    	"environment": "Zamieszkuje większe zbiorniki ze stojącą wodą",
+    	"food": "Żywi się drobnymi zwierzętami wodnymi i pokarmem roślinnym",
+    	"division": "REPTILE",
+    	"multiplication": "Do rozrodu przystępuje wczesną wiosną. Samica składa 4 - 20 jaj do dołka wygrzebanego w ziemi.",
+    	"protectionAndThreats": "",
+    	"facts": "Obecnie występuje również w Europie, gdzie uważa się go za gatunek inwazyjny. Zimuje w mule na dnie zbiorników wodnych.",
+    	"wiki": "https://pl.wikipedia.org/wiki/%C5%BB%C3%B3%C5%82w_czerwonolicy",
+    	"web": "",
+    	"regionInZoo": "egzotarium",
+    	"photos": []
+    },
+	{
 		"id": {
 			"id": "iguana-iguana"
 		},
@@ -404,6 +423,25 @@
 		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/pyton-zielony21.jpg",
 		    "https://zoo-krakow.pl/wp-content/uploads/2016/05/pyton-zielony3.jpg"
 		]
+	},
+	{
+		"id": {
+			"id": "waz-dlugonosy"
+		},
+		"language": "pl",
+		"name": "Wąż Długonosy",
+		"nameLatin": "Rhynchophis boulengeri",
+		"occurrence": "Północny Wietnam i Południowe Chiny",
+		"environment": "Zamieszkuje wilgotne lasy. Chętnie przebywa na drzewach",
+		"food": "Żywi się płazami, jaszczurkami, ptakami i gryzoniami",
+		"division": "REPTILE",
+		"multiplication": "Gatunek jajorodny. Po około 60 dniach od złożenia jaj wykluwają się młode osobniki o jasnobrązowym ubarwieniu. Dojrzałość płciową uzyskują po 3 latach.",
+		"protectionAndThreats": "",
+		"facts": "Dorosłe węże długonose dorastają do około 140 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Gonyosoma",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
 	},
 	{
 		"id": {
@@ -630,6 +668,63 @@
 	},
 	{
 		"id": {
+			"id": "ptasznik-kedzierzawy"
+		},
+		"language": "pl",
+		"name": "Ptasznik Kędzierzawy",
+		"nameLatin": "Brachypelma albopilosum",
+		"occurrence": "Ameryka Środkowa i Południowa",
+		"environment": "Wilgotne lasy",
+		"food": "Żywi się owadami i małymi kręgowcami.",
+		"division": "ARTHROPOD",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Osiąga 8 cm długości. Jest to jeden z najłagodniejszych gatunków ptaszników.",
+		"wiki": "https://pl.wikipedia.org/wiki/Ptasznik_k%C4%99dzierzawy",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "slimak-achatina"
+		},
+		"language": "pl",
+		"name": "Ślimak Achatina",
+		"nameLatin": "Achatina achatina",
+		"occurrence": "Afryka Zachodnia",
+		"environment": "Tereny wilgotne",
+		"food": "Żywi się zielonymi częściami roślin i owocami.",
+		"division": "MOLLUSCA",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Muszla dorosłego osobnika osiąga średnio długość około 20 cm",
+		"wiki": "https://pl.wikipedia.org/wiki/Achatina_zwyczajna",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "karaczan-choparda"
+		},
+		"language": "pl",
+		"name": "Karaczan Choparda",
+		"nameLatin": "Elliptorhina Chopardi",
+		"occurrence": "Madagaskar",
+		"environment": "Lasy tropikalne",
+		"food": "Żywi się zarówno pokarmem roślinnym jak i zwierzęcym.",
+		"division": "ARTHROPOD",
+		"multiplication": "Jajożyworodny",
+		"protectionAndThreats": "",
+		"facts": "Osiąga do 5 cm długości ciała.",
+		"wiki": "https://pl.wikipedia.org/wiki/Karaczany",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "boa-dusiciel"
 		},
 		"language": "pl",
@@ -670,6 +765,25 @@
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/boa-psiogłowy1.jpg"
 		]
+	},
+	{
+		"id": {
+			"id": "boa-pacyficzny"
+		},
+		"language": "pl",
+		"name": "Boa Pacyficzny",
+		"nameLatin": "Candoia carinata",
+		"occurrence": "Nowa Gwinea, Wyspy Salomona, Celebes, Wyspy Tokelau.",
+		"environment": "Zamieszkuje tereny zalesione, chętnie przebywa na drzewach.",
+		"food": "Poluje głównie na małe ssaki, jaszczurki i żaby.",
+		"division": "REPTILE",
+		"multiplication": "Jest gatunkiem jajożyworodnym. Ciąża trwa 7 - 8 miesięcy.",
+		"protectionAndThreats": "",
+		"facts": "Przedstawiciel rodziny dusicieli. Posiada charakterystycznie spłaszczoną głowę i zadarty pysk.",
+		"wiki": "https://pl.wikipedia.org/wiki/Candoiinae",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
 	},
 	{
 		"id": {
@@ -1686,7 +1800,7 @@
 	},
 	{
 		"id": {
-			"id": "nierozlaczka"
+			"id": "nierozlaczka-rudoglowa"
 		},
 		"language": "pl",
 		"name": "Nierozłączka rudogłowa",
@@ -1703,6 +1817,63 @@
 		"regionInZoo": "bazanty-papugi",
 		"photos": [
 		]
+	},
+	{
+		"id": {
+			"id": "nierozlaczka-czerwonoczelna"
+		},
+		"language": "pl",
+		"name": "Nierozłączka Czerwonoczelna",
+		"nameLatin": "Agapornis roseicollis",
+		"occurrence": "Południowo-Zachodnia Afryka",
+		"environment": "Luźne zadrzewienia, zwykle w pobliżu cieków wodnych",
+		"food": "Nasiona, liście i pąki roślin",
+		"division": "BIRD",
+		"multiplication": "Gniazdują w szczelinach skalnych a nawet w konstrukcjach budynków i mostów. Zajmują opuszczone gniazda wikłaczy. W zniesieniu 4 - 6 jaj, okres ikubacji wynosi 23 dni.",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Nieroz%C5%82%C4%85czka_czerwonoczelna",
+		"web": "",
+		"regionInZoo": "bazanty-papugi",
+		"photos": []
+	},
+	{
+    	"id": {
+    		"id": "afrykanka-senegalsa"
+    	},
+    	"language": "pl",
+    	"name": "Afrykanka Senegalska",
+    	"nameLatin": "Poicephalus senegalus",
+    	"occurrence": "Zachodnia Afryka - od Senegalu do Kamerunu.",
+    	"environment": "Sawanna i luźne zadrzewienia",
+    	"food": "Żywi się owocami, pączkami drzew, nasionami",
+    	"division": "BIRD",
+    	"multiplication": "Gnieździ się w dziuplach drzew. W zniesieniu 2 - 4 jaja, wysiadywane przez 25 dni.",
+    	"protectionAndThreats": "",
+    	"facts": "",
+    	"wiki": "https://pl.wikipedia.org/wiki/Afrykanka_%C5%BC%C3%B3%C5%82tobrzucha",
+    	"web": "",
+    	"regionInZoo": "bazanty-papugi",
+    	"photos": []
+    },
+	{
+		"id": {
+			"id": "bazant-diamentowy"
+		},
+		"language": "pl",
+		"name": "Bażant Diamentowy",
+		"nameLatin": "Chrysolophus amherstiae",
+		"occurrence": "Występuje w Tybecie oraz w Chinach.",
+		"environment": "Zamieszkuje gęste bambusowe zarośla w górach do wysokości 3600 m n.p.m.",
+		"food": "Żywi się głównie drobnymi bezkręgowcami, larwami owadów i pająkami. Dietę uzupełnia pokarmem roślinnym, który stanowią młode pędy bambusa i paproci oraz owoce i nasiona",
+		"division": "BIRD",
+		"multiplication": "Sezon lęgowy trwa od marca do kwietnia. Do gniazda zbudowanego na ziemi samica składa średnio 6 jaj, które wysiaduje około 24 dni.",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Ba%C5%BCant_diamentowy",
+		"web": "",
+		"regionInZoo": "bazanty-papugi",
+		"photos": []
 	},
 	{
 		"id": {
@@ -2815,13 +2986,13 @@
 		"language": "pl",
 		"name": "Mangustolisek Afrykański",
 		"nameLatin": "Cynictis penicillata",
-		"occurrence": "",
-		"environment": "",
-		"food": "",
+		"occurrence": "Afryka Południowa",
+		"environment": "Zamieszkuje otwarte tereny półpustynne, zarośla i łąki",
+		"food": "Owady, drobne kręgowce.",
 		"division": "MAMMAL",
-		"multiplication": "",
+		"multiplication": "Dojrzałość płciową osiąga w wieku 730 dni, ciąża trwa około 56 dni. W miocie zwykle 2 młode",
 		"protectionAndThreats": "",
-		"facts": "",
+		"facts": "Żyje około 15 lat.",
 		"wiki": "https://pl.wikipedia.org/wiki/Mangustolisek_afryka%C5%84ski",
 		"web": "",
 		"regionInZoo": "surykatki",
