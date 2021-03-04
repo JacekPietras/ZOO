@@ -43,27 +43,6 @@
 	},
 	{
 		"id": {
-			"id": "pyszczak-zolty"
-		},
-		"language": "pl",
-		"name": "Pyszczak żołty",
-		"nameLatin": "Labidochromis caeruleus",
-		"occurrence": "Jezioro Malawi w południowo - wschodniej Afryce.",
-		"environment": "Strefa przybrzeżna i głębsze strefy litoralu skalistego.",
-		"food": "Małe ryby i skorupiaki.",
-		"division": "FISH",
-		"multiplication": "Ryba jajorodna.",
-		"protectionAndThreats": "Gatunek nie jest zagrożony wyginięciem.",
-		"facts": "Przedstawiciel rodziny pielęgnicowatych. Osiąga około 10 cm długości.",
-		"wiki": "https://pl.wikipedia.org/wiki/Labidochromis_caeruleus",
-		"web": "https://zoo-krakow.pl/pyszczak-zolty/",
-		"regionInZoo": "egzotarium",
-		"photos": [
-			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pyszczak1.jpg"
-		]
-	},
-	{
-		"id": {
 			"id": "szczelinowiec-z-burundi"
 		},
 		"language": "pl",
@@ -146,6 +125,217 @@
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/05/stadnik-zoltoogonowy1-e1468337007304.jpg"
 		]
+	},
+	{
+		"id": {
+			"id": "niszczuka-plamista"
+		},
+		"language": "pl",
+		"name": "Niszczuka plamista",
+		"nameLatin": "Lepisosteus oculatus",
+		"occurrence": "Ameryka Północna",
+		"environment": "",
+		"food": "Jest drapieżnikiem, żywi się różnymi gatunkami ryb i skorupiaków.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Dorasta do 1,5 metra długości",
+		"wiki": "https://pl.wikipedia.org/wiki/Niszczuka_plamista",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "pielegnica-zebra"
+		},
+		"language": "pl",
+		"name": "Pielęgnica zebra",
+		"nameLatin": "Cichlasoma nigrofasciatum",
+		"occurrence": "Ameryka Środkowa",
+		"environment": "",
+		"food": "Odżywia się głównie pokarmem zwierzęcym.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "W okresie godowym para wykazuje dużą agresję. Samica buduje gniazdo w piasku. Samiec dorasta do 10 cm długości, samica jest niego mniejsza.",
+		"wiki": "",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "zbrojnik-lamparci"
+		},
+		"language": "pl",
+		"name": "Zbrojnik lamparci",
+		"nameLatin": "Glyptoperichthys gibbiceps",
+		"occurrence": "Ameryka Południowa, Peru, Amazonia, Boliwia i Paragwaj",
+		"environment": "Rzeki",
+		"food": "Odżywia się pokarmem roślinnym",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Osiąga 40 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Zbrojnik_lamparci",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "pyszczak-zolty"
+		},
+		"language": "pl",
+		"name": "Pyszczak żołty",
+		"nameLatin": "Labidochromis caeruleus",
+		"occurrence": "Jezioro Malawi w południowo - wschodniej Afryce.",
+		"environment": "Strefa przybrzeżna i głębsze strefy litoralu skalistego.",
+		"food": "Małe ryby i skorupiaki.",
+		"division": "FISH",
+		"multiplication": "Ryba jajorodna.",
+		"protectionAndThreats": "Gatunek nie jest zagrożony wyginięciem.",
+		"facts": "Przedstawiciel rodziny pielęgnicowatych. Osiąga około 10 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Labidochromis_caeruleus",
+		"web": "https://zoo-krakow.pl/pyszczak-zolty/",
+		"regionInZoo": "egzotarium",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pyszczak1.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pyszczak-maingano"
+		},
+		"language": "pl",
+		"name": "Pyszczak maingano",
+		"nameLatin": "Melanochromis cyaneorhabdos",
+		"occurrence": "Jezioro Malawi w południowo - wschodniej Afryce.",
+		"environment": "",
+		"food": "",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Ryba z rodziny pielęgnicowatych. Osiąga 9 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Pseudotropheus_cyaneorhabdos",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "pyszczak-hongi"
+		},
+		"language": "pl",
+		"name": "Pyszczak Hongi",
+		"nameLatin": "Labidochromis Hongi",
+		"occurrence": "Jezioro Malawi w południowo - wschodniej Afryce.",
+		"environment": "",
+		"food": "Żywi się glonami i bezkręgowcami.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Ryba z rodziny pielęgnicowatych. Terytorialna. Osiąga 9 cm długości",
+		"wiki": "https://pl.wikipedia.org/wiki/Piel%C4%99gnicowate",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "pyszczak-red-red"
+		},
+		"language": "pl",
+		"name": "Pysczak Red-red",
+		"nameLatin": "Metriaclima estherae Red-red",
+		"occurrence": "Jezioro Malawi w południowo - wschodniej Afryce.",
+		"environment": "Strefa przybżeżna.",
+		"food": "",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Ryba z rodziny pielęgnicowatych. Osiąga 12 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Piel%C4%99gnicowate",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "zebrasoma-niebiesko-zolta"
+		},
+		"language": "pl",
+		"name": "Zebrasoma niebiesko-żółta",
+		"nameLatin": "Zebrasoma xanthurum",
+		"occurrence": "Ocean Indyjski.",
+		"environment": "Zamieszkuje rafy koralowe",
+		"food": "",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Ryba z rodziny pokolcowatych. Posiada kolce u nasady ogona. osiąga 20 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Zebrasoma_niebiesko-%C5%BC%C3%B3%C5%82ta",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "chromis-niebieski"
+		},
+		"language": "pl",
+		"name": "Chromis niebieski",
+		"nameLatin": "Chromis cyanea",
+		"occurrence": "Ocean Atlantycki",
+		"environment": "",
+		"food": "",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Ryba z rodziny garbikowatych. Osiąga 18 cm długości",
+		"wiki": "https://pl.wikipedia.org/wiki/Chromis",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "babka-kopiaca"
+		},
+		"language": "pl",
+		"name": "Babka kopiąca",
+		"nameLatin": "Valenciennea puellaris",
+		"occurrence": "Indopacyfik",
+		"environment": "Zamieszkuje kryjówki pod skałami.",
+		"food": "",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Przedstawiciel rodziny babkowatych. Często nabiera w pyszczek piasek i przesiewa go przez skrzela. Osiąga około 14 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Valenciennea",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{fixme
+		"id": {
+			"id": ""
+		},
+		"language": "pl",
+		"name": "",
+		"nameLatin": "",
+		"occurrence": "",
+		"environment": "",
+		"food": "",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
 	},
 	{
 		"id": {
@@ -1096,19 +1286,19 @@
 	},
 	{
 		"id": {
-			"id": ""
+			"id": "feniks-miniaturowy"
 		},
 		"language": "pl",
 		"name": "Feniks Miniaturowy",
-		"nameLatin": "",
+		"nameLatin": "Gallus gallus domesticus",
 		"occurrence": "",
 		"environment": "",
 		"food": "",
 		"division": "BIRD",
 		"multiplication": "",
 		"protectionAndThreats": "",
-		"facts": "",
-		"wiki": "",
+		"facts": "Kury te mają smukłe i wydłużone ciało oraz długi ogon, noszony dość nisko w linii grzbietu. Ich ubarwienie może być kuropatwiane, kuropatwiane srebrne oraz czarne. Są to ptaki bardzo łagodne i łatwe do oswojenia. Kury tej rasy są dobrymi nioskami.",
+		"wiki": "https://pl.wikipedia.org/wiki/Kura_domowa",
 		"web": "",
 		"regionInZoo": "mini-zoo",
 		"photos": []
@@ -2264,6 +2454,82 @@
 	},
 	{
 		"id": {
+			"id": "wielkomysz-filipinska"
+		},
+		"language": "pl",
+		"name": "Wielkomysz filipińska",
+		"nameLatin": "Phloeomys pallidus",
+		"occurrence": "Filipiny",
+		"environment": "Lasy tropikalne.",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": " Samica rodzi jedno młode.",
+		"protectionAndThreats": "",
+		"facts": "Znakomicie wspina się po drzewach, prowadzi nocny tryb życia, żyje do wysokości 2200 m n.p.m, noworodek przysysa się na kilka tygodni do matki.",
+		"wiki": "https://pl.wikipedia.org/wiki/Sier%C5%9Bciogon_d%C5%BCunglowy",
+		"web": "",
+		"regionInZoo": "nocny-pawilon",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "kitanka-lisia"
+		},
+		"language": "pl",
+		"name": "Kitanka lisia",
+		"nameLatin": "Trichosurus vulpecula",
+		"occurrence": "Australia",
+		"environment": "Lasy, półpustynie, tereny zurbanizowane.",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "Ciążą trwa zaledwie około 17 dni, młode przebywa w torbie matki do 5 miesiąca życia.",
+		"protectionAndThreats": "",
+		"facts": "Gatunek ten jest jednym z najliczniejszych tobaczy występujących w Australii",
+		"wiki": "https://pl.wikipedia.org/wiki/Kitanka_lisia",
+		"web": "",
+		"regionInZoo": "nocny-pawilon",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "kinkazu"
+		},
+		"language": "pl",
+		"name": "Kinkażu",
+		"nameLatin": "Potos flavus",
+		"occurrence": "Meksyk, Ameryka Środkowa.",
+		"environment": "",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "",
+		"wiki": "https://pl.wikipedia.org/wiki/Kinka%C5%BCu_%C5%BC%C3%B3%C5%82ty",
+		"web": "",
+		"regionInZoo": "nocny-pawilon",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "galago-senegalski"
+		},
+		"language": "pl",
+		"name": "Galago Senegalski",
+		"nameLatin": "Galago senegalensis",
+		"occurrence": "Afryka Środkowa",
+		"environment": "Lasy i zarośla",
+		"food": "",
+		"division": "MAMMAL",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Prowadzi nocny tryb życia, doskonale porusza się po drzewach, wykonuje dalekie skoki, nazywany jest dzieckiem buszu z powodu głosu przypominającego płacz niemowlęcia.",
+		"wiki": "https://pl.wikipedia.org/wiki/Galago_senegalski",
+		"web": "",
+		"regionInZoo": "nocny-pawilon",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "walabia-benetta"
 		},
 		"language": "pl",
@@ -2964,13 +3230,13 @@
 		"language": "pl",
 		"name": "Góralek Skalny",
 		"nameLatin": "Procavia capensis",
-		"occurrence": "",
+		"occurrence": "Afryka, Półwysek Arabski, Bliski wschód, aż po Turcję.",
 		"environment": "",
-		"food": "",
+		"food": "Pokarm stanowią trawy, rośliny zielone, młode pędy i owoce a także owady i ich larwy.",
 		"division": "MAMMAL",
-		"multiplication": "",
+		"multiplication": "Po ciąży trwającej 7 miesięcy na świat przychodzi zwykle 2 do 3 młodych, które rodzą się w pełni ukształtowane, pokryte futrem i z otwartymi oczami. W wieku 2 tygodni zaczynają odżywiać się jak dorosłe osobniki.",
 		"protectionAndThreats": "",
-		"facts": "",
+		"facts": "Żyje w grupach rodzinnych, które mogą łączyć się w większe stada.",
 		"wiki": "https://pl.wikipedia.org/wiki/G%C3%B3ralek_skalny",
 		"web": "",
 		"regionInZoo": "nocny-pawilon",
@@ -4249,13 +4515,13 @@
 		"language": "pl",
 		"name": "Orzeł Stepowy",
 		"nameLatin": "Aquila nipalensis",
-		"occurrence": "",
-		"environment": "",
-		"food": "",
+		"occurrence": "Azja środkowa i południowa",
+		"environment": "Stepy i półpustynie.",
+		"food": "Na lęgowiskach odżywia się niemal wyłącznie susłami. Na afrykańskich zimowiskach i podczas wędrówek zjada także inne frobne ssaki oraz padlinę.",
 		"division": "BIRD",
 		"multiplication": "",
-		"protectionAndThreats": "",
-		"facts": "",
+		"protectionAndThreats": "Liczebność tych ptaków zmniejsza się na skutek intensywnego zagospodarowania stepów.",
+		"facts": "Najczęściej poluje z zasiadki lub krążąc nad rewirem łowieckim w locie patrolowym. Gniazdo, umieszczone najczęściej na ziemi budowane jest przez samca i samicę.",
 		"wiki": "https://pl.wikipedia.org/wiki/Orze%C5%82_stepowy",
 		"web": "",
 		"regionInZoo": "orly-2",
