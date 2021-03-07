@@ -64,28 +64,6 @@
 	},
 	{
 		"id": {
-			"id": "pokolec-krolewski"
-		},
-		"language": "pl",
-		"name": "Pokolec królewski",
-		"nameLatin": "Paracanthurus hepatus",
-		"occurrence": "Indopacyfik.",
-		"environment": "Przybrzeżne rafy koralowe.",
-		"food": "Wszystkożerna. Żywi się zooplanktonem i glonami.",
-		"division": "FISH",
-		"multiplication": "Gatunek jajorodny. W czasie tarła samce bywają bardzo agresywne wobec samic.",
-		"protectionAndThreats": "Ryba nie jest zagrożona wyginięciem.",
-		"facts": "U nasady płetwy ogonowej posiada wysuwane ostrze, służące do obrony przed wrogami. Osiąga 25 cm długości. Przedstawiciel rodziny pokolcowatych.",
-		"wiki": "https://pl.wikipedia.org/wiki/Pokolec_kr%C3%B3lewski",
-		"web": "https://zoo-krakow.pl/pokolec-krolewski/",
-		"regionInZoo": "egzotarium",
-		"photos": [
-			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pokolec-krolewski11.jpg",
-			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pokolec-krolewski2.jpg"
-		]
-	},
-	{
-		"id": {
 			"id": "amfiprion-okoniowy"
 		},
 		"language": "pl",
@@ -282,6 +260,66 @@
 	},
 	{
 		"id": {
+			"id": "zebrasoma-zaglopletwa"
+		},
+		"language": "pl",
+		"name": "Zebrasoma Żaglopłetwa",
+		"nameLatin": "Zebrasoma veliferum",
+		"occurrence": "Ocean Indyjski, Morze Czerwone i Pacyfik",
+		"environment": "",
+		"food": "",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Przedstawiciel rodziny pokolcowatych. Osiąga około 35 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Zebrasoma",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "pokolec-krolewski"
+		},
+		"language": "pl",
+		"name": "Pokolec królewski",
+		"nameLatin": "Paracanthurus hepatus",
+		"occurrence": "Indopacyfik.",
+		"environment": "Przybrzeżne rafy koralowe.",
+		"food": "Wszystkożerna. Żywi się zooplanktonem i glonami.",
+		"division": "FISH",
+		"multiplication": "Gatunek jajorodny. W czasie tarła samce bywają bardzo agresywne wobec samic.",
+		"protectionAndThreats": "Ryba nie jest zagrożona wyginięciem.",
+		"facts": "U nasady płetwy ogonowej posiada wysuwane ostrze, służące do obrony przed wrogami. Osiąga 25 cm długości. Przedstawiciel rodziny pokolcowatych.",
+		"wiki": "https://pl.wikipedia.org/wiki/Pokolec_kr%C3%B3lewski",
+		"web": "https://zoo-krakow.pl/pokolec-krolewski/",
+		"regionInZoo": "egzotarium",
+		"photos": [
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pokolec-krolewski11.jpg",
+			"https://zoo-krakow.pl/wp-content/uploads/2016/05/pokolec-krolewski2.jpg"
+		]
+	},
+	{
+		"id": {
+			"id": "pokolec-dwupasy"
+		},
+		"language": "pl",
+		"name": "Pokolec dwupasy",
+		"nameLatin": "Acanthurus tennentii",
+		"occurrence": "Ocean Indyjski",
+		"environment": "Rafy koralowe",
+		"food": "Żywi się roślinami bentosowymi.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Przedstawiciel rodziny pokolcowatych. Żyje w stadach lub samotnie. Osiąga około 30 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Acanthurus_tennentii",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
 			"id": "chromis-niebieski"
 		},
 		"language": "pl",
@@ -318,21 +356,97 @@
 		"regionInZoo": "egzotarium",
 		"photos": []
 	},
-	{fixme
+	{
 		"id": {
-			"id": ""
+			"id": "pseudochromis-paccagnellae"
 		},
 		"language": "pl",
-		"name": "",
-		"nameLatin": "",
-		"occurrence": "",
-		"environment": "",
+		"name": "Pseudochromis paccagnellae",
+		"nameLatin": "Pseudochromis paccagnellae",
+		"occurrence": "Indopacyfik",
+		"environment": "Zamieszkuje rafy koralowe wód tropikalnych.",
 		"food": "",
 		"division": "FISH",
 		"multiplication": "",
 		"protectionAndThreats": "",
-		"facts": "",
-		"wiki": "",
+		"facts": "Przedstawiciel rodziny diademkowatych. Ryba terytorialna. Osiąga około 7 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Pictichromis_paccagnellae",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "pensetnik-pomaranczowopregi"
+		},
+		"language": "pl",
+		"name": "Pensetnik pomarańczowopręgi",
+		"nameLatin": "Chelmon rostratus",
+		"occurrence": "Ocean Indyjski i Pacyfik.",
+		"environment": "Zamieszkuje rafy koralowe.",
+		"food": "Żywi się bezkręgowcami.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Ryba morska z rodziny chetonikowatych. Jej mocno wydłużony pyszczek funkcjonuje jak penseta.",
+		"wiki": "https://pl.wikipedia.org/wiki/Pensetnik_dwuoki",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "dascylus-zebra"
+		},
+		"language": "pl",
+		"name": "Dascylus zebra",
+		"nameLatin": "Dascyllus aruanus",
+		"occurrence": "Indopacyfik.",
+		"environment": "",
+		"food": "Żywi się zooplanktonem, bezkręgowcami dennymi i glonami.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Przedstawiciel rodziny garbikowatych. Osiąga 10 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Dascylus_zebra",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "strzykwa-norowa"
+		},
+		"language": "pl",
+		"name": "Strzykwa norowa",
+		"nameLatin": "Holothuria atra",
+		"occurrence": "Morze Czerwone i Indopacyfik",
+		"environment": "Występuje na płyciznach",
+		"food": "Żywi się obumarłymi szczątkami roślin i zwierząt.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Przedstawiciel szkarłupni. Osiąga 55 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Strzykwy",
+		"web": "",
+		"regionInZoo": "egzotarium",
+		"photos": []
+	},
+	{
+		"id": {
+			"id": "krewetka-boksujaca"
+		},
+		"language": "pl",
+		"name": "Krewetka boksująca",
+		"nameLatin": "Stenopus hispidus",
+		"occurrence": "Indopacyfik i Ocean Atlantycki",
+		"environment": "",
+		"food": "W naturze żywi się padliną. Czyści również ryby z pasożytów.",
+		"division": "FISH",
+		"multiplication": "",
+		"protectionAndThreats": "",
+		"facts": "Osiąga około 8 cm długości.",
+		"wiki": "https://pl.wikipedia.org/wiki/Stenopodidea",
 		"web": "",
 		"regionInZoo": "egzotarium",
 		"photos": []
