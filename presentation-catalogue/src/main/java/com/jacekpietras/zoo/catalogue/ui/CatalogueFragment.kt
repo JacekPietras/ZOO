@@ -51,7 +51,7 @@ class CatalogueFragment : Fragment() {
                     style = android.graphics.Paint.Style.STROKE
                     textSize = listTextSize
                     color = requireContext().getColorFromAttr(android.R.attr.colorPrimary)
-                    strokeWidth = listTextSize / 2
+                    strokeWidth = listTextSize / 1.5f
                     strokeMiter = 1f
                     strokeJoin = android.graphics.Paint.Join.ROUND
                     strokeCap = android.graphics.Paint.Cap.ROUND
@@ -61,7 +61,7 @@ class CatalogueFragment : Fragment() {
                     style = android.graphics.Paint.Style.STROKE
                     textSize = listTextSize
                     color = requireContext().getColorFromAttr(android.R.attr.colorPrimary)
-                    strokeWidth = listTextSize / 3
+                    strokeWidth = listTextSize / 2
                     strokeMiter = 1f
                     strokeJoin = android.graphics.Paint.Join.ROUND
                     strokeCap = android.graphics.Paint.Cap.ROUND
