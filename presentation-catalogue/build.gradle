@@ -4,6 +4,7 @@ apply from: "$rootDir/presentation.gradle"
 
 dependencies {
     implementation project(':domain')
+    implementation project(':presentation-core')
 
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "com.google.accompanist:accompanist-glide:0.7.1"
