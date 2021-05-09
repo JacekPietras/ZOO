@@ -26,7 +26,14 @@ internal class GpsRepositoryImpl(
         val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
         val ola2 = TxtParser(context, R.raw.ola_28_02_21)
         val jack2 = TxtParser(context, R.raw.jacek_28_02_21)
-        flowOf(ola1.result + jack1.result + jack2.result + ola2.result)
+        val ola3 = TxtParser(context, R.raw.ola_08_05_21)
+        val jack3 = TxtParser(context, R.raw.jacek_08_05_21)
+        val eliza3 = TxtParser(context, R.raw.eliza_08_05_21)
+        flowOf(
+            ola1.result + jack1.result
+                    + jack2.result + ola2.result
+                    + jack3.result + ola3.result + eliza3.result
+        )
     } else {
         flowOf(emptyList())
     }
