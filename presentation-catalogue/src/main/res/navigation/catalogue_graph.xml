@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/catalogue_graph"
-    app:startDestination="@+id/navigation_catalogue">
+    app:startDestination="@+id/fragment_catalogue">
 
     <fragment
-        android:id="@+id/navigation_catalogue"
+        android:id="@+id/fragment_catalogue"
         android:name="com.jacekpietras.zoo.catalogue.ui.CatalogueFragment"
-        android:label="@string/title_catalogue"
-        tools:layout="@layout/fragment_catalogue" />
+        android:label="@string/title_catalogue">
+
+        <action
+            android:id="@+id/navigateToAnimal"
+            app:destination="@+id/fragment_animal" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_animal"
+        android:name="com.jacekpietras.zoo.catalogue.ui.AnimalFragment" />
 
 </navigation>

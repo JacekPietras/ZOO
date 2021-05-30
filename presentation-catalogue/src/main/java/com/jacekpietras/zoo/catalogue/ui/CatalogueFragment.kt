@@ -24,8 +24,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.accompanist.glide.GlideImage
 import com.jacekpietras.zoo.catalogue.model.CatalogueViewState
+import com.jacekpietras.zoo.catalogue.router.CatalogueRouterImpl
 import com.jacekpietras.zoo.catalogue.viewmodel.CatalogueViewModel
 import com.jacekpietras.zoo.core.extensions.getColorFromAttr
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,6 +35,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CatalogueFragment : Fragment() {
 
     private val viewModel by viewModel<CatalogueViewModel>()
+    private val router by lazy { CatalogueRouterImpl(findNavController()) }
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View =
         ComposeView(requireContext()).apply {
@@ -62,7 +65,7 @@ class CatalogueFragment : Fragment() {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clickable(onClick = { viewModel.onAnimalClicked(animal) }),
+                                .clickable(onClick = { viewModel.onAnimalClicked(animal, router) }),
                             contentAlignment = Alignment.BottomEnd,
                         ) {
                             GlideImage(
