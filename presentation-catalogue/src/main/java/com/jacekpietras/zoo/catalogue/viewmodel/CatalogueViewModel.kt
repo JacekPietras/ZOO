@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.catalogue.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.jacekpietras.zoo.catalogue.mapper.CatalogueStateMapper
+import com.jacekpietras.zoo.catalogue.model.CatalogueListItem
 import com.jacekpietras.zoo.catalogue.model.CatalogueState
 import com.jacekpietras.zoo.catalogue.model.CatalogueViewState
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsByDivisionUseCase
@@ -20,4 +21,8 @@ internal class CatalogueViewModel(
     )
 
     var viewState: Flow<CatalogueViewState> = MutableStateFlow(mapper.from(state))
+
+    fun onAnimalClicked(clickedListItem: CatalogueListItem) {
+        TODO("Not yet implemented")
+    }
 }

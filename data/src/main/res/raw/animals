@@ -3577,26 +3577,6 @@
 	},
 	{
 		"id": {
-			"id": "wilk-europejski"
-		},
-		"language": "pl",
-		"name": "Wilk Europejski",
-		"nameLatin": "Canis lupus lupus",
-		"occurrence": "",
-		"environment": "",
-		"food": "",
-		"division": "MAMMAL",
-		"multiplication": "",
-		"protectionAndThreats": "",
-		"facts": "",
-		"wiki": "https://pl.wikipedia.org/wiki/Wilk_europejski",
-		"web": "",
-		"regionInZoo": "",
-		"photos": [
-		]
-	},
-	{
-		"id": {
 			"id": "otocjon"
 		},
 		"language": "pl",

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_catalogue"
+        android:id="@+id/catalogue_graph"
         android:icon="@drawable/ic_elephant_24"
         android:title="@string/title_catalogue" />
 

@@ -12,14 +12,11 @@
         tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/navigation_catalogue"
-        android:name="com.jacekpietras.zoo.catalogue.ui.CatalogueFragment"
-        android:label="@string/title_catalogue"
-        tools:layout="@layout/fragment_catalogue" />
-
-    <fragment
         android:id="@+id/navigation_planner"
         android:name="com.jacekpietras.zoo.planner.PlannerFragment"
         android:label="@string/title_planner"
         tools:layout="@layout/fragment_planner" />
+
+    <include app:graph="@navigation/catalogue_graph" />
+
 </navigation>
