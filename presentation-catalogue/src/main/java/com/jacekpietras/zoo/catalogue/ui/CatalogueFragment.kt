@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,11 +14,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.NativePaint
 import androidx.compose.ui.graphics.Paint
@@ -92,13 +95,14 @@ class CatalogueFragment : Fragment() {
                         backgroundColor = Color.LightGray,
                         elevation = 4.dp,
                         modifier = Modifier
-                            .height(96.dp)
+                            .height(128.dp)
                             .fillMaxSize(),
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clickable(onClick = { }),
+                            contentAlignment = Alignment.BottomEnd,
                         ) {
                             GlideImage(
                                 data = animal.img ?: "no image",
@@ -106,7 +110,7 @@ class CatalogueFragment : Fragment() {
                                 fadeIn = true,
                                 contentScale = ContentScale.Crop,
                             )
-                            OutlinedTextView(text = "${animal.name} - ${animal.regionInZoo}")
+                            BoxedTextView(text = "${animal.name} - ${animal.regionInZoo}")
                         }
                     }
                 }
@@ -115,7 +119,23 @@ class CatalogueFragment : Fragment() {
     }
 
     @Composable
-    fun BoxScope.OutlinedTextView(text:String) {
+    fun BoxedTextView(text: String) {
+        Box(
+            modifier = Modifier
+                .padding(4.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(color = Color(requireContext().getColorFromAttr(android.R.attr.colorPrimary)))
+                .padding(vertical = 2.dp, horizontal = 8.dp),
+        ) {
+            Text(
+                color = Color.White,
+                text = text,
+            )
+        }
+    }
+
+    @Composable
+    fun BoxScope.OutlinedTextView(text: String) {
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text.length, bounds)
         val textWidth =
