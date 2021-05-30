@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.catalogue.ui
+package com.jacekpietras.zoo.catalogue.feature.list.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.accompanist.glide.GlideImage
-import com.jacekpietras.zoo.catalogue.model.CatalogueViewState
-import com.jacekpietras.zoo.catalogue.router.CatalogueRouterImpl
-import com.jacekpietras.zoo.catalogue.viewmodel.CatalogueViewModel
+import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
+import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
+import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
 import com.jacekpietras.zoo.core.extensions.getColorFromAttr
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -65,7 +65,12 @@ class CatalogueFragment : Fragment() {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clickable(onClick = { viewModel.onAnimalClicked(animal, router) }),
+                                .clickable(onClick = {
+                                    viewModel.onAnimalClicked(
+                                        animalId = animal.id,
+                                        router = router
+                                    )
+                                }),
                             contentAlignment = Alignment.BottomEnd,
                         ) {
                             GlideImage(

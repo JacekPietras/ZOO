@@ -1,12 +1,12 @@
-package com.jacekpietras.zoo.catalogue.viewmodel
+package com.jacekpietras.zoo.catalogue.feature.list.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.jacekpietras.zoo.catalogue.mapper.CatalogueStateMapper
-import com.jacekpietras.zoo.catalogue.model.CatalogueListItem
-import com.jacekpietras.zoo.catalogue.model.CatalogueState
-import com.jacekpietras.zoo.catalogue.model.CatalogueViewState
-import com.jacekpietras.zoo.catalogue.router.CatalogueRouter
+import com.jacekpietras.zoo.catalogue.feature.list.mapper.CatalogueStateMapper
+import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueState
+import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
+import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouter
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsByDivisionUseCase
+import com.jacekpietras.zoo.domain.model.AnimalId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -21,7 +21,7 @@ internal class CatalogueViewModel(
     )
     var viewState: Flow<CatalogueViewState> = MutableStateFlow(mapper.from(state))
 
-    fun onAnimalClicked(clickedListItem: CatalogueListItem, router: CatalogueRouter) {
-        router.navigateToAnimal()
+    fun onAnimalClicked(animalId: String, router: CatalogueRouter) {
+        router.navigateToAnimal(AnimalId(animalId))
     }
 }

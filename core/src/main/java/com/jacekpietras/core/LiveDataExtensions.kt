@@ -1,14 +1,28 @@
 package com.jacekpietras.core
 
+
+import androidx.annotation.MainThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 
-val <T> MutableLiveData<T>.safeValue: T
-    get() = checkNotNull(value)
-
-fun <T> MutableLiveData<T>.update(block: (T) -> T) {
-    value = block(safeValue)
+inline fun <T> MutableLiveData<T>.reduce(block: T.() -> T) {
+    value = block(checkNotNull(value))
 }
 
-fun <T> MutableLiveData<T>.reduce(block: T.() -> T) {
-    value = block(safeValue)
+inline fun <T> NullSafeMutableLiveData<T>.reduce(block: T.() -> T) {
+    value = block(value)
 }
+
+class NullSafeMutableLiveData<T>(value: T) : MutableLiveData<T>(value) {
+
+    override fun getValue(): T = checkNotNull(super.getValue())
+}
+
+@MainThread
+fun <X, Y> LiveData<X>.mapNotNull(mapFunction: (X) -> Y?): LiveData<Y> =
+    MediatorLiveData<Y>().apply {
+        addSource(this@mapNotNull) { x ->
+            mapFunction(x)?.let { value = it }
+        }
+    }

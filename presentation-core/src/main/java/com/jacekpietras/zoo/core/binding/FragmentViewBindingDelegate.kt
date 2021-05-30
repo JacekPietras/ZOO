@@ -1,5 +1,7 @@
 package com.jacekpietras.zoo.core.binding
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -14,7 +16,8 @@ class FragmentViewBindingDelegate<T : ViewBinding>(
 ) : ReadOnlyProperty<Fragment, T> {
 
     private var binding: T? = null
-    private var shouldRecreate = false
+
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     init {
         fragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
@@ -22,21 +25,19 @@ class FragmentViewBindingDelegate<T : ViewBinding>(
                 fragment.viewLifecycleOwnerLiveData.observe(fragment) { viewLifecycleOwner ->
                     viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
                         override fun onDestroy(owner: LifecycleOwner) {
-                            shouldRecreate = true
+                            mainHandler.post {
+                                binding = null
+                            }
                         }
                     })
                 }
-            }
-
-            override fun onDestroy(owner: LifecycleOwner) {
-                binding = null
             }
         })
     }
 
     override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
         val binding = binding
-        if (!shouldRecreate && binding != null) {
+        if (binding != null) {
             return binding
         }
 

@@ -27,6 +27,11 @@ val domainModule = module {
         )
     }
     factory {
+        GetAnimalUseCase(
+            animalRepository = get()
+        )
+    }
+    factory {
         GetAnimalsByDivisionUseCase(
             animalRepository = get()
         )

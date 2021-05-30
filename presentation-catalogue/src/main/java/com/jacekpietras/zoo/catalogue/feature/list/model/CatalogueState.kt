@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.catalogue.model
+package com.jacekpietras.zoo.catalogue.feature.list.model
 
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 

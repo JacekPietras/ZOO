@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fragment_catalogue"
-        android:name="com.jacekpietras.zoo.catalogue.ui.CatalogueFragment"
+        android:name="com.jacekpietras.zoo.catalogue.feature.list.ui.CatalogueFragment"
         android:label="@string/title_catalogue">
 
         <action
@@ -16,6 +16,12 @@
 
     <fragment
         android:id="@+id/fragment_animal"
-        android:name="com.jacekpietras.zoo.catalogue.ui.AnimalFragment" />
+        android:name="com.jacekpietras.zoo.catalogue.feature.animal.ui.AnimalFragment">
+
+        <argument
+            android:name="animalId"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 
 </navigation>
