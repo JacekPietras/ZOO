@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/catalogue_graph"
+    android:id="@+id/graph_catalogue"
     app:startDestination="@+id/fragment_catalogue">
 
     <fragment
@@ -24,4 +24,13 @@
             app:nullable="false" />
     </fragment>
 
+    <action
+        android:id="@+id/navigateToMap"
+        app:destination="@+id/graph_map">
+
+        <argument
+            android:name="animalId"
+            app:argType="string"
+            app:nullable="true" />
+    </action>
 </navigation>

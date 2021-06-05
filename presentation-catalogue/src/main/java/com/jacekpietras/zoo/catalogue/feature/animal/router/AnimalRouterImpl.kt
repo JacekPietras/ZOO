@@ -4,14 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.navigation.NavController
+import com.jacekpietras.zoo.catalogue.feature.animal.ui.AnimalFragmentDirections
+import com.jacekpietras.zoo.domain.model.AnimalId
 
 class AnimalRouterImpl(
     private val activityFactory: () -> Activity,
     private val navController: NavController,
 ) : AnimalRouter {
 
-    override fun navigateToMap() {
-        TODO("Not yet implemented")
+    override fun navigateToMap(animalId: AnimalId) {
+        navController.navigate(AnimalFragmentDirections.navigateToMap(animalId = animalId.id))
     }
 
     override fun navigateToWeb(link: String) {

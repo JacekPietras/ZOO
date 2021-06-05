@@ -16,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
+//    private val args: MapFragmentArgs by navArgs()
     private val viewModel by viewModel<MapViewModel>()
     private val binding: FragmentMapBinding by viewBinding(FragmentMapBinding::bind)
     private val permissionChecker = GpsPermissionRequester(fragment = this)

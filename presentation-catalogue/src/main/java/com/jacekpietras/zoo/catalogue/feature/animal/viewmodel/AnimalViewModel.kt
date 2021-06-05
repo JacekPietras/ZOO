@@ -40,6 +40,6 @@ internal class AnimalViewModel(
     }
 
     fun onNavClicked(router: AnimalRouter) {
-        router.navigateToMap()
+        router.navigateToMap(currentState.animal.id)
     }
 }
