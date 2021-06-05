@@ -13,6 +13,7 @@
 
         <argument
             android:name="animalId"
+            android:defaultValue="null"
             app:argType="string"
             app:nullable="true" />
     </fragment>

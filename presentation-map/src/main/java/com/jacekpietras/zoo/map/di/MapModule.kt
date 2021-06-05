@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.map.di
 
+import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -11,8 +12,9 @@ val mapModule = module {
         MapViewStateMapper()
     }
 
-    viewModel {
+    viewModel { (animalId: String?) ->
         MapViewModel(
+            animalId = animalId?.let(::AnimalId),
             viewStateMapper = get(),
             observeWorldBoundsUseCase = get(),
             observeCompassUseCase = get(),

@@ -6,6 +6,7 @@ import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
 import com.jacekpietras.zoo.domain.interactor.*
+import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
@@ -16,6 +17,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
 internal class MapViewModel(
+    animalId: AnimalId?,
     viewStateMapper: MapViewStateMapper,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     observeCompassUseCase: ObserveCompassUseCase,

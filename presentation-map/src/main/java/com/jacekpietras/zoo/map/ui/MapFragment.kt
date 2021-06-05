@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.jacekpietras.core.observe
 import com.jacekpietras.zoo.core.binding.viewBinding
 import com.jacekpietras.zoo.map.R
@@ -13,11 +14,14 @@ import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
-//    private val args: MapFragmentArgs by navArgs()
-    private val viewModel by viewModel<MapViewModel>()
+    private val args: MapFragmentArgs? by navArgs()
+    private val viewModel by viewModel<MapViewModel> {
+        parametersOf(args?.animalId)
+    }
     private val binding: FragmentMapBinding by viewBinding(FragmentMapBinding::bind)
     private val permissionChecker = GpsPermissionRequester(fragment = this)
 
