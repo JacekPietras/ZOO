@@ -18,19 +18,11 @@
         android:id="@+id/fragment_animal"
         android:name="com.jacekpietras.zoo.catalogue.feature.animal.ui.AnimalFragment">
 
+        <deepLink app:uri="zoo://fragmentAnimal?animalId={animalId}" />
+
         <argument
             android:name="animalId"
             app:argType="string"
             app:nullable="false" />
     </fragment>
-
-    <action
-        android:id="@+id/navigateToMap"
-        app:destination="@+id/graph_map">
-
-        <argument
-            android:name="animalId"
-            app:argType="string"
-            app:nullable="true" />
-    </action>
 </navigation>

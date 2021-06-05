@@ -9,13 +9,11 @@
         android:name="com.jacekpietras.zoo.map.ui.MapFragment"
         android:label="@string/title_map">
 
+        <deepLink app:uri="zoo://fragmentMap?animalId={animalId}"/>
+
         <argument
             android:name="animalId"
             app:argType="string"
             app:nullable="true" />
-
-        <action
-            android:id="@+id/navigateToAnimal"
-            app:destination="@+id/fragment_animal" />
     </fragment>
 </navigation>
