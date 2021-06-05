@@ -4,5 +4,5 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 
 internal interface CatalogueRouter {
 
-    fun navigateToAnimal(animalId:AnimalId)
+    fun navigateToAnimal(animalId: AnimalId)
 }

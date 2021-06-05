@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
+import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
@@ -17,8 +18,8 @@ internal class AnimalViewModel(
     dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
-    private val state: MutableLiveData<AnimalState> =
-        MutableLiveData()
+    private val state = MutableLiveData<AnimalState>()
+    private val currentState get() = checkNotNull(state.value)
     val viewState: LiveData<AnimalViewState> = state.map(mapper::from)
 
     init {
@@ -28,5 +29,17 @@ internal class AnimalViewModel(
                 animal = getAnimalUseCase.run(animalId),
             )
         }
+    }
+
+    fun onWikiClicked(router: AnimalRouter) {
+        router.navigateToWiki(currentState.animal.wiki)
+    }
+
+    fun onWebClicked(router: AnimalRouter) {
+        router.navigateToWeb(currentState.animal.web)
+    }
+
+    fun onNavClicked(router: AnimalRouter) {
+        router.navigateToMap()
     }
 }
