@@ -14,5 +14,5 @@ interface AnimalRepository {
 
     fun getAnimalsByDivision(division: Division? = null): List<AnimalEntity>
 
-    fun getAnimal(animalId: AnimalId): AnimalEntity
+    fun getAnimal(animalId: AnimalId): AnimalEntity?
 }

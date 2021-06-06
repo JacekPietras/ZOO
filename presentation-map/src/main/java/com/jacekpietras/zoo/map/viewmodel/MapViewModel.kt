@@ -41,6 +41,7 @@ internal class MapViewModel(
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
     loadAnimalsUseCase: LoadAnimalsUseCase,
+    getAnimalUseCase: GetAnimalUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
@@ -58,7 +59,11 @@ internal class MapViewModel(
 
     init {
         viewModelScope.launch(dispatcherProvider.main) {
-            loadAnimalsUseCase.run()
+            launch { loadAnimalsUseCase.run() }
+
+            if (animalId != null) {
+                volatileState.reduce { copy(selectedAnimal = getAnimalUseCase.run(animalId)) }
+            }
 
             observeCompassUseCase.run()
                 .onEach { volatileState.reduce { copy(compass = it) } }

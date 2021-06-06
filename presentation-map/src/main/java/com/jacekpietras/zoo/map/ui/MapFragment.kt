@@ -46,8 +46,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             with(it) {
                 binding.mapView.userPosition = userPosition
                 binding.mapView.compass = compass
-                binding.regionIds.text = currentRegionIds
-                binding.animals.text = currentAnimals
+                binding.topCardTitle.text = title.toCharSeq(requireContext())
+                binding.topCardContent.text = content.toCharSeq(requireContext())
                 binding.mapView.clickOnWorld = snappedPoint
                 binding.mapView.shortestPath = shortestPath
             }

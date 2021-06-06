@@ -26,7 +26,7 @@ internal class AnimalViewModel(
         viewModelScope.launch(dispatcherProvider.main) {
             state.value = AnimalState(
                 animalId = animalId,
-                animal = getAnimalUseCase.run(animalId),
+                animal = checkNotNull(getAnimalUseCase.run(animalId)),
             )
         }
     }

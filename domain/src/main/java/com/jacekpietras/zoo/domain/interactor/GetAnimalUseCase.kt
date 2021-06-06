@@ -8,6 +8,6 @@ class GetAnimalUseCase(
     private val animalRepository: AnimalRepository,
 ) {
 
-    fun run(animalId: AnimalId): AnimalEntity =
+    fun run(animalId: AnimalId): AnimalEntity? =
         animalRepository.getAnimal(animalId = animalId)
 }

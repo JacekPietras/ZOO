@@ -4,8 +4,10 @@ import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
+import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapState
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileState
@@ -19,8 +21,18 @@ internal class MapViewStateMapper {
         MapVolatileViewState(
             compass = compass,
             userPosition = userPosition,
-            currentRegionIds = regionsInUserPosition.joinToString(separator = ", "),
-            currentAnimals = animalsInUserPosition.joinToString(separator = ", ") { it.name },
+            title = when {
+                selectedAnimal != null -> Text(selectedAnimal.name)
+                else -> Text(R.string.around_you)
+            },
+            content = when {
+                selectedAnimal != null -> Text(selectedAnimal.nameLatin)
+                else -> {
+                    Text.Listing(regionsInUserPosition.map { Text(it) }) +
+                            "\n" +
+                            Text.Listing(animalsInUserPosition.map { Text(it.name) })
+                }
+            },
             snappedPoint = snappedPoint,
             shortestPath = shortestPath,
         )

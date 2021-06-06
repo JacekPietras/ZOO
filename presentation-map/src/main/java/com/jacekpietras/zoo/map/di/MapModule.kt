@@ -32,6 +32,7 @@ val mapModule = module {
             getShortestPathUseCase = get(),
             loadAnimalsUseCase = get(),
             getAnimalsInUserPositionUseCase = get(),
+            getAnimalUseCase = get(),
         )
     }
 }

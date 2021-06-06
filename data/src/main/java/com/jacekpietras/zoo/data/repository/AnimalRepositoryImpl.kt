@@ -80,8 +80,8 @@ class AnimalRepositoryImpl(
             storedAnimals.filter { it.division == division }
         }
 
-    override fun getAnimal(animalId: AnimalId): AnimalEntity =
-        storedAnimals.first { it.id.id == animalId.id }
+    override fun getAnimal(animalId: AnimalId): AnimalEntity? =
+        storedAnimals.firstOrNull { it.id.id == animalId.id }
 
     private val animalJsonAdapter: JsonAdapter<List<AnimalEntity>>
         get() = moshi.adapter(

@@ -14,7 +14,7 @@ class AnimalRouterImpl(
 
     override fun navigateToMap(animalId: AnimalId) {
 //        navController.navigate(AnimalFragmentDirections.navigateToMap(animalId = animalId.id))
-        navController.navigate(Uri.parse("zoo://fragmentMap?animalId=$animalId"))
+        navController.navigate(Uri.parse("zoo://fragmentMap?animalId=${animalId.id}"))
     }
 
     override fun navigateToWeb(link: String) {

@@ -10,4 +10,5 @@ internal data class MapVolatileState(
     val animalsInUserPosition: List<AnimalEntity> = emptyList(),
     val snappedPoint: PointD? = null,
     val shortestPath: List<PointD> = emptyList(),
+    val selectedAnimal: AnimalEntity? = null,
 )

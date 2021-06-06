@@ -15,6 +15,7 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/topCardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -22,15 +23,7 @@
             android:textAppearance="?textAppearanceHeadline6" />
 
         <TextView
-            android:id="@+id/regionIds"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="?textAppearanceBody1"
-            android:textColor="?colorOnSurface" />
-
-        <TextView
-            android:id="@+id/animals"
+            android:id="@+id/topCardContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
