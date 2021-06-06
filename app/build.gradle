@@ -45,7 +45,7 @@ dependencies {
     implementation project(':logger')
     implementation project(':tracking')
 
-    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
 
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
