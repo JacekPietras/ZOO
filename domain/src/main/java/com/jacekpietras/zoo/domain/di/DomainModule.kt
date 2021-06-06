@@ -17,6 +17,11 @@ val domainModule = module {
         )
     }
     factory {
+        GetRegionCenterPointUseCase(
+            mapRepository = get(),
+        )
+    }
+    factory {
         GetBuildingsUseCase(
             mapRepository = get()
         )

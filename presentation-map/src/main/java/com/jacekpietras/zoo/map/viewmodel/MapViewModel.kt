@@ -10,6 +10,7 @@ import com.jacekpietras.core.combine
 import com.jacekpietras.core.reduce
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
+import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.map.BuildConfig
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -42,8 +42,8 @@ internal class MapViewModel(
     getLinesUseCase: GetLinesUseCase,
     loadAnimalsUseCase: LoadAnimalsUseCase,
     getAnimalUseCase: GetAnimalUseCase,
+    private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
-    private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
@@ -60,10 +60,6 @@ internal class MapViewModel(
     init {
         viewModelScope.launch(dispatcherProvider.main) {
             launch { loadAnimalsUseCase.run() }
-
-            if (animalId != null) {
-                volatileState.reduce { copy(selectedAnimal = getAnimalUseCase.run(animalId)) }
-            }
 
             observeCompassUseCase.run()
                 .onEach { volatileState.reduce { copy(compass = it) } }
@@ -101,6 +97,14 @@ internal class MapViewModel(
                     )
                 }
             }.launchIn(this)
+
+            if (animalId != null) {
+                val animal = getAnimalUseCase.run(animalId)
+                volatileState.reduce { copy(selectedAnimal = animal) }
+                val point = getRegionCenterPointUseCase.run(animal.regionInZoo)
+                onPointPlaced(point)
+                _effect.send(MapEffect.CenterAtPoint(point))
+            }
         }
     }
 
@@ -109,20 +113,13 @@ internal class MapViewModel(
             uploadHistoryUseCase.run()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
             viewModelScope.launch(dispatcherProvider.main) {
-                _effect.send(MapEffect.ShowToast("Upload failed"))
+                _effect.send(MapEffect.ShowToast(Text("Upload failed")))
             }
         }
     }
 
     fun onPointPlaced(point: PointD) {
         viewModelScope.launch(dispatcherProvider.main) {
-            val regions = withContext(dispatcherProvider.default) {
-                getRegionsContainingPointUseCase.run(point)
-            }
-
-            if (regions.isNotEmpty())
-                _effect.send(MapEffect.ShowToast(regions.toString()))
-
             volatileState.reduce { copy(snappedPoint = point) }
             volatileState.reduce { copy(shortestPath = getShortestPathUseCase.run(point)) }
         }
@@ -148,7 +145,7 @@ internal class MapViewModel(
     private fun onLocationDenied() {
         if (BuildConfig.DEBUG) {
             viewModelScope.launch(dispatcherProvider.main) {
-                _effect.send(MapEffect.ShowToast("Location denied"))
+                _effect.send(MapEffect.ShowToast(Text(R.string.location_denied)))
             }
         }
     }

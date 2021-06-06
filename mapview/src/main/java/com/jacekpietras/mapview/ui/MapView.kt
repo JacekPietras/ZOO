@@ -119,6 +119,16 @@ class MapView @JvmOverloads constructor(
             style = Paint.Style.FILL
         }
 
+    fun centerAtPoint(desiredPosition: PointD, animation: Boolean = true) {
+        centeringAtUser = false
+        val previousPosition = centerGpsCoordinate
+
+        doAnimation(animation) { progress, left ->
+            centerGpsCoordinate = previousPosition * left + desiredPosition * progress
+            cutOutNotVisible()
+        }
+    }
+
     fun centerAtUserPosition(animation: Boolean = true) {
         centeringAtUser = true
         val desiredPosition = userPosition ?: return

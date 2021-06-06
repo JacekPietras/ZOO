@@ -55,8 +55,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         effect.observe(viewLifecycleOwner) {
             when (it) {
-                is MapEffect.ShowToast -> toast(it.text)
+                is MapEffect.ShowToast -> toast(it.text.toString(requireContext()))
                 is MapEffect.CenterAtUser -> binding.mapView.centerAtUserPosition()
+                is MapEffect.CenterAtPoint -> binding.mapView.centerAtPoint(it.point)
             }
         }
     }
