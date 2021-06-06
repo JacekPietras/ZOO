@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -25,7 +27,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.accompanist.glide.GlideImage
+import com.google.accompanist.glide.rememberGlidePainter
+import com.google.accompanist.imageloading.ImageLoadState
+import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
@@ -56,12 +60,13 @@ class CatalogueFragment : Fragment() {
                 items(viewState.animalList) { animal ->
                     Card(
                         shape = RoundedCornerShape(4.dp),
-                        backgroundColor = Color.LightGray,
+                        backgroundColor = Color.White,
                         elevation = 4.dp,
                         modifier = Modifier
                             .height(128.dp)
                             .fillMaxSize(),
                     ) {
+
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -73,12 +78,28 @@ class CatalogueFragment : Fragment() {
                                 }),
                             contentAlignment = Alignment.BottomEnd,
                         ) {
-                            GlideImage(
-                                data = animal.img ?: "no image",
-                                contentDescription = animal.name,
+                            val painter = rememberGlidePainter(
+                                animal.img ?: "no image",
                                 fadeIn = true,
+                            )
+                            Image(
+                                painter = painter,
+                                contentDescription = animal.img,
                                 contentScale = ContentScale.Crop,
                             )
+                            if (painter.loadState is ImageLoadState.Error) {
+                                Image(
+                                    painter = rememberGlidePainter(
+                                        R.drawable.pic_banana_leaf_rasterized,
+                                        fadeIn = true,
+                                    ),
+                                    contentDescription = null, // decorative element
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .alpha(.7f)
+                                )
+                            }
                             BoxedTextView(text = "${animal.name} - ${animal.regionInZoo}")
                         }
                     }
