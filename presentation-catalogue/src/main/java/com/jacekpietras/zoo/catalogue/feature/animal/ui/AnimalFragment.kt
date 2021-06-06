@@ -70,10 +70,11 @@ class AnimalFragment : Fragment() {
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         )
                     }
-                    if (viewState.isNavLink) {
+                    //todo make more buttons for multiple regions!
+                    viewState.navLinks.forEach {
                         SimpleButton(
-                            text = Text(R.string.nav),
-                            onClick = { viewModel.onNavClicked(router) },
+                            text = Text(R.string.nav) + " " + it,
+                            onClick = { viewModel.onNavClicked(router, it) },
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         )
                     }

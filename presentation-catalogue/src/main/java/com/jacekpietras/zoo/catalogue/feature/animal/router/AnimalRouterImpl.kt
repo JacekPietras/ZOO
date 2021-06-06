@@ -12,8 +12,8 @@ class AnimalRouterImpl(
     private val navController: NavController,
 ) : AnimalRouter {
 
-    override fun navigateToMap(animalId: AnimalId) {
-        navController.navigate(Uri.parse("zoo://fragmentMap?animalId=${animalId.id}"))
+    override fun navigateToMap(animalId: AnimalId, regionId:String) {
+        navController.navigate(Uri.parse("zoo://fragmentMap?animalId=${animalId.id}&regionId=$regionId"))
     }
 
     override fun navigateToWeb(link: String) {

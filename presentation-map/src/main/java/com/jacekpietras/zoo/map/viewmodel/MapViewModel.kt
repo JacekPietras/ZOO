@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 
 internal class MapViewModel(
     animalId: AnimalId?,
+    regionId: String?,
     mapper: MapViewStateMapper,
     observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
@@ -101,7 +102,7 @@ internal class MapViewModel(
             if (animalId != null) {
                 val animal = getAnimalUseCase.run(animalId)
                 volatileState.reduce { copy(selectedAnimal = animal) }
-                val point = getRegionCenterPointUseCase.run(animal.regionInZoo)
+                val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo)
                 onPointPlaced(point)
                 _effect.send(MapEffect.CenterAtPoint(point))
             }

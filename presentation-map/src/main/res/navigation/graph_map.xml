@@ -9,10 +9,16 @@
         android:name="com.jacekpietras.zoo.map.ui.MapFragment"
         android:label="@string/title_map">
 
-        <deepLink app:uri="zoo://fragmentMap?animalId={animalId}"/>
+        <deepLink app:uri="zoo://fragmentMap?animalId={animalId}&amp;regionId={regionId}"/>
 
         <argument
             android:name="animalId"
+            android:defaultValue="null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="regionId"
             android:defaultValue="null"
             app:argType="string"
             app:nullable="true" />

@@ -8,5 +8,5 @@ internal data class AnimalViewState(
     val content: Text = Text.Empty,
     val isWikiLink: Boolean = false,
     val isWebLink: Boolean = false,
-    val isNavLink: Boolean = false,
+    val navLinks: List<String> = emptyList(),
 )

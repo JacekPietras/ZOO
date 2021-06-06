@@ -20,7 +20,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val args: MapFragmentArgs? by navArgs()
     private val viewModel by viewModel<MapViewModel> {
-        parametersOf(args?.animalId)
+        parametersOf(args?.animalId, args?.regionId)
     }
     private val binding: FragmentMapBinding by viewBinding(FragmentMapBinding::bind)
     private val permissionChecker = GpsPermissionRequester(fragment = this)
