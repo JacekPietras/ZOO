@@ -5,6 +5,6 @@ import com.jacekpietras.zoo.domain.business.GraphAnalyzer
 
 class GetSnappedToRoadUseCase() {
 
-    operator fun invoke(point: PointD): PointD =
+    fun run(point: PointD): PointD =
         GraphAnalyzer.getSnapped(point)
 }

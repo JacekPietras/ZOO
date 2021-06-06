@@ -13,7 +13,7 @@ class OnLocationUpdateImpl(
 
     override fun invoke(time: Long, lat: Double, lon: Double) {
         CoroutineScope(Dispatchers.IO).launch {
-            insertUserPositionUseCase(GpsHistoryEntity(time, lat, lon))
+            insertUserPositionUseCase.run(GpsHistoryEntity(time, lat, lon))
         }
     }
 }

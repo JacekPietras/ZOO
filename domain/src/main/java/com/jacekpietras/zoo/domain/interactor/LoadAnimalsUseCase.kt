@@ -6,6 +6,6 @@ class LoadAnimalsUseCase(
     private val animalRepository: AnimalRepository,
 ) {
 
-    suspend operator fun invoke() =
+    suspend fun run() =
         animalRepository.scrapTestAnimals()
 }

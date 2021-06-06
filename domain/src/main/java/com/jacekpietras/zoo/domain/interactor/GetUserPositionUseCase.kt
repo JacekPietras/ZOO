@@ -9,7 +9,7 @@ class GetUserPositionUseCase(
     private val gpsRepository: GpsRepository,
 ) {
 
-    operator fun invoke(): Flow<PointD> =
+    fun run(): Flow<PointD> =
         gpsRepository.observeLatestPosition().map { PointD(it.lon, it.lat) }
 
 

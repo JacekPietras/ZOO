@@ -8,8 +8,8 @@ class InsertUserPositionUseCase(
     private val worldBoundsUseCase: GetWorldBoundsUseCase,
 ) {
 
-    suspend operator fun invoke(position: GpsHistoryEntity) {
-        val bounds = worldBoundsUseCase()
+    suspend fun run(position: GpsHistoryEntity) {
+        val bounds = worldBoundsUseCase.run()
         if (bounds.contains(position.lon, position.lat)) {
             gpsRepository.insertPosition(position)
         }

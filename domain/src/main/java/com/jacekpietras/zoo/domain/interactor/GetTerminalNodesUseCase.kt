@@ -10,10 +10,10 @@ class GetTerminalNodesUseCase(
     private val getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
 ) {
 
-    operator fun invoke(): Flow<List<PointD>> =
+    fun run(): Flow<List<PointD>> =
         combine(
-            getRoadsUseCase(),
-            getTechnicalRoadsUseCase(),
+            getRoadsUseCase.run(),
+            getTechnicalRoadsUseCase.run(),
         ) { roads, technical ->
             GraphAnalyzer.initialize(roads, technical)
             GraphAnalyzer.getTerminalPoints()

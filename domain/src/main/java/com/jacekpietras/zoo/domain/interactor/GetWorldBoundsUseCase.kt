@@ -7,6 +7,6 @@ class GetWorldBoundsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    operator fun invoke(): RectD =
+    fun run(): RectD =
         mapRepository.getWorldBounds()
 }

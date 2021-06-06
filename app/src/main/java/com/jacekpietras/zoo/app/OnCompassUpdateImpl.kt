@@ -12,7 +12,7 @@ class OnCompassUpdateImpl(
 
     override fun invoke(angle: Float) {
         CoroutineScope(Dispatchers.IO).launch {
-            insertUserCompassUseCase(angle)
+            insertUserCompassUseCase.run(angle)
         }
     }
 }

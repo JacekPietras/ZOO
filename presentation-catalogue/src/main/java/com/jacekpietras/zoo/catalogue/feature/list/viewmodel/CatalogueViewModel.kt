@@ -16,7 +16,7 @@ internal class CatalogueViewModel(
 
     private val mapper = CatalogueStateMapper()
     private val state = CatalogueState(
-        animalList = getAnimalsByDivisionUseCase()
+        animalList = getAnimalsByDivisionUseCase.run()
             .sortedWith(compareBy({ it.regionInZoo }, { it.name }))
     )
     var viewState: Flow<CatalogueViewState> = MutableStateFlow(mapper.from(state))

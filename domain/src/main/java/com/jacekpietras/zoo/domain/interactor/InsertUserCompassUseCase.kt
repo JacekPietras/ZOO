@@ -6,7 +6,7 @@ class InsertUserCompassUseCase(
     private val gpsRepository: GpsRepository,
 ) {
 
-    suspend operator fun invoke(angle: Float) {
+    suspend fun run(angle: Float) {
         gpsRepository.insertCompass(angle)
     }
 }

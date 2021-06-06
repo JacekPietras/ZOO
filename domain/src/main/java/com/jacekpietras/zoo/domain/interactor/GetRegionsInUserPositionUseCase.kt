@@ -10,8 +10,8 @@ class GetRegionsInUserPositionUseCase(
     private val gpsRepository: GpsRepository,
 ) {
 
-    operator fun invoke(): Flow<List<String>> =
+    fun run(): Flow<List<String>> =
         gpsRepository.observeLatestPosition().map { position ->
-            getRegionsContainingPointUseCase(PointD(position.lon, position.lat))
+            getRegionsContainingPointUseCase.run(PointD(position.lon, position.lat))
         }
 }

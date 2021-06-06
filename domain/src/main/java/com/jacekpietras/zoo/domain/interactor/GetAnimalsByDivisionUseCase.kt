@@ -8,6 +8,6 @@ class GetAnimalsByDivisionUseCase(
     private val animalRepository: AnimalRepository,
 ) {
 
-    operator fun invoke(division: Division? = null): List<AnimalEntity> =
+    fun run(division: Division? = null): List<AnimalEntity> =
         animalRepository.getAnimalsByDivision(division)
 }

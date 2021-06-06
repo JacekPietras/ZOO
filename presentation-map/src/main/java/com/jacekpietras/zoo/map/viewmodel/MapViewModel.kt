@@ -1,8 +1,13 @@
 package com.jacekpietras.zoo.map.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.PointD
+import com.jacekpietras.core.combine
+import com.jacekpietras.core.reduce
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
 import com.jacekpietras.zoo.domain.interactor.*
@@ -10,21 +15,23 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
-import com.jacekpietras.zoo.map.model.MapEffect
-import com.jacekpietras.zoo.map.model.MapState
+import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class MapViewModel(
     animalId: AnimalId?,
-    viewStateMapper: MapViewStateMapper,
-    private val uploadHistoryUseCase: UploadHistoryUseCase,
+    mapper: MapViewStateMapper,
     observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
     getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
     getAnimalsInUserPositionUseCase: GetAnimalsInUserPositionUseCase,
-    private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     getBuildingsUseCase: GetBuildingsUseCase,
@@ -34,54 +41,85 @@ internal class MapViewModel(
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
     loadAnimalsUseCase: LoadAnimalsUseCase,
+    private val uploadHistoryUseCase: UploadHistoryUseCase,
+    private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
     private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
-    private val state = MapState(
-        regionsInUserPosition = getRegionsInUserPositionUseCase(),
-        animalsInUserPosition = getAnimalsInUserPositionUseCase(),
-        worldBounds = observeWorldBoundsUseCase(),
-        userPosition = getUserPositionUseCase(),
-        buildings = getBuildingsUseCase(),
-        aviary = getAviaryUseCase(),
-        roads = getRoadsUseCase(),
-        technicalRoute = getTechnicalRoadsUseCase(),
-        terminalPoints = getTerminalNodesUseCase(),
-        lines = getLinesUseCase(),
-        takenRoute = observeTakenRouteUseCase(),
-        compass = observeCompassUseCase(),
-    )
-    private val effect: Channel<MapEffect> = Channel()
-    var viewState = viewStateMapper.from(state, effect)
+    private val volatileState = NullSafeMutableLiveData(MapVolatileState())
+    val volatileViewState: LiveData<MapVolatileViewState> = volatileState.map(mapper::from)
+
+    private val mapState = NullSafeMutableLiveData(MapState())
+    var mapViewState: LiveData<MapViewState> = mapState.map(mapper::from)
+
+    private val _effect = Channel<MapEffect>()
+    val effect: Flow<MapEffect> = _effect.receiveAsFlow()
 
     init {
-        viewModelScope.launch(dispatcherProvider.default) {
-            loadAnimalsUseCase()
+        viewModelScope.launch(dispatcherProvider.main) {
+            loadAnimalsUseCase.run()
+
+            observeCompassUseCase.run()
+                .onEach { volatileState.reduce { copy(compass = it) } }
+                .launchIn(this)
+            getUserPositionUseCase.run()
+                .onEach { volatileState.reduce { copy(userPosition = it) } }
+                .launchIn(this)
+            getRegionsInUserPositionUseCase.run()
+                .onEach { volatileState.reduce { copy(regionsInUserPosition = it) } }
+                .launchIn(this)
+            getAnimalsInUserPositionUseCase.run()
+                .onEach { volatileState.reduce { copy(animalsInUserPosition = it) } }
+                .launchIn(this)
+
+            combine(
+                observeWorldBoundsUseCase.run(),
+                getBuildingsUseCase.run(),
+                getAviaryUseCase.run(),
+                getRoadsUseCase.run(),
+                getLinesUseCase.run(),
+                observeTakenRouteUseCase.run(),
+                getTechnicalRoadsUseCase.run(),
+                getTerminalNodesUseCase.run(),
+            ) { worldBounds, buildings, aviary, roads, lines, takenRoute, technicalRoute, terminalPoints ->
+                mapState.reduce {
+                    copy(
+                        worldBounds = worldBounds,
+                        buildings = buildings,
+                        aviary = aviary,
+                        roads = roads,
+                        lines = lines,
+                        takenRoute = takenRoute,
+                        technicalRoute = technicalRoute,
+                        terminalPoints = terminalPoints,
+                    )
+                }
+            }.launchIn(this)
         }
     }
 
     fun onUploadClicked() {
         try {
-            uploadHistoryUseCase()
+            uploadHistoryUseCase.run()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
             viewModelScope.launch(dispatcherProvider.main) {
-                effect.send(MapEffect.ShowToast("Upload failed"))
+                _effect.send(MapEffect.ShowToast("Upload failed"))
             }
         }
     }
 
     fun onPointPlaced(point: PointD) {
-        viewModelScope.launch(dispatcherProvider.default) {
-            val regions = getRegionsContainingPointUseCase(point)
+        viewModelScope.launch(dispatcherProvider.main) {
+            val regions = withContext(dispatcherProvider.default) {
+                getRegionsContainingPointUseCase.run(point)
+            }
 
             if (regions.isNotEmpty())
-                effect.send(MapEffect.ShowToast(regions.toString()))
+                _effect.send(MapEffect.ShowToast(regions.toString()))
 
-            state.snappedPoint.emit(point)
-
-            val shortestPath = getShortestPathUseCase(point)
-            state.shortestPath.emit(shortestPath)
+            volatileState.reduce { copy(snappedPoint = point) }
+            volatileState.reduce { copy(shortestPath = getShortestPathUseCase.run(point)) }
         }
     }
 
@@ -98,14 +136,14 @@ internal class MapViewModel(
 
     private fun onMyLocationClicked() {
         viewModelScope.launch(dispatcherProvider.main) {
-            effect.send(MapEffect.CenterAtUser)
+            _effect.send(MapEffect.CenterAtUser)
         }
     }
 
     private fun onLocationDenied() {
         if (BuildConfig.DEBUG) {
             viewModelScope.launch(dispatcherProvider.main) {
-                effect.send(MapEffect.ShowToast("Location denied"))
+                _effect.send(MapEffect.ShowToast("Location denied"))
             }
         }
     }

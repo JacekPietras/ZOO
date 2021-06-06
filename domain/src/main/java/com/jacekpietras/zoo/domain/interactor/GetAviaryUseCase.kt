@@ -8,6 +8,6 @@ class GetAviaryUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    operator fun invoke(): Flow<List<PolygonEntity>> =
+    fun run(): Flow<List<PolygonEntity>> =
         mapRepository.getAviary()
 }

@@ -7,6 +7,6 @@ class ObserveCompassUseCase(
     private val gpsRepository: GpsRepository,
 ) {
 
-    operator fun invoke(): Flow<Float> =
+    fun run(): Flow<Float> =
         gpsRepository.getCompass()
 }

@@ -12,7 +12,7 @@ class UploadHistoryUseCase(
 ) {
 
     @Throws(UploadFailed::class)
-    operator fun invoke() {
+    fun run() {
         try {
             CoroutineScope(Dispatchers.Default).launch {
                 val list = gpsRepository.getAllPositions()

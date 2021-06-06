@@ -10,7 +10,7 @@ class ObserveTakenRouteUseCase(
     private val gpsRepository: GpsRepository,
 ) {
 
-    operator fun invoke(): Flow<List<MapItemEntity.PathEntity>> =
+    fun run(): Flow<List<MapItemEntity.PathEntity>> =
         gpsRepository.observeAllPositions().map { each ->
             each.map { list ->
                 MapItemEntity.PathEntity(

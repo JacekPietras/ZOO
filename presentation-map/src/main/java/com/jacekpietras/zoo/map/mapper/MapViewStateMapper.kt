@@ -1,97 +1,48 @@
 package com.jacekpietras.zoo.map.mapper
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
-import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapState
 import com.jacekpietras.zoo.map.model.MapViewState
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import com.jacekpietras.zoo.map.model.MapVolatileState
+import com.jacekpietras.zoo.map.model.MapVolatileViewState
+import timber.log.Timber
 
 internal class MapViewStateMapper {
 
-    fun from(state: MapState, effect: Channel<MapEffect>): MapViewState {
-        val roads = combine(
-            state.roads,
-            state.roadPaint,
-        ) { route, paint -> fromPaths(route, paint) }
-
-        val technical = combine(
-            state.technicalRoute,
-            state.technicalPaint,
-        ) { route, paint -> fromPaths(route, paint) }
-
-        val lines = combine(
-            state.lines,
-            state.linesPaint,
-        ) { route, paint -> fromPaths(route, paint) }
-
-        val taken = combine(
-            state.takenRoute,
-            state.takenRoutePaint,
-        ) { route, paint -> fromPaths(route, paint) }
-
-        val buildings: Flow<List<MapItem>> = combine(
-            state.buildings,
-            state.buildingPaint,
-        ) { building, buildingPaint ->
-            fromPolygons(building, buildingPaint)
-        }
-
-        val aviary: Flow<List<MapItem>> = combine(
-            state.aviary,
-            state.aviaryPaint,
-        ) { aviary, aviaryPaint ->
-            fromPolygons(aviary, aviaryPaint)
-        }
-
-        val complex = combineSum(
-            technical,
-            roads,
-            lines,
-            buildings,
-            aviary,
-            taken,
-        )
-
-        return MapViewState(
-            currentRegionIds = state.regionsInUserPosition.map(::fromRegionId),
-            currentAnimals = state.animalsInUserPosition.map(::fromAnimals),
-            worldBounds = state.worldBounds.map(::fromWorldSpace),
-            mapData = complex,
-            userPosition = state.userPosition.map(::fromPoint),
-            terminalPoints = state.terminalPoints.map(::fromPoints),
-            compass = state.compass.map(::fromCompass),
-            snappedPoint = state.snappedPoint.filterNotNull().map(::fromPoint),
-            shortestPath = state.shortestPath.map(::fromPoints),
-            effect = effect.receiveAsFlow()
+    fun from(state: MapVolatileState): MapVolatileViewState = with(state) {
+        Timber.e("dupa update volatile")
+        MapVolatileViewState(
+            compass = compass,
+            userPosition = userPosition,
+            currentRegionIds = regionsInUserPosition.joinToString(separator = ", "),
+            currentAnimals = animalsInUserPosition.joinToString(separator = ", ") { it.name },
+            snappedPoint = snappedPoint,
+            shortestPath = shortestPath,
         )
     }
 
-    private fun fromCompass(compass: Float): Float =
-        compass
+    fun from(state: MapState): MapViewState = with(state) {
+        Timber.e("dupa update whole map")
+        MapViewState(
+            worldBounds = worldBounds,
+            mapData = flatListOf(
+                fromPaths(roads, roadPaint),
+                fromPaths(technicalRoute, technicalPaint),
+                fromPaths(lines, linesPaint),
+                fromPaths(takenRoute, takenRoutePaint),
+                fromPolygons(buildings, buildingPaint),
+                fromPolygons(aviary, aviaryPaint),
+            ),
+            terminalPoints = terminalPoints,
+        )
+    }
 
-    private fun fromPoint(position: PointD): PointD =
-        position
-
-    private fun fromPoints(points: List<PointD>): List<PointD> =
-        points
-
-    private fun fromWorldSpace(worldSpace: RectD): RectD =
-        worldSpace
-
-    private fun fromRegionId(regionIds: List<String>): String =
-        regionIds.joinToString(separator = ", ")
-
-    private fun fromAnimals(animals: List<AnimalEntity>): String =
-        animals.joinToString(separator = ", ") { it.name }
+    private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
 
     private fun fromPolygons(
         polygons: List<PolygonEntity>,
@@ -111,7 +62,4 @@ internal class MapViewStateMapper {
                 paint
             )
         }
-
-    private fun <T> combineSum(vararg flow: Flow<List<T>>): Flow<List<T>> =
-        combine(flow.toList()) { a -> a.toList().flatten() }
 }

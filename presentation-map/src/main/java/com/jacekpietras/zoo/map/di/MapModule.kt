@@ -15,7 +15,7 @@ val mapModule = module {
     viewModel { (animalId: String?) ->
         MapViewModel(
             animalId = animalId?.let(::AnimalId),
-            viewStateMapper = get(),
+            mapper = get(),
             observeWorldBoundsUseCase = get(),
             observeCompassUseCase = get(),
             getBuildingsUseCase = get(),

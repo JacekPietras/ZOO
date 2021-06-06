@@ -12,6 +12,7 @@ data class RectD(
 
     fun toShortString(): String = "[${left.form()},${top.form()}][${right.form()},${bottom.form()}]"
     fun isEmpty(): Boolean = left >= right || top >= bottom
+    fun isNotEmpty(): Boolean = !isEmpty()
     fun width(): Double = right - left
     fun height(): Double = bottom - top
     fun centerX(): Double = (left + right) * 0.5

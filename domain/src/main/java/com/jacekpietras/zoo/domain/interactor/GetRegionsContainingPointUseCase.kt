@@ -8,7 +8,7 @@ class GetRegionsContainingPointUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    operator fun invoke(point: PointD): List<String> =
+    fun run(point: PointD): List<String> =
         mapRepository.getCurrentRegions()
             .filter { region -> polygonContains(region.second.vertices, point) }
             .map { it.first }

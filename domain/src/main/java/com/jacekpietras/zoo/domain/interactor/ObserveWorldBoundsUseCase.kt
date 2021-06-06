@@ -8,6 +8,6 @@ class ObserveWorldBoundsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    operator fun invoke(): Flow<RectD> =
+    fun run(): Flow<RectD> =
         mapRepository.observeWorldBounds()
 }

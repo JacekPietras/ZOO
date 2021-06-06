@@ -9,10 +9,10 @@ class GetAnimalsInUserPositionUseCase(
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
 ) {
 
-    operator fun invoke(): Flow<List<AnimalEntity>> =
-        getRegionsInUserPositionUseCase().map { regions ->
+    fun run(): Flow<List<AnimalEntity>> =
+        getRegionsInUserPositionUseCase.run().map { regions ->
             regions
-                .map { region -> getAnimalsInRegionUseCase(region) }
+                .map { region -> getAnimalsInRegionUseCase.run(region) }
                 .flatten()
                 .distinct()
         }

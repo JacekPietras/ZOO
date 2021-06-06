@@ -7,6 +7,6 @@ class GetAnimalsInRegionUseCase(
     private val animalRepository: AnimalRepository,
 ) {
 
-    operator fun invoke(regionId: String): List<AnimalEntity> =
+    fun run(regionId: String): List<AnimalEntity> =
         animalRepository.getAnimalsInRegion(regionId)
 }

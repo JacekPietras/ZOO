@@ -5,16 +5,16 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.jacekpietras.core.observe
 import com.jacekpietras.zoo.core.binding.viewBinding
+import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.databinding.FragmentMapBinding
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
-import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
@@ -32,18 +32,28 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         setListeners()
     }
 
-    private fun setObservers() = with(viewModel.viewState) {
-        currentRegionIds.observe { binding.regionIds.text = it }
-        currentAnimals.observe { binding.animals.text = it }
-        userPosition.observe { binding.mapView.userPosition = it }
-        terminalPoints.observe { binding.mapView.terminalPoints = it }
-        mapData.observe { binding.mapView.objectList = it }
-        worldBounds.observe { binding.mapView.worldBounds = it }
-        compass.observe { binding.mapView.compass = it }
-        snappedPoint.observe { binding.mapView.clickOnWorld = it }
-        shortestPath.observe { binding.mapView.shortestPath = it }
+    private fun setObservers() = with(viewModel) {
+        mapViewState.observe(viewLifecycleOwner) {
+            Timber.e("dupa observe whole map")
+            with(it) {
+                binding.mapView.worldBounds = worldBounds
+                binding.mapView.objectList = mapData
+                binding.mapView.terminalPoints = terminalPoints
+            }
+        }
+        volatileViewState.observe(viewLifecycleOwner) {
+            Timber.e("dupa observe volatile map")
+            with(it) {
+                binding.mapView.userPosition = userPosition
+                binding.mapView.compass = compass
+                binding.regionIds.text = currentRegionIds
+                binding.animals.text = currentAnimals
+                binding.mapView.clickOnWorld = snappedPoint
+                binding.mapView.shortestPath = shortestPath
+            }
+        }
 
-        effect.observe {
+        effect.observe(viewLifecycleOwner) {
             when (it) {
                 is MapEffect.ShowToast -> toast(it.text)
                 is MapEffect.CenterAtUser -> binding.mapView.centerAtUserPosition()
@@ -59,9 +69,5 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun toast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
-    }
-
-    private inline fun <T> Flow<T>.observe(crossinline block: (T) -> Unit) {
-        observe(viewLifecycleOwner, block)
     }
 }

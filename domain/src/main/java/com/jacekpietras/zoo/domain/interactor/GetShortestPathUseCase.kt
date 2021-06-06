@@ -8,6 +8,6 @@ class GetShortestPathUseCase(
     private val getUserPositionUseCase: GetUserPositionUseCase,
 ) {
 
-    suspend operator fun invoke(point: PointD): List<PointD> =
-        GraphAnalyzer.getShortestPath(point, getUserPositionUseCase().firstOrNull())
+    suspend fun run(point: PointD): List<PointD> =
+        GraphAnalyzer.getShortestPath(point, getUserPositionUseCase.run().firstOrNull())
 }

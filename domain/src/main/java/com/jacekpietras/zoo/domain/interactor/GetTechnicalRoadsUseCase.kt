@@ -8,6 +8,6 @@ class GetTechnicalRoadsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    operator fun invoke(): Flow<List<PathEntity>> =
+    fun run(): Flow<List<PathEntity>> =
         mapRepository.getTechnicalRoads()
 }

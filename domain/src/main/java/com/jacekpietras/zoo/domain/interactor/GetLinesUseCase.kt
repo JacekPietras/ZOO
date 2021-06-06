@@ -8,6 +8,6 @@ class GetLinesUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    operator fun invoke(): Flow<List<PathEntity>> =
+    fun run(): Flow<List<PathEntity>> =
         mapRepository.getLines()
 }
