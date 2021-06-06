@@ -9,7 +9,8 @@ class GetRegionCenterPointUseCase(
 
     fun run(regionId: String): PointD =
         mapRepository.getCurrentRegions()
-            .first { (currentRegionId, _) -> regionId == currentRegionId }
-            .second
-            .findCenter()
+            .firstOrNull { (currentRegionId, _) -> regionId == currentRegionId }
+            ?.second
+            ?.findCenter()
+            ?: throw IllegalArgumentException("cannot find region with id: $regionId")
 }
