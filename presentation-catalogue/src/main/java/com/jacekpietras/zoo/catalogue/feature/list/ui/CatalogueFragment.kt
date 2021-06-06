@@ -109,7 +109,7 @@ class CatalogueFragment : Fragment() {
                                     .align(Alignment.BottomEnd)
                                     .padding(bottom = 32.dp, end = 8.dp),
                             ) {
-                                    Text(color = Color(0x55000000), text = animal.regionInZoo)
+                                    Text(color = Color(0x88000000), text = animal.regionInZoo)
                                 }
                             }
                         }
