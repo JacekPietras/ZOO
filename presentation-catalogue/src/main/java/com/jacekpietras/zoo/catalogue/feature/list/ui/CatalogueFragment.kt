@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.imageloading.ImageLoadState
+import com.jacekpietras.zoo.catalogue.BuildConfig
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
@@ -100,7 +101,17 @@ class CatalogueFragment : Fragment() {
                                         .alpha(.7f)
                                 )
                             }
-                            BoxedTextView(text = "${animal.name} - ${animal.regionInZoo}")
+                            BoxedTextView(text = animal.name)
+
+                            if (BuildConfig.DEBUG) {
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(bottom = 32.dp, end = 8.dp),
+                            ) {
+                                    Text(color = Color(0x55000000), text = animal.regionInZoo)
+                                }
+                            }
                         }
                     }
                 }
