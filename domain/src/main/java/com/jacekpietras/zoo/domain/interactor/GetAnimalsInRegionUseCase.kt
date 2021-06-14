@@ -8,5 +8,5 @@ class GetAnimalsInRegionUseCase(
 ) {
 
     fun run(regionId: String): List<AnimalEntity> =
-        animalRepository.getAnimalsInRegion(regionId)
+        animalRepository.getAnimals(regionId)
 }

@@ -9,5 +9,5 @@ class GetAnimalsByDivisionUseCase(
 ) {
 
     fun run(division: Division? = null): List<AnimalEntity> =
-        animalRepository.getAnimalsByDivision(division)
+        animalRepository.getAnimals(division)
 }

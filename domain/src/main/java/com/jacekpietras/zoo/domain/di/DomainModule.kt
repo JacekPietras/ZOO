@@ -32,6 +32,11 @@ val domainModule = module {
         )
     }
     factory {
+        ObserveFilteredAnimalsUseCase(
+            animalRepository = get()
+        )
+    }
+    factory {
         GetAnimalUseCase(
             animalRepository = get()
         )

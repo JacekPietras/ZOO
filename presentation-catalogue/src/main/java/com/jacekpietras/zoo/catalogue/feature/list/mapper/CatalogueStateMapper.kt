@@ -4,7 +4,9 @@ import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueListItem
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueState
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 
-internal class CatalogueStateMapper {
+internal class CatalogueStateMapper(
+    private val divisionMapper: DivisionMapper
+) {
 
     fun from(state: CatalogueState) = CatalogueViewState(
         animalList = state.animalList.map { animal ->
@@ -14,6 +16,7 @@ internal class CatalogueStateMapper {
                 regionInZoo = animal.regionInZoo,
                 img = animal.photos.firstOrNull(),
             )
-        }
+        },
+        filterList = state.filter.divisions.map(divisionMapper::from)
     )
 }

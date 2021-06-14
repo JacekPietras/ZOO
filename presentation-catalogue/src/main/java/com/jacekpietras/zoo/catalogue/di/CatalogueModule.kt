@@ -1,6 +1,8 @@
 package com.jacekpietras.zoo.catalogue.di
 
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
+import com.jacekpietras.zoo.catalogue.feature.list.mapper.CatalogueStateMapper
+import com.jacekpietras.zoo.catalogue.feature.list.mapper.DivisionMapper
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
 import com.jacekpietras.zoo.domain.model.AnimalId
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -10,7 +12,10 @@ val catalogueModule = module {
 
     viewModel {
         CatalogueViewModel(
-            getAnimalsByDivisionUseCase = get(),
+            observeFilteredAnimalsUseCase = get(),
+            loadAnimalsUseCase = get(),
+            stateMapper = get(),
+            divisionMapper = get(),
         )
     }
 
@@ -18,6 +23,13 @@ val catalogueModule = module {
         AnimalViewModel(
             animalId = AnimalId(animalId),
             getAnimalUseCase = get(),
+        )
+    }
+
+    factory { DivisionMapper() }
+    factory {
+        CatalogueStateMapper(
+            divisionMapper = get(),
         )
     }
 }
