@@ -6,11 +6,11 @@ import com.jacekpietras.zoo.catalogue.R
 enum class AnimalDivision(
      @DrawableRes val iconRes: Int,
 ) {
-    MAMMAL(R.drawable.ic_lion),
-    BIRD(R.drawable.ic_bird),
-    AMPHIBIAN(R.drawable.ic_frog),
-    REPTILE(R.drawable.ic_snake),
-    FISH(R.drawable.ic_fish),
-    ARTHROPOD(R.drawable.ic_spider),
-    MOLLUSCA(R.drawable.ic_snail),
+    MAMMAL(R.drawable.ic_animal_lion_24dp),
+    BIRD(R.drawable.ic_animal_bird_24dp),
+    AMPHIBIAN(R.drawable.ic_animal_frog_24dp),
+    REPTILE(R.drawable.ic_animal_snake_24dp),
+    FISH(R.drawable.ic_animal_fish_24dp),
+    ARTHROPOD(R.drawable.ic_animal_spider_24dp),
+    MOLLUSCA(R.drawable.ic_animal_snail_24dp),
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -61,8 +62,9 @@ class CatalogueFragment : Fragment() {
     @Composable
     fun ToolbarWithFilters(filterList: List<AnimalDivision>) {
         Card(
+            shape = RectangleShape,
             backgroundColor = Color.White,
-            elevation = 4.dp,
+            elevation = 6.dp,
             modifier = Modifier
                 .height(48.dp)
                 .fillMaxSize(),
