@@ -5,4 +5,5 @@ internal data class CatalogueViewState(
     val filterList: List<AnimalDivision> = emptyList(),
     val filtersVisible: Boolean = true,
     val searchVisible: Boolean = false,
+    val searchText: String = "",
 )

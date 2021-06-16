@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +28,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -56,7 +59,12 @@ class CatalogueFragment : Fragment() {
                 with(viewState) {
                     MaterialTheme {
                         Column {
-                            ToolbarWithFilters(filterList, filtersVisible, searchVisible)
+                            ToolbarWithFilters(
+                                filterList,
+                                filtersVisible,
+                                searchVisible,
+                                searchText
+                            )
                             AnimalList(animalList)
                         }
                     }
@@ -68,7 +76,8 @@ class CatalogueFragment : Fragment() {
     fun ToolbarWithFilters(
         filterList: List<AnimalDivision>,
         filtersVisible: Boolean,
-        searchVisible: Boolean
+        searchVisible: Boolean,
+        searchText: String,
     ) {
         Card(
             shape = RectangleShape,
@@ -124,7 +133,7 @@ class CatalogueFragment : Fragment() {
                             contentDescription = null // decorative element
                         )
 
-                        SearchView()
+                        SearchView(searchText)
 
                         ToolbarIcon(
                             padding = 8.dp,
@@ -138,7 +147,7 @@ class CatalogueFragment : Fragment() {
     }
 
     @Composable
-    fun RowScope.SearchView() {
+    fun RowScope.SearchView(searchText: String) {
         Box(
             modifier = Modifier
                 .fillMaxHeight()
@@ -149,7 +158,14 @@ class CatalogueFragment : Fragment() {
                     color = Color.Black.copy(alpha = 0.1f)
                 )
         ) {
-            var value by remember { mutableStateOf("") }
+            var value by rememberSaveable {
+                mutableStateOf(
+                    TextFieldValue(
+                        text = searchText,
+                        selection = TextRange(searchText.length)
+                    )
+                )
+            }
             val focusRequester = FocusRequester()
             BasicTextField(
                 modifier = Modifier
@@ -160,7 +176,7 @@ class CatalogueFragment : Fragment() {
                 value = value,
                 onValueChange = {
                     value = it
-                    viewModel.onSearch(it)
+                    viewModel.onSearch(it.text)
                 },
                 maxLines = 1,
                 singleLine = true,
@@ -236,7 +252,7 @@ class CatalogueFragment : Fragment() {
                         )
                         if (painter.loadState is ImageLoadState.Error) {
                             Image(
-                                painter = painterResource(id = R.drawable.pic_banana_leaf_rasterized_2),
+                                painter = painterResource(R.drawable.pic_banana_leaf_rasterized_2),
                                 contentDescription = null, // decorative element
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -251,7 +267,10 @@ class CatalogueFragment : Fragment() {
                                     .align(Alignment.BottomEnd)
                                     .padding(bottom = 32.dp, end = 8.dp),
                             ) {
-                                Text(color = Color.Black.copy(alpha = 0.3f), text = animal.regionInZoo)
+                                Text(
+                                    color = Color.Black.copy(alpha = 0.3f),
+                                    text = animal.regionInZoo
+                                )
                             }
                         }
                     }

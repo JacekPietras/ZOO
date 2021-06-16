@@ -20,5 +20,6 @@ internal class CatalogueStateMapper(
         filterList = state.filter.divisions.map(divisionMapper::from),
         filtersVisible = !state.searchOpened,
         searchVisible = state.searchOpened,
+        searchText = state.filter.query ?: "",
     )
 }
