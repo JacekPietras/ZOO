@@ -124,37 +124,8 @@ class CatalogueFragment : Fragment() {
                             contentDescription = null // decorative element
                         )
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .weight(1f)
-                                .padding(8.dp)
-                                .background(
-                                    shape = RoundedCornerShape(8.dp),
-                                    color = Color.Black.copy(alpha = 0.1f)
-                                )
-                        ) {
-                            var value by remember { mutableStateOf("") }
-                            val focusRequester = FocusRequester()
-                            BasicTextField(
-                                modifier = Modifier
-                                    .focusRequester(focusRequester)
-                                    .padding(horizontal = 8.dp)
-                                    .fillMaxSize()
-                                    .wrapContentSize(Alignment.CenterStart),
-                                value = value,
-                                onValueChange = {
-                                    value = it
-                                    viewModel.onSearch(it)
-                                },
-                                maxLines = 1,
-                                singleLine = true,
-                            )
-                            DisposableEffect(Unit) {
-                                focusRequester.requestFocus()
-                                onDispose { }
-                            }
-                        }
+                        SearchView()
+
                         ToolbarIcon(
                             padding = 8.dp,
                             id = R.drawable.ic_close_24,
@@ -162,6 +133,41 @@ class CatalogueFragment : Fragment() {
                         )
                     }
                 }
+            }
+        }
+    }
+
+    @Composable
+    fun RowScope.SearchView() {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f)
+                .padding(8.dp)
+                .background(
+                    shape = RoundedCornerShape(8.dp),
+                    color = Color.Black.copy(alpha = 0.1f)
+                )
+        ) {
+            var value by remember { mutableStateOf("") }
+            val focusRequester = FocusRequester()
+            BasicTextField(
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.CenterStart),
+                value = value,
+                onValueChange = {
+                    value = it
+                    viewModel.onSearch(it)
+                },
+                maxLines = 1,
+                singleLine = true,
+            )
+            DisposableEffect(Unit) {
+                focusRequester.requestFocus()
+                onDispose { }
             }
         }
     }
@@ -245,7 +251,7 @@ class CatalogueFragment : Fragment() {
                                     .align(Alignment.BottomEnd)
                                     .padding(bottom = 32.dp, end = 8.dp),
                             ) {
-                                Text(color = Color(0x66000000), text = animal.regionInZoo)
+                                Text(color = Color.Black.copy(alpha = 0.3f), text = animal.regionInZoo)
                             }
                         }
                     }
@@ -271,6 +277,5 @@ class CatalogueFragment : Fragment() {
     }
 
     private val primaryColor: Color
-        get() =
-            Color(requireContext().getColorFromAttr(android.R.attr.colorPrimary))
+        get() = Color(requireContext().getColorFromAttr(android.R.attr.colorPrimary))
 }
