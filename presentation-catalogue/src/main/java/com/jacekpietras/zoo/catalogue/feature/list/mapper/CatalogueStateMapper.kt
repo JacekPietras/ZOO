@@ -17,6 +17,8 @@ internal class CatalogueStateMapper(
                 img = animal.photos.firstOrNull(),
             )
         },
-        filterList = state.filter.divisions.map(divisionMapper::from)
+        filterList = state.filter.divisions.map(divisionMapper::from),
+        filtersVisible = !state.searchOpened,
+        searchVisible = state.searchOpened,
     )
 }

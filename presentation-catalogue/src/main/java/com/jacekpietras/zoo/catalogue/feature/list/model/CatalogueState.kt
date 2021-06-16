@@ -6,4 +6,5 @@ import com.jacekpietras.zoo.domain.model.AnimalFilter
 data class CatalogueState(
     val animalList: List<AnimalEntity> = emptyList(),
     val filter : AnimalFilter = AnimalFilter(),
+    val searchOpened : Boolean = false,
 )

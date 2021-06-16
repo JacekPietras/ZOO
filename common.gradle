@@ -19,7 +19,8 @@ android {
         // Disabling coroutine's ExperimentalCoroutinesApi warning
         freeCompilerArgs += [
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xuse-experimental=kotlinx.coroutines.TheAnnotationYouWantToDisable"
+                "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
+                "-Xuse-experimental=kotlinx.coroutines.TheAnnotationYouWantToDisable",
         ]
     }
 }

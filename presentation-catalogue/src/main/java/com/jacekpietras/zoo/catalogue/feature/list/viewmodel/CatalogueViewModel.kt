@@ -52,11 +52,20 @@ internal class CatalogueViewModel(
 
     fun onFilterClicked(division: AnimalDivision) {
         val domainDivision = divisionMapper.from(division)
-        val filter = filterFlow.value
-        filterFlow.value = if (filter.divisions.contains(domainDivision)) {
-            filter.copy(divisions = filter.divisions - domainDivision)
-        } else {
-            filter.copy(divisions = filter.divisions + domainDivision)
+        filterFlow.value = with(filterFlow.value) {
+            if (divisions.contains(domainDivision)) {
+                copy(divisions = divisions - domainDivision)
+            } else {
+                copy(divisions = divisions + domainDivision)
+            }
         }
+    }
+
+    fun onSearchClicked() {
+        state.reduce { copy(searchOpened = !searchOpened) }
+    }
+
+    fun onSearch(query: String) {
+        filterFlow.value = filterFlow.value.copy(query = query)
     }
 }
