@@ -11,17 +11,17 @@ import com.google.android.material.color.MaterialColors
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 
-sealed class MapPaint {
+sealed class MapPaint<T> {
 
-    internal abstract fun toCanvasPaint(context: Context): PaintHolder
-    internal open fun toBorderCanvasPaint(context: Context): PaintHolder? = null
+    internal abstract fun toCanvasPaint(context: Context): PaintHolder<T>
+    internal open fun toBorderCanvasPaint(context: Context): PaintHolder<T>? = null
 
     data class Stroke(
         val width: MapDimension,
         val strokeColor: MapColor,
-    ) : MapPaint() {
+    ) : MapPaint<Paint>() {
 
-        override fun toCanvasPaint(context: Context): PaintHolder =
+        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
             when (width) {
                 is MapDimension.Static ->
                     PaintHolder.Static(
@@ -51,9 +51,9 @@ sealed class MapPaint {
         val strokeColor: MapColor,
         val borderWidth: MapDimension.Static,
         val borderColor: MapColor,
-    ) : MapPaint() {
+    ) : MapPaint<Paint>() {
 
-        override fun toCanvasPaint(context: Context): PaintHolder =
+        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
             when (width) {
                 is MapDimension.Static ->
                     PaintHolder.Static(
@@ -79,7 +79,7 @@ sealed class MapPaint {
                     }
             }
 
-        override fun toBorderCanvasPaint(context: Context): PaintHolder =
+        override fun toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
             when (width) {
                 is MapDimension.Static ->
                     PaintHolder.Static(
@@ -112,9 +112,9 @@ sealed class MapPaint {
         val width: MapDimension.Static,
         val pattern: MapDimension.Static,
         val strokeColor: MapColor,
-    ) : MapPaint() {
+    ) : MapPaint<Paint>() {
 
-        override fun toCanvasPaint(context: Context): PaintHolder =
+        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
             PaintHolder.Static(
                 Paint().apply {
                     style = Paint.Style.STROKE
@@ -134,9 +134,9 @@ sealed class MapPaint {
 
     data class Fill(
         val fillColor: MapColor,
-    ) : MapPaint() {
+    ) : MapPaint<Paint>() {
 
-        override fun toCanvasPaint(context: Context): PaintHolder =
+        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
             PaintHolder.Static(
                 Paint().apply {
                     style = Paint.Style.FILL
@@ -151,9 +151,9 @@ sealed class MapPaint {
         val fillColor: MapColor,
         val borderWidth: MapDimension.Static,
         val borderColor: MapColor,
-    ) : MapPaint() {
+    ) : MapPaint<Paint>() {
 
-        override fun toCanvasPaint(context: Context): PaintHolder =
+        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
             PaintHolder.Static(
                 Paint().apply {
                     style = Paint.Style.FILL
@@ -163,7 +163,7 @@ sealed class MapPaint {
                 }
             )
 
-        override fun toBorderCanvasPaint(context: Context): PaintHolder =
+        override fun toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
             PaintHolder.Static(
                 Paint().apply {
                     style = Paint.Style.FILL_AND_STROKE

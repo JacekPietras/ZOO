@@ -1,12 +1,11 @@
 package com.jacekpietras.mapview.model
 
-import android.graphics.Paint
 import com.jacekpietras.core.PointD
 
-internal sealed class PaintHolder {
+internal sealed class PaintHolder<T> {
 
-    class Static(val paint: Paint) : PaintHolder()
+    class Static<T>(val paint: T) : PaintHolder<T>()
 
-    class Dynamic(val block: (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Paint) :
-        PaintHolder()
+    class Dynamic<T>(val block: (zoom: Double, position: PointD, screenWidthInPixels: Int) -> T) :
+        PaintHolder<T>()
 }

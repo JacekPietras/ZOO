@@ -47,7 +47,7 @@ class MapView @JvmOverloads constructor(
         set(value) {
             mapData.terminalPoints = value
         }
-    var objectList: List<MapItem>
+    var objectList: List<MapItem<Paint>>
         get() = mapData.objectList
         set(value) {
             mapData.objectList = value
@@ -58,7 +58,7 @@ class MapView @JvmOverloads constructor(
             mapData.worldBounds = value
         }
 
-    private val mapData = MapViewLogic(
+    private val mapData = MapViewLogic<Paint>(
         context,
         getCurrentHeight = { height },
         getCurrentWidth = { width },

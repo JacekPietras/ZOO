@@ -1,12 +1,12 @@
 package com.jacekpietras.mapview.model
 
-class MapItem {
+class MapItem<T> {
     val shape: Any
-    val paint: MapPaint
+    val paint: MapPaint<T>
 
     constructor(
         polygon: PolygonD,
-        paint: MapPaint,
+        paint: MapPaint<T>,
     ) {
         this.shape = polygon
         this.paint = paint
@@ -14,7 +14,7 @@ class MapItem {
 
     constructor(
         path: PathD,
-        paint: MapPaint,
+        paint: MapPaint<T>,
     ) {
         this.shape = path
         this.paint = paint

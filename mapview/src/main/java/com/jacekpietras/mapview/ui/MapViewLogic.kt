@@ -3,7 +3,6 @@ package com.jacekpietras.mapview.ui
 
 import android.content.Context
 import android.graphics.Matrix
-import android.graphics.Paint
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.BuildConfig
@@ -15,7 +14,7 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
-internal class MapViewLogic(
+internal class MapViewLogic<T>(
     private val context: Context,
     private val getCurrentHeight: () -> Int,
     private val getCurrentWidth: () -> Int,
@@ -34,8 +33,8 @@ internal class MapViewLogic(
             minZoom = maxZoom / 10
             zoom = maxZoom / 5
         }
-    private var _objectList: List<ObjectItem> = emptyList()
-    internal var objectList: List<MapItem> = emptyList()
+    private var _objectList: List<ObjectItem<T>> = emptyList()
+    internal var objectList: List<MapItem<T>> = emptyList()
         set(value) {
             Timber.v("Content changed")
             field = value
@@ -89,7 +88,7 @@ internal class MapViewLogic(
     private var zoomOnStart: Double = 5.0
     private var worldRotation: Float = 0f
     private var worldRotationOnStart: Float = 0f
-    internal var renderList: List<RenderItem>? = null
+    internal var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
 
     fun centerAtPoint(desiredPosition: PointD) {
@@ -236,9 +235,9 @@ internal class MapViewLogic(
 //        }
 //    }
 
-    private fun List<MapItem>.toRenderItems(): List<ObjectItem> {
-        val innerPaints = mutableMapOf<MapPaint, PaintHolder>()
-        val borderPaints = mutableMapOf<MapPaint, PaintHolder?>()
+    private fun List<MapItem<T>>.toRenderItems(): List<ObjectItem<T>> {
+        val innerPaints = mutableMapOf<MapPaint<T>, PaintHolder<T>>()
+        val borderPaints = mutableMapOf<MapPaint<T>, PaintHolder<T>?>()
 
         return map { item ->
             val inner = innerPaints[item.paint]
@@ -347,10 +346,10 @@ internal class MapViewLogic(
         return result
     }
 
-    private fun PaintHolder.takePaint(dynamicPaints: MutableMap<PaintHolder.Dynamic, Paint>): Paint {
+    private fun PaintHolder<T>.takePaint(dynamicPaints: MutableMap<PaintHolder.Dynamic<T>, T>): T {
         return when (this) {
-            is PaintHolder.Static -> paint
-            is PaintHolder.Dynamic -> {
+            is PaintHolder.Static<T> -> paint
+            is PaintHolder.Dynamic<T> -> {
                 dynamicPaints[this]
                     ?: block(zoom, centerGpsCoordinate, getCurrentWidth())
                         .also { dynamicPaints[this] = it }
@@ -369,9 +368,9 @@ internal class MapViewLogic(
             return
         }
 
-        val borders = mutableListOf<RenderItem>()
-        val insides = mutableListOf<RenderItem>()
-        val dynamicPaints = mutableMapOf<PaintHolder.Dynamic, Paint>()
+        val borders = mutableListOf<RenderItem<T>>()
+        val insides = mutableListOf<RenderItem<T>>()
+        val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
 
         val matrix = Matrix()
             .apply {
@@ -437,11 +436,11 @@ internal class MapViewLogic(
         return this
     }
 
-    private fun ObjectItem.addToRender(
+    private fun ObjectItem<T>.addToRender(
         array: FloatArray,
-        borders: MutableList<RenderItem>,
-        insides: MutableList<RenderItem>,
-        dynamicPaints: MutableMap<PaintHolder.Dynamic, Paint>,
+        borders: MutableList<RenderItem<T>>,
+        insides: MutableList<RenderItem<T>>,
+        dynamicPaints: MutableMap<PaintHolder.Dynamic<T>, T>,
     ) {
         insides.add(
             RenderItem(
@@ -470,16 +469,16 @@ internal class MapViewLogic(
         }
     }
 
-    private class ObjectItem(
+    private class ObjectItem<T>(
         val shape: DoubleArray,
-        val paintHolder: PaintHolder,
-        val outerPaintHolder: PaintHolder? = null,
+        val paintHolder: PaintHolder<T>,
+        val outerPaintHolder: PaintHolder<T>? = null,
         val close: Boolean,
     )
 
-    internal class RenderItem(
+    internal class RenderItem<T>(
         val shape: FloatArray,
-        val paint: Paint,
+        val paint: T,
         val close: Boolean,
     )
 }
