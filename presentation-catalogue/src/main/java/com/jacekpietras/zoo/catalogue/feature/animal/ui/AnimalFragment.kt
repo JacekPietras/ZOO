@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.zoo.catalogue.R
@@ -52,17 +56,9 @@ class AnimalFragment : Fragment() {
                         modifier = Modifier
                             .verticalScroll(rememberScrollState())
                     ) {
-                        val painter = rememberImagePainter(
-                            data = images.firstOrNull() ?: "no image",
-                            builder = { crossfade(true) }
-                        )
-                        Image(
-                            painter = painter,
-                            contentDescription = title.toString(LocalContext.current),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .height(256.dp)
+                        ImageCarousel(
+                            images = images,
+                            contentDescription = title,
                         )
                         SimpleText(title)
                         SimpleText(subTitle)
@@ -89,6 +85,36 @@ class AnimalFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun ImageCarousel(
+        images: List<String>,
+        contentDescription: Text,
+    ) {
+        if (images.isEmpty()) return
+
+        val painter = rememberImagePainter(
+            data = images.randomOrNull() ?: "no image",
+            builder = { crossfade(true) }
+        )
+        val state = remember { MutableTransitionState(true) }
+        AnimatedVisibility(
+            visibleState = state,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Image(
+                painter = painter,
+                contentDescription = contentDescription.toString(LocalContext.current),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(256.dp)
+            )
+        }
+        if (painter.state is ImagePainter.State.Error) {
+            state.targetState = false
         }
     }
 
