@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,8 +29,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -89,11 +88,11 @@ class CatalogueFragment : Fragment() {
         ) {
             Box {
                 AnimatedVisibility(
-                    visible = filtersVisible,
+                    visibleState = remember { MutableTransitionState(true) }
+                        .apply { targetState = filtersVisible },
                     modifier = Modifier.fillMaxSize(),
                     enter = fadeIn() + slideInHorizontally(),
                     exit = fadeOut() + slideOutHorizontally(),
-                    initiallyVisible = true,
                 ) {
                     Row(
                         modifier = Modifier
@@ -116,11 +115,11 @@ class CatalogueFragment : Fragment() {
                     }
                 }
                 AnimatedVisibility(
-                    visible = searchVisible,
+                    visibleState = remember { MutableTransitionState(false) }
+                        .apply { targetState = searchVisible },
                     modifier = Modifier.fillMaxSize(),
                     enter = fadeIn() + slideInHorizontally(initialOffsetX = { it / 2 }),
                     exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it / 2 }),
-                    initiallyVisible = false,
                 ) {
                     Row(
                         modifier = Modifier.fillMaxHeight(),
@@ -158,14 +157,7 @@ class CatalogueFragment : Fragment() {
                     color = Color.Black.copy(alpha = 0.1f)
                 )
         ) {
-            var value by rememberSaveable {
-                mutableStateOf(
-                    TextFieldValue(
-                        text = searchText,
-                        selection = TextRange(searchText.length)
-                    )
-                )
-            }
+            var value by rememberSaveable { mutableStateOf(searchText) }
             val focusRequester = FocusRequester()
             BasicTextField(
                 modifier = Modifier
@@ -176,7 +168,7 @@ class CatalogueFragment : Fragment() {
                 value = value,
                 onValueChange = {
                     value = it
-                    viewModel.onSearch(it.text)
+                    viewModel.onSearch(it)
                 },
                 maxLines = 1,
                 singleLine = true,
