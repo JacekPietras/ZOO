@@ -5,6 +5,9 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 inline fun <T> MutableLiveData<T>.reduce(block: T.() -> T) {
     value = block(checkNotNull(value))

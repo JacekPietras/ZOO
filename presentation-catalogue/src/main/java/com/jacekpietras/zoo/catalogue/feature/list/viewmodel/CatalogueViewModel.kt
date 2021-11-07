@@ -3,7 +3,6 @@ package com.jacekpietras.zoo.catalogue.feature.list.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
 import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.reduce
 import com.jacekpietras.zoo.catalogue.feature.list.mapper.CatalogueStateMapper
@@ -14,6 +13,8 @@ import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouter
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
+import com.jacekpietras.zoo.core.dispatcher.launchInBackground
+import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveFilteredAnimalsUseCase
 import com.jacekpietras.zoo.domain.model.AnimalFilter
@@ -26,7 +27,6 @@ internal class CatalogueViewModel(
     private val stateMapper: CatalogueStateMapper,
     private val divisionMapper: DivisionMapper,
     loadAnimalsUseCase: LoadAnimalsUseCase,
-    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(CatalogueState())
@@ -35,13 +35,13 @@ internal class CatalogueViewModel(
     private val filterFlow = MutableStateFlow(AnimalFilter())
 
     init {
-        viewModelScope.launch(dispatcherProvider.main) {
+        launchInBackground {
             launch { loadAnimalsUseCase.run() }
 
             filterFlow
-                .onEach { state.reduce { copy(filter = it) } }
+                .onEach { onMain { state.reduce { copy(filter = it) } } }
                 .flatMapLatest { observeFilteredAnimalsUseCase.run(it) }
-                .onEach { state.reduce { copy(animalList = it) } }
+                .onEach { onMain { state.reduce { copy(animalList = it) } } }
                 .launchIn(this)
         }
     }
@@ -63,6 +63,7 @@ internal class CatalogueViewModel(
 
     fun onSearchClicked() {
         state.reduce { copy(searchOpened = !searchOpened) }
+        filterFlow.value = filterFlow.value.copy(query = null)
     }
 
     fun onSearch(query: String) {
