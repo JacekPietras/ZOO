@@ -23,8 +23,8 @@ internal class MapViewLogic<T>(
 ) {
 
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null
-    var maxZoom: Double = 10.0
-    var minZoom: Double = 2.0
+    private var maxZoom: Double = 10.0
+    private var minZoom: Double = 2.0
     var worldBounds: RectD = RectD()
         set(value) {
             field = value
@@ -55,8 +55,8 @@ internal class MapViewLogic<T>(
             field = value
             cutOutNotVisible()
         }
-    internal var terminalPointsOnScreen: FloatArray? = null
-    var userPositionOnScreen: FloatArray? = null
+    private var terminalPointsOnScreen: FloatArray? = null
+    private var userPositionOnScreen: FloatArray? = null
     var compass: Float = 0f
         set(value) {
             field = value
@@ -66,7 +66,7 @@ internal class MapViewLogic<T>(
         }
 
     private val interesting: List<PointD> = listOf()
-    internal var interestingOnScreen: FloatArray? = null
+    private var interestingOnScreen: FloatArray? = null
 
     internal var clickOnWorld: PointD? = null
         set(value) {
@@ -78,8 +78,8 @@ internal class MapViewLogic<T>(
             field = value
             cutOutNotVisible()
         }
-    internal var shortestPathOnScreen: FloatArray? = null
-    internal var clickOnScreen: FloatArray? = null
+    private var shortestPathOnScreen: FloatArray? = null
+    private var clickOnScreen: FloatArray? = null
 
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD =
@@ -88,7 +88,7 @@ internal class MapViewLogic<T>(
     private var zoomOnStart: Double = 5.0
     private var worldRotation: Float = 0f
     private var worldRotationOnStart: Float = 0f
-    internal var renderList: List<RenderItem<T>>? = null
+    private var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
 
     fun centerAtPoint(desiredPosition: PointD) {
