@@ -56,10 +56,10 @@ internal class MapViewStateMapper {
 
     private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
 
-    private fun <T> fromPolygons(
+    private fun fromPolygons(
         polygons: List<PolygonEntity>,
         paint: MapPaint
-    ): List<MapItem<T>> =
+    ): List<MapItem> =
         polygons.map { polygon ->
             MapItem(
                 PolygonD(polygon.vertices),
@@ -67,9 +67,9 @@ internal class MapViewStateMapper {
             )
         }
 
-    private fun <T>fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem<T>> =
+    private fun fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem> =
         paths.map { polygon ->
-            MapItem<T>(
+            MapItem(
                 PathD(polygon.vertices),
                 paint
             )

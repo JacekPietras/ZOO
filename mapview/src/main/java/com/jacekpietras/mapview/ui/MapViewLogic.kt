@@ -35,7 +35,7 @@ internal class MapViewLogic<T>(
             zoom = maxZoom / 5
         }
     private var _objectList: List<ObjectItem<T>> = emptyList()
-    internal var objectList: List<MapItem<T>> = emptyList()
+    internal var objectList: List<MapItem> = emptyList()
         set(value) {
             Timber.v("Content changed")
             field = value
@@ -207,7 +207,7 @@ internal class MapViewLogic<T>(
         }
     }
 
-    private fun List<MapItem<T>>.toRenderItems(): List<ObjectItem<T>> {
+    private fun List<MapItem>.toRenderItems(): List<ObjectItem<T>> {
         val innerPaints = mutableMapOf<MapPaint, PaintHolder<T>>()
         val borderPaints = mutableMapOf<MapPaint, PaintHolder<T>?>()
 

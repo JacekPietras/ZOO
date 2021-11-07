@@ -1,6 +1,6 @@
 package com.jacekpietras.mapview.model
 
-class MapItem<T> {
+class MapItem {
     val shape: Any
     val paint: MapPaint
 
