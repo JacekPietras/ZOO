@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
@@ -26,7 +26,7 @@ class CatalogueFragment : Fragment() {
             val viewState: CatalogueViewState by viewModel.viewState.collectAsState(initial = CatalogueViewState())
 
             with(viewState) {
-                MaterialTheme {
+                MdcTheme {
                     Column {
                         ToolbarWithFilters(
                             filterList,

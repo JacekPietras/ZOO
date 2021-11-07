@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
+import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
 import kotlinx.coroutines.launch
@@ -15,7 +16,6 @@ internal class AnimalViewModel(
     animalId: AnimalId,
     mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
-    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
     private val state = MutableLiveData<AnimalState>()
@@ -23,7 +23,7 @@ internal class AnimalViewModel(
     val viewState: LiveData<AnimalViewState> = state.map(mapper::from)
 
     init {
-        viewModelScope.launch(dispatcherProvider.main) {
+        launchInMain {
             state.value = AnimalState(
                 animalId = animalId,
                 animal = checkNotNull(getAnimalUseCase.run(animalId)),

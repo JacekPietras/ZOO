@@ -51,7 +51,7 @@ internal fun AnimalList(
                     )
                     Image(
                         painter = painter,
-                        contentDescription = animal.img,
+                        contentDescription = null, // it's background
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()

@@ -26,6 +26,7 @@ internal class AnimalMapper {
             isWikiLink = state.animal.wiki.isNotBlank(),
             isWebLink = state.animal.web.isNotBlank(),
             navLinks = state.animal.regionInZoo.split("|").toList(),
+            images = state.animal.photos,
         )
 
     private fun paragraph(title: Text, content: String): Text =
