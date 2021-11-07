@@ -15,11 +15,12 @@ import kotlin.math.min
 import kotlin.math.sin
 
 internal class MapViewLogic<T>(
-    private val context: Context,
     private val getCurrentHeight: () -> Int,
     private val getCurrentWidth: () -> Int,
     private val doAnimation: ((progress: Float, left: Float) -> Unit) -> Unit,
     private val invalidate: () -> Unit,
+    private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
+    private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
 ) {
 
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null
@@ -207,15 +208,15 @@ internal class MapViewLogic<T>(
     }
 
     private fun List<MapItem<T>>.toRenderItems(): List<ObjectItem<T>> {
-        val innerPaints = mutableMapOf<MapPaint<T>, PaintHolder<T>>()
-        val borderPaints = mutableMapOf<MapPaint<T>, PaintHolder<T>?>()
+        val innerPaints = mutableMapOf<MapPaint, PaintHolder<T>>()
+        val borderPaints = mutableMapOf<MapPaint, PaintHolder<T>?>()
 
         return map { item ->
             val inner = innerPaints[item.paint]
-                ?: item.paint.toCanvasPaint(context)
+                ?: bakeCanvasPaint(item.paint)
                     .also { innerPaints[item.paint] = it }
             val border = borderPaints[item.paint]
-                ?: item.paint.toBorderCanvasPaint(context)
+                ?: bakeBorderCanvasPaint(item.paint)
                     .also { borderPaints[item.paint] = it }
 
             when (item.shape) {

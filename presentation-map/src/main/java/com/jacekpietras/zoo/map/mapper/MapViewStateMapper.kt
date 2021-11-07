@@ -58,7 +58,7 @@ internal class MapViewStateMapper {
 
     private fun <T> fromPolygons(
         polygons: List<PolygonEntity>,
-        paint: MapPaint<T>
+        paint: MapPaint
     ): List<MapItem<T>> =
         polygons.map { polygon ->
             MapItem(
@@ -67,7 +67,7 @@ internal class MapViewStateMapper {
             )
         }
 
-    private fun <T>fromPaths(paths: List<PathEntity>, paint: MapPaint<T>): List<MapItem<T>> =
+    private fun <T>fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem<T>> =
         paths.map { polygon ->
             MapItem<T>(
                 PathD(polygon.vertices),

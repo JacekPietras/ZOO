@@ -11,169 +11,35 @@ import com.google.android.material.color.MaterialColors
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 
-sealed class MapPaint<T> {
-
-    internal abstract fun toCanvasPaint(context: Context): PaintHolder<T>
-    internal open fun toBorderCanvasPaint(context: Context): PaintHolder<T>? = null
+sealed class MapPaint {
 
     data class Stroke(
         val width: MapDimension,
         val strokeColor: MapColor,
-    ) : MapPaint<Paint>() {
-
-        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
-            when (width) {
-                is MapDimension.Static ->
-                    PaintHolder.Static(
-                        Paint().apply {
-                            style = Paint.Style.STROKE
-                            isAntiAlias = true
-
-                            color = strokeColor.toColorInt(context)
-                            strokeWidth = width.toPixels(context)
-                        }
-                    )
-                is MapDimension.Dynamic ->
-                    PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                        Paint().apply {
-                            style = Paint.Style.STROKE
-                            isAntiAlias = true
-
-                            color = strokeColor.toColorInt(context)
-                            strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
-                        }
-                    }
-            }
-    }
+    ) : MapPaint()
 
     data class StrokeWithBorder(
         val width: MapDimension,
         val strokeColor: MapColor,
         val borderWidth: MapDimension.Static,
         val borderColor: MapColor,
-    ) : MapPaint<Paint>() {
-
-        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
-            when (width) {
-                is MapDimension.Static ->
-                    PaintHolder.Static(
-                        Paint().apply {
-                            style = Paint.Style.STROKE
-                            strokeCap = Paint.Cap.ROUND
-                            isAntiAlias = true
-
-                            color = strokeColor.toColorInt(context)
-                            strokeWidth = width.toPixels(context)
-                        }
-                    )
-                is MapDimension.Dynamic ->
-                    PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                        Paint().apply {
-                            style = Paint.Style.STROKE
-                            strokeCap = Paint.Cap.ROUND
-                            isAntiAlias = true
-
-                            color = strokeColor.toColorInt(context)
-                            strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
-                        }
-                    }
-            }
-
-        override fun toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
-            when (width) {
-                is MapDimension.Static ->
-                    PaintHolder.Static(
-                        Paint().apply {
-                            style = Paint.Style.STROKE
-                            strokeCap = Paint.Cap.ROUND
-                            isAntiAlias = true
-
-                            color = borderColor.toColorInt(context)
-                            strokeWidth = width.toPixels(context) +
-                                    2 * borderWidth.toPixels(context)
-                        }
-                    )
-                is MapDimension.Dynamic ->
-                    PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                        Paint().apply {
-                            style = Paint.Style.STROKE
-                            strokeCap = Paint.Cap.ROUND
-                            isAntiAlias = true
-
-                            color = borderColor.toColorInt(context)
-                            strokeWidth = width.toPixels(zoom, position, screenWidthInPixels) +
-                                    2 * borderWidth.toPixels(context)
-                        }
-                    }
-            }
-    }
+    ) : MapPaint()
 
     data class DashedStroke(
         val width: MapDimension.Static,
         val pattern: MapDimension.Static,
         val strokeColor: MapColor,
-    ) : MapPaint<Paint>() {
-
-        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
-            PaintHolder.Static(
-                Paint().apply {
-                    style = Paint.Style.STROKE
-                    isAntiAlias = true
-
-                    color = strokeColor.toColorInt(context)
-                    strokeWidth = width.toPixels(context)
-                    pathEffect = DashPathEffect(
-                        floatArrayOf(
-                            pattern.toPixels(context),
-                            pattern.toPixels(context)
-                        ), 0f
-                    )
-                }
-            )
-    }
+    ) : MapPaint()
 
     data class Fill(
         val fillColor: MapColor,
-    ) : MapPaint<Paint>() {
-
-        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
-            PaintHolder.Static(
-                Paint().apply {
-                    style = Paint.Style.FILL
-                    isAntiAlias = true
-
-                    color = fillColor.toColorInt(context)
-                }
-            )
-    }
+    ) : MapPaint()
 
     data class FillWithBorder(
         val fillColor: MapColor,
         val borderWidth: MapDimension.Static,
         val borderColor: MapColor,
-    ) : MapPaint<Paint>() {
-
-        override fun toCanvasPaint(context: Context): PaintHolder<Paint> =
-            PaintHolder.Static(
-                Paint().apply {
-                    style = Paint.Style.FILL
-                    isAntiAlias = true
-
-                    color = fillColor.toColorInt(context)
-                }
-            )
-
-        override fun toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
-            PaintHolder.Static(
-                Paint().apply {
-                    style = Paint.Style.FILL_AND_STROKE
-                    isAntiAlias = true
-
-                    color = borderColor.toColorInt(context)
-                    strokeWidth = borderWidth.toPixels(context) * 2
-                }
-            )
-    }
+    ) : MapPaint()
 }
 
 sealed class MapDimension {
