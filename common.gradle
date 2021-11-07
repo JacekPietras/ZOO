@@ -20,6 +20,7 @@ android {
         freeCompilerArgs += [
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
+                "-Xuse-experimental=coil.annotation.ExperimentalCoilApi",
         ]
     }
 }

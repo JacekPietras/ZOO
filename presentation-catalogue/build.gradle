@@ -10,9 +10,7 @@ dependencies {
     implementation project(':presentation-core')
 
     //Image Loader
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    implementation "com.google.accompanist:accompanist-glide:$glide_accompanist_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "io.coil-kt:coil-compose:$coil_version"
 
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"

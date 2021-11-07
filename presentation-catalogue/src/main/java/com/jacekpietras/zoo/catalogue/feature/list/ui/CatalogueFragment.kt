@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.accompanist.glide.rememberGlidePainter
-import com.google.accompanist.imageloading.ImageLoadState
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.jacekpietras.zoo.catalogue.BuildConfig
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.list.model.AnimalDivision
@@ -241,16 +241,18 @@ class CatalogueFragment : Fragment() {
                             }),
                         contentAlignment = Alignment.BottomEnd,
                     ) {
-                        val painter = rememberGlidePainter(
-                            animal.img ?: "no image",
-                            fadeIn = true,
+                        val painter = rememberImagePainter(
+                            data = animal.img ?: "no image",
+                            builder = { crossfade(true) }
                         )
                         Image(
                             painter = painter,
                             contentDescription = animal.img,
                             contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
                         )
-                        if (painter.loadState is ImageLoadState.Error) {
+                        if (painter.state is ImagePainter.State.Error) {
                             Image(
                                 painter = painterResource(R.drawable.pic_banana_leaf_rasterized_2),
                                 contentDescription = null, // decorative element

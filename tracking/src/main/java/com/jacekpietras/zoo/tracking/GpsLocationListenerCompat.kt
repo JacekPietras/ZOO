@@ -16,7 +16,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.*
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
 
 @SuppressLint("MissingPermission")
@@ -134,33 +133,38 @@ class GpsLocationListenerCompat(
     private var locationCallback: LocationCallback? = null
 
     private fun buildLocationRequest() =
-        LocationRequest().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 100
-            fastestInterval = 100
-            smallestDisplacement = 1f
-        }
+        LocationRequest
+            .create()
+            .apply {
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                interval = 100
+                fastestInterval = 100
+                smallestDisplacement = 1f
+            }
 
     private fun addListenerWithGMS(context: Context) {
-        fusedLocationClient?.removeLocationUpdates(locationCallback)
+        locationCallback?.let { locationCallback ->
+            fusedLocationClient?.removeLocationUpdates(locationCallback)
+        }
 
         val client = LocationServices.getFusedLocationProviderClient(context)
         fusedLocationClient = client
-        locationCallback = //WeakLocationCallback(
-            LocationCallbackImpl(
-                onLocationChanged,
-                onGpsStatusChanged,
+        locationCallback = LocationCallbackImpl(
+            onLocationChanged,
+            onGpsStatusChanged,
+        ).also { locationCallback ->
+            client.requestLocationUpdates(
+                buildLocationRequest(),
+                locationCallback,
+                Looper.getMainLooper(),
             )
-       // )
-        client.requestLocationUpdates(
-            buildLocationRequest(),
-            locationCallback,
-            Looper.getMainLooper(),
-        )
+        }
     }
 
     private fun removeListenerWithGMS() {
-        fusedLocationClient?.removeLocationUpdates(locationCallback)
+        locationCallback?.let { locationCallback ->
+            fusedLocationClient?.removeLocationUpdates(locationCallback)
+        }
         locationCallback = null
         fusedLocationClient = null
     }
@@ -182,15 +186,6 @@ class GpsLocationListenerCompat(
                     location.longitude,
                 )
             }
-        }
-    }
-
-    private class WeakLocationCallback(locationCallback: LocationCallback) : LocationCallback() {
-
-        private val weakLocationCallback = WeakReference(locationCallback)
-        override fun onLocationResult(result: LocationResult) {
-            super.onLocationResult(result)
-            weakLocationCallback.get()?.onLocationResult(result)
         }
     }
     //endregion

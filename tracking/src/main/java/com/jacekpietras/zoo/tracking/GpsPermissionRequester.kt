@@ -268,11 +268,11 @@ class GpsPermissionRequester(private val fragment: Fragment) {
     private fun showErrorDialog(googleAPI: GoogleApiAvailability, result: Int) {
         errorDialog = googleAPI
             .getErrorDialog(activity, result, PLAY_SERVICES_RESOLUTION_REQUEST)
-            .apply {
+            ?.apply {
                 setOnDismissListener { errorDialog = null }
                 show()
+                promptForUpdatePlayServicesWasShown = true
             }
-        promptForUpdatePlayServicesWasShown = true
     }
 
     private fun Context.unwrap(): AppCompatActivity {
