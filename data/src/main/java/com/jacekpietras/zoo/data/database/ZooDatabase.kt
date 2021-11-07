@@ -10,7 +10,8 @@ import com.jacekpietras.zoo.data.database.model.GpsHistoryDto
     entities = [
         GpsHistoryDto::class,
     ],
-    version = VERSION
+    version = VERSION,
+    exportSchema = true,
 )
 //@TypeConverters(
 //    SomeConverter::class,

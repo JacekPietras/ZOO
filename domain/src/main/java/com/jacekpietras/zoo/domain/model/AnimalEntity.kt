@@ -44,7 +44,7 @@ class AnimalId(id: String) {
         .replace("Ź", "z")
         .replace("Ń", "n")
         .replace(" ", "-")
-        .toLowerCase(Locale.US)
+        .lowercase()
 }
 
 enum class Division {

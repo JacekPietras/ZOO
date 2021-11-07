@@ -98,8 +98,8 @@ class AnimalRepositoryImpl(
 
     private fun AnimalEntity.containsQuery(query: String?): Boolean {
         if (query.isNullOrBlank()) return true
-        if (this.name.toLowerCase(Locale.getDefault()).contains(query)) return true
-        if (this.nameLatin.toLowerCase(Locale.getDefault()).contains(query)) return true
+        if (this.name.lowercase().contains(query)) return true
+        if (this.nameLatin.lowercase().contains(query)) return true
         return false
     }
 
