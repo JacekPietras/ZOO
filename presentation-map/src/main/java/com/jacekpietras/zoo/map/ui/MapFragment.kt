@@ -44,10 +44,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         volatileViewState.observe(viewLifecycleOwner) {
             Timber.e("dupa observe volatile map")
             with(it) {
-                binding.mapView.userPosition = userPosition
-                binding.mapView.compass = compass
                 binding.topCardTitle.text = title.toCharSeq(requireContext())
                 binding.topCardContent.text = content.toCharSeq(requireContext())
+
+                binding.mapView.userPosition = userPosition
+                binding.mapView.compass = compass
                 binding.mapView.clickOnWorld = snappedPoint
                 binding.mapView.shortestPath = shortestPath
             }

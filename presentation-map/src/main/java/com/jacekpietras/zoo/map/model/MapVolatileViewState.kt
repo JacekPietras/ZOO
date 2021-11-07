@@ -4,10 +4,10 @@ import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.core.text.Text
 
 internal data class MapVolatileViewState(
-    val compass: Float,
-    val userPosition: PointD,
-    val title: Text,
-    val content: Text,
-    val snappedPoint: PointD?,
-    val shortestPath: List<PointD>,
+    val compass: Float = 0f,
+    val userPosition: PointD = PointD(0.0, 0.0),
+    val title: Text = Text.Empty,
+    val content: Text = Text.Empty,
+    val snappedPoint: PointD? = null,
+    val shortestPath: List<PointD> = emptyList(),
 )

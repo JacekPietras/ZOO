@@ -5,7 +5,7 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.model.MapItem
 
 internal class MapViewState(
-    val worldBounds: RectD,
-    val mapData: List<MapItem>,
-    val terminalPoints: List<PointD>,
+    val worldBounds: RectD = RectD(0.0, 0.0, 0.0, 0.0),
+    val mapData: List<MapItem> = emptyList(),
+    val terminalPoints: List<PointD> = emptyList(),
 )

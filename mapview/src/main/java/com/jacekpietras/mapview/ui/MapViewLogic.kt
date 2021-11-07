@@ -1,14 +1,10 @@
 package com.jacekpietras.mapview.ui
 
-
-import android.content.Context
 import android.graphics.Matrix
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
-import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
@@ -37,7 +33,6 @@ internal class MapViewLogic<T>(
     private var _objectList: List<ObjectItem<T>> = emptyList()
     internal var objectList: List<MapItem> = emptyList()
         set(value) {
-            Timber.v("Content changed")
             field = value
             _objectList = value.toRenderItems()
             cutOutNotVisible()
@@ -45,7 +40,6 @@ internal class MapViewLogic<T>(
 
     internal var userPosition: PointD? = null
         set(value) {
-            Timber.v("Position changed ${value?.x}")
             field = value
             if (centeringAtUser) {
                 centerAtUserPosition()
@@ -89,7 +83,7 @@ internal class MapViewLogic<T>(
     private var zoomOnStart: Double = 5.0
     private var worldRotation: Float = 0f
     private var worldRotationOnStart: Float = 0f
-    private var renderList: List<RenderItem<T>>? = null
+    internal var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
 
     fun centerAtPoint(desiredPosition: PointD) {
@@ -163,15 +157,14 @@ internal class MapViewLogic<T>(
         val point = FloatArray(2)
         point[0] = x
         point[1] = y
-        val matrix = Matrix()
-            .apply {
-                setRotate(
-                    worldRotation,
-                    getCurrentWidth() / 2.toFloat(),
-                    getCurrentHeight() / 2.toFloat(),
-                )
-            }
-        matrix.mapPoints(point)
+        Matrix().apply {
+            setRotate(
+                worldRotation,
+                getCurrentWidth() / 2.toFloat(),
+                getCurrentHeight() / 2.toFloat(),
+            )
+            mapPoints(point)
+        }
 
         setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(point[0], point[1]))
     }
@@ -397,7 +390,7 @@ internal class MapViewLogic<T>(
         }
 
         renderList = borders + insides
-        logVisibleShapes()
+//        logVisibleShapes()
         if (invalidate) invalidate()
     }
 
@@ -432,14 +425,14 @@ internal class MapViewLogic<T>(
         }
     }
 
-    private fun logVisibleShapes() {
-        if (BuildConfig.DEBUG) {
-            val message = "Preparing render list: " +
-                    renderList?.map { "Shape " + (it.shape.size shr 1) } +
-                    " (${objectList.size})"
-            Timber.v(message)
-        }
-    }
+//    private fun logVisibleShapes() {
+//        if (BuildConfig.DEBUG) {
+//            val message = "Preparing render list: " +
+//                    renderList?.map { "Shape " + (it.shape.size shr 1) } +
+//                    " (${objectList.size})"
+//            Timber.v(message)
+//        }
+//    }
 
     private class ObjectItem<T>(
         val shape: DoubleArray,
