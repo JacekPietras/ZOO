@@ -43,8 +43,8 @@ internal class MapViewStateMapper {
         MapViewState(
             worldBounds = worldBounds,
             mapData = flatListOf(
-                fromPaths(roads, roadPaint),
                 fromPaths(technicalRoute, technicalPaint),
+                fromPaths(roads, roadPaint),
                 fromPaths(lines, linesPaint),
                 fromPaths(takenRoute, takenRoutePaint),
                 fromPolygons(buildings, buildingPaint),
