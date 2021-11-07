@@ -48,10 +48,6 @@ fun ComposableMapView(
             it.objectList = objectList
         }
 
-        mapData.renderList?.forEach {
-            drawPath(it.shape, it.paint, it.close)
-        }
-
         mapData.draw(
             drawPath = this::drawPath,
             drawCircle = { cx, cy, radius, paint ->
