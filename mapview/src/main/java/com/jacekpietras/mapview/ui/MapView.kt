@@ -118,26 +118,18 @@ class MapView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        mapData.renderList?.forEach { canvas.drawPath(it.shape, it.paint, it.close) }
-        mapData.userPositionOnScreen?.let {
-            canvas.drawCircle(it[0], it[1], 15f, userPositionPaint)
-        }
-        mapData.terminalPointsOnScreen?.let { array ->
-            for (i in array.indices step 2) {
-                canvas.drawCircle(array[i], array[i + 1], 5f, terminalPaint)
-            }
-        }
-        mapData.shortestPathOnScreen?.let { array ->
-            canvas.drawPath(array, shortestPaint, false)
-        }
-        mapData.interestingOnScreen?.let { array ->
-            for (i in array.indices step 2) {
-                canvas.drawCircle(array[i], array[i + 1], 5f, interestingPaint)
-            }
-        }
-        mapData.clickOnScreen?.let {
-            canvas.drawCircle(it[0], it[1], 15f, interestingPaint)
-        }
+        mapData.draw(
+            drawPath = { shape, paint, close ->
+                canvas.drawPath(shape, paint, close)
+            },
+            drawCircle = { cx, cy, radius, paint ->
+                canvas.drawCircle(cx, cy, radius, paint)
+            },
+            userPositionPaint,
+            terminalPaint,
+            shortestPaint,
+            interestingPaint,
+        )
     }
 
     fun centerAtUserPosition() {

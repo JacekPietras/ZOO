@@ -175,65 +175,36 @@ internal class MapViewLogic<T>(
         setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(point[0], point[1]))
     }
 
-//    override fun onDraw(canvas: Canvas) {
-//        super.onDraw(canvas)
-//
-//        renderList?.forEach { canvas.drawPath(it.shape, it.paint, it.close) }
-//        userPositionOnScreen?.let {
-//            canvas.drawCircle(it[0], it[1], 15f, userPositionPaint)
-//        }
-//        terminalPointsOnScreen?.let { array ->
-//            for (i in array.indices step 2) {
-//                canvas.drawCircle(array[i], array[i + 1], 5f, terminalPaint)
-//            }
-//        }
-//        shortestPathOnScreen?.let { array ->
-//            canvas.drawPath(array, shortestPaint, false)
-//        }
-//        interestingOnScreen?.let { array ->
-//            for (i in array.indices step 2) {
-//                canvas.drawCircle(array[i], array[i + 1], 5f, interestingPaint)
-//            }
-//        }
-//        clickOnScreen?.let {
-//            canvas.drawCircle(it[0], it[1], 15f, interestingPaint)
-//        }
-//
-//        renderDebug(canvas)
-//    }
-//
-//    private fun renderDebug(canvas: Canvas) {
-//        if (BuildConfig.DEBUG && ::visibleGpsCoordinate.isInitialized) {
-//            canvas.drawText("wrld: " + worldBounds.toShortString(), 10f, 40f, debugTextPaint)
-//            canvas.drawText(
-//                "curr: ${visibleGpsCoordinate.visibleRect.toShortString()}",
-//                10f,
-//                80f,
-//                debugTextPaint
-//            )
-//
-//            canvas.drawText(
-//                "zoom: ${((zoom - minZoom) / (maxZoom - minZoom)).form()}",
-//                10f,
-//                120f,
-//                debugTextPaint
-//            )
-//            canvas.drawText(
-//                "rot:  [${worldRotation.toDouble().form()}]",
-//                10f,
-//                160f,
-//                debugTextPaint
-//            )
-//            userPosition?.let {
-//                canvas.drawText(
-//                    "upos: [${it.x.form()},${it.y.form()}]",
-//                    10f,
-//                    200f,
-//                    debugTextPaint
-//                )
-//            }
-//        }
-//    }
+    fun draw(
+        drawPath: (shape: FloatArray, paint: T, close: Boolean) -> Unit,
+        drawCircle: (cx: Float, xy: Float, radius: Float, paint: T) -> Unit,
+        userPositionPaint: T,
+        terminalPaint: T,
+        shortestPaint: T,
+        interestingPaint: T,
+    ) {
+
+        renderList?.forEach { drawPath(it.shape, it.paint, it.close) }
+        userPositionOnScreen?.let {
+            drawCircle(it[0], it[1], 15f, userPositionPaint)
+        }
+        terminalPointsOnScreen?.let { array ->
+            for (i in array.indices step 2) {
+                drawCircle(array[i], array[i + 1], 5f, terminalPaint)
+            }
+        }
+        shortestPathOnScreen?.let { array ->
+            drawPath(array, shortestPaint, false)
+        }
+        interestingOnScreen?.let { array ->
+            for (i in array.indices step 2) {
+                drawCircle(array[i], array[i + 1], 5f, interestingPaint)
+            }
+        }
+        clickOnScreen?.let {
+            drawCircle(it[0], it[1], 15f, interestingPaint)
+        }
+    }
 
     private fun List<MapItem<T>>.toRenderItems(): List<ObjectItem<T>> {
         val innerPaints = mutableMapOf<MapPaint<T>, PaintHolder<T>>()
