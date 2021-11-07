@@ -10,16 +10,16 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
-internal class MapViewLogic<T>(
-    private val getCurrentHeight: () -> Int,
-    private val getCurrentWidth: () -> Int,
+class MapViewLogic<T>(
     private val doAnimation: ((progress: Float, left: Float) -> Unit) -> Unit,
     private val invalidate: () -> Unit,
     private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
     private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
+    var currentHeight: Int = 0,
+    var currentWidth: Int = 0,
+    var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
 ) {
 
-    var setOnPointPlacedListener: ((PointD) -> Unit)? = null
     private var maxZoom: Double = 10.0
     private var minZoom: Double = 2.0
     var worldBounds: RectD = RectD()
@@ -31,14 +31,14 @@ internal class MapViewLogic<T>(
             zoom = maxZoom / 5
         }
     private var _objectList: List<ObjectItem<T>> = emptyList()
-    internal var objectList: List<MapItem> = emptyList()
+    var objectList: List<MapItem> = emptyList()
         set(value) {
             field = value
             _objectList = value.toRenderItems()
             cutOutNotVisible()
         }
 
-    internal var userPosition: PointD? = null
+    var userPosition: PointD? = null
         set(value) {
             field = value
             if (centeringAtUser) {
@@ -63,7 +63,7 @@ internal class MapViewLogic<T>(
     private val interesting: List<PointD> = listOf()
     private var interestingOnScreen: FloatArray? = null
 
-    internal var clickOnWorld: PointD? = null
+    var clickOnWorld: PointD? = null
         set(value) {
             field = value
             cutOutNotVisible()
@@ -160,8 +160,8 @@ internal class MapViewLogic<T>(
         Matrix().apply {
             setRotate(
                 worldRotation,
-                getCurrentWidth() / 2.toFloat(),
-                getCurrentHeight() / 2.toFloat(),
+                currentWidth / 2.toFloat(),
+                currentHeight / 2.toFloat(),
             )
             mapPoints(point)
         }
@@ -316,17 +316,17 @@ internal class MapViewLogic<T>(
             is PaintHolder.Static<T> -> paint
             is PaintHolder.Dynamic<T> -> {
                 dynamicPaints[this]
-                    ?: block(zoom, centerGpsCoordinate, getCurrentWidth())
+                    ?: block(zoom, centerGpsCoordinate, currentWidth)
                         .also { dynamicPaints[this] = it }
             }
         }
     }
 
     private fun cutOutNotVisible(invalidate: Boolean = true) {
-        if (getCurrentWidth() == 0 || getCurrentHeight() == 0) return
+        if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.width() == 0.0 || worldBounds.height() == 0.0) return
 
-        visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, getCurrentWidth(), getCurrentHeight())
+        visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
 
         if (preventedGoingOutsideWorld()) {
             cutOutNotVisible(false)
@@ -341,8 +341,8 @@ internal class MapViewLogic<T>(
             .apply {
                 setRotate(
                     -worldRotation,
-                    getCurrentWidth() / 2.toFloat(),
-                    getCurrentHeight() / 2.toFloat(),
+                    currentWidth / 2.toFloat(),
+                    currentHeight / 2.toFloat(),
                 )
             }
 

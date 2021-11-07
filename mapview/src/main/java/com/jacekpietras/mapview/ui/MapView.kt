@@ -60,8 +60,6 @@ class MapView @JvmOverloads constructor(
     private val paintBaker = ViewPaintBaker(context)
 
     private val mapData = MapViewLogic(
-        getCurrentHeight = { height },
-        getCurrentWidth = { width },
         doAnimation = { lambda -> doAnimation(true, lambda) },
         invalidate = { invalidate() },
         bakeCanvasPaint = paintBaker::bakeCanvasPaint,
@@ -90,8 +88,21 @@ class MapView @JvmOverloads constructor(
             style = Paint.Style.FILL
         }
 
+    init {
+        mapData.currentHeight = height
+        mapData.currentWidth = width
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        mapData.currentHeight = height
+        mapData.currentWidth = width
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         mapData.onSizeChanged()
+        mapData.currentHeight = height
+        mapData.currentWidth = width
     }
 
     override fun onScaleBegin(x: Float, y: Float) {

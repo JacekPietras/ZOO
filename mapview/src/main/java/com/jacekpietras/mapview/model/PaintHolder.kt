@@ -2,7 +2,7 @@ package com.jacekpietras.mapview.model
 
 import com.jacekpietras.core.PointD
 
-internal sealed class PaintHolder<T> {
+sealed class PaintHolder<T> {
 
     class Static<T>(val paint: T) : PaintHolder<T>()
 

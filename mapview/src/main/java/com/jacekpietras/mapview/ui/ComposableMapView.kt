@@ -1,6 +1,7 @@
 package com.jacekpietras.mapview.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -8,45 +9,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.platform.LocalContext
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.model.MapItem
 
 @Composable
 fun ComposableMapView(
-    setOnPointPlacedListener: ((PointD) -> Unit)?,
-    shortestPath: List<PointD>,
-    clickOnWorld: PointD?,
-    compass: Float,
-    userPosition: PointD?,
-    terminalPoints: List<PointD>,
-    objectList: List<MapItem>,
-    worldBounds: RectD,
+//    setOnPointPlacedListener: ((PointD) -> Unit)?,
+//    shortestPath: List<PointD>,
+//    clickOnWorld: PointD?,
+//    compass: Float,
+//    userPosition: PointD?,
+//    terminalPoints: List<PointD>,
+//    objectList: List<MapItem>,
+//    worldBounds: RectD,
+    mapData: MapViewLogic<ComposablePaint>,
 ) {
-    if (objectList.isEmpty()) return
+    if (mapData.renderList.isNullOrEmpty()) return
 
-    val paintBaker = ComposablePaintBaker(LocalContext.current)
-
-    Canvas(modifier = Modifier) {
-        val mapData = MapViewLogic(
-            getCurrentHeight = { size.height.toInt() },
-            getCurrentWidth = { size.width.toInt() },
-            doAnimation = { it(1f, 0f) },
-            invalidate = { },
-            bakeCanvasPaint = paintBaker::bakeCanvasPaint,
-            bakeBorderCanvasPaint = paintBaker::bakeBorderCanvasPaint,
-        ).also {
-            it.setOnPointPlacedListener = setOnPointPlacedListener
-            it.worldBounds = worldBounds
-            it.compass = compass
-            it.userPosition = userPosition
-            it.clickOnWorld = clickOnWorld
-            it.shortestPath = shortestPath
-            it.terminalPoints = terminalPoints
-            it.objectList = objectList
+    Canvas(modifier = Modifier
+        .pointerInput(Unit) {
+            detectDragGestures { change, dragAmount ->
+                change.consumeAllChanges()
+                mapData.onScroll(dragAmount.x, dragAmount.y)
+            }
         }
+    ) {
+        mapData.currentHeight = size.height.toInt()
+        mapData.currentWidth = size.width.toInt()
 
         mapData.draw(
             drawPath = this::drawPath,

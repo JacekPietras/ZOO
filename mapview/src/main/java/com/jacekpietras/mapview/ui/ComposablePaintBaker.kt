@@ -9,7 +9,7 @@ import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 
-internal class ComposablePaintBaker(
+class ComposablePaintBaker(
     private val context: Context,
 ) {
 
