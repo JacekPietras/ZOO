@@ -57,15 +57,15 @@ class MapView @JvmOverloads constructor(
         set(value) {
             mapData.worldBounds = value
         }
-    private val paintBaker = ViewPaintBaker()
+    private val paintBaker = ViewPaintBaker(context)
 
     private val mapData = MapViewLogic(
         getCurrentHeight = { height },
         getCurrentWidth = { width },
         doAnimation = { lambda -> doAnimation(true, lambda) },
         invalidate = { invalidate() },
-        bakeCanvasPaint = { paintBaker.bakeCanvasPaint(context, it) },
-        bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(context, it) },
+        bakeCanvasPaint = paintBaker::bakeCanvasPaint,
+        bakeBorderCanvasPaint = paintBaker::bakeBorderCanvasPaint,
     )
 
     private val userPositionPaint = Paint()

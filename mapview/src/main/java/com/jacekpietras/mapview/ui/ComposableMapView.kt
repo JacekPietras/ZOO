@@ -6,15 +6,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.model.MapItem
-import com.jacekpietras.mapview.model.PaintHolder
-import timber.log.Timber
 
 @Composable
 fun ComposableMapView(
@@ -29,21 +27,16 @@ fun ComposableMapView(
 ) {
     if (objectList.isEmpty()) return
 
-    val brush = Paint().apply {
-        color = Color.Red
-        isAntiAlias = true
-        style = PaintingStyle.Stroke
-        strokeWidth = 10f
-    }
+    val paintBaker = ComposablePaintBaker(LocalContext.current)
 
     Canvas(modifier = Modifier) {
         val mapData = MapViewLogic(
             getCurrentHeight = { size.height.toInt() },
             getCurrentWidth = { size.width.toInt() },
-            doAnimation = { it(1f, 0f)},
+            doAnimation = { it(1f, 0f) },
             invalidate = { },
-            bakeCanvasPaint = { PaintHolder.Static(brush) },
-            bakeBorderCanvasPaint = { null },
+            bakeCanvasPaint = paintBaker::bakeCanvasPaint,
+            bakeBorderCanvasPaint = paintBaker::bakeBorderCanvasPaint,
         ).also {
             it.setOnPointPlacedListener = setOnPointPlacedListener
             it.worldBounds = worldBounds
@@ -54,7 +47,6 @@ fun ComposableMapView(
             it.terminalPoints = terminalPoints
             it.objectList = objectList
         }
-        Timber.e("dupa" + "redraw" + objectList.size + " world" + mapData.renderList?.size)
 
         mapData.renderList?.forEach {
             drawPath(it.shape, it.paint, it.close)

@@ -1,13 +1,15 @@
 package com.jacekpietras.mapview.ui
 
 import android.content.Context
-import android.graphics.DashPathEffect
-import android.graphics.Paint
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.StrokeCap
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 
-internal class ViewPaintBaker(
+internal class ComposablePaintBaker(
     private val context: Context,
 ) {
 
@@ -34,20 +36,20 @@ internal class ViewPaintBaker(
             is MapDimension.Static ->
                 PaintHolder.Static(
                     Paint().apply {
-                        style = Paint.Style.STROKE
+                        style = PaintingStyle.Stroke
                         isAntiAlias = true
 
-                        color = strokeColor.toColorInt(context)
+                        color = strokeColor.toColorInt(context).let(::Color)
                         strokeWidth = width.toPixels(context)
                     }
                 )
             is MapDimension.Dynamic ->
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     Paint().apply {
-                        style = Paint.Style.STROKE
+                        style = PaintingStyle.Stroke
                         isAntiAlias = true
 
-                        color = strokeColor.toColorInt(context)
+                        color = strokeColor.toColorInt(context).let(::Color)
                         strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
                     }
                 }
@@ -58,22 +60,22 @@ internal class ViewPaintBaker(
             is MapDimension.Static ->
                 PaintHolder.Static(
                     Paint().apply {
-                        style = Paint.Style.STROKE
-                        strokeCap = Paint.Cap.ROUND
+                        style = PaintingStyle.Stroke
+                        strokeCap = StrokeCap.Round
                         isAntiAlias = true
 
-                        color = strokeColor.toColorInt(context)
+                        color = strokeColor.toColorInt(context).let(::Color)
                         strokeWidth = width.toPixels(context)
                     }
                 )
             is MapDimension.Dynamic ->
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     Paint().apply {
-                        style = Paint.Style.STROKE
-                        strokeCap = Paint.Cap.ROUND
+                        style = PaintingStyle.Stroke
+                        strokeCap = StrokeCap.Round
                         isAntiAlias = true
 
-                        color = strokeColor.toColorInt(context)
+                        color = strokeColor.toColorInt(context).let(::Color)
                         strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
                     }
                 }
@@ -84,11 +86,11 @@ internal class ViewPaintBaker(
             is MapDimension.Static ->
                 PaintHolder.Static(
                     Paint().apply {
-                        style = Paint.Style.STROKE
-                        strokeCap = Paint.Cap.ROUND
+                        style = PaintingStyle.Stroke
+                        strokeCap = StrokeCap.Round
                         isAntiAlias = true
 
-                        color = borderColor.toColorInt(context)
+                        color = borderColor.toColorInt(context).let(::Color)
                         strokeWidth = width.toPixels(context) +
                                 2 * borderWidth.toPixels(context)
                     }
@@ -96,11 +98,11 @@ internal class ViewPaintBaker(
             is MapDimension.Dynamic ->
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     Paint().apply {
-                        style = Paint.Style.STROKE
-                        strokeCap = Paint.Cap.ROUND
+                        style = PaintingStyle.Stroke
+                        strokeCap = StrokeCap.Round
                         isAntiAlias = true
 
-                        color = borderColor.toColorInt(context)
+                        color = borderColor.toColorInt(context).let(::Color)
                         strokeWidth = width.toPixels(zoom, position, screenWidthInPixels) +
                                 2 * borderWidth.toPixels(context)
                     }
@@ -110,37 +112,37 @@ internal class ViewPaintBaker(
     private fun MapPaint.DashedStroke.toCanvasPaint(context: Context): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
-                style = Paint.Style.STROKE
+                style = PaintingStyle.Stroke
                 isAntiAlias = true
 
-                color = strokeColor.toColorInt(context)
+                color = strokeColor.toColorInt(context).let(::Color)
                 strokeWidth = width.toPixels(context)
-                pathEffect = DashPathEffect(
-                    floatArrayOf(
-                        pattern.toPixels(context),
-                        pattern.toPixels(context)
-                    ), 0f
-                )
+//                pathEffect = DashPathEffect(
+//                    floatArrayOf(
+//                        pattern.toPixels(context),
+//                        pattern.toPixels(context)
+//                    ), 0f
+//                )
             }
         )
 
     private fun MapPaint.FillWithBorder.toCanvasPaint(context: Context): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
-                style = Paint.Style.FILL
+                style = PaintingStyle.Fill
                 isAntiAlias = true
 
-                color = fillColor.toColorInt(context)
+                color = fillColor.toColorInt(context).let(::Color)
             }
         )
 
     private fun MapPaint.FillWithBorder.toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
-                style = Paint.Style.FILL_AND_STROKE
+                style = PaintingStyle.Stroke
                 isAntiAlias = true
 
-                color = borderColor.toColorInt(context)
+                color = borderColor.toColorInt(context).let(::Color)
                 strokeWidth = borderWidth.toPixels(context) * 2
             }
         )
@@ -148,10 +150,10 @@ internal class ViewPaintBaker(
     private fun MapPaint.Fill.toCanvasPaint(context: Context): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
-                style = Paint.Style.FILL
+                style = PaintingStyle.Fill
                 isAntiAlias = true
 
-                color = fillColor.toColorInt(context)
+                color = fillColor.toColorInt(context).let(::Color)
             }
         )
 }
