@@ -2,9 +2,9 @@ package com.jacekpietras.mapview.ui
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.PathEffect.Companion.dashPathEffect
 import androidx.compose.ui.graphics.StrokeCap
+import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
@@ -13,147 +13,118 @@ internal class ComposablePaintBaker(
     private val context: Context,
 ) {
 
-    fun bakeCanvasPaint(paint: MapPaint): PaintHolder<Paint> =
+    fun bakeCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
         when (paint) {
-            is MapPaint.DashedStroke -> paint.toCanvasPaint(context)
-            is MapPaint.Fill -> paint.toCanvasPaint(context)
-            is MapPaint.FillWithBorder -> paint.toCanvasPaint(context)
-            is MapPaint.Stroke -> paint.toCanvasPaint(context)
-            is MapPaint.StrokeWithBorder -> paint.toCanvasPaint(context)
+            is MapPaint.DashedStroke -> paint.toCanvasPaint()
+            is MapPaint.Fill -> paint.toCanvasPaint()
+            is MapPaint.FillWithBorder -> paint.toCanvasPaint()
+            is MapPaint.Stroke -> paint.toCanvasPaint()
+            is MapPaint.StrokeWithBorder -> paint.toCanvasPaint()
         }
 
-    fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<Paint>? =
+    fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint>? =
         when (paint) {
             is MapPaint.DashedStroke -> null
             is MapPaint.Fill -> null
-            is MapPaint.FillWithBorder -> paint.toBorderCanvasPaint(context)
+            is MapPaint.FillWithBorder -> paint.toBorderCanvasPaint()
             is MapPaint.Stroke -> null
-            is MapPaint.StrokeWithBorder -> paint.toBorderCanvasPaint(context)
+            is MapPaint.StrokeWithBorder -> paint.toBorderCanvasPaint()
         }
 
-    private fun MapPaint.Stroke.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.Stroke.toCanvasPaint(): PaintHolder<ComposablePaint> =
         when (width) {
             is MapDimension.Static ->
                 PaintHolder.Static(
-                    Paint().apply {
-                        style = PaintingStyle.Stroke
-                        isAntiAlias = true
-
-                        color = strokeColor.toColorInt(context).let(::Color)
-                        strokeWidth = width.toPixels(context)
-                    }
+                    ComposablePaint.Stroke(
+                        color = strokeColor.toColorInt(context).let(::Color),
+                        width = width.toPixels(context),
+                    )
                 )
             is MapDimension.Dynamic ->
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                    Paint().apply {
-                        style = PaintingStyle.Stroke
-                        isAntiAlias = true
-
-                        color = strokeColor.toColorInt(context).let(::Color)
-                        strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
-                    }
+                    ComposablePaint.Stroke(
+                        color = strokeColor.toColorInt(context).let(::Color),
+                        width = width.toPixels(zoom, position, screenWidthInPixels),
+                    )
                 }
         }
 
-    private fun MapPaint.StrokeWithBorder.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.StrokeWithBorder.toCanvasPaint(): PaintHolder<ComposablePaint> =
         when (width) {
             is MapDimension.Static ->
                 PaintHolder.Static(
-                    Paint().apply {
-                        style = PaintingStyle.Stroke
-                        strokeCap = StrokeCap.Round
-                        isAntiAlias = true
+                    ComposablePaint.Stroke(
+                        cap = StrokeCap.Round,
+                        color = strokeColor.toColorInt(context).let(::Color),
+                        width = width.toPixels(context),
 
-                        color = strokeColor.toColorInt(context).let(::Color)
-                        strokeWidth = width.toPixels(context)
-                    }
+                        )
                 )
             is MapDimension.Dynamic ->
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                    Paint().apply {
-                        style = PaintingStyle.Stroke
-                        strokeCap = StrokeCap.Round
-                        isAntiAlias = true
-
-                        color = strokeColor.toColorInt(context).let(::Color)
-                        strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
-                    }
+                    ComposablePaint.Stroke(
+                        cap = StrokeCap.Round,
+                        color = strokeColor.toColorInt(context).let(::Color),
+                        width = width.toPixels(zoom, position, screenWidthInPixels),
+                    )
                 }
         }
 
-    private fun MapPaint.StrokeWithBorder.toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.StrokeWithBorder.toBorderCanvasPaint(): PaintHolder<ComposablePaint> =
         when (width) {
             is MapDimension.Static ->
                 PaintHolder.Static(
-                    Paint().apply {
-                        style = PaintingStyle.Stroke
-                        strokeCap = StrokeCap.Round
-                        isAntiAlias = true
-
-                        color = borderColor.toColorInt(context).let(::Color)
-                        strokeWidth = width.toPixels(context) +
-                                2 * borderWidth.toPixels(context)
-                    }
+                    ComposablePaint.Stroke(
+                        cap = StrokeCap.Round,
+                        color = borderColor.toColorInt(context).let(::Color),
+                        width = width.toPixels(context) + 2 * borderWidth.toPixels(context)
+                    )
                 )
             is MapDimension.Dynamic ->
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                    Paint().apply {
-                        style = PaintingStyle.Stroke
-                        strokeCap = StrokeCap.Round
-                        isAntiAlias = true
+                    ComposablePaint.Stroke(
+                        cap = StrokeCap.Round,
+                        color = borderColor.toColorInt(context).let(::Color),
+                        width = width.toPixels(zoom, position, screenWidthInPixels) + 2 * borderWidth.toPixels(context)
 
-                        color = borderColor.toColorInt(context).let(::Color)
-                        strokeWidth = width.toPixels(zoom, position, screenWidthInPixels) +
-                                2 * borderWidth.toPixels(context)
-                    }
+                    )
                 }
         }
 
-    private fun MapPaint.DashedStroke.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.DashedStroke.toCanvasPaint(): PaintHolder<ComposablePaint> =
         PaintHolder.Static(
-            Paint().apply {
-                style = PaintingStyle.Stroke
-                isAntiAlias = true
-
-                color = strokeColor.toColorInt(context).let(::Color)
-                strokeWidth = width.toPixels(context)
-//                pathEffect = DashPathEffect(
-//                    floatArrayOf(
-//                        pattern.toPixels(context),
-//                        pattern.toPixels(context)
-//                    ), 0f
-//                )
-            }
+            ComposablePaint.Stroke(
+                color = strokeColor.toColorInt(context).let(::Color),
+                width = width.toPixels(context),
+                pathEffect = dashPathEffect(
+                    floatArrayOf(
+                        pattern.toPixels(context),
+                        pattern.toPixels(context),
+                    ),
+                    phase = 0f,
+                )
+            )
         )
 
-    private fun MapPaint.FillWithBorder.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.FillWithBorder.toCanvasPaint(): PaintHolder<ComposablePaint> =
         PaintHolder.Static(
-            Paint().apply {
-                style = PaintingStyle.Fill
-                isAntiAlias = true
-
+            ComposablePaint.Fill(
                 color = fillColor.toColorInt(context).let(::Color)
-            }
+            )
         )
 
-    private fun MapPaint.FillWithBorder.toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.FillWithBorder.toBorderCanvasPaint(): PaintHolder<ComposablePaint> =
         PaintHolder.Static(
-            Paint().apply {
-                style = PaintingStyle.Stroke
-                isAntiAlias = true
-
-                color = borderColor.toColorInt(context).let(::Color)
-                strokeWidth = borderWidth.toPixels(context) * 2
-            }
+            ComposablePaint.Stroke( // FillAndStroke
+                color = borderColor.toColorInt(context).let(::Color),
+                width = borderWidth.toPixels(context) * 2
+            )
         )
 
-    private fun MapPaint.Fill.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.Fill.toCanvasPaint(): PaintHolder<ComposablePaint> =
         PaintHolder.Static(
-            Paint().apply {
-                style = PaintingStyle.Fill
-                isAntiAlias = true
-
+            ComposablePaint.Fill(
                 color = fillColor.toColorInt(context).let(::Color)
-            }
+            )
         )
 }

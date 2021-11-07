@@ -13,23 +13,23 @@ internal class ViewPaintBaker(
 
     fun bakeCanvasPaint(paint: MapPaint): PaintHolder<Paint> =
         when (paint) {
-            is MapPaint.DashedStroke -> paint.toCanvasPaint(context)
-            is MapPaint.Fill -> paint.toCanvasPaint(context)
-            is MapPaint.FillWithBorder -> paint.toCanvasPaint(context)
-            is MapPaint.Stroke -> paint.toCanvasPaint(context)
-            is MapPaint.StrokeWithBorder -> paint.toCanvasPaint(context)
+            is MapPaint.DashedStroke -> paint.toCanvasPaint()
+            is MapPaint.Fill -> paint.toCanvasPaint()
+            is MapPaint.FillWithBorder -> paint.toCanvasPaint()
+            is MapPaint.Stroke -> paint.toCanvasPaint()
+            is MapPaint.StrokeWithBorder -> paint.toCanvasPaint()
         }
 
     fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<Paint>? =
         when (paint) {
             is MapPaint.DashedStroke -> null
             is MapPaint.Fill -> null
-            is MapPaint.FillWithBorder -> paint.toBorderCanvasPaint(context)
+            is MapPaint.FillWithBorder -> paint.toBorderCanvasPaint()
             is MapPaint.Stroke -> null
-            is MapPaint.StrokeWithBorder -> paint.toBorderCanvasPaint(context)
+            is MapPaint.StrokeWithBorder -> paint.toBorderCanvasPaint()
         }
 
-    private fun MapPaint.Stroke.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.Stroke.toCanvasPaint(): PaintHolder<Paint> =
         when (width) {
             is MapDimension.Static ->
                 PaintHolder.Static(
@@ -53,7 +53,7 @@ internal class ViewPaintBaker(
                 }
         }
 
-    private fun MapPaint.StrokeWithBorder.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.StrokeWithBorder.toCanvasPaint(): PaintHolder<Paint> =
         when (width) {
             is MapDimension.Static ->
                 PaintHolder.Static(
@@ -79,7 +79,7 @@ internal class ViewPaintBaker(
                 }
         }
 
-    private fun MapPaint.StrokeWithBorder.toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.StrokeWithBorder.toBorderCanvasPaint(): PaintHolder<Paint> =
         when (width) {
             is MapDimension.Static ->
                 PaintHolder.Static(
@@ -107,7 +107,7 @@ internal class ViewPaintBaker(
                 }
         }
 
-    private fun MapPaint.DashedStroke.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.DashedStroke.toCanvasPaint(): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
                 style = Paint.Style.STROKE
@@ -124,7 +124,7 @@ internal class ViewPaintBaker(
             }
         )
 
-    private fun MapPaint.FillWithBorder.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.FillWithBorder.toCanvasPaint(): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
                 style = Paint.Style.FILL
@@ -134,7 +134,7 @@ internal class ViewPaintBaker(
             }
         )
 
-    private fun MapPaint.FillWithBorder.toBorderCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.FillWithBorder.toBorderCanvasPaint(): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
                 style = Paint.Style.FILL_AND_STROKE
@@ -145,7 +145,7 @@ internal class ViewPaintBaker(
             }
         )
 
-    private fun MapPaint.Fill.toCanvasPaint(context: Context): PaintHolder<Paint> =
+    private fun MapPaint.Fill.toCanvasPaint(): PaintHolder<Paint> =
         PaintHolder.Static(
             Paint().apply {
                 style = Paint.Style.FILL

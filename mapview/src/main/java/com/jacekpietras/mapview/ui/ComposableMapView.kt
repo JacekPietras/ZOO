@@ -5,13 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.platform.LocalContext
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.MapItem
 
 @Composable
@@ -52,52 +52,23 @@ fun ComposableMapView(
             drawPath(it.shape, it.paint, it.close)
         }
 
-//        mapData.draw(
-//            drawPath = { a, b, c -> DrawPath(a, b, c) },
-//            drawCircle = { _, _, _, _ -> },
-//            brush,
-//            brush,
-//            brush,
-//            brush,
-//        )
-
-        drawLine(
-            start = Offset(
-                x = 0f,
-                y = 0f,
-            ),
-            end = Offset(
-                x = size.width,
-                y = size.height,
-            ),
-            color = Color(40, 193, 218),
-            strokeWidth = Stroke.DefaultMiter
+        mapData.draw(
+            drawPath = this::drawPath,
+            drawCircle = { cx, cy, radius, paint ->
+                drawCircle(
+                    color = paint.color,
+                    radius = radius,
+                    center = Offset(cx, cy),
+                )
+            },
+            ComposablePaint.Fill(color = Color.Green),
+            ComposablePaint.Fill(color = Color.Red),
+            ComposablePaint.Stroke(color = Color.Blue),
+            ComposablePaint.Fill(color = Color.Blue),
         )
     }
 
-
-//
-//    private val userPositionPaint = Paint()
-//        .apply {
-//            color = MapColor.Attribute(R.attr.colorPrimary).toColorInt(context)
-//            style = Paint.Style.FILL
-//        }
-//    private val terminalPaint = Paint()
-//        .apply {
-//            color = Color.RED
-//            style = Paint.Style.FILL
-//        }
-//    private val shortestPaint = Paint()
-//        .apply {
-//            strokeWidth = 4f
-//            color = Color.BLUE
-//            style = Paint.Style.STROKE
-//        }
-//    private val interestingPaint = Paint()
-//        .apply {
-//            color = Color.BLUE
-//            style = Paint.Style.FILL
-//        }
+// TODO implement those:
 //
 //    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
 //        mapData.onSizeChanged()
@@ -127,19 +98,6 @@ fun ComposableMapView(
 //        mapData.onClick(x, y)
 //    }
 //
-//    override fun onDraw(canvas: Canvas) {
-//        super.onDraw(canvas)
-//
-//        mapData.draw(
-//            drawPath = canvas::drawPath,
-//            drawCircle = canvas::drawCircle,
-//            userPositionPaint,
-//            terminalPaint,
-//            shortestPaint,
-//            interestingPaint,
-//        )
-//    }
-//
 //    fun centerAtUserPosition() {
 //        mapData.centerAtUserPosition()
 //    }
@@ -149,7 +107,7 @@ fun ComposableMapView(
 //    }
 }
 
-fun DrawScope.drawPath(polygon: FloatArray, paint: Paint, close: Boolean = false) {
+private fun DrawScope.drawPath(polygon: FloatArray, paint: ComposablePaint, close: Boolean = false) {
     val toDraw = Path()
 
     if (polygon.size >= 4) {
@@ -160,6 +118,13 @@ fun DrawScope.drawPath(polygon: FloatArray, paint: Paint, close: Boolean = false
 
         if (close) toDraw.close()
     }
-
-    drawPath(toDraw, paint.color)
+    drawPath(
+        path = toDraw,
+        color = paint.color,
+        alpha = paint.alpha,
+        style = when (paint) {
+            is ComposablePaint.Stroke -> paint.stroke
+            is ComposablePaint.Fill -> Fill
+        }
+    )
 }
