@@ -4,18 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.zoo.core.extensions.observe
+import com.jacekpietras.zoo.map.model.MapEffect.*
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 class ComposableMapFragment : Fragment() {
 
@@ -27,7 +31,7 @@ class ComposableMapFragment : Fragment() {
     private val permissionChecker = GpsPermissionRequester(fragment = this)
     private val mapLogic = MapViewLogic(
         doAnimation = { it(1f, 0f) },
-        invalidate = { },
+        invalidate = { mapUpdates.value = "update" + System.currentTimeMillis() },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
         bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
         setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) },
@@ -39,32 +43,36 @@ class ComposableMapFragment : Fragment() {
         setObservers()
     }
 
+    private val mapUpdates = MutableLiveData("")
+
     private fun setObservers() = with(viewModel) {
         mapViewState.observe(viewLifecycleOwner) {
-            Timber.e("dupa observe whole map")
             with(it) {
-                mapLogic.worldBounds = worldBounds
-                mapLogic.objectList = mapData
-                mapLogic.terminalPoints = terminalPoints
+                mapLogic.worldData = MapViewLogic.WorldData(
+                    bounds = worldBounds,
+                    objectList = mapData,
+                    terminalPoints = terminalPoints,
+                )
             }
         }
         volatileViewState.observe(viewLifecycleOwner) {
-            Timber.e("dupa observe volatile map")
             with(it) {
-                mapLogic.userPosition = userPosition
-                mapLogic.compass = compass
-                mapLogic.clickOnWorld = snappedPoint
-                mapLogic.shortestPath = shortestPath
+                mapLogic.userData = MapViewLogic.UserData(
+                    userPosition = userPosition,
+                    compass = compass,
+                    clickOnWorld = snappedPoint,
+                    shortestPath = shortestPath,
+                )
             }
         }
 
-//        effect.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is MapEffect.ShowToast -> toast(it.text.toString(requireContext()))
-//                is MapEffect.CenterAtUser -> mapData.centerAtUserPosition()
-//                is MapEffect.CenterAtPoint -> mapData.centerAtPoint(it.point)
-//            }
-//        }
+        effect.observe(viewLifecycleOwner) {
+            when (it) {
+                is ShowToast -> toast(it.text.toString(requireContext()))
+                is CenterAtUser -> mapLogic.centerAtUserPosition()
+                is CenterAtPoint -> mapLogic.centerAtPoint(it.point)
+            }
+        }
     }
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
@@ -72,8 +80,13 @@ class ComposableMapFragment : Fragment() {
             MdcTheme {
                 ComposableMapView(
                     mapData = mapLogic,
+                    state = mapUpdates.observeAsState(),
                 )
             }
         }
+    }
+
+    private fun toast(text: String) {
+        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
     }
 }

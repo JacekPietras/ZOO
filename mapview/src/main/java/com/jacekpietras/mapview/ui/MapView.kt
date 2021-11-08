@@ -21,20 +21,16 @@ class MapView @JvmOverloads constructor(
     )
 
     init {
-        logic.currentHeight = height
-        logic.currentWidth = width
+        logic.onSizeChanged(width, height)
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        logic.currentHeight = height
-        logic.currentWidth = width
+        logic.onSizeChanged(width, height)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        logic.onSizeChanged()
-        logic.currentHeight = height
-        logic.currentWidth = width
+        logic.onSizeChanged(width, height)
     }
 
     override fun onScaleBegin(x: Float, y: Float) {

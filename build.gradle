@@ -25,7 +25,7 @@ buildscript {
     ext.lifecycle_version = "2.4.0"
     ext.lifecycle_extensions_version = "2.2.0"
 
-    ext.compose_version = "1.0.4"
+    ext.compose_version = "1.0.5"
     ext.compose_activity_version= "1.4.0"
     ext.compose_viewmodel_version= "2.4.0"
     ext.benManes_version = "0.39.0"

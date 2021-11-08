@@ -3,6 +3,7 @@ package com.jacekpietras.mapview.ui
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
@@ -11,23 +12,24 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
+import timber.log.Timber
 
 @Composable
 fun ComposableMapView(
     mapData: MapViewLogic<ComposablePaint>,
+    state: State<String?>,
 ) {
-    if (mapData.renderList.isNullOrEmpty()) return
+    Timber.e("dupa Recomposing screen - ${state.value}")
 
     Canvas(modifier = Modifier
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
                 change.consumeAllChanges()
-                mapData.onScroll(dragAmount.x, dragAmount.y)
+                mapData.onScroll(-dragAmount.x, -dragAmount.y)
             }
         }
     ) {
-        mapData.currentHeight = size.height.toInt()
-        mapData.currentWidth = size.width.toInt()
+        mapData.onSizeChanged(size.width.toInt(), size.height.toInt())
 
         mapData.draw(
             drawPath = this::drawPath,
@@ -42,10 +44,6 @@ fun ComposableMapView(
     }
 
 // TODO implement those:
-//
-//    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-//        mapData.onSizeChanged()
-//    }
 //
 //    override fun onScaleBegin(x: Float, y: Float) {
 //        mapData.onScaleBegin()

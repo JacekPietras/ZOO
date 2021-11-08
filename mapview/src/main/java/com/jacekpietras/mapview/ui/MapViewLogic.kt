@@ -7,6 +7,7 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
+import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
@@ -17,70 +18,50 @@ class MapViewLogic<T>(
     private val invalidate: () -> Unit,
     private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
     private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
-    var currentHeight: Int = 0,
-    var currentWidth: Int = 0,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
 ) {
 
-    private var maxZoom: Double = 10.0
-    private var minZoom: Double = 2.0
-    var worldBounds: RectD = RectD()
+    var worldData: WorldData = WorldData()
         set(value) {
             field = value
-            centerGpsCoordinate = PointD(value.centerX(), value.centerY())
-            maxZoom = min(abs(value.width()), abs(value.height())) / 2
+
+            centerGpsCoordinate = PointD(value.bounds.centerX(), value.bounds.centerY())
+            maxZoom = min(abs(value.bounds.width()), abs(value.bounds.height())) / 2
             minZoom = maxZoom / 10
             zoom = maxZoom / 5
-        }
-    private var _objectList: List<ObjectItem<T>> = emptyList()
-    var objectList: List<MapItem> = emptyList()
-        set(value) {
-            field = value
-            _objectList = value.toRenderItems()
-            cutOutNotVisible()
-        }
 
-    var userPosition: PointD? = null
-        set(value) {
-            field = value
-            if (centeringAtUser) {
-                centerAtUserPosition()
-            }
-        }
-    var terminalPoints: List<PointD> = emptyList()
-        set(value) {
-            field = value
+            objectList = value.objectList.toRenderItems()
+
             cutOutNotVisible()
         }
+    private val worldBounds: RectD get() = worldData.bounds
+    private var objectList: List<ObjectItem<T>> = emptyList()
+    private val terminalPoints: List<PointD> get() = worldData.terminalPoints
+
+    var userData: UserData = UserData()
+        set(value) {
+            field = value
+            if (centeringAtUser) centerAtUserPosition()
+            if (centeringAtUser) centerAtUserCompass()
+            cutOutNotVisible()
+        }
+    private val userPosition: PointD? get() = userData.userPosition
+    private val compass: Float get() = userData.compass
+    private val clickOnWorld: PointD? get() = userData.clickOnWorld
+    private val shortestPath: List<PointD> get() = userData.shortestPath
+
+    private var currentHeight: Int = 0
+    private var currentWidth: Int = 0
+    private var maxZoom: Double = 10.0
+    private var minZoom: Double = 2.0
     private var terminalPointsOnScreen: FloatArray? = null
     private var userPositionOnScreen: FloatArray? = null
-    var compass: Float = 0f
-        set(value) {
-            field = value
-            if (centeringAtUser) {
-                centerAtUserCompass()
-            }
-        }
-
     private val interesting: List<PointD> = listOf()
     private var interestingOnScreen: FloatArray? = null
-
-    var clickOnWorld: PointD? = null
-        set(value) {
-            field = value
-            cutOutNotVisible()
-        }
-    var shortestPath: List<PointD> = emptyList()
-        set(value) {
-            field = value
-            cutOutNotVisible()
-        }
     private var shortestPathOnScreen: FloatArray? = null
     private var clickOnScreen: FloatArray? = null
-
     private lateinit var visibleGpsCoordinate: ViewCoordinates
-    private var centerGpsCoordinate: PointD =
-        PointD(worldBounds.centerX(), worldBounds.centerY())
+    private var centerGpsCoordinate: PointD = PointD(worldBounds.centerX(), worldBounds.centerY())
     private var zoom: Double = 5.0
     private var zoomOnStart: Double = 5.0
     private var worldRotation: Float = 0f
@@ -88,19 +69,27 @@ class MapViewLogic<T>(
     internal var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
 
-    private val userPositionPaint: T = MapPaint.Fill(
-        fillColor = MapColor.Attribute(R.attr.colorPrimary),
-    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
-    private val terminalPaint: T = MapPaint.Fill(
-        fillColor = MapColor.Hard(Color.RED)
-    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
-    private val shortestPaint: T = MapPaint.Stroke(
-        strokeColor = MapColor.Hard(Color.BLUE),
-        width = MapDimension.Static.Screen(2),
-    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
-    private val interestingPaint: T = MapPaint.Fill(
-        fillColor = MapColor.Hard(Color.BLUE),
-    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
+    private val userPositionPaint: T by lazy {
+        MapPaint.Fill(
+            fillColor = MapColor.Attribute(R.attr.colorPrimary),
+        ).let { bakeCanvasPaint(it) as PaintHolder.Static<T> }.paint
+    }
+    private val terminalPaint: T by lazy {
+        MapPaint.Fill(
+            fillColor = MapColor.Hard(Color.RED)
+        ).let { bakeCanvasPaint(it) as PaintHolder.Static<T> }.paint
+    }
+    private val shortestPaint: T by lazy {
+        MapPaint.Stroke(
+            strokeColor = MapColor.Hard(Color.BLUE),
+            width = MapDimension.Static.Screen(2),
+        ).let { bakeCanvasPaint(it) as PaintHolder.Static<T> }.paint
+    }
+    private val interestingPaint: T by lazy {
+        MapPaint.Fill(
+            fillColor = MapColor.Hard(Color.BLUE),
+        ).let { bakeCanvasPaint(it) as PaintHolder.Static<T> }.paint
+    }
 
     fun centerAtPoint(desiredPosition: PointD) {
         centeringAtUser = false
@@ -137,8 +126,12 @@ class MapViewLogic<T>(
         }
     }
 
-    fun onSizeChanged() {
-        cutOutNotVisible(invalidate = false)
+    fun onSizeChanged(width: Int, height: Int) {
+        if (currentHeight != height || currentWidth != width) {
+            currentHeight = height
+            currentWidth = width
+            cutOutNotVisible()
+        }
     }
 
     fun onScaleBegin() {
@@ -167,6 +160,7 @@ class MapViewLogic<T>(
             (-sin(radians) * vX + cos(radians) * vY) / visibleGpsCoordinate.verticalScale
         )
         cutOutNotVisible()
+        Timber.e("dupa scroll $vX $vY")
     }
 
     fun onClick(x: Float, y: Float) {
@@ -358,7 +352,7 @@ class MapViewLogic<T>(
                 )
             }
 
-        _objectList.forEach { item ->
+        objectList.forEach { item ->
             if (item.close) {
                 visibleGpsCoordinate
                     .transformPolygon(item.shape)
@@ -448,5 +442,18 @@ class MapViewLogic<T>(
         val shape: FloatArray,
         val paint: T,
         val close: Boolean,
+    )
+
+    class WorldData(
+        val bounds: RectD = RectD(),
+        val objectList: List<MapItem> = emptyList(),
+        val terminalPoints: List<PointD> = emptyList(),
+    )
+
+    class UserData(
+        var userPosition: PointD? = null,
+        var compass: Float = 0f,
+        var clickOnWorld: PointD? = null,
+        var shortestPath: List<PointD> = emptyList(),
     )
 }

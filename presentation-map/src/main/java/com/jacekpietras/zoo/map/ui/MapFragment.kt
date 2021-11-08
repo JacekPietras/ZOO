@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.binding.viewBinding
 import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.map.R
@@ -36,9 +37,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapViewState.observe(viewLifecycleOwner) {
             Timber.e("dupa observe whole map")
             with(it) {
-                binding.mapView.logic.worldBounds = worldBounds
-                binding.mapView.logic.objectList = mapData
-                binding.mapView.logic.terminalPoints = terminalPoints
+                binding.mapView.logic.worldData = MapViewLogic.WorldData(
+                    bounds = worldBounds,
+                    objectList = mapData,
+                    terminalPoints = terminalPoints,
+                )
             }
         }
         volatileViewState.observe(viewLifecycleOwner) {
@@ -47,10 +50,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 binding.topCardTitle.text = title.toCharSeq(requireContext())
                 binding.topCardContent.text = content.toCharSeq(requireContext())
 
-                binding.mapView.logic.userPosition = userPosition
-                binding.mapView.logic.compass = compass
-                binding.mapView.logic.clickOnWorld = snappedPoint
-                binding.mapView.logic.shortestPath = shortestPath
+                binding.mapView.logic.userData = MapViewLogic.UserData(
+                    userPosition = userPosition,
+                    compass = compass,
+                    clickOnWorld = snappedPoint,
+                    shortestPath = shortestPath,
+                )
             }
         }
 
