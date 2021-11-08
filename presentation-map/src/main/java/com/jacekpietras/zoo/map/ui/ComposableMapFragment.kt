@@ -5,9 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
@@ -16,6 +26,7 @@ import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.extensions.observe
+import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.*
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
@@ -47,10 +58,37 @@ class ComposableMapFragment : Fragment() {
                     ToolbarView(
                         title = rememberTitle.observeAsState().value ?: ""
                     )
-                    ComposableMapView(
-                        mapData = mapLogic,
-                        state = mapUpdates.observeAsState(),
-                    )
+                    Box(modifier = Modifier) {
+                        ComposableMapView(
+                            mapData = mapLogic,
+                            state = mapUpdates.observeAsState(),
+                        )
+                        FloatingActionButton(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .align(Alignment.BottomEnd),
+                            onClick = { viewModel.onLocationButtonClicked(permissionChecker) },
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_my_location_24),
+                                tint = Color.Black,
+                                contentDescription = stringResource(R.string.my_location),
+                            )
+                        }
+
+                        FloatingActionButton(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .align(Alignment.TopEnd),
+                            onClick = { viewModel.onUploadClicked() },
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_upload_24),
+                                tint = Color.Black,
+                                contentDescription = stringResource(R.string.upload),
+                            )
+                        }
+                    }
                 }
             }
         }
