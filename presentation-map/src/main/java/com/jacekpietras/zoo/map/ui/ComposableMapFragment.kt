@@ -31,19 +31,34 @@ class ComposableMapFragment : Fragment() {
     private val permissionChecker = GpsPermissionRequester(fragment = this)
     private val mapLogic = MapViewLogic(
         doAnimation = { it(1f, 0f) },
-        invalidate = { mapUpdates.value = "update" + System.currentTimeMillis() },
+        invalidate = { mapUpdates.value = "update " + System.currentTimeMillis() },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
         bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
         setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) },
     )
+    private val mapUpdates = MutableLiveData("init")
+
+    override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
+        setContent {
+            MdcTheme {
+                ComposableMapView(
+                    mapData = mapLogic,
+                    onScroll = mapLogic::onScroll,
+                    onSizeChanged = mapLogic::onSizeChanged,
+                    onClick = mapLogic::onClick,
+                    onRotate = mapLogic::onRotate,
+                    onScale = mapLogic::onScale,
+                    state = mapUpdates.observeAsState(),
+                )
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setObservers()
     }
-
-    private val mapUpdates = MutableLiveData("")
 
     private fun setObservers() = with(viewModel) {
         mapViewState.observe(viewLifecycleOwner) {
@@ -71,17 +86,6 @@ class ComposableMapFragment : Fragment() {
                 is ShowToast -> toast(it.text.toString(requireContext()))
                 is CenterAtUser -> mapLogic.centerAtUserPosition()
                 is CenterAtPoint -> mapLogic.centerAtPoint(it.point)
-            }
-        }
-    }
-
-    override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
-        setContent {
-            MdcTheme {
-                ComposableMapView(
-                    mapData = mapLogic,
-                    state = mapUpdates.observeAsState(),
-                )
             }
         }
     }

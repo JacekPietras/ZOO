@@ -33,16 +33,8 @@ class MapView @JvmOverloads constructor(
         logic.onSizeChanged(width, height)
     }
 
-    override fun onScaleBegin(x: Float, y: Float) {
-        logic.onScaleBegin()
-    }
-
-    override fun onScale(scale: Float) {
+    override fun onScale(cX: Float, cY: Float, scale: Float) {
         logic.onScale(scale)
-    }
-
-    override fun onRotateBegin() {
-        logic.onRotateBegin()
     }
 
     override fun onRotate(rotate: Float) {

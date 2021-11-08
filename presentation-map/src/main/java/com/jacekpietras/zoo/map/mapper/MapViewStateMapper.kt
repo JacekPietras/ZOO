@@ -17,7 +17,7 @@ import timber.log.Timber
 internal class MapViewStateMapper {
 
     fun from(state: MapVolatileState): MapVolatileViewState = with(state) {
-        Timber.e("dupa update volatile")
+//        Timber.e("dupa update volatile")
         MapVolatileViewState(
             compass = compass,
             userPosition = userPosition,
@@ -39,7 +39,7 @@ internal class MapViewStateMapper {
     }
 
     fun from(state: MapState): MapViewState = with(state) {
-        Timber.e("dupa update whole map")
+//        Timber.e("dupa update whole map")
         MapViewState(
             worldBounds = worldBounds,
             mapData = flatListOf(

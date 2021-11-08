@@ -1,7 +1,8 @@
 package com.jacekpietras.mapview.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
@@ -9,7 +10,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
 import timber.log.Timber
@@ -17,19 +17,32 @@ import timber.log.Timber
 @Composable
 fun ComposableMapView(
     mapData: MapViewLogic<ComposablePaint>,
+    onScroll: (Float, Float) -> Unit,
+    onSizeChanged: (Int, Int) -> Unit,
+    onClick: (Float, Float) -> Unit,
+    onRotate: (Float) -> Unit,
+    onScale: (Float) -> Unit,
     state: State<String?>,
 ) {
     Timber.e("dupa Recomposing screen - ${state.value}")
 
     Canvas(modifier = Modifier
         .pointerInput(Unit) {
-            detectDragGestures { change, dragAmount ->
-                change.consumeAllChanges()
-                mapData.onScroll(-dragAmount.x, -dragAmount.y)
+            detectTransformGestures { _, pan, zoomChange, rotationChange ->
+                onScroll(-pan.x, -pan.y)
+                onScale(1/zoomChange)
+                onRotate(-rotationChange)
             }
         }
+        .pointerInput(Unit) {
+            detectTapGestures(
+                onTap = { offset ->
+                    onClick(offset.x, offset.y)
+                },
+            )
+        }
     ) {
-        mapData.onSizeChanged(size.width.toInt(), size.height.toInt())
+        onSizeChanged(size.width.toInt(), size.height.toInt())
 
         mapData.draw(
             drawPath = this::drawPath,
@@ -42,40 +55,6 @@ fun ComposableMapView(
             },
         )
     }
-
-// TODO implement those:
-//
-//    override fun onScaleBegin(x: Float, y: Float) {
-//        mapData.onScaleBegin()
-//    }
-//
-//    override fun onScale(scale: Float) {
-//        mapData.onScale(scale)
-//    }
-//
-//    override fun onRotateBegin() {
-//        mapData.onRotateBegin()
-//    }
-//
-//    override fun onRotate(rotate: Float) {
-//        mapData.onRotate(rotate)
-//    }
-//
-//    override fun onScroll(vX: Float, vY: Float) {
-//        mapData.onScroll(vX, vY)
-//    }
-//
-//    override fun onClick(x: Float, y: Float) {
-//        mapData.onClick(x, y)
-//    }
-//
-//    fun centerAtUserPosition() {
-//        mapData.centerAtUserPosition()
-//    }
-//
-//    fun centerAtPoint(point: PointD) {
-//        mapData.centerAtPoint(point)
-//    }
 }
 
 private fun DrawScope.drawPath(polygon: FloatArray, paint: ComposablePaint, close: Boolean = false) {

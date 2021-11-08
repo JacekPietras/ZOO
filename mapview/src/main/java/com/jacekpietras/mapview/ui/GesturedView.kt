@@ -16,6 +16,10 @@ abstract class GesturedView @JvmOverloads constructor(
     private var swipeDetector = GestureDetector(context, OnGestureListener())
     private var pinchDetector = ScaleGestureDetector(context, OnScaleGestureListener())
     private var rotateDetector = RotationGestureDetector(OnRotationGestureListener())
+    private var rotationBuffer = 0f
+    private var zoomBuffer = 1f
+    private var zoomX = 1f
+    private var zoomY = 1f
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -25,13 +29,9 @@ abstract class GesturedView @JvmOverloads constructor(
         return true
     }
 
-    abstract fun onScaleBegin(x: Float, y: Float)
-
-    abstract fun onScale(scale: Float)
+    abstract fun onScale(cX: Float, cY: Float, scale: Float)
 
     abstract fun onRotate(rotate: Float)
-
-    abstract fun onRotateBegin()
 
     abstract fun onScroll(vX: Float, vY: Float)
 
@@ -60,14 +60,18 @@ abstract class GesturedView @JvmOverloads constructor(
 
     private inner class OnScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener {
         override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
-            onScaleBegin(detector?.focusX ?: 0f, detector?.focusY ?: 0f)
+            zoomBuffer = 1f
+            zoomX = detector?.focusX ?: 0f
+            zoomY = detector?.focusY ?: 0f
             return true
         }
 
         override fun onScaleEnd(detector: ScaleGestureDetector?) = Unit
 
         override fun onScale(detector: ScaleGestureDetector?): Boolean {
-            onScale(detector?.scaleFactor ?: 1f)
+            val zoom = detector?.scaleFactor ?: 1f
+            onScale(zoomX, zoomY, zoomBuffer / zoom)
+            zoomBuffer = zoom
             return false
         }
     }
@@ -76,11 +80,13 @@ abstract class GesturedView @JvmOverloads constructor(
         RotationGestureDetector.OnRotationGestureListener {
 
         override fun onRotation(rotationDetector: RotationGestureDetector?) {
-            onRotate(rotationDetector?.angle ?: 0f)
+            val rotate = rotationDetector?.angle ?: 0f
+            onRotate(rotate - rotationBuffer)
+            rotationBuffer = rotate
         }
 
         override fun onRotationStart(rotationDetector: RotationGestureDetector?) {
-            onRotateBegin()
+            rotationBuffer = 0f
         }
     }
 }

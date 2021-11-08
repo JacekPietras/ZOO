@@ -7,7 +7,6 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
-import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
@@ -63,10 +62,8 @@ class MapViewLogic<T>(
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD = PointD(worldBounds.centerX(), worldBounds.centerY())
     private var zoom: Double = 5.0
-    private var zoomOnStart: Double = 5.0
     private var worldRotation: Float = 0f
-    private var worldRotationOnStart: Float = 0f
-    internal var renderList: List<RenderItem<T>>? = null
+    private var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
 
     private val userPositionPaint: T by lazy {
@@ -134,33 +131,30 @@ class MapViewLogic<T>(
         }
     }
 
-    fun onScaleBegin() {
-        zoomOnStart = zoom
-    }
-
     fun onScale(scale: Float) {
-        val zoomPoint = (maxZoom - minZoom) / 2
-        zoom = (zoomOnStart + zoomPoint * (1 - scale)).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
-        cutOutNotVisible()
-    }
-
-    fun onRotateBegin() {
-        worldRotationOnStart = worldRotation
+        if (scale != 1f) {
+            zoom = (zoom * scale).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+            cutOutNotVisible()
+        }
     }
 
     fun onRotate(rotate: Float) {
-        worldRotation = (rotate + worldRotationOnStart) % 360
+        if (rotate != 0f) {
+            worldRotation = (worldRotation + rotate) % 360
+            cutOutNotVisible()
+        }
     }
 
     fun onScroll(vX: Float, vY: Float) {
-        centeringAtUser = false
-        val radians = Math.toRadians(-worldRotation.toDouble())
-        centerGpsCoordinate += PointD(
-            (sin(radians) * vY + cos(radians) * vX) / visibleGpsCoordinate.horizontalScale,
-            (-sin(radians) * vX + cos(radians) * vY) / visibleGpsCoordinate.verticalScale
-        )
-        cutOutNotVisible()
-        Timber.e("dupa scroll $vX $vY")
+        if (vX > 0 && vY > 0) {
+            centeringAtUser = false
+            val radians = Math.toRadians(-worldRotation.toDouble())
+            centerGpsCoordinate += PointD(
+                (sin(radians) * vY + cos(radians) * vX) / visibleGpsCoordinate.horizontalScale,
+                (-sin(radians) * vX + cos(radians) * vY) / visibleGpsCoordinate.verticalScale
+            )
+            cutOutNotVisible()
+        }
     }
 
     fun onClick(x: Float, y: Float) {
