@@ -43,11 +43,6 @@ class ComposableMapFragment : Fragment() {
             MdcTheme {
                 ComposableMapView(
                     mapData = mapLogic,
-                    onScroll = mapLogic::onScroll,
-                    onSizeChanged = mapLogic::onSizeChanged,
-                    onClick = mapLogic::onClick,
-                    onRotate = mapLogic::onRotate,
-                    onScale = mapLogic::onScale,
                     state = mapUpdates.observeAsState(),
                 )
             }

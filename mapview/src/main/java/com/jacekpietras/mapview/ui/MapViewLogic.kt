@@ -146,7 +146,7 @@ class MapViewLogic<T>(
     }
 
     fun onScroll(vX: Float, vY: Float) {
-        if (vX > 0 && vY > 0) {
+        if (vX != 0f || vY != 0f) {
             centeringAtUser = false
             val radians = Math.toRadians(-worldRotation.toDouble())
             centerGpsCoordinate += PointD(

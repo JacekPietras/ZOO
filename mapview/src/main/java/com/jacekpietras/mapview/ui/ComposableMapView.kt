@@ -17,11 +17,6 @@ import timber.log.Timber
 @Composable
 fun ComposableMapView(
     mapData: MapViewLogic<ComposablePaint>,
-    onScroll: (Float, Float) -> Unit,
-    onSizeChanged: (Int, Int) -> Unit,
-    onClick: (Float, Float) -> Unit,
-    onRotate: (Float) -> Unit,
-    onScale: (Float) -> Unit,
     state: State<String?>,
 ) {
     Timber.e("dupa Recomposing screen - ${state.value}")
@@ -29,20 +24,20 @@ fun ComposableMapView(
     Canvas(modifier = Modifier
         .pointerInput(Unit) {
             detectTransformGestures { _, pan, zoomChange, rotationChange ->
-                onScroll(-pan.x, -pan.y)
-                onScale(1/zoomChange)
-                onRotate(-rotationChange)
+                mapData.onScroll(-pan.x, -pan.y)
+                mapData.onScale(1 / zoomChange)
+                mapData.onRotate(-rotationChange)
             }
         }
         .pointerInput(Unit) {
             detectTapGestures(
                 onTap = { offset ->
-                    onClick(offset.x, offset.y)
+                    mapData.onClick(offset.x, offset.y)
                 },
             )
         }
     ) {
-        onSizeChanged(size.width.toInt(), size.height.toInt())
+        mapData.onSizeChanged(size.width.toInt(), size.height.toInt())
 
         mapData.draw(
             drawPath = this::drawPath,
