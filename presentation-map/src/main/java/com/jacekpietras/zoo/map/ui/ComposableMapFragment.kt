@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
@@ -37,14 +38,20 @@ class ComposableMapFragment : Fragment() {
         setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) },
     )
     private val mapUpdates = MutableLiveData("init")
+    private val rememberTitle = MutableLiveData("")
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
             MdcTheme {
-                ComposableMapView(
-                    mapData = mapLogic,
-                    state = mapUpdates.observeAsState(),
-                )
+                Column {
+                    ToolbarView(
+                        title = rememberTitle.observeAsState().value ?: ""
+                    )
+                    ComposableMapView(
+                        mapData = mapLogic,
+                        state = mapUpdates.observeAsState(),
+                    )
+                }
             }
         }
     }
@@ -52,35 +59,34 @@ class ComposableMapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setObservers()
-    }
-
-    private fun setObservers() = with(viewModel) {
-        mapViewState.observe(viewLifecycleOwner) {
-            with(it) {
-                mapLogic.worldData = MapViewLogic.WorldData(
-                    bounds = worldBounds,
-                    objectList = mapData,
-                    terminalPoints = terminalPoints,
-                )
+        with(viewModel) {
+            mapViewState.observe(viewLifecycleOwner) {
+                with(it) {
+                    mapLogic.worldData = MapViewLogic.WorldData(
+                        bounds = worldBounds,
+                        objectList = mapData,
+                        terminalPoints = terminalPoints,
+                    )
+                }
             }
-        }
-        volatileViewState.observe(viewLifecycleOwner) {
-            with(it) {
-                mapLogic.userData = MapViewLogic.UserData(
-                    userPosition = userPosition,
-                    compass = compass,
-                    clickOnWorld = snappedPoint,
-                    shortestPath = shortestPath,
-                )
+            volatileViewState.observe(viewLifecycleOwner) {
+                with(it) {
+                    mapLogic.userData = MapViewLogic.UserData(
+                        userPosition = userPosition,
+                        compass = compass,
+                        clickOnWorld = snappedPoint,
+                        shortestPath = shortestPath,
+                    )
+                    rememberTitle.value = title.toString(requireContext())
+                }
             }
-        }
 
-        effect.observe(viewLifecycleOwner) {
-            when (it) {
-                is ShowToast -> toast(it.text.toString(requireContext()))
-                is CenterAtUser -> mapLogic.centerAtUserPosition()
-                is CenterAtPoint -> mapLogic.centerAtPoint(it.point)
+            effect.observe(viewLifecycleOwner) {
+                when (it) {
+                    is ShowToast -> toast(it.text.toString(requireContext()))
+                    is CenterAtUser -> mapLogic.centerAtUserPosition()
+                    is CenterAtPoint -> mapLogic.centerAtPoint(it.point)
+                }
             }
         }
     }

@@ -3,9 +3,11 @@ package com.jacekpietras.mapview.ui
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -22,6 +24,8 @@ fun ComposableMapView(
     Timber.e("dupa Recomposing screen - ${state.value}")
 
     Canvas(modifier = Modifier
+        .fillMaxSize()
+        .clipToBounds()
         .pointerInput(Unit) {
             detectTransformGestures { _, pan, zoomChange, rotationChange ->
                 mapData.onScroll(-pan.x, -pan.y)

@@ -32,7 +32,7 @@ internal fun ToolbarWithFilters(
         elevation = 6.dp,
         modifier = Modifier
             .height(48.dp)
-            .fillMaxSize(),
+            .fillMaxWidth(),
     ) {
         Box {
             AnimatedVisibility(
