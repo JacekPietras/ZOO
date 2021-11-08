@@ -1,8 +1,10 @@
 package com.jacekpietras.mapview.ui
 
+import android.graphics.Color
 import android.graphics.Matrix
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
+import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import kotlin.math.abs
@@ -85,6 +87,20 @@ class MapViewLogic<T>(
     private var worldRotationOnStart: Float = 0f
     internal var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
+
+    private val userPositionPaint: T = MapPaint.Fill(
+        fillColor = MapColor.Attribute(R.attr.colorPrimary),
+    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
+    private val terminalPaint: T = MapPaint.Fill(
+        fillColor = MapColor.Hard(Color.RED)
+    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
+    private val shortestPaint: T = MapPaint.Stroke(
+        strokeColor = MapColor.Hard(Color.BLUE),
+        width = MapDimension.Static.Screen(2),
+    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
+    private val interestingPaint: T = MapPaint.Fill(
+        fillColor = MapColor.Hard(Color.BLUE),
+    ).let { bakeCanvasPaint(it) as PaintHolder.Static<T>}.paint
 
     fun centerAtPoint(desiredPosition: PointD) {
         centeringAtUser = false
@@ -172,10 +188,6 @@ class MapViewLogic<T>(
     fun draw(
         drawPath: (shape: FloatArray, paint: T, close: Boolean) -> Unit,
         drawCircle: (cx: Float, xy: Float, radius: Float, paint: T) -> Unit,
-        userPositionPaint: T,
-        terminalPaint: T,
-        shortestPaint: T,
-        interestingPaint: T,
     ) {
 
         renderList?.forEach { drawPath(it.shape, it.paint, it.close) }
@@ -390,7 +402,7 @@ class MapViewLogic<T>(
         }
 
         renderList = borders + insides
-//        logVisibleShapes()
+
         if (invalidate) invalidate()
     }
 
@@ -424,15 +436,6 @@ class MapViewLogic<T>(
             )
         }
     }
-
-//    private fun logVisibleShapes() {
-//        if (BuildConfig.DEBUG) {
-//            val message = "Preparing render list: " +
-//                    renderList?.map { "Shape " + (it.shape.size shr 1) } +
-//                    " (${objectList.size})"
-//            Timber.v(message)
-//        }
-//    }
 
     private class ObjectItem<T>(
         val shape: DoubleArray,

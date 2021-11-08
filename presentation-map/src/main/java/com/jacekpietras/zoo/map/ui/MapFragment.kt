@@ -36,9 +36,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapViewState.observe(viewLifecycleOwner) {
             Timber.e("dupa observe whole map")
             with(it) {
-                binding.mapView.worldBounds = worldBounds
-                binding.mapView.objectList = mapData
-                binding.mapView.terminalPoints = terminalPoints
+                binding.mapView.logic.worldBounds = worldBounds
+                binding.mapView.logic.objectList = mapData
+                binding.mapView.logic.terminalPoints = terminalPoints
             }
         }
         volatileViewState.observe(viewLifecycleOwner) {
@@ -47,10 +47,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 binding.topCardTitle.text = title.toCharSeq(requireContext())
                 binding.topCardContent.text = content.toCharSeq(requireContext())
 
-                binding.mapView.userPosition = userPosition
-                binding.mapView.compass = compass
-                binding.mapView.clickOnWorld = snappedPoint
-                binding.mapView.shortestPath = shortestPath
+                binding.mapView.logic.userPosition = userPosition
+                binding.mapView.logic.compass = compass
+                binding.mapView.logic.clickOnWorld = snappedPoint
+                binding.mapView.logic.shortestPath = shortestPath
             }
         }
 
@@ -66,7 +66,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun setListeners() = with(binding) {
         uploadButton.setOnClickListener { viewModel.onUploadClicked() }
         myLocationButton.setOnClickListener { viewModel.onLocationButtonClicked(permissionChecker) }
-        mapView.setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) }
+        mapView.logic.setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) }
     }
 
     private fun toast(text: String) {

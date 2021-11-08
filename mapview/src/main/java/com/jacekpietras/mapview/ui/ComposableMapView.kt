@@ -5,7 +5,6 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -15,14 +14,6 @@ import com.jacekpietras.mapview.model.ComposablePaint
 
 @Composable
 fun ComposableMapView(
-//    setOnPointPlacedListener: ((PointD) -> Unit)?,
-//    shortestPath: List<PointD>,
-//    clickOnWorld: PointD?,
-//    compass: Float,
-//    userPosition: PointD?,
-//    terminalPoints: List<PointD>,
-//    objectList: List<MapItem>,
-//    worldBounds: RectD,
     mapData: MapViewLogic<ComposablePaint>,
 ) {
     if (mapData.renderList.isNullOrEmpty()) return
@@ -47,10 +38,6 @@ fun ComposableMapView(
                     center = Offset(cx, cy),
                 )
             },
-            ComposablePaint.Fill(color = Color.Green),
-            ComposablePaint.Fill(color = Color.Red),
-            ComposablePaint.Stroke(color = Color.Blue),
-            ComposablePaint.Fill(color = Color.Blue),
         )
     }
 
