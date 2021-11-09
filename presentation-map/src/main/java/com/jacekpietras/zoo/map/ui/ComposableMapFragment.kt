@@ -57,12 +57,11 @@ class ComposableMapFragment : Fragment() {
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
-            val viewState by viewModel.viewState.observeAsState(MapViewState())
-
             MdcTheme {
                 Column {
+                    val viewState by viewModel.viewState.observeAsState(MapViewState())
                     ToolbarView(
-                        title = viewState.title.toString(requireContext())
+                        title = viewState.title,
                     )
                     Box(modifier = Modifier) {
                         ComposableMapView(

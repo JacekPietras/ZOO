@@ -14,6 +14,10 @@ internal class Snapper {
         var result: Snapped? = null
         var shortest: Double = Double.MAX_VALUE
 
+        if (nodes.none()) {
+            throw IllegalStateException("Cannot find snapped edge for empty nodes")
+        }
+
         nodes.forAllEdges { p1, p2, technical ->
             if (technicalAllowed || !technical) {
                 val found = getSnappedToEdge(source, p1.point, p2.point)
@@ -24,7 +28,8 @@ internal class Snapper {
                 }
             }
         }
-        return result!!
+
+        return requireNotNull(result)
     }
 
     fun getSnappedPoint(nodes: Iterable<Node>, source: PointD): PointD {

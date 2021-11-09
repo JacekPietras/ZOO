@@ -8,11 +8,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.jacekpietras.zoo.core.text.Text
 
 @Composable
 internal fun ToolbarView(
-    title: String,
+    title: Text,
 ) {
     Card(
         shape = RectangleShape,
@@ -28,7 +30,7 @@ internal fun ToolbarView(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = title,
+                text = title.toString(LocalContext.current),
                 color = Color.Black
             )
         }

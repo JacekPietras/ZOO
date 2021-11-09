@@ -29,6 +29,7 @@ object GraphAnalyzer {
         technicalAllowed: Boolean = false,
     ): List<PointD> {
         if (startPoint == null) return listOf(endPoint)
+        if (nodes.isEmpty()) return listOf(endPoint)
 
         val snapStart = snapper.getSnappedEdge(nodes, startPoint, technicalAllowed = true)
         val snapEnd = snapper.getSnappedEdge(nodes, endPoint, technicalAllowed = technicalAllowed)
