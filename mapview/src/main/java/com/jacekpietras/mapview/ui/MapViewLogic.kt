@@ -14,7 +14,7 @@ import kotlin.math.sin
 
 class MapViewLogic<T>(
     private val doAnimation: ((progress: Float) -> Unit) -> Unit,
-    private val invalidate: () -> Unit,
+    private val invalidate: (List<RenderItem<T>>) -> Unit,
     private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
     private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
@@ -410,7 +410,7 @@ class MapViewLogic<T>(
 
         renderList = borders + insides + extraRenderList
 
-        if (invalidate) invalidate()
+        if (invalidate) invalidate(renderList!!)
     }
 
     private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {

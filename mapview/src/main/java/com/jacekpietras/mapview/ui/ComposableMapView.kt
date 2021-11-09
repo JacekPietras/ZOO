@@ -16,39 +16,39 @@ import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderCircleItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderPathItem
-import timber.log.Timber
 
 @Composable
 fun ComposableMapView(
-    mapData: MapViewLogic<ComposablePaint>,
-    state: State<String?>,
+    onSizeChanged: (Int, Int) -> Unit,
+    onClick: (Float, Float) -> Unit,
+    onTransform: (Float, Float, Float, Float) -> Unit,
+    mapList: State<List<MapViewLogic.RenderItem<ComposablePaint>>?>,
 ) {
-    Timber.e("dupa Recomposing screen - ${state.value}")
 
     Canvas(modifier = Modifier
         .fillMaxSize()
         .clipToBounds()
         .pointerInput(Unit) {
             detectTransformGestures { _, pan, zoomChange, rotationChange ->
-                mapData.onTransform(
-                    scale = 1 / zoomChange,
-                    rotate = -rotationChange,
-                    vX = -pan.x,
-                    vY = -pan.y,
+                onTransform(
+                    1 / zoomChange,
+                    -rotationChange,
+                    -pan.x,
+                    -pan.y,
                 )
             }
         }
         .pointerInput(Unit) {
             detectTapGestures(
                 onTap = { offset ->
-                    mapData.onClick(offset.x, offset.y)
+                    onClick(offset.x, offset.y)
                 },
             )
         }
     ) {
-        mapData.onSizeChanged(size.width.toInt(), size.height.toInt())
+        onSizeChanged(size.width.toInt(), size.height.toInt())
 
-        mapData.renderList?.forEach {
+        mapList.value?.forEach {
             when (it) {
                 is RenderPathItem -> drawPath(it.shape, it.paint, it.close)
                 is RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))

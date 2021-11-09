@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
+import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
@@ -43,12 +44,12 @@ class ComposableMapFragment : Fragment() {
     private val permissionChecker = GpsPermissionRequester(fragment = this)
     private val mapLogic = MapViewLogic(
         doAnimation = { it(1f) }, // TODO make animation
-        invalidate = { mapUpdates.value = "update " + System.currentTimeMillis() },
+        invalidate = { mapList.value = it },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
         bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
         setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) },
     )
-    private val mapUpdates = MutableLiveData("init")
+    private val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
     private val rememberTitle = MutableLiveData("")
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
@@ -60,8 +61,10 @@ class ComposableMapFragment : Fragment() {
                     )
                     Box(modifier = Modifier) {
                         ComposableMapView(
-                            mapData = mapLogic,
-                            state = mapUpdates.observeAsState(),
+                            onSizeChanged = mapLogic::onSizeChanged,
+                            onClick = mapLogic::onClick,
+                            onTransform = mapLogic::onTransform,
+                            mapList = mapList.observeAsState(),
                         )
                         FloatingActionButton(
                             modifier = Modifier
