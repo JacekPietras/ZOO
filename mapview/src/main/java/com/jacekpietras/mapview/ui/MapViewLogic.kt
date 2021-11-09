@@ -7,6 +7,7 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
@@ -40,9 +41,11 @@ class MapViewLogic<T>(
     var userData: UserData = UserData()
         set(value) {
             field = value
-            if (centeringAtUser) centerAtUserPosition()
-            if (centeringAtUser) centerAtUserCompass()
-            cutOutNotVisible()
+            if (centeringAtUser) {
+                centerAtUserPositionAndRotation()
+            } else {
+                cutOutNotVisible()
+            }
         }
     private val userPosition: PointD? get() = userData.userPosition
     private val compass: Float get() = userData.compass
@@ -96,39 +99,53 @@ class MapViewLogic<T>(
 
     fun centerAtPoint(desiredPosition: PointD) {
         centeringAtUser = false
-        val previousPosition = centerGpsCoordinate
-
-        doAnimation { progress ->
-            val left = 1f - progress
-            centerGpsCoordinate = previousPosition * left + desiredPosition * progress
-            cutOutNotVisible()
-        }
+        animateCentering(desiredPosition)
     }
 
     fun centerAtUserPosition() {
         centeringAtUser = true
         val desiredPosition = userPosition ?: return
-        val previousPosition = centerGpsCoordinate
+        animateCentering(desiredPosition)
+    }
 
+    private fun centerAtUserPositionAndRotation() {
+        animateCentering(userPosition, compass)
+    }
+
+    private var nextAnimation: Pair<PointD?, Float?>? = null
+    private val animatingNow = AtomicBoolean(false)
+    private fun animateCentering(desiredPosition: PointD?, desiredRotation: Float? = null) {
+        if (desiredPosition == null && desiredRotation == null) return
+        if (animatingNow.get()) {
+            nextAnimation = Pair(desiredPosition, desiredRotation)
+            return
+        }
+        animatingNow.set(true)
+        nextAnimation = null
+        val previousPosition = centerGpsCoordinate
+        val previousRotation = getPreviousRotation()
         doAnimation { progress ->
             val left = 1f - progress
-            centerGpsCoordinate = previousPosition * left + desiredPosition * progress
+            if (desiredPosition != null) {
+                centerGpsCoordinate = previousPosition * left + desiredPosition * progress
+            }
+            if (desiredRotation != null) {
+                worldRotation = previousRotation * left + desiredRotation * progress
+            }
             cutOutNotVisible()
+            if (progress == 1f) {
+                animatingNow.set(false)
+                nextAnimation?.run { animateCentering(first, second) }
+            }
         }
     }
 
-    private fun centerAtUserCompass() {
+    private fun getPreviousRotation(): Float {
         val diff = worldRotation - compass
-        val previousPosition = when {
+        return when {
             diff > 180 -> worldRotation - 360
             diff < -180 -> worldRotation + 360
             else -> worldRotation
-        }
-
-        doAnimation { progress ->
-            val left = 1f - progress
-            worldRotation = (previousPosition * left + compass * progress) % 360f
-            cutOutNotVisible()
         }
     }
 

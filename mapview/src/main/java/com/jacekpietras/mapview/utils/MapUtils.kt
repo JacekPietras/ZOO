@@ -1,7 +1,6 @@
 package com.jacekpietras.mapview.utils
 
 import android.animation.ValueAnimator
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.core.PointD
 
@@ -14,10 +13,10 @@ fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
     return result
 }
 
-fun View.doAnimation(onUpdate: (progress: Float) -> Unit) {
+fun doAnimation(onUpdate: (progress: Float) -> Unit) {
     ValueAnimator.ofFloat(1f)
         .apply {
-            duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+            duration = 1000
             interpolator = AccelerateDecelerateInterpolator()
             addUpdateListener { animation ->
                 onUpdate(animation.animatedFraction)

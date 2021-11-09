@@ -16,6 +16,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderCircleItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderPathItem
+import timber.log.Timber
 
 @Composable
 fun ComposableMapView(
@@ -47,6 +48,7 @@ fun ComposableMapView(
     ) {
         onSizeChanged(size.width.toInt(), size.height.toInt())
 
+        Timber.e("dupa map drawn!")
         mapList.value?.forEach {
             when (it) {
                 is RenderPathItem -> drawPath(it.shape, it.paint, it.close)

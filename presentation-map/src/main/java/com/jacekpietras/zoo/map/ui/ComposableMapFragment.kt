@@ -27,6 +27,7 @@ import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.*
@@ -44,7 +45,7 @@ class ComposableMapFragment : Fragment() {
     private val paintBaker by lazy { ComposablePaintBaker(requireActivity()) }
     private val permissionChecker = GpsPermissionRequester(fragment = this)
     private val mapLogic = MapViewLogic(
-        doAnimation = { it(1f) }, // TODO make animation
+        doAnimation = ::doAnimation,
         invalidate = { mapList.value = it },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
         bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },

@@ -3,13 +3,11 @@ package com.jacekpietras.zoo.map.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
 import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.combine
 import com.jacekpietras.core.reduce
-import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
-import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
+import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalId
@@ -46,7 +44,6 @@ internal class MapViewModel(
     private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
-    private val dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider(),
 ) : ViewModel() {
 
     private val volatileState = NullSafeMutableLiveData(MapVolatileState())
@@ -59,7 +56,7 @@ internal class MapViewModel(
     val effect: Flow<MapEffect> = _effect.receiveAsFlow()
 
     init {
-        viewModelScope.launch(dispatcherProvider.main) {
+        launchInMain {
             launch { loadAnimalsUseCase.run() }
 
             observeCompassUseCase.run()
@@ -113,14 +110,14 @@ internal class MapViewModel(
         try {
             uploadHistoryUseCase.run()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
-            viewModelScope.launch(dispatcherProvider.main) {
+            launchInMain {
                 _effect.send(MapEffect.ShowToast(Text("Upload failed")))
             }
         }
     }
 
     fun onPointPlaced(point: PointD) {
-        viewModelScope.launch(dispatcherProvider.main) {
+        launchInMain {
             volatileState.reduce { copy(snappedPoint = point) }
             volatileState.reduce { copy(shortestPath = getShortestPathUseCase.run(point)) }
         }
@@ -138,14 +135,14 @@ internal class MapViewModel(
     }
 
     private fun onMyLocationClicked() {
-        viewModelScope.launch(dispatcherProvider.main) {
+        launchInMain {
             _effect.send(MapEffect.CenterAtUser)
         }
     }
 
     private fun onLocationDenied() {
         if (BuildConfig.DEBUG) {
-            viewModelScope.launch(dispatcherProvider.main) {
+            launchInMain {
                 _effect.send(MapEffect.ShowToast(Text(R.string.location_denied)))
             }
         }
