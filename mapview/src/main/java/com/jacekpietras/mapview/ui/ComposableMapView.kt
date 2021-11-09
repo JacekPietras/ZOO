@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderPathItem
 import timber.log.Timber
 
 @Composable
@@ -46,10 +48,10 @@ fun ComposableMapView(
     ) {
         mapData.onSizeChanged(size.width.toInt(), size.height.toInt())
 
-        mapData.getFullRenderList().forEach {
+        mapData.renderList?.forEach {
             when (it) {
-                is MapViewLogic.RenderPathItem -> drawPath(it.shape, it.paint, it.close)
-                is MapViewLogic.RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))
+                is RenderPathItem -> drawPath(it.shape, it.paint, it.close)
+                is RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))
             }
         }
     }

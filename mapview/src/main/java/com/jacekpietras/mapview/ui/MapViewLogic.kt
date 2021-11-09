@@ -69,7 +69,7 @@ class MapViewLogic<T>(
         set(value) {
             field = value % 360
         }
-    private var renderList: List<RenderPathItem<T>>? = null
+    var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
 
     private val userPositionPaint: T by lazy {
@@ -193,33 +193,28 @@ class MapViewLogic<T>(
         setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(point[0], point[1]))
     }
 
-    fun getFullRenderList(): List<RenderItem<T>> {
-        val extraRenderList = mutableListOf<RenderItem<T>>()
-
-        renderList?.also(extraRenderList::addAll)
-
-        userPositionOnScreen?.let {
-            extraRenderList.add(RenderCircleItem(it[0], it[1], 15f, userPositionPaint))
-        }
-        terminalPointsOnScreen?.let { array ->
-            for (i in array.indices step 2) {
-                extraRenderList.add(RenderCircleItem(array[i], array[i + 1], 5f, terminalPaint))
+    private val extraRenderList: List<RenderItem<T>>
+        get() = mutableListOf<RenderItem<T>>().apply {
+            userPositionOnScreen?.also {
+                add(RenderCircleItem(it[0], it[1], 15f, userPositionPaint))
+            }
+            terminalPointsOnScreen?.also { array ->
+                for (i in array.indices step 2) {
+                    add(RenderCircleItem(array[i], array[i + 1], 5f, terminalPaint))
+                }
+            }
+            shortestPathOnScreen?.also { array ->
+                add(RenderPathItem(array, shortestPaint, false))
+            }
+            interestingOnScreen?.also { array ->
+                for (i in array.indices step 2) {
+                    add(RenderCircleItem(array[i], array[i + 1], 5f, interestingPaint))
+                }
+            }
+            clickOnScreen?.also {
+                add(RenderCircleItem(it[0], it[1], 15f, interestingPaint))
             }
         }
-        shortestPathOnScreen?.let { array ->
-            extraRenderList.add(RenderPathItem(array, shortestPaint, false))
-        }
-        interestingOnScreen?.let { array ->
-            for (i in array.indices step 2) {
-                extraRenderList.add(RenderCircleItem(array[i], array[i + 1], 5f, interestingPaint))
-            }
-        }
-        clickOnScreen?.let {
-            extraRenderList.add(RenderCircleItem(it[0], it[1], 15f, interestingPaint))
-        }
-
-        return extraRenderList
-    }
 
     private fun List<MapItem>.toRenderItems(): List<ObjectItem<T>> {
         val innerPaints = mutableMapOf<MapPaint, PaintHolder<T>>()
@@ -410,7 +405,7 @@ class MapViewLogic<T>(
                 .withMatrix(matrix, worldRotation)
         }
 
-        renderList = borders + insides
+        renderList = borders + insides + extraRenderList
 
         if (invalidate) invalidate()
     }
