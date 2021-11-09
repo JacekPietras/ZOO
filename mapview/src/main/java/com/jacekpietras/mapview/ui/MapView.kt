@@ -16,7 +16,7 @@ class MapView @JvmOverloads constructor(
     private val paintBaker = ViewPaintBaker(context)
 
     val logic = MapViewLogic(
-        doAnimation = { lambda -> doAnimation(true, lambda) },
+        doAnimation = this::doAnimation,
         invalidate = { invalidate() },
         bakeCanvasPaint = paintBaker::bakeCanvasPaint,
         bakeBorderCanvasPaint = paintBaker::bakeBorderCanvasPaint,

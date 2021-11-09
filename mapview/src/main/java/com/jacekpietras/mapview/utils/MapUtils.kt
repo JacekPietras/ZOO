@@ -5,8 +5,6 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.core.PointD
 
-fun Double.form() = "%.6f".format(this)
-
 fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
     val result = DoubleArray(list.size * 2)
     for (i in list.indices) {
@@ -16,18 +14,14 @@ fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
     return result
 }
 
-fun View.doAnimation(animating: Boolean = true, onUpdate: (progress: Float, left: Float) -> Unit) {
-    if (animating) {
-        ValueAnimator.ofFloat(1f)
-            .apply {
-                duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
-                interpolator = AccelerateDecelerateInterpolator()
-                addUpdateListener { animation ->
-                    onUpdate(animation.animatedFraction, (1f - animation.animatedFraction))
-                }
-                start()
+fun View.doAnimation(onUpdate: (progress: Float) -> Unit) {
+    ValueAnimator.ofFloat(1f)
+        .apply {
+            duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener { animation ->
+                onUpdate(animation.animatedFraction)
             }
-    } else {
-        onUpdate(1f, 0f)
-    }
+            start()
+        }
 }

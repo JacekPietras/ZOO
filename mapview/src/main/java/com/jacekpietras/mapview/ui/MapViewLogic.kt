@@ -13,7 +13,7 @@ import kotlin.math.min
 import kotlin.math.sin
 
 class MapViewLogic<T>(
-    private val doAnimation: ((progress: Float, left: Float) -> Unit) -> Unit,
+    private val doAnimation: ((progress: Float) -> Unit) -> Unit,
     private val invalidate: () -> Unit,
     private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
     private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
@@ -98,7 +98,8 @@ class MapViewLogic<T>(
         centeringAtUser = false
         val previousPosition = centerGpsCoordinate
 
-        doAnimation { progress, left ->
+        doAnimation { progress ->
+            val left = 1f - progress
             centerGpsCoordinate = previousPosition * left + desiredPosition * progress
             cutOutNotVisible()
         }
@@ -109,7 +110,8 @@ class MapViewLogic<T>(
         val desiredPosition = userPosition ?: return
         val previousPosition = centerGpsCoordinate
 
-        doAnimation { progress, left ->
+        doAnimation { progress ->
+            val left = 1f - progress
             centerGpsCoordinate = previousPosition * left + desiredPosition * progress
             cutOutNotVisible()
         }
@@ -123,7 +125,8 @@ class MapViewLogic<T>(
             else -> worldRotation
         }
 
-        doAnimation { progress, left ->
+        doAnimation { progress ->
+            val left = 1f - progress
             worldRotation = (previousPosition * left + compass * progress) % 360f
             cutOutNotVisible()
         }
