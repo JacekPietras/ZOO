@@ -28,9 +28,12 @@ fun ComposableMapView(
         .clipToBounds()
         .pointerInput(Unit) {
             detectTransformGestures { _, pan, zoomChange, rotationChange ->
-                mapData.onScroll(-pan.x, -pan.y)
-                mapData.onScale(1 / zoomChange)
-                mapData.onRotate(-rotationChange)
+                mapData.onTransform(
+                    scale = 1 / zoomChange,
+                    rotate = -rotationChange,
+                    vX = -pan.x,
+                    vY = -pan.y,
+                )
             }
         }
         .pointerInput(Unit) {
@@ -43,16 +46,12 @@ fun ComposableMapView(
     ) {
         mapData.onSizeChanged(size.width.toInt(), size.height.toInt())
 
-        mapData.draw(
-            drawPath = this::drawPath,
-            drawCircle = { cx, cy, radius, paint ->
-                drawCircle(
-                    color = paint.color,
-                    radius = radius,
-                    center = Offset(cx, cy),
-                )
-            },
-        )
+        mapData.getFullRenderList().forEach {
+            when (it) {
+                is MapViewLogic.RenderPathItem -> drawPath(it.shape, it.paint, it.close)
+                is MapViewLogic.RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))
+            }
+        }
     }
 }
 

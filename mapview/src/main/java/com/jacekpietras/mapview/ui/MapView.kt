@@ -52,10 +52,12 @@ class MapView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        logic.draw(
-            drawPath = canvas::drawPath,
-            drawCircle = canvas::drawCircle,
-        )
+        logic.getFullRenderList().forEach {
+            when (it) {
+                is MapViewLogic.RenderPathItem -> canvas.drawPath(it.shape, it.paint, it.close)
+                is MapViewLogic.RenderCircleItem -> canvas.drawCircle(it.cX, it.cY, it.radius, it.paint)
+            }
+        }
     }
 
     fun centerAtUserPosition() {

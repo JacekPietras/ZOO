@@ -62,8 +62,14 @@ class MapViewLogic<T>(
     private lateinit var visibleGpsCoordinate: ViewCoordinates
     private var centerGpsCoordinate: PointD = PointD(worldBounds.centerX(), worldBounds.centerY())
     private var zoom: Double = 5.0
+        set(value) {
+            field = value.coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+        }
     private var worldRotation: Float = 0f
-    private var renderList: List<RenderItem<T>>? = null
+        set(value) {
+            field = value % 360
+        }
+    private var renderList: List<RenderPathItem<T>>? = null
     private var centeringAtUser = false
 
     private val userPositionPaint: T by lazy {
@@ -131,16 +137,25 @@ class MapViewLogic<T>(
         }
     }
 
+    fun onTransform(scale: Float, rotate: Float, vX: Float, vY: Float) {
+        zoom *= scale
+        worldRotation += rotate
+        centeringAtUser = false
+        centerGpsCoordinate += toMovementInWorld(vX, vY)
+
+        cutOutNotVisible()
+    }
+
     fun onScale(scale: Float) {
         if (scale != 1f) {
-            zoom = (zoom * scale).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+            zoom *= scale
             cutOutNotVisible()
         }
     }
 
     fun onRotate(rotate: Float) {
         if (rotate != 0f) {
-            worldRotation = (worldRotation + rotate) % 360
+            worldRotation += rotate
             cutOutNotVisible()
         }
     }
@@ -148,14 +163,19 @@ class MapViewLogic<T>(
     fun onScroll(vX: Float, vY: Float) {
         if (vX != 0f || vY != 0f) {
             centeringAtUser = false
-            val radians = Math.toRadians(-worldRotation.toDouble())
-            centerGpsCoordinate += PointD(
-                (sin(radians) * vY + cos(radians) * vX) / visibleGpsCoordinate.horizontalScale,
-                (-sin(radians) * vX + cos(radians) * vY) / visibleGpsCoordinate.verticalScale
-            )
+            centerGpsCoordinate += toMovementInWorld(vX, vY)
             cutOutNotVisible()
         }
     }
+
+    private fun toMovementInWorld(vX: Float, vY: Float): PointD =
+        Math.toRadians(-worldRotation.toDouble())
+            .let { radians ->
+                PointD(
+                    (sin(radians) * vY + cos(radians) * vX) / visibleGpsCoordinate.horizontalScale,
+                    (-sin(radians) * vX + cos(radians) * vY) / visibleGpsCoordinate.verticalScale,
+                )
+            }
 
     fun onClick(x: Float, y: Float) {
         val point = FloatArray(2)
@@ -173,31 +193,32 @@ class MapViewLogic<T>(
         setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(point[0], point[1]))
     }
 
-    fun draw(
-        drawPath: (shape: FloatArray, paint: T, close: Boolean) -> Unit,
-        drawCircle: (cx: Float, xy: Float, radius: Float, paint: T) -> Unit,
-    ) {
+    fun getFullRenderList(): List<RenderItem<T>> {
+        val extraRenderList = mutableListOf<RenderItem<T>>()
 
-        renderList?.forEach { drawPath(it.shape, it.paint, it.close) }
+        renderList?.also(extraRenderList::addAll)
+
         userPositionOnScreen?.let {
-            drawCircle(it[0], it[1], 15f, userPositionPaint)
+            extraRenderList.add(RenderCircleItem(it[0], it[1], 15f, userPositionPaint))
         }
         terminalPointsOnScreen?.let { array ->
             for (i in array.indices step 2) {
-                drawCircle(array[i], array[i + 1], 5f, terminalPaint)
+                extraRenderList.add(RenderCircleItem(array[i], array[i + 1], 5f, terminalPaint))
             }
         }
         shortestPathOnScreen?.let { array ->
-            drawPath(array, shortestPaint, false)
+            extraRenderList.add(RenderPathItem(array, shortestPaint, false))
         }
         interestingOnScreen?.let { array ->
             for (i in array.indices step 2) {
-                drawCircle(array[i], array[i + 1], 5f, interestingPaint)
+                extraRenderList.add(RenderCircleItem(array[i], array[i + 1], 5f, interestingPaint))
             }
         }
         clickOnScreen?.let {
-            drawCircle(it[0], it[1], 15f, interestingPaint)
+            extraRenderList.add(RenderCircleItem(it[0], it[1], 15f, interestingPaint))
         }
+
+        return extraRenderList
     }
 
     private fun List<MapItem>.toRenderItems(): List<ObjectItem<T>> {
@@ -333,8 +354,8 @@ class MapViewLogic<T>(
             return
         }
 
-        val borders = mutableListOf<RenderItem<T>>()
-        val insides = mutableListOf<RenderItem<T>>()
+        val borders = mutableListOf<RenderPathItem<T>>()
+        val insides = mutableListOf<RenderPathItem<T>>()
         val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
 
         val matrix = Matrix()
@@ -403,12 +424,12 @@ class MapViewLogic<T>(
 
     private fun ObjectItem<T>.addToRender(
         array: FloatArray,
-        borders: MutableList<RenderItem<T>>,
-        insides: MutableList<RenderItem<T>>,
+        borders: MutableList<RenderPathItem<T>>,
+        insides: MutableList<RenderPathItem<T>>,
         dynamicPaints: MutableMap<PaintHolder.Dynamic<T>, T>,
     ) {
         insides.add(
-            RenderItem(
+            RenderPathItem(
                 array,
                 paintHolder.takePaint(dynamicPaints),
                 close
@@ -416,7 +437,7 @@ class MapViewLogic<T>(
         )
         if (outerPaintHolder != null) {
             borders.add(
-                RenderItem(
+                RenderPathItem(
                     array,
                     outerPaintHolder.takePaint(dynamicPaints),
                     close
@@ -432,11 +453,20 @@ class MapViewLogic<T>(
         val close: Boolean,
     )
 
-    internal class RenderItem<T>(
+    interface RenderItem<T>
+
+    class RenderPathItem<T>(
         val shape: FloatArray,
         val paint: T,
         val close: Boolean,
-    )
+    ) : RenderItem<T>
+
+    class RenderCircleItem<T>(
+        val cX: Float,
+        val cY: Float,
+        val radius: Float,
+        val paint: T,
+    ) : RenderItem<T>
 
     class WorldData(
         val bounds: RectD = RectD(),

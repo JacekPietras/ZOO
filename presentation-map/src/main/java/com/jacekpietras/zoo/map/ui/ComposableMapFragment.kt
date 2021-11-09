@@ -42,7 +42,7 @@ class ComposableMapFragment : Fragment() {
     private val paintBaker by lazy { ComposablePaintBaker(requireActivity()) }
     private val permissionChecker = GpsPermissionRequester(fragment = this)
     private val mapLogic = MapViewLogic(
-        doAnimation = { it(1f, 0f) },
+        doAnimation = { it(1f, 0f) }, // TODO make animation
         invalidate = { mapUpdates.value = "update " + System.currentTimeMillis() },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
         bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
