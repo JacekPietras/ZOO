@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import com.jacekpietras.core.PointD
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderCircleItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderPathItem
-import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.drawPath
 
 class MapView @JvmOverloads constructor(
@@ -16,7 +15,6 @@ class MapView @JvmOverloads constructor(
     private val paintBaker = ViewPaintBaker(context)
 
     val logic = MapViewLogic(
-        doAnimation = ::doAnimation,
         invalidate = { invalidate() },
         bakeCanvasPaint = paintBaker::bakeCanvasPaint,
         bakeBorderCanvasPaint = paintBaker::bakeBorderCanvasPaint,

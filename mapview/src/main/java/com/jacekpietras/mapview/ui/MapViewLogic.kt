@@ -6,6 +6,7 @@ import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
+import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -14,7 +15,7 @@ import kotlin.math.min
 import kotlin.math.sin
 
 class MapViewLogic<T>(
-    private val doAnimation: ((progress: Float) -> Unit) -> Unit,
+    private val doAnimation: ((progress: Float) -> Unit) -> Unit = ::doAnimation,
     private val invalidate: (List<RenderItem<T>>) -> Unit,
     private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
     private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
