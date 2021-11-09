@@ -8,19 +8,12 @@ import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.map.R
-import com.jacekpietras.zoo.map.model.MapState
-import com.jacekpietras.zoo.map.model.MapViewState
-import com.jacekpietras.zoo.map.model.MapVolatileState
-import com.jacekpietras.zoo.map.model.MapVolatileViewState
-import timber.log.Timber
+import com.jacekpietras.zoo.map.model.*
 
 internal class MapViewStateMapper {
 
-    fun from(state: MapVolatileState): MapVolatileViewState = with(state) {
-//        Timber.e("dupa update volatile")
-        MapVolatileViewState(
-            compass = compass,
-            userPosition = userPosition,
+    fun from(state: MapState): MapViewState = with(state) {
+        MapViewState(
             title = when {
                 selectedAnimal != null -> Text(selectedAnimal.name)
                 else -> Text(R.string.around_you)
@@ -33,14 +26,20 @@ internal class MapViewStateMapper {
                             Text.Listing(animalsInUserPosition.map { Text(it.name) })
                 }
             },
+        )
+    }
+
+    fun from(state: MapVolatileState): MapVolatileViewState = with(state) {
+        MapVolatileViewState(
+            compass = compass,
+            userPosition = userPosition,
             snappedPoint = snappedPoint,
             shortestPath = shortestPath,
         )
     }
 
-    fun from(state: MapState): MapViewState = with(state) {
-//        Timber.e("dupa update whole map")
-        MapViewState(
+    fun from(state: MapWorldState): MapWorldViewState = with(state) {
+        MapWorldViewState(
             worldBounds = worldBounds,
             mapData = flatListOf(
                 fromPaths(technicalRoute, technicalPaint),

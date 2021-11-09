@@ -15,7 +15,6 @@ import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
@@ -34,8 +33,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun setObservers() = with(viewModel) {
-        mapViewState.observe(viewLifecycleOwner) {
-            Timber.e("dupa observe whole map")
+        mapWorldViewState.observe(viewLifecycleOwner) {
             with(it) {
                 binding.mapView.logic.worldData = MapViewLogic.WorldData(
                     bounds = worldBounds,
@@ -45,17 +43,19 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             }
         }
         volatileViewState.observe(viewLifecycleOwner) {
-            Timber.e("dupa observe volatile map")
             with(it) {
-                binding.topCardTitle.text = title.toCharSeq(requireContext())
-                binding.topCardContent.text = content.toCharSeq(requireContext())
-
                 binding.mapView.logic.userData = MapViewLogic.UserData(
                     userPosition = userPosition,
                     compass = compass,
                     clickOnWorld = snappedPoint,
                     shortestPath = shortestPath,
                 )
+            }
+        }
+        viewState.observe(viewLifecycleOwner) {
+            with(it) {
+                binding.topCardTitle.text = title.toCharSeq(requireContext())
+                binding.topCardContent.text = content.toCharSeq(requireContext())
             }
         }
 

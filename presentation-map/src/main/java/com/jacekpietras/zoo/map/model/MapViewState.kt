@@ -1,11 +1,13 @@
 package com.jacekpietras.zoo.map.model
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
-import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.zoo.core.text.Text
 
-internal class MapViewState(
-    val worldBounds: RectD = RectD(0.0, 0.0, 0.0, 0.0),
-    val mapData: List<MapItem> = emptyList(),
-    val terminalPoints: List<PointD> = emptyList(),
+internal data class MapViewState(
+    val compass: Float = 0f,
+    val userPosition: PointD = PointD(0.0, 0.0),
+    val title: Text = Text.Empty,
+    val content: Text = Text.Empty,
+    val snappedPoint: PointD? = null,
+    val shortestPath: List<PointD> = emptyList(),
 )

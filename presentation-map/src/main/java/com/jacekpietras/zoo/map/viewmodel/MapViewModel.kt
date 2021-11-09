@@ -7,7 +7,11 @@ import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.combine
 import com.jacekpietras.core.reduce
+import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
+import com.jacekpietras.zoo.core.dispatcher.onBackground
+import com.jacekpietras.zoo.core.extensions.mapInBackground
+import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalId
@@ -46,30 +50,33 @@ internal class MapViewModel(
     private val getShortestPathUseCase: GetShortestPathUseCase,
 ) : ViewModel() {
 
+    private val state = NullSafeMutableLiveData(MapState())
+    val viewState: LiveData<MapViewState> = state.map(mapper::from)
+
     private val volatileState = NullSafeMutableLiveData(MapVolatileState())
     val volatileViewState: LiveData<MapVolatileViewState> = volatileState.map(mapper::from)
 
-    private val mapState = NullSafeMutableLiveData(MapState())
-    var mapViewState: LiveData<MapViewState> = mapState.map(mapper::from)
+    private val mapWorldState = NullSafeMutableLiveData(MapWorldState())
+    var mapWorldViewState: LiveData<MapWorldViewState> = mapWorldState.mapInBackground(mapper::from)
 
     private val _effect = Channel<MapEffect>()
     val effect: Flow<MapEffect> = _effect.receiveAsFlow()
 
     init {
-        launchInMain {
+        launchInBackground {
             launch { loadAnimalsUseCase.run() }
 
             observeCompassUseCase.run()
-                .onEach { volatileState.reduce { copy(compass = it) } }
+                .onEach { volatileState.reduceOnMain { copy(compass = it) } }
                 .launchIn(this)
             getUserPositionUseCase.run()
-                .onEach { volatileState.reduce { copy(userPosition = it) } }
+                .onEach { volatileState.reduceOnMain { copy(userPosition = it) } }
                 .launchIn(this)
             getRegionsInUserPositionUseCase.run()
-                .onEach { volatileState.reduce { copy(regionsInUserPosition = it) } }
+                .onEach { state.reduceOnMain { copy(regionsInUserPosition = it) } }
                 .launchIn(this)
             getAnimalsInUserPositionUseCase.run()
-                .onEach { volatileState.reduce { copy(animalsInUserPosition = it) } }
+                .onEach { state.reduceOnMain { copy(animalsInUserPosition = it) } }
                 .launchIn(this)
 
             combine(
@@ -82,7 +89,7 @@ internal class MapViewModel(
                 getTechnicalRoadsUseCase.run(),
                 getTerminalNodesUseCase.run(),
             ) { worldBounds, buildings, aviary, roads, lines, takenRoute, technicalRoute, terminalPoints ->
-                mapState.reduce {
+                mapWorldState.reduceOnMain {
                     copy(
                         worldBounds = worldBounds,
                         buildings = buildings,
@@ -98,7 +105,7 @@ internal class MapViewModel(
 
             if (animalId != null) {
                 val animal = getAnimalUseCase.run(animalId)
-                volatileState.reduce { copy(selectedAnimal = animal) }
+                state.reduceOnMain { copy(selectedAnimal = animal) }
                 val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo)
                 onPointPlaced(point)
                 _effect.send(MapEffect.CenterAtPoint(point))
@@ -119,7 +126,10 @@ internal class MapViewModel(
     fun onPointPlaced(point: PointD) {
         launchInMain {
             volatileState.reduce { copy(snappedPoint = point) }
-            volatileState.reduce { copy(shortestPath = getShortestPathUseCase.run(point)) }
+            onBackground {
+                val shortestPath = getShortestPathUseCase.run(point)
+                volatileState.reduceOnMain { copy(shortestPath = shortestPath) }
+            }
         }
     }
 

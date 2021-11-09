@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.*
+import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -52,14 +54,15 @@ class ComposableMapFragment : Fragment() {
         setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) },
     )
     private val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
-    private val rememberTitle = MutableLiveData("")
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
+            val viewState by viewModel.viewState.observeAsState(MapViewState())
+
             MdcTheme {
                 Column {
                     ToolbarView(
-                        title = rememberTitle.observeAsState().value ?: ""
+                        title = viewState.title.toString(requireContext())
                     )
                     Box(modifier = Modifier) {
                         ComposableMapView(
@@ -108,7 +111,7 @@ class ComposableMapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(viewModel) {
-            mapViewState.observe(viewLifecycleOwner) {
+            mapWorldViewState.observe(viewLifecycleOwner) {
                 with(it) {
                     mapLogic.worldData = MapViewLogic.WorldData(
                         bounds = worldBounds,
@@ -125,7 +128,6 @@ class ComposableMapFragment : Fragment() {
                         clickOnWorld = snappedPoint,
                         shortestPath = shortestPath,
                     )
-                    rememberTitle.value = title.toString(requireContext())
                 }
             }
 
