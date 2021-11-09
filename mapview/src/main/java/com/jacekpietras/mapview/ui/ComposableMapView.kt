@@ -24,7 +24,6 @@ fun ComposableMapView(
     onTransform: (Float, Float, Float, Float) -> Unit,
     mapList: State<List<MapViewLogic.RenderItem<ComposablePaint>>?>,
 ) {
-
     Canvas(modifier = Modifier
         .fillMaxSize()
         .clipToBounds()

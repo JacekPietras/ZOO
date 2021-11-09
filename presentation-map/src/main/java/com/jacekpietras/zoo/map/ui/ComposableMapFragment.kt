@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,34 +67,39 @@ class ComposableMapFragment : Fragment() {
                             onTransform = mapLogic::onTransform,
                             mapList = mapList.observeAsState(),
                         )
-                        FloatingActionButton(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .align(Alignment.BottomEnd),
-                            onClick = { viewModel.onLocationButtonClicked(permissionChecker) },
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_my_location_24),
-                                tint = Color.Black,
-                                contentDescription = stringResource(R.string.my_location),
-                            )
-                        }
-
-                        FloatingActionButton(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .align(Alignment.TopEnd),
-                            onClick = { viewModel.onUploadClicked() },
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_upload_24),
-                                tint = Color.Black,
-                                contentDescription = stringResource(R.string.upload),
-                            )
-                        }
+                        LocationButtonView(Modifier.align(Alignment.BottomEnd))
+                        UploadButtonView(Modifier.align(Alignment.TopEnd))
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun LocationButtonView(modifier: Modifier = Modifier) {
+        FloatingActionButton(
+            modifier = modifier.padding(16.dp),
+            onClick = { viewModel.onLocationButtonClicked(permissionChecker) },
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_my_location_24),
+                tint = Color.Black,
+                contentDescription = stringResource(R.string.my_location),
+            )
+        }
+    }
+
+    @Composable
+    private fun UploadButtonView(modifier: Modifier = Modifier) {
+        FloatingActionButton(
+            modifier = modifier.padding(16.dp),
+            onClick = { viewModel.onUploadClicked() },
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_upload_24),
+                tint = Color.Black,
+                contentDescription = stringResource(R.string.upload),
+            )
         }
     }
 
