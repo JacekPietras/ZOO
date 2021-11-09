@@ -33,6 +33,8 @@ class MapViewLogic<T>(
             objectList = value.objectList.toRenderItems()
 
             cutOutNotVisible()
+
+            nextAnimation?.run { animateCentering(first, second) }
         }
     private val worldBounds: RectD get() = worldData.bounds
     private var objectList: List<ObjectItem<T>> = emptyList()
@@ -116,7 +118,7 @@ class MapViewLogic<T>(
     private val animatingNow = AtomicBoolean(false)
     private fun animateCentering(desiredPosition: PointD?, desiredRotation: Float? = null) {
         if (desiredPosition == null && desiredRotation == null) return
-        if (animatingNow.get()) {
+        if (animatingNow.get() || worldBounds.notInitialized()) {
             nextAnimation = Pair(desiredPosition, desiredRotation)
             return
         }
@@ -360,7 +362,7 @@ class MapViewLogic<T>(
 
     private fun cutOutNotVisible(invalidate: Boolean = true) {
         if (currentWidth == 0 || currentHeight == 0) return
-        if (worldBounds.width() == 0.0 || worldBounds.height() == 0.0) return
+        if (worldBounds.notInitialized()) return
 
         visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
 
