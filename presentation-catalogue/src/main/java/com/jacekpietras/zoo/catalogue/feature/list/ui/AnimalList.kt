@@ -42,7 +42,7 @@ internal fun AnimalList(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable(onClick = { onAnimalClicked(animal.id) }),
+                        .clickable { onAnimalClicked(animal.id) },
                     contentAlignment = Alignment.BottomEnd,
                 ) {
                     val painter = rememberImagePainter(

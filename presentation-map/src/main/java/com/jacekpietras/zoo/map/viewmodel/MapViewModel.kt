@@ -162,4 +162,8 @@ internal class MapViewModel(
     fun onCameraButtonClicked(router: MapRouter) {
         router.navigateToCamera()
     }
+
+    fun onRegionClicked(region: Text) {
+
+    }
 }

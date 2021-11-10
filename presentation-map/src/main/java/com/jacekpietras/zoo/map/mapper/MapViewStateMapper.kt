@@ -14,6 +14,7 @@ internal class MapViewStateMapper {
 
     fun from(state: MapState): MapViewState = with(state) {
         MapViewState(
+            isGuidanceShown = selectedAnimal != null,
             title = when {
                 selectedAnimal != null -> Text(selectedAnimal.name)
                 else -> Text(R.string.around_you)
@@ -26,6 +27,8 @@ internal class MapViewStateMapper {
                             Text.Listing(animalsInUserPosition.map { Text(it.name) })
                 }
             },
+            isNearRegionsShown = selectedAnimal == null,
+            nearRegions = regionsInUserPosition.map(Text::Value),
         )
     }
 

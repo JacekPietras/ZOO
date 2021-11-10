@@ -5,11 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -17,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -61,9 +66,12 @@ class ComposableMapFragment : Fragment() {
             MdcTheme {
                 Column {
                     val viewState by viewModel.viewState.observeAsState(MapViewState())
-                    ToolbarView(
-                        title = viewState.title,
-                    )
+                    if (viewState.isGuidanceShown) {
+                        ToolbarView(
+                            title = viewState.title,
+                            onClose = {},
+                        )
+                    }
                     Box(modifier = Modifier) {
                         ComposableMapView(
                             onSizeChanged = mapLogic::onSizeChanged,
@@ -71,6 +79,28 @@ class ComposableMapFragment : Fragment() {
                             onTransform = mapLogic::onTransform,
                             mapList = mapList.observeAsState(),
                         )
+                        if (viewState.isNearRegionsShown) {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                            ) {
+                                items(viewState.nearRegions) { region ->
+                                    Card(
+                                        shape = RoundedCornerShape(50),
+                                    ) {
+                                        Box(
+                                            modifier = Modifier.clickable { viewModel.onRegionClicked(region)}
+                                        ) {
+                                            Text(
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                                text = region.toString(LocalContext.current),
+                                                color = Color.Black,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         UploadButtonView(Modifier.align(Alignment.TopEnd))
                         Column(
                             Modifier
