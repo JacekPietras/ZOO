@@ -34,6 +34,7 @@ import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.extensions.observe
+import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.*
 import com.jacekpietras.zoo.map.model.MapViewState
@@ -66,8 +67,9 @@ class ComposableMapFragment : Fragment() {
                 Column {
                     val viewState by viewModel.viewState.observeAsState(MapViewState())
                     if (viewState.isGuidanceShown) {
-                        ToolbarView(
+                        ClosableToolbarView(
                             title = viewState.title,
+                            onBack = { viewModel.onBackClicked(router) },
                             onClose = { viewModel.onCloseClicked() },
                         )
                     }

@@ -15,6 +15,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
+import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -42,6 +43,13 @@ class CatalogueFragment : Fragment() {
                                 onSearch = viewModel::onSearch,
                                 onSearchClicked = viewModel::onSearchClicked,
                                 onFilterClicked = viewModel::onFilterClicked,
+                            )
+                        }
+                        if (isRegionShown) {
+                            ClosableToolbarView(
+                                title = regionName,
+                                onBack = { viewModel.onBackClicked(router) },
+                                onClose = { viewModel.onCloseClicked() },
                             )
                         }
                         AnimalList(

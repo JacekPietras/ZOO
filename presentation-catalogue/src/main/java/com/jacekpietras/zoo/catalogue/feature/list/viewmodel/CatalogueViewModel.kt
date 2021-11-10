@@ -68,4 +68,12 @@ internal class CatalogueViewModel(
     fun onSearch(query: String) {
         filterFlow.value = filterFlow.value.copy(query = query)
     }
+
+    fun onBackClicked(router: CatalogueRouter) {
+        router.goBack()
+    }
+
+    fun onCloseClicked() {
+        filterFlow.value = filterFlow.value.copy(regionId = null)
+    }
 }

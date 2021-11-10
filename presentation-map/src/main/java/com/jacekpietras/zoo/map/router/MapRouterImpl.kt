@@ -20,4 +20,8 @@ internal class MapRouterImpl(
     override fun navigateToAnimalList(regionId: String) {
         navController.navigate(Uri.parse("zoo://fragmentCatalogue?regionId=$regionId"))
     }
+
+    override fun goBack() {
+        navController.navigateUp()
+    }
 }

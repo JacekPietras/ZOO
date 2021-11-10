@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.map.ui
+package com.jacekpietras.zoo.core.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -12,14 +12,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jacekpietras.zoo.core.R
 import com.jacekpietras.zoo.core.text.Text
-import com.jacekpietras.zoo.map.R
 
 @Composable
-internal fun ToolbarView(
+fun ClosableToolbarView(
     title: Text,
+    onBack: () -> Unit,
     onClose: () -> Unit,
 ) {
     Card(
@@ -29,6 +31,19 @@ internal fun ToolbarView(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Box {
+            IconButton(
+                modifier = Modifier
+                    .then(Modifier.size(48.dp))
+                    .align(Alignment.TopStart)
+                    .padding(12.dp),
+                onClick = onBack,
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_back_24),
+                    tint = Color.Black,
+                    contentDescription = stringResource(R.string.back)
+                )
+            }
             Row(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -45,14 +60,14 @@ internal fun ToolbarView(
             IconButton(
                 modifier = Modifier
                     .then(Modifier.size(48.dp))
-                    .align(Alignment.CenterEnd)
+                    .align(Alignment.TopEnd)
                     .padding(12.dp),
                 onClick = onClose,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_close_24),
                     tint = Color.Black,
-                    contentDescription = null // decorative element
+                    contentDescription = stringResource(R.string.close)
                 )
             }
         }

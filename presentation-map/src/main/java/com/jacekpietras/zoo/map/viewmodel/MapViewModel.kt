@@ -176,4 +176,8 @@ internal class MapViewModel(
             )
         }
     }
+
+    fun onBackClicked(router: MapRouter) {
+        router.goBack()
+    }
 }

@@ -11,4 +11,8 @@ internal class CatalogueRouterImpl(
     override fun navigateToAnimal(animalId: AnimalId) {
         navController.navigate(CatalogueFragmentDirections.navigateToAnimal(animalId = animalId.id))
     }
+
+    override fun goBack() {
+        navController.navigateUp()
+    }
 }

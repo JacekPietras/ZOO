@@ -9,4 +9,6 @@ internal interface MapRouter {
     fun navigateToAnimal(animalId: AnimalId)
 
     fun navigateToAnimalList(regionId: String)
+
+    fun goBack()
 }
