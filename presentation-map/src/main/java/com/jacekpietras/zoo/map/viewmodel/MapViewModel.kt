@@ -163,7 +163,17 @@ internal class MapViewModel(
         router.navigateToCamera()
     }
 
-    fun onRegionClicked(region: Text) {
+    fun onRegionClicked(router: MapRouter, regionId: String) {
+        router.navigateToAnimalList(regionId)
+    }
 
+    fun onCloseClicked() {
+        state.reduce { copy(selectedAnimal = null) }
+        volatileState.reduce {
+            copy(
+                snappedPoint = null,
+                shortestPath = emptyList(),
+            )
+        }
     }
 }

@@ -4,7 +4,9 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 
 internal interface MapRouter {
 
+    fun navigateToCamera()
+
     fun navigateToAnimal(animalId: AnimalId)
 
-    fun navigateToCamera()
+    fun navigateToAnimalList(regionId: String)
 }

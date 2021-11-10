@@ -10,8 +10,9 @@ import org.koin.dsl.module
 
 val catalogueModule = module {
 
-    viewModel {
+    viewModel { (regionId: String?) ->
         CatalogueViewModel(
+            regionId = regionId,
             observeFilteredAnimalsUseCase = get(),
             loadAnimalsUseCase = get(),
             stateMapper = get(),

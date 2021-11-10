@@ -28,7 +28,7 @@ internal class MapViewStateMapper {
                 }
             },
             isNearRegionsShown = selectedAnimal == null,
-            nearRegions = regionsInUserPosition.map(Text::Value),
+            nearRegions = regionsInUserPosition,
         )
     }
 

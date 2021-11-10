@@ -13,5 +13,5 @@ internal data class MapViewState(
     val title: Text = Text.Empty,
     val content: Text = Text.Empty,
     val isNearRegionsShown: Boolean = false,
-    val nearRegions: List<Text> = emptyList(),
+    val nearRegions: List<String> = emptyList(),
 )

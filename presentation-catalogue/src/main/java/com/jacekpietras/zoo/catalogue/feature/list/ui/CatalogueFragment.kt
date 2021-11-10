@@ -10,15 +10,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class CatalogueFragment : Fragment() {
 
-    private val viewModel by viewModel<CatalogueViewModel>()
+    private val args: CatalogueFragmentArgs by navArgs()
+    private val viewModel by viewModel<CatalogueViewModel> {
+        parametersOf(args.regionId)
+    }
     private val router by lazy { CatalogueRouterImpl(findNavController()) }
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
@@ -28,15 +33,17 @@ class CatalogueFragment : Fragment() {
             with(viewState) {
                 MdcTheme {
                     Column {
-                        ToolbarWithFilters(
-                            filterList,
-                            filtersVisible,
-                            searchVisible,
-                            searchText,
-                            onSearch = viewModel::onSearch,
-                            onSearchClicked = viewModel::onSearchClicked,
-                            onFilterClicked = viewModel::onFilterClicked,
-                        )
+                        if (isToolbarVisible) {
+                            ToolbarWithFilters(
+                                filterList,
+                                filtersVisible,
+                                searchVisible,
+                                searchText,
+                                onSearch = viewModel::onSearch,
+                                onSearchClicked = viewModel::onSearchClicked,
+                                onFilterClicked = viewModel::onFilterClicked,
+                            )
+                        }
                         AnimalList(
                             animalList = animalList,
                             onAnimalClicked = { animalId ->

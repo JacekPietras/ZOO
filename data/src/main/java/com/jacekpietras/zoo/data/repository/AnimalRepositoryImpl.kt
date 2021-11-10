@@ -90,6 +90,7 @@ class AnimalRepositoryImpl(
                 it.filter { animal ->
                     when {
                         !animal.containsQuery(filter.query) -> false
+                        filter.regionId != null && !animal.regionInZoo.contains(filter.regionId!!) -> false
                         filter.divisions.isNotEmpty() && !filter.divisions.contains(animal.division) -> false
                         else -> true
                     }

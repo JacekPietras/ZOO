@@ -9,6 +9,14 @@
         android:name="com.jacekpietras.zoo.catalogue.feature.list.ui.CatalogueFragment"
         android:label="@string/title_catalogue">
 
+        <deepLink app:uri="zoo://fragmentCatalogue?regionId={regionId}" />
+
+        <argument
+            android:name="regionId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
         <action
             android:id="@+id/navigateToAnimal"
             app:destination="@+id/fragment_animal" />

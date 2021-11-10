@@ -26,6 +26,10 @@
         <action
             android:id="@+id/navigateToCamera"
             app:destination="@id/camera"/>
+
+        <action
+            android:id="@+id/navigateToAnimalList"
+            app:destination="@id/camera"/>
     </fragment>
 
     <fragment

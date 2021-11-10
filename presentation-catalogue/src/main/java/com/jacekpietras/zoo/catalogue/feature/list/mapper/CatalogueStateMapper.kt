@@ -9,6 +9,7 @@ internal class CatalogueStateMapper(
 ) {
 
     fun from(state: CatalogueState) = CatalogueViewState(
+        isToolbarVisible = state.filter.regionId == null,
         animalList = state.animalList.map { animal ->
             CatalogueListItem(
                 id = animal.id.id,

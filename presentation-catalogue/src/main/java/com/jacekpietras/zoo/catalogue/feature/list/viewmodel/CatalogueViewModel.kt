@@ -11,8 +11,6 @@ import com.jacekpietras.zoo.catalogue.feature.list.model.AnimalDivision
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueState
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouter
-import com.jacekpietras.zoo.core.dispatcher.DefaultDispatcherProvider
-import com.jacekpietras.zoo.core.dispatcher.DispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
@@ -23,6 +21,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class CatalogueViewModel(
+    regionId: String?,
     private val observeFilteredAnimalsUseCase: ObserveFilteredAnimalsUseCase,
     private val stateMapper: CatalogueStateMapper,
     private val divisionMapper: DivisionMapper,
@@ -32,7 +31,7 @@ internal class CatalogueViewModel(
     private val state = NullSafeMutableLiveData(CatalogueState())
     var viewState: Flow<CatalogueViewState> = state.map(stateMapper::from).asFlow()
 
-    private val filterFlow = MutableStateFlow(AnimalFilter())
+    private val filterFlow = MutableStateFlow(AnimalFilter(regionId = regionId))
 
     init {
         launchInBackground {

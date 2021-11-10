@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.catalogue.feature.list.model
 
 internal data class CatalogueViewState(
+    val isToolbarVisible: Boolean = false,
     val animalList: List<CatalogueListItem> = emptyList(),
     val filterList: List<AnimalDivision> = emptyList(),
     val filtersVisible: Boolean = true,
