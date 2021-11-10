@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.mapview.model.ComposablePaint
@@ -32,6 +33,7 @@ import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.*
 import com.jacekpietras.zoo.map.model.MapViewState
+import com.jacekpietras.zoo.map.router.MapRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,6 +45,7 @@ class ComposableMapFragment : Fragment() {
     private val viewModel by viewModel<MapViewModel> {
         parametersOf(args?.animalId, args?.regionId)
     }
+    private val router by lazy { MapRouterImpl(findNavController()) }
     private val paintBaker by lazy { ComposablePaintBaker(requireActivity()) }
     private val permissionChecker = GpsPermissionRequester(fragment = this)
     private val mapLogic = MapViewLogic(
@@ -68,8 +71,15 @@ class ComposableMapFragment : Fragment() {
                             onTransform = mapLogic::onTransform,
                             mapList = mapList.observeAsState(),
                         )
-                        LocationButtonView(Modifier.align(Alignment.BottomEnd))
                         UploadButtonView(Modifier.align(Alignment.TopEnd))
+                        Column(
+                            Modifier
+                                .padding(16.dp)
+                                .align(Alignment.BottomEnd)
+                        ) {
+                            CameraButtonView(Modifier.padding(bottom = 16.dp))
+                            LocationButtonView()
+                        }
                     }
                 }
             }
@@ -79,11 +89,25 @@ class ComposableMapFragment : Fragment() {
     @Composable
     private fun LocationButtonView(modifier: Modifier = Modifier) {
         FloatingActionButton(
-            modifier = modifier.padding(16.dp),
+            modifier = modifier,
             onClick = { viewModel.onLocationButtonClicked(permissionChecker) },
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_my_location_24),
+                tint = Color.Black,
+                contentDescription = stringResource(R.string.my_location),
+            )
+        }
+    }
+
+    @Composable
+    private fun CameraButtonView(modifier: Modifier = Modifier) {
+        FloatingActionButton(
+            modifier = modifier,
+            onClick = { viewModel.onCameraButtonClicked(router) },
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_camera_24),
                 tint = Color.Black,
                 contentDescription = stringResource(R.string.my_location),
             )

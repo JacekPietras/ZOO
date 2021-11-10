@@ -19,6 +19,7 @@ import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.*
+import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -156,5 +157,9 @@ internal class MapViewModel(
                 _effect.send(MapEffect.ShowToast(Text(R.string.location_denied)))
             }
         }
+    }
+
+    fun onCameraButtonClicked(router: MapRouter) {
+        router.navigateToCamera()
     }
 }
