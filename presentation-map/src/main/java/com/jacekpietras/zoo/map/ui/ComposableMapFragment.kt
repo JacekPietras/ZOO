@@ -164,7 +164,7 @@ class ComposableMapFragment : Fragment() {
                                             }
                                         ) {
                                             Text(
-                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                                 text = stringResource(mapAction.title),
                                                 color = Color.Black,
                                             )

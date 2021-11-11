@@ -98,8 +98,7 @@ private fun SideIconView(
 ) {
     IconButton(
         modifier = modifier
-            .then(Modifier.size(48.dp))
-            .padding(12.dp),
+            .then(Modifier.size(48.dp)),
         onClick = onClick,
     ) {
         Icon(
