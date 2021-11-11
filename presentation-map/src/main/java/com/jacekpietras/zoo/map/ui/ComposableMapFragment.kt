@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.animation.*
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,20 +17,28 @@ import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import coil.compose.rememberImagePainter
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
@@ -36,6 +47,7 @@ import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.map.R
+import com.jacekpietras.zoo.map.model.MapCarouselItem
 import com.jacekpietras.zoo.map.model.MapEffect.*
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.router.MapRouterImpl
@@ -66,12 +78,60 @@ class ComposableMapFragment : Fragment() {
             MdcTheme {
                 Column {
                     val viewState by viewModel.viewState.observeAsState(MapViewState())
-                    if (viewState.isGuidanceShown) {
+                    AnimatedVisibility(
+                        visibleState = remember { MutableTransitionState(false) }
+                            .apply { targetState = viewState.isGuidanceShown },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        var size by remember { mutableStateOf(Size.Zero) }
+
                         ClosableToolbarView(
+                            modifier = Modifier.onSizeChanged {
+                                size = it.toSize()
+                            },
                             title = viewState.title,
+                            isBackArrowShown = viewState.isBackArrowShown,
                             onBack = { viewModel.onBackClicked(router) },
                             onClose = { viewModel.onCloseClicked() },
-                        )
+                        ) {
+
+                            val carouselItemWidth: Dp = (with(LocalDensity.current) { (size.width).toDp() } - 32.dp) / 3.5f
+
+                            AnimatedVisibility(
+                                visibleState = remember { MutableTransitionState(viewState.mapCarouselItems.isNotEmpty()) }
+                                    .apply { targetState = viewState.mapCarouselItems.isNotEmpty() },
+                                modifier = Modifier.fillMaxWidth(),
+                                enter = fadeIn() + expandVertically(),
+                                exit = fadeOut() + shrinkVertically(),
+                            ) {
+
+                                LazyRow(
+                                    modifier = Modifier
+                                        .defaultMinSize(minHeight = carouselItemWidth + 16.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                                ) {
+                                    items(viewState.mapCarouselItems) { carouselItem ->
+                                        when (carouselItem) {
+                                            is MapCarouselItem.Animal -> {
+                                                AnimalCarouselItem(
+                                                    item = carouselItem,
+                                                    carouselItemWidth = carouselItemWidth,
+                                                    onClick = { viewModel.onAnimalClicked(router, carouselItem.id) },
+                                                )
+                                            }
+                                            is MapCarouselItem.Region -> {
+                                                RegionCarouselItem(
+                                                    item = carouselItem,
+                                                    carouselItemWidth = carouselItemWidth,
+                                                    onClick = { viewModel.onCarouselRegionClicked(carouselItem.id) },
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     Box(modifier = Modifier) {
                         ComposableMapView(
@@ -80,24 +140,24 @@ class ComposableMapFragment : Fragment() {
                             onTransform = mapLogic::onTransform,
                             mapList = mapList.observeAsState(),
                         )
-                        if (viewState.isNearRegionsShown) {
-                            LazyRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-                            ) {
-                                items(viewState.nearRegions) { region ->
-                                    Card(
-                                        shape = RoundedCornerShape(50),
-                                    ) {
-                                        Box(
-                                            modifier = Modifier.clickable { viewModel.onRegionClicked(router, region) }
-                                        ) {
-                                            Text(
-                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                                text = region,
-                                                color = Color.Black,
-                                            )
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                        ) {
+                            items(viewState.mapActions) { mapAction ->
+                                Card(
+                                    shape = RoundedCornerShape(50),
+                                ) {
+                                    Box(
+                                        modifier = Modifier.clickable {
+                                            viewModel.onMapActionClicked(mapAction)
                                         }
+                                    ) {
+                                        Text(
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                            text = stringResource(mapAction.title),
+                                            color = Color.Black,
+                                        )
                                     }
                                 }
                             }
@@ -115,6 +175,75 @@ class ComposableMapFragment : Fragment() {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun RegionCarouselItem(
+        item: MapCarouselItem.Region,
+        carouselItemWidth: Dp,
+        onClick: () -> Unit,
+    ) {
+        Column(
+            modifier = Modifier
+                .width(carouselItemWidth)
+                .clickable(onClick = onClick),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Row {
+                AnimalImageView(item.photoUrlLeftTop, carouselItemWidth / 2)
+                AnimalImageView(item.photoUrlRightTop, carouselItemWidth / 2)
+            }
+            Row {
+                AnimalImageView(item.photoUrlLeftBottom, carouselItemWidth / 2)
+                AnimalImageView(item.photoUrlRightBottom, carouselItemWidth / 2)
+            }
+            Text(
+                textAlign = TextAlign.Center,
+                modifier = Modifier,
+                text = item.name.toString(LocalContext.current),
+                color = Color.Black,
+            )
+        }
+    }
+
+    @Composable
+    private fun imagePainter(url: String?) = rememberImagePainter(
+        data = url ?: "no image",
+        builder = { crossfade(true) }
+    )
+
+    @Composable
+    private fun AnimalCarouselItem(
+        item: MapCarouselItem.Animal,
+        carouselItemWidth: Dp,
+        onClick: () -> Unit,
+    ) {
+        Column(
+            modifier = Modifier
+                .width(carouselItemWidth)
+                .clickable(onClick = onClick),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            AnimalImageView(item.photoUrl, carouselItemWidth)
+            Text(
+                textAlign = TextAlign.Center,
+                modifier = Modifier,
+                text = item.name.toString(LocalContext.current),
+                color = Color.Black,
+            )
+        }
+    }
+
+    @Composable
+    private fun AnimalImageView(url: String?, size: Dp) {
+        Image(
+            painter = imagePainter(url),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .height(size)
+                .width(size)
+        )
     }
 
     @Composable
@@ -148,7 +277,9 @@ class ComposableMapFragment : Fragment() {
     @Composable
     private fun UploadButtonView(modifier: Modifier = Modifier) {
         FloatingActionButton(
-            modifier = modifier.padding(16.dp),
+            modifier = modifier
+                .padding(16.dp)
+                .padding(top = 48.dp),
             onClick = { viewModel.onUploadClicked() },
         ) {
             Icon(

@@ -9,9 +9,10 @@ internal data class MapViewState(
     val snappedPoint: PointD? = null,
     val shortestPath: List<PointD> = emptyList(),
 
+    val isBackArrowShown: Boolean = false,
     val isGuidanceShown: Boolean = false,
     val title: Text = Text.Empty,
     val content: Text = Text.Empty,
-    val isNearRegionsShown: Boolean = false,
-    val nearRegions: List<String> = emptyList(),
+    val mapCarouselItems: List<MapCarouselItem> = emptyList(),
+    val mapActions: List<MapAction> = emptyList(),
 )

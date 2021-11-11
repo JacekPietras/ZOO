@@ -9,4 +9,6 @@
     <string name="gps_permission_denied_content">You Denied Tracking Permission for that app permanently. You can change it in Settings.</string>
     <string name="title_map">Map</string>
     <string name="location_denied">Location denied</string>
+    <string name="wc">WC</string>
+    <string name="restaurant">Restaurant</string>
 </resources>

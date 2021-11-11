@@ -1,5 +1,7 @@
 package com.jacekpietras.zoo.core.ui
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -20,56 +22,76 @@ import com.jacekpietras.zoo.core.text.Text
 
 @Composable
 fun ClosableToolbarView(
+    modifier :Modifier= Modifier,
     title: Text,
-    onBack: () -> Unit,
-    onClose: () -> Unit,
+    isBackArrowShown: Boolean = true,
+    onBack: () -> Unit = {},
+    onClose: () -> Unit = {},
+    content: @Composable ColumnScope.() -> Unit = {},
 ) {
     Card(
         shape = RectangleShape,
         backgroundColor = Color.White,
         elevation = 6.dp,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     ) {
-        Box {
-            IconButton(
-                modifier = Modifier
-                    .then(Modifier.size(48.dp))
-                    .align(Alignment.TopStart)
-                    .padding(12.dp),
-                onClick = onBack,
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+//            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_back_24),
-                    tint = Color.Black,
-                    contentDescription = stringResource(R.string.back)
+                if (isBackArrowShown) {
+                    SideIconView(
+                        modifier = Modifier.align(Alignment.TopStart),
+                        iconRes = R.drawable.ic_arrow_back_24,
+                        contentDescription = R.string.back,
+                        onClick = onBack,
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = 32.dp)
+                        .defaultMinSize(minHeight = 48.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        textAlign = TextAlign.Center,
+                        text = title.toString(LocalContext.current),
+                        color = Color.Black,
+                    )
+                }
+                SideIconView(
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    iconRes = R.drawable.ic_close_24,
+                    contentDescription = R.string.close,
+                    onClick = onClose,
                 )
             }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(horizontal = 32.dp)
-                    .defaultMinSize(minHeight = 48.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    textAlign = TextAlign.Center,
-                    text = title.toString(LocalContext.current),
-                    color = Color.Black,
-                )
-            }
-            IconButton(
-                modifier = Modifier
-                    .then(Modifier.size(48.dp))
-                    .align(Alignment.TopEnd)
-                    .padding(12.dp),
-                onClick = onClose,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_close_24),
-                    tint = Color.Black,
-                    contentDescription = stringResource(R.string.close)
-                )
-            }
+            content.invoke(this)
         }
+    }
+}
+
+@Composable
+private fun SideIconView(
+    modifier: Modifier = Modifier,
+    @DrawableRes iconRes: Int,
+    @StringRes contentDescription: Int,
+    onClick: () -> Unit,
+) {
+    IconButton(
+        modifier = modifier
+            .then(Modifier.size(48.dp))
+            .padding(12.dp),
+        onClick = onClick,
+    ) {
+        Icon(
+            painter = painterResource(iconRes),
+            tint = Color.Black,
+            contentDescription = stringResource(contentDescription)
+        )
     }
 }

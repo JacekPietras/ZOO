@@ -7,17 +7,24 @@ import com.jacekpietras.mapview.model.PolygonD
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.*
+import java.util.*
 
 internal class MapViewStateMapper {
 
     fun from(state: MapState): MapViewState = with(state) {
         MapViewState(
-            isGuidanceShown = selectedAnimal != null,
+            isGuidanceShown = isToolbarOpened,
+            isBackArrowShown = selectedAnimal != null,
             title = when {
                 selectedAnimal != null -> Text(selectedAnimal.name)
-                else -> Text(R.string.around_you)
+                mapAction != null -> Text(mapAction.title)
+                else -> Text.Empty
+            },
+            mapCarouselItems = if (mapAction == MapAction.AROUND_YOU) {
+                getCarousel(state)
+            } else {
+                emptyList()
             },
             content = when {
                 selectedAnimal != null -> Text(selectedAnimal.nameLatin)
@@ -27,8 +34,11 @@ internal class MapViewStateMapper {
                             Text.Listing(animalsInUserPosition.map { Text(it.name) })
                 }
             },
-            isNearRegionsShown = selectedAnimal == null,
-            nearRegions = regionsInUserPosition,
+            mapActions = if (!isToolbarOpened) {
+                MapAction.values().asList()
+            } else {
+                emptyList()
+            },
         )
     }
 
@@ -76,4 +86,33 @@ internal class MapViewStateMapper {
                 paint
             )
         }
+
+    private fun getCarousel(state: MapState) = mutableListOf<MapCarouselItem>().apply {
+        state.regionsInUserPosition.forEach { region ->
+            val animalsInRegion = state.animalsInUserPosition.filter { it.regionInZoo.contains(region) }
+            if (animalsInRegion.size > 5) {
+                val images = animalsInRegion.map { it.photos }.flatten().shuffled(Random(100))
+                add(
+                    MapCarouselItem.Region(
+                        id = region,
+                        name = Text(region),
+                        photoUrlLeftTop = images.getOrNull(0),
+                        photoUrlRightTop = images.getOrNull(1),
+                        photoUrlLeftBottom = images.getOrNull(2),
+                        photoUrlRightBottom = images.getOrNull(3),
+                    )
+                )
+            } else {
+                animalsInRegion.forEach { animal ->
+                    add(
+                        MapCarouselItem.Animal(
+                            id = animal.id,
+                            name = Text(animal.name),
+                            photoUrl = animal.photos.shuffled(Random(100)).firstOrNull(),
+                        )
+                    )
+                }
+            }
+        }
+    }
 }

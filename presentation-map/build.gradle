@@ -19,6 +19,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter")
 
+    //Image Loader
+    implementation "io.coil-kt:coil-compose:$coil_version"
+
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"

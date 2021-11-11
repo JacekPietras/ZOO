@@ -11,4 +11,6 @@ internal data class MapState(
     val snappedPoint: PointD? = null,
     val shortestPath: List<PointD> = emptyList(),
     val selectedAnimal: AnimalEntity? = null,
+    val mapAction: MapAction? = null,
+    val isToolbarOpened: Boolean = false,
 )

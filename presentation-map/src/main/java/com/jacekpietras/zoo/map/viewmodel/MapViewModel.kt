@@ -10,6 +10,7 @@ import com.jacekpietras.core.reduce
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.core.dispatcher.onBackground
+import com.jacekpietras.zoo.core.dispatcher.sendOnMain
 import com.jacekpietras.zoo.core.extensions.mapInBackground
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.Text
@@ -106,10 +107,15 @@ internal class MapViewModel(
 
             if (animalId != null) {
                 val animal = getAnimalUseCase.run(animalId)
-                state.reduceOnMain { copy(selectedAnimal = animal) }
+                state.reduceOnMain {
+                    copy(
+                        selectedAnimal = animal,
+                        isToolbarOpened = true,
+                    )
+                }
                 val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo)
                 onPointPlaced(point)
-                _effect.send(MapEffect.CenterAtPoint(point))
+                _effect.sendOnMain(MapEffect.CenterAtPoint(point))
             }
         }
     }
@@ -168,7 +174,11 @@ internal class MapViewModel(
     }
 
     fun onCloseClicked() {
-        state.reduce { copy(selectedAnimal = null) }
+        state.reduce {
+            copy(
+                isToolbarOpened = false,
+            )
+        }
         volatileState.reduce {
             copy(
                 snappedPoint = null,
@@ -179,5 +189,25 @@ internal class MapViewModel(
 
     fun onBackClicked(router: MapRouter) {
         router.goBack()
+    }
+
+    fun onMapActionClicked(mapAction: MapAction) {
+        if (mapAction == MapAction.AROUND_YOU) {
+            onMyLocationClicked()
+        }
+        state.reduce {
+            copy(
+                mapAction = mapAction,
+                isToolbarOpened = true,
+            )
+        }
+    }
+
+    fun onAnimalClicked(router: MapRouter, animalId: AnimalId) {
+        router.navigateToAnimal(animalId)
+    }
+
+    fun onCarouselRegionClicked(regionId: String) {
+
     }
 }

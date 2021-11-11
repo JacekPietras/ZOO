@@ -37,6 +37,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
 import com.jacekpietras.zoo.core.text.Text
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.random.Random
 
 class AnimalFragment : Fragment() {
 
@@ -88,6 +89,8 @@ class AnimalFragment : Fragment() {
         }
     }
 
+    private val carouselSeed = Random.nextLong()
+
     @Composable
     private fun ImageCarousel(
         images: List<String>,
@@ -96,7 +99,7 @@ class AnimalFragment : Fragment() {
         if (images.isEmpty()) return
 
         val painter = rememberImagePainter(
-            data = images.randomOrNull() ?: "no image",
+            data = images.randomOrNull(Random(carouselSeed)) ?: "no image",
             builder = { crossfade(true) }
         )
         val state = remember { MutableTransitionState(true) }
