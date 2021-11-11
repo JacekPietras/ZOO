@@ -114,9 +114,23 @@ class AnimalRepositoryImpl(
         )
 
     private fun String.parseJsonAnimals(): List<AnimalEntity> =
-        animalJsonAdapter.fromJson(this) ?: emptyList()
+        animalJsonAdapter.fromJson(this)
+            ?.map{
+                it.copy(
+                    occurrence = it.occurrence.correctSpecialCharacters(),
+                    environment = it.environment.correctSpecialCharacters(),
+                    food = it.food.correctSpecialCharacters(),
+                    multiplication = it.multiplication.correctSpecialCharacters(),
+                    protectionAndThreats = it.protectionAndThreats.correctSpecialCharacters(),
+                    facts = it.facts.correctSpecialCharacters(),
+                )
+            }
+            ?: emptyList()
 
     companion object {
         private var storedAnimals: List<AnimalEntity> = emptyList()
     }
+    private fun String.correctSpecialCharacters(): String =
+        replace("&#8222;", "„")
+            .replace("&#8221;", "”")
 }
