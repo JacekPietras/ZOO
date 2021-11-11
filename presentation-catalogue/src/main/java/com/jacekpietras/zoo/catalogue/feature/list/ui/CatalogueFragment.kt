@@ -34,6 +34,13 @@ class CatalogueFragment : Fragment() {
             with(viewState) {
                 MdcTheme {
                     Column {
+                        if (isRegionShown) {
+                            ClosableToolbarView(
+                                title = regionName,
+                                onBack = { viewModel.onBackClicked(router) },
+                                onClose = { viewModel.onCloseClicked() },
+                            )
+                        }
                         if (isToolbarVisible) {
                             ToolbarWithFilters(
                                 filterList,
@@ -43,13 +50,6 @@ class CatalogueFragment : Fragment() {
                                 onSearch = viewModel::onSearch,
                                 onSearchClicked = viewModel::onSearchClicked,
                                 onFilterClicked = viewModel::onFilterClicked,
-                            )
-                        }
-                        if (isRegionShown) {
-                            ClosableToolbarView(
-                                title = regionName,
-                                onBack = { viewModel.onBackClicked(router) },
-                                onClose = { viewModel.onCloseClicked() },
                             )
                         }
                         AnimalList(

@@ -22,7 +22,7 @@ import com.jacekpietras.zoo.core.text.Text
 
 @Composable
 fun ClosableToolbarView(
-    modifier :Modifier= Modifier,
+    modifier: Modifier = Modifier,
     title: Text,
     isBackArrowShown: Boolean = true,
     onBack: () -> Unit = {},
@@ -37,41 +37,55 @@ fun ClosableToolbarView(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-//            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                if (isBackArrowShown) {
-                    SideIconView(
-                        modifier = Modifier.align(Alignment.TopStart),
-                        iconRes = R.drawable.ic_arrow_back_24,
-                        contentDescription = R.string.back,
-                        onClick = onBack,
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(horizontal = 32.dp)
-                        .defaultMinSize(minHeight = 48.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        textAlign = TextAlign.Center,
-                        text = title.toString(LocalContext.current),
-                        color = Color.Black,
-                    )
-                }
-                SideIconView(
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    iconRes = R.drawable.ic_close_24,
-                    contentDescription = R.string.close,
-                    onClick = onClose,
-                )
-            }
+            ClosableRowView(
+                isBackArrowShown = isBackArrowShown,
+                onBack = onBack,
+                title = title,
+                onClose = onClose
+            )
             content.invoke(this)
         }
+    }
+}
+
+@Composable
+fun ClosableRowView(
+    title: Text,
+    isBackArrowShown: Boolean = true,
+    onBack: () -> Unit = {},
+    onClose: () -> Unit = {},
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        if (isBackArrowShown) {
+            SideIconView(
+                modifier = Modifier.align(Alignment.TopStart),
+                iconRes = R.drawable.ic_arrow_back_24,
+                contentDescription = R.string.back,
+                onClick = onBack,
+            )
+        }
+        Row(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 32.dp)
+                .defaultMinSize(minHeight = 48.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                textAlign = TextAlign.Center,
+                text = title.toString(LocalContext.current),
+                color = Color.Black,
+            )
+        }
+        SideIconView(
+            modifier = Modifier.align(Alignment.TopEnd),
+            iconRes = R.drawable.ic_close_24,
+            contentDescription = R.string.close,
+            onClick = onClose,
+        )
     }
 }
 

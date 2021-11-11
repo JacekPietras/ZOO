@@ -140,33 +140,31 @@ class ComposableMapFragment : Fragment() {
                             onTransform = mapLogic::onTransform,
                             mapList = mapList.observeAsState(),
                         )
-                        Column {
-                            AnimatedVisibility(
-                                visibleState = remember { MutableTransitionState(viewState.isMapActionsVisible) }
-                                    .apply { targetState = viewState.isMapActionsVisible },
-                                modifier = Modifier.fillMaxWidth(),
-                                enter = fadeIn() + slideInVertically(),
-                                exit = fadeOut() + slideOutVertically(),
+                        androidx.compose.animation.AnimatedVisibility(
+                            visibleState = remember { MutableTransitionState(viewState.isMapActionsVisible) }
+                                .apply { targetState = viewState.isMapActionsVisible },
+                            modifier = Modifier.fillMaxWidth(),
+                            enter = fadeIn() + slideInVertically(),
+                            exit = fadeOut() + slideOutVertically(),
+                        ) {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                             ) {
-                                LazyRow(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-                                ) {
-                                    items(viewState.mapActions) { mapAction ->
-                                        Card(
-                                            shape = RoundedCornerShape(50),
-                                        ) {
-                                            Box(
-                                                modifier = Modifier.clickable {
-                                                    viewModel.onMapActionClicked(mapAction)
-                                                }
-                                            ) {
-                                                Text(
-                                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                                    text = stringResource(mapAction.title),
-                                                    color = Color.Black,
-                                                )
+                                items(viewState.mapActions) { mapAction ->
+                                    Card(
+                                        shape = RoundedCornerShape(50),
+                                    ) {
+                                        Box(
+                                            modifier = Modifier.clickable {
+                                                viewModel.onMapActionClicked(mapAction)
                                             }
+                                        ) {
+                                            Text(
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                                text = stringResource(mapAction.title),
+                                                color = Color.Black,
+                                            )
                                         }
                                     }
                                 }

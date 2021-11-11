@@ -30,11 +30,12 @@ internal fun ToolbarWithFilters(
         shape = RectangleShape,
         backgroundColor = Color.White,
         elevation = 6.dp,
-        modifier = Modifier
-            .height(48.dp)
-            .fillMaxWidth(),
     ) {
-        Box {
+        Box(
+            modifier = Modifier
+                .height(48.dp)
+                .fillMaxWidth(),
+        ) {
             AnimatedVisibility(
                 visibleState = remember { MutableTransitionState(true) }
                     .apply { targetState = filtersVisible },
