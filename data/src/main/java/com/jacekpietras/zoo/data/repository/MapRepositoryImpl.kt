@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.parser.SvgParser
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,7 +20,7 @@ class MapRepositoryImpl(
 ) : MapRepository {
 
     private val worldRect: RectD
-    private val regions: List<Pair<String, PolygonEntity>>
+    private val regions: List<Pair<Region, PolygonEntity>>
     private val buildings: List<List<PointD>>
     private val aviary: List<List<PointD>>
     private val technical: List<List<PointD>>
@@ -61,7 +62,7 @@ class MapRepositoryImpl(
     override fun getLines(): Flow<List<PathEntity>> =
         flowOf(lines.map(::PathEntity))
 
-    override fun getCurrentRegions(): List<Pair<String, PolygonEntity>> =
+    override fun getCurrentRegions(): List<Pair<Region, PolygonEntity>> =
         regions
 
     override fun observeWorldBounds(): Flow<RectD> =

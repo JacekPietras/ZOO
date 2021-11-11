@@ -75,7 +75,7 @@ internal fun AnimalList(
                         ) {
                             Text(
                                 color = Color.Black.copy(alpha = 0.3f),
-                                text = animal.regionInZoo
+                                text = animal.regionInZoo.joinToString { it.id }
                             )
                         }
                     }

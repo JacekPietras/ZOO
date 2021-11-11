@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.map.di
 
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -9,7 +10,9 @@ import org.koin.dsl.module
 val mapModule = module {
 
     factory {
-        MapViewStateMapper()
+        MapViewStateMapper(
+            regionMapper = get()
+        )
     }
 
     viewModel { (animalId: String?, regionId: String?) ->
@@ -18,7 +21,8 @@ val mapModule = module {
                 ?.takeIf { it.isNotBlank() }
                 ?.let(::AnimalId),
             regionId = regionId
-                ?.takeIf { it.isNotBlank() },
+                ?.takeIf { it.isNotBlank() }
+                ?.let(::RegionId),
             mapper = get(),
             observeWorldBoundsUseCase = get(),
             observeCompassUseCase = get(),

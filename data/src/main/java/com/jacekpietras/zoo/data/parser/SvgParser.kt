@@ -8,12 +8,14 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.core.mapPair
 import com.jacekpietras.core.polygonContains
 import com.jacekpietras.zoo.domain.model.MapItemEntity
+import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.RegionId
 import org.xmlpull.v1.XmlPullParser
 
 internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
 
     val worldRect: RectD
-    val regions: List<Pair<String, MapItemEntity.PolygonEntity>>
+    val regions: List<Pair<Region, MapItemEntity.PolygonEntity>>
 
     private val transformation: (PointD) -> PointD
     private lateinit var rect: RectD
@@ -101,6 +103,14 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
                 val currentTag = unusedContainingTags.first()
                 usedTags.add(currentTag)
                 currentTag.content to MapItemEntity.PolygonEntity(region)
+            }
+            .map { (region, poly) ->
+                when {
+                    region.startsWith("wc-") -> Region.WcRegion(RegionId(region))
+                    region.startsWith("wejscie") -> Region.EntryRegion(RegionId(region))
+                    region.startsWith("restauracja") -> Region.RestaurantRegion(RegionId(region))
+                    else -> Region.AnimalRegion(RegionId(region))
+                } to poly
             }
     }
 

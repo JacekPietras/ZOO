@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.data.repository.di
 
 import com.jacekpietras.zoo.data.cache.di.COMPASS_ENABLED
 import com.jacekpietras.zoo.data.database.ZooDatabase
+import com.jacekpietras.zoo.data.parser.RegionIdAdapter
 import com.jacekpietras.zoo.data.repository.AnimalRepositoryImpl
 import com.jacekpietras.zoo.data.repository.GpsRepositoryImpl
 import com.jacekpietras.zoo.data.repository.MapRepositoryImpl
@@ -18,6 +19,7 @@ internal val repositoryModule = module {
 
     single<Moshi> {
         Moshi.Builder()
+            .add(RegionIdAdapter())
             .addLast(KotlinJsonAdapterFactory())
             .build()
     }

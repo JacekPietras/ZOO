@@ -74,7 +74,7 @@ class AnimalRepositoryImpl(
                 }
         }
 
-    override fun getAnimals(regionId: String): List<AnimalEntity> =
+    override fun getAnimals(regionId: RegionId): List<AnimalEntity> =
         storedAnimals.filter { it.regionInZoo.contains(regionId) }
 
     override fun getAnimals(division: Division?): List<AnimalEntity> =

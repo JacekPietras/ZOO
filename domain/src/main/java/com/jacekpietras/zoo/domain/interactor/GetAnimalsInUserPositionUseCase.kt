@@ -12,7 +12,7 @@ class GetAnimalsInUserPositionUseCase(
     fun run(): Flow<List<AnimalEntity>> =
         getRegionsInUserPositionUseCase.run().map { regions ->
             regions
-                .map { region -> getAnimalsInRegionUseCase.run(region) }
+                .map { region -> getAnimalsInRegionUseCase.run(region.id) }
                 .flatten()
                 .distinct()
         }

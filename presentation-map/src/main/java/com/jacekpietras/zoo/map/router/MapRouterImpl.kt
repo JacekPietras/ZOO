@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.map.router
 import android.net.Uri
 import androidx.navigation.NavController
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.ui.ComposableMapFragmentDirections
 
 internal class MapRouterImpl(
@@ -17,8 +18,8 @@ internal class MapRouterImpl(
         navController.navigate(Uri.parse("zoo://fragmentAnimal?animalId=${animalId.id}"))
     }
 
-    override fun navigateToAnimalList(regionId: String) {
-        navController.navigate(Uri.parse("zoo://fragmentCatalogue?regionId=$regionId"))
+    override fun navigateToAnimalList(regionId: RegionId) {
+        navController.navigate(Uri.parse("zoo://fragmentCatalogue?regionId=${regionId.id}"))
     }
 
     override fun goBack() {

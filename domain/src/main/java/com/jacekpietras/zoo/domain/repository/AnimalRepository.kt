@@ -1,9 +1,6 @@
 package com.jacekpietras.zoo.domain.repository
 
-import com.jacekpietras.zoo.domain.model.AnimalEntity
-import com.jacekpietras.zoo.domain.model.AnimalFilter
-import com.jacekpietras.zoo.domain.model.AnimalId
-import com.jacekpietras.zoo.domain.model.Division
+import com.jacekpietras.zoo.domain.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface AnimalRepository {
@@ -12,7 +9,7 @@ interface AnimalRepository {
 
     suspend fun scrapTestAnimals()
 
-    fun getAnimals(regionId: String): List<AnimalEntity>
+    fun getAnimals(regionId: RegionId): List<AnimalEntity>
 
     fun getAnimals(division: Division? = null): List<AnimalEntity>
 

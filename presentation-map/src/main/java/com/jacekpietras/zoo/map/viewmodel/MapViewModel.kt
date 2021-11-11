@@ -16,6 +16,8 @@ import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
@@ -31,7 +33,7 @@ import kotlinx.coroutines.launch
 
 internal class MapViewModel(
     animalId: AnimalId?,
-    regionId: String?,
+    regionId: RegionId?,
     mapper: MapViewStateMapper,
     observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
@@ -112,7 +114,7 @@ internal class MapViewModel(
         }
     }
 
-    private suspend fun navigationToAnimal(animalId: AnimalId, regionId: String?) {
+    private suspend fun navigationToAnimal(animalId: AnimalId, regionId: RegionId?) {
         val animal = getAnimalUseCase.run(animalId)
         state.reduceOnMain {
             copy(
@@ -120,7 +122,7 @@ internal class MapViewModel(
                 isToolbarOpened = true,
             )
         }
-        val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo)
+        val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo.first())
         navigateToPoint(point)
     }
 
@@ -145,7 +147,7 @@ internal class MapViewModel(
     fun onPointPlaced(point: PointD) {
         launchInBackground {
             val regionsAndAnimals = getRegionsContainingPointUseCase.run(point)
-                .map { region -> region to getAnimalsInRegionUseCase.run(region) }
+                .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
                 .filter { (_, animals) -> animals.isNotEmpty() }
 
             if (regionsAndAnimals.isEmpty()) return@launchInBackground
@@ -200,7 +202,7 @@ internal class MapViewModel(
         router.navigateToCamera()
     }
 
-    fun onRegionClicked(router: MapRouter, regionId: String) {
+    fun onRegionClicked(router: MapRouter, regionId: RegionId) {
         router.navigateToAnimalList(regionId)
     }
 
@@ -228,7 +230,7 @@ internal class MapViewModel(
                 onMyLocationClicked()
             }
             MapAction.WC -> {
-                val wcRegions = findRegionUseCase.run { it.startsWith("wc-") }
+                val wcRegions = findRegionUseCase.run { it is Region.WcRegion }
             }
         }
         state.reduce {

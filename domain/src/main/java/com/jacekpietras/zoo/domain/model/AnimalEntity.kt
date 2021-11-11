@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.domain.model
 
 import com.jacekpietras.zoo.domain.model.Division.*
-import java.util.*
 
 data class AnimalEntity(
     val id: AnimalId = AnimalId("id"),
@@ -17,7 +16,7 @@ data class AnimalEntity(
     val facts: String,
     val wiki: String = "todo",
     val web: String,
-    val regionInZoo: String = "todo",
+    val regionInZoo: List<RegionId> = emptyList(),
     val photos: List<String>,
 )
 

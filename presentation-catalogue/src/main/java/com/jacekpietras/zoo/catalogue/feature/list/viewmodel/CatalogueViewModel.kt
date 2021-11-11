@@ -17,11 +17,12 @@ import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveFilteredAnimalsUseCase
 import com.jacekpietras.zoo.domain.model.AnimalFilter
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class CatalogueViewModel(
-    regionId: String?,
+    regionId: RegionId?,
     private val observeFilteredAnimalsUseCase: ObserveFilteredAnimalsUseCase,
     private val stateMapper: CatalogueStateMapper,
     private val divisionMapper: DivisionMapper,

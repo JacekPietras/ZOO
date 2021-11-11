@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.repository
 import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.model.Region
 import kotlinx.coroutines.flow.Flow
 
 interface MapRepository {
@@ -17,7 +18,7 @@ interface MapRepository {
 
     fun getLines(): Flow<List<PathEntity>>
 
-    fun getCurrentRegions(): List<Pair<String, PolygonEntity>>
+    fun getCurrentRegions(): List<Pair<Region, PolygonEntity>>
 
     fun observeWorldBounds(): Flow<RectD>
 

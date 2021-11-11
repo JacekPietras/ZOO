@@ -4,15 +4,19 @@ import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
+import com.jacekpietras.zoo.core.RegionMapper
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.*
 import kotlin.random.Random
 
-internal class MapViewStateMapper {
+internal class MapViewStateMapper(
+    private val regionMapper: RegionMapper,
+) {
 
     private val carouselSeed = Random.nextLong()
 
@@ -27,7 +31,7 @@ internal class MapViewStateMapper {
                     if (toolbarMode.regionsWithAnimals.size > 1) {
                         Text(R.string.selected)
                     } else {
-                        Text(toolbarMode.regionsWithAnimals.first().first)
+                        toolbarMode.regionsWithAnimals.first().first.id.id.let(regionMapper::from)
                     }
                 }
                 else -> Text.Empty
@@ -93,15 +97,15 @@ internal class MapViewStateMapper {
             )
         }
 
-    private fun getCarousel(regionsWithAnimals: List<Pair<String, List<AnimalEntity>>>) =
+    private fun getCarousel(regionsWithAnimals: List<Pair<Region, List<AnimalEntity>>>) =
         mutableListOf<MapCarouselItem>().apply {
             regionsWithAnimals.forEach { (region, animalsInRegion) ->
                 if (animalsInRegion.size > 5 && regionsWithAnimals.size > 1) {
                     val images = animalsInRegion.map { it.photos }.flatten().shuffled(Random(carouselSeed))
                     add(
                         MapCarouselItem.Region(
-                            id = region,
-                            name = Text(region),
+                            id = region.id,
+                            name = region.id.id.let(regionMapper::from),
                             photoUrlLeftTop = images.getOrNull(0),
                             photoUrlRightTop = images.getOrNull(1),
                             photoUrlLeftBottom = images.getOrNull(2),

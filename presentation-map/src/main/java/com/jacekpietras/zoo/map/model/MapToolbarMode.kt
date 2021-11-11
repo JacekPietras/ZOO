@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.map.model
 
 import com.jacekpietras.zoo.domain.model.AnimalEntity
+import com.jacekpietras.zoo.domain.model.Region
 
 sealed class MapToolbarMode {
 
@@ -13,6 +14,6 @@ sealed class MapToolbarMode {
     ) : MapToolbarMode()
 
     data class SelectedRegionMode(
-        val regionsWithAnimals: List<Pair<String, List<AnimalEntity>>>
+        val regionsWithAnimals: List<Pair<Region, List<AnimalEntity>>>
     ) : MapToolbarMode()
 }
