@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -123,7 +124,7 @@ class ComposableMapFragment : Fragment() {
                                                 RegionCarouselItem(
                                                     item = carouselItem,
                                                     carouselItemWidth = carouselItemWidth,
-                                                    onClick = { viewModel.onCarouselRegionClicked(carouselItem.id) },
+                                                    onClick = { viewModel.onRegionClicked(router, carouselItem.id) },
                                                 )
                                             }
                                         }
@@ -211,6 +212,7 @@ class ComposableMapFragment : Fragment() {
                 modifier = Modifier,
                 text = item.name.toString(LocalContext.current),
                 color = Color.Black,
+                fontSize = 14.sp,
             )
         }
     }
@@ -239,6 +241,7 @@ class ComposableMapFragment : Fragment() {
                 modifier = Modifier,
                 text = item.name.toString(LocalContext.current),
                 color = Color.Black,
+                fontSize = 14.sp,
             )
         }
     }

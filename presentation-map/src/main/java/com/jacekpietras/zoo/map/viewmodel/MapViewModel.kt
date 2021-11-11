@@ -207,7 +207,11 @@ internal class MapViewModel(
         router.navigateToAnimal(animalId)
     }
 
-    fun onCarouselRegionClicked(regionId: String) {
-
-    }
+//    fun onCarouselRegionClicked(regionId: String) {
+//        state.reduce {
+//            copy(
+//                carouselRegionId = regionId,
+//            )
+//        }
+//    }
 }
