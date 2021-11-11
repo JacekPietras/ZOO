@@ -7,10 +7,10 @@ internal data class MapState(
     val compass: Float = 0f,
     val userPosition: PointD = PointD(),
     val regionsInUserPosition: List<String> = emptyList(),
+    val regionsWithAnimalsInUserPosition: List<Pair<String, List<AnimalEntity>>> = emptyList(),
     val animalsInUserPosition: List<AnimalEntity> = emptyList(),
     val snappedPoint: PointD? = null,
     val shortestPath: List<PointD> = emptyList(),
-    val selectedAnimal: AnimalEntity? = null,
-    val mapAction: MapAction? = null,
     val isToolbarOpened: Boolean = false,
+    val toolbarMode: MapToolbarMode? = null,
 )

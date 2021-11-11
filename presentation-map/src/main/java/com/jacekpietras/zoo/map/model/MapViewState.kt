@@ -12,6 +12,7 @@ internal data class MapViewState(
     val isBackArrowShown: Boolean = false,
     val isGuidanceShown: Boolean = false,
     val title: Text = Text.Empty,
+    @Deprecated("used only in old fragment")
     val content: Text = Text.Empty,
     val mapCarouselItems: List<MapCarouselItem> = emptyList(),
     val isMapActionsVisible: Boolean = false,

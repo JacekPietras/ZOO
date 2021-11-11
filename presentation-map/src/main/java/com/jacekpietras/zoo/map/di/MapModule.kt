@@ -16,11 +16,9 @@ val mapModule = module {
         MapViewModel(
             animalId = animalId
                 ?.takeIf { it.isNotBlank() }
-                ?.takeIf { it != "null" }
                 ?.let(::AnimalId),
             regionId = regionId
-                ?.takeIf { it.isNotBlank() }
-                ?.takeIf { it != "null" },
+                ?.takeIf { it.isNotBlank() },
             mapper = get(),
             observeWorldBoundsUseCase = get(),
             observeCompassUseCase = get(),
@@ -33,12 +31,13 @@ val mapModule = module {
             getUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
             getTerminalNodesUseCase = get(),
-            getRegionsInUserPositionUseCase = get(),
             getShortestPathUseCase = get(),
             loadAnimalsUseCase = get(),
-            getAnimalsInUserPositionUseCase = get(),
+            getRegionsWithAnimalsInUserPositionUseCase = get(),
             getAnimalUseCase = get(),
             getRegionCenterPointUseCase = get(),
+            getRegionsContainingPointUseCase = get(),
+            getAnimalsInRegionUseCase = get(),
         )
     }
 }

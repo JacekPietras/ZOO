@@ -35,8 +35,9 @@ internal class MapViewModel(
     mapper: MapViewStateMapper,
     observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
-    getRegionsInUserPositionUseCase: GetRegionsInUserPositionUseCase,
-    getAnimalsInUserPositionUseCase: GetAnimalsInUserPositionUseCase,
+    private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
+    private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
+    getRegionsWithAnimalsInUserPositionUseCase: GetRegionsWithAnimalsInUserPositionUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     getBuildingsUseCase: GetBuildingsUseCase,
@@ -46,7 +47,7 @@ internal class MapViewModel(
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
     loadAnimalsUseCase: LoadAnimalsUseCase,
-    getAnimalUseCase: GetAnimalUseCase,
+    private val getAnimalUseCase: GetAnimalUseCase,
     private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
@@ -74,11 +75,8 @@ internal class MapViewModel(
             getUserPositionUseCase.run()
                 .onEach { volatileState.reduceOnMain { copy(userPosition = it) } }
                 .launchIn(this)
-            getRegionsInUserPositionUseCase.run()
-                .onEach { state.reduceOnMain { copy(regionsInUserPosition = it) } }
-                .launchIn(this)
-            getAnimalsInUserPositionUseCase.run()
-                .onEach { state.reduceOnMain { copy(animalsInUserPosition = it) } }
+            getRegionsWithAnimalsInUserPositionUseCase.run()
+                .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
                 .launchIn(this)
 
             combine(
@@ -106,18 +104,21 @@ internal class MapViewModel(
             }.launchIn(this)
 
             if (animalId != null) {
-                val animal = getAnimalUseCase.run(animalId)
-                state.reduceOnMain {
-                    copy(
-                        selectedAnimal = animal,
-                        isToolbarOpened = true,
-                    )
-                }
-                val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo)
-                onPointPlaced(point)
-                _effect.sendOnMain(MapEffect.CenterAtPoint(point))
+                navigationToAnimal(animalId, regionId)
             }
         }
+    }
+
+    private suspend fun navigationToAnimal(animalId: AnimalId, regionId: String?) {
+        val animal = getAnimalUseCase.run(animalId)
+        state.reduceOnMain {
+            copy(
+                toolbarMode = MapToolbarMode.SelectedAnimalMode(animal),
+                isToolbarOpened = true,
+            )
+        }
+        val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo)
+        navigateToPoint(point)
     }
 
     fun onUploadClicked() {
@@ -131,11 +132,30 @@ internal class MapViewModel(
     }
 
     fun onPointPlaced(point: PointD) {
+        launchInBackground {
+            val regionsAndAnimals = getRegionsContainingPointUseCase.run(point)
+                .map { region -> region to getAnimalsInRegionUseCase.run(region) }
+                .filter { (_, animals) -> animals.isNotEmpty() }
+
+            if (regionsAndAnimals.isEmpty()) return@launchInBackground
+
+            state.reduceOnMain {
+                copy(
+                    toolbarMode = MapToolbarMode.SelectedRegionMode(regionsAndAnimals),
+                    isToolbarOpened = true,
+                )
+            }
+        }
+        navigateToPoint(point)
+    }
+
+    private fun navigateToPoint(point: PointD) {
         launchInMain {
             volatileState.reduce { copy(snappedPoint = point) }
             onBackground {
                 val shortestPath = getShortestPathUseCase.run(point)
                 volatileState.reduceOnMain { copy(shortestPath = shortestPath) }
+                _effect.sendOnMain(MapEffect.CenterAtPoint(point))
             }
         }
     }
@@ -197,7 +217,7 @@ internal class MapViewModel(
         }
         state.reduce {
             copy(
-                mapAction = mapAction,
+                toolbarMode = MapToolbarMode.MapActionMode(mapAction),
                 isToolbarOpened = true,
             )
         }
@@ -206,12 +226,4 @@ internal class MapViewModel(
     fun onAnimalClicked(router: MapRouter, animalId: AnimalId) {
         router.navigateToAnimal(animalId)
     }
-
-//    fun onCarouselRegionClicked(regionId: String) {
-//        state.reduce {
-//            copy(
-//                carouselRegionId = regionId,
-//            )
-//        }
-//    }
 }
