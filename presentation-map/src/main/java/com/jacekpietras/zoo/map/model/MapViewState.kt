@@ -14,5 +14,6 @@ internal data class MapViewState(
     val title: Text = Text.Empty,
     val content: Text = Text.Empty,
     val mapCarouselItems: List<MapCarouselItem> = emptyList(),
+    val isMapActionsVisible: Boolean = false,
     val mapActions: List<MapAction> = emptyList(),
 )

@@ -34,11 +34,8 @@ internal class MapViewStateMapper {
                             Text.Listing(animalsInUserPosition.map { Text(it.name) })
                 }
             },
-            mapActions = if (!isToolbarOpened) {
-                MapAction.values().asList()
-            } else {
-                emptyList()
-            },
+            isMapActionsVisible = !isToolbarOpened,
+            mapActions = MapAction.values().asList(),
         )
     }
 
