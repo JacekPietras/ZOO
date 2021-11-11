@@ -85,9 +85,12 @@ internal class MapViewStateMapper {
         }
 
     private fun getCarousel(state: MapState) = mutableListOf<MapCarouselItem>().apply {
-        state.regionsInUserPosition.forEach { region ->
-            val animalsInRegion = state.animalsInUserPosition.filter { it.regionInZoo.contains(region) }
-            if (animalsInRegion.size > 5 && state.regionsInUserPosition.size > 1) {
+        val regions = state.regionsInUserPosition
+            .map { region -> region to state.animalsInUserPosition.filter { it.regionInZoo.contains(region) } }
+            .filter { (_, animalsInRegion) -> animalsInRegion.isNotEmpty() }
+
+        regions.forEach { (region, animalsInRegion) ->
+            if (animalsInRegion.size > 5 && regions.size > 1) {
                 val images = animalsInRegion.map { it.photos }.flatten().shuffled(Random(100))
                 add(
                     MapCarouselItem.Region(

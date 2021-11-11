@@ -47,6 +47,7 @@ import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
+import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapCarouselItem
 import com.jacekpietras.zoo.map.model.MapEffect.*
@@ -286,6 +287,7 @@ class ComposableMapFragment : Fragment() {
 
     @Composable
     private fun UploadButtonView(modifier: Modifier = Modifier) {
+        if (!BuildConfig.DEBUG) return
         FloatingActionButton(
             modifier = modifier
                 .padding(16.dp)
