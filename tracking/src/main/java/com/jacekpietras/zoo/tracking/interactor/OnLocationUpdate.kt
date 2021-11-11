@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.tracking
+package com.jacekpietras.zoo.tracking.interactor
 
 interface OnLocationUpdate {
 

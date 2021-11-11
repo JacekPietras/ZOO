@@ -12,6 +12,21 @@ val domainModule = module {
         )
     }
     factory {
+        StopCompassUseCase(
+            gpsRepository = get(),
+        )
+    }
+    factory {
+        StartCompassUseCase(
+            gpsRepository = get(),
+        )
+    }
+    factory {
+        FindRegionUseCase(
+            mapRepository = get(),
+        )
+    }
+    factory {
         GetRegionsContainingPointUseCase(
             mapRepository = get(),
         )

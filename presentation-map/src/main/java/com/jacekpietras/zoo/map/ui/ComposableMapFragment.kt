@@ -71,7 +71,9 @@ class ComposableMapFragment : Fragment() {
         invalidate = { mapList.value = it },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
         bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
-        setOnPointPlacedListener = { point -> viewModel.onPointPlaced(point) },
+        setOnPointPlacedListener = { viewModel.onPointPlaced(it) },
+        onStopCentering = { viewModel.onStopCentering() },
+        onStartCentering = { viewModel.onStartCentering() },
     )
     private val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
 

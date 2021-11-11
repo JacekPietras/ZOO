@@ -6,6 +6,7 @@ import com.jacekpietras.core.cutOut
 import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.data.BuildConfig
 import com.jacekpietras.zoo.data.R
+import com.jacekpietras.zoo.data.cache.watcher.Watcher
 import com.jacekpietras.zoo.data.database.dao.GpsDao
 import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
 import com.jacekpietras.zoo.data.parser.TxtParser
@@ -17,6 +18,7 @@ internal class GpsRepositoryImpl(
     context: Context,
     private val gpsDao: GpsDao,
     private val gpsHistoryMapper: GpsHistoryMapper,
+    private val compassEnabledWatcher: Watcher<Boolean>,
 ) : GpsRepository {
 
     private val compass = MutableStateFlow(0f)
@@ -66,7 +68,18 @@ internal class GpsRepositoryImpl(
     override fun getCompass(): Flow<Float> =
         compass
 
+    override fun observeCompassEnabled(): Flow<Boolean> =
+        compassEnabledWatcher.dataFlow
+
     override suspend fun insertCompass(angle: Float) {
         compass.emit(angle)
+    }
+
+    override fun enableCompass() {
+        compassEnabledWatcher.notifyUpdated(true)
+    }
+
+    override fun disableCompass() {
+        compassEnabledWatcher.notifyUpdated(false)
     }
 }

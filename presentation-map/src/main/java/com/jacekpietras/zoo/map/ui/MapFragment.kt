@@ -68,6 +68,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
     }
 
+    override fun onStop() {
+        viewModel.onStopEvent()
+        super.onStop()
+    }
+
     private fun setListeners() = with(binding) {
         uploadButton.setOnClickListener { viewModel.onUploadClicked() }
         myLocationButton.setOnClickListener { viewModel.onLocationButtonClicked(permissionChecker) }

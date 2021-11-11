@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.tracking
+package com.jacekpietras.zoo.tracking.utils
 
 import android.app.*
 import android.content.Context
@@ -13,9 +13,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
+import com.jacekpietras.zoo.tracking.R
 import com.jacekpietras.zoo.tracking.TrackingService.Companion.ACTION_STOP_SERVICE
 import timber.log.Timber
-
 
 internal class ServiceUtils(
     private val service: Service,

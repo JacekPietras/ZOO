@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.app
 
 import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
-import com.jacekpietras.zoo.tracking.OnLocationUpdate
+import com.jacekpietras.zoo.tracking.interactor.OnLocationUpdate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

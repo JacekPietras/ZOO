@@ -47,7 +47,10 @@ internal class MapViewModel(
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
     loadAnimalsUseCase: LoadAnimalsUseCase,
+    private val stopCompassUseCase: StopCompassUseCase,
+    private val startCompassUseCase: StartCompassUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
+    private val findRegionUseCase: FindRegionUseCase,
     private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
@@ -131,6 +134,14 @@ internal class MapViewModel(
         }
     }
 
+    fun onStopCentering() {
+        stopCompassUseCase.run()
+    }
+
+    fun onStartCentering() {
+        startCompassUseCase.run()
+    }
+
     fun onPointPlaced(point: PointD) {
         launchInBackground {
             val regionsAndAnimals = getRegionsContainingPointUseCase.run(point)
@@ -212,8 +223,13 @@ internal class MapViewModel(
     }
 
     fun onMapActionClicked(mapAction: MapAction) {
-        if (mapAction == MapAction.AROUND_YOU) {
-            onMyLocationClicked()
+        when (mapAction) {
+            MapAction.AROUND_YOU -> {
+                onMyLocationClicked()
+            }
+            MapAction.WC -> {
+                val wcRegions = findRegionUseCase.run { it.startsWith("wc-") }
+            }
         }
         state.reduce {
             copy(
@@ -225,5 +241,9 @@ internal class MapViewModel(
 
     fun onAnimalClicked(router: MapRouter, animalId: AnimalId) {
         router.navigateToAnimal(animalId)
+    }
+
+    fun onStopEvent() {
+        stopCompassUseCase.run()
     }
 }

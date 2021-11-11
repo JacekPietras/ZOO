@@ -1,21 +1,25 @@
 package com.jacekpietras.zoo.tracking
 
 import android.annotation.SuppressLint
-import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.IBinder
 import android.os.Process
 import android.os.Process.killProcess
 import androidx.core.content.ContextCompat.startForegroundService
+import androidx.lifecycle.LifecycleService
+import com.jacekpietras.zoo.tracking.interactor.ObserveCompassEnabledUseCase
+import com.jacekpietras.zoo.tracking.interactor.OnCompassUpdate
+import com.jacekpietras.zoo.tracking.interactor.OnLocationUpdate
+import com.jacekpietras.zoo.tracking.utils.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 @SuppressLint("Registered")
-class TrackingService : Service() {
+class TrackingService : LifecycleService() {
 
     private val onLocationUpdate: OnLocationUpdate by inject()
     private val onCompassUpdate: OnCompassUpdate by inject()
+    private val observeCompassEnabledUseCase: ObserveCompassEnabledUseCase by inject()
     private var serviceUtils: ServiceUtils? = null
     private val gpsLocationListener = GpsLocationListenerCompat(
         onLocationChanged = { time, lat, lon ->
@@ -34,6 +38,7 @@ class TrackingService : Service() {
         Timber.i("Compass angle $angle")
         onCompassUpdate(angle)
     }
+    private var compassIsWorking = false
 
     override fun onCreate() {
         super.onCreate()
@@ -47,6 +52,14 @@ class TrackingService : Service() {
             actionRes = R.string.location_service_stop_text,
             actionBroadcast = ACTION_STOP_SERVICE,
         )
+
+        observeCompassEnabledUseCase.run().observe(lifecycleOwner = this) { enabled ->
+            if (enabled) {
+                compassStart()
+            } else {
+                compassStop()
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -55,6 +68,8 @@ class TrackingService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+
         if (ACTION_STOP_SERVICE == intent?.action) {
             navigationStop()
             stopSelf()
@@ -65,20 +80,18 @@ class TrackingService : Service() {
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
-
     private fun navigationStart() {
         if (gpsLocationListener.noPermissions(this)) return
 
         gpsLocationListener.addLocationListener(this)
         gpsStatusListener.addStatusListener(this)
-        compassListener.addCompassListener(this)
+        compassStart()
     }
 
     private fun navigationStop() {
         gpsLocationListener.removeLocationListener()
         gpsStatusListener.removeStatusListener()
-        compassListener.removeCompassListener()
+        compassStop()
 
         serviceUtils?.removeNotification()
         stopForeground(true)
@@ -87,13 +100,31 @@ class TrackingService : Service() {
         }
     }
 
+    private fun compassStart() {
+        if (!compassIsWorking) {
+            compassListener.addCompassListener(this)
+            compassIsWorking = true
+        }
+    }
+
+    private fun compassStop() {
+        if (compassIsWorking) {
+            Timber.v("Compass stopped")
+            compassListener.removeCompassListener()
+            compassIsWorking = false
+        }
+    }
+
     companion object {
+
         const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
         private val NORMAL_NOTIFICATION_CHANNEL = "Channel" + R.id.normal_notification_channel
 
         fun start(context: Context) {
-            initTrackingNotificationChannel(context, NORMAL_NOTIFICATION_CHANNEL)
-            startForegroundService(context, Intent(context, TrackingService::class.java))
+            if (!isServiceRunning(context, TrackingService::class.java)) {
+                initTrackingNotificationChannel(context, NORMAL_NOTIFICATION_CHANNEL)
+                startForegroundService(context, Intent(context, TrackingService::class.java))
+            }
         }
     }
 }

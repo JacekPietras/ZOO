@@ -16,4 +16,10 @@ interface GpsRepository {
     fun getCompass(): Flow<Float>
 
     suspend fun insertCompass(angle: Float)
+
+    fun enableCompass()
+
+    fun disableCompass()
+
+    fun observeCompassEnabled(): Flow<Boolean>
 }

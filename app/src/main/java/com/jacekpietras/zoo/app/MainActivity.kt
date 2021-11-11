@@ -13,7 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.jacekpietras.zoo.R
 import com.jacekpietras.zoo.databinding.ActivityMainBinding
 import com.jacekpietras.zoo.tracking.TrackingService
-import com.jacekpietras.zoo.tracking.isServiceRunning
+import com.jacekpietras.zoo.tracking.utils.isServiceRunning
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {

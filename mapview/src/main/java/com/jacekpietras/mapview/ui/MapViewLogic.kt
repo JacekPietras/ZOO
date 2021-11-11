@@ -19,6 +19,8 @@ class MapViewLogic<T>(
     private val invalidate: (List<RenderItem<T>>) -> Unit,
     private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
     private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
+    private var onStopCentering: (() -> Unit)? = null,
+    private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
 ) {
 
@@ -77,6 +79,16 @@ class MapViewLogic<T>(
         }
     var renderList: List<RenderItem<T>>? = null
     private var centeringAtUser = false
+        set(value) {
+            if (field != value) {
+                if (value) {
+                    onStartCentering?.invoke()
+                } else {
+                    onStopCentering?.invoke()
+                }
+            }
+            field = value
+        }
 
     private val userPositionPaint: T by lazy {
         MapPaint.Fill(
