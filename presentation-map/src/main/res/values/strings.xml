@@ -12,4 +12,6 @@
     <string name="location_denied">Location denied</string>
     <string name="wc">WC</string>
     <string name="restaurant">Restaurant</string>
+    <string name="exit">Exit</string>
+    <string name="cannot_find_near">Cannot find near %s</string>
 </resources>

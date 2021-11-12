@@ -18,7 +18,7 @@ sealed class Region(
         override val id: RegionId,
     ) : Region(id)
 
-    data class EntryRegion(
+    data class ExitRegion(
         override val id: RegionId,
     ) : Region(id)
 

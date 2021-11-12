@@ -9,4 +9,5 @@ enum class MapAction(
     AROUND_YOU(R.string.around_you),
     WC(R.string.wc),
     RESTAURANT(R.string.restaurant),
+    EXIT(R.string.exit),
 }

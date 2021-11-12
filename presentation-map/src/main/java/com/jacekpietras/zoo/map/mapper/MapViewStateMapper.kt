@@ -26,7 +26,13 @@ internal class MapViewStateMapper(
             isBackArrowShown = toolbarMode is MapToolbarMode.SelectedAnimalMode,
             title = when (toolbarMode) {
                 is MapToolbarMode.SelectedAnimalMode -> Text(toolbarMode.animal.name)
-                is MapToolbarMode.MapActionMode -> Text(toolbarMode.mapAction.title)
+                is MapToolbarMode.NavigableMapActionMode -> {
+                    val extra = toolbarMode.distance?.let { distance ->
+                        Text(" ") + Text(distance.toInt().toString()) + "m"
+                    } ?: Text.Empty
+                    Text(toolbarMode.mapAction.title) + extra
+                }
+                is MapToolbarMode.AroundYouMapActionMode -> Text(toolbarMode.mapAction.title)
                 is MapToolbarMode.SelectedRegionMode -> {
                     if (toolbarMode.regionsWithAnimals.size > 1) {
                         Text(R.string.selected)
@@ -36,7 +42,6 @@ internal class MapViewStateMapper(
                 }
                 else -> Text.Empty
             },
-
 
             mapCarouselItems = when (toolbarMode) {
                 is MapToolbarMode.MapActionMode ->
