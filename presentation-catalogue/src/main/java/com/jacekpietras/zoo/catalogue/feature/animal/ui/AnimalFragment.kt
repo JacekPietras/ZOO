@@ -76,11 +76,10 @@ class AnimalFragment : Fragment() {
                                 onClick = { viewModel.onWebClicked(router) },
                             )
                         }
-
-                        navLinks.forEach {
+                        if (isNavLink) {
                             SimpleButton(
-                                text = Text(R.string.nav) + " " + it,
-                                onClick = { viewModel.onNavClicked(router, it) },
+                                text = Text(R.string.nav),
+                                onClick = { viewModel.onNavClicked(router) },
                             )
                         }
                     }

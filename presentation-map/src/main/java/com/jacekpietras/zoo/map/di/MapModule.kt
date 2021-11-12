@@ -19,9 +19,11 @@ val mapModule = module {
         MapViewModel(
             animalId = animalId
                 ?.takeIf { it.isNotBlank() }
+                ?.takeIf { it != "null" }
                 ?.let(::AnimalId),
             regionId = regionId
                 ?.takeIf { it.isNotBlank() }
+                ?.takeIf { it != "null" }
                 ?.let(::RegionId),
             mapper = get(),
             observeWorldBoundsUseCase = get(),

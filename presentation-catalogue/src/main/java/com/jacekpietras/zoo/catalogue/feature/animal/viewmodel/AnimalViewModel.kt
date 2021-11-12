@@ -39,7 +39,7 @@ internal class AnimalViewModel(
         router.navigateToWeb(currentState.animal.web)
     }
 
-    fun onNavClicked(router: AnimalRouter, regionId: String) {
+    fun onNavClicked(router: AnimalRouter, regionId: String?=null) {
         router.navigateToMap(currentState.animal.id, regionId)
     }
 }

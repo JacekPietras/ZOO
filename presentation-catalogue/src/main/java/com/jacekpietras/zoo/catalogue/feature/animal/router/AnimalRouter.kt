@@ -4,7 +4,7 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 
 interface AnimalRouter {
 
-    fun navigateToMap(animalId: AnimalId, regionId: String)
+    fun navigateToMap(animalId: AnimalId, regionId: String? = null)
 
     fun navigateToWeb(link: String)
 

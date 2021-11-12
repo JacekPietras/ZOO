@@ -25,7 +25,7 @@ internal class AnimalMapper {
             },
             isWikiLink = state.animal.wiki.isNotBlank(),
             isWebLink = state.animal.web.isNotBlank(),
-            navLinks = state.animal.regionInZoo.map { it.id },
+            isNavLink = state.animal.regionInZoo.isNotEmpty(),
             images = state.animal.photos,
         )
 

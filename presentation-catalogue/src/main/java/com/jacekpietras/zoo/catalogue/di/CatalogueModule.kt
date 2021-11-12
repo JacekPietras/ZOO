@@ -14,7 +14,10 @@ val catalogueModule = module {
 
     viewModel { (regionId: String?) ->
         CatalogueViewModel(
-            regionId = regionId?.let(::RegionId),
+            regionId = regionId
+                ?.takeIf { it.isNotBlank() }
+                ?.takeIf { it != "null" }
+                ?.let(::RegionId),
             observeFilteredAnimalsUseCase = get(),
             loadAnimalsUseCase = get(),
             stateMapper = get(),
