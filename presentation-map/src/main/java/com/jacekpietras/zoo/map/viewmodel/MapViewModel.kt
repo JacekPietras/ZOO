@@ -11,6 +11,7 @@ import com.jacekpietras.zoo.core.extensions.mapInBackground
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.interactor.*
+import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
@@ -78,11 +79,12 @@ internal class MapViewModel(
                 .onEach {
                     volatileState.reduceOnMain { copy(userPosition = it) }
                     with(currentState) {
-                        if (
-                            isToolbarOpened &&
-                            toolbarMode is MapToolbarMode.NavigableMapActionMode
-                        ) {
-                            startNavigationToNearestRegion(toolbarMode.mapAction)
+                        if (isToolbarOpened) {
+                            when (toolbarMode) {
+                                is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
+                                is MapToolbarMode.SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
+                                else -> Unit
+                            }
                         }
                     }
                 }
@@ -116,21 +118,40 @@ internal class MapViewModel(
             }.launchIn(this)
 
             if (animalId != null) {
-                navigationToAnimal(animalId, regionId)
+                onMyLocationClicked()
+                navigationToAnimal(getAnimalUseCase.run(animalId), regionId)
             }
         }
     }
 
-    private suspend fun navigationToAnimal(animalId: AnimalId, regionId: RegionId?) {
-        val animal = getAnimalUseCase.run(animalId)
+    private suspend fun navigationToAnimal(animal: AnimalEntity, regionId: RegionId?) {
+        val regionIds = if (regionId != null) {
+            listOf(regionId)
+        } else {
+            animal.regionInZoo
+        }
+
+        val pathToNearestWithDistance = findNearRegionWithDistance { it.id in regionIds } ?: return
+
+        val shortestPath = pathToNearestWithDistance.first
+        val distance = pathToNearestWithDistance.second
+
         state.reduceOnMain {
             copy(
-                toolbarMode = MapToolbarMode.SelectedAnimalMode(animal),
+                toolbarMode = MapToolbarMode.SelectedAnimalMode(
+                    animal = animal,
+                    distance = distance,
+                    regionId = regionId,
+                ),
                 isToolbarOpened = true,
             )
         }
-        val point = getRegionCenterPointUseCase.run(regionId ?: animal.regionInZoo.first())
-        navigateToPoint(point)
+        volatileState.reduceOnMain {
+            copy(
+                snappedPoint = shortestPath.last(),
+                shortestPath = shortestPath,
+            )
+        }
     }
 
     fun onUploadClicked() {
@@ -171,15 +192,10 @@ internal class MapViewModel(
                 }
             }
         }
-        navigateToPoint(point)
-    }
-
-    private fun navigateToPoint(point: PointD) {
         volatileState.reduce { copy(snappedPoint = point) }
         launchInBackground {
             val shortestPath = getShortestPathUseCase.run(point)
             volatileState.reduceOnMain { copy(shortestPath = shortestPath) }
-//            _effect.sendOnMain(MapEffect.CenterAtPoint(point))
         }
     }
 
@@ -287,12 +303,15 @@ internal class MapViewModel(
         }
     }
 
-    private suspend inline fun <reified T> findNearRegionWithDistance(): Pair<List<PointD>, Double>? =
-        findRegionUseCase.run { it is T }
+    private suspend fun findNearRegionWithDistance(condition: (Region) -> Boolean): Pair<List<PointD>, Double>? =
+        findRegionUseCase.run(condition)
             .map { getRegionCenterPointUseCase.run(regionId = it.id) }
             .map { getShortestPathUseCase.run(it) }
             .map { it to it.toLengthInMeters() }
             .minByOrNull { (_, length) -> length }
+
+    private suspend inline fun <reified T> findNearRegionWithDistance(): Pair<List<PointD>, Double>? =
+        findNearRegionWithDistance { it is T }
 
     private fun List<PointD>.toLengthInMeters(): Double =
         this

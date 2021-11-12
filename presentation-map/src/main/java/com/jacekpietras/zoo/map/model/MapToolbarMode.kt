@@ -3,11 +3,12 @@ package com.jacekpietras.zoo.map.model
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.RegionId
 
 sealed class MapToolbarMode {
 
     sealed class MapActionMode(
-       open val mapAction: MapAction,
+        open val mapAction: MapAction,
     ) : MapToolbarMode()
 
     data class NavigableMapActionMode(
@@ -22,6 +23,8 @@ sealed class MapToolbarMode {
 
     data class SelectedAnimalMode(
         val animal: AnimalEntity,
+        val distance: Double,
+        val regionId: RegionId?,
     ) : MapToolbarMode()
 
     data class SelectedRegionMode(

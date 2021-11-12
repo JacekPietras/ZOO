@@ -25,13 +25,8 @@ internal class MapViewStateMapper(
             isGuidanceShown = isToolbarOpened,
             isBackArrowShown = toolbarMode is MapToolbarMode.SelectedAnimalMode,
             title = when (toolbarMode) {
-                is MapToolbarMode.SelectedAnimalMode -> Text(toolbarMode.animal.name)
-                is MapToolbarMode.NavigableMapActionMode -> {
-                    val extra = toolbarMode.distance?.let { distance ->
-                        Text(" ") + Text(distance.toInt().toString()) + "m"
-                    } ?: Text.Empty
-                    Text(toolbarMode.mapAction.title) + extra
-                }
+                is MapToolbarMode.SelectedAnimalMode -> Text(toolbarMode.animal.name) + toolbarMode.distance.metersToText()
+                is MapToolbarMode.NavigableMapActionMode -> Text(toolbarMode.mapAction.title) + toolbarMode.distance.metersToText()
                 is MapToolbarMode.AroundYouMapActionMode -> Text(toolbarMode.mapAction.title)
                 is MapToolbarMode.SelectedRegionMode -> {
                     if (toolbarMode.regionsWithAnimals.size > 1) {
@@ -56,6 +51,11 @@ internal class MapViewStateMapper(
             mapActions = MapAction.values().asList(),
         )
     }
+
+    private fun Double?.metersToText() =
+        this?.let { distance ->
+            Text(" ") + Text(distance.toInt().toString()) + "m"
+        } ?: Text.Empty
 
     fun from(state: MapVolatileState): MapVolatileViewState = with(state) {
         MapVolatileViewState(
