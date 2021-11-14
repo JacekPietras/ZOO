@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic.*
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.*
 import timber.log.Timber
 
 @Composable

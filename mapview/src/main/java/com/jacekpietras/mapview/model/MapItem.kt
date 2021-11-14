@@ -23,10 +23,10 @@ class MapItem {
     }
 
     constructor(
-        path: PointD,
+        point: PointD,
         paint: MapPaint,
     ) {
-        this.shape = path
+        this.shape = point
         this.paint = paint
     }
 }
