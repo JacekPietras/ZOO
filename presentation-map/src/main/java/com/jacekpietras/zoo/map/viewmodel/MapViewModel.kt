@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -92,6 +93,17 @@ internal class MapViewModel(
             getRegionsWithAnimalsInUserPositionUseCase.run()
                 .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
                 .launchIn(this)
+
+
+
+            observeWorldBoundsUseCase.run().onEach { Timber.e("dupa 2") }.launchIn(this)
+            getBuildingsUseCase.run().onEach { Timber.e("dupa 3") }.launchIn(this)
+            getAviaryUseCase.run().onEach { Timber.e("dupa 4") }.launchIn(this)
+            getRoadsUseCase.run().onEach { Timber.e("dupa 5") }.launchIn(this)
+            getLinesUseCase.run().onEach { Timber.e("dupa 6") }.launchIn(this)
+            observeTakenRouteUseCase.run().onEach { Timber.e("dupa 7") }.launchIn(this)
+            getTechnicalRoadsUseCase.run().onEach { Timber.e("dupa 8") }.launchIn(this)
+            getTerminalNodesUseCase.run().onEach { Timber.e("dupa 9") }.launchIn(this)
 
             combine(
                 observeWorldBoundsUseCase.run(),

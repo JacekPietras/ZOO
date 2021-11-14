@@ -18,7 +18,7 @@ class PlannerFragment : Fragment() {
         setContent {
             MdcTheme {
                 Text(
-                    text = "Idź do najbliższej toalety/palarni/jedzenia\nDodaj trase predefiniowaną\nDodaj obiad o danej godzinie i miejscu\nDodaj karmienie które chcesz zobaczyć\nPrzegląd trasy z godzinami",
+                    text = "Dodaj trase predefiniowaną\nDodaj obiad o danej godzinie i miejscu\nDodaj karmienie które chcesz zobaczyć\nPrzegląd trasy z godzinami",
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
             }

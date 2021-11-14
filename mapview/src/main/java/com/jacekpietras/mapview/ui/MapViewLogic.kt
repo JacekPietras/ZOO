@@ -28,10 +28,11 @@ class MapViewLogic<T>(
         set(value) {
             field = value
 
-            centerGpsCoordinate = PointD(value.bounds.centerX(), value.bounds.centerY())
+            if (!value.bounds.contains(centerGpsCoordinate)) {
+                centerGpsCoordinate = PointD(value.bounds.centerX(), value.bounds.centerY())
+            }
             maxZoom = min(abs(value.bounds.width()), abs(value.bounds.height())) / 2
             minZoom = maxZoom / 10
-            zoom = maxZoom / 5
 
             objectList = value.objectList.toRenderItems()
 
@@ -60,7 +61,19 @@ class MapViewLogic<T>(
     private var currentHeight: Int = 0
     private var currentWidth: Int = 0
     private var maxZoom: Double = 10.0
+        set(value) {
+            if (value != field) {
+                field = value
+                zoom = maxZoom / 5
+            }
+        }
     private var minZoom: Double = 2.0
+        set(value) {
+            if (value != field) {
+                field = value
+                zoom = maxZoom / 5
+            }
+        }
     private var terminalPointsOnScreen: FloatArray? = null
     private var userPositionOnScreen: FloatArray? = null
     private val interesting: List<PointD> = listOf()
@@ -68,7 +81,7 @@ class MapViewLogic<T>(
     private var shortestPathOnScreen: FloatArray? = null
     private var clickOnScreen: FloatArray? = null
     private lateinit var visibleGpsCoordinate: ViewCoordinates
-    private var centerGpsCoordinate: PointD = PointD(worldBounds.centerX(), worldBounds.centerY())
+    private var centerGpsCoordinate: PointD = PointD()
     private var zoom: Double = 5.0
         set(value) {
             field = value.coerceAtMost(maxZoom).coerceAtLeast(minZoom)
@@ -313,7 +326,7 @@ class MapViewLogic<T>(
 
         when {
             leftMargin + rightMargin < 0 -> {
-                zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+                zoom *= .99f
                 centerGpsCoordinate = PointD(worldBounds.centerX(), centerGpsCoordinate.y)
                 result = true
             }
@@ -337,7 +350,7 @@ class MapViewLogic<T>(
 
         when {
             topMargin + bottomMargin < 0 -> {
-                zoom = zoom.times(.99f).coerceAtMost(maxZoom).coerceAtLeast(minZoom)
+                zoom *= .99f
                 centerGpsCoordinate = PointD(centerGpsCoordinate.x, worldBounds.centerY())
                 result = true
             }

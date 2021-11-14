@@ -34,6 +34,8 @@ data class RectD(
             }
         }
 
+    fun contains(point: PointD): Boolean = contains(point.x, point.y)
+
     fun toFloat(): RectF =
         RectF(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())
 
