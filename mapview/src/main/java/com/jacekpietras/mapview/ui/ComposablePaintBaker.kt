@@ -20,6 +20,7 @@ class ComposablePaintBaker(
             is MapPaint.FillWithBorder -> paint.toCanvasPaint()
             is MapPaint.Stroke -> paint.toCanvasPaint()
             is MapPaint.StrokeWithBorder -> paint.toCanvasPaint()
+            is MapPaint.Circle -> paint.toCanvasPaint()
         }
 
     fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint>? =
@@ -29,6 +30,7 @@ class ComposablePaintBaker(
             is MapPaint.FillWithBorder -> paint.toBorderCanvasPaint()
             is MapPaint.Stroke -> null
             is MapPaint.StrokeWithBorder -> paint.toBorderCanvasPaint()
+            is MapPaint.Circle -> null
         }
 
     private fun MapPaint.Stroke.toCanvasPaint(): PaintHolder<ComposablePaint> =
@@ -127,4 +129,22 @@ class ComposablePaintBaker(
                 color = fillColor.toColorInt(context).let(::Color)
             )
         )
+
+    private fun MapPaint.Circle.toCanvasPaint(): PaintHolder<ComposablePaint> =
+        when (radius) {
+            is MapDimension.Static ->
+                PaintHolder.Static(
+                    ComposablePaint.Circle(
+                        color = fillColor.toColorInt(context).let(::Color),
+                        radius = radius.toPixels(context)
+                    )
+                )
+            is MapDimension.Dynamic ->
+                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
+                    ComposablePaint.Circle(
+                        color = fillColor.toColorInt(context).let(::Color),
+                        radius = radius.toPixels(zoom, position, screenWidthInPixels)
+                    )
+                }
+        }
 }

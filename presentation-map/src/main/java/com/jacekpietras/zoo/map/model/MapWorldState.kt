@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.map.model
 
 import android.graphics.Color
-import android.graphics.Paint
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.model.MapColor
@@ -51,5 +50,9 @@ internal data class MapWorldState(
         strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
         width = MapDimension.Static.Screen(0.5),
 //            pattern = MapDimension.Static.Screen(8)
+    ),
+    val terminalPaint: MapPaint = MapPaint.Circle(
+        fillColor = MapColor.Hard(Color.RED),
+        radius = MapDimension.Static.Screen(5),
     ),
 )

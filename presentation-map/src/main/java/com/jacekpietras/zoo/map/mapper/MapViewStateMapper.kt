@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.map.mapper
 
+import com.jacekpietras.core.PointD
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
@@ -73,11 +74,11 @@ internal class MapViewStateMapper(
                 fromPaths(technicalRoute, technicalPaint),
                 fromPaths(roads, roadPaint),
                 fromPaths(lines, linesPaint),
-                fromPaths(takenRoute, takenRoutePaint),
+//                fromPaths(takenRoute, takenRoutePaint),
                 fromPolygons(buildings, buildingPaint),
                 fromPolygons(aviary, aviaryPaint),
+                fromPoints(terminalPoints, terminalPaint),
             ),
-            terminalPoints = terminalPoints,
         )
     }
 
@@ -98,6 +99,14 @@ internal class MapViewStateMapper(
         paths.map { polygon ->
             MapItem(
                 PathD(polygon.vertices),
+                paint
+            )
+        }
+
+    private fun fromPoints(points: List<PointD>, paint: MapPaint): List<MapItem> =
+        points.map { point ->
+            MapItem(
+                point,
                 paint
             )
         }

@@ -42,7 +42,7 @@ class MapViewLogic<T>(
         }
     private val worldBounds: RectD get() = worldData.bounds
     private var objectList: List<ObjectItem<T>> = emptyList()
-    private val terminalPoints: List<PointD> get() = worldData.terminalPoints
+//    private val terminalPoints: List<PointD> get() = worldData.terminalPoints
 
     var userData: UserData = UserData()
         set(value) {
@@ -76,8 +76,6 @@ class MapViewLogic<T>(
         }
     private var terminalPointsOnScreen: FloatArray? = null
     private var userPositionOnScreen: FloatArray? = null
-    private val interesting: List<PointD> = listOf()
-    private var interestingOnScreen: FloatArray? = null
     private var shortestPathOnScreen: FloatArray? = null
     private var clickOnScreen: FloatArray? = null
     private lateinit var visibleGpsCoordinate: ViewCoordinates
@@ -244,23 +242,18 @@ class MapViewLogic<T>(
     private val extraRenderList: List<RenderItem<T>>
         get() = mutableListOf<RenderItem<T>>().apply {
             userPositionOnScreen?.also {
-                add(RenderCircleItem(it[0], it[1], 15f, userPositionPaint))
+                add(RenderCircleItem(it[0], it[1], userPositionPaint))
             }
             terminalPointsOnScreen?.also { array ->
                 for (i in array.indices step 2) {
-                    add(RenderCircleItem(array[i], array[i + 1], 5f, terminalPaint))
+                    add(RenderCircleItem(array[i], array[i + 1], terminalPaint))
                 }
             }
             shortestPathOnScreen?.also { array ->
-                add(RenderPathItem(array, shortestPaint, false))
-            }
-            interestingOnScreen?.also { array ->
-                for (i in array.indices step 2) {
-                    add(RenderCircleItem(array[i], array[i + 1], 5f, interestingPaint))
-                }
+                add(RenderPathItem(array, shortestPaint))
             }
             clickOnScreen?.also {
-                add(RenderCircleItem(it[0], it[1], 15f, interestingPaint))
+                add(RenderCircleItem(it[0], it[1], interestingPaint))
             }
         }
 
@@ -277,17 +270,20 @@ class MapViewLogic<T>(
                     .also { borderPaints[item.paint] = it }
 
             when (item.shape) {
-                is PathD -> ObjectItem(
+                is PathD -> ObjectItem.PathObjectItem(
                     pointsToDoubleArray(item.shape.vertices),
                     inner,
                     border,
-                    close = false,
                 )
-                is PolygonD -> ObjectItem(
+                is PolygonD -> ObjectItem.PolygonObjectItem(
                     pointsToDoubleArray(item.shape.vertices),
                     inner,
                     border,
-                    close = true,
+                )
+                is PointD -> ObjectItem.CircleObjectItem(
+                    item.shape,
+                    inner,
+                    border,
                 )
                 else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
@@ -397,8 +393,8 @@ class MapViewLogic<T>(
             return
         }
 
-        val borders = mutableListOf<RenderPathItem<T>>()
-        val insides = mutableListOf<RenderPathItem<T>>()
+        val borders = mutableListOf<RenderItem<T>>()
+        val insides = mutableListOf<RenderItem<T>>()
         val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
 
         val matrix = Matrix()
@@ -411,20 +407,32 @@ class MapViewLogic<T>(
             }
 
         objectList.forEach { item ->
-            if (item.close) {
-                visibleGpsCoordinate
-                    .transformPolygon(item.shape)
-                    ?.withMatrix(matrix, worldRotation)
-                    ?.let { polygon ->
-                        item.addToRender(polygon, borders, insides, dynamicPaints)
-                    }
-            } else {
-                visibleGpsCoordinate
-                    .transformPath(item.shape)
-                    .map { it.withMatrix(matrix, worldRotation) }
-                    .forEach { path ->
-                        item.addToRender(path, borders, insides, dynamicPaints)
-                    }
+            when (item) {
+                is ObjectItem.PolygonObjectItem -> {
+
+                    visibleGpsCoordinate
+                        .transformPolygon(item.shape)
+                        ?.withMatrix(matrix, worldRotation)
+                        ?.let { polygon ->
+                            item.addToRender(polygon, borders, insides, dynamicPaints)
+                        }
+                }
+                is ObjectItem.PathObjectItem -> {
+                    visibleGpsCoordinate
+                        .transformPath(item.shape)
+                        .map { it.withMatrix(matrix, worldRotation) }
+                        .forEach { path ->
+                            item.addToRender(path, borders, insides, dynamicPaints)
+                        }
+                }
+                is ObjectItem.CircleObjectItem -> {
+                    visibleGpsCoordinate
+                        .transformPoint(item.point)
+                        .withMatrix(matrix, worldRotation)
+                        .let { path ->
+                            item.addToRender(path, borders, insides, dynamicPaints)
+                        }
+                }
             }
         }
         userPosition?.let {
@@ -437,19 +445,9 @@ class MapViewLogic<T>(
                 .transformPoint(it)
                 .withMatrix(matrix, worldRotation)
         }
-        if (terminalPoints.isNotEmpty()) {
-            terminalPointsOnScreen = visibleGpsCoordinate
-                .transformPoints(terminalPoints)
-                .withMatrix(matrix, worldRotation)
-        }
         if (shortestPath.isNotEmpty()) {
             shortestPathOnScreen = visibleGpsCoordinate
                 .transformPoints(shortestPath)
-                .withMatrix(matrix, worldRotation)
-        }
-        if (interesting.isNotEmpty()) {
-            interestingOnScreen = visibleGpsCoordinate
-                .transformPoints(interesting)
                 .withMatrix(matrix, worldRotation)
         }
 
@@ -467,54 +465,112 @@ class MapViewLogic<T>(
 
     private fun ObjectItem<T>.addToRender(
         array: FloatArray,
-        borders: MutableList<RenderPathItem<T>>,
-        insides: MutableList<RenderPathItem<T>>,
+        borders: MutableList<RenderItem<T>>,
+        insides: MutableList<RenderItem<T>>,
         dynamicPaints: MutableMap<PaintHolder.Dynamic<T>, T>,
     ) {
-        insides.add(
-            RenderPathItem(
-                array,
-                paintHolder.takePaint(dynamicPaints),
-                close
-            )
-        )
-        if (outerPaintHolder != null) {
-            borders.add(
-                RenderPathItem(
-                    array,
-                    outerPaintHolder.takePaint(dynamicPaints),
-                    close
+        when (this) {
+            is ObjectItem.PolygonObjectItem -> {
+                insides.add(
+                    RenderPolygonItem(
+                        array,
+                        paintHolder.takePaint(dynamicPaints),
+                    )
                 )
-            )
+                if (outerPaintHolder != null) {
+                    borders.add(
+                        RenderPolygonItem(
+                            array,
+                            outerPaintHolder!!.takePaint(dynamicPaints),
+                        )
+                    )
+                }
+            }
+            is ObjectItem.PathObjectItem -> {
+                insides.add(
+                    RenderPathItem(
+                        array,
+                        paintHolder.takePaint(dynamicPaints),
+                    )
+                )
+                if (outerPaintHolder != null) {
+                    borders.add(
+                        RenderPathItem(
+                            array,
+                            outerPaintHolder!!.takePaint(dynamicPaints),
+                        )
+                    )
+                }
+            }
+            is ObjectItem.CircleObjectItem -> {
+                insides.add(
+                    RenderCircleItem(
+                        array[0],
+                        array[1],
+                        paintHolder.takePaint(dynamicPaints),
+                    )
+                )
+                if (outerPaintHolder != null) {
+                    borders.add(
+                        RenderCircleItem(
+                            array[0],
+                            array[1],
+                            outerPaintHolder!!.takePaint(dynamicPaints),
+                        )
+                    )
+                }
+            }
         }
     }
 
-    private class ObjectItem<T>(
-        val shape: DoubleArray,
-        val paintHolder: PaintHolder<T>,
-        val outerPaintHolder: PaintHolder<T>? = null,
-        val close: Boolean,
-    )
+    private sealed class ObjectItem<T>(
+        open val paintHolder: PaintHolder<T>,
+        open val outerPaintHolder: PaintHolder<T>? = null,
+    ) {
+
+        class PathObjectItem<T>(
+            val shape: DoubleArray,
+            override val paintHolder: PaintHolder<T>,
+            override val outerPaintHolder: PaintHolder<T>? = null,
+        ) : ObjectItem<T>(paintHolder, outerPaintHolder)
+
+        class PolygonObjectItem<T>(
+            val shape: DoubleArray,
+            override val paintHolder: PaintHolder<T>,
+            override val outerPaintHolder: PaintHolder<T>? = null,
+        ) : ObjectItem<T>(paintHolder, outerPaintHolder)
+
+        class CircleObjectItem<T>(
+            val point: PointD,
+            override val paintHolder: PaintHolder<T>,
+            override val outerPaintHolder: PaintHolder<T>? = null,
+//            val radius: MapDimension,
+        ) : ObjectItem<T>(paintHolder, outerPaintHolder)
+    }
 
     interface RenderItem<T>
 
     class RenderPathItem<T>(
         val shape: FloatArray,
         val paint: T,
-        val close: Boolean,
+    ) : RenderItem<T>
+
+    class RenderPolygonItem<T>(
+        val shape: FloatArray,
+        val paint: T,
     ) : RenderItem<T>
 
     class RenderCircleItem<T>(
         val cX: Float,
         val cY: Float,
-        val radius: Float,
+//        val radius: Float,
         val paint: T,
     ) : RenderItem<T>
 
     class WorldData(
         val bounds: RectD = RectD(),
         val objectList: List<MapItem> = emptyList(),
-        val terminalPoints: List<PointD> = emptyList(),
+//        val terminalPoints: List<PointD> = emptyList(),
     )
 
     class UserData(

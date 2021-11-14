@@ -14,8 +14,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderPathItem
+import com.jacekpietras.mapview.ui.MapViewLogic.*
 import timber.log.Timber
 
 @Composable
@@ -51,8 +50,9 @@ fun ComposableMapView(
         Timber.e("dupa map drawn!")
         mapList.value?.forEach {
             when (it) {
-                is RenderPathItem -> drawPath(it.shape, it.paint, it.close)
-                is RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))
+                is RenderPathItem -> drawPath(it.shape, it.paint, false)
+                is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
+                is RenderCircleItem -> drawCircle(it.paint.color, 5f, Offset(it.cX, it.cY))
             }
         }
     }
@@ -75,6 +75,7 @@ private fun DrawScope.drawPath(polygon: FloatArray, paint: ComposablePaint, clos
         alpha = paint.alpha,
         style = when (paint) {
             is ComposablePaint.Stroke -> paint.stroke
+            is ComposablePaint.Circle,
             is ComposablePaint.Fill -> Fill
         }
     )

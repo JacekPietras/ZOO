@@ -38,7 +38,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 binding.mapView.logic.worldData = MapViewLogic.WorldData(
                     bounds = worldBounds,
                     objectList = mapData,
-                    terminalPoints = terminalPoints,
                 )
             }
         }

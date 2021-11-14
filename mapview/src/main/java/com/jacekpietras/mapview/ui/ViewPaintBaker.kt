@@ -18,6 +18,7 @@ internal class ViewPaintBaker(
             is MapPaint.FillWithBorder -> paint.toCanvasPaint()
             is MapPaint.Stroke -> paint.toCanvasPaint()
             is MapPaint.StrokeWithBorder -> paint.toCanvasPaint()
+            is MapPaint.Circle -> paint.toCanvasPaint()
         }
 
     fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<Paint>? =
@@ -27,6 +28,7 @@ internal class ViewPaintBaker(
             is MapPaint.FillWithBorder -> paint.toBorderCanvasPaint()
             is MapPaint.Stroke -> null
             is MapPaint.StrokeWithBorder -> paint.toBorderCanvasPaint()
+            is MapPaint.Circle -> null
         }
 
     private fun MapPaint.Stroke.toCanvasPaint(): PaintHolder<Paint> =
@@ -154,4 +156,28 @@ internal class ViewPaintBaker(
                 color = fillColor.toColorInt(context)
             }
         )
+
+    private fun MapPaint.Circle.toCanvasPaint(): PaintHolder<Paint> =
+        when (radius) {
+            is MapDimension.Static ->
+                PaintHolder.Static(
+                    Paint().apply {
+                        style = Paint.Style.FILL
+                        isAntiAlias = true
+
+                        color = fillColor.toColorInt(context)
+//                        strokeWidth = radius.toPixels(context)
+                    }
+                )
+            is MapDimension.Dynamic ->
+                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
+                    Paint().apply {
+                        style = Paint.Style.FILL
+                        isAntiAlias = true
+
+                        color = fillColor.toColorInt(context)
+//                        strokeWidth = radius.toPixels(zoom, position, screenWidthInPixels)
+                    }
+                }
+        }
 }

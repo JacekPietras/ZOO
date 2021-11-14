@@ -313,7 +313,7 @@ class ComposableMapFragment : Fragment() {
                     mapLogic.worldData = MapViewLogic.WorldData(
                         bounds = worldBounds,
                         objectList = mapData,
-                        terminalPoints = terminalPoints,
+//                        terminalPoints = terminalPoints,
                     )
                 }
             }

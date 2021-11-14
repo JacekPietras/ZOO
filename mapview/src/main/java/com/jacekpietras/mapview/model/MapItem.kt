@@ -1,5 +1,7 @@
 package com.jacekpietras.mapview.model
 
+import com.jacekpietras.core.PointD
+
 class MapItem {
     val shape: Any
     val paint: MapPaint
@@ -14,6 +16,14 @@ class MapItem {
 
     constructor(
         path: PathD,
+        paint: MapPaint,
+    ) {
+        this.shape = path
+        this.paint = paint
+    }
+
+    constructor(
+        path: PointD,
         paint: MapPaint,
     ) {
         this.shape = path

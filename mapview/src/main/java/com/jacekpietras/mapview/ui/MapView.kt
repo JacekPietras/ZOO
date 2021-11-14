@@ -4,8 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.jacekpietras.core.PointD
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderPathItem
+import com.jacekpietras.mapview.ui.MapViewLogic.*
 import com.jacekpietras.mapview.utils.drawPath
 
 class MapView @JvmOverloads constructor(
@@ -54,8 +53,9 @@ class MapView @JvmOverloads constructor(
 
         logic.renderList?.forEach {
             when (it) {
-                is RenderPathItem -> canvas.drawPath(it.shape, it.paint, it.close)
-                is RenderCircleItem -> canvas.drawCircle(it.cX, it.cY, it.radius, it.paint)
+                is RenderPathItem -> canvas.drawPath(it.shape, it.paint, false)
+                is RenderPolygonItem -> canvas.drawPath(it.shape, it.paint, true)
+                is RenderCircleItem -> canvas.drawCircle(it.cX, it.cY, 5f, it.paint)
             }
         }
     }

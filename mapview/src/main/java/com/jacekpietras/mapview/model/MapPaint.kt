@@ -18,6 +18,11 @@ sealed class MapPaint {
         val strokeColor: MapColor,
     ) : MapPaint()
 
+    data class Circle(
+        val radius: MapDimension,
+        val fillColor: MapColor,
+    ) : MapPaint()
+
     data class StrokeWithBorder(
         val width: MapDimension,
         val strokeColor: MapColor,
