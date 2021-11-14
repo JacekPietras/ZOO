@@ -56,7 +56,7 @@ class MapViewLogic<T>(
         }
 
     private var volatilePreparedList: List<PreparedItem<T>> = emptyList()
-    private val userPosition: PointD? get() = userData.userPosition
+    private val userPosition: PointD? get() = userData.userPosition.takeIf { it != PointD() }
     private val compass: Float get() = userData.compass
 
     private var currentHeight: Int = 0

@@ -78,8 +78,8 @@ internal class MapViewStateMapper(
                 fromPaths(lines, linesPaint),
                 fromPolygons(buildings, buildingPaint),
                 fromPolygons(aviary, aviaryPaint),
-                fromPaths(oldTakenRoute, takenRoutePaint),
-                fromPoints(terminalPoints, terminalPaint),
+//                fromPaths(oldTakenRoute, oldTakenRoutePaint),
+//                fromPoints(terminalPoints, terminalPaint),
             ),
         )
     }
@@ -113,6 +113,7 @@ internal class MapViewStateMapper(
             )
         }
 
+    @Suppress("unused")
     private fun fromPoints(points: List<PointD>, paint: MapPaint): List<MapItem> =
         points.map { point ->
             MapItem.CircleMapItem(
@@ -197,6 +198,8 @@ internal class MapViewStateMapper(
             strokeColor = MapColor.Hard(Color.BLUE),
             width = MapDimension.Dynamic.World(0.5),
         )
+
+        @Suppress("unused")
         val terminalPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Hard(Color.RED),
             radius = MapDimension.Dynamic.World(meters = 1.0),
@@ -212,6 +215,12 @@ internal class MapViewStateMapper(
         val userPositionPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Attribute(com.jacekpietras.mapview.R.attr.colorPrimary),
             radius = MapDimension.Static.Screen(dp = 8)
+        )
+
+        @Suppress("unused")
+        val oldTakenRoutePaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
+            width = MapDimension.Static.Screen(0.5),
         )
         val takenRoutePaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
