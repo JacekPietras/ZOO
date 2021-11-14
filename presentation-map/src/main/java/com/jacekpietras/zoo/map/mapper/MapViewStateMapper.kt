@@ -1,10 +1,8 @@
 package com.jacekpietras.zoo.map.mapper
 
+import android.graphics.Color
 import com.jacekpietras.core.PointD
-import com.jacekpietras.mapview.model.MapItem
-import com.jacekpietras.mapview.model.MapPaint
-import com.jacekpietras.mapview.model.PathD
-import com.jacekpietras.mapview.model.PolygonD
+import com.jacekpietras.mapview.model.*
 import com.jacekpietras.zoo.core.RegionMapper
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.AnimalEntity
@@ -13,16 +11,6 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.*
-import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.shortestPathPaint
-import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.snappedPointPaint
-import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.takenRoutePaint
-import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.userPositionPaint
-import com.jacekpietras.zoo.map.model.MapWorldState.Companion.aviaryPaint
-import com.jacekpietras.zoo.map.model.MapWorldState.Companion.buildingPaint
-import com.jacekpietras.zoo.map.model.MapWorldState.Companion.linesPaint
-import com.jacekpietras.zoo.map.model.MapWorldState.Companion.roadPaint
-import com.jacekpietras.zoo.map.model.MapWorldState.Companion.technicalPaint
-import com.jacekpietras.zoo.map.model.MapWorldState.Companion.terminalPaint
 import kotlin.random.Random
 
 internal class MapViewStateMapper(
@@ -103,7 +91,7 @@ internal class MapViewStateMapper(
         paint: MapPaint
     ): List<MapItem> =
         polygons.map { polygon ->
-            MapItem(
+            MapItem.PolygonMapItem(
                 PolygonD(polygon.vertices),
                 paint,
             )
@@ -111,7 +99,7 @@ internal class MapViewStateMapper(
 
     private fun fromPath(path: List<PointD>, paint: MapPaint): List<MapItem> =
         listOf(
-            MapItem(
+            MapItem.PathMapItem(
                 PathD(path),
                 paint,
             )
@@ -119,7 +107,7 @@ internal class MapViewStateMapper(
 
     private fun fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem> =
         paths.map { path ->
-            MapItem(
+            MapItem.PathMapItem(
                 PathD(path.vertices),
                 paint,
             )
@@ -127,8 +115,9 @@ internal class MapViewStateMapper(
 
     private fun fromPoints(points: List<PointD>, paint: MapPaint): List<MapItem> =
         points.map { point ->
-            MapItem(
+            MapItem.CircleMapItem(
                 point,
+                (paint as MapPaint.Circle).radius,
                 paint,
             )
         }
@@ -136,8 +125,9 @@ internal class MapViewStateMapper(
     private fun fromPoint(point: PointD?, paint: MapPaint): List<MapItem> =
         if (point != null) {
             listOf(
-                MapItem(
+                MapItem.CircleMapItem(
                     point,
+                    (paint as MapPaint.Circle).radius,
                     paint,
                 )
             )
@@ -178,4 +168,54 @@ internal class MapViewStateMapper(
                 { (it as? MapCarouselItem.Animal)?.photoUrl == null },
             )
         )
+
+    private companion object {
+
+        val buildingPaint: MapPaint = MapPaint.FillWithBorder(
+            fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
+            borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
+            borderWidth = MapDimension.Static.Screen(1),
+        )
+        val aviaryPaint: MapPaint = MapPaint.FillWithBorder(
+            fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
+            borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
+            borderWidth = MapDimension.Static.Screen(1),
+        )
+        val roadPaint: MapPaint = MapPaint.StrokeWithBorder(
+            strokeColor = MapColor.Attribute(R.attr.colorMapRoute),
+            width = MapDimension.Dynamic.World(2.0),
+            borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
+            borderWidth = MapDimension.Static.Screen(1),
+        )
+        val technicalPaint: MapPaint = MapPaint.StrokeWithBorder(
+            strokeColor = MapColor.Attribute(R.attr.colorMapTechnical),
+            width = MapDimension.Dynamic.World(2.0),
+            borderColor = MapColor.Attribute(R.attr.colorMapTechnicalBorder),
+            borderWidth = MapDimension.Static.Screen(1),
+        )
+        val linesPaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Hard(Color.BLUE),
+            width = MapDimension.Dynamic.World(0.5),
+        )
+        val terminalPaint: MapPaint = MapPaint.Circle(
+            fillColor = MapColor.Hard(Color.RED),
+            radius = MapDimension.Dynamic.World(meters = 1.0),
+        )
+        val shortestPathPaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Hard(Color.BLUE),
+            width = MapDimension.Static.Screen(2),
+        )
+        val snappedPointPaint: MapPaint = MapPaint.Circle(
+            fillColor = MapColor.Hard(Color.BLUE),
+            radius = MapDimension.Static.Screen(dp = 4)
+        )
+        val userPositionPaint: MapPaint = MapPaint.Circle(
+            fillColor = MapColor.Attribute(com.jacekpietras.mapview.R.attr.colorPrimary),
+            radius = MapDimension.Static.Screen(dp = 8)
+        )
+        val takenRoutePaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
+            width = MapDimension.Static.Screen(0.5),
+        )
+    }
 }

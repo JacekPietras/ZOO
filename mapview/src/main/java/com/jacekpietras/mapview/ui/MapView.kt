@@ -17,6 +17,7 @@ class MapView @JvmOverloads constructor(
         invalidate = { invalidate() },
         bakeCanvasPaint = paintBaker::bakeCanvasPaint,
         bakeBorderCanvasPaint = paintBaker::bakeBorderCanvasPaint,
+        bakeDimension = paintBaker::bakeDimension,
     )
 
     init {
@@ -55,7 +56,7 @@ class MapView @JvmOverloads constructor(
             when (it) {
                 is RenderPathItem -> canvas.drawPath(it.shape, it.paint, false)
                 is RenderPolygonItem -> canvas.drawPath(it.shape, it.paint, true)
-                is RenderCircleItem -> canvas.drawCircle(it.cX, it.cY, 5f, it.paint)
+                is RenderCircleItem -> canvas.drawCircle(it.cX, it.cY, it.radius, it.paint)
             }
         }
     }

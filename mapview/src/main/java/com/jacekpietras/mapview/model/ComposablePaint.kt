@@ -38,6 +38,5 @@ sealed class ComposablePaint {
     class Circle(
         override val color: Color = Color.Red,
         override val alpha: Float = 1f,
-        radius: Float = 0.0f,
     ) : ComposablePaint()
 }

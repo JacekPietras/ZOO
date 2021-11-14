@@ -1,14 +1,9 @@
 package com.jacekpietras.zoo.map.model
 
-import android.graphics.Color
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.mapview.model.MapColor
-import com.jacekpietras.mapview.model.MapDimension
-import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.map.R
 
 internal data class MapWorldState(
     val worldBounds: RectD = RectD(),
@@ -19,43 +14,4 @@ internal data class MapWorldState(
     val technicalRoute: List<PathEntity> = emptyList(),
     val oldTakenRoute: List<PathEntity> = emptyList(),
     val terminalPoints: List<PointD> = emptyList(),
-) {
-
-    companion object {
-
-        val buildingPaint: MapPaint = MapPaint.FillWithBorder(
-            fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
-            borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
-            borderWidth = MapDimension.Static.Screen(1),
-        )
-        val aviaryPaint: MapPaint = MapPaint.FillWithBorder(
-            fillColor = MapColor.Attribute(R.attr.colorMapBuilding),
-            borderColor = MapColor.Attribute(R.attr.colorMapBuildingBorder),
-            borderWidth = MapDimension.Static.Screen(1),
-        )
-        val roadPaint: MapPaint = MapPaint.StrokeWithBorder(
-            strokeColor = MapColor.Attribute(R.attr.colorMapRoute),
-            width = MapDimension.Dynamic.World(2.0),
-            borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
-            borderWidth = MapDimension.Static.Screen(1),
-        )
-        val technicalPaint: MapPaint = MapPaint.StrokeWithBorder(
-            strokeColor = MapColor.Attribute(R.attr.colorMapTechnical),
-            width = MapDimension.Dynamic.World(2.0),
-            borderColor = MapColor.Attribute(R.attr.colorMapTechnicalBorder),
-            borderWidth = MapDimension.Static.Screen(1),
-        )
-        val linesPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Hard(Color.BLUE),
-            width = MapDimension.Dynamic.World(0.5),
-        )
-        val terminalPaint: MapPaint = MapPaint.Circle(
-            fillColor = MapColor.Hard(Color.RED),
-            radius = MapDimension.Static.Screen(5),
-        )
-        val takenRoutePaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
-            width = MapDimension.Static.Screen(0.5),
-        )
-    }
-}
+)

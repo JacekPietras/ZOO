@@ -52,7 +52,7 @@ fun ComposableMapView(
             when (it) {
                 is RenderPathItem -> drawPath(it.shape, it.paint, false)
                 is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
-                is RenderCircleItem -> drawCircle(it.paint.color, 5f, Offset(it.cX, it.cY))
+                is RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))
             }
         }
     }

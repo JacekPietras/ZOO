@@ -17,6 +17,7 @@ class MapViewLogic<T>(
     private val invalidate: (List<RenderItem<T>>) -> Unit,
     private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
     private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
+    private val bakeDimension: (MapDimension) -> ((Double, PointD, Int) -> Float),
     private var onStopCentering: (() -> Unit)? = null,
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
@@ -225,23 +226,23 @@ class MapViewLogic<T>(
                 ?: bakeBorderCanvasPaint(item.paint)
                     .also { borderPaints[item.paint] = it }
 
-            when (item.shape) {
-                is PathD -> PreparedItem.PathPreparedItem(
-                    pointsToDoubleArray(item.shape.vertices),
+            when (item) {
+                is MapItem.PathMapItem -> PreparedItem.PreparedPathItem(
+                    pointsToDoubleArray(item.path.vertices),
                     inner,
                     border,
                 )
-                is PolygonD -> PreparedItem.PolygonPreparedItem(
-                    pointsToDoubleArray(item.shape.vertices),
+                is MapItem.PolygonMapItem -> PreparedItem.PreparedPolygonItem(
+                    pointsToDoubleArray(item.polygon.vertices),
                     inner,
                     border,
                 )
-                is PointD -> PreparedItem.CirclePreparedItem(
-                    item.shape,
+                is MapItem.CircleMapItem -> PreparedItem.PreparedCircleItem(
+                    item.point,
+                    item.radius,
                     inner,
                     border,
                 )
-                else -> throw IllegalStateException("Unknown shape type ${item.shape}")
             }
         }
     }
@@ -341,13 +342,14 @@ class MapViewLogic<T>(
             return
         }
 
-        renderList = MapListPreparation<T>(
+        renderList = RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
             worldRotation = worldRotation,
             currentWidth = currentWidth,
             currentHeight = currentHeight,
             zoom = zoom,
             centerGpsCoordinate = centerGpsCoordinate,
+            bakeDimension = bakeDimension,
         ).translate(worldPreparedList + volatilePreparedList)
 
         invalidate(renderList!!)
@@ -358,20 +360,21 @@ class MapViewLogic<T>(
         open val outerPaintHolder: PaintHolder<T>? = null,
     ) {
 
-        class PathPreparedItem<T>(
+        class PreparedPathItem<T>(
             val shape: DoubleArray,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
         ) : PreparedItem<T>(paintHolder, outerPaintHolder)
 
-        class PolygonPreparedItem<T>(
+        class PreparedPolygonItem<T>(
             val shape: DoubleArray,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
         ) : PreparedItem<T>(paintHolder, outerPaintHolder)
 
-        class CirclePreparedItem<T>(
+        class PreparedCircleItem<T>(
             val point: PointD,
+            val radius: MapDimension,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
         ) : PreparedItem<T>(paintHolder, outerPaintHolder)
@@ -392,6 +395,7 @@ class MapViewLogic<T>(
         class RenderCircleItem<T>(
             val cX: Float,
             val cY: Float,
+            val radius: Float,
             val paint: T,
         ) : RenderItem<T>()
     }

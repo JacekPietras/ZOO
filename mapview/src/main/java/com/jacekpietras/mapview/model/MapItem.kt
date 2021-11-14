@@ -2,31 +2,23 @@ package com.jacekpietras.mapview.model
 
 import com.jacekpietras.core.PointD
 
-class MapItem {
-    val shape: Any
-    val paint: MapPaint
+sealed class MapItem(
+    open val paint: MapPaint,
+) {
 
-    constructor(
-        polygon: PolygonD,
-        paint: MapPaint,
-    ) {
-        this.shape = polygon
-        this.paint = paint
-    }
+    class PathMapItem(
+        val path: PathD,
+        override val paint: MapPaint,
+    ) : MapItem(paint)
 
-    constructor(
-        path: PathD,
-        paint: MapPaint,
-    ) {
-        this.shape = path
-        this.paint = paint
-    }
+    class PolygonMapItem(
+        val polygon: PolygonD,
+        override val paint: MapPaint,
+    ) : MapItem(paint)
 
-    constructor(
-        point: PointD,
-        paint: MapPaint,
-    ) {
-        this.shape = point
-        this.paint = paint
-    }
+    class CircleMapItem(
+        val point: PointD,
+        val radius: MapDimension,
+        override val paint: MapPaint,
+    ) : MapItem(paint)
 }

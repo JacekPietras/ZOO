@@ -71,6 +71,7 @@ class ComposableMapFragment : Fragment() {
         invalidate = { mapList.value = it },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
         bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
+        bakeDimension = { paintBaker.bakeDimension(it) },
         setOnPointPlacedListener = { viewModel.onPointPlaced(it) },
         onStopCentering = { viewModel.onStopCentering() },
         onStartCentering = { viewModel.onStartCentering() },

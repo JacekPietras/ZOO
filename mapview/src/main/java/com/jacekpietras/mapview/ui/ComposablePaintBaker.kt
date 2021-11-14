@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect.Companion.dashPathEffect
 import androidx.compose.ui.graphics.StrokeCap
+import com.jacekpietras.core.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
@@ -12,6 +13,16 @@ import com.jacekpietras.mapview.model.PaintHolder
 class ComposablePaintBaker(
     private val context: Context,
 ) {
+
+    fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float =
+        when (dimension) {
+            is MapDimension.Dynamic -> { zoom, position, screenWidthInPixels ->
+                dimension.toPixels(zoom, position, screenWidthInPixels)
+            }
+            is MapDimension.Static -> { _, _, _ ->
+                dimension.toPixels(context)
+            }
+        }
 
     fun bakeCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
         when (paint) {
@@ -42,13 +53,15 @@ class ComposablePaintBaker(
                         width = width.toPixels(context),
                     )
                 )
-            is MapDimension.Dynamic ->
+            is MapDimension.Dynamic -> {
+                val color = strokeColor.toColorInt(context).let(::Color)
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     ComposablePaint.Stroke(
-                        color = strokeColor.toColorInt(context).let(::Color),
+                        color = color,
                         width = width.toPixels(zoom, position, screenWidthInPixels),
                     )
                 }
+            }
         }
 
     private fun MapPaint.StrokeWithBorder.toCanvasPaint(): PaintHolder<ComposablePaint> =
@@ -59,17 +72,18 @@ class ComposablePaintBaker(
                         cap = StrokeCap.Round,
                         color = strokeColor.toColorInt(context).let(::Color),
                         width = width.toPixels(context),
-
-                        )
+                    )
                 )
-            is MapDimension.Dynamic ->
+            is MapDimension.Dynamic -> {
+                val color = strokeColor.toColorInt(context).let(::Color)
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     ComposablePaint.Stroke(
                         cap = StrokeCap.Round,
-                        color = strokeColor.toColorInt(context).let(::Color),
+                        color = color,
                         width = width.toPixels(zoom, position, screenWidthInPixels),
                     )
                 }
+            }
         }
 
     private fun MapPaint.StrokeWithBorder.toBorderCanvasPaint(): PaintHolder<ComposablePaint> =
@@ -82,15 +96,16 @@ class ComposablePaintBaker(
                         width = width.toPixels(context) + 2 * borderWidth.toPixels(context)
                     )
                 )
-            is MapDimension.Dynamic ->
+            is MapDimension.Dynamic -> {
+                val color = borderColor.toColorInt(context).let(::Color)
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     ComposablePaint.Stroke(
                         cap = StrokeCap.Round,
-                        color = borderColor.toColorInt(context).let(::Color),
+                        color = color,
                         width = width.toPixels(zoom, position, screenWidthInPixels) + 2 * borderWidth.toPixels(context)
-
                     )
                 }
+            }
         }
 
     private fun MapPaint.DashedStroke.toCanvasPaint(): PaintHolder<ComposablePaint> =
@@ -136,15 +151,14 @@ class ComposablePaintBaker(
                 PaintHolder.Static(
                     ComposablePaint.Circle(
                         color = fillColor.toColorInt(context).let(::Color),
-                        radius = radius.toPixels(context)
                     )
                 )
-            is MapDimension.Dynamic ->
-                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
+            is MapDimension.Dynamic -> {
+                PaintHolder.Static(
                     ComposablePaint.Circle(
                         color = fillColor.toColorInt(context).let(::Color),
-                        radius = radius.toPixels(zoom, position, screenWidthInPixels)
                     )
-                }
+                )
+            }
         }
 }
