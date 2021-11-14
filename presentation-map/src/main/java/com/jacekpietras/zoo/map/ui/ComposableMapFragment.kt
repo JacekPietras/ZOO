@@ -321,8 +321,7 @@ class ComposableMapFragment : Fragment() {
                     mapLogic.userData = MapViewLogic.UserData(
                         userPosition = userPosition,
                         compass = compass,
-                        clickOnWorld = snappedPoint,
-                        shortestPath = shortestPath,
+                        objectList = mapData,
                     )
                 }
             }

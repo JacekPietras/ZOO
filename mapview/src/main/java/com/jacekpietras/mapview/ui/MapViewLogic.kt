@@ -47,36 +47,7 @@ class MapViewLogic<T>(
         set(value) {
             field = value
 
-            volatilePreparedList = mutableListOf<MapItem>().apply {
-                userPosition?.also {
-                    MapItem(
-                        point = it,
-                        paint = MapPaint.Fill(
-                            fillColor = MapColor.Attribute(R.attr.colorPrimary),
-                        ),
-                    ).also(this::add)
-                }
-
-                value.clickOnWorld?.also {
-                    MapItem(
-                        point = it,
-                        paint = MapPaint.Fill(
-                            fillColor = MapColor.Hard(Color.BLUE),
-                        ),
-                    ).also(this::add)
-                }
-
-                if (value.shortestPath.isNotEmpty()) {
-                    MapItem(
-                        path = PathD(value.shortestPath),
-                        paint = MapPaint.Stroke(
-                            strokeColor = MapColor.Hard(Color.BLUE),
-                            width = MapDimension.Static.Screen(2),
-                        ),
-                    ).also(this::add)
-                }
-
-            }.toPreparedItems()
+            volatilePreparedList = value.objectList.toPreparedItems()
 
             if (centeringAtUser) {
                 centerAtUserPositionAndRotation()
@@ -364,8 +335,8 @@ class MapViewLogic<T>(
 
         visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
 
-        while (preventedGoingOutsideWorld()) {
-            // do nothing
+        if (preventedGoingOutsideWorld()) {
+            return
         }
 
         renderList = MapListPreparation<T>(
@@ -431,7 +402,6 @@ class MapViewLogic<T>(
     class UserData(
         var userPosition: PointD? = null,
         var compass: Float = 0f,
-        var clickOnWorld: PointD? = null,
-        var shortestPath: List<PointD> = emptyList(),
+        var objectList: List<MapItem> = emptyList(),
     )
 }

@@ -13,6 +13,16 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.*
+import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.shortestPathPaint
+import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.snappedPointPaint
+import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.takenRoutePaint
+import com.jacekpietras.zoo.map.model.MapVolatileState.Companion.userPositionPaint
+import com.jacekpietras.zoo.map.model.MapWorldState.Companion.aviaryPaint
+import com.jacekpietras.zoo.map.model.MapWorldState.Companion.buildingPaint
+import com.jacekpietras.zoo.map.model.MapWorldState.Companion.linesPaint
+import com.jacekpietras.zoo.map.model.MapWorldState.Companion.roadPaint
+import com.jacekpietras.zoo.map.model.MapWorldState.Companion.technicalPaint
+import com.jacekpietras.zoo.map.model.MapWorldState.Companion.terminalPaint
 import kotlin.random.Random
 
 internal class MapViewStateMapper(
@@ -62,8 +72,12 @@ internal class MapViewStateMapper(
         MapVolatileViewState(
             compass = compass,
             userPosition = userPosition,
-            snappedPoint = snappedPoint,
-            shortestPath = shortestPath,
+            mapData = flatListOf(
+                fromPaths(takenRoute, takenRoutePaint),
+                fromPath(shortestPath, shortestPathPaint),
+                fromPoint(userPosition, userPositionPaint),
+                fromPoint(snappedPoint, snappedPointPaint),
+            ),
         )
     }
 
@@ -74,7 +88,6 @@ internal class MapViewStateMapper(
                 fromPaths(technicalRoute, technicalPaint),
                 fromPaths(roads, roadPaint),
                 fromPaths(lines, linesPaint),
-//                fromPaths(takenRoute, takenRoutePaint),
                 fromPolygons(buildings, buildingPaint),
                 fromPolygons(aviary, aviaryPaint),
                 fromPoints(terminalPoints, terminalPaint),
@@ -91,15 +104,23 @@ internal class MapViewStateMapper(
         polygons.map { polygon ->
             MapItem(
                 PolygonD(polygon.vertices),
-                paint
+                paint,
             )
         }
 
-    private fun fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem> =
-        paths.map { polygon ->
+    private fun fromPath(path: List<PointD>, paint: MapPaint): List<MapItem> =
+        listOf(
             MapItem(
-                PathD(polygon.vertices),
-                paint
+                PathD(path),
+                paint,
+            )
+        )
+
+    private fun fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem> =
+        paths.map { path ->
+            MapItem(
+                PathD(path.vertices),
+                paint,
             )
         }
 
@@ -107,8 +128,20 @@ internal class MapViewStateMapper(
         points.map { point ->
             MapItem(
                 point,
-                paint
+                paint,
             )
+        }
+
+    private fun fromPoint(point: PointD?, paint: MapPaint): List<MapItem> =
+        if (point != null) {
+            listOf(
+                MapItem(
+                    point,
+                    paint,
+                )
+            )
+        } else {
+            emptyList()
         }
 
     private fun getCarousel(regionsWithAnimals: List<Pair<Region, List<AnimalEntity>>>) =

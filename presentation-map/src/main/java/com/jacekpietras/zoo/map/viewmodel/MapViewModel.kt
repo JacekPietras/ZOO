@@ -89,6 +89,11 @@ internal class MapViewModel(
                     }
                 }
                 .launchIn(this)
+            observeTakenRouteUseCase.run()
+                .onEach {
+                    volatileState.reduceOnMain { copy(takenRoute = it) }
+                }
+                .launchIn(this)
             getRegionsWithAnimalsInUserPositionUseCase.run()
                 .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
                 .launchIn(this)
@@ -99,10 +104,9 @@ internal class MapViewModel(
                 getAviaryUseCase.run(),
                 getRoadsUseCase.run(),
                 getLinesUseCase.run(),
-                observeTakenRouteUseCase.run(),
                 getTechnicalRoadsUseCase.run(),
                 getTerminalNodesUseCase.run(),
-            ) { worldBounds, buildings, aviary, roads, lines, takenRoute, technicalRoute, terminalPoints ->
+            ) { worldBounds, buildings, aviary, roads, lines, technicalRoute, terminalPoints ->
                 mapWorldState.reduceOnMain {
                     copy(
                         worldBounds = worldBounds,
@@ -110,7 +114,6 @@ internal class MapViewModel(
                         aviary = aviary,
                         roads = roads,
                         lines = lines,
-                        takenRoute = takenRoute,
                         technicalRoute = technicalRoute,
                         terminalPoints = terminalPoints,
                     )

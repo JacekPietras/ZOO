@@ -46,8 +46,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 binding.mapView.logic.userData = MapViewLogic.UserData(
                     userPosition = userPosition,
                     compass = compass,
-                    clickOnWorld = snappedPoint,
-                    shortestPath = shortestPath,
+                    objectList = mapData,
                 )
             }
         }
