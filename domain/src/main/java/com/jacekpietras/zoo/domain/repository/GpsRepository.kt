@@ -9,6 +9,8 @@ interface GpsRepository {
 
     fun observeAllPositions(): Flow<List<List<GpsHistoryEntity>>>
 
+    fun observeOldPositions(): Flow<List<List<GpsHistoryEntity>>>
+
     suspend fun getAllPositions(): List<GpsHistoryEntity>
 
     suspend fun insertPosition(position: GpsHistoryEntity)

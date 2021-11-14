@@ -123,6 +123,11 @@ val domainModule = module {
         )
     }
     factory {
+        ObserveOldTakenRouteUseCase(
+            gpsRepository = get(),
+        )
+    }
+    factory {
         GetUserPositionUseCase(
             gpsRepository = get(),
         )

@@ -1,10 +1,8 @@
 package com.jacekpietras.mapview.ui
 
-import android.graphics.Color
 import android.graphics.Matrix
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.mapview.R
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
@@ -329,13 +327,17 @@ class MapViewLogic<T>(
         return result
     }
 
-    private fun cutOutNotVisible() {
+    private fun cutOutNotVisible(invalidate: Boolean = true) {
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
 
         visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
 
         if (preventedGoingOutsideWorld()) {
+            cutOutNotVisible(false)
+            return
+        }
+        if (!invalidate) {
             return
         }
 

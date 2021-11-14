@@ -34,6 +34,7 @@ internal class MapViewModel(
     mapper: MapViewStateMapper,
     observeCompassUseCase: ObserveCompassUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
+    observeOldTakenRouteUseCase: ObserveOldTakenRouteUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     getRegionsWithAnimalsInUserPositionUseCase: GetRegionsWithAnimalsInUserPositionUseCase,
@@ -104,9 +105,10 @@ internal class MapViewModel(
                 getAviaryUseCase.run(),
                 getRoadsUseCase.run(),
                 getLinesUseCase.run(),
+                observeOldTakenRouteUseCase.run(),
                 getTechnicalRoadsUseCase.run(),
                 getTerminalNodesUseCase.run(),
-            ) { worldBounds, buildings, aviary, roads, lines, technicalRoute, terminalPoints ->
+            ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, terminalPoints ->
                 mapWorldState.reduceOnMain {
                     copy(
                         worldBounds = worldBounds,
@@ -114,6 +116,7 @@ internal class MapViewModel(
                         aviary = aviary,
                         roads = roads,
                         lines = lines,
+                        oldTakenRoute = taken,
                         technicalRoute = technicalRoute,
                         terminalPoints = terminalPoints,
                     )

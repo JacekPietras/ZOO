@@ -31,7 +31,6 @@ internal data class MapVolatileState(
         val takenRoutePaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
             width = MapDimension.Static.Screen(0.5),
-//            pattern = MapDimension.Static.Screen(8)
         )
     }
 }

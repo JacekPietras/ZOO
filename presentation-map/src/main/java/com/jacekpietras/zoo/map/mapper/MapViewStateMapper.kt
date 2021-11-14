@@ -90,6 +90,7 @@ internal class MapViewStateMapper(
                 fromPaths(lines, linesPaint),
                 fromPolygons(buildings, buildingPaint),
                 fromPolygons(aviary, aviaryPaint),
+                fromPaths(oldTakenRoute, takenRoutePaint),
                 fromPoints(terminalPoints, terminalPaint),
             ),
         )

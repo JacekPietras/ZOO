@@ -17,6 +17,7 @@ internal data class MapWorldState(
     val roads: List<PathEntity> = emptyList(),
     val lines: List<PathEntity> = emptyList(),
     val technicalRoute: List<PathEntity> = emptyList(),
+    val oldTakenRoute: List<PathEntity> = emptyList(),
     val terminalPoints: List<PointD> = emptyList(),
 ) {
 
@@ -51,6 +52,10 @@ internal data class MapWorldState(
         val terminalPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Hard(Color.RED),
             radius = MapDimension.Static.Screen(5),
+        )
+        val takenRoutePaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
+            width = MapDimension.Static.Screen(0.5),
         )
     }
 }
