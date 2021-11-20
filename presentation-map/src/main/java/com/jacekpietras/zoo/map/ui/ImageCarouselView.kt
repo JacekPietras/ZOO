@@ -100,7 +100,7 @@ private fun RegionCarouselItem(
             modifier = Modifier,
             text = item.name.toString(LocalContext.current),
             color = MaterialTheme.colors.onSurface,
-            fontSize = 14.sp,
+            fontSize = 13.sp,
         )
     }
 }
@@ -129,7 +129,7 @@ private fun AnimalCarouselItem(
             modifier = Modifier,
             text = item.name.toString(LocalContext.current),
             color = MaterialTheme.colors.onSurface,
-            fontSize = 14.sp,
+            fontSize = 13.sp,
         )
     }
 }

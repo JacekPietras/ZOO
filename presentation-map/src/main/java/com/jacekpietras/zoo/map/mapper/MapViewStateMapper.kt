@@ -8,7 +8,7 @@ import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
-import com.jacekpietras.zoo.core.RegionMapper
+import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
@@ -27,9 +27,7 @@ import com.jacekpietras.zoo.map.model.MapWorldState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import kotlin.random.Random
 
-internal class MapViewStateMapper(
-    private val regionMapper: RegionMapper,
-) {
+internal class MapViewStateMapper() {
 
     private val carouselSeed = Random.nextLong()
 
@@ -45,7 +43,7 @@ internal class MapViewStateMapper(
                     if (toolbarMode.regionsWithAnimals.size > 1) {
                         Text(R.string.selected)
                     } else {
-                        toolbarMode.regionsWithAnimals.first().first.id.id.let(regionMapper::from)
+                        toolbarMode.regionsWithAnimals.first().first.id.id.findReadableName()
                     }
                 }
                 else -> Text.Empty
@@ -159,7 +157,7 @@ internal class MapViewStateMapper(
                     add(
                         MapCarouselItem.Region(
                             id = region.id,
-                            name = region.id.id.let(regionMapper::from),
+                            name = region.id.id.findReadableName(),
                             photoUrlLeftTop = images.getOrNull(0),
                             photoUrlRightTop = images.getOrNull(1),
                             photoUrlLeftBottom = images.getOrNull(2),

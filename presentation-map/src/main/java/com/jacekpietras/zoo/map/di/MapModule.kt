@@ -10,9 +10,7 @@ import org.koin.dsl.module
 val mapModule = module {
 
     factory {
-        MapViewStateMapper(
-            regionMapper = get()
-        )
+        MapViewStateMapper()
     }
 
     viewModel { (animalId: String?, regionId: String?) ->

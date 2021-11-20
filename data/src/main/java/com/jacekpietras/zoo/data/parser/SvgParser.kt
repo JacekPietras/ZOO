@@ -108,7 +108,7 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
                 when {
                     region.startsWith("wc-") -> Region.WcRegion(RegionId(region))
                     region.startsWith("wejscie") -> Region.ExitRegion(RegionId(region))
-                    region.startsWith("restauracja") -> Region.RestaurantRegion(RegionId(region))
+                    region.startsWith("gastronomia") -> Region.RestaurantRegion(RegionId(region))
                     else -> Region.AnimalRegion(RegionId(region))
                 } to poly
             }
