@@ -8,12 +8,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -61,9 +63,12 @@ class AnimalFragment : Fragment() {
                             images = images,
                             contentDescription = title,
                         )
-                        SimpleText(title)
-                        SimpleText(subTitle)
-                        SimpleText(content)
+                        HeaderView(title, subTitle)
+                        content.forEach {
+                            TitleView(text = it.title)
+                            ParagraphView(text = it.text)
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                         if (isWikiLink) {
                             SimpleButton(
                                 text = Text(R.string.wiki),
@@ -121,12 +126,42 @@ class AnimalFragment : Fragment() {
     }
 
     @Composable
-    private fun SimpleText(
+    private fun HeaderView(
+        text: Text,
+        subtitle: Text,
+    ) {
+        Text(
+            text = text.toString(LocalContext.current),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.h5,
+        )
+        Text(
+            text = subtitle.toString(LocalContext.current),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.caption,
+        )
+        Spacer(Modifier.height(24.dp))
+    }
+
+    @Composable
+    private fun TitleView(
         text: Text,
     ) {
         Text(
             text = text.toString(LocalContext.current),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.subtitle2,
+        )
+    }
+
+    @Composable
+    private fun ParagraphView(
+        text: Text,
+    ) {
+        Text(
+            text = text.toString(LocalContext.current),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.body1,
         )
     }
 
@@ -138,7 +173,7 @@ class AnimalFragment : Fragment() {
         SimpleButton(
             text = text,
             onClick = onClick,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
 
