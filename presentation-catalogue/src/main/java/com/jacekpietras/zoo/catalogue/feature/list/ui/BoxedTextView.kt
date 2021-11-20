@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.list.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -30,9 +31,15 @@ internal fun BoxedTextView(text: String) {
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun BoxedTextViewPreview() {
+private fun BoxedTextViewPreviewDay() {
+    BoxedTextView("Lorem Ipsum")
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun BoxedTextViewPreviewNight() {
     BoxedTextView("Lorem Ipsum")
 }
 

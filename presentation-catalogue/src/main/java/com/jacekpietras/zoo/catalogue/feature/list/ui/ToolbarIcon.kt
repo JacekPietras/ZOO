@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -36,7 +37,13 @@ internal fun ToolbarIcon(
             ),
         onClick = onClick,
     ) {
-        val color by animateColorAsState(if (selected) Color.White else Color.Black)
+        val color by animateColorAsState(
+            if (selected) {
+                Color.White
+            } else {
+                MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
+            }
+        )
 
         Icon(
             painter = painterResource(id = id),

@@ -5,6 +5,7 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,7 +29,7 @@ internal fun ToolbarWithFilters(
 ) {
     Card(
         shape = RectangleShape,
-        backgroundColor = Color.White,
+        backgroundColor = MaterialTheme.colors.surface,
         elevation = 6.dp,
     ) {
         Box(
@@ -77,7 +78,7 @@ internal fun ToolbarWithFilters(
                     Icon(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         painter = painterResource(id = R.drawable.ic_search_24),
-                        tint = Color.Black,
+                        tint = MaterialTheme.colors.onSurface,
                         contentDescription = null // decorative element
                     )
 
