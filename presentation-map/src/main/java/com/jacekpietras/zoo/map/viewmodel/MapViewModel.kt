@@ -160,7 +160,7 @@ internal class MapViewModel(
         }
     }
 
-    fun onUploadClicked() {
+    private fun onUploadClicked() {
         try {
             uploadHistoryUseCase.run()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
@@ -260,12 +260,16 @@ internal class MapViewModel(
         onMyLocationClicked()
         val toolbarMode = when (mapAction) {
             MapAction.AROUND_YOU -> MapToolbarMode.AroundYouMapActionMode(mapAction)
+            MapAction.UPLOAD -> {
+                onUploadClicked()
+                null
+            }
             else -> MapToolbarMode.NavigableMapActionMode(mapAction)
         }
         state.reduce {
             copy(
                 toolbarMode = toolbarMode,
-                isToolbarOpened = true,
+                isToolbarOpened = toolbarMode != null,
             )
         }
         if (toolbarMode is MapToolbarMode.NavigableMapActionMode) startNavigationToNearestRegion(mapAction)

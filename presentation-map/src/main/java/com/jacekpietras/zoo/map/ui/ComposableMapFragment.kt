@@ -42,7 +42,6 @@ import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
-import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.CenterAtPoint
 import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
@@ -117,7 +116,6 @@ class ComposableMapFragment : Fragment() {
                             mapActions = viewState.mapActions,
                             viewModel::onMapActionClicked,
                         )
-                        UploadButtonView(Modifier.align(Alignment.TopEnd))
                         Column(
                             Modifier
                                 .padding(16.dp)
@@ -160,23 +158,6 @@ class ComposableMapFragment : Fragment() {
         }
     }
 
-    @Composable
-    private fun UploadButtonView(modifier: Modifier = Modifier) {
-        if (!BuildConfig.DEBUG) return
-        FloatingActionButton(
-            modifier = modifier
-                .padding(16.dp)
-                .padding(top = 48.dp),
-            onClick = { viewModel.onUploadClicked() },
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_upload_24),
-                tint = MaterialTheme.colors.onSurface,
-                contentDescription = stringResource(R.string.upload),
-            )
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -207,6 +188,11 @@ class ComposableMapFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onStopEvent()
     }
 
     private fun toast(text: String) {
