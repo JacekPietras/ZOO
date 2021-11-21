@@ -5,7 +5,6 @@ internal class Dijkstra(
     private val start: Node,
     private val end: Node,
     technicalAllowed: Boolean = false,
-    technicalBlocked: Boolean = false,
 ) {
 
     private val previous: MutableMap<Node, Node?> = vertices.map { it to null }.toMutableMap()
@@ -29,9 +28,7 @@ internal class Dijkstra(
                 .key
 
             v.edges.forEach { neighbor ->
-                if (technicalBlocked && neighbor.technical) {
-                    // no op
-                } else if (neighbor.node !in s &&
+                if (neighbor.node !in s &&
                     (technicalAllowed || !outsideTechnical || !neighbor.technical)
                 ) {
                     val newPath = delta.getValue(v) + neighbor.length

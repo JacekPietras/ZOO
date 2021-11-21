@@ -48,7 +48,6 @@ internal object GraphAnalyzer {
         endPoint: Snapped,
         startPoint: Snapped,
         technicalAllowed: Boolean = false,
-        technicalBlocked: Boolean = false,
     ): List<Node> {
         mutex.withLock {
             val nodes = waitForNodes()
@@ -69,7 +68,7 @@ internal object GraphAnalyzer {
                     .also { cleanupList.add(it) }
             }
 
-            val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed, technicalBlocked = technicalBlocked).getPath()
+            val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed).getPath()
 
             cleanupList.forEach { fake ->
                 val edges = fake.edges.toList()
@@ -147,7 +146,9 @@ internal object GraphAnalyzer {
         return checkNotNull(nodes)
     }
 
-    private fun MutableSet<Node>.createAndConnect(snap: Snapped): Node {
+    private fun MutableSet<Node>.createAndConnect(
+        snap: Snapped,
+    ): Node {
         val node = Node(snap.point)
         val edge = snap.near1.edges.first { it.node == snap.near2 }
 

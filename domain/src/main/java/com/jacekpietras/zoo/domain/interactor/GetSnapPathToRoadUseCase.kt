@@ -27,7 +27,9 @@ class GetSnapPathToRoadUseCase {
                         startPoint = start,
                         endPoint = end,
                     )
-                        .filterOutLongerThan(length = 30)
+                        .filterOutNotFoundRoutes()
+                        ?.filterCrossingTechnical()
+                        ?.filterOutLongerThan(length = 30)
                         ?.filterNot { it.point == start.point || it.point == end.point }
                         ?.map { Snapped(it.point, it, it) }
                         ?.let {
@@ -66,11 +68,21 @@ class GetSnapPathToRoadUseCase {
         return result
     }
 
+    private fun List<Node>.filterCrossingTechnical(): List<Node>? {
+        zipWithNext { prev, next ->
+            prev.edges.firstOrNull() { it.node == next && !it.technical } ?: return null
+        }
+        return this
+    }
+
     private fun List<Node>.filterOutLongerThan(length: Int): List<Node>? {
         val sum = zipWithNext { prev, next -> haversine(prev.point.x, prev.point.y, next.point.x, next.point.y) }
             .sum()
         return this.takeIf { sum < length }
     }
+
+    private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
+        takeIf { it.size != 1 }
 
     suspend fun run(list: List<MapItemEntity.PathEntity>): List<MapItemEntity.PathEntity> =
         list
