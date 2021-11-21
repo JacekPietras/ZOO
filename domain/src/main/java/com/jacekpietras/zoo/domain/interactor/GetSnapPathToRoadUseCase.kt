@@ -20,24 +20,29 @@ class GetSnapPathToRoadUseCase {
         list
             .zipWithNext()
             .mapNotNull { (start, end) ->
-                if (start onSameEdge end) {
-                    listOf(start, end)
-                } else {
-                    GraphAnalyzer.getShortestPathWithContext(
-                        startPoint = start,
-                        endPoint = end,
-                    )
-                        .filterOutNotFoundRoutes()
-                        ?.filterCrossingTechnical()
-                        ?.filterOutLongerThan(length = 30)
-                        ?.filterNot { it.point == start.point || it.point == end.point }
-                        ?.map { Snapped(it.point, it, it) }
-                        ?.let {
-                            it.toMutableList().apply {
-                                add(0, start)
-                                add(end)
+                when {
+                    start onSameEdge end -> listOf(start, end)
+                    commonNode(start, end) != null -> {
+                        val commonNode = checkNotNull(commonNode(start, end))
+                        listOf(start, Snapped(commonNode.point, commonNode, commonNode), end)
+                    }
+                    else -> {
+                        GraphAnalyzer.getShortestPathWithContext(
+                            startPoint = start,
+                            endPoint = end,
+                        )
+                            .filterOutNotFoundRoutes()
+                            ?.filterCrossingTechnical()
+                            ?.filterOutLongerThan(length = 30)
+                            ?.filterNot { it.point == start.point || it.point == end.point }
+                            ?.map { Snapped(it.point, it, it) }
+                            ?.let {
+                                it.toMutableList().apply {
+                                    add(0, start)
+                                    add(end)
+                                }
                             }
-                        }
+                    }
                 }
             }
             .filter { it.isNotEmpty() }
@@ -55,6 +60,11 @@ class GetSnapPathToRoadUseCase {
                 temp.last().point == list.first().point -> {
                     temp.addAll(list.subList(1, list.size))
                 }
+                commonNode(temp.last(), list.first()) != null -> {
+                    val commonNode = checkNotNull(commonNode(temp.last(), list.first()))
+                    temp.add(Snapped(commonNode.point, commonNode, commonNode))
+                    temp.addAll(list)
+                }
                 else -> {
                     result.add(temp)
                     temp = mutableListOf()
@@ -66,6 +76,14 @@ class GetSnapPathToRoadUseCase {
         result.add(temp)
 
         return result
+    }
+
+    private fun commonNode(left: Snapped, right: Snapped): Node? {
+        if (left.near1 == right.near1) return left.near1
+        if (left.near1 == right.near2) return left.near1
+        if (left.near2 == right.near1) return left.near2
+        if (left.near2 == right.near2) return left.near2
+        return null
     }
 
     private fun List<Node>.filterCrossingTechnical(): List<Node>? {

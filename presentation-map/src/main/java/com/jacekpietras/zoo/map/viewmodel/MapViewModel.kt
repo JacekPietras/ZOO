@@ -124,7 +124,7 @@ internal class MapViewModel(
                 launchInBackground {
                     val snappedTaken = getSnapPathToRoadUseCase.run(taken)
                     mapWorldState.reduceOnMain {
-                        copy(oldTakenRoute = snappedTaken)
+                        copy(oldTakenRoute = taken+snappedTaken)
                     }
                 }
             }.launchIn(this)
