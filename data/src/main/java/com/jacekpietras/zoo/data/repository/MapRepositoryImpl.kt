@@ -55,10 +55,10 @@ internal class MapRepositoryImpl(
         parser.getPointsByGroup("paths")
             .also { roadsWatcher.notifyUpdated(it.map(::PathEntity)) }
     }
-    private var visitedRoads: List<List<VisitedRoadPoint>> = emptyList()
+    private var visitedRoads: List<List<VisitedRoadPoint>>? = null
         set(value) {
             field = value
-            visitedRoadsWatcher.notifyUpdated(value)
+            value?.let { visitedRoadsWatcher.notifyUpdated(it) }
         }
 
     override suspend fun getBuildings(): Flow<List<PolygonEntity>> =
@@ -78,6 +78,13 @@ internal class MapRepositoryImpl(
 
     override suspend fun getVisitedRoads(): Flow<List<List<VisitedRoadPoint>>> =
         visitedRoadsWatcher.dataFlow
+
+    override fun updateVisitedRoads(list: List<List<VisitedRoadPoint>>) {
+        visitedRoads = list
+    }
+
+    override fun areVisitedRoadsCalculated(): Boolean =
+        visitedRoads != null
 
     override suspend fun getTechnicalRoads(): Flow<List<PathEntity>> =
         technicalWatcher.dataFlow.also {

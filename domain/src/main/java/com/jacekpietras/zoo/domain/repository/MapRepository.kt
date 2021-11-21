@@ -17,6 +17,10 @@ interface MapRepository {
 
     suspend fun getVisitedRoads(): Flow<List<List<VisitedRoadPoint>>>
 
+    fun updateVisitedRoads(list:List<List<VisitedRoadPoint>>)
+
+    fun areVisitedRoadsCalculated(): Boolean
+
     suspend fun getTechnicalRoads(): Flow<List<PathEntity>>
 
     suspend fun getLines(): Flow<List<PathEntity>>

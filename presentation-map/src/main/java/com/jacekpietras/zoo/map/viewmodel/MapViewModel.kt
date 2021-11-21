@@ -45,6 +45,7 @@ internal class MapViewModel(
     getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
     getLinesUseCase: GetLinesUseCase,
+    getVisitedRoadsUseCase: GetVisitedRoadsUseCase,
     loadAnimalsUseCase: LoadAnimalsUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
@@ -53,7 +54,6 @@ internal class MapViewModel(
     private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
-    private val getSnapPathToRoadUseCase: GetSnapPathToRoadUseCase,
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(MapState())
@@ -108,7 +108,8 @@ internal class MapViewModel(
                 observeOldTakenRouteUseCase.run(),
                 getTechnicalRoadsUseCase.run(),
                 getTerminalNodesUseCase.run(),
-            ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, terminalPoints ->
+                getVisitedRoadsUseCase.run(),
+            ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, terminalPoints, visited ->
                 mapWorldState.reduceOnMain {
                     copy(
                         worldBounds = worldBounds,
@@ -116,16 +117,10 @@ internal class MapViewModel(
                         aviary = aviary,
                         roads = roads,
                         lines = lines,
-                        oldTakenRoute = taken,
+                        oldTakenRoute = taken + visited,
                         technicalRoute = technicalRoute,
                         terminalPoints = terminalPoints,
                     )
-                }
-                launchInBackground {
-                    val snappedTaken = getSnapPathToRoadUseCase.run(taken)
-                    mapWorldState.reduceOnMain {
-                        copy(oldTakenRoute = taken+snappedTaken)
-                    }
                 }
             }.launchIn(this)
 

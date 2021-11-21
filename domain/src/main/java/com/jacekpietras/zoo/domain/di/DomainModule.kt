@@ -15,10 +15,12 @@ import com.jacekpietras.zoo.domain.interactor.GetRegionsWithAnimalsInUserPositio
 import com.jacekpietras.zoo.domain.interactor.GetRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.interactor.GetShortestPathUseCase
+import com.jacekpietras.zoo.domain.interactor.GetSnapPathToRoadUseCase
 import com.jacekpietras.zoo.domain.interactor.GetSnappedToRoadUseCase
 import com.jacekpietras.zoo.domain.interactor.GetTechnicalRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.GetTerminalNodesUseCase
 import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetVisitedRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.GetWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.interactor.InsertUserCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
@@ -28,7 +30,6 @@ import com.jacekpietras.zoo.domain.interactor.ObserveFilteredAnimalsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveWorldBoundsUseCase
-import com.jacekpietras.zoo.domain.interactor.GetSnapPathToRoadUseCase
 import com.jacekpietras.zoo.domain.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.StopCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
@@ -139,6 +140,13 @@ val domainModule = module {
     factory {
         GetTechnicalRoadsUseCase(
             mapRepository = get(),
+        )
+    }
+    factory {
+        GetVisitedRoadsUseCase(
+            mapRepository = get(),
+            gpsRepository = get(),
+            getSnapPathToRoadUseCase = get(),
         )
     }
     factory {

@@ -12,7 +12,11 @@ import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
 import com.jacekpietras.zoo.data.parser.TxtParser
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 internal class GpsRepositoryImpl(
     private val context: Context,
@@ -23,8 +27,8 @@ internal class GpsRepositoryImpl(
 
     private val compass = MutableStateFlow(0f)
 
-    private val debugHistory: Flow<List<List<GpsHistoryEntity>>>
-        get() = if (BuildConfig.DEBUG) {
+    private val debugHistory by lazy {
+        if (BuildConfig.DEBUG) {
             val ola1 = TxtParser(context, R.raw.ola_14_02_21)
             val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
             val ola2 = TxtParser(context, R.raw.ola_28_02_21)
@@ -32,14 +36,15 @@ internal class GpsRepositoryImpl(
             val ola3 = TxtParser(context, R.raw.ola_08_05_21)
             val jack3 = TxtParser(context, R.raw.jacek_08_05_21)
             val eliza3 = TxtParser(context, R.raw.eliza_08_05_21)
-            flowOf(
-                ola1.result// + jack1.result
+
+            ola1.result// + jack1.result
 //                        + jack2.result + ola2.result
 //                        + jack3.result + ola3.result + eliza3.result
-            )
+
         } else {
-            flowOf(emptyList())
+            emptyList()
         }
+    }
 
     override fun observeLatestPosition(): Flow<GpsHistoryEntity> =
         gpsDao.getLatest().filterNotNull().map(gpsHistoryMapper::from)
@@ -54,9 +59,18 @@ internal class GpsRepositoryImpl(
         }
     }
 
-    override fun observeOldPositions(): Flow<List<List<GpsHistoryEntity>>> {
-        return debugHistory
-    }
+    override fun observeOldPositions(): Flow<List<List<GpsHistoryEntity>>> =
+        flowOf(debugHistory)
+
+    override suspend fun getOldPositions(): List<List<GpsHistoryEntity>> =
+        debugHistory
+
+    override suspend fun getAllPositionsNormalized(): List<List<GpsHistoryEntity>> =
+        gpsDao.getAll().map(gpsHistoryMapper::from)
+            .cutOut { prev, next ->
+                next.timestamp - prev.timestamp < DateUtils.MINUTE_IN_MILLIS &&
+                        haversine(prev.lon, prev.lat, next.lon, next.lat) < 20
+            } + debugHistory
 
     override suspend fun getAllPositions(): List<GpsHistoryEntity> =
         gpsDao.getAll().map(gpsHistoryMapper::from)
