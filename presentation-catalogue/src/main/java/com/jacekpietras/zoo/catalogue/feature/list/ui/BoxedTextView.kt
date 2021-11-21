@@ -20,7 +20,7 @@ internal fun BoxedTextView(text: String) {
     Box(
         modifier = Modifier
             .padding(4.dp)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(6.dp))
             .background(color = colorPrimary())
             .padding(vertical = 2.dp, horizontal = 8.dp),
     ) {

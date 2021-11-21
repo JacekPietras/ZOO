@@ -33,7 +33,7 @@ internal fun AnimalList(
     ) {
         items(animalList) { animal ->
             Card(
-                shape = RoundedCornerShape(4.dp),
+                shape = RoundedCornerShape(8.dp),
                 backgroundColor = MaterialTheme.colors.surface,
                 elevation = 4.dp,
                 modifier = Modifier

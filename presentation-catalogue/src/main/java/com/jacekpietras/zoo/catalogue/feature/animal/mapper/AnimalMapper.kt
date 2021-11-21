@@ -15,7 +15,7 @@ internal class AnimalMapper {
             subTitle = Text(state.animal.nameLatin),
             content = with(state.animal) {
                 listOfNotNull(
-                    paragraph(R.string.occurence, occurrence),
+                    paragraph(R.string.occurrence, occurrence),
                     paragraph(R.string.environment, environment),
                     paragraph(R.string.food, food),
                     paragraph(R.string.multiplication, multiplication),

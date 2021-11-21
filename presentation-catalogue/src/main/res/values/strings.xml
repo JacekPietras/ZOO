@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_catalogue">Animals</string>
-    <string name="occurence">Occurence</string>
+    <string name="occurrence">Occurrence</string>
     <string name="environment">Environment</string>
     <string name="food">Food</string>
     <string name="facts">Facts</string>
     <string name="multiplication">Multiplication</string>
     <string name="protection_and_threats">Protection and threats</string>
-    <string name="wiki">Wiki</string>
-    <string name="web">Web</string>
-    <string name="nav">Nav</string>
+    <string name="wiki">Wikipedia</string>
+    <string name="web">Web Browser</string>
+    <string name="nav">Navigation</string>
 </resources>
