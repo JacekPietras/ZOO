@@ -1,6 +1,14 @@
 apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
+apply plugin: "de.mannodermaus.android-junit5"
 
 dependencies {
     implementation project(':core')
+
+    //Test
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 }

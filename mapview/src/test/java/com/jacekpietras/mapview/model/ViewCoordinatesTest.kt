@@ -2,7 +2,9 @@ package com.jacekpietras.mapview.model
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.containsLine
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ViewCoordinatesTest {
@@ -26,9 +28,9 @@ class ViewCoordinatesTest {
 
     @Test
     fun `mapped center is in center of screen`() {
-        val mapped = tested.transformPoint(center)
+        val mapped = tested.transformPoint(center).toList()
 
-        val expected = PointD(viewWidth / 2.0, viewHeight / 2.0)
+        val expected = listOf(viewWidth / 2.0f, viewHeight / 2.0f)
         assertEquals(expected, mapped)
     }
 

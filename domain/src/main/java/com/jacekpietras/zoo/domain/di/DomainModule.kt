@@ -1,6 +1,37 @@
 package com.jacekpietras.zoo.domain.di
 
-import com.jacekpietras.zoo.domain.interactor.*
+import com.jacekpietras.zoo.domain.interactor.FindRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalsByDivisionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAviaryUseCase
+import com.jacekpietras.zoo.domain.interactor.GetBuildingsUseCase
+import com.jacekpietras.zoo.domain.interactor.GetLinesUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionCenterPointUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionsWithAnimalsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRoadsUseCase
+import com.jacekpietras.zoo.domain.interactor.GetShortestPathFromUserUseCase
+import com.jacekpietras.zoo.domain.interactor.GetShortestPathUseCase
+import com.jacekpietras.zoo.domain.interactor.GetSnappedToRoadUseCase
+import com.jacekpietras.zoo.domain.interactor.GetTechnicalRoadsUseCase
+import com.jacekpietras.zoo.domain.interactor.GetTerminalNodesUseCase
+import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetWorldBoundsUseCase
+import com.jacekpietras.zoo.domain.interactor.InsertUserCompassUseCase
+import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveCompassUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveFilteredAnimalsUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveWorldBoundsUseCase
+import com.jacekpietras.zoo.domain.interactor.GetSnapPathToRoadUseCase
+import com.jacekpietras.zoo.domain.interactor.StartCompassUseCase
+import com.jacekpietras.zoo.domain.interactor.StopCompassUseCase
+import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -98,7 +129,10 @@ val domainModule = module {
         GetSnappedToRoadUseCase()
     }
     factory {
-        GetShortestPathUseCase(
+        GetShortestPathUseCase()
+    }
+    factory {
+        GetShortestPathFromUserUseCase(
             getUserPositionUseCase = get(),
         )
     }
@@ -125,6 +159,12 @@ val domainModule = module {
     factory {
         ObserveOldTakenRouteUseCase(
             gpsRepository = get(),
+        )
+    }
+    factory {
+        GetSnapPathToRoadUseCase(
+//            getSnappedToRoadUseCase = get(),
+//            getShortestPathUseCase = get()
         )
     }
     factory {

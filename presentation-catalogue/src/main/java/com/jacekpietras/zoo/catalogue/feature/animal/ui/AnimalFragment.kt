@@ -81,16 +81,16 @@ class AnimalFragment : Fragment() {
                                 .padding(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
-                            if (isWikiLink) {
-                                SimpleButton(
-                                    text = Text(R.string.wiki),
-                                    onClick = { viewModel.onWikiClicked(router) },
-                                )
-                            }
                             if (isWebLink) {
                                 SimpleButton(
                                     text = Text(R.string.web),
                                     onClick = { viewModel.onWebClicked(router) },
+                                )
+                            }
+                            if (isWikiLink) {
+                                SimpleButton(
+                                    text = Text(R.string.wiki),
+                                    onClick = { viewModel.onWikiClicked(router) },
                                 )
                             }
                             if (isNavLink) {

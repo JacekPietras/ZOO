@@ -22,6 +22,7 @@ buildscript {
         timber_version = "5.0.1"
         junit_jupiter = "5.8.1"
         junit5_version = "1.8.0.0"
+        mockito_version = "3.2.0"
 
         lifecycle_version = "2.4.0"
         lifecycle_extensions_version = "2.2.0"

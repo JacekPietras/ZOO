@@ -91,7 +91,7 @@ internal class MapViewStateMapper() {
                 fromPaths(lines, linesPaint),
                 fromPolygons(buildings, buildingPaint),
                 fromPolygons(aviary, aviaryPaint),
-//                fromPaths(oldTakenRoute, oldTakenRoutePaint),
+                fromPaths(oldTakenRoute, oldTakenRoutePaint),
 //                fromPoints(terminalPoints, terminalPaint),
             ),
         )

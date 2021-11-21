@@ -46,6 +46,7 @@ val mapModule = module {
             stopCompassUseCase = get(),
             startCompassUseCase = get(),
             findRegionUseCase = get(),
+            getSnapPathToRoadUseCase = get(),
         )
     }
 }

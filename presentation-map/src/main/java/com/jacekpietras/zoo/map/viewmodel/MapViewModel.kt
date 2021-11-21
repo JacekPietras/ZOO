@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -53,7 +52,8 @@ internal class MapViewModel(
     private val findRegionUseCase: FindRegionUseCase,
     private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
-    private val getShortestPathUseCase: GetShortestPathUseCase,
+    private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
+    private val getSnapPathToRoadUseCase: GetSnapPathToRoadUseCase,
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(MapState())
@@ -71,7 +71,7 @@ internal class MapViewModel(
 
     init {
         launchInBackground {
-            launch { loadAnimalsUseCase.run() }
+            loadAnimalsUseCase.run()
 
             observeCompassUseCase.run()
                 .onEach { volatileState.reduceOnMain { copy(compass = it) } }
@@ -120,6 +120,12 @@ internal class MapViewModel(
                         technicalRoute = technicalRoute,
                         terminalPoints = terminalPoints,
                     )
+                }
+                launchInBackground {
+                    val snappedTaken = getSnapPathToRoadUseCase.run(taken)
+                    mapWorldState.reduceOnMain {
+                        copy(oldTakenRoute = snappedTaken)
+                    }
                 }
             }.launchIn(this)
 

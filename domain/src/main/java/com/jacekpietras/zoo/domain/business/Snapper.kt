@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.business
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 import com.jacekpietras.core.pow2
+import com.jacekpietras.zoo.domain.model.Snapped
 
 internal class Snapper {
 
@@ -32,16 +33,43 @@ internal class Snapper {
         return requireNotNull(result)
     }
 
-    fun getSnappedPoint(nodes: Iterable<Node>, source: PointD): PointD {
+    fun getSnappedPoint(
+        nodes: Iterable<Node>,
+        source: PointD,
+        technicalAllowed: Boolean,
+    ): PointD {
         var result: PointD? = null
         var shortest: Double = Double.MAX_VALUE
 
-        nodes.forAllEdges { p1, p2, _ ->
-            val found = getSnappedToEdge(source, p1.point, p2.point)
-            val foundToSource = haversine(source.x, source.y, found.x, found.y)
-            if (foundToSource < shortest) {
-                shortest = foundToSource
-                result = found
+        nodes.forAllEdges { p1, p2, technical ->
+            if (technicalAllowed || !technical) {
+                val found = getSnappedToEdge(source, p1.point, p2.point)
+                val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                if (foundToSource < shortest) {
+                    shortest = foundToSource
+                    result = found
+                }
+            }
+        }
+        return result!!
+    }
+
+    fun getSnappedPointWithContext(
+        nodes: Iterable<Node>,
+        source: PointD,
+        technicalAllowed: Boolean,
+    ): Snapped {
+        var result: Snapped? = null
+        var shortest: Double = Double.MAX_VALUE
+
+        nodes.forAllEdges { p1, p2, technical ->
+            if (technicalAllowed || !technical) {
+                val found = getSnappedToEdge(source, p1.point, p2.point)
+                val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                if (foundToSource < shortest) {
+                    shortest = foundToSource
+                    result = Snapped(found, p1, p2)
+                }
             }
         }
         return result!!
@@ -61,5 +89,4 @@ internal class Snapper {
         }
     }
 
-    class Snapped(val point: PointD, val near1: Node, val near2: Node)
 }
