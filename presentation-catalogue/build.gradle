@@ -15,4 +15,7 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    //Pager
+    implementation "com.google.accompanist:accompanist-pager:$pager_version"
 }

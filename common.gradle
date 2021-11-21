@@ -21,6 +21,7 @@ android {
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
                 "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
+                "-Xuse-experimental=com.google.accompanist.pager.ExperimentalPagerApi",
                 "-Xuse-experimental=coil.annotation.ExperimentalCoilApi",
         ]
     }

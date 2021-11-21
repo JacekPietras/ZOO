@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -31,6 +32,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
@@ -39,7 +42,6 @@ import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
 import com.jacekpietras.zoo.core.text.Text
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.random.Random
 
 class AnimalFragment : Fragment() {
 
@@ -93,7 +95,6 @@ class AnimalFragment : Fragment() {
         }
     }
 
-    private val carouselSeed = Random.nextLong()
 
     @Composable
     private fun ImageCarousel(
@@ -101,27 +102,44 @@ class AnimalFragment : Fragment() {
         contentDescription: Text,
     ) {
         if (images.isEmpty()) return
+        val listState = remember { mutableStateOf(images) }
+        val visibilityState = remember { MutableTransitionState(true) }
 
-        val painter = rememberImagePainter(
-            data = images.randomOrNull(Random(carouselSeed)) ?: "no image",
-            builder = { crossfade(true) }
-        )
-        val state = remember { MutableTransitionState(true) }
+        val state = rememberPagerState()
+
         AnimatedVisibility(
-            visibleState = state,
+            visibleState = visibilityState,
             modifier = Modifier.fillMaxSize(),
         ) {
-            Image(
-                painter = painter,
-                contentDescription = contentDescription.toString(LocalContext.current),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(256.dp)
-            )
-        }
-        if (painter.state is ImagePainter.State.Error) {
-            state.targetState = false
+            HorizontalPager(
+                count = listState.value.size,
+                state = state,
+            ) { page ->
+                val painter = rememberImagePainter(
+                    data = listState.value.getOrNull(page) ?: "no image",
+                    builder = { crossfade(true) },
+                )
+
+                Image(
+                    painter = painter,
+                    contentDescription = contentDescription.toString(LocalContext.current),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .height(256.dp)
+                )
+
+                val painterState = painter.state
+                if (painterState is ImagePainter.State.Error) {
+                    val afterRemoving = listState.value - (painterState.result.request.data as String)
+
+                    if (afterRemoving.isEmpty()) {
+                        visibilityState.targetState = false
+                    } else {
+                        listState.value = afterRemoving
+                    }
+                }
+            }
         }
     }
 
