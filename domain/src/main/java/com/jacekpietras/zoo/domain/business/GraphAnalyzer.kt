@@ -48,10 +48,10 @@ internal object GraphAnalyzer {
         endPoint: Snapped,
         startPoint: Snapped,
         technicalAllowed: Boolean = false,
+        technicalBlocked: Boolean = false,
     ): List<Node> {
         mutex.withLock {
-            val nodes = mutableSetOf<Node>()
-                .apply { addAll(waitForNodes()) }
+            val nodes = waitForNodes()
 
             val cleanupList: MutableList<Node> = mutableListOf()
 
@@ -69,7 +69,7 @@ internal object GraphAnalyzer {
                     .also { cleanupList.add(it) }
             }
 
-            val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed).getPath()
+            val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed, technicalBlocked = technicalBlocked).getPath()
 
             cleanupList.forEach { fake ->
                 val edges = fake.edges.toList()
@@ -87,7 +87,6 @@ internal object GraphAnalyzer {
         }
     }
 
-    // do not run in parallel
     suspend fun getShortestPath(
         endPoint: PointD,
         startPoint: PointD?,
