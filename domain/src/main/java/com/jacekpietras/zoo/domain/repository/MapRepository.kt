@@ -4,23 +4,26 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.VisitedRoadPoint
 import kotlinx.coroutines.flow.Flow
 
 interface MapRepository {
 
-    fun getBuildings(): Flow<List<PolygonEntity>>
+    suspend fun getBuildings(): Flow<List<PolygonEntity>>
 
-    fun getAviary(): Flow<List<PolygonEntity>>
+    suspend fun getAviary(): Flow<List<PolygonEntity>>
 
-    fun getRoads(): Flow<List<PathEntity>>
+    suspend fun getRoads(): Flow<List<PathEntity>>
 
-    fun getTechnicalRoads(): Flow<List<PathEntity>>
+    suspend fun getVisitedRoads(): Flow<List<List<VisitedRoadPoint>>>
 
-    fun getLines(): Flow<List<PathEntity>>
+    suspend fun getTechnicalRoads(): Flow<List<PathEntity>>
 
-    fun getCurrentRegions(): List<Pair<Region, PolygonEntity>>
+    suspend fun getLines(): Flow<List<PathEntity>>
 
-    fun observeWorldBounds(): Flow<RectD>
+    suspend fun getCurrentRegions(): List<Pair<Region, PolygonEntity>>
+
+    suspend fun observeWorldBounds(): Flow<RectD>
 
     fun getWorldBounds(): RectD
 }

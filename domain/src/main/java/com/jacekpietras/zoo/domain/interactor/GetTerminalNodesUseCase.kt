@@ -10,7 +10,7 @@ class GetTerminalNodesUseCase(
     private val getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
 ) {
 
-    fun run(): Flow<List<PointD>> =
+    suspend fun run(): Flow<List<PointD>> =
         combine(
             getRoadsUseCase.run(),
             getTechnicalRoadsUseCase.run(),

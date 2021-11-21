@@ -8,7 +8,7 @@ class FindRegionUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    fun run(condition: (Region) -> Boolean): List<Region> =
+    suspend fun run(condition: (Region) -> Boolean): List<Region> =
         mapRepository.getCurrentRegions()
             .filter { (currentRegionId, _) -> condition(currentRegionId) }
             .map(Pair<Region, MapItemEntity.PolygonEntity>::first)

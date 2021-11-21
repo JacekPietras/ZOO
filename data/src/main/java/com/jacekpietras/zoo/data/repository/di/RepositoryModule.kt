@@ -1,6 +1,12 @@
 package com.jacekpietras.zoo.data.repository.di
 
 import com.jacekpietras.zoo.data.cache.di.COMPASS_ENABLED
+import com.jacekpietras.zoo.data.cache.di.MAP_AVIARY
+import com.jacekpietras.zoo.data.cache.di.MAP_BUILDINGS
+import com.jacekpietras.zoo.data.cache.di.MAP_LINES
+import com.jacekpietras.zoo.data.cache.di.MAP_ROADS
+import com.jacekpietras.zoo.data.cache.di.MAP_TECHNICAL
+import com.jacekpietras.zoo.data.cache.di.MAP_VISITED_ROADS
 import com.jacekpietras.zoo.data.database.ZooDatabase
 import com.jacekpietras.zoo.data.parser.RegionIdAdapter
 import com.jacekpietras.zoo.data.repository.AnimalRepositoryImpl
@@ -27,6 +33,12 @@ internal val repositoryModule = module {
     single<MapRepository> {
         MapRepositoryImpl(
             context = androidContext(),
+            roadsWatcher = get(named(MAP_ROADS)),
+            technicalWatcher = get(named(MAP_TECHNICAL)),
+            linesWatcher = get(named(MAP_LINES)),
+            buildingsWatcher = get(named(MAP_BUILDINGS)),
+            aviaryWatcher = get(named(MAP_AVIARY)),
+            visitedRoadsWatcher = get(named(MAP_VISITED_ROADS)),
         )
     }
 

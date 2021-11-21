@@ -8,6 +8,6 @@ class GetTechnicalRoadsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    fun run(): Flow<List<PathEntity>> =
+    suspend fun run(): Flow<List<PathEntity>> =
         mapRepository.getTechnicalRoads()
 }
