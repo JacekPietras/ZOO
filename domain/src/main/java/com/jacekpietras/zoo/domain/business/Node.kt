@@ -26,5 +26,5 @@ internal class Node(
         edges.remove(edges.first { it.node == node })
     }
 
-    override fun toString() = "PointD($x, $y),"
+    override fun toString() = "Node($x, $y),"
 }

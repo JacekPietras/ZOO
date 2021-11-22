@@ -116,17 +116,66 @@ class GetSnapPathToRoadUseCase(
 //                    .map { MapItemEntity.PathEntity(it) }
             }
             .flatten()
-            .also { it.toVisited() }
+            .also {
+                it
+                    .toVisitedParts()
+                    .sortByPoints()
+                    .merge()
+            }
 
-    internal fun List<List<Snapped>>.toVisited() {
+    private fun List<List<Snapped>>.toVisitedParts(): List<VisitedPart> =
         map { continous ->
             continous.zipWithNext { prev, next ->
-                val nodes = prev.getUniqueNodes() + next.getUniqueNodes()
+                val nodes = (prev.getUniqueNodes() + next.getUniqueNodes()).toList()
                 check(nodes.size == 2) { "there is no line between $prev -> $next" }
-//                val diff =
 
+                val diff = nodes[1].x - nodes[0].x
+                val prevPercent = (prev.point.x - nodes[0].x) / diff
+                val nextPercent = (next.point.x - nodes[0].x) / diff
+
+                check(prevPercent in 0.0..1.0)
+                check(nextPercent in 0.0..1.0)
+
+                VisitedPart(
+                    fromPoint = nodes[0].point,
+                    toPoint = nodes[1].point,
+                    fromPercent = prevPercent,
+                    toPercent = nextPercent,
+                )
+            }
+        }.flatten()
+
+    private fun List<VisitedPart>.merge() {
+        val map:Map<Pair<PointD, PointD>, List<VisitedPart>> = groupBy { it.fromPoint to it.toPoint }
+        map.mapValues {
+            it.value.fold(mutableListOf<Pair<Double, Double>>()){ acc, v ->
+                acc // fixme add range
             }
         }
+    }
+
+    private fun List<VisitedPart>.sortByPoints() =
+        map {
+            when {
+                it.fromPoint.x > it.toPoint.x -> it.reversed()
+                it.fromPoint.x == it.toPoint.x && it.fromPoint.y > it.toPoint.y -> it.reversed()
+                else -> it
+            }
+        }
+
+    private class VisitedPart(
+        val fromPoint: PointD,
+        val toPoint: PointD,
+        val fromPercent: Double,
+        val toPercent: Double,
+    ) {
+
+        fun reversed() = VisitedPart(
+            fromPoint = toPoint,
+            toPoint = fromPoint,
+            fromPercent = 1 - fromPercent,
+            toPercent = 1 - toPercent,
+        )
     }
 
     private fun Snapped.getUniqueNodes(): Set<Node> =
