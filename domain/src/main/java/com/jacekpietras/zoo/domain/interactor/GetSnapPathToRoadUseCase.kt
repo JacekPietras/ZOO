@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.domain.business.GraphAnalyzer
 import com.jacekpietras.zoo.domain.business.Node
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Snapped
+import timber.log.Timber
 
 class GetSnapPathToRoadUseCase {
 
@@ -102,16 +103,42 @@ class GetSnapPathToRoadUseCase {
     private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
         takeIf { it.size != 1 }
 
-    suspend fun run(list: List<MapItemEntity.PathEntity>): List<MapItemEntity.PathEntity> =
+    internal suspend fun run(list: List<MapItemEntity.PathEntity>): List<List<Snapped>> =
         list
             .map { path ->
                 path.vertices
+                    .also {
+                        Timber.e("dupa Too I'm here yy")
+                    }
                     .let { snapToRoad(it) }
+                    .also {
+                        Timber.e("dupa Too I'm here xx")
+                    }
                     .let { fillCorners(it) }
-                    .map { it.map { a -> a.point } }
-                    .map { MapItemEntity.PathEntity(it) }
+//                    .map { it.map { a -> a.point } }
+//                    .map { MapItemEntity.PathEntity(it) }
             }
             .flatten()
+            .also {
+                Timber.e("dupa Too I'm here")
+                it.toVisited()
+            }
+
+    internal fun List<List<Snapped>>.toVisited() {
+        Timber.e("dupa Too I'm here 4")
+        map { continous ->
+            continous.zipWithNext { prev, next ->
+                val nodes = setOf(prev.near1, prev.near2, next.near1, next.near2)
+                if (nodes.size != 2) {
+                    Timber.e("dupa Too many nodes $nodes")
+                    throw IllegalStateException("Too many nodes $nodes")
+                }
+            }
+        }
+    }
+
+    private fun Snapped.isNode() =
+        near1 == near2 || near1.point == point || near2.point == point
 
     private infix fun Snapped.onSameEdge(right: Snapped): Boolean =
         (this.near1 == right.near1 && this.near2 == right.near2) ||

@@ -16,7 +16,6 @@ import com.jacekpietras.zoo.domain.interactor.GetRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.interactor.GetShortestPathUseCase
 import com.jacekpietras.zoo.domain.interactor.GetSnapPathToRoadUseCase
-import com.jacekpietras.zoo.domain.interactor.GetSnappedToRoadUseCase
 import com.jacekpietras.zoo.domain.interactor.GetTechnicalRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.GetTerminalNodesUseCase
 import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
@@ -125,9 +124,6 @@ val domainModule = module {
         GetRoadsUseCase(
             mapRepository = get()
         )
-    }
-    factory {
-        GetSnappedToRoadUseCase()
     }
     factory {
         GetShortestPathUseCase()

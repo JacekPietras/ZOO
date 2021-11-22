@@ -53,7 +53,10 @@ internal class MapRepositoryImpl(
     }
     private val roads: List<List<PointD>> by lazy {
         parser.getPointsByGroup("paths")
-            .also { roadsWatcher.notifyUpdated(it.map(::PathEntity)) }
+            .also {
+                visitedRoadsWatcher.notifyUpdated(emptyList())
+                roadsWatcher.notifyUpdated(it.map(::PathEntity))
+            }
     }
     private var visitedRoads: List<List<VisitedRoadPoint>>? = null
         set(value) {

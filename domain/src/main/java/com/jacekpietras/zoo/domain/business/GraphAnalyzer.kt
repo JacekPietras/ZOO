@@ -24,16 +24,6 @@ internal object GraphAnalyzer {
             .map { it.point }
             .toList()
 
-    suspend fun getSnapped(
-        point: PointD,
-        technicalAllowed: Boolean,
-    ): PointD =
-        snapper.getSnappedPoint(
-            waitForNodes(),
-            point,
-            technicalAllowed
-        )
-
     suspend fun getSnappedPointWithContext(
         point: PointD,
         technicalAllowed: Boolean,
