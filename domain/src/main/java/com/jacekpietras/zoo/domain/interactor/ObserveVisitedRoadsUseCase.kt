@@ -5,8 +5,10 @@ import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 
 class ObserveVisitedRoadsUseCase(
     private val mapRepository: MapRepository,
@@ -15,18 +17,17 @@ class ObserveVisitedRoadsUseCase(
 ) {
 
     suspend fun run(): Flow<List<MapItemEntity.PathEntity>> {
-//        if (!mapRepository.areVisitedRoadsCalculated()) {
-//            coroutineScope {
-//                launch {
-//                    val historicalGpsData = gpsRepository.getAllPositionsNormalized().toPathEntity()
-//                    val snapped = getSnapPathToRoadUseCase.run(historicalGpsData)
-////                    mapRepository.updateVisitedRoads(snapped)
-//                    mapRepository.updateVisitedRoads(emptyList())
-//                }
-//            }
-//        }
+        if (!mapRepository.areVisitedRoadsCalculated()) {
+            coroutineScope {
+                launch {
+                    val historicalGpsData = gpsRepository.getAllPositionsNormalized().toPathEntity()
+                    val snapped = getSnapPathToRoadUseCase.run(historicalGpsData)
+//                    mapRepository.updateVisitedRoads(snapped)
+                }
+            }
+        }
         return flowOf(emptyList())
-//        return mapRepository.getVisitedRoads()
+//        return mapRepository.observeVisitedRoads()
 //            .map { MapItemEntity.PathEntity(it) }
     }
 

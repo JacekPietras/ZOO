@@ -8,7 +8,6 @@ import com.jacekpietras.zoo.domain.business.GraphAnalyzer
 import com.jacekpietras.zoo.domain.business.Node
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Snapped
-import timber.log.Timber
 
 class GetSnapPathToRoadUseCase(
     private val initializeGraphAnalyzerIfNeededUseCase: InitializeGraphAnalyzerIfNeededUseCase,
@@ -38,12 +37,12 @@ class GetSnapPathToRoadUseCase(
                             .filterOutNotFoundRoutes()
                             ?.filterCrossingTechnical()
                             ?.filterOutLongerThan(length = 30)
-                            ?.filterNot { it.point == start.point || it.point == end.point }
                             ?.map { Snapped(it.point, it, it) }
-                            ?.let {
-                                it.toMutableList().apply {
-                                    add(0, start)
-                                    add(end)
+                            ?.mapIndexed { i, it ->
+                                when (it.point) {
+                                    start.point -> start
+                                    end.point -> end
+                                    else -> it
                                 }
                             }
                     }
@@ -51,6 +50,7 @@ class GetSnapPathToRoadUseCase(
             }
             .filter { it.isNotEmpty() }
             .let(::connectIfPossible)
+            .map { it.filterWithPrev { prev, next -> prev.point != next.point } }
 
     internal fun connectIfPossible(source: List<List<Snapped>>): List<List<Snapped>> {
         val result = mutableListOf<List<Snapped>>()
@@ -92,7 +92,7 @@ class GetSnapPathToRoadUseCase(
 
     private fun List<Node>.filterCrossingTechnical(): List<Node>? {
         zipWithNext { prev, next ->
-            prev.edges.firstOrNull() { it.node == next && !it.technical } ?: return null
+            prev.edges.firstOrNull { it.node == next && !it.technical } ?: return null
         }
         return this
     }
@@ -121,14 +121,20 @@ class GetSnapPathToRoadUseCase(
     internal fun List<List<Snapped>>.toVisited() {
         map { continous ->
             continous.zipWithNext { prev, next ->
-                val nodes = setOf(prev.near1, prev.near2, next.near1, next.near2)
-                if (nodes.size != 2) {
-                    Timber.e("dupa Too many nodes $nodes")
-//                    throw IllegalStateException("Too many nodes $nodes")
-                }
+                val nodes = prev.getUniqueNodes() + next.getUniqueNodes()
+                check(nodes.size == 2) { "there is no line between $prev -> $next" }
+//                val diff =
+
             }
         }
     }
+
+    private fun Snapped.getUniqueNodes(): Set<Node> =
+        when (point) {
+            near1.point -> setOf(near1)
+            near2.point -> setOf(near2)
+            else -> setOf(near1, near2)
+        }
 
     private fun Snapped.isNode() =
         near1 == near2 || near1.point == point || near2.point == point
@@ -136,4 +142,12 @@ class GetSnapPathToRoadUseCase(
     private infix fun Snapped.onSameEdge(right: Snapped): Boolean =
         (this.near1 == right.near1 && this.near2 == right.near2) ||
                 (this.near1 == right.near2 && this.near2 == right.near1)
+}
+
+internal fun <T> List<T>.filterWithPrev(condition: (T, T) -> Boolean): List<T> {
+    var prev: T? = null
+    return filter { next ->
+        (prev?.let { condition(it, next) } ?: true)
+            .also { prev = next }
+    }
 }

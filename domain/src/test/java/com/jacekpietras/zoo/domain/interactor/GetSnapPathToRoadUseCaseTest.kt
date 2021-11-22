@@ -9,7 +9,7 @@ import org.mockito.kotlin.mock
 
 class GetSnapPathToRoadUseCaseTest {
 
-    private val getSnapPathToRoadUseCase = GetSnapPathToRoadUseCase()
+    private val getSnapPathToRoadUseCase = GetSnapPathToRoadUseCase(mock())
 
     @Test
     fun `test connection 1`() {
@@ -79,5 +79,12 @@ class GetSnapPathToRoadUseCaseTest {
             )
         )
         assertEquals(expected.map { a->a.map { it.point } }, received.map { a->a.map { it.point } })
+    }
+
+    @Test
+    fun `removes duplicates`(){
+        val result = listOf(1,1,2,5,5,6,7,8,8).filterWithPrev{prev, next -> prev != next}
+
+        assertEquals(listOf(1,2,5,6,7,8), result)
     }
 }
