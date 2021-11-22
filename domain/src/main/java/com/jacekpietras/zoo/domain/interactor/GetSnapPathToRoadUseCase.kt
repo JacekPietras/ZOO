@@ -148,8 +148,10 @@ class GetSnapPathToRoadUseCase(
     private fun List<VisitedPart>.merge() {
         val map:Map<Pair<PointD, PointD>, List<VisitedPart>> = groupBy { it.fromPoint to it.toPoint }
         map.mapValues {
-            it.value.fold(mutableListOf<Pair<Double, Double>>()){ acc, v ->
-                acc // fixme add range
+            it.value.fold(mutableListOf<ClosedFloatingPointRange<Double>>()){ acc, v ->
+
+
+                acc // fixme add range, look at tests
             }
         }
     }
@@ -200,3 +202,6 @@ internal fun <T> List<T>.filterWithPrev(condition: (T, T) -> Boolean): List<T> {
             .also { prev = next }
     }
 }
+
+internal operator fun <T : Comparable<T>> ClosedFloatingPointRange<T>.plus(right: ClosedFloatingPointRange<T>): List<ClosedFloatingPointRange<T>> =
+    emptyList() // fixme write it

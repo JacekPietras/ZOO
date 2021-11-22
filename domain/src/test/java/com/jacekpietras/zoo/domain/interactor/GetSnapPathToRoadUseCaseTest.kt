@@ -78,13 +78,21 @@ class GetSnapPathToRoadUseCaseTest {
                 point4,
             )
         )
-        assertEquals(expected.map { a->a.map { it.point } }, received.map { a->a.map { it.point } })
+        assertEquals(expected.map { a -> a.map { it.point } }, received.map { a -> a.map { it.point } })
     }
 
     @Test
-    fun `removes duplicates`(){
-        val result = listOf(1,1,2,5,5,6,7,8,8).filterWithPrev{prev, next -> prev != next}
+    fun `removes duplicates`() {
+        val result = listOf(1, 1, 2, 5, 5, 6, 7, 8, 8).filterWithPrev { prev, next -> prev != next }
 
-        assertEquals(listOf(1,2,5,6,7,8), result)
+        assertEquals(listOf(1, 2, 5, 6, 7, 8), result)
     }
+
+    @Test
+    fun ranges() {
+        val range1 = 0.0..0.1
+        val range2 = 0.0..0.2
+        val range3 = range1 + range2
+    }
+
 }
