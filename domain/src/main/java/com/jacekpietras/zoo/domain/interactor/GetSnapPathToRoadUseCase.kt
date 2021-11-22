@@ -10,10 +10,13 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Snapped
 import timber.log.Timber
 
-class GetSnapPathToRoadUseCase {
+class GetSnapPathToRoadUseCase(
+    private val initializeGraphAnalyzerIfNeededUseCase: InitializeGraphAnalyzerIfNeededUseCase,
+) {
 
     private suspend fun snapToRoad(list: List<PointD>): List<Snapped> =
         list.map {
+            initializeGraphAnalyzerIfNeededUseCase.run()
             GraphAnalyzer.getSnappedPointWithContext(it, false)
         }
 
@@ -107,31 +110,21 @@ class GetSnapPathToRoadUseCase {
         list
             .map { path ->
                 path.vertices
-                    .also {
-                        Timber.e("dupa Too I'm here yy")
-                    }
                     .let { snapToRoad(it) }
-                    .also {
-                        Timber.e("dupa Too I'm here xx")
-                    }
                     .let { fillCorners(it) }
 //                    .map { it.map { a -> a.point } }
 //                    .map { MapItemEntity.PathEntity(it) }
             }
             .flatten()
-            .also {
-                Timber.e("dupa Too I'm here")
-                it.toVisited()
-            }
+            .also { it.toVisited() }
 
     internal fun List<List<Snapped>>.toVisited() {
-        Timber.e("dupa Too I'm here 4")
         map { continous ->
             continous.zipWithNext { prev, next ->
                 val nodes = setOf(prev.near1, prev.near2, next.near1, next.near2)
                 if (nodes.size != 2) {
                     Timber.e("dupa Too many nodes $nodes")
-                    throw IllegalStateException("Too many nodes $nodes")
+//                    throw IllegalStateException("Too many nodes $nodes")
                 }
             }
         }

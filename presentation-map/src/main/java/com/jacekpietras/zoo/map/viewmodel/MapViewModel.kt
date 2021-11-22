@@ -31,24 +31,27 @@ internal class MapViewModel(
     animalId: AnimalId?,
     regionId: RegionId?,
     mapper: MapViewStateMapper,
+
     observeCompassUseCase: ObserveCompassUseCase,
+    private val stopCompassUseCase: StopCompassUseCase,
+    private val startCompassUseCase: StartCompassUseCase,
+    getUserPositionUseCase: GetUserPositionUseCase,
+
+    observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
+    observeBuildingsUseCase: ObserveBuildingsUseCase,
+    observeAviaryUseCase: ObserveAviaryUseCase,
+    observeRoadsUseCase: ObserveRoadsUseCase,
+    observeTechnicalRoadsUseCase: ObserveTechnicalRoadsUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
     observeOldTakenRouteUseCase: ObserveOldTakenRouteUseCase,
+    observeMapLinesUseCase: ObserveMapLinesUseCase,
+    observeVisitedRoadsUseCase: ObserveVisitedRoadsUseCase,
+    getTerminalNodesUseCase: GetTerminalNodesUseCase,
+
+    loadAnimalsUseCase: LoadAnimalsUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     getRegionsWithAnimalsInUserPositionUseCase: GetRegionsWithAnimalsInUserPositionUseCase,
-    getUserPositionUseCase: GetUserPositionUseCase,
-    observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
-    getBuildingsUseCase: GetBuildingsUseCase,
-    getAviaryUseCase: GetAviaryUseCase,
-    getRoadsUseCase: GetRoadsUseCase,
-    getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
-    getTerminalNodesUseCase: GetTerminalNodesUseCase,
-    getLinesUseCase: GetLinesUseCase,
-    getVisitedRoadsUseCase: GetVisitedRoadsUseCase,
-    loadAnimalsUseCase: LoadAnimalsUseCase,
-    private val stopCompassUseCase: StopCompassUseCase,
-    private val startCompassUseCase: StartCompassUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
     private val findRegionUseCase: FindRegionUseCase,
     private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
@@ -101,15 +104,16 @@ internal class MapViewModel(
 
             combine(
                 observeWorldBoundsUseCase.run(),
-                getBuildingsUseCase.run(),
-                getAviaryUseCase.run(),
-                getRoadsUseCase.run(),
-                getLinesUseCase.run(),
+                observeBuildingsUseCase.run(),
+                observeAviaryUseCase.run(),
+                observeRoadsUseCase.run(),
+                observeMapLinesUseCase.run(),
                 observeOldTakenRouteUseCase.run(),
-                getTechnicalRoadsUseCase.run(),
-                getTerminalNodesUseCase.run(),
-                getVisitedRoadsUseCase.run(),
-            ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, terminalPoints, visited ->
+                observeTechnicalRoadsUseCase.run(),
+                observeVisitedRoadsUseCase.run(),
+            ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, visited ->
+                val terminalPoints = getTerminalNodesUseCase.run()
+
                 mapWorldState.reduceOnMain {
                     copy(
                         worldBounds = worldBounds,

@@ -54,7 +54,6 @@ internal class MapRepositoryImpl(
     private val roads: List<List<PointD>> by lazy {
         parser.getPointsByGroup("paths")
             .also {
-                visitedRoadsWatcher.notifyUpdated(emptyList())
                 roadsWatcher.notifyUpdated(it.map(::PathEntity))
             }
     }
@@ -64,22 +63,25 @@ internal class MapRepositoryImpl(
             value?.let { visitedRoadsWatcher.notifyUpdated(it) }
         }
 
-    override suspend fun getBuildings(): Flow<List<PolygonEntity>> =
+    override suspend fun observeBuildings(): Flow<List<PolygonEntity>> =
         buildingsWatcher.dataFlow.also {
             coroutineScope { launch { buildings } }
         }
 
-    override suspend fun getAviary(): Flow<List<PolygonEntity>> =
+    override suspend fun observeAviary(): Flow<List<PolygonEntity>> =
         aviaryWatcher.dataFlow.also {
             coroutineScope { launch { aviary } }
         }
 
-    override suspend fun getRoads(): Flow<List<PathEntity>> =
+    override suspend fun observeRoads(): Flow<List<PathEntity>> =
         roadsWatcher.dataFlow.also {
             coroutineScope { launch { roads } }
         }
 
-    override suspend fun getVisitedRoads(): Flow<List<List<VisitedRoadPoint>>> =
+    override suspend fun getRoads(): List<PathEntity> =
+        roads.map(::PathEntity)
+
+    override suspend fun observeVisitedRoads(): Flow<List<List<VisitedRoadPoint>>> =
         visitedRoadsWatcher.dataFlow
 
     override fun updateVisitedRoads(list: List<List<VisitedRoadPoint>>) {
@@ -89,12 +91,15 @@ internal class MapRepositoryImpl(
     override fun areVisitedRoadsCalculated(): Boolean =
         visitedRoads != null
 
-    override suspend fun getTechnicalRoads(): Flow<List<PathEntity>> =
+    override suspend fun observeTechnicalRoads(): Flow<List<PathEntity>> =
         technicalWatcher.dataFlow.also {
             coroutineScope { launch { technical } }
         }
 
-    override suspend fun getLines(): Flow<List<PathEntity>> =
+    override suspend fun getTechnicalRoads(): List<PathEntity> =
+        technical.map(::PathEntity)
+
+    override suspend fun observeLines(): Flow<List<PathEntity>> =
         linesWatcher.dataFlow.also {
             coroutineScope { launch { lines } }
         }

@@ -17,6 +17,8 @@ internal object GraphAnalyzer {
         nodes = Builder(roads, technical).build()
     }
 
+    fun isInitialized(): Boolean = nodes != null
+
     suspend fun getTerminalPoints(): List<PointD> =
         waitForNodes()
             .asSequence()

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/graph_catalogue">
+    app:startDestination="@+id/graph_map">
 
     <include app:graph="@navigation/graph_catalogue" />
 
@@ -12,6 +11,5 @@
     <fragment
         android:id="@+id/navigation_planner"
         android:name="com.jacekpietras.zoo.planner.PlannerFragment"
-        android:label="@string/title_planner"
-        tools:layout="@layout/fragment_planner" />
+        android:label="@string/title_planner" />
 </navigation>

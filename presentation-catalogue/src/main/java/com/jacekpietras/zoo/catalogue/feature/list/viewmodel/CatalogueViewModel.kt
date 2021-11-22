@@ -36,7 +36,7 @@ internal class CatalogueViewModel(
 
     init {
         launchInBackground {
-            launch { loadAnimalsUseCase.run() }
+            loadAnimalsUseCase.run()
 
             filterFlow
                 .onEach { onMain { state.reduce { copy(filter = it) } } }

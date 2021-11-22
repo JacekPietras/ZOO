@@ -26,13 +26,13 @@ val mapModule = module {
             mapper = get(),
             observeWorldBoundsUseCase = get(),
             observeCompassUseCase = get(),
-            getBuildingsUseCase = get(),
+            observeBuildingsUseCase = get(),
             observeTakenRouteUseCase = get(),
             observeOldTakenRouteUseCase = get(),
-            getRoadsUseCase = get(),
-            getAviaryUseCase = get(),
-            getTechnicalRoadsUseCase = get(),
-            getLinesUseCase = get(),
+            observeRoadsUseCase = get(),
+            observeAviaryUseCase = get(),
+            observeTechnicalRoadsUseCase = get(),
+            observeMapLinesUseCase = get(),
             getUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
             getTerminalNodesUseCase = get(),
@@ -46,7 +46,7 @@ val mapModule = module {
             stopCompassUseCase = get(),
             startCompassUseCase = get(),
             findRegionUseCase = get(),
-            getVisitedRoadsUseCase = get(),
+            observeVisitedRoadsUseCase = get(),
         )
     }
 }

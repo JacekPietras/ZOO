@@ -4,10 +4,10 @@ import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetBuildingsUseCase(
+class ObserveBuildingsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
     suspend fun run(): Flow<List<PolygonEntity>> =
-        mapRepository.getBuildings()
+        mapRepository.observeBuildings()
 }

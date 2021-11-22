@@ -47,7 +47,6 @@ fun ComposableMapView(
     ) {
         onSizeChanged(size.width.toInt(), size.height.toInt())
 
-        Timber.e("dupa map drawn!")
         mapList.value?.forEach {
             when (it) {
                 is RenderPathItem -> drawPath(it.shape, it.paint, false)

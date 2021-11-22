@@ -2,20 +2,13 @@ package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.business.GraphAnalyzer
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 
 class GetTerminalNodesUseCase(
-    private val getRoadsUseCase: GetRoadsUseCase,
-    private val getTechnicalRoadsUseCase: GetTechnicalRoadsUseCase,
+    private val initializeGraphAnalyzerIfNeededUseCase: InitializeGraphAnalyzerIfNeededUseCase,
 ) {
 
-    suspend fun run(): Flow<List<PointD>> =
-        combine(
-            getRoadsUseCase.run(),
-            getTechnicalRoadsUseCase.run(),
-        ) { roads, technical ->
-            GraphAnalyzer.initialize(roads, technical)
-            GraphAnalyzer.getTerminalPoints()
-        }
+    suspend fun run(): List<PointD> {
+        initializeGraphAnalyzerIfNeededUseCase.run()
+        return GraphAnalyzer.getTerminalPoints()
+    }
 }
