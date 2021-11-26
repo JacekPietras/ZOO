@@ -8,8 +8,6 @@ internal class Intervals<T : Comparable<T>>(
 
     private var _ranges: List<Interval<T>> = range.map { it.toInterval() }
 
-    fun toClosedRanges(): List<ClosedRange<T>> = _ranges.map { it.start..it.end }
-
     fun asDoubleArray(): DoubleArray {
         val result = DoubleArray(_ranges.size * 2)
         for (i in _ranges.indices) {
@@ -33,10 +31,10 @@ internal class Intervals<T : Comparable<T>>(
 
         _ranges.forEach {
             when {
-                it.end < range.start -> {
+                it.end < range.startMinusAccuracy -> {
                     result.add(it)
                 }
-                it.start > range.end -> {
+                it.startMinusAccuracy > range.end -> {
                     if (start != null && end != null) {
                         result.add(Interval(start!!, end!!))
                         start = null
@@ -89,7 +87,7 @@ internal class Intervals<T : Comparable<T>>(
                 }
             }
         return Intervals<T>()
-            .also { it._ranges = result }
+            .also { intervals -> intervals._ranges = result.filter { it.start < it.end } }
     }
 
     operator fun plus(range: Intervals<T>): Intervals<T> {
@@ -170,7 +168,21 @@ internal class Intervals<T : Comparable<T>>(
     private data class Interval<T : Comparable<T>>(
         val start: T,
         val end: T,
-    )
+    ) {
+
+        @Suppress("UNCHECKED_CAST")
+        val startMinusAccuracy: T =
+            if (start is Double) {
+                (start - ACCURACY) as T
+            } else {
+                start
+            }
+    }
+
+    private companion object {
+
+        const val ACCURACY = 0.000001
+    }
 }
 
 internal operator fun <T : Comparable<T>> ClosedRange<T>.plus(range: ClosedRange<T>): Intervals<T> =

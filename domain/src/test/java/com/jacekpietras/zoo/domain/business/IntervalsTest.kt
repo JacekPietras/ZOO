@@ -205,4 +205,25 @@ internal class IntervalsTest {
             assertEquals(expected, complex)
         }
     }
+
+    @Nested
+    @DisplayName("Merge near points")
+    inner class MergeNearPoints {
+
+        @Test
+        fun `near points scenario #1`() {
+            val complex = Intervals(0.0..1.0) + Intervals(1.00000001..2.0)
+
+            val expected = Intervals((0.0..2.0))
+            assertEquals(expected, complex)
+        }
+
+        @Test
+        fun `near points scenario #2`() {
+            val complex = Intervals(1.00000001..2.0) + Intervals(0.0..1.0)
+
+            val expected = Intervals((0.0..2.0))
+            assertEquals(expected, complex)
+        }
+    }
 }
