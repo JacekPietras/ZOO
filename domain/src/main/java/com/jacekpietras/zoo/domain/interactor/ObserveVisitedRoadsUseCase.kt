@@ -29,25 +29,14 @@ class ObserveVisitedRoadsUseCase(
         }
         return mapRepository.observeVisitedRoads()
             .map { edges ->
-                edges
-                    .map { edge ->
-                        val result = mutableListOf<List<PathEntity>>()
-                        for (i in 0 until (edge.visited.size) step 2) {
-                            val diff = edge.to - edge.from
-                            val moveStart = diff * edge.visited[i]
-                            val moveEnd = diff * edge.visited[i + 1]
-
-                            result.add(
-                                listOf(
-                                    PathEntity(listOf(edge.from + moveStart)),
-                                    PathEntity(listOf(edge.from + moveEnd))
-                                )
-                            )
+                mutableListOf<PathEntity>().apply {
+                    edges.forEach { edge ->
+                        when (edge) {
+                            is VisitedRoadEdge.Fully -> add(edge.toPath())
+                            is VisitedRoadEdge.Partially -> addAll(edge.toPath())
                         }
-                        result
                     }
-                    .flatten()
-                    .flatten()
+                }
             }
     }
 

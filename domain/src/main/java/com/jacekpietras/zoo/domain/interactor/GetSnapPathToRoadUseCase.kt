@@ -122,7 +122,13 @@ class GetSnapPathToRoadUseCase(
             .sortByPoints()
             .merge()
             .filter { it.second.isNotEmpty() }
-            .map { (point, visited) -> VisitedRoadEdge(point.first, point.second, visited) }
+            .map { (point, visited) ->
+                if (visited.size == 2 && visited[0] == 0.0 && visited[1] == 1.0) {
+                    VisitedRoadEdge.Fully(point.first, point.second)
+                } else {
+                    VisitedRoadEdge.Partially(point.first, point.second, visited)
+                }
+            }
 
     private fun List<List<Snapped>>.toVisitedParts(): List<VisitedPart> =
         map { continous ->
@@ -140,25 +146,19 @@ class GetSnapPathToRoadUseCase(
                 VisitedPart(
                     fromPoint = nodes[0].point,
                     toPoint = nodes[1].point,
-                    range = min(prevPercent,nextPercent)..max(prevPercent,nextPercent),
+                    range = min(prevPercent, nextPercent)..max(prevPercent, nextPercent),
                 )
             }
         }.flatten()
 
     private fun List<VisitedPart>.merge(): List<Pair<Pair<PointD, PointD>, DoubleArray>> =
         groupBy { it.fromPoint to it.toPoint }
-            .let {
-                it
-            }
             .mapValues {
                 it.value
                     .fold(Intervals<Double>()) { acc, v -> acc + v.range }
                     .asDoubleArray()
             }
             .toList()
-            .let {
-                it
-            }
 
     private fun List<VisitedPart>.sortByPoints() =
         map {
