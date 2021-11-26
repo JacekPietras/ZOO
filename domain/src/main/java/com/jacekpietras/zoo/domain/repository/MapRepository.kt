@@ -4,7 +4,7 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.model.VisitedRoadPoint
+import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import kotlinx.coroutines.flow.Flow
 
 interface MapRepository {
@@ -23,9 +23,9 @@ interface MapRepository {
 
     suspend fun getRoads(): List<PathEntity>
 
-    suspend fun observeVisitedRoads(): Flow<List<List<VisitedRoadPoint>>>
+    suspend fun observeVisitedRoads(): Flow<List<VisitedRoadEdge>>
 
-    fun updateVisitedRoads(list: List<List<VisitedRoadPoint>>)
+    fun updateVisitedRoads(list: List<VisitedRoadEdge>)
 
     fun areVisitedRoadsCalculated(): Boolean
 

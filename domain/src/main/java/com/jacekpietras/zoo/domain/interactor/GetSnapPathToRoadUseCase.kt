@@ -5,9 +5,11 @@ package com.jacekpietras.zoo.domain.interactor
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.domain.business.GraphAnalyzer
+import com.jacekpietras.zoo.domain.business.Intervals
 import com.jacekpietras.zoo.domain.business.Node
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Snapped
+import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 
 class GetSnapPathToRoadUseCase(
     private val initializeGraphAnalyzerIfNeededUseCase: InitializeGraphAnalyzerIfNeededUseCase,
@@ -106,22 +108,18 @@ class GetSnapPathToRoadUseCase(
     private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
         takeIf { it.size != 1 }
 
-    internal suspend fun run(list: List<MapItemEntity.PathEntity>): List<List<Snapped>> =
+    internal suspend fun run(list: List<MapItemEntity.PathEntity>): List<VisitedRoadEdge> =
         list
             .map { path ->
                 path.vertices
                     .let { snapToRoad(it) }
                     .let { fillCorners(it) }
-//                    .map { it.map { a -> a.point } }
-//                    .map { MapItemEntity.PathEntity(it) }
             }
             .flatten()
-            .also {
-                it
-                    .toVisitedParts()
-                    .sortByPoints()
-                    .merge()
-            }
+            .toVisitedParts()
+            .sortByPoints()
+            .merge()
+            .map { (point, visited) -> VisitedRoadEdge(point.first, point.second, visited) }
 
     private fun List<List<Snapped>>.toVisitedParts(): List<VisitedPart> =
         map { continous ->
@@ -139,22 +137,19 @@ class GetSnapPathToRoadUseCase(
                 VisitedPart(
                     fromPoint = nodes[0].point,
                     toPoint = nodes[1].point,
-                    fromPercent = prevPercent,
-                    toPercent = nextPercent,
+                    range = prevPercent..nextPercent,
                 )
             }
         }.flatten()
 
-    private fun List<VisitedPart>.merge() {
-        val map:Map<Pair<PointD, PointD>, List<VisitedPart>> = groupBy { it.fromPoint to it.toPoint }
-        map.mapValues {
-            it.value.fold(mutableListOf<ClosedFloatingPointRange<Double>>()){ acc, v ->
-
-
-                acc // fixme add range, look at tests
+    private fun List<VisitedPart>.merge(): List<Pair<Pair<PointD, PointD>, DoubleArray>> =
+        groupBy { it.fromPoint to it.toPoint }
+            .mapValues {
+                it.value
+                    .fold(Intervals<Double>()) { acc, v -> acc + v.range }
+                    .asDoubleArray()
             }
-        }
-    }
+            .toList()
 
     private fun List<VisitedPart>.sortByPoints() =
         map {
@@ -168,15 +163,13 @@ class GetSnapPathToRoadUseCase(
     private class VisitedPart(
         val fromPoint: PointD,
         val toPoint: PointD,
-        val fromPercent: Double,
-        val toPercent: Double,
+        val range: ClosedRange<Double>,
     ) {
 
         fun reversed() = VisitedPart(
             fromPoint = toPoint,
             toPoint = fromPoint,
-            fromPercent = 1 - fromPercent,
-            toPercent = 1 - toPercent,
+            range = (1 - range.start)..(1 - range.endInclusive),
         )
     }
 

@@ -87,12 +87,4 @@ class GetSnapPathToRoadUseCaseTest {
 
         assertEquals(listOf(1, 2, 5, 6, 7, 8), result)
     }
-
-    @Test
-    fun ranges() {
-        val range1 = 0.0..0.1
-        val range2 = 0.0..0.2
-        val range3 = range1 + range2
-    }
-
 }

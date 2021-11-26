@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.data.cache.di
 
 import com.jacekpietras.zoo.data.cache.watcher.buildColdWatcher
 import com.jacekpietras.zoo.domain.model.MapItemEntity
-import com.jacekpietras.zoo.domain.model.VisitedRoadPoint
+import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -28,7 +28,7 @@ val cacheModule = module {
         buildColdWatcher<List<MapItemEntity.PolygonEntity>>()
     }
     single(named(MAP_VISITED_ROADS)) {
-        buildColdWatcher<List<List<VisitedRoadPoint>>>()
+        buildColdWatcher<List<VisitedRoadEdge>>()
     }
 }
 

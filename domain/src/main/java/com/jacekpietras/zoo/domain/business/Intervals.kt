@@ -7,7 +7,17 @@ internal class Intervals<T : Comparable<T>>(
     constructor(vararg range: ClosedRange<T>) : this(range.toList())
 
     private var _ranges: List<Interval<T>> = range.map { it.toInterval() }
-    val ranges: List<ClosedRange<T>> get() = _ranges.map { it.start..it.end }
+
+    fun toClosedRanges(): List<ClosedRange<T>> = _ranges.map { it.start..it.end }
+
+    fun asDoubleArray(): DoubleArray {
+        val result = DoubleArray(_ranges.size * 2)
+        for (i in _ranges.indices) {
+            result[i shl 1] = (_ranges[i].start as Number).toDouble()
+            result[(i shl 1) + 1] = (_ranges[i].end as Number).toDouble()
+        }
+        return result
+    }
 
     operator fun plus(range: ClosedRange<T>): Intervals<T> =
         plus(range.toInterval())

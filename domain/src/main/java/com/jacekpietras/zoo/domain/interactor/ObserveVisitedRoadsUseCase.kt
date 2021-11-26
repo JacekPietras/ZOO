@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.interactor
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity
+import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.coroutineScope
@@ -21,8 +22,8 @@ class ObserveVisitedRoadsUseCase(
             coroutineScope {
                 launch {
                     val historicalGpsData = gpsRepository.getAllPositionsNormalized().toPathEntity()
-                    val snapped = getSnapPathToRoadUseCase.run(historicalGpsData)
-//                    mapRepository.updateVisitedRoads(snapped)
+                    val snapped: List<VisitedRoadEdge> = getSnapPathToRoadUseCase.run(historicalGpsData)
+                    mapRepository.updateVisitedRoads(snapped)
                 }
             }
         }

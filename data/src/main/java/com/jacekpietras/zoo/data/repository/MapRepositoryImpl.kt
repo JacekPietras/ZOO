@@ -9,7 +9,7 @@ import com.jacekpietras.zoo.data.parser.SvgParser
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.model.VisitedRoadPoint
+import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +24,7 @@ internal class MapRepositoryImpl(
     private val linesWatcher: Watcher<List<PathEntity>>,
     private val buildingsWatcher: Watcher<List<PolygonEntity>>,
     private val aviaryWatcher: Watcher<List<PolygonEntity>>,
-    private val visitedRoadsWatcher: Watcher<List<List<VisitedRoadPoint>>>,
+    private val visitedRoadsWatcher: Watcher<List<VisitedRoadEdge>>,
 ) : MapRepository {
 
     private val parser = SvgParser(context, R.xml.map)
@@ -57,7 +57,7 @@ internal class MapRepositoryImpl(
                 roadsWatcher.notifyUpdated(it.map(::PathEntity))
             }
     }
-    private var visitedRoads: List<List<VisitedRoadPoint>>? = null
+    private var visitedRoads: List<VisitedRoadEdge>? = null
         set(value) {
             field = value
             value?.let { visitedRoadsWatcher.notifyUpdated(it) }
@@ -81,10 +81,10 @@ internal class MapRepositoryImpl(
     override suspend fun getRoads(): List<PathEntity> =
         roads.map(::PathEntity)
 
-    override suspend fun observeVisitedRoads(): Flow<List<List<VisitedRoadPoint>>> =
+    override suspend fun observeVisitedRoads(): Flow<List<VisitedRoadEdge>> =
         visitedRoadsWatcher.dataFlow
 
-    override fun updateVisitedRoads(list: List<List<VisitedRoadPoint>>) {
+    override fun updateVisitedRoads(list: List<VisitedRoadEdge>) {
         visitedRoads = list
     }
 
