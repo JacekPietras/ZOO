@@ -27,4 +27,12 @@ data class VisitedRoadEdge(
         result = 31 * result + visited.contentHashCode()
         return result
     }
+
+    override fun toString(): String {
+        val result = mutableListOf<String>()
+        for (i in 0 until (visited.size) step 2) {
+            result.add("%.6f".format(visited[i]) + "->" + "%.6f".format(visited[i + 1]))
+        }
+        return "[${from.x}, ${from.y}] -> [${to.x}, ${to.y}] || $result"
+    }
 }

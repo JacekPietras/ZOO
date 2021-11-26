@@ -32,7 +32,7 @@ class ObserveVisitedRoadsUseCase(
                 edges
                     .map { edge ->
                         val result = mutableListOf<List<PathEntity>>()
-                        for (i in 0 until (edge.visited.size - 2) step 2) {
+                        for (i in 0 until (edge.visited.size) step 2) {
                             val diff = edge.to - edge.from
                             val moveStart = diff * edge.visited[i]
                             val moveEnd = diff * edge.visited[i + 1]

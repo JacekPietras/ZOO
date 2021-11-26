@@ -10,6 +10,8 @@ import com.jacekpietras.zoo.domain.business.Node
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Snapped
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
+import kotlin.math.max
+import kotlin.math.min
 
 class GetSnapPathToRoadUseCase(
     private val initializeGraphAnalyzerIfNeededUseCase: InitializeGraphAnalyzerIfNeededUseCase,
@@ -119,6 +121,7 @@ class GetSnapPathToRoadUseCase(
             .toVisitedParts()
             .sortByPoints()
             .merge()
+            .filter { it.second.isNotEmpty() }
             .map { (point, visited) -> VisitedRoadEdge(point.first, point.second, visited) }
 
     private fun List<List<Snapped>>.toVisitedParts(): List<VisitedPart> =
@@ -137,19 +140,25 @@ class GetSnapPathToRoadUseCase(
                 VisitedPart(
                     fromPoint = nodes[0].point,
                     toPoint = nodes[1].point,
-                    range = prevPercent..nextPercent,
+                    range = min(prevPercent,nextPercent)..max(prevPercent,nextPercent),
                 )
             }
         }.flatten()
 
     private fun List<VisitedPart>.merge(): List<Pair<Pair<PointD, PointD>, DoubleArray>> =
         groupBy { it.fromPoint to it.toPoint }
+            .let {
+                it
+            }
             .mapValues {
                 it.value
                     .fold(Intervals<Double>()) { acc, v -> acc + v.range }
                     .asDoubleArray()
             }
             .toList()
+            .let {
+                it
+            }
 
     private fun List<VisitedPart>.sortByPoints() =
         map {
@@ -169,7 +178,7 @@ class GetSnapPathToRoadUseCase(
         fun reversed() = VisitedPart(
             fromPoint = toPoint,
             toPoint = fromPoint,
-            range = (1 - range.start)..(1 - range.endInclusive),
+            range = (1 - range.endInclusive)..(1 - range.start),
         )
     }
 
