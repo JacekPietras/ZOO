@@ -121,9 +121,8 @@ class GetSnapPathToRoadUseCase(
             .toVisitedParts()
             .sortByPoints()
             .merge()
-            .filter { it.second.isNotEmpty() }
             .map { (point, visited) ->
-                if (visited.size == 2 && visited[0] == 0.0 && visited[1] == 1.0) {
+                if (visited.equals(0.0..0.1)) {
                     VisitedRoadEdge.Fully(point.first, point.second)
                 } else {
                     VisitedRoadEdge.Partially(point.first, point.second, visited)
@@ -151,12 +150,11 @@ class GetSnapPathToRoadUseCase(
             }
         }.flatten()
 
-    private fun List<VisitedPart>.merge(): List<Pair<Pair<PointD, PointD>, DoubleArray>> =
+    private fun List<VisitedPart>.merge(): List<Pair<Pair<PointD, PointD>, Intervals<Double>>> =
         groupBy { it.fromPoint to it.toPoint }
             .mapValues {
                 it.value
                     .fold(Intervals<Double>()) { acc, v -> acc + v.range }
-                    .asDoubleArray()
             }
             .toList()
 
@@ -189,9 +187,6 @@ class GetSnapPathToRoadUseCase(
             else -> setOf(near1, near2)
         }
 
-    private fun Snapped.isNode() =
-        near1 == near2 || near1.point == point || near2.point == point
-
     private infix fun Snapped.onSameEdge(right: Snapped): Boolean =
         (this.near1 == right.near1 && this.near2 == right.near2) ||
                 (this.near1 == right.near2 && this.near2 == right.near1)
@@ -204,6 +199,3 @@ internal fun <T> List<T>.filterWithPrev(condition: (T, T) -> Boolean): List<T> {
             .also { prev = next }
     }
 }
-
-internal operator fun <T : Comparable<T>> ClosedFloatingPointRange<T>.plus(right: ClosedFloatingPointRange<T>): List<ClosedFloatingPointRange<T>> =
-    emptyList() // fixme write it

@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.business
 
-internal class Intervals<T : Comparable<T>>(
+class Intervals<T : Comparable<T>>(
     range: List<ClosedRange<T>>
 ) {
 
@@ -8,7 +8,7 @@ internal class Intervals<T : Comparable<T>>(
 
     private var _ranges: List<Interval<T>> = range.map { it.toInterval() }
 
-    fun asDoubleArray(): DoubleArray {
+    fun toDoubleArray(): DoubleArray {
         val result = DoubleArray(_ranges.size * 2)
         for (i in _ranges.indices) {
             result[i shl 1] = (_ranges[i].start as Number).toDouble()
@@ -152,6 +152,10 @@ internal class Intervals<T : Comparable<T>>(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
+        if (other is ClosedRange<*>) {
+            if (_ranges.size != 1) return false
+            return _ranges.first().start == other.start && _ranges.first().end == other.endInclusive
+        }
         if (javaClass != other?.javaClass) return false
 
         other as Intervals<*>

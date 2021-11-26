@@ -1,6 +1,9 @@
 package com.jacekpietras.zoo.domain.business
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -224,6 +227,25 @@ internal class IntervalsTest {
 
             val expected = Intervals((0.0..2.0))
             assertEquals(expected, complex)
+        }
+    }
+
+    @Nested
+    @DisplayName("Compare equals")
+    inner class ComapreEquals {
+
+        @Test
+        fun `compare scenario #1`() {
+            val complex = Intervals(0.0..1.0)
+
+            assertTrue(complex.equals(0.0..1.0))
+        }
+
+        @Test
+        fun `compare scenario #2`() {
+            val complex = Intervals(0.0..2.0)
+
+            assertFalse(complex.equals(0.0..1.0))
         }
     }
 }
