@@ -18,11 +18,6 @@ data class PointD(
     fun toInt(): Point =
         Point(x.toInt(), y.toInt())
 
-    operator fun minusAssign(right: PointD) {
-        x -= right.x
-        y -= right.y
-    }
-
     operator fun timesAssign(times: Double) {
         x *= times
         y *= times
@@ -49,6 +44,12 @@ data class PointD(
         PointD(
             x + second.x,
             y + second.y
+        )
+
+    operator fun minus(second: PointD): PointD =
+        PointD(
+            x - second.x,
+            y - second.y
         )
 
     fun toShortString(): String = "[${x.form()},${y.form()}]"
