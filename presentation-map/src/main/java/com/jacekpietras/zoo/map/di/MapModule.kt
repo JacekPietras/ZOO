@@ -38,7 +38,7 @@ val mapModule = module {
             getTerminalNodesUseCase = get(),
             getShortestPathUseCase = get(),
             loadAnimalsUseCase = get(),
-            getRegionsWithAnimalsInUserPositionUseCase = get(),
+            observeRegionsWithAnimalsInUserPositionUseCase = get(),
             getAnimalUseCase = get(),
             getRegionCenterPointUseCase = get(),
             getRegionsContainingPointUseCase = get(),
@@ -47,6 +47,7 @@ val mapModule = module {
             startCompassUseCase = get(),
             findRegionUseCase = get(),
             observeVisitedRoadsUseCase = get(),
+            loadMapUseCase = get(),
         )
     }
 }

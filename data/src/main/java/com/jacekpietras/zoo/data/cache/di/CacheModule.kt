@@ -19,7 +19,7 @@ val cacheModule = module {
         buildColdWatcher<List<MapItemEntity.PathEntity>>()
     }
     single(named(MAP_LINES)) {
-        buildColdWatcher<List<MapItemEntity.PathEntity>>()
+        buildColdWatcher<List<MapItemEntity.PathEntity>>(initValue = emptyList())
     }
     single(named(MAP_BUILDINGS)) {
         buildColdWatcher<List<MapItemEntity.PolygonEntity>>()
@@ -28,7 +28,7 @@ val cacheModule = module {
         buildColdWatcher<List<MapItemEntity.PolygonEntity>>()
     }
     single(named(MAP_VISITED_ROADS)) {
-        buildColdWatcher<List<VisitedRoadEdge>>()
+        buildColdWatcher<List<VisitedRoadEdge>>(initValue = emptyList())
     }
 }
 

@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.map.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.jacekpietras.core.*
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
@@ -21,11 +22,14 @@ import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import timber.log.Timber
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -49,9 +53,10 @@ internal class MapViewModel(
     getTerminalNodesUseCase: GetTerminalNodesUseCase,
 
     loadAnimalsUseCase: LoadAnimalsUseCase,
+    loadMapUseCase: LoadMapUseCase,
+    observeRegionsWithAnimalsInUserPositionUseCase: ObserveRegionsWithAnimalsInUserPositionUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
-    getRegionsWithAnimalsInUserPositionUseCase: GetRegionsWithAnimalsInUserPositionUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
     private val findRegionUseCase: FindRegionUseCase,
     private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
@@ -73,60 +78,64 @@ internal class MapViewModel(
     val effect: Flow<MapEffect> = _effect.receiveAsFlow()
 
     init {
-        launchInBackground {
-            loadAnimalsUseCase.run()
+        observeCompassUseCase.run()
+            .onEach { volatileState.reduceOnMain { copy(compass = it) } }
+            .launchIn(viewModelScope)
 
-            observeCompassUseCase.run()
-                .onEach { volatileState.reduceOnMain { copy(compass = it) } }
-                .launchIn(this)
-            getUserPositionUseCase.run()
-                .onEach {
-                    volatileState.reduceOnMain { copy(userPosition = it) }
-                    with(currentState) {
-                        if (isToolbarOpened) {
-                            when (toolbarMode) {
-                                is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
-                                is MapToolbarMode.SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
-                                else -> Unit
-                            }
+        getUserPositionUseCase.run()
+            .onEach {
+                volatileState.reduceOnMain { copy(userPosition = it) }
+                with(currentState) {
+                    if (isToolbarOpened) {
+                        when (toolbarMode) {
+                            is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
+                            is MapToolbarMode.SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
+                            else -> Unit
                         }
                     }
                 }
-                .launchIn(this)
-            observeTakenRouteUseCase.run()
-                .onEach {
-                    volatileState.reduceOnMain { copy(takenRoute = it) }
-                }
-                .launchIn(this)
-            getRegionsWithAnimalsInUserPositionUseCase.run()
-                .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
-                .launchIn(this)
+            }
+            .launchIn(viewModelScope)
 
-            combine(
-                observeWorldBoundsUseCase.run(),
-                observeBuildingsUseCase.run(),
-                observeAviaryUseCase.run(),
-                observeRoadsUseCase.run(),
-                observeMapLinesUseCase.run(),
-                observeOldTakenRouteUseCase.run(),
-                observeTechnicalRoadsUseCase.run(),
-                observeVisitedRoadsUseCase.run(),
-            ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, visited ->
-                val terminalPoints = getTerminalNodesUseCase.run()
+        observeTakenRouteUseCase.run()
+            .onEach { volatileState.reduceOnMain { copy(takenRoute = it) } }
+            .launchIn(viewModelScope)
 
-                mapWorldState.reduceOnMain {
-                    copy(
-                        worldBounds = worldBounds,
-                        buildings = buildings,
-                        aviary = aviary,
-                        roads = roads,
-                        lines = lines,
-                        oldTakenRoute = taken + visited,
-                        technicalRoute = technicalRoute,
-                        terminalPoints = terminalPoints,
-                    )
-                }
-            }.launchIn(this)
+        observeRegionsWithAnimalsInUserPositionUseCase.run()
+            .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
+            .launchIn(viewModelScope)
+
+        combine(
+            observeWorldBoundsUseCase.run(),
+            observeBuildingsUseCase.run(),
+            observeAviaryUseCase.run(),
+            observeRoadsUseCase.run(),
+            observeMapLinesUseCase.run(),
+            observeOldTakenRouteUseCase.run(),
+            observeTechnicalRoadsUseCase.run(),
+            observeVisitedRoadsUseCase.run(),
+        ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, visited ->
+            val terminalPoints = getTerminalNodesUseCase.run()
+
+            mapWorldState.reduceOnMain {
+                copy(
+                    worldBounds = worldBounds,
+                    buildings = buildings,
+                    aviary = aviary,
+                    roads = roads,
+                    lines = lines,
+                    oldTakenRoute = taken + visited,
+                    technicalRoute = technicalRoute,
+                    terminalPoints = terminalPoints,
+                )
+            }
+        }.launchIn(viewModelScope)
+
+        launchInBackground {
+            listOf(
+                async { loadAnimalsUseCase.run() },
+                async { loadMapUseCase.run() },
+            ).awaitAll()
 
             if (animalId != null) {
                 onMyLocationClicked()

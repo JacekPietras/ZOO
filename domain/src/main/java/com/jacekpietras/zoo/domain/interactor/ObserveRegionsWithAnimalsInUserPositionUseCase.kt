@@ -7,7 +7,7 @@ import com.jacekpietras.zoo.domain.repository.GpsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetRegionsWithAnimalsInUserPositionUseCase(
+class ObserveRegionsWithAnimalsInUserPositionUseCase(
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val gpsRepository: GpsRepository,

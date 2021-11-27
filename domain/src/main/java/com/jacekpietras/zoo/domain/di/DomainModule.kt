@@ -68,7 +68,7 @@ val domainModule = module {
         )
     }
     factory {
-        GetRegionsWithAnimalsInUserPositionUseCase(
+        ObserveRegionsWithAnimalsInUserPositionUseCase(
             getRegionsContainingPointUseCase = get(),
             getAnimalsInRegionUseCase = get(),
             gpsRepository = get(),
@@ -117,6 +117,11 @@ val domainModule = module {
     }
     factory {
         ObserveVisitedRoadsUseCase(
+            mapRepository = get(),
+        )
+    }
+    factory {
+        LoadMapUseCase(
             mapRepository = get(),
             gpsRepository = get(),
             getSnapPathToRoadUseCase = get(),

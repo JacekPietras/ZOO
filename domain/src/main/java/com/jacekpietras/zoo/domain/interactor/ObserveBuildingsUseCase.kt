@@ -8,6 +8,6 @@ class ObserveBuildingsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    suspend fun run(): Flow<List<PolygonEntity>> =
+    fun run(): Flow<List<PolygonEntity>> =
         mapRepository.observeBuildings()
 }

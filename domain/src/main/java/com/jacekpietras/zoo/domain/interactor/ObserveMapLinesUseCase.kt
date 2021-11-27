@@ -8,6 +8,6 @@ class ObserveMapLinesUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    suspend fun run(): Flow<List<PathEntity>> =
+    fun run(): Flow<List<PathEntity>> =
         mapRepository.observeLines()
 }
