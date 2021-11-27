@@ -41,26 +41,48 @@ internal class PathListSnapper {
             }
         }
 
+    fun merge(left: List<VisitedRoadEdge>, right: List<VisitedRoadEdge>): List<VisitedRoadEdge> =
+        right.fold(left) { acc, v ->
+            add(acc, v)
+        }
+
     private fun List<VisitedRoadEdge>.merge(): List<VisitedRoadEdge> =
         groupBy { it.from to it.to }
             .values
             .map { list ->
                 list.drop(1).fold(list.first()) { acc, v ->
-                    when {
-                        acc is VisitedRoadEdge.Fully -> acc
-                        v is VisitedRoadEdge.Fully -> v
-                        else -> {
-                            val visited = (acc as VisitedRoadEdge.Partially).visited + (v as VisitedRoadEdge.Partially).visited
-
-                            if (visited.equals(0.0..0.1)) {
-                                VisitedRoadEdge.Fully(acc.from, acc.to)
-                            } else {
-                                VisitedRoadEdge.Partially(acc.from, acc.to, visited)
-                            }
-                        }
-                    }
+                    merge(acc, v)
                 }
             }
+
+    private fun merge(left: VisitedRoadEdge, right: VisitedRoadEdge): VisitedRoadEdge =
+        when {
+            left is VisitedRoadEdge.Fully -> left
+            right is VisitedRoadEdge.Fully -> right
+            else -> {
+                val visited = (left as VisitedRoadEdge.Partially).visited + (right as VisitedRoadEdge.Partially).visited
+
+                if (visited.equals(0.0..0.1)) {
+                    VisitedRoadEdge.Fully(left.from, left.to)
+                } else {
+                    VisitedRoadEdge.Partially(left.from, left.to, visited)
+                }
+            }
+        }
+
+    fun add(list: List<VisitedRoadEdge>, edge: VisitedRoadEdge): List<VisitedRoadEdge> {
+        val found = list.find { it.from == edge.from && it.to == edge.to }
+        if (found != null) {
+            return list.replace(found, merge(found, edge))
+        }
+
+        val foundReversed = list.find { it.from == edge.to && it.to == edge.from }
+        if (foundReversed != null) {
+            return list.replace(foundReversed, merge(foundReversed, edge.reversed()))
+        }
+
+        return list + edge
+    }
 
     fun add(list: List<VisitedRoadEdge>, from: PointD, to: PointD, range: ClosedRange<Double>): List<VisitedRoadEdge> {
         val found = list.find { it.from == from && it.to == to }

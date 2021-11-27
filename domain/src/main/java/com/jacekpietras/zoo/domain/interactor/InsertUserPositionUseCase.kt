@@ -1,7 +1,10 @@
 package com.jacekpietras.zoo.domain.interactor
 
+import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.business.PathListSnapper
+import com.jacekpietras.zoo.domain.business.PathSnapper
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
+import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
 
@@ -13,6 +16,7 @@ class InsertUserPositionUseCase(
 
     private var lastPosition: GpsHistoryEntity? = null
     private val pathListSnapper = PathListSnapper()
+    private val pathSnapper = PathSnapper()
 
     suspend fun run(position: GpsHistoryEntity) {
         val bounds = worldBoundsUseCase.run()
@@ -29,9 +33,20 @@ class InsertUserPositionUseCase(
         }
     }
 
-    private fun addVisitedPart(prev: GpsHistoryEntity?, next: GpsHistoryEntity) {
-        lastPosition ?: return
-        val alreadyVisited = mapRepository.getVisitedRoads()
-//  todo       pathListSnapper.add(alreadyVisited, )
+    private suspend fun addVisitedPart(prev: GpsHistoryEntity?, next: GpsHistoryEntity) {
+        prev ?: return
+        if (!mapRepository.areVisitedRoadsCalculated()) return
+
+        val path = MapItemEntity.PathEntity(
+            listOf(
+                PointD(prev.lat, prev.lon),
+                PointD(next.lat, next.lon)
+            )
+        )
+        val snappedEdge = pathSnapper.snapToEdges(path)
+
+        val alreadyVisited = checkNotNull(mapRepository.getVisitedRoads())
+        val updated = pathListSnapper.merge(alreadyVisited, snappedEdge)
+        mapRepository.updateVisitedRoads(updated)
     }
 }

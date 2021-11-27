@@ -9,6 +9,31 @@ sealed class VisitedRoadEdge(
     open val to: PointD,
 ) {
 
+    fun reversed(): VisitedRoadEdge =
+        when (this) {
+            is Fully -> {
+                Fully(
+                    from = to,
+                    to = from,
+                )
+            }
+            is Partially -> {
+                Partially(
+                    from = to,
+                    to = from,
+                    visited =
+                    mutableListOf<ClosedRange<Double>>()
+                        .apply {
+                            visited.forEach { start, end ->
+                                add((1 - end)..(1 - start))
+                            }
+                            reverse()
+                        }
+                        .let { Intervals(it) }
+                )
+            }
+        }
+
     data class Partially(
         override val from: PointD,
         override val to: PointD,

@@ -17,6 +17,10 @@ class Intervals<T : Comparable<T>>(
         return result
     }
 
+    fun forEach(block: (T, T) -> Unit) {
+        _ranges.forEach { block(it.start, it.end) }
+    }
+
     operator fun plus(range: ClosedRange<T>): Intervals<T> =
         plus(range.toInterval())
 
