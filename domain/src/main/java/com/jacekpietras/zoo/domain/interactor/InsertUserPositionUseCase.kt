@@ -39,8 +39,8 @@ class InsertUserPositionUseCase(
 
         val path = MapItemEntity.PathEntity(
             listOf(
-                PointD(prev.lat, prev.lon),
-                PointD(next.lat, next.lon)
+                PointD(prev.lon, prev.lat),
+                PointD(next.lon, next.lat)
             )
         )
         val snappedEdge = pathSnapper.snapToEdges(path)
