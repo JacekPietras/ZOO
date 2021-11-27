@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.interactor
 
+import com.jacekpietras.zoo.domain.business.PathListSnapper
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
@@ -11,6 +12,7 @@ class InsertUserPositionUseCase(
 ) {
 
     private var lastPosition: GpsHistoryEntity? = null
+    private val pathListSnapper = PathListSnapper()
 
     suspend fun run(position: GpsHistoryEntity) {
         val bounds = worldBoundsUseCase.run()
@@ -30,8 +32,6 @@ class InsertUserPositionUseCase(
     private fun addVisitedPart(prev: GpsHistoryEntity?, next: GpsHistoryEntity) {
         lastPosition ?: return
         val alreadyVisited = mapRepository.getVisitedRoads()
-
-
-        TODO("Not yet implemented")
+//  todo       pathListSnapper.add(alreadyVisited, )
     }
 }

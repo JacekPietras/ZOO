@@ -10,61 +10,76 @@ import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import kotlin.math.max
 import kotlin.math.min
 
-internal class RoadSnapper {
+internal class PathSnapper {
 
-    suspend fun run(list: List<MapItemEntity.PathEntity>): List<VisitedRoadEdge> =
-        list
-            .map { path ->
-                path.vertices
-                    .snapPointsToRoad()
-                    .fillMissingCorners()
-            }
-            .flatten()
-            .connectPointsIntoEdges()
-            .normalizeEdgeDirection()
+    suspend fun snapToEdges(path: MapItemEntity.PathEntity): List<VisitedRoadEdge> =
+        snapToEdgeParts(path)
             .mergeVisitedParts()
             .toVisitedEdges()
+
+    suspend fun snapToEdgeParts(path: MapItemEntity.PathEntity): List<VisitedRoadEdgePart> =
+        path.vertices
+            .snapPointsToRoad()
+            .fillMissingCorners()
+            .connectIfPossible()
+            .filterDuplicatesInRow()
+            .connectPointsIntoEdges()
+            .normalizeEdgeDirection()
 
     private suspend fun List<PointD>.snapPointsToRoad(): List<SnappedOnEdge> =
         map { GraphAnalyzer.getSnappedPointOnEdge(it, false) }
 
     private suspend fun List<SnappedOnEdge>.fillMissingCorners(): List<List<SnappedOnEdge>> =
-        zipWithNext()
-            .mapNotNull { (start, end) ->
-                when {
-                    start onSameEdge end -> listOf(start, end)
-                    commonNode(start, end) != null -> {
-                        val commonNode = checkNotNull(commonNode(start, end))
-                        listOf(start, SnappedOnEdge(commonNode.point, commonNode, commonNode), end)
-                    }
-                    else -> {
-                        GraphAnalyzer.getShortestPathWithContext(
-                            startPoint = start,
-                            endPoint = end,
-                        )
-                            .filterOutNotFoundRoutes()
-                            ?.filterCrossingTechnical()
-                            ?.filterOutLongerThan(length = 30)
-                            ?.map { SnappedOnEdge(it.point, it, it) }
-                            ?.mapIndexed { i, it ->
-                                when (it.point) {
-                                    start.point -> start
-                                    end.point -> end
-                                    else -> it
-                                }
+        zipWithNext { start, end ->
+            when {
+                start onSameEdgeWith end -> {
+                    listOf(start, end)
+                }
+                start hasCommonNodeWith end -> {
+                    val commonNode = checkNotNull(start.commonNode(end))
+                    listOf(start, SnappedOnEdge(commonNode.point, commonNode, commonNode), end)
+                }
+                else -> {
+                    GraphAnalyzer.getShortestPathWithContext(
+                        startPoint = start,
+                        endPoint = end,
+                    )
+                        .filterOutNotFoundRoutes()
+                        ?.filterCrossingTechnical()
+                        ?.filterOutLongerThan(length = 30)
+                        ?.map { SnappedOnEdge(it.point, it, it) }
+                        ?.map {
+                            when (it.point) {
+                                start.point -> start
+                                end.point -> end
+                                else -> it
                             }
-                    }
+                        }
                 }
             }
-            .filter { it.isNotEmpty() }
-            .let(::connectIfPossible)
-            .map { it.filterWithPrev { prev, next -> prev.point != next.point } }
+        }.filterNotNull().filter { it.isNotEmpty() }
 
-    internal fun connectIfPossible(source: List<List<SnappedOnEdge>>): List<List<SnappedOnEdge>> {
+    private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
+        takeIf { it.size != 1 }
+
+    private fun List<Node>.filterCrossingTechnical(): List<Node>? {
+        zipWithNext { prev, next ->
+            prev.edges.firstOrNull { it.node == next && !it.technical } ?: return null
+        }
+        return this
+    }
+
+    private fun List<Node>.filterOutLongerThan(length: Int): List<Node>? {
+        val sum = zipWithNext { prev, next -> haversine(prev.point.x, prev.point.y, next.point.x, next.point.y) }
+            .sum()
+        return this.takeIf { sum < length }
+    }
+
+    private fun List<List<SnappedOnEdge>>.connectIfPossible(): List<List<SnappedOnEdge>> {
         val result = mutableListOf<List<SnappedOnEdge>>()
         var temp = mutableListOf<SnappedOnEdge>()
 
-        source.forEach { list ->
+        forEach { list ->
             when {
                 temp.isEmpty() -> {
                     temp.addAll(list)
@@ -72,8 +87,8 @@ internal class RoadSnapper {
                 temp.last().point == list.first().point -> {
                     temp.addAll(list.subList(1, list.size))
                 }
-                commonNode(temp.last(), list.first()) != null -> {
-                    val commonNode = checkNotNull(commonNode(temp.last(), list.first()))
+                temp.last() hasCommonNodeWith list.first() -> {
+                    val commonNode = checkNotNull(temp.last().commonNode(list.first()))
                     temp.add(SnappedOnEdge(commonNode.point, commonNode, commonNode))
                     temp.addAll(list)
                 }
@@ -90,29 +105,8 @@ internal class RoadSnapper {
         return result
     }
 
-    private fun commonNode(left: SnappedOnEdge, right: SnappedOnEdge): Node? {
-        if (left.near1 == right.near1) return left.near1
-        if (left.near1 == right.near2) return left.near1
-        if (left.near2 == right.near1) return left.near2
-        if (left.near2 == right.near2) return left.near2
-        return null
-    }
-
-    private fun List<Node>.filterCrossingTechnical(): List<Node>? {
-        zipWithNext { prev, next ->
-            prev.edges.firstOrNull { it.node == next && !it.technical } ?: return null
-        }
-        return this
-    }
-
-    private fun List<Node>.filterOutLongerThan(length: Int): List<Node>? {
-        val sum = zipWithNext { prev, next -> haversine(prev.point.x, prev.point.y, next.point.x, next.point.y) }
-            .sum()
-        return this.takeIf { sum < length }
-    }
-
-    private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
-        takeIf { it.size != 1 }
+    private fun List<List<SnappedOnEdge>>.filterDuplicatesInRow(): List<List<SnappedOnEdge>> =
+        map { it.filterWithPrev { prev, next -> prev.point != next.point } }
 
     private fun List<List<SnappedOnEdge>>.connectPointsIntoEdges(): List<VisitedRoadEdgePart> =
         map { continuous ->
@@ -135,7 +129,7 @@ internal class RoadSnapper {
             }
         }.flatten()
 
-    private fun List<VisitedRoadEdgePart>.normalizeEdgeDirection() =
+    private fun List<VisitedRoadEdgePart>.normalizeEdgeDirection(): List<VisitedRoadEdgePart> =
         map {
             if ((it.from.x > it.to.x) ||
                 (it.from.x == it.to.x && it.from.y > it.to.y)
@@ -149,8 +143,7 @@ internal class RoadSnapper {
     private fun List<VisitedRoadEdgePart>.mergeVisitedParts(): List<Pair<Pair<PointD, PointD>, Intervals<Double>>> =
         groupBy { it.from to it.to }
             .mapValues {
-                it.value
-                    .fold(Intervals<Double>()) { acc, v -> acc + v.range }
+                it.value.fold(Intervals<Double>()) { acc, v -> acc + v.range }
             }
             .toList()
 
@@ -163,7 +156,7 @@ internal class RoadSnapper {
             }
         }
 
-    private class VisitedRoadEdgePart(
+    internal class VisitedRoadEdgePart(
         val from: PointD,
         val to: PointD,
         val range: ClosedRange<Double>,

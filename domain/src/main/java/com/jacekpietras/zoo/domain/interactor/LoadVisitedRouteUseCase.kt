@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.domain.business.RoadSnapper
+import com.jacekpietras.zoo.domain.business.PathListSnapper
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
@@ -19,7 +19,7 @@ class LoadVisitedRouteUseCase(
         if (!mapRepository.areVisitedRoadsCalculated()) {
             gpsRepository.getAllPositionsNormalized()
                 .toPathEntity()
-                .let { RoadSnapper().run(it) }
+                .let { PathListSnapper().snapToEdges(it) }
                 .also { mapRepository.updateVisitedRoads(it) }
         }
     }

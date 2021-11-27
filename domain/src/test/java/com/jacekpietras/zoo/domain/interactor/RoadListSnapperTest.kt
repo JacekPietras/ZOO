@@ -2,16 +2,17 @@ package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.business.Node
-import com.jacekpietras.zoo.domain.business.RoadSnapper
+import com.jacekpietras.zoo.domain.business.PathListSnapper
+import com.jacekpietras.zoo.domain.business.RoadListSnapper
 import com.jacekpietras.zoo.domain.business.filterWithPrev
 import com.jacekpietras.zoo.domain.model.SnappedOnEdge
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 
-class RoadSnapperTest {
+class RoadListSnapperTest {
 
-    private val getSnapPathToRoadUseCase = RoadSnapper()
+    private val getSnapPathToRoadUseCase = PathListSnapper()
 
     @Test
     fun `test connection 1`() {
