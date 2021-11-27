@@ -48,6 +48,7 @@ val mapModule = module {
             findRegionUseCase = get(),
             observeVisitedRoadsUseCase = get(),
             loadMapUseCase = get(),
+            loadVisitedRouteUseCase = get(),
         )
     }
 }

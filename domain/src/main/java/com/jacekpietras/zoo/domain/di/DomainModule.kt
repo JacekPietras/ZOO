@@ -123,6 +123,11 @@ val domainModule = module {
     factory {
         LoadMapUseCase(
             mapRepository = get(),
+        )
+    }
+    factory {
+        LoadVisitedRouteUseCase(
+            mapRepository = get(),
             gpsRepository = get(),
             getSnapPathToRoadUseCase = get(),
         )

@@ -76,55 +76,60 @@ class ComposableMapFragment : Fragment() {
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
             MdcTheme {
-                Column {
-                    val viewState by viewModel.viewState.observeAsState(MapViewState())
-                    AnimatedVisibility(
-                        visibleState = remember { MutableTransitionState(false) }
-                            .apply { targetState = viewState.isGuidanceShown },
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        var size by remember { mutableStateOf(Size.Zero) }
+                val viewState by viewModel.viewState.observeAsState()
+                viewState?.let { MapScreen(it) }
+            }
+        }
+    }
 
-                        ClosableToolbarView(
-                            modifier = Modifier.onSizeChanged {
-                                size = it.toSize()
-                            },
-                            title = viewState.title,
-                            isBackArrowShown = viewState.isBackArrowShown,
-                            onBack = { viewModel.onBackClicked(router) },
-                            onClose = { viewModel.onCloseClicked() },
-                        ) {
+    @Composable
+    private fun MapScreen(viewState: MapViewState) {
+        Column {
+            AnimatedVisibility(
+                visibleState = remember { MutableTransitionState(false) }
+                    .apply { targetState = viewState.isGuidanceShown },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                var size by remember { mutableStateOf(Size.Zero) }
 
-                            val carouselItemWidth: Dp = (with(LocalDensity.current) { (size.width).toDp() } - 32.dp) / 3.5f
-                            ImageCarouselView(
-                                viewState.mapCarouselItems,
-                                carouselItemWidth,
-                                { viewModel.onAnimalClicked(router, it) },
-                                { viewModel.onRegionClicked(router, it) },
-                            )
-                        }
-                    }
-                    Box(modifier = Modifier) {
-                        ComposableMapView(
-                            onSizeChanged = mapLogic::onSizeChanged,
-                            onClick = mapLogic::onClick,
-                            onTransform = mapLogic::onTransform,
-                            mapList = mapList.observeAsState(),
-                        )
-                        MapActionChips(
-                            isVisible = viewState.isMapActionsVisible,
-                            mapActions = viewState.mapActions,
-                            viewModel::onMapActionClicked,
-                        )
-                        Column(
-                            Modifier
-                                .padding(16.dp)
-                                .align(Alignment.BottomEnd)
-                        ) {
-                            CameraButtonView(Modifier.padding(bottom = 16.dp))
-                            LocationButtonView()
-                        }
-                    }
+                ClosableToolbarView(
+                    modifier = Modifier.onSizeChanged {
+                        size = it.toSize()
+                    },
+                    title = viewState.title,
+                    isBackArrowShown = viewState.isBackArrowShown,
+                    onBack = { viewModel.onBackClicked(router) },
+                    onClose = { viewModel.onCloseClicked() },
+                ) {
+
+                    val carouselItemWidth: Dp = (with(LocalDensity.current) { (size.width).toDp() } - 32.dp) / 3.5f
+                    ImageCarouselView(
+                        viewState.mapCarouselItems,
+                        carouselItemWidth,
+                        { viewModel.onAnimalClicked(router, it) },
+                        { viewModel.onRegionClicked(router, it) },
+                    )
+                }
+            }
+            Box(modifier = Modifier) {
+                ComposableMapView(
+                    onSizeChanged = mapLogic::onSizeChanged,
+                    onClick = mapLogic::onClick,
+                    onTransform = mapLogic::onTransform,
+                    mapList = mapList.observeAsState(),
+                )
+                MapActionChips(
+                    isVisible = viewState.isMapActionsVisible,
+                    mapActions = viewState.mapActions,
+                    viewModel::onMapActionClicked,
+                )
+                Column(
+                    Modifier
+                        .padding(16.dp)
+                        .align(Alignment.BottomEnd)
+                ) {
+                    CameraButtonView(Modifier.padding(bottom = 16.dp))
+                    LocationButtonView()
                 }
             }
         }

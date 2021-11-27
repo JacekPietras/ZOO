@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
-import timber.log.Timber
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -54,6 +53,7 @@ internal class MapViewModel(
 
     loadAnimalsUseCase: LoadAnimalsUseCase,
     loadMapUseCase: LoadMapUseCase,
+    loadVisitedRouteUseCase: LoadVisitedRouteUseCase,
     observeRegionsWithAnimalsInUserPositionUseCase: ObserveRegionsWithAnimalsInUserPositionUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
@@ -78,6 +78,23 @@ internal class MapViewModel(
     val effect: Flow<MapEffect> = _effect.receiveAsFlow()
 
     init {
+        launchInBackground {
+            listOf(
+                async { loadAnimalsUseCase.run() },
+                async { loadMapUseCase.run() },
+            ).awaitAll()
+
+            if (animalId != null) {
+                onMyLocationClicked()
+                navigationToAnimal(getAnimalUseCase.run(animalId), regionId)
+            }
+
+            @Suppress("DeferredResultUnused")
+            async {
+                loadVisitedRouteUseCase.run()
+            }
+        }
+
         observeCompassUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(compass = it) } }
             .launchIn(viewModelScope)
@@ -130,18 +147,6 @@ internal class MapViewModel(
                 )
             }
         }.launchIn(viewModelScope)
-
-        launchInBackground {
-            listOf(
-                async { loadAnimalsUseCase.run() },
-                async { loadMapUseCase.run() },
-            ).awaitAll()
-
-            if (animalId != null) {
-                onMyLocationClicked()
-                navigationToAnimal(getAnimalUseCase.run(animalId), regionId)
-            }
-        }
     }
 
     private suspend fun navigationToAnimal(animal: AnimalEntity, regionId: RegionId?) {
