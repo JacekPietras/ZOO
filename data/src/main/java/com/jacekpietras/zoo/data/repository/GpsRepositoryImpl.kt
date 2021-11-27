@@ -37,10 +37,10 @@ internal class GpsRepositoryImpl(
             val jack3 = TxtParser(context, R.raw.jacek_08_05_21)
             val eliza3 = TxtParser(context, R.raw.eliza_08_05_21)
 
-            ola1.result// + jack1.result
+            ola1.result
+//                        + jack1.result
 //                        + jack2.result + ola2.result
 //                        + jack3.result + ola3.result + eliza3.result
-
         } else {
             emptyList()
         }
@@ -61,9 +61,6 @@ internal class GpsRepositoryImpl(
 
     override fun observeOldPositions(): Flow<List<List<GpsHistoryEntity>>> =
         flowOf(debugHistory)
-
-    override suspend fun getOldPositions(): List<List<GpsHistoryEntity>> =
-        debugHistory
 
     override suspend fun getAllPositionsNormalized(): List<List<GpsHistoryEntity>> =
         gpsDao.getAll().map(gpsHistoryMapper::from)

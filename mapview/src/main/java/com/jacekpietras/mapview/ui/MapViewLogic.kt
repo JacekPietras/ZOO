@@ -65,14 +65,14 @@ class MapViewLogic<T>(
         set(value) {
             if (value != field) {
                 field = value
-                zoom = maxZoom / 5
+                zoom = maxZoom / 3
             }
         }
     private var minZoom: Double = 2.0
         set(value) {
             if (value != field) {
                 field = value
-                zoom = maxZoom / 5
+                zoom = maxZoom / 3
             }
         }
     private lateinit var visibleGpsCoordinate: ViewCoordinates

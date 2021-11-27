@@ -90,9 +90,7 @@ internal class MapViewModel(
             }
 
             @Suppress("DeferredResultUnused")
-            async {
-                loadVisitedRouteUseCase.run()
-            }
+            async { loadVisitedRouteUseCase.run() }
         }
 
         observeCompassUseCase.run()

@@ -1,25 +1,38 @@
 @file:Suppress("ComplexRedundantLet")
 
-package com.jacekpietras.zoo.domain.interactor
+package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
-import com.jacekpietras.zoo.domain.business.GraphAnalyzer
-import com.jacekpietras.zoo.domain.business.Intervals
-import com.jacekpietras.zoo.domain.business.Node
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Snapped
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import kotlin.math.max
 import kotlin.math.min
 
-class GetSnapPathToRoadUseCase(
-    private val initializeGraphAnalyzerIfNeededUseCase: InitializeGraphAnalyzerIfNeededUseCase,
-) {
+internal class GetSnapPathToRoadUseCase {
+
+    suspend fun run(list: List<MapItemEntity.PathEntity>): List<VisitedRoadEdge> =
+        list
+            .map { path ->
+                path.vertices
+                    .let { snapToRoad(it) }
+                    .let { fillCorners(it) }
+            }
+            .flatten()
+            .toVisitedParts()
+            .sortByPoints()
+            .merge()
+            .map { (point, visited) ->
+                if (visited.equals(0.0..0.1)) {
+                    VisitedRoadEdge.Fully(point.first, point.second)
+                } else {
+                    VisitedRoadEdge.Partially(point.first, point.second, visited)
+                }
+            }
 
     private suspend fun snapToRoad(list: List<PointD>): List<Snapped> =
         list.map {
-            initializeGraphAnalyzerIfNeededUseCase.run()
             GraphAnalyzer.getSnappedPointWithContext(it, false)
         }
 
@@ -56,7 +69,7 @@ class GetSnapPathToRoadUseCase(
             .let(::connectIfPossible)
             .map { it.filterWithPrev { prev, next -> prev.point != next.point } }
 
-    internal fun connectIfPossible(source: List<List<Snapped>>): List<List<Snapped>> {
+    private fun connectIfPossible(source: List<List<Snapped>>): List<List<Snapped>> {
         val result = mutableListOf<List<Snapped>>()
         var temp = mutableListOf<Snapped>()
 
@@ -109,25 +122,6 @@ class GetSnapPathToRoadUseCase(
 
     private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
         takeIf { it.size != 1 }
-
-    internal suspend fun run(list: List<MapItemEntity.PathEntity>): List<VisitedRoadEdge> =
-        list
-            .map { path ->
-                path.vertices
-                    .let { snapToRoad(it) }
-                    .let { fillCorners(it) }
-            }
-            .flatten()
-            .toVisitedParts()
-            .sortByPoints()
-            .merge()
-            .map { (point, visited) ->
-                if (visited.equals(0.0..0.1)) {
-                    VisitedRoadEdge.Fully(point.first, point.second)
-                } else {
-                    VisitedRoadEdge.Partially(point.first, point.second, visited)
-                }
-            }
 
     private fun List<List<Snapped>>.toVisitedParts(): List<VisitedPart> =
         map { continous ->

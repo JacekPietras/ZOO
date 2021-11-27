@@ -28,36 +28,24 @@ internal class MapRepositoryImpl(
     private val visitedRoadsWatcher: Watcher<List<VisitedRoadEdge>>,
 ) : MapRepository {
 
-    private val parser = SvgParser(context, R.xml.map)
+    private val parser by lazy { SvgParser(context, R.xml.map) }
     private var isMapLoaded = false
 
-    private val worldRect: RectD by lazy {
-        parser.worldRect
-    }
-    private val regions: List<Pair<Region, PolygonEntity>> by lazy {
-        parser.regions
-    }
-    private val buildings: List<List<PointD>> by lazy {
-        parser.getPointsByGroup("buildings")
-    }
-    private val aviary: List<List<PointD>> by lazy {
-        parser.getPointsByGroup("aviary")
-    }
-    private val technical: List<List<PointD>> by lazy {
-        parser.getPointsByGroup("technical")
-    }
-    private val lines: List<List<PointD>> by lazy {
-        parser.getPointsByGroup("lines")
-    }
-    private val roads: List<List<PointD>> by lazy {
-        parser.getPointsByGroup("paths")
-    }
+    private val worldRect: RectD by lazy { parser.worldRect }
+    private val regions: List<Pair<Region, PolygonEntity>> by lazy { parser.regions }
+    private val buildings: List<List<PointD>> by lazy { parser.getPointsByGroup("buildings") }
+    private val aviary: List<List<PointD>> by lazy { parser.getPointsByGroup("aviary") }
+    private val technical: List<List<PointD>> by lazy { parser.getPointsByGroup("technical") }
+    private val lines: List<List<PointD>> by lazy { parser.getPointsByGroup("lines") }
+    private val roads: List<List<PointD>> by lazy { parser.getPointsByGroup("paths") }
+
     private var visitedRoads: List<VisitedRoadEdge>? = null
     private var visitedRoadsCalculated = false
 
     override suspend fun loadMap() {
         coroutineScope {
             isMapLoaded = true
+            parser
             listOf(
                 async { buildingsWatcher.notifyUpdated(buildings.map(::PolygonEntity)) },
                 async { aviaryWatcher.notifyUpdated(aviary.map(::PolygonEntity)) },
@@ -91,6 +79,9 @@ internal class MapRepositoryImpl(
         visitedRoads = list
         visitedRoadsWatcher.notifyUpdated(list)
     }
+
+    override fun getVisitedRoads(): List<VisitedRoadEdge>? =
+        visitedRoads
 
     override fun areVisitedRoadsCalculated(): Boolean =
         visitedRoadsCalculated

@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.di
 
+import com.jacekpietras.zoo.domain.interactor.InitializeGraphAnalyzerIfNeededUseCase
 import com.jacekpietras.zoo.domain.interactor.*
 import org.koin.dsl.module
 
@@ -129,7 +130,7 @@ val domainModule = module {
         LoadVisitedRouteUseCase(
             mapRepository = get(),
             gpsRepository = get(),
-            getSnapPathToRoadUseCase = get(),
+            initializeGraphAnalyzerIfNeededUseCase = get(),
         )
     }
     factory {
@@ -153,11 +154,6 @@ val domainModule = module {
         )
     }
     factory {
-        GetSnapPathToRoadUseCase(
-            initializeGraphAnalyzerIfNeededUseCase = get(),
-        )
-    }
-    factory {
         GetUserPositionUseCase(
             gpsRepository = get(),
         )
@@ -165,6 +161,7 @@ val domainModule = module {
     factory {
         InsertUserPositionUseCase(
             gpsRepository = get(),
+            mapRepository = get(),
             worldBoundsUseCase = get(),
         )
     }
