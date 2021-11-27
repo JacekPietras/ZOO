@@ -2,22 +2,24 @@ package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.business.Node
-import com.jacekpietras.zoo.domain.model.Snapped
+import com.jacekpietras.zoo.domain.business.RoadSnapper
+import com.jacekpietras.zoo.domain.business.filterWithPrev
+import com.jacekpietras.zoo.domain.model.SnappedOnEdge
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 
-class GetSnapPathToRoadUseCaseTest {
+class RoadSnapperTest {
 
-    private val getSnapPathToRoadUseCase = GetSnapPathToRoadUseCase(mock())
+    private val getSnapPathToRoadUseCase = RoadSnapper()
 
     @Test
     fun `test connection 1`() {
         val near = mock<Node>()
-        val point1 = Snapped(PointD(1.0), near, near)
-        val point2 = Snapped(PointD(2.0), near, near)
-        val point3 = Snapped(PointD(3.0), near, near)
-        val point4 = Snapped(PointD(4.0), near, near)
+        val point1 = SnappedOnEdge(PointD(1.0), near, near)
+        val point2 = SnappedOnEdge(PointD(2.0), near, near)
+        val point3 = SnappedOnEdge(PointD(3.0), near, near)
+        val point4 = SnappedOnEdge(PointD(4.0), near, near)
 
         val given = listOf(
             listOf(
@@ -50,10 +52,10 @@ class GetSnapPathToRoadUseCaseTest {
     @Test
     fun `test connection 2`() {
         val near = mock<Node>()
-        val point1 = Snapped(PointD(1.0), near, near)
-        val point2 = Snapped(PointD(2.0), near, near)
-        val point3 = Snapped(PointD(3.0), near, near)
-        val point4 = Snapped(PointD(4.0), near, near)
+        val point1 = SnappedOnEdge(PointD(1.0), near, near)
+        val point2 = SnappedOnEdge(PointD(2.0), near, near)
+        val point3 = SnappedOnEdge(PointD(3.0), near, near)
+        val point4 = SnappedOnEdge(PointD(4.0), near, near)
 
         val given = listOf(
             listOf(

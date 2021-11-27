@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
-import com.jacekpietras.zoo.domain.model.Snapped
+import com.jacekpietras.zoo.domain.model.SnappedOnEdge
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -10,7 +10,7 @@ import kotlinx.coroutines.sync.withLock
 internal object GraphAnalyzer {
 
     private var nodes: MutableSet<Node>? = null
-    private val snapper = Snapper()
+    private val snapper = PointSnapper()
     private val mutex = Mutex()
 
     fun initialize(roads: List<PathEntity>, technical: List<PathEntity>) {
@@ -26,19 +26,19 @@ internal object GraphAnalyzer {
             .map { it.point }
             .toList()
 
-    suspend fun getSnappedPointWithContext(
+    suspend fun getSnappedPointOnEdge(
         point: PointD,
         technicalAllowed: Boolean,
-    ): Snapped =
-        snapper.getSnappedPointWithContext(
+    ): SnappedOnEdge =
+        snapper.getSnappedOnEdge(
             waitForNodes(),
             point,
             technicalAllowed
         )
 
     suspend fun getShortestPathWithContext(
-        endPoint: Snapped,
-        startPoint: Snapped,
+        endPoint: SnappedOnEdge,
+        startPoint: SnappedOnEdge,
         technicalAllowed: Boolean = false,
     ): List<Node> {
         mutex.withLock {
@@ -89,45 +89,14 @@ internal object GraphAnalyzer {
             if (startPoint == null) return listOf(endPoint)
             if (nodes.isEmpty()) return listOf(endPoint)
 
-            val snapStart = snapper.getSnappedEdge(nodes, startPoint, technicalAllowed = true)
-            val snapEnd = snapper.getSnappedEdge(nodes, endPoint, technicalAllowed = technicalAllowed)
+            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = true)
+            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowed)
 
-            val cleanupList: MutableList<Node> = mutableListOf()
-
-            val start = when (snapStart.point) {
-                snapStart.near1.point -> snapStart.near1
-                snapStart.near2.point -> snapStart.near2
-                else -> {
-                    nodes.createAndConnect(snapStart)
-                        .also { cleanupList.add(it) }
-                }
-            }
-
-            val end = when (snapEnd.point) {
-                snapEnd.near1.point -> snapEnd.near1
-                snapEnd.near2.point -> snapEnd.near2
-                else -> {
-                    nodes.createAndConnect(snapEnd)
-                        .also { cleanupList.add(it) }
-                }
-            }
-
-            val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed).getPath()
-                .map { PointD(it.x, it.y) }
-
-            cleanupList.forEach { fake ->
-                val edges = fake.edges.toList()
-                if (edges.size > 2) throw IllegalStateException("more than two edges in fake node")
-
-                val edge1 = edges[0]
-                val edge2 = edges[1]
-
-                edge1.node.disconnect(fake)
-                edge2.node.disconnect(fake)
-                nodes.remove(fake)
-            }
-
-            return result
+            return getShortestPathWithContext(
+                startPoint = snapStart,
+                endPoint = snapEnd,
+                technicalAllowed = technicalAllowed,
+            ).map { PointD(it.x, it.y) }
         }
     }
 
@@ -139,7 +108,7 @@ internal object GraphAnalyzer {
     }
 
     private fun MutableSet<Node>.createAndConnect(
-        snap: Snapped,
+        snap: SnappedOnEdge,
     ): Node {
         val node = Node(snap.point)
         val edge = snap.near1.edges.first { it.node == snap.near2 }

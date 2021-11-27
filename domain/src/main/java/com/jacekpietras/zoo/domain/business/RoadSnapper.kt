@@ -5,46 +5,37 @@ package com.jacekpietras.zoo.domain.business
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.domain.model.MapItemEntity
-import com.jacekpietras.zoo.domain.model.Snapped
+import com.jacekpietras.zoo.domain.model.SnappedOnEdge
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import kotlin.math.max
 import kotlin.math.min
 
-internal class GetSnapPathToRoadUseCase {
+internal class RoadSnapper {
 
     suspend fun run(list: List<MapItemEntity.PathEntity>): List<VisitedRoadEdge> =
         list
             .map { path ->
                 path.vertices
-                    .let { snapToRoad(it) }
-                    .let { fillCorners(it) }
+                    .snapPointsToRoad()
+                    .fillMissingCorners()
             }
             .flatten()
-            .toVisitedParts()
-            .sortByPoints()
-            .merge()
-            .map { (point, visited) ->
-                if (visited.equals(0.0..0.1)) {
-                    VisitedRoadEdge.Fully(point.first, point.second)
-                } else {
-                    VisitedRoadEdge.Partially(point.first, point.second, visited)
-                }
-            }
+            .connectPointsIntoEdges()
+            .normalizeEdgeDirection()
+            .mergeVisitedParts()
+            .toVisitedEdges()
 
-    private suspend fun snapToRoad(list: List<PointD>): List<Snapped> =
-        list.map {
-            GraphAnalyzer.getSnappedPointWithContext(it, false)
-        }
+    private suspend fun List<PointD>.snapPointsToRoad(): List<SnappedOnEdge> =
+        map { GraphAnalyzer.getSnappedPointOnEdge(it, false) }
 
-    private suspend fun fillCorners(list: List<Snapped>): List<List<Snapped>> =
-        list
-            .zipWithNext()
+    private suspend fun List<SnappedOnEdge>.fillMissingCorners(): List<List<SnappedOnEdge>> =
+        zipWithNext()
             .mapNotNull { (start, end) ->
                 when {
                     start onSameEdge end -> listOf(start, end)
                     commonNode(start, end) != null -> {
                         val commonNode = checkNotNull(commonNode(start, end))
-                        listOf(start, Snapped(commonNode.point, commonNode, commonNode), end)
+                        listOf(start, SnappedOnEdge(commonNode.point, commonNode, commonNode), end)
                     }
                     else -> {
                         GraphAnalyzer.getShortestPathWithContext(
@@ -54,7 +45,7 @@ internal class GetSnapPathToRoadUseCase {
                             .filterOutNotFoundRoutes()
                             ?.filterCrossingTechnical()
                             ?.filterOutLongerThan(length = 30)
-                            ?.map { Snapped(it.point, it, it) }
+                            ?.map { SnappedOnEdge(it.point, it, it) }
                             ?.mapIndexed { i, it ->
                                 when (it.point) {
                                     start.point -> start
@@ -69,9 +60,9 @@ internal class GetSnapPathToRoadUseCase {
             .let(::connectIfPossible)
             .map { it.filterWithPrev { prev, next -> prev.point != next.point } }
 
-    private fun connectIfPossible(source: List<List<Snapped>>): List<List<Snapped>> {
-        val result = mutableListOf<List<Snapped>>()
-        var temp = mutableListOf<Snapped>()
+    internal fun connectIfPossible(source: List<List<SnappedOnEdge>>): List<List<SnappedOnEdge>> {
+        val result = mutableListOf<List<SnappedOnEdge>>()
+        var temp = mutableListOf<SnappedOnEdge>()
 
         source.forEach { list ->
             when {
@@ -83,7 +74,7 @@ internal class GetSnapPathToRoadUseCase {
                 }
                 commonNode(temp.last(), list.first()) != null -> {
                     val commonNode = checkNotNull(commonNode(temp.last(), list.first()))
-                    temp.add(Snapped(commonNode.point, commonNode, commonNode))
+                    temp.add(SnappedOnEdge(commonNode.point, commonNode, commonNode))
                     temp.addAll(list)
                 }
                 else -> {
@@ -99,7 +90,7 @@ internal class GetSnapPathToRoadUseCase {
         return result
     }
 
-    private fun commonNode(left: Snapped, right: Snapped): Node? {
+    private fun commonNode(left: SnappedOnEdge, right: SnappedOnEdge): Node? {
         if (left.near1 == right.near1) return left.near1
         if (left.near1 == right.near2) return left.near1
         if (left.near2 == right.near1) return left.near2
@@ -123,9 +114,9 @@ internal class GetSnapPathToRoadUseCase {
     private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
         takeIf { it.size != 1 }
 
-    private fun List<List<Snapped>>.toVisitedParts(): List<VisitedPart> =
-        map { continous ->
-            continous.zipWithNext { prev, next ->
+    private fun List<List<SnappedOnEdge>>.connectPointsIntoEdges(): List<VisitedRoadEdgePart> =
+        map { continuous ->
+            continuous.zipWithNext { prev, next ->
                 val nodes = (prev.getUniqueNodes() + next.getUniqueNodes()).toList()
                 check(nodes.size == 2) { "there is no line between $prev -> $next" }
 
@@ -136,54 +127,54 @@ internal class GetSnapPathToRoadUseCase {
                 check(prevPercent in 0.0..1.0)
                 check(nextPercent in 0.0..1.0)
 
-                VisitedPart(
-                    fromPoint = nodes[0].point,
-                    toPoint = nodes[1].point,
+                VisitedRoadEdgePart(
+                    from = nodes[0].point,
+                    to = nodes[1].point,
                     range = min(prevPercent, nextPercent)..max(prevPercent, nextPercent),
                 )
             }
         }.flatten()
 
-    private fun List<VisitedPart>.merge(): List<Pair<Pair<PointD, PointD>, Intervals<Double>>> =
-        groupBy { it.fromPoint to it.toPoint }
+    private fun List<VisitedRoadEdgePart>.normalizeEdgeDirection() =
+        map {
+            if ((it.from.x > it.to.x) ||
+                (it.from.x == it.to.x && it.from.y > it.to.y)
+            ) {
+                it.reversed()
+            } else {
+                it
+            }
+        }
+
+    private fun List<VisitedRoadEdgePart>.mergeVisitedParts(): List<Pair<Pair<PointD, PointD>, Intervals<Double>>> =
+        groupBy { it.from to it.to }
             .mapValues {
                 it.value
                     .fold(Intervals<Double>()) { acc, v -> acc + v.range }
             }
             .toList()
 
-    private fun List<VisitedPart>.sortByPoints() =
-        map {
-            when {
-                it.fromPoint.x > it.toPoint.x -> it.reversed()
-                it.fromPoint.x == it.toPoint.x && it.fromPoint.y > it.toPoint.y -> it.reversed()
-                else -> it
+    private fun List<Pair<Pair<PointD, PointD>, Intervals<Double>>>.toVisitedEdges(): List<VisitedRoadEdge> =
+        map { (point, visited) ->
+            if (visited.equals(0.0..0.1)) {
+                VisitedRoadEdge.Fully(point.first, point.second)
+            } else {
+                VisitedRoadEdge.Partially(point.first, point.second, visited)
             }
         }
 
-    private class VisitedPart(
-        val fromPoint: PointD,
-        val toPoint: PointD,
+    private class VisitedRoadEdgePart(
+        val from: PointD,
+        val to: PointD,
         val range: ClosedRange<Double>,
     ) {
 
-        fun reversed() = VisitedPart(
-            fromPoint = toPoint,
-            toPoint = fromPoint,
+        fun reversed() = VisitedRoadEdgePart(
+            from = to,
+            to = from,
             range = (1 - range.endInclusive)..(1 - range.start),
         )
     }
-
-    private fun Snapped.getUniqueNodes(): Set<Node> =
-        when (point) {
-            near1.point -> setOf(near1)
-            near2.point -> setOf(near2)
-            else -> setOf(near1, near2)
-        }
-
-    private infix fun Snapped.onSameEdge(right: Snapped): Boolean =
-        (this.near1 == right.near1 && this.near2 == right.near2) ||
-                (this.near1 == right.near2 && this.near2 == right.near1)
 }
 
 internal fun <T> List<T>.filterWithPrev(condition: (T, T) -> Boolean): List<T> {
