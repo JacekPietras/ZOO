@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.catalogue.feature.list.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.reduce
@@ -18,8 +18,10 @@ import com.jacekpietras.zoo.domain.interactor.ObserveFilteredAnimalsUseCase
 import com.jacekpietras.zoo.domain.model.AnimalFilter
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 internal class CatalogueViewModel(
     regionId: RegionId?,
@@ -30,7 +32,7 @@ internal class CatalogueViewModel(
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(CatalogueState())
-    var viewState: Flow<CatalogueViewState> = state.map(stateMapper::from).asFlow()
+    var viewState: LiveData<CatalogueViewState> = state.map(stateMapper::from)
 
     private val filterFlow = MutableStateFlow(AnimalFilter(regionId = regionId))
 

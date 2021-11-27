@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -29,7 +29,7 @@ class CatalogueFragment : Fragment() {
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
-            val viewState: CatalogueViewState by viewModel.viewState.collectAsState(initial = CatalogueViewState())
+            val viewState: CatalogueViewState by viewModel.viewState.observeAsState(initial = CatalogueViewState())
 
             with(viewState) {
                 MdcTheme {

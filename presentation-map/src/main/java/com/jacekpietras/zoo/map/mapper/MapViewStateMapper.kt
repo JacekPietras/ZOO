@@ -208,7 +208,7 @@ internal class MapViewStateMapper() {
             borderWidth = MapDimension.Static.Screen(1),
         )
         val linesPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Hard(Color.BLUE),
+            strokeColor = MapColor.Hard(Color.rgb(240, 180, 140)),
             width = MapDimension.Dynamic.World(0.5),
         )
 
