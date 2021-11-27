@@ -11,7 +11,7 @@ internal data class MapWorldState(
     val aviary: List<PolygonEntity> = emptyList(),
     val roads: List<PathEntity> = emptyList(),
     val lines: List<PathEntity> = emptyList(),
-    val technicalRoute: List<PathEntity> = emptyList(),
-    val oldTakenRoute: List<PathEntity> = emptyList(),
+    val technicalRoads: List<PathEntity> = emptyList(),
+    val rawOldTakenRoute: List<PathEntity> = emptyList(),
     val terminalPoints: List<PointD> = emptyList(),
 )

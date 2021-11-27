@@ -74,6 +74,7 @@ internal class MapViewStateMapper() {
             compass = compass,
             userPosition = userPosition,
             mapData = flatListOf(
+                fromPaths(visitedRoads, visitedRoadsPaint),
                 fromPaths(takenRoute, takenRoutePaint),
                 fromPath(shortestPath, shortestPathPaint),
                 fromPoint(userPosition, userPositionPaint),
@@ -86,12 +87,12 @@ internal class MapViewStateMapper() {
         MapWorldViewState(
             worldBounds = worldBounds,
             mapData = flatListOf(
-                fromPaths(technicalRoute, technicalPaint),
+                fromPaths(technicalRoads, technicalPaint),
                 fromPaths(roads, roadPaint),
                 fromPaths(lines, linesPaint),
                 fromPolygons(buildings, buildingPaint),
                 fromPolygons(aviary, aviaryPaint),
-                fromPaths(oldTakenRoute, oldTakenRoutePaint),
+                fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
 //                fromPoints(terminalPoints, terminalPaint),
             ),
         )
@@ -196,10 +197,14 @@ internal class MapViewStateMapper() {
             borderWidth = MapDimension.Static.Screen(1),
         )
         val roadPaint: MapPaint = MapPaint.StrokeWithBorder(
-            strokeColor = MapColor.Attribute(R.attr.colorMapRoute),
+            strokeColor = MapColor.Attribute(R.attr.colorMapRoad),
             width = MapDimension.Dynamic.World(2.0),
-            borderColor = MapColor.Attribute(R.attr.colorMapRouteBorder),
+            borderColor = MapColor.Attribute(R.attr.colorMapRoadBorder),
             borderWidth = MapDimension.Static.Screen(1),
+        )
+        val visitedRoadsPaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Attribute(R.attr.colorMapRoadVisited),
+            width = MapDimension.Dynamic.World(2.0),
         )
         val technicalPaint: MapPaint = MapPaint.StrokeWithBorder(
             strokeColor = MapColor.Attribute(R.attr.colorMapTechnical),
@@ -232,7 +237,7 @@ internal class MapViewStateMapper() {
 
         @Suppress("unused")
         val oldTakenRoutePaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Attribute(R.attr.colorMapTaken),
+            strokeColor = MapColor.Hard(Color.rgb(150, 180, 150)),
             width = MapDimension.Static.Screen(0.5),
         )
         val takenRoutePaint: MapPaint = MapPaint.Stroke(

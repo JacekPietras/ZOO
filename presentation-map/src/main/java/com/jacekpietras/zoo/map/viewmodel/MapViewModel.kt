@@ -112,6 +112,10 @@ internal class MapViewModel(
             }
             .launchIn(viewModelScope)
 
+        observeVisitedRoadsUseCase.run()
+            .onEach { volatileState.reduceOnMain { copy(visitedRoads = it) } }
+            .launchIn(viewModelScope)
+
         observeTakenRouteUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(takenRoute = it) } }
             .launchIn(viewModelScope)
@@ -128,8 +132,7 @@ internal class MapViewModel(
             observeMapLinesUseCase.run(),
             observeOldTakenRouteUseCase.run(),
             observeTechnicalRoadsUseCase.run(),
-            observeVisitedRoadsUseCase.run(),
-        ) { worldBounds, buildings, aviary, roads, lines, taken, technicalRoute, visited ->
+        ) { worldBounds, buildings, aviary, roads, lines, rawTakenRoute, technicalRoads ->
             val terminalPoints = getTerminalNodesUseCase.run()
 
             mapWorldState.reduceOnMain {
@@ -137,10 +140,10 @@ internal class MapViewModel(
                     worldBounds = worldBounds,
                     buildings = buildings,
                     aviary = aviary,
-                    roads = roads,
                     lines = lines,
-                    oldTakenRoute = taken + visited,
-                    technicalRoute = technicalRoute,
+                    roads = roads,
+                    technicalRoads = technicalRoads,
+                    rawOldTakenRoute = rawTakenRoute,
                     terminalPoints = terminalPoints,
                 )
             }

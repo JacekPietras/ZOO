@@ -3,8 +3,9 @@
     <attr name="colorMapBackground" format="color|reference" />
     <attr name="colorMapBuilding" format="color|reference" />
     <attr name="colorMapBuildingBorder" format="color|reference" />
-    <attr name="colorMapRoute" format="color|reference" />
-    <attr name="colorMapRouteBorder" format="color|reference" />
+    <attr name="colorMapRoad" format="color|reference" />
+    <attr name="colorMapRoadVisited" format="color|reference" />
+    <attr name="colorMapRoadBorder" format="color|reference" />
     <attr name="colorMapTechnical" format="color|reference" />
     <attr name="colorMapTechnicalBorder" format="color|reference" />
     <attr name="colorMapTaken" format="color|reference" />

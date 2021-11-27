@@ -16,8 +16,9 @@
         <item name="colorMapBackground">#121a26</item>
         <item name="colorMapBuilding">#2f3a47</item>
         <item name="colorMapBuildingBorder">#0E141E</item>
-        <item name="colorMapRoute">#4E5C6C</item>
-        <item name="colorMapRouteBorder">#0E141E</item>
+        <item name="colorMapRoad">#4E5C6C</item>
+        <item name="colorMapRoadVisited">#447C43</item>
+        <item name="colorMapRoadBorder">#0E141E</item>
         <item name="colorMapTaken">?colorPrimary</item>
         <item name="colorMapTechnical">#6C4E4E</item>
         <item name="colorMapTechnicalBorder">#0E141E</item>
