@@ -32,6 +32,7 @@ class AnimalRepositoryImpl(
                     .bufferedReader()
                     .readText()
                     .parseJsonAnimals()
+                    .sortedBy { it.name }
                 animalFlow.value = storedAnimals
             }
         }
