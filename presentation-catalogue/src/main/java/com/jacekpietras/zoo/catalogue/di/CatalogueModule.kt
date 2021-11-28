@@ -29,6 +29,8 @@ val catalogueModule = module {
             animalId = AnimalId(animalId),
             getAnimalUseCase = get(),
             isAnimalSeenUseCase = get(),
+            isAnimalFavoriteUseCase = get(),
+            setAnimalFavoriteUseCase = get(),
         )
     }
 

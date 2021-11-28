@@ -27,7 +27,7 @@ class AnimalFragment : Fragment() {
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
-            val viewState by viewModel.viewState.observeAsState(AnimalViewState())
+            val viewState by viewModel.viewState.observeAsState()
 
             MdcTheme {
                 AnimalFragmentView(
@@ -35,7 +35,7 @@ class AnimalFragment : Fragment() {
                     onWebClicked = { viewModel.onWebClicked(router) },
                     onWikiClicked = { viewModel.onWikiClicked(router) },
                     onNavClicked = { viewModel.onNavClicked(router) },
-                    onWantToSeeClicked = { viewModel.onWantToSee() },
+                    onFavoriteClicked = { viewModel.onFavoriteClicked() },
                 )
             }
         }

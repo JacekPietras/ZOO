@@ -44,12 +44,14 @@ import com.jacekpietras.zoo.core.text.Text
 
 @Composable
 internal fun AnimalFragmentView(
-    viewState: AnimalViewState,
+    viewState: AnimalViewState?,
     onWebClicked: () -> Unit,
     onWikiClicked: () -> Unit,
     onNavClicked: () -> Unit,
-    onWantToSeeClicked: () -> Unit,
+    onFavoriteClicked: () -> Unit,
 ) {
+    if (viewState == null) return
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState()),
@@ -71,14 +73,14 @@ internal fun AnimalFragmentView(
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (viewState.isNavLink) {
+            if (viewState.isNavLinkVisible) {
                 SimpleButton(
                     text = Text(R.string.nav),
                     onClick = onNavClicked,
                 )
                 SimpleButton(
-                    text = Text(R.string.want_to_see),
-                    onClick = onWantToSeeClicked,
+                    text = viewState.favoriteButtonText,
+                    onClick = onFavoriteClicked,
                 )
             }
         }
@@ -90,26 +92,28 @@ internal fun AnimalFragmentView(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        TitleView(text = Text(R.string.read_more))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp)
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            if (viewState.isWebLink) {
-                SimpleButton(
-                    text = Text(R.string.on_web),
-                    onClick = onWebClicked,
-                )
-            }
-            if (viewState.isWikiLink) {
-                SimpleButton(
-                    text = Text(R.string.on_wiki),
-                    onClick = onWikiClicked,
-                )
+        if (viewState.isWebLinkVisible || viewState.isWikiLinkVisible) {
+            TitleView(text = Text(R.string.read_more))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp)
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                if (viewState.isWebLinkVisible) {
+                    SimpleButton(
+                        text = Text(R.string.on_web),
+                        onClick = onWebClicked,
+                    )
+                }
+                if (viewState.isWikiLinkVisible) {
+                    SimpleButton(
+                        text = Text(R.string.on_wiki),
+                        onClick = onWikiClicked,
+                    )
+                }
             }
         }
     }
@@ -293,10 +297,11 @@ private fun AnimalFragmentPreview() {
                 text = Text.Value("content"),
             )
         ),
-        isWikiLink = true,
-        isWebLink = true,
-        isNavLink = true,
+        isWikiLinkVisible = true,
+        isWebLinkVisible = true,
+        isNavLinkVisible = true,
         isSeen = false,
+        favoriteButtonText = Text.Value("Favorite!"),
         images = listOf("https://www.medivet.co.uk/globalassets/assets/puppy--kitten/two-puppies-in-garden.jpg")
     )
     AnimalFragmentView(
@@ -304,6 +309,6 @@ private fun AnimalFragmentPreview() {
         onWebClicked = {},
         onWikiClicked = {},
         onNavClicked = {},
-        onWantToSeeClicked = {},
+        onFavoriteClicked = {},
     )
 }

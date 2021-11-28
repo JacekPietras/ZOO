@@ -7,7 +7,8 @@
     <string name="facts">Facts</string>
     <string name="multiplication">Multiplication</string>
     <string name="protection_and_threats">Protection and threats</string>
-    <string name="want_to_see">Want to see</string>
+    <string name="is_favorite">Want to see</string>
+    <string name="is_not_favorite">Not interested</string>
     <string name="read_more">Read more</string>
     <string name="wiki">Wikipedia</string>
     <string name="web">Web Browser</string>

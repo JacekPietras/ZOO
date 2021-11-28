@@ -23,11 +23,16 @@ internal class AnimalMapper {
                     paragraph(R.string.facts, facts),
                 )
             },
-            isWikiLink = state.animal.wiki.isNotBlank(),
-            isWebLink = state.animal.web.isNotBlank(),
-            isNavLink = state.animal.regionInZoo.isNotEmpty(),
+            isWikiLinkVisible = state.animal.wiki.isNotBlank(),
+            isWebLinkVisible = state.animal.web.isNotBlank(),
+            isNavLinkVisible = state.animal.regionInZoo.isNotEmpty(),
             images = state.animal.photos,
             isSeen = state.isSeen,
+            favoriteButtonText = if (state.isFavorite) {
+                Text(R.string.is_not_favorite)
+            } else {
+                Text(R.string.is_favorite)
+            },
         )
 
     private fun paragraph(@StringRes title: Int, content: String): TextParagraph? =

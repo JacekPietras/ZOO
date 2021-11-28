@@ -8,11 +8,14 @@ import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
+import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.core.dispatcher.onBackground
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
+import com.jacekpietras.zoo.domain.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalSeenUseCase
+import com.jacekpietras.zoo.domain.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
 
 internal class AnimalViewModel(
@@ -20,6 +23,8 @@ internal class AnimalViewModel(
     mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
     isAnimalSeenUseCase: IsAnimalSeenUseCase,
+    isAnimalFavoriteUseCase: IsAnimalFavoriteUseCase,
+    private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
 ) : ViewModel() {
 
     private val state = MutableLiveData<AnimalState>()
@@ -34,7 +39,14 @@ internal class AnimalViewModel(
             )
             onBackground {
                 val isSeen = isAnimalSeenUseCase.run(animalId)
-                state.reduceOnMain { copy(isSeen = isSeen) }
+                val isFavorite = isAnimalFavoriteUseCase.run(animalId)
+
+                state.reduceOnMain {
+                    copy(
+                        isSeen = isSeen,
+                        isFavorite = isFavorite,
+                    )
+                }
             }
         }
     }
@@ -51,7 +63,16 @@ internal class AnimalViewModel(
         router.navigateToMap(currentState.animal.id, regionId)
     }
 
-    fun onWantToSee() {
+    fun onFavoriteClicked() {
+        val isFavorite = !currentState.isFavorite
+        val animalId = currentState.animalId
 
+        launchInBackground {
+            state.reduceOnMain { copy(isFavorite = isFavorite) }
+            setAnimalFavoriteUseCase.run(
+                animalId = animalId,
+                isFavorite = isFavorite,
+            )
+        }
     }
 }

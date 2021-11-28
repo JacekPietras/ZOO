@@ -16,6 +16,7 @@ import com.jacekpietras.zoo.domain.interactor.GetWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.interactor.InitializeGraphAnalyzerIfNeededUseCase
 import com.jacekpietras.zoo.domain.interactor.InsertUserCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalSeenUseCase
 import com.jacekpietras.zoo.domain.interactor.IsRegionSeenUseCase
 import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
@@ -33,6 +34,7 @@ import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTechnicalRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveWorldBoundsUseCase
+import com.jacekpietras.zoo.domain.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.StopCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
@@ -229,6 +231,14 @@ val domainModule = module {
     factory {
         IsRegionSeenUseCase(
             mapRepository = get(),
+        )
+    }
+    factory {
+        IsAnimalFavoriteUseCase(
+        )
+    }
+    factory {
+        SetAnimalFavoriteUseCase(
         )
     }
 }
