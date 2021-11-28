@@ -22,6 +22,7 @@ import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.plus
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -95,7 +97,7 @@ internal class MapViewModel(
 
         observeCompassUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(compass = it) } }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + Dispatchers.Default)
 
         getUserPositionUseCase.run()
             .onEach {
@@ -110,19 +112,19 @@ internal class MapViewModel(
                     }
                 }
             }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + Dispatchers.Default)
 
         observeVisitedRoadsUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(visitedRoads = it) } }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + Dispatchers.Default)
 
         observeTakenRouteUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(takenRoute = it) } }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + Dispatchers.Default)
 
         observeRegionsWithAnimalsInUserPositionUseCase.run()
             .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + Dispatchers.Default)
 
         combine(
             observeWorldBoundsUseCase.run(),
