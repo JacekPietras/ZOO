@@ -1,6 +1,8 @@
 package com.jacekpietras.zoo.domain.di
 
+import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.FindRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsByDivisionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
@@ -81,6 +83,19 @@ val domainModule = module {
     factory {
         GetAnimalsInRegionUseCase(
             animalRepository = get()
+        )
+    }
+    factory {
+        GetAnimalPositionUseCase(
+            getAnimalUseCase = get(),
+            getRegionCenterPointUseCase = get(),
+        )
+    }
+    factory {
+        FindNearRegionWithDistanceUseCase(
+            findRegionUseCase = get(),
+            getRegionCenterPointUseCase = get(),
+            getShortestPathUseCase = get(),
         )
     }
     factory {

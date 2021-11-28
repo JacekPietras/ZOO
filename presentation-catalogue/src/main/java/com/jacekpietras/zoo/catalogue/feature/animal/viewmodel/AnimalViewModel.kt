@@ -10,9 +10,9 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
-import com.jacekpietras.zoo.core.dispatcher.launchInMain
-import com.jacekpietras.zoo.core.dispatcher.onBackground
+import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
+import com.jacekpietras.zoo.domain.interactor.GetAnimalPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalSeenUseCase
@@ -37,6 +37,7 @@ internal class AnimalViewModel(
     observeBuildingsUseCase: ObserveBuildingsUseCase,
     observeAviaryUseCase: ObserveAviaryUseCase,
     observeRoadsUseCase: ObserveRoadsUseCase,
+    getAnimalPositionUseCase: GetAnimalPositionUseCase,
 ) : ViewModel() {
 
     private val state = MutableLiveData<AnimalState>()
@@ -44,39 +45,43 @@ internal class AnimalViewModel(
     val viewState: LiveData<AnimalViewState> = state.map(mapper::from)
 
     init {
-        launchInMain {
-            state.value = AnimalState(
-                animalId = animalId,
-                animal = checkNotNull(getAnimalUseCase.run(animalId)),
-            )
-            onBackground {
-                val isSeen = isAnimalSeenUseCase.run(animalId)
-                val isFavorite = isAnimalFavoriteUseCase.run(animalId)
-
-                state.reduceOnMain {
-                    copy(
-                        isSeen = isSeen,
-                        isFavorite = isFavorite,
-                    )
-                }
-            }
-        }
-
-        combine(
-            observeWorldBoundsUseCase.run(),
-            observeBuildingsUseCase.run(),
-            observeAviaryUseCase.run(),
-            observeRoadsUseCase.run(),
-        ) { worldBounds, buildings, aviary, roads ->
-            state.reduceOnMain {
-                copy(
-                    worldBounds = worldBounds,
-                    buildings = buildings,
-                    aviary = aviary,
-                    roads = roads,
+        launchInBackground {
+            val animal = checkNotNull(getAnimalUseCase.run(animalId))
+            onMain {
+                state.value = AnimalState(
+                    animalId = animalId,
+                    animal = animal,
                 )
             }
-        }.launchIn(viewModelScope)
+
+            combine(
+                observeWorldBoundsUseCase.run(),
+                observeBuildingsUseCase.run(),
+                observeAviaryUseCase.run(),
+                observeRoadsUseCase.run(),
+            ) { worldBounds, buildings, aviary, roads ->
+                state.reduceOnMain {
+                    copy(
+                        worldBounds = worldBounds,
+                        buildings = buildings,
+                        aviary = aviary,
+                        roads = roads,
+                    )
+                }
+            }.launchIn(viewModelScope)
+
+            val isSeen = isAnimalSeenUseCase.run(animalId)
+            val isFavorite = isAnimalFavoriteUseCase.run(animalId)
+            val positions = getAnimalPositionUseCase.run(animalId)
+
+            state.reduceOnMain {
+                copy(
+                    isSeen = isSeen,
+                    isFavorite = isFavorite,
+                    animalPositions = positions,
+                )
+            }
+        }
     }
 
     fun onWikiClicked(router: AnimalRouter) {

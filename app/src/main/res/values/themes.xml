@@ -26,6 +26,7 @@
         <item name="colorSmallMapBackground">#6AAE86</item>
         <item name="colorSmallMapBuilding">#5F7A6A</item>
         <item name="colorSmallMapRoad">#FFFFFF</item>
+        <item name="colorSmallMapAnimal">#F44336</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>

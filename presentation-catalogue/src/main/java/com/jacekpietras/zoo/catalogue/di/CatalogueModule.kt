@@ -35,6 +35,7 @@ val catalogueModule = module {
             observeBuildingsUseCase = get(),
             observeAviaryUseCase = get(),
             observeRoadsUseCase = get(),
+            getAnimalPositionUseCase = get(),
         )
     }
 

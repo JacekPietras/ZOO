@@ -121,11 +121,6 @@ internal fun AnimalFragmentView(
                     color = Color(MaterialColors.getColor(LocalContext.current, R.attr.colorSmallMapBackground, android.graphics.Color.MAGENTA)),
                     shape = RoundedCornerShape(8.dp)
                 ),
-//                .border(
-//                    width = 2.dp,
-//                    color = MaterialTheme.colors.primary,
-//                    shape = RoundedCornerShape(8.dp)
-//                )
             onSizeChanged = onMapSizeChanged,
             mapList = mapList,
         )

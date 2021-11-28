@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.model
 
+import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
@@ -15,4 +16,5 @@ internal data class AnimalState(
     val buildings: List<MapItemEntity.PolygonEntity> = emptyList(),
     val aviary: List<MapItemEntity.PolygonEntity> = emptyList(),
     val roads: List<MapItemEntity.PathEntity> = emptyList(),
+    val animalPositions: List<PointD> = emptyList(),
 )

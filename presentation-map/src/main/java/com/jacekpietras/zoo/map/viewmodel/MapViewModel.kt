@@ -23,7 +23,6 @@ import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.*
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
@@ -61,8 +60,7 @@ internal class MapViewModel(
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
-    private val findRegionUseCase: FindRegionUseCase,
-    private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
+    private val findNearRegionWithDistance: FindNearRegionWithDistanceUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) : ViewModel() {
@@ -160,7 +158,7 @@ internal class MapViewModel(
             animal.regionInZoo
         }
 
-        val pathToNearestWithDistance = findNearRegionWithDistance { it.id in regionIds } ?: return
+        val pathToNearestWithDistance = findNearRegionWithDistance.run { it.id in regionIds } ?: return
 
         val shortestPath = pathToNearestWithDistance.first
         val distance = pathToNearestWithDistance.second
@@ -336,21 +334,8 @@ internal class MapViewModel(
         }
     }
 
-    private suspend fun findNearRegionWithDistance(condition: (Region) -> Boolean): Pair<List<PointD>, Double>? =
-        findRegionUseCase.run(condition)
-            .map { getRegionCenterPointUseCase.run(regionId = it.id) }
-            .map { getShortestPathUseCase.run(it) }
-            .map { it to it.toLengthInMeters() }
-            .minByOrNull { (_, length) -> length }
-
     private suspend inline fun <reified T> findNearRegionWithDistance(): Pair<List<PointD>, Double>? =
-        findNearRegionWithDistance { it is T }
-
-    private fun List<PointD>.toLengthInMeters(): Double =
-        this
-            .zipWithNext()
-            .map { (p1, p2) -> haversine(p1.x, p1.y, p2.x, p2.y) }
-            .sum()
+        findNearRegionWithDistance.run { it is T }
 
     fun onAnimalClicked(router: MapRouter, animalId: AnimalId) {
         router.navigateToAnimal(animalId)

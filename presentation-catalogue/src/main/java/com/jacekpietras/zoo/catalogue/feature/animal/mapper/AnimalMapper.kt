@@ -1,8 +1,7 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.mapper
 
-import android.graphics.Color.BLUE
-import android.graphics.Color.RED
 import androidx.annotation.StringRes
+import com.jacekpietras.core.PointD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
@@ -47,6 +46,7 @@ internal class AnimalMapper {
                 fromPaths(state.roads, roadPaint),
                 fromPolygons(state.buildings, buildingPaint),
                 fromPolygons(state.aviary, aviaryPaint),
+                fromPoints(state.animalPositions, positionsPaint),
             ),
         )
 
@@ -81,6 +81,15 @@ internal class AnimalMapper {
             )
         }
 
+    private fun fromPoints(points: List<PointD>, paint: MapPaint): List<MapItem> =
+        points.map { point ->
+            MapItem.CircleMapItem(
+                point,
+                (paint as MapPaint.Circle).radius,
+                paint,
+            )
+        }
+
     private companion object {
 
         val buildingPaint: MapPaint = MapPaint.Fill(
@@ -92,6 +101,10 @@ internal class AnimalMapper {
         val roadPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Attribute(R.attr.colorSmallMapRoad),
             width = MapDimension.Dynamic.World(2.0),
+        )
+        val positionsPaint: MapPaint = MapPaint.Circle(
+            fillColor = MapColor.Attribute(R.attr.colorSmallMapAnimal),
+            radius = MapDimension.Static.Screen(dp = 4),
         )
     }
 }
