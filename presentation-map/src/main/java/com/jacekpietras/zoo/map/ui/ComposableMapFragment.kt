@@ -9,6 +9,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
@@ -60,8 +61,9 @@ class ComposableMapFragment : Fragment() {
         parametersOf(args?.animalId, args?.regionId)
     }
     private val router by lazy { MapRouterImpl(findNavController()) }
-    private val paintBaker by lazy { ComposablePaintBaker(requireActivity()) }
     private val permissionChecker = GpsPermissionRequester(fragment = this)
+
+    private val paintBaker by lazy { ComposablePaintBaker(requireActivity()) }
     private val mapLogic = MapViewLogic(
         invalidate = { mapList.value = it },
         bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
@@ -113,10 +115,11 @@ class ComposableMapFragment : Fragment() {
             }
             Box(modifier = Modifier) {
                 ComposableMapView(
+                    modifier = Modifier.fillMaxSize(),
                     onSizeChanged = mapLogic::onSizeChanged,
                     onClick = mapLogic::onClick,
                     onTransform = mapLogic::onTransform,
-                    mapList = mapList.observeAsState(),
+                    mapList = mapList.observeAsState().value,
                 )
                 MapActionChips(
                     isVisible = viewState.isMapActionsVisible,

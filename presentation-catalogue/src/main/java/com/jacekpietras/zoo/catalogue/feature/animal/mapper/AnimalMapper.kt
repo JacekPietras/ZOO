@@ -1,11 +1,20 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.mapper
 
+import android.graphics.Color.BLUE
+import android.graphics.Color.RED
 import androidx.annotation.StringRes
+import com.jacekpietras.mapview.model.MapColor
+import com.jacekpietras.mapview.model.MapDimension
+import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.mapview.model.MapPaint
+import com.jacekpietras.mapview.model.PathD
+import com.jacekpietras.mapview.model.PolygonD
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
 import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.domain.model.MapItemEntity
 
 internal class AnimalMapper {
 
@@ -33,6 +42,12 @@ internal class AnimalMapper {
                 state.isFavorite -> Text(R.string.is_not_favorite)
                 else -> Text(R.string.is_favorite)
             },
+            worldBounds = state.worldBounds,
+            mapData = flatListOf(
+                fromPaths(state.roads, roadPaint),
+                fromPolygons(state.buildings, buildingPaint),
+                fromPolygons(state.aviary, aviaryPaint),
+            ),
         )
 
     private fun paragraph(@StringRes title: Int, content: String): TextParagraph? =
@@ -44,4 +59,39 @@ internal class AnimalMapper {
         } else {
             null
         }
+
+    private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
+
+    private fun fromPolygons(
+        polygons: List<MapItemEntity.PolygonEntity>,
+        paint: MapPaint
+    ): List<MapItem> =
+        polygons.map { polygon ->
+            MapItem.PolygonMapItem(
+                PolygonD(polygon.vertices),
+                paint,
+            )
+        }
+
+    private fun fromPaths(paths: List<MapItemEntity.PathEntity>, paint: MapPaint): List<MapItem> =
+        paths.map { path ->
+            MapItem.PathMapItem(
+                PathD(path.vertices),
+                paint,
+            )
+        }
+
+    private companion object {
+
+        val buildingPaint: MapPaint = MapPaint.Fill(
+            fillColor = MapColor.Hard(RED),
+        )
+        val aviaryPaint: MapPaint = MapPaint.Fill(
+            fillColor = MapColor.Hard(RED),
+        )
+        val roadPaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Hard(BLUE),
+            width = MapDimension.Dynamic.World(2.0),
+        )
+    }
 }

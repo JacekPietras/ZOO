@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
@@ -15,8 +16,14 @@ import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalSeenUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveAviaryUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveBuildingsUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveRoadsUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 
 internal class AnimalViewModel(
     animalId: AnimalId,
@@ -25,6 +32,11 @@ internal class AnimalViewModel(
     isAnimalSeenUseCase: IsAnimalSeenUseCase,
     isAnimalFavoriteUseCase: IsAnimalFavoriteUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
+
+    observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
+    observeBuildingsUseCase: ObserveBuildingsUseCase,
+    observeAviaryUseCase: ObserveAviaryUseCase,
+    observeRoadsUseCase: ObserveRoadsUseCase,
 ) : ViewModel() {
 
     private val state = MutableLiveData<AnimalState>()
@@ -49,6 +61,22 @@ internal class AnimalViewModel(
                 }
             }
         }
+
+        combine(
+            observeWorldBoundsUseCase.run(),
+            observeBuildingsUseCase.run(),
+            observeAviaryUseCase.run(),
+            observeRoadsUseCase.run(),
+        ) { worldBounds, buildings, aviary, roads ->
+            state.reduceOnMain {
+                copy(
+                    worldBounds = worldBounds,
+                    buildings = buildings,
+                    aviary = aviary,
+                    roads = roads,
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onWikiClicked(router: AnimalRouter) {

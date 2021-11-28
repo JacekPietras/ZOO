@@ -14,18 +14,19 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.*
-import timber.log.Timber
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
 
 @Composable
 fun ComposableMapView(
+    modifier:Modifier = Modifier,
     onSizeChanged: (Int, Int) -> Unit,
-    onClick: (Float, Float) -> Unit,
-    onTransform: (Float, Float, Float, Float) -> Unit,
-    mapList: State<List<MapViewLogic.RenderItem<ComposablePaint>>?>,
+    onClick: (Float, Float) -> Unit = { _, _ -> },
+    onTransform: (Float, Float, Float, Float) -> Unit = { _, _, _, _ -> },
+    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
 ) {
-    Canvas(modifier = Modifier
-        .fillMaxSize()
+    Canvas(modifier = modifier
         .clipToBounds()
         .pointerInput(Unit) {
             detectTransformGestures { _, pan, zoomChange, rotationChange ->
@@ -47,7 +48,7 @@ fun ComposableMapView(
     ) {
         onSizeChanged(size.width.toInt(), size.height.toInt())
 
-        mapList.value?.forEach {
+        mapList?.forEach {
             when (it) {
                 is RenderPathItem -> drawPath(it.shape, it.paint, false)
                 is RenderPolygonItem -> drawPath(it.shape, it.paint, true)

@@ -8,10 +8,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.composethemeadapter.MdcTheme
-import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
+import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.ui.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,17 +28,37 @@ class AnimalFragment : Fragment() {
     }
     private val router by lazy { AnimalRouterImpl(::requireActivity, findNavController()) }
 
+    private val paintBaker by lazy { ComposablePaintBaker(requireActivity()) }
+    private val mapLogic = MapViewLogic(
+        invalidate = { mapList.value = it },
+        bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
+        bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
+        bakeDimension = { paintBaker.bakeDimension(it) },
+    )
+    private val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
+
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
             val viewState by viewModel.viewState.observeAsState()
 
+            viewState?.let {
+                with(it) {
+                    mapLogic.worldData = MapViewLogic.WorldData(
+                        bounds = worldBounds,
+                        objectList = mapData,
+                    )
+                }
+            }
+
             MdcTheme {
                 AnimalFragmentView(
                     viewState = viewState,
+                    mapList = mapList.observeAsState().value,
                     onWebClicked = { viewModel.onWebClicked(router) },
                     onWikiClicked = { viewModel.onWikiClicked(router) },
                     onNavClicked = { viewModel.onNavClicked(router) },
                     onFavoriteClicked = { viewModel.onFavoriteClicked() },
+                    onMapSizeChanged = mapLogic::onSizeChanged,
                 )
             }
         }

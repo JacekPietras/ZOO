@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
@@ -36,6 +37,9 @@ import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.ui.ComposableMapView
+import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
@@ -45,9 +49,11 @@ import com.jacekpietras.zoo.core.text.Text
 @Composable
 internal fun AnimalFragmentView(
     viewState: AnimalViewState?,
+    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
     onWebClicked: () -> Unit,
     onWikiClicked: () -> Unit,
     onNavClicked: () -> Unit,
+    onMapSizeChanged: (Int, Int) -> Unit,
     onFavoriteClicked: () -> Unit,
 ) {
     if (viewState == null) return
@@ -84,6 +90,14 @@ internal fun AnimalFragmentView(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        ComposableMapView(
+            Modifier
+                .fillMaxWidth()
+                .height(96.dp),
+            onSizeChanged = onMapSizeChanged,
+            mapList = mapList,
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         viewState.content.forEach {
@@ -285,6 +299,7 @@ private fun SimpleButton(
         )
     }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 private fun AnimalFragmentPreview() {
@@ -306,9 +321,11 @@ private fun AnimalFragmentPreview() {
     )
     AnimalFragmentView(
         viewState = viewState,
+        mapList = emptyList(),
         onWebClicked = {},
         onWikiClicked = {},
         onNavClicked = {},
         onFavoriteClicked = {},
+        onMapSizeChanged = { _, _ -> },
     )
 }
