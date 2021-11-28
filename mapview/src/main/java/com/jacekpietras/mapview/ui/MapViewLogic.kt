@@ -30,7 +30,7 @@ class MapViewLogic<T>(
             if (!value.bounds.contains(centerGpsCoordinate)) {
                 centerGpsCoordinate = PointD(value.bounds.centerX(), value.bounds.centerY())
             }
-            maxZoom = min(abs(value.bounds.width()), abs(value.bounds.height())) / 2
+            maxZoom = min(abs(value.bounds.width()), abs(value.bounds.height())) / 1.6
             minZoom = maxZoom / 10
 
             worldPreparedList = value.objectList.toPreparedItems()
