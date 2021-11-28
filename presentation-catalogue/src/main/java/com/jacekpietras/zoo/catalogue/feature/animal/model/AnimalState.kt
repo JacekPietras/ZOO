@@ -17,4 +17,5 @@ internal data class AnimalState(
     val aviary: List<MapItemEntity.PolygonEntity> = emptyList(),
     val roads: List<MapItemEntity.PathEntity> = emptyList(),
     val animalPositions: List<PointD> = emptyList(),
+    val pathsToAnimal: List<MapItemEntity.PathEntity> = emptyList(),
 )

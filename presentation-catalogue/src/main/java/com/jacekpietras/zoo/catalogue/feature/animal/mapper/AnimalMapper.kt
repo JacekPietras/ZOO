@@ -44,6 +44,7 @@ internal class AnimalMapper {
             worldBounds = state.worldBounds,
             mapData = flatListOf(
                 fromPaths(state.roads, roadPaint),
+                fromPaths(state.pathsToAnimal, pathPaint),
                 fromPolygons(state.buildings, buildingPaint),
                 fromPolygons(state.aviary, aviaryPaint),
                 fromPoints(state.animalPositions, positionsPaint),
@@ -101,6 +102,11 @@ internal class AnimalMapper {
         val roadPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Attribute(R.attr.colorSmallMapRoad),
             width = MapDimension.Dynamic.World(2.0),
+        )
+        val pathPaint: MapPaint = MapPaint.DashedStroke(
+            strokeColor = MapColor.Attribute(R.attr.colorSmallMapAnimal),
+            width = MapDimension.Dynamic.World(4.0),
+            pattern = MapDimension.Static.Screen(dp = 4),
         )
         val positionsPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Attribute(R.attr.colorSmallMapAnimal),

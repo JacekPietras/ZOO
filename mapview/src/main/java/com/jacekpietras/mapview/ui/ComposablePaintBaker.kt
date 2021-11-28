@@ -109,19 +109,38 @@ class ComposablePaintBaker(
         }
 
     private fun MapPaint.DashedStroke.toCanvasPaint(): PaintHolder<ComposablePaint> =
-        PaintHolder.Static(
-            ComposablePaint.Stroke(
-                color = strokeColor.toColorInt(context).let(::Color),
-                width = width.toPixels(context),
-                pathEffect = dashPathEffect(
-                    floatArrayOf(
-                        pattern.toPixels(context),
-                        pattern.toPixels(context),
-                    ),
-                    phase = 0f,
+        when (width) {
+            is MapDimension.Static ->
+                PaintHolder.Static(
+                    ComposablePaint.Stroke(
+                        color = strokeColor.toColorInt(context).let(::Color),
+                        width = width.toPixels(context),
+                        pathEffect = dashPathEffect(
+                            floatArrayOf(
+                                pattern.toPixels(context),
+                                pattern.toPixels(context),
+                            ),
+                            phase = 0f,
+                        )
+                    )
                 )
-            )
-        )
+            is MapDimension.Dynamic -> {
+                val color = strokeColor.toColorInt(context).let(::Color)
+                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
+                    ComposablePaint.Stroke(
+                        color = color,
+                        width = width.toPixels(zoom, position, screenWidthInPixels),
+                        pathEffect = dashPathEffect(
+                            floatArrayOf(
+                                pattern.toPixels(context),
+                                pattern.toPixels(context),
+                            ),
+                            phase = 0f,
+                        )
+                    )
+                }
+            }
+        }
 
     private fun MapPaint.FillWithBorder.toCanvasPaint(): PaintHolder<ComposablePaint> =
         PaintHolder.Static(

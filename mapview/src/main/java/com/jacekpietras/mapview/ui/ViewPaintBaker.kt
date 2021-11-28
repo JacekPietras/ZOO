@@ -127,21 +127,42 @@ internal class ViewPaintBaker(
         }
 
     private fun MapPaint.DashedStroke.toCanvasPaint(): PaintHolder<Paint> =
-        PaintHolder.Static(
-            Paint().apply {
-                style = Paint.Style.STROKE
-                isAntiAlias = true
+        when (width) {
+            is MapDimension.Static ->
+                PaintHolder.Static(
+                    Paint().apply {
+                        style = Paint.Style.STROKE
+                        isAntiAlias = true
 
-                color = strokeColor.toColorInt(context)
-                strokeWidth = width.toPixels(context)
-                pathEffect = DashPathEffect(
-                    floatArrayOf(
-                        pattern.toPixels(context),
-                        pattern.toPixels(context)
-                    ), 0f
+                        color = strokeColor.toColorInt(context)
+                        strokeWidth = width.toPixels(context)
+                        pathEffect = DashPathEffect(
+                            floatArrayOf(
+                                pattern.toPixels(context),
+                                pattern.toPixels(context)
+                            ), 0f
+                        )
+                    }
                 )
+            is MapDimension.Dynamic -> {
+                val strokeColor = strokeColor.toColorInt(context)
+                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
+                    Paint().apply {
+                        style = Paint.Style.STROKE
+                        isAntiAlias = true
+
+                        color = strokeColor
+                        strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
+                        pathEffect = DashPathEffect(
+                            floatArrayOf(
+                                pattern.toPixels(context),
+                                pattern.toPixels(context)
+                            ), 0f
+                        )
+                    }
+                }
             }
-        )
+        }
 
     private fun MapPaint.FillWithBorder.toCanvasPaint(): PaintHolder<Paint> =
         PaintHolder.Static(

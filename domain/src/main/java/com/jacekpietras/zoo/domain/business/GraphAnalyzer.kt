@@ -42,40 +42,52 @@ internal object GraphAnalyzer {
         technicalAllowed: Boolean = false,
     ): List<Node> {
         mutex.withLock {
-            val nodes = waitForNodes()
 
-            val cleanupList: MutableList<Node> = mutableListOf()
-
-            val start = when (startPoint.point) {
-                startPoint.near1.point -> startPoint.near1
-                startPoint.near2.point -> startPoint.near2
-                else -> nodes.createAndConnect(startPoint)
-                    .also { cleanupList.add(it) }
-            }
-
-            val end = when (endPoint.point) {
-                endPoint.near1.point -> endPoint.near1
-                endPoint.near2.point -> endPoint.near2
-                else -> nodes.createAndConnect(endPoint)
-                    .also { cleanupList.add(it) }
-            }
-
-            val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed).getPath()
-
-            cleanupList.forEach { fake ->
-                val edges = fake.edges.toList()
-                if (edges.size > 2) throw IllegalStateException("more than two edges in fake node")
-
-                val edge1 = edges[0]
-                val edge2 = edges[1]
-
-                edge1.node.disconnect(fake)
-                edge2.node.disconnect(fake)
-                nodes.remove(fake)
-            }
-
-            return result
+            return getShortestPathJob(
+                endPoint = endPoint,
+                startPoint = startPoint,
+                technicalAllowed = technicalAllowed,
+            )
         }
+    }
+
+    suspend fun getShortestPathJob(
+        endPoint: SnappedOnEdge,
+        startPoint: SnappedOnEdge,
+        technicalAllowed: Boolean = false,
+    ): List<Node> {
+        val nodes = waitForNodes()
+        val cleanupList: MutableList<Node> = mutableListOf()
+
+        val start = when (startPoint.point) {
+            startPoint.near1.point -> startPoint.near1
+            startPoint.near2.point -> startPoint.near2
+            else -> nodes.createAndConnect(startPoint)
+                .also { cleanupList.add(it) }
+        }
+
+        val end = when (endPoint.point) {
+            endPoint.near1.point -> endPoint.near1
+            endPoint.near2.point -> endPoint.near2
+            else -> nodes.createAndConnect(endPoint)
+                .also { cleanupList.add(it) }
+        }
+
+        val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed).getPath()
+
+        cleanupList.forEach { fake ->
+            val edges = fake.edges.toList()
+            if (edges.size > 2) throw IllegalStateException("more than two edges in fake node")
+
+            val edge1 = edges[0]
+            val edge2 = edges[1]
+
+            edge1.node.disconnect(fake)
+            edge2.node.disconnect(fake)
+            nodes.remove(fake)
+        }
+
+        return result
     }
 
     suspend fun getShortestPath(
@@ -92,7 +104,7 @@ internal object GraphAnalyzer {
             val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = true)
             val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowed)
 
-            return getShortestPathWithContext(
+            return getShortestPathJob(
                 startPoint = snapStart,
                 endPoint = snapEnd,
                 technicalAllowed = technicalAllowed,

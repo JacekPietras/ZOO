@@ -29,7 +29,7 @@ sealed class MapPaint {
     ) : MapPaint()
 
     data class DashedStroke(
-        val width: MapDimension.Static,
+        val width: MapDimension,
         val pattern: MapDimension.Static,
         val strokeColor: MapColor,
     ) : MapPaint()
