@@ -28,10 +28,10 @@ internal class AnimalMapper {
             isNavLinkVisible = state.animal.regionInZoo.isNotEmpty(),
             images = state.animal.photos,
             isSeen = state.isSeen,
-            favoriteButtonText = if (state.isFavorite) {
-                Text(R.string.is_not_favorite)
-            } else {
-                Text(R.string.is_favorite)
+            favoriteButtonText = when {
+                state.isFavorite == null -> Text.Empty
+                state.isFavorite -> Text(R.string.is_not_favorite)
+                else -> Text(R.string.is_favorite)
             },
         )
 

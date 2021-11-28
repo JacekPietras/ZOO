@@ -10,9 +10,11 @@ import com.jacekpietras.zoo.data.cache.di.MAP_VISITED_ROADS
 import com.jacekpietras.zoo.data.database.ZooDatabase
 import com.jacekpietras.zoo.data.parser.RegionIdAdapter
 import com.jacekpietras.zoo.data.repository.AnimalRepositoryImpl
+import com.jacekpietras.zoo.data.repository.FavoritesRepositoryImpl
 import com.jacekpietras.zoo.data.repository.GpsRepositoryImpl
 import com.jacekpietras.zoo.data.repository.MapRepositoryImpl
 import com.jacekpietras.zoo.domain.repository.AnimalRepository
+import com.jacekpietras.zoo.domain.repository.FavoritesRepository
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import com.squareup.moshi.Moshi
@@ -55,6 +57,11 @@ internal val repositoryModule = module {
         AnimalRepositoryImpl(
             context = androidContext(),
             moshi = get(),
+        )
+    }
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(
+            favoritesDao = get<ZooDatabase>().favoriteDao(),
         )
     }
 }

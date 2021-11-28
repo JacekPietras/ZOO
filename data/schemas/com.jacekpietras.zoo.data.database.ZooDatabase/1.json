@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5e372abd13aa4f20b08a36642efa6d3f",
+    "identityHash": "176d09f9b518769f50735e53e1b6146f",
     "entities": [
       {
         "tableName": "gps_history",
@@ -35,12 +35,38 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "favorite",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`animalId` TEXT NOT NULL, `isFavorite` INTEGER NOT NULL, PRIMARY KEY(`animalId`))",
+        "fields": [
+          {
+            "fieldPath": "animalId",
+            "columnName": "animalId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "isFavorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "animalId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5e372abd13aa4f20b08a36642efa6d3f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '176d09f9b518769f50735e53e1b6146f')"
     ]
   }
 }

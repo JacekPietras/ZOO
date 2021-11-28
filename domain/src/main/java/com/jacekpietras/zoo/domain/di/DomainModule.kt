@@ -235,10 +235,12 @@ val domainModule = module {
     }
     factory {
         IsAnimalFavoriteUseCase(
+            favoritesRepository = get(),
         )
     }
     factory {
         SetAnimalFavoriteUseCase(
+            favoritesRepository = get(),
         )
     }
 }

@@ -64,7 +64,7 @@ internal class AnimalViewModel(
     }
 
     fun onFavoriteClicked() {
-        val isFavorite = !currentState.isFavorite
+        val isFavorite = (currentState.isFavorite ?: false).not()
         val animalId = currentState.animalId
 
         launchInBackground {

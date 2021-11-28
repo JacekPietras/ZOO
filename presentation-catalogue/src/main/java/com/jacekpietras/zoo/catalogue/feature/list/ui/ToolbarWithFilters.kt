@@ -30,7 +30,7 @@ internal fun ToolbarWithFilters(
     Card(
         shape = RectangleShape,
         backgroundColor = MaterialTheme.colors.surface,
-        elevation = 6.dp,
+        elevation = 8.dp,
     ) {
         Box(
             modifier = Modifier

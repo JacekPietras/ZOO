@@ -7,5 +7,5 @@ internal data class AnimalState(
     val animalId: AnimalId,
     val animal: AnimalEntity,
     val isSeen: Boolean? = null,
-    val isFavorite: Boolean = false,
+    val isFavorite: Boolean? = null,
 )
