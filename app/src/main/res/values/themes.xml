@@ -23,6 +23,10 @@
         <item name="colorMapTechnical">#FFC9C9</item>
         <item name="colorMapTechnicalBorder">#D7DBDD</item>
 
+        <item name="colorSmallMapBackground">#6AAE86</item>
+        <item name="colorSmallMapBuilding">#5F7A6A</item>
+        <item name="colorSmallMapRoad">#FFFFFF</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,20 +24,27 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.android.material.color.MaterialColors
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.MapViewLogic
@@ -58,8 +66,14 @@ internal fun AnimalFragmentView(
 ) {
     if (viewState == null) return
 
+    var size by remember { mutableStateOf(IntSize.Zero) }
+    val parentWidth = with(LocalDensity.current) {
+        size.width.toDp()
+    }
+
     Column(
         modifier = Modifier
+            .onSizeChanged { size = it }
             .verticalScroll(rememberScrollState()),
     ) {
         ImageCarousel(
@@ -91,20 +105,31 @@ internal fun AnimalFragmentView(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        ComposableMapView(
-            Modifier
-                .fillMaxWidth()
-                .height(96.dp),
-            onSizeChanged = onMapSizeChanged,
-            mapList = mapList,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
 
         viewState.content.forEach {
             TitleView(text = it.title)
             ParagraphView(text = it.text)
             Spacer(modifier = Modifier.height(16.dp))
         }
+
+        ComposableMapView(
+            Modifier
+                .fillMaxWidth()
+                .height(parentWidth * 0.6f)
+                .padding(horizontal = 16.dp)
+                .background(
+                    color = Color(MaterialColors.getColor(LocalContext.current, R.attr.colorSmallMapBackground, android.graphics.Color.MAGENTA)),
+                    shape = RoundedCornerShape(8.dp)
+                ),
+//                .border(
+//                    width = 2.dp,
+//                    color = MaterialTheme.colors.primary,
+//                    shape = RoundedCornerShape(8.dp)
+//                )
+            onSizeChanged = onMapSizeChanged,
+            mapList = mapList,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
 
         if (viewState.isWebLinkVisible || viewState.isWikiLinkVisible) {
             TitleView(text = Text(R.string.read_more))

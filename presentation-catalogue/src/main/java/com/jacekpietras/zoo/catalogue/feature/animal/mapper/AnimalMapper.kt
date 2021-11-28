@@ -84,13 +84,13 @@ internal class AnimalMapper {
     private companion object {
 
         val buildingPaint: MapPaint = MapPaint.Fill(
-            fillColor = MapColor.Hard(RED),
+            fillColor = MapColor.Attribute(R.attr.colorSmallMapBuilding),
         )
         val aviaryPaint: MapPaint = MapPaint.Fill(
-            fillColor = MapColor.Hard(RED),
+            fillColor = MapColor.Attribute(R.attr.colorSmallMapBuilding),
         )
         val roadPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Hard(BLUE),
+            strokeColor = MapColor.Attribute(R.attr.colorSmallMapRoad),
             width = MapDimension.Dynamic.World(2.0),
         )
     }

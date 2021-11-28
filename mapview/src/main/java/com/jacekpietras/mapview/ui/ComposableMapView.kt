@@ -3,9 +3,7 @@ package com.jacekpietras.mapview.ui
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -20,31 +18,17 @@ import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
 
 @Composable
 fun ComposableMapView(
-    modifier:Modifier = Modifier,
+    modifier: Modifier = Modifier,
     onSizeChanged: (Int, Int) -> Unit,
-    onClick: (Float, Float) -> Unit = { _, _ -> },
-    onTransform: (Float, Float, Float, Float) -> Unit = { _, _, _, _ -> },
+    onClick: ((Float, Float) -> Unit)? = null,
+    onTransform: ((Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
 ) {
-    Canvas(modifier = modifier
-        .clipToBounds()
-        .pointerInput(Unit) {
-            detectTransformGestures { _, pan, zoomChange, rotationChange ->
-                onTransform(
-                    1 / zoomChange,
-                    -rotationChange,
-                    -pan.x,
-                    -pan.y,
-                )
-            }
-        }
-        .pointerInput(Unit) {
-            detectTapGestures(
-                onTap = { offset ->
-                    onClick(offset.x, offset.y)
-                },
-            )
-        }
+    Canvas(
+        modifier = modifier
+            .clipToBounds()
+            .addOnTransform(onTransform)
+            .addOnClick(onClick)
     ) {
         onSizeChanged(size.width.toInt(), size.height.toInt())
 
@@ -55,6 +39,33 @@ fun ComposableMapView(
                 is RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))
             }
         }
+    }
+}
+
+private fun Modifier.addOnTransform(onTransform: ((Float, Float, Float, Float) -> Unit)?): Modifier {
+    onTransform ?: return this
+
+    return pointerInput(Unit) {
+        detectTransformGestures { _, pan, zoomChange, rotationChange ->
+            onTransform(
+                1 / zoomChange,
+                -rotationChange,
+                -pan.x,
+                -pan.y,
+            )
+        }
+    }
+}
+
+private fun Modifier.addOnClick(onClick: ((Float, Float) -> Unit)?): Modifier {
+    onClick ?: return this
+
+    return pointerInput(Unit) {
+        detectTapGestures(
+            onTap = { offset ->
+                onClick(offset.x, offset.y)
+            },
+        )
     }
 }
 
