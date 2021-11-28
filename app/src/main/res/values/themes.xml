@@ -23,8 +23,8 @@
         <item name="colorMapTechnical">#FFC9C9</item>
         <item name="colorMapTechnicalBorder">#D7DBDD</item>
 
-        <item name="colorSmallMapBackground">#85BD9C</item>
-        <item name="colorSmallMapBuilding">#5F7A6A</item>
+        <item name="colorSmallMapBackground">#A1DAB8</item>
+        <item name="colorSmallMapBuilding">#768A7E</item>
         <item name="colorSmallMapRoad">#FFFFFF</item>
         <item name="colorSmallMapAnimal">#F44336</item>
 
