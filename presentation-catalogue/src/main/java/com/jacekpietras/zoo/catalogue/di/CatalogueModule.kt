@@ -28,6 +28,7 @@ val catalogueModule = module {
         AnimalViewModel(
             animalId = AnimalId(animalId),
             getAnimalUseCase = get(),
+            isAnimalSeenUseCase = get(),
         )
     }
 

@@ -7,7 +7,13 @@
     <string name="facts">Facts</string>
     <string name="multiplication">Multiplication</string>
     <string name="protection_and_threats">Protection and threats</string>
+    <string name="want_to_see">Want to see</string>
+    <string name="read_more">Read more</string>
     <string name="wiki">Wikipedia</string>
     <string name="web">Web Browser</string>
+    <string name="on_wiki">on Wikipedia</string>
+    <string name="on_web">on Website</string>
     <string name="nav">Navigation</string>
+    <string name="seen">Seen</string>
+    <string name="not_seen">Not seen</string>
 </resources>

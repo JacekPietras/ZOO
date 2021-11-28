@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.core.*
+import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.core.dispatcher.onMain
@@ -97,7 +98,7 @@ internal class MapViewModel(
 
         observeCompassUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(compass = it) } }
-            .launchIn(viewModelScope + Dispatchers.Default)
+            .launchIn(viewModelScope + dispatcherProvider.default)
 
         getUserPositionUseCase.run()
             .onEach {
@@ -112,19 +113,19 @@ internal class MapViewModel(
                     }
                 }
             }
-            .launchIn(viewModelScope + Dispatchers.Default)
+            .launchIn(viewModelScope + dispatcherProvider.default)
 
         observeVisitedRoadsUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(visitedRoads = it) } }
-            .launchIn(viewModelScope + Dispatchers.Default)
+            .launchIn(viewModelScope + dispatcherProvider.default)
 
         observeTakenRouteUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(takenRoute = it) } }
-            .launchIn(viewModelScope + Dispatchers.Default)
+            .launchIn(viewModelScope + dispatcherProvider.default)
 
         observeRegionsWithAnimalsInUserPositionUseCase.run()
             .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
-            .launchIn(viewModelScope + Dispatchers.Default)
+            .launchIn(viewModelScope + dispatcherProvider.default)
 
         combine(
             observeWorldBoundsUseCase.run(),

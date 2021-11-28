@@ -9,5 +9,6 @@ internal data class AnimalViewState(
     val isWikiLink: Boolean = false,
     val isWebLink: Boolean = false,
     val isNavLink: Boolean = false,
+    val isSeen: Boolean? = null,
     val images: List<String> = emptyList(),
 )

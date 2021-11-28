@@ -6,4 +6,5 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 internal data class AnimalState(
     val animalId: AnimalId,
     val animal: AnimalEntity,
+    val isSeen: Boolean? = null,
 )

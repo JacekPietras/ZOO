@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.interactor
 
+import com.jacekpietras.zoo.domain.business.PathMerger
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import com.jacekpietras.zoo.domain.repository.MapRepository
@@ -13,7 +14,6 @@ class ObserveVisitedRoadsUseCase(
     fun run(): Flow<List<PathEntity>> =
         mapRepository.observeVisitedRoads()
             .map { edges ->
-
                 val paths = mutableListOf<PathEntity>().apply {
                     edges.forEach { edge ->
                         when (edge) {

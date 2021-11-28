@@ -27,6 +27,7 @@ internal class AnimalMapper {
             isWebLink = state.animal.web.isNotBlank(),
             isNavLink = state.animal.regionInZoo.isNotEmpty(),
             images = state.animal.photos,
+            isSeen = state.isSeen,
         )
 
     private fun paragraph(@StringRes title: Int, content: String): TextParagraph? =
