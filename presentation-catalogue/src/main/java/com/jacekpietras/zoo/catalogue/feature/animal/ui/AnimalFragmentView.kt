@@ -66,45 +66,16 @@ internal fun AnimalFragmentView(
 ) {
     if (viewState == null) return
 
-    var size by remember { mutableStateOf(IntSize.Zero) }
-    val parentWidth = with(LocalDensity.current) {
-        size.width.toDp()
-    }
-
     Column(
         modifier = Modifier
-            .onSizeChanged { size = it }
             .verticalScroll(rememberScrollState()),
     ) {
-        ImageCarousel(
-            images = viewState.images,
-            contentDescription = viewState.title,
-        )
-        HeaderView(
-            Modifier.padding(bottom = 24.dp, top = 16.dp, start = 16.dp, end = 16.dp),
-            viewState.title,
-            viewState.subTitle,
-            isSeen = viewState.isSeen,
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            if (viewState.isNavLinkVisible) {
-                SimpleButton(
-                    text = Text(R.string.nav),
-                    onClick = onNavClicked,
-                )
-                SimpleButton(
-                    text = viewState.favoriteButtonText,
-                    onClick = onFavoriteClicked,
-                )
-            }
-        }
+        ImageCarousel(images = viewState.images, contentDescription = viewState.title)
         Spacer(modifier = Modifier.height(16.dp))
+
+        NavigationButtons(viewState, onNavClicked, onFavoriteClicked)
+
+        HeaderView(viewState = viewState)
 
         viewState.content.forEach {
             TitleView(text = it.title)
@@ -112,42 +83,91 @@ internal fun AnimalFragmentView(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        ComposableMapView(
-            Modifier
-                .fillMaxWidth()
-                .height(parentWidth * 0.6f)
-                .padding(horizontal = 16.dp)
-                .background(
-                    color = Color(MaterialColors.getColor(LocalContext.current, R.attr.colorSmallMapBackground, android.graphics.Color.MAGENTA)),
-                    shape = RoundedCornerShape(8.dp)
-                ),
-            onSizeChanged = onMapSizeChanged,
-            mapList = mapList,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+        ReadMoreButtonsView(viewState, onWebClicked, onWikiClicked)
 
-        if (viewState.isWebLinkVisible || viewState.isWikiLinkVisible) {
-            TitleView(text = Text(R.string.read_more))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 16.dp)
-                    .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                if (viewState.isWebLinkVisible) {
-                    SimpleButton(
-                        text = Text(R.string.on_web),
-                        onClick = onWebClicked,
-                    )
-                }
-                if (viewState.isWikiLinkVisible) {
-                    SimpleButton(
-                        text = Text(R.string.on_wiki),
-                        onClick = onWikiClicked,
-                    )
-                }
+        MapView(mapList, onMapSizeChanged)
+    }
+}
+
+@Composable
+private fun NavigationButtons(
+    viewState: AnimalViewState,
+    onNavClicked: () -> Unit,
+    onFavoriteClicked: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        if (viewState.isNavLinkVisible) {
+            SimpleButton(
+                text = Text(R.string.nav),
+                onClick = onNavClicked,
+            )
+            SimpleButton(
+                text = viewState.favoriteButtonText,
+                onClick = onFavoriteClicked,
+            )
+        }
+    }
+}
+
+@Composable
+private fun MapView(
+    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
+    onMapSizeChanged: (Int, Int) -> Unit,
+) {
+    var size by remember { mutableStateOf(IntSize.Zero) }
+    val parentWidth = with(LocalDensity.current) {
+        size.width.toDp()
+    }
+
+    ComposableMapView(
+        Modifier
+            .fillMaxWidth()
+            .height(parentWidth * 0.6f)
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
+            .onSizeChanged { size = it }
+            .background(
+                color = Color(MaterialColors.getColor(LocalContext.current, R.attr.colorSmallMapBackground, android.graphics.Color.MAGENTA)),
+                shape = RoundedCornerShape(8.dp)
+            ),
+        onSizeChanged = onMapSizeChanged,
+        mapList = mapList,
+    )
+}
+
+@Composable
+private fun ReadMoreButtonsView(
+    viewState: AnimalViewState,
+    onWebClicked: () -> Unit,
+    onWikiClicked: () -> Unit,
+) {
+    if (viewState.isWebLinkVisible || viewState.isWikiLinkVisible) {
+        TitleView(text = Text(R.string.read_more))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (viewState.isWebLinkVisible) {
+                SimpleButton(
+                    text = Text(R.string.on_web),
+                    onClick = onWebClicked,
+                )
+            }
+            if (viewState.isWikiLinkVisible) {
+                SimpleButton(
+                    text = Text(R.string.on_wiki),
+                    onClick = onWikiClicked,
+                )
             }
         }
     }
@@ -205,40 +225,38 @@ private fun ImageCarousel(
 @Composable
 private fun HeaderView(
     modifier: Modifier = Modifier,
-    text: Text,
-    subtitle: Text,
-    isSeen: Boolean?,
+    viewState: AnimalViewState,
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.padding(bottom = 24.dp, start = 16.dp, end = 16.dp),
         verticalAlignment = Alignment.Bottom,
     ) {
         Column(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = text.toString(LocalContext.current),
+                text = viewState.title.toString(LocalContext.current),
                 modifier = Modifier,
                 style = MaterialTheme.typography.h5,
             )
             Text(
-                text = subtitle.toString(LocalContext.current),
+                text = viewState.subTitle.toString(LocalContext.current),
                 modifier = Modifier,
                 style = MaterialTheme.typography.caption,
             )
         }
-        if (isSeen != null) {
-            val painter = if (isSeen) {
+        if (viewState.isSeen != null) {
+            val painter = if (viewState.isSeen) {
                 painterResource(id = R.drawable.ic_visibility_24)
             } else {
                 painterResource(id = R.drawable.ic_visibility_off_24)
             }
-            val tint = if (isSeen) {
+            val tint = if (viewState.isSeen) {
                 MaterialTheme.colors.onSurface
             } else {
                 MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
             }
-            val seenText = if (isSeen) {
+            val seenText = if (viewState.isSeen) {
                 Text(R.string.seen)
             } else {
                 Text(R.string.not_seen)
