@@ -3,13 +3,13 @@
     <style name="Theme.ZOO" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/main_green</item>
-        <item name="colorPrimaryVariant">@color/main_green</item>
+        <item name="colorPrimary">@color/primaryDark</item>
+        <item name="colorPrimaryVariant">@color/primaryDark</item>
         <item name="colorOnPrimary">@color/black</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/main_green</item>
-        <item name="colorSecondaryVariant">@color/main_green</item>
+        <item name="colorSecondary">@color/primaryDark</item>
+        <item name="colorSecondaryVariant">@color/primaryDark</item>
         <item name="colorOnSecondary">@color/black</item>
 
         <!-- Map Colors -->

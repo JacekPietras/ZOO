@@ -10,13 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.jacekpietras.zoo.core.theme.ZooTheme
 
 class PlannerFragment : Fragment() {
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
-            MdcTheme {
+            ZooTheme {
                 Text(
                     text = "Dodaj trase predefiniowaną\nDodaj obiad o danej godzinie i miejscu\nDodaj karmienie które chcesz zobaczyć\nPrzegląd trasy z godzinami",
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),

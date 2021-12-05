@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
+import com.jacekpietras.zoo.core.theme.ZooTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -52,7 +52,7 @@ class AnimalFragment : Fragment() {
                 }
             }
 
-            MdcTheme {
+            ZooTheme {
                 AnimalFragmentView(
                     viewState = viewState,
                     mapList = mapList.observeAsState().value,

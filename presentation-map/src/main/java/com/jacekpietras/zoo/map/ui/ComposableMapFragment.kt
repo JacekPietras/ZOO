@@ -36,12 +36,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.extensions.observe
+import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.CenterAtPoint
@@ -77,7 +77,7 @@ class ComposableMapFragment : Fragment() {
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
-            MdcTheme {
+            ZooTheme {
                 val viewState by viewModel.viewState.observeAsState()
                 viewState?.let { MapScreen(it) }
             }

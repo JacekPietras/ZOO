@@ -22,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,6 +53,7 @@ import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
 import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.theme.ZooTheme
 
 
 @Composable
@@ -78,8 +80,27 @@ internal fun AnimalFragmentView(
         HeaderView(viewState = viewState)
 
         if (viewState.feeding != null) {
-            TitleView(text = Text(R.string.feeding))
-            ParagraphView(text = viewState.feeding)
+            Surface(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                color = ZooTheme.colors.secondary,
+                shape = RoundedCornerShape(8.dp),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                ) {
+                    TitleView(
+                        text = Text(R.string.feeding),
+                        color = ZooTheme.colors.onSecondary,
+                    )
+                    ParagraphView(
+                        text = viewState.feeding,
+                        color = ZooTheme.colors.onSecondary,
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp))
         }
 
@@ -244,11 +265,13 @@ private fun HeaderView(
                 text = viewState.title.toString(LocalContext.current),
                 modifier = Modifier,
                 style = MaterialTheme.typography.h5,
+                color = ZooTheme.colors.textPrimaryOnSurface,
             )
             Text(
                 text = viewState.subTitle.toString(LocalContext.current),
                 modifier = Modifier,
                 style = MaterialTheme.typography.caption,
+                color = ZooTheme.colors.textPrimaryOnSurface,
             )
         }
         if (viewState.isSeen != null) {
@@ -258,9 +281,9 @@ private fun HeaderView(
                 painterResource(id = R.drawable.ic_visibility_off_24)
             }
             val tint = if (viewState.isSeen) {
-                MaterialTheme.colors.onSurface
+                ZooTheme.colors.onSurface
             } else {
-                MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+                ZooTheme.colors.onSurface.copy(alpha = 0.3f)
             }
             val seenText = if (viewState.isSeen) {
                 Text(R.string.seen)
@@ -290,22 +313,26 @@ private fun HeaderView(
 @Composable
 private fun TitleView(
     text: Text,
+    color: Color = ZooTheme.colors.onSurface,
 ) {
     Text(
         text = text.toString(LocalContext.current),
         modifier = Modifier.padding(horizontal = 16.dp),
         style = MaterialTheme.typography.subtitle2,
+        color = color,
     )
 }
 
 @Composable
 private fun ParagraphView(
     text: Text,
+    color: Color = ZooTheme.colors.onSurface,
 ) {
     Text(
         modifier = Modifier.padding(horizontal = 16.dp),
         text = text.toString(LocalContext.current),
         style = MaterialTheme.typography.body1,
+        color = color,
     )
 }
 

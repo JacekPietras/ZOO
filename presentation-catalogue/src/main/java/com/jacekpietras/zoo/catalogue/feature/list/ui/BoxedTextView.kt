@@ -12,8 +12,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.jacekpietras.zoo.catalogue.res.colorPrimary
+import com.jacekpietras.zoo.core.theme.ZooTheme
 
 @Composable
 internal fun BoxedTextView(text: String) {
@@ -46,7 +46,7 @@ private fun BoxedTextViewPreviewNight() {
 @Preview
 @Composable
 private fun ThemedBoxedTextViewPreview() {
-    MdcTheme {
+    ZooTheme {
         BoxedTextView("Lorem Ipsum")
     }
 }
