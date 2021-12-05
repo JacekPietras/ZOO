@@ -143,6 +143,7 @@ class ComposableMapFragment : Fragment() {
         FloatingActionButton(
             modifier = modifier,
             onClick = { viewModel.onLocationButtonClicked(permissionChecker) },
+            backgroundColor = ZooTheme.colors.surface,
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_my_location_24),
@@ -157,6 +158,7 @@ class ComposableMapFragment : Fragment() {
         FloatingActionButton(
             modifier = modifier,
             onClick = { viewModel.onCameraButtonClicked(router) },
+            backgroundColor = ZooTheme.colors.surface,
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_camera_24),

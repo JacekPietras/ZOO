@@ -2,10 +2,17 @@ package com.jacekpietras.zoo.catalogue.feature.animal.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -226,14 +233,31 @@ private fun ImageCarousel(
                 builder = { crossfade(true) },
             )
 
-            Image(
-                painter = painter,
-                contentDescription = contentDescription.toString(LocalContext.current),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(256.dp)
-            )
+            BoxWithConstraints {
+                val infiniteTransition = rememberInfiniteTransition()
+                val shimmerTransition = infiniteTransition.animateFloat(
+                    initialValue = 0f,
+                    targetValue = 1f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(delayMillis = 1000, durationMillis = 1000, easing = LinearEasing),
+                        repeatMode = RepeatMode.Restart
+                    ),
+                )
+
+                Image(
+                    painter = painter,
+                    contentDescription = contentDescription.toString(LocalContext.current),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .height(256.dp)
+                        .shimmerWhen(
+                            progress = shimmerTransition.value,
+                            width = maxWidth,
+                            condition = { painter.state is ImagePainter.State.Loading },
+                        ),
+                )
+            }
 
             val painterState = painter.state
             if (painterState is ImagePainter.State.Error) {
