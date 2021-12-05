@@ -13,6 +13,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
 import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.domain.model.Feeding
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 
 internal class AnimalMapper {
@@ -49,7 +50,98 @@ internal class AnimalMapper {
                 fromPolygons(state.aviary, aviaryPaint),
                 fromPoints(state.animalPositions, positionsPaint),
             ),
+            feeding =
+            if (state.animal.feeding.isNotEmpty()) {
+                Text.Listing(
+                    listOfNotNull(
+                        state.animal.feeding.filterUnique()
+                            .map { it.toText() }
+                            .filterNot { it is Text.Empty }
+                            .takeIf { it.isNotEmpty() }
+                            ?.let {
+                                Text.Listing(
+                                    it,
+                                    if (it.any { text -> text is Text.Listing }) {
+                                        Text("\n")
+                                    } else {
+                                        Text(", ")
+                                    }
+                                )
+                            },
+                        state.animal.feeding.filterRepetitive()
+                            .toText()
+                            .takeUnless { it is Text.Empty }
+                    ),
+                    Text("\n")
+                )
+            } else {
+                null
+            },
         )
+
+    private fun List<Feeding>.filterRepetitive(): Feeding =
+        Feeding(
+            time = takeIfRepetitive { it.time } ?: "",
+            weekdays = takeIfRepetitive { it.weekdays },
+            note = takeIfRepetitive { it.note },
+        )
+
+    private fun List<Feeding>.filterUnique(): List<Feeding> =
+        map { feeding ->
+            Feeding(
+                time = takeIfUnique(feeding) { it.time } ?: "",
+                weekdays = takeIfUnique(feeding) { it.weekdays },
+                note = takeIfUnique(feeding) { it.note },
+            )
+        }
+
+    private fun <T> List<Feeding>.takeIfUnique(feeding: Feeding, block: (Feeding) -> T): T? =
+        if (this.all { block(it) == block(feeding) }) {
+            null
+        } else {
+            block(feeding)
+        }
+
+    private fun <T> List<Feeding>.takeIfRepetitive(block: (Feeding) -> T): T? =
+        if (isEmpty() || !this.all { block(it) == block(first()) }) {
+            null
+        } else {
+            block(first())
+        }
+
+    private fun Feeding.toText(): Text =
+        listOfNotNull(
+            time.takeIf { it.isNotBlank() }?.let(Text::Value),
+            weekdays?.let { weekdays ->
+                if (weekdays.size <= 5) {
+                    weekdays.map { it.toWeekdayName() }.let(Text::Listing)
+                } else {
+                    Text(R.string.all_week_except) + " " +
+                            ((0..6).toList() - weekdays.toSet())
+                                .map { it.toWeekdayName() }
+                                .let(Text::Listing)
+                }
+            },
+            note?.let(Text::Value),
+        ).let {
+            when {
+                it.isEmpty() -> Text.Empty
+                it.size == 1 -> it.first()
+                else -> Text.Listing(it, Text("\n"))
+            }
+        }
+
+    private fun Int.toWeekdayName(): Text =
+        when (this) {
+            0 -> Text(R.string.monday)
+            1 -> Text(R.string.tuesday)
+            2 -> Text(R.string.wednesday)
+            3 -> Text(R.string.thursday)
+            4 -> Text(R.string.friday)
+            5 -> Text(R.string.saturday)
+            6 -> Text(R.string.sunday)
+            else -> throw IllegalArgumentException("There is not weekday $this")
+        }
 
     private fun paragraph(@StringRes title: Int, content: String): TextParagraph? =
         if (content.isNotBlank()) {

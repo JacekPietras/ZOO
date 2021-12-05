@@ -1,6 +1,10 @@
 package com.jacekpietras.zoo.domain.model
 
-import com.jacekpietras.zoo.domain.model.Division.*
+import com.jacekpietras.zoo.domain.model.Division.AMPHIBIAN
+import com.jacekpietras.zoo.domain.model.Division.BIRD
+import com.jacekpietras.zoo.domain.model.Division.FISH
+import com.jacekpietras.zoo.domain.model.Division.MAMMAL
+import com.jacekpietras.zoo.domain.model.Division.REPTILE
 
 data class AnimalEntity(
     val id: AnimalId = AnimalId("id"),
@@ -10,6 +14,7 @@ data class AnimalEntity(
     val occurrence: String,
     val environment: String,
     val food: String,
+    val feeding: List<Feeding> = emptyList(),
     val division: Division,
     val multiplication: String,
     val protectionAndThreats: String,
@@ -18,6 +23,12 @@ data class AnimalEntity(
     val web: String,
     val regionInZoo: List<RegionId> = emptyList(),
     val photos: List<String>,
+)
+
+data class Feeding(
+    val time: String,
+    val weekdays: List<Int>?,
+    val note: String?,
 )
 
 class AnimalId(id: String) {

@@ -2677,6 +2677,12 @@
 		"multiplication": "Ciąża trwa około 21 miesięcy. Rodzi się jedno młode ważące do 100 kg.",
 		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii EN – zagrożony wyginięciem. Na I załączniku Konwencji Waszyngtońskiej. Objęty programem EEP.",
 		"facts": "W Azji wykorzystywany jako zwierzę pociągowe, juczne i wierzchowe. Słonie prowadzą stadny tryb życia. Przewodnikiem stada jest stara samica.",
+		"feeding": [
+		    {
+		        "time": "13:00",
+		        "note": "przy sprzyjających warunkach atmosferycznych"
+		    }
+		],
 		"wiki": "https://pl.wikipedia.org/wiki/S%C5%82o%C5%84_indyjski",
 		"web": "https://zoo-krakow.pl/slon-indyjski/",
 		"regionInZoo": [ "slonie" ],
@@ -3654,6 +3660,16 @@
 		"multiplication": "Ciąża trwa ok. 11 miesięcy, samica rodzi 1 młode, które osiąga dojrzałość płciową pomiędzy 4 i 5 rokiem życia.",
 		"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) gatunek zaliczony do kategorii Lc – oznaczającej mniejsze ryzyko zagrożenia. Gatunek objęty regionalną, europejską księgą rodowodową ESB.",
 		"facts": "Uchatki są najsprawniej poruszającymi się na lądzie płetwonogimi. Posiadają niewielkie małżowiny uszne, od obecności których pochodzi nazwa zwierzęcia. Inna nazwa - lew morski uzasadniona jest charakterystycznym, grzmiącym rykiem wydawanym przez samce i grzywą, porastającą ich grzbiet i kark. Pod wodą uchatki przebywają zwykle około 5 minut, nurkują na głębokość do 100 metrów.",
+		"feeding": [
+		    {
+		        "time": "9:30",
+		        "weekdays": [ 0, 1, 2, 3, 5, 6 ]
+		    },
+		    {
+		        "time": "14:00",
+		        "weekdays": [ 0, 1, 2, 3, 5, 6 ]
+		    }
+		],
 		"wiki": "https://pl.wikipedia.org/wiki/Uchatka_patago%C5%84ska",
 		"web": "https://zoo-krakow.pl/uchatka-patagonska/",
 		"regionInZoo": [ "uchatka-patagonska" ],
@@ -4481,6 +4497,16 @@
     	"multiplication": "W naturze rozmnaża się w ciągu całego roku. Gniazda zakłada na klifach, w jaskiniach, rozpadlinach skalnych, rzadziej na otwartej przestrzeni. W zniesieniu 2 jaja, wysiadywanie trwa 40-42 dni.",
     	"protectionAndThreats": "Według IUCN Red List (Czerwona Lista Gatunków Zagrożonych Międzynarodowej Unii Ochrony Przyrody) i Polskiej Czerwonej Księgi gatunek zaliczony do kategorii VU – narażony na wyginięcie. Na I załączniku Konwencji Waszyngtońskiej. Liczebność tego gatunku zmniejsza się. Zagraża mu działalność człowieka – odłów, pozyskiwanie jaj i guana oraz związane z tym niepokojenie ptaków.",
     	"facts": "Gatunek ten tworzy niezbyt liczne kolonie.",
+		"feeding": [
+		    {
+		        "time": "10:00",
+		        "note": "przy sprzyjających warunkach atmosferycznych"
+		    },
+		    {
+		        "time": "13:30",
+		        "note": "przy sprzyjających warunkach atmosferycznych"
+		    }
+		],
     	"wiki": "https://pl.wikipedia.org/wiki/Pingwin_peruwia%C5%84ski",
     	"web": "https://zoo-krakow.pl/pingwiny-humboldta/",
     	"regionInZoo": [ "pingwiny" ],

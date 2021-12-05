@@ -6,7 +6,11 @@ import androidx.annotation.AttrRes
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.core.text.*
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
+import androidx.core.text.strikeThrough
+import androidx.core.text.underline
 
 sealed class Text {
 
@@ -99,10 +103,12 @@ sealed class Text {
             is Listing -> {
                 val separator = separator.toCharSeq(context)
                 buildSpannedString {
-                    texts.forEachIndexed { i, text ->
-                        if (i > 0) append(separator)
-                        append(text.toString(context))
-                    }
+                    texts
+                        .filterNot { it is Empty }
+                        .forEachIndexed { i, text ->
+                            if (i > 0) append(separator)
+                            append(text.toString(context))
+                        }
                 }
             }
             is Concat -> {

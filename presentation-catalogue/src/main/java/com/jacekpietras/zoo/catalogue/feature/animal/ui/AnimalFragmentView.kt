@@ -77,6 +77,12 @@ internal fun AnimalFragmentView(
 
         HeaderView(viewState = viewState)
 
+        if (viewState.feeding != null) {
+            TitleView(text = Text(R.string.feeding))
+            ParagraphView(text = viewState.feeding)
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         viewState.content.forEach {
             TitleView(text = it.title)
             ParagraphView(text = it.text)
@@ -350,6 +356,7 @@ private fun AnimalFragmentPreview() {
                 text = Text.Value("content"),
             )
         ),
+        feeding = Text.Value("Feeding content"),
         isWikiLinkVisible = true,
         isWebLinkVisible = true,
         isNavLinkVisible = true,

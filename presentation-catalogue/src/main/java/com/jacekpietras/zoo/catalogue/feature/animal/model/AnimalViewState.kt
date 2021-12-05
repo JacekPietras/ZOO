@@ -8,6 +8,7 @@ internal data class AnimalViewState(
     val title: Text,
     val subTitle: Text,
     val content: List<TextParagraph>,
+    val feeding: Text?,
     val isWikiLinkVisible: Boolean,
     val isWebLinkVisible: Boolean,
     val isNavLinkVisible: Boolean,

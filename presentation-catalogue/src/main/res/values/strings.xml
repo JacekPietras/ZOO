@@ -17,4 +17,13 @@
     <string name="nav">Navigation</string>
     <string name="seen">Seen</string>
     <string name="not_seen">Not seen</string>
+    <string name="feeding">Feeding</string>
+    <string name="all_week_except">All week except</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
 </resources>
