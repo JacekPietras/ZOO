@@ -1,6 +1,12 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,15 +37,24 @@ private fun shimmerBrush(
 
 @SuppressLint("ComposableModifierFactory")
 @Composable
-internal fun Modifier.shimmerWhen(progress: Float, width: Dp, condition: () -> Boolean): Modifier {
-    return if (condition()) {
+internal fun Modifier.shimmerWhen(width: Dp, condition: () -> Boolean): Modifier =
+    if (condition()) {
+        val infiniteTransition = rememberInfiniteTransition()
+        val shimmerTransition = infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(delayMillis = 1000, durationMillis = 1000, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart
+            ),
+        )
+
         background(
             shimmerBrush(
-                progress = progress,
+                progress = shimmerTransition.value,
                 width = width,
             )
         )
     } else {
         this
     }
-}

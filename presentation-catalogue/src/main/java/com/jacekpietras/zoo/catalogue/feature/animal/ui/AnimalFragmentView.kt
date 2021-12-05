@@ -234,16 +234,6 @@ private fun ImageCarousel(
             )
 
             BoxWithConstraints {
-                val infiniteTransition = rememberInfiniteTransition()
-                val shimmerTransition = infiniteTransition.animateFloat(
-                    initialValue = 0f,
-                    targetValue = 1f,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(delayMillis = 1000, durationMillis = 1000, easing = LinearEasing),
-                        repeatMode = RepeatMode.Restart
-                    ),
-                )
-
                 Image(
                     painter = painter,
                     contentDescription = contentDescription.toString(LocalContext.current),
@@ -252,7 +242,6 @@ private fun ImageCarousel(
                         .fillMaxSize()
                         .height(256.dp)
                         .shimmerWhen(
-                            progress = shimmerTransition.value,
                             width = maxWidth,
                             condition = { painter.state is ImagePainter.State.Loading },
                         ),
