@@ -9,6 +9,7 @@ import com.jacekpietras.zoo.catalogue.di.catalogueModule
 import com.jacekpietras.zoo.data.di.dataModule
 import com.jacekpietras.zoo.domain.di.domainModule
 import com.jacekpietras.zoo.map.di.mapModule
+import com.jacekpietras.zoo.planner.di.plannerModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -24,7 +25,7 @@ class ZooApplication : Application() {
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@ZooApplication)
-            modules(dataModule + domainModule + mapModule + catalogueModule + appModule)
+            modules(dataModule + domainModule + mapModule + catalogueModule + plannerModule + appModule)
         }
 
         if (BuildConfig.DEBUG) {

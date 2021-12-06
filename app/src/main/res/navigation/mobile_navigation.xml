@@ -10,6 +10,6 @@
 
     <fragment
         android:id="@+id/navigation_planner"
-        android:name="com.jacekpietras.zoo.planner.PlannerFragment"
+        android:name="com.jacekpietras.zoo.planner.ui.PlannerFragment"
         android:label="@string/title_planner" />
 </navigation>

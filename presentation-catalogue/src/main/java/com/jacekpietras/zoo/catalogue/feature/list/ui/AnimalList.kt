@@ -22,6 +22,7 @@ import com.jacekpietras.zoo.catalogue.BuildConfig
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.common.ui.shimmerWhen
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueListItem
+import com.jacekpietras.zoo.core.theme.ZooTheme
 
 @Composable
 internal fun AnimalList(
@@ -35,7 +36,7 @@ internal fun AnimalList(
         items(animalList) { animal ->
             Card(
                 shape = RoundedCornerShape(8.dp),
-                backgroundColor = MaterialTheme.colors.surface,
+                backgroundColor = ZooTheme.colors.surface,
                 elevation = 4.dp,
                 modifier = Modifier
                     .height(128.dp)
