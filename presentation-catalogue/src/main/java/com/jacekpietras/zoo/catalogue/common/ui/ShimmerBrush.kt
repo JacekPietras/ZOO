@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.catalogue.feature.animal.ui
+package com.jacekpietras.zoo.catalogue.common.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.LinearEasing

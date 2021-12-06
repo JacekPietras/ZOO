@@ -20,6 +20,7 @@ import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.jacekpietras.zoo.catalogue.BuildConfig
 import com.jacekpietras.zoo.catalogue.R
+import com.jacekpietras.zoo.catalogue.common.ui.shimmerWhen
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueListItem
 
 @Composable
@@ -40,7 +41,7 @@ internal fun AnimalList(
                     .height(128.dp)
                     .fillMaxSize(),
             ) {
-                Box(
+                BoxWithConstraints(
                     modifier = Modifier
                         .fillMaxSize()
                         .clickable { onAnimalClicked(animal.id) },
@@ -56,6 +57,10 @@ internal fun AnimalList(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
+                            .shimmerWhen(
+                                width = maxWidth,
+                                condition = { painter.state is ImagePainter.State.Loading },
+                            )
                     )
                     if (painter.state is ImagePainter.State.Error) {
                         Image(
