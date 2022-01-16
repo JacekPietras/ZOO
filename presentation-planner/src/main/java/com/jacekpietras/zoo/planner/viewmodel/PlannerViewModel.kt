@@ -25,14 +25,14 @@ internal class PlannerViewModel(
     init {
         launchInBackground {
             observeCurrentPlanUseCase.run()
-                .onEach { state.reduceOnMain { copy(plan = it.regions) } }
+                .onEach {
+                    state.reduceOnMain {
+                        copy(
+                            plan = it.stages.map { it.animals.joinToString() }
+                        )
+                    }
+                }
                 .launchIn(this)
-
-//            filterFlow
-//                .onEach { onMain { state.reduce { copy(filter = it) } } }
-//                .flatMapLatest { observeFilteredAnimalsUseCase.run(it) }
-//                .onEach { onMain { state.reduce { copy(animalList = it) } } }
-//                .launchIn(this)
         }
     }
 }
