@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.di
 
+import com.jacekpietras.zoo.domain.feature.favorites.di.favoritesModule
 import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.FindRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalPositionUseCase
@@ -18,7 +19,6 @@ import com.jacekpietras.zoo.domain.interactor.GetWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.interactor.InitializeGraphAnalyzerIfNeededUseCase
 import com.jacekpietras.zoo.domain.interactor.InsertUserCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.InsertUserPositionUseCase
-import com.jacekpietras.zoo.domain.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalSeenUseCase
 import com.jacekpietras.zoo.domain.interactor.IsRegionSeenUseCase
 import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
@@ -36,7 +36,7 @@ import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTechnicalRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveWorldBoundsUseCase
-import com.jacekpietras.zoo.domain.interactor.SetAnimalFavoriteUseCase
+import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.StopCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
@@ -248,14 +248,4 @@ val domainModule = module {
             mapRepository = get(),
         )
     }
-    factory {
-        IsAnimalFavoriteUseCase(
-            favoritesRepository = get(),
-        )
-    }
-    factory {
-        SetAnimalFavoriteUseCase(
-            favoritesRepository = get(),
-        )
-    }
-}
+} + favoritesModule + plannerModule

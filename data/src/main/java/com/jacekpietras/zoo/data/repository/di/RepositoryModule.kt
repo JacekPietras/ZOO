@@ -13,8 +13,10 @@ import com.jacekpietras.zoo.data.repository.AnimalRepositoryImpl
 import com.jacekpietras.zoo.data.repository.FavoritesRepositoryImpl
 import com.jacekpietras.zoo.data.repository.GpsRepositoryImpl
 import com.jacekpietras.zoo.data.repository.MapRepositoryImpl
+import com.jacekpietras.zoo.data.repository.PlanRepositoryImpl
+import com.jacekpietras.zoo.domain.feature.favorites.repository.FavoritesRepository
+import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.repository.AnimalRepository
-import com.jacekpietras.zoo.domain.repository.FavoritesRepository
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import com.squareup.moshi.Moshi
@@ -62,6 +64,12 @@ internal val repositoryModule = module {
     single<FavoritesRepository> {
         FavoritesRepositoryImpl(
             favoritesDao = get<ZooDatabase>().favoriteDao(),
+        )
+    }
+    single<PlanRepository> {
+        PlanRepositoryImpl(
+            planDao = get<ZooDatabase>().planDao(),
+            planMapper=get(),
         )
     }
 }

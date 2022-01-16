@@ -16,15 +16,16 @@ import com.jacekpietras.zoo.domain.interactor.GetAnimalPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.interactor.GetShortestPathUseCase
 import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
-import com.jacekpietras.zoo.domain.interactor.IsAnimalFavoriteUseCase
+import com.jacekpietras.zoo.domain.feature.favorites.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.interactor.IsAnimalSeenUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveAviaryUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveBuildingsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveWorldBoundsUseCase
-import com.jacekpietras.zoo.domain.interactor.SetAnimalFavoriteUseCase
+import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.MapItemEntity
+import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -110,7 +111,7 @@ internal class AnimalViewModel(
         router.navigateToWeb(currentState.animal.web)
     }
 
-    fun onNavClicked(router: AnimalRouter, regionId: String? = null) {
+    fun onNavClicked(router: AnimalRouter, regionId: RegionId? = null) {
         router.navigateToMap(currentState.animal.id, regionId)
     }
 

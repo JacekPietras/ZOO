@@ -8,6 +8,6 @@ internal class PlannerStateMapper {
 
     fun from(state: PlannerState): PlannerViewState =
         PlannerViewState(
-            list = listOf(PlannerItem(), PlannerItem(), PlannerItem())
+            list = state.plan.map { PlannerItem() }
         )
 }

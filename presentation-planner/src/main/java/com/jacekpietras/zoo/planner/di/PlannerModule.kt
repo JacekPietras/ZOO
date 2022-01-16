@@ -10,6 +10,7 @@ val plannerModule = module {
     viewModel {
         PlannerViewModel(
             stateMapper = get(),
+            observeCurrentPlanUseCase = get(),
         )
     }
 

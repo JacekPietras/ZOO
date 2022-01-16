@@ -5,14 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
-import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveFilteredAnimalsUseCase
+import com.jacekpietras.zoo.core.extensions.reduceOnMain
+import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
+    observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(PlannerState())
@@ -21,6 +24,10 @@ internal class PlannerViewModel(
 
     init {
         launchInBackground {
+            observeCurrentPlanUseCase.run()
+                .onEach { state.reduceOnMain { copy(plan = it.regions) } }
+                .launchIn(this)
+
 //            filterFlow
 //                .onEach { onMain { state.reduce { copy(filter = it) } } }
 //                .flatMapLatest { observeFilteredAnimalsUseCase.run(it) }
