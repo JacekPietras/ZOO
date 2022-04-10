@@ -35,9 +35,11 @@ internal class GpsRepositoryImpl(
             val jack2 = TxtParser(context, R.raw.jacek_28_02_21)
             val ola3 = TxtParser(context, R.raw.ola_08_05_21)
             val jack3 = TxtParser(context, R.raw.jacek_08_05_21)
+            val jack4 = TxtParser(context, R.raw.jacek_18_03_22)
             val eliza3 = TxtParser(context, R.raw.eliza_08_05_21)
 
-            ola1.result
+            jack4.result
+//            ola1.result
 //                        + jack1.result
 //                        + jack2.result + ola2.result
 //                        + jack3.result + ola3.result + eliza3.result
