@@ -3,7 +3,7 @@ package com.jacekpietras.zoo.domain.business
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 
-internal class Node(
+internal data class Node(
     val point: PointD,
     val edges: MutableSet<Edge> = mutableSetOf()
 ) {

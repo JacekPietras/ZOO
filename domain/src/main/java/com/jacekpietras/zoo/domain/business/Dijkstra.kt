@@ -52,12 +52,11 @@ internal class Dijkstra(
 
     private fun pathTo(start: Node, end: Node): List<Node> {
         val path = previous[end] ?: return listOf(end)
-        return listOf(pathTo(start, path), listOf(end)).flatten()
+        return pathTo(start, path) + end
     }
 
-    fun getPath(): List<Node> {
-        return pathTo(start, end)
-    }
+    fun getPath(): List<Node> =
+        pathTo(start, end)
 
     private fun <T, R> List<Pair<T, R>>.toMutableMap(): MutableMap<T, R> =
         this.toMap().toMutableMap()

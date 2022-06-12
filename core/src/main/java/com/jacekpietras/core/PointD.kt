@@ -8,6 +8,8 @@ data class PointD(
     var y: Double = 0.0,
 ) {
 
+    constructor(xInt: Number, yInt: Int) : this(xInt.toDouble(), yInt.toDouble())
+
     constructor(xFloat: Float, yFloat: Float) : this(xFloat.toDouble(), yFloat.toDouble())
 
     constructor(pair: Pair<Number, Number>) : this(pair.first.toDouble(), pair.second.toDouble())

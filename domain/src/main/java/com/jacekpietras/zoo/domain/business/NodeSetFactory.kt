@@ -4,7 +4,7 @@ import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 
-internal class Builder(
+internal class NodeSetFactory(
     roads: List<MapItemEntity.PathEntity>,
     technical: List<MapItemEntity.PathEntity>
 ) {
@@ -22,7 +22,7 @@ internal class Builder(
         calcDistances()
     }
 
-    fun build() = nodes
+    fun create() = nodes
 
     private fun addAllToGraph(list: List<MapItemEntity.PathEntity>, technical: Boolean) {
         list.forEach { path ->

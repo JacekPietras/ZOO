@@ -14,7 +14,7 @@ internal object GraphAnalyzer {
     private val mutex = Mutex()
 
     fun initialize(roads: List<PathEntity>, technical: List<PathEntity>) {
-        nodes = Builder(roads, technical).build()
+        nodes = NodeSetFactory(roads, technical).create()
     }
 
     fun isInitialized(): Boolean = nodes != null
@@ -44,50 +44,11 @@ internal object GraphAnalyzer {
         mutex.withLock {
 
             return getShortestPathJob(
-                endPoint = endPoint,
-                startPoint = startPoint,
+                start = startPoint.makeNode(),
+                end = endPoint.makeNode(),
                 technicalAllowed = technicalAllowed,
             )
         }
-    }
-
-    suspend fun getShortestPathJob(
-        endPoint: SnappedOnEdge,
-        startPoint: SnappedOnEdge,
-        technicalAllowed: Boolean = false,
-    ): List<Node> {
-        val nodes = waitForNodes()
-        val cleanupList: MutableList<Node> = mutableListOf()
-
-        val start = when (startPoint.point) {
-            startPoint.near1.point -> startPoint.near1
-            startPoint.near2.point -> startPoint.near2
-            else -> nodes.createAndConnect(startPoint)
-                .also { cleanupList.add(it) }
-        }
-
-        val end = when (endPoint.point) {
-            endPoint.near1.point -> endPoint.near1
-            endPoint.near2.point -> endPoint.near2
-            else -> nodes.createAndConnect(endPoint)
-                .also { cleanupList.add(it) }
-        }
-
-        val result = Dijkstra(nodes, start, end, technicalAllowed = technicalAllowed).getPath()
-
-        cleanupList.forEach { fake ->
-            val edges = fake.edges.toList()
-            if (edges.size > 2) throw IllegalStateException("more than two edges in fake node")
-
-            val edge1 = edges[0]
-            val edge2 = edges[1]
-
-            edge1.node.disconnect(fake)
-            edge2.node.disconnect(fake)
-            nodes.remove(fake)
-        }
-
-        return result
     }
 
     suspend fun getShortestPath(
@@ -101,36 +62,103 @@ internal object GraphAnalyzer {
             if (startPoint == null) return listOf(endPoint)
             if (nodes.isEmpty()) return listOf(endPoint)
 
-            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = true)
-            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowed)
+            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = true).makeNode()
+            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowed).makeNode()
+
+            // fixme remove that debug print
+            waitForNodes().forEach {
+                println(it.point.toString()+" e: "+it.edges.map { p -> p.node.point })
+            }
 
             return getShortestPathJob(
-                startPoint = snapStart,
-                endPoint = snapEnd,
+                start = snapStart,
+                end = snapEnd,
                 technicalAllowed = technicalAllowed,
             ).map { PointD(it.x, it.y) }
         }
     }
 
-    private suspend fun waitForNodes(): MutableSet<Node> {
+    private suspend fun getShortestPathJob(
+        start: SnappedNode,
+        end: SnappedNode,
+        technicalAllowed: Boolean = false,
+    ): List<Node> =
+        Dijkstra(
+            vertices = waitForNodes(),
+            start = start.node,
+            end = end.node,
+            technicalAllowed = technicalAllowed
+        )
+            .getPath()
+            .also { revertConnections(start, end) }
+
+    private suspend fun revertConnections(vararg nodes: SnappedNode) {
+        nodes
+            .filterIsInstance<NewSnappedNode>()
+            .map { it.node }
+            .run { revertConnections(this) }
+    }
+
+    private suspend fun revertConnections(cleanupList: List<Node>) {
+        cleanupList
+            .reversed()
+            .forEach { fake ->
+                val edges = fake.edges.toList()
+                if (edges.size > 2) throw IllegalStateException("more than two edges in fake node")
+
+                val edge1 = edges[0]
+                val edge2 = edges[1]
+                val technical = edge1.technical
+
+                edge1.node.disconnect(fake)
+                edge2.node.disconnect(fake)
+
+                edge1.node.connectAndCalc(edge2.node, technical, backward = edge1.backward)
+                edge2.node.connectAndCalc(edge1.node, technical, backward = edge2.backward)
+
+                waitForNodes().remove(fake)
+            }
+    }
+
+    internal suspend fun waitForNodes(): MutableSet<Node> {
         while (nodes == null) {
             delay(100)
         }
         return checkNotNull(nodes)
     }
 
-    private fun MutableSet<Node>.createAndConnect(
+    private suspend fun SnappedOnEdge.makeNode(): SnappedNode =
+        when (point) {
+            near1.point -> SnappedNode(near1)
+            near2.point -> SnappedNode(near2)
+            else -> createAndConnect(this)
+        }
+
+    private suspend fun createAndConnect(
         snap: SnappedOnEdge,
-    ): Node {
+    ): NewSnappedNode {
         val node = Node(snap.point)
-        val edge = snap.near1.edges.first { it.node == snap.near2 }
 
-        snap.near1.connectAndCalc(node, edge.technical, backward = false)
-        snap.near2.connectAndCalc(node, edge.technical, backward = true)
-        node.connectAndCalc(snap.near1, edge.technical, backward = false)
-        node.connectAndCalc(snap.near2, edge.technical, backward = true)
-        this.add(node)
+        val edge1 = snap.near1.edges.first { it.node == snap.near2 }
+        snap.near1.connectAndCalc(node, edge1.technical, backward = edge1.backward)
+        node.connectAndCalc(snap.near2, edge1.technical, backward = edge1.backward)
 
-        return node
+        val edge2 = snap.near2.edges.first { it.node == snap.near1 }
+        snap.near2.connectAndCalc(node, edge2.technical, backward = edge2.backward)
+        node.connectAndCalc(snap.near1, edge2.technical, backward = edge2.backward)
+
+        snap.near1.disconnect(snap.near2)
+        snap.near2.disconnect(snap.near1)
+        waitForNodes().add(node)
+
+        return NewSnappedNode(node)
     }
+
+    private open class SnappedNode(
+        val node: Node,
+    )
+
+    private class NewSnappedNode(
+        node: Node,
+    ) : SnappedNode(node)
 }
