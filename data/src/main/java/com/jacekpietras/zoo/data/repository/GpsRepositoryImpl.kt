@@ -23,6 +23,7 @@ internal class GpsRepositoryImpl(
     private val gpsDao: GpsDao,
     private val gpsHistoryMapper: GpsHistoryMapper,
     private val compassEnabledWatcher: Watcher<Boolean>,
+    private val lightSensorEnabledWatcher: Watcher<Boolean>,
 ) : GpsRepository {
 
     private val compass = MutableStateFlow(0f)
@@ -81,12 +82,12 @@ internal class GpsRepositoryImpl(
     override fun getCompass(): Flow<Float> =
         compass
 
-    override fun observeCompassEnabled(): Flow<Boolean> =
-        compassEnabledWatcher.dataFlow
-
     override suspend fun insertCompass(angle: Float) {
         compass.emit(angle)
     }
+
+    override fun observeCompassEnabled(): Flow<Boolean> =
+        compassEnabledWatcher.dataFlow
 
     override fun enableCompass() {
         compassEnabledWatcher.notifyUpdated(true)
@@ -95,4 +96,7 @@ internal class GpsRepositoryImpl(
     override fun disableCompass() {
         compassEnabledWatcher.notifyUpdated(false)
     }
+
+    override fun observeLightSensorEnabled(): Flow<Boolean> =
+        lightSensorEnabledWatcher.dataFlow
 }

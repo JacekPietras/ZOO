@@ -26,4 +26,6 @@ interface GpsRepository {
     fun disableCompass()
 
     fun observeCompassEnabled(): Flow<Boolean>
+
+    fun observeLightSensorEnabled(): Flow<Boolean>
 }

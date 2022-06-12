@@ -7,9 +7,7 @@ import android.os.Process
 import android.os.Process.killProcess
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
-import com.jacekpietras.zoo.tracking.interactor.ObserveCompassEnabledUseCase
-import com.jacekpietras.zoo.tracking.interactor.OnCompassUpdate
-import com.jacekpietras.zoo.tracking.interactor.OnLocationUpdate
+import com.jacekpietras.zoo.tracking.interactor.*
 import com.jacekpietras.zoo.tracking.utils.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -19,7 +17,9 @@ class TrackingService : LifecycleService() {
 
     private val onLocationUpdate: OnLocationUpdate by inject()
     private val onCompassUpdate: OnCompassUpdate by inject()
+    private val onLightSensorUpdate: OnLightSensorUpdate by inject()
     private val observeCompassEnabledUseCase: ObserveCompassEnabledUseCase by inject()
+    private val observeLightSensorEnabledUseCase: ObserveLightSensorEnabledUseCase by inject()
     private var serviceUtils: ServiceUtils? = null
     private val gpsLocationListener = GpsLocationListenerCompat(
         onLocationChanged = { time, lat, lon ->
@@ -39,6 +39,11 @@ class TrackingService : LifecycleService() {
         onCompassUpdate(angle)
     }
     private var compassIsWorking = false
+    private var lightIsWorking = false
+
+    private val lightListener = LightSensorListenerCompat { light, value ->
+        onLightSensorUpdate(light, value)
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -60,9 +65,19 @@ class TrackingService : LifecycleService() {
                 compassStop()
             }
         }
+
+        observeLightSensorEnabledUseCase.run().observe(lifecycleOwner = this) { enabled ->
+            if (enabled) {
+                lightStart()
+            } else {
+                lightStop()
+            }
+        }
     }
 
     override fun onDestroy() {
+        compassStop()
+        lightStop()
         navigationStop()
         super.onDestroy()
     }
@@ -71,6 +86,8 @@ class TrackingService : LifecycleService() {
         super.onStartCommand(intent, flags, startId)
 
         if (ACTION_STOP_SERVICE == intent?.action) {
+            compassStop()
+            lightStop()
             navigationStop()
             stopSelf()
         } else {
@@ -85,13 +102,11 @@ class TrackingService : LifecycleService() {
 
         gpsLocationListener.addLocationListener(this)
         gpsStatusListener.addStatusListener(this)
-        compassStart()
     }
 
     private fun navigationStop() {
         gpsLocationListener.removeLocationListener()
         gpsStatusListener.removeStatusListener()
-        compassStop()
 
         serviceUtils?.removeNotification()
         stopForeground(true)
@@ -112,6 +127,21 @@ class TrackingService : LifecycleService() {
             Timber.v("Compass stopped")
             compassListener.removeCompassListener()
             compassIsWorking = false
+        }
+    }
+
+    private fun lightStart() {
+        if (!lightIsWorking) {
+            lightListener.addLightSensorListener(this)
+            lightIsWorking = true
+        }
+    }
+
+    private fun lightStop() {
+        if (lightIsWorking) {
+            Timber.v("Light sensor stopped")
+            lightListener.removeLightSensorListener()
+            lightIsWorking = false
         }
     }
 
