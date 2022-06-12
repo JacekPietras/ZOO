@@ -65,11 +65,6 @@ internal object GraphAnalyzer {
             val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = true).makeNode()
             val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowed).makeNode()
 
-            // fixme remove that debug print
-            waitForNodes().forEach {
-                println(it.point.toString()+" e: "+it.edges.map { p -> p.node.point })
-            }
-
             return getShortestPathJob(
                 start = snapStart,
                 end = snapEnd,
@@ -116,7 +111,10 @@ internal object GraphAnalyzer {
                 edge1.node.connectAndCalc(edge2.node, technical, backward = edge1.backward)
                 edge2.node.connectAndCalc(edge1.node, technical, backward = edge2.backward)
 
-                waitForNodes().remove(fake)
+                val removed = waitForNodes().remove(fake)
+                if (!removed) {
+                    waitForNodes().removeAll { it.point == fake.point }
+                }
             }
     }
 

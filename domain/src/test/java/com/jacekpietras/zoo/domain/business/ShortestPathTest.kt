@@ -131,11 +131,11 @@ internal class ShortestPathTest {
             val p3 = PointD(2, 2)
             val nodes = GraphAnalyzer.waitForNodes().toList()
 
-            assertEquals(setOf(p1, p2, p3), nodes.map { it.point }.toSet())
-            assertEquals(setOf(p2), nodes[0].edges.map { it.node.point }.toSet())
-            assertEquals(setOf(p1, p3), nodes[1].edges.map { it.node.point }.toSet())
-            assertEquals(setOf(p2), nodes[2].edges.map { it.node.point }.toSet())
-            assertEquals(snapshot.toList(), nodes)
+            assertEquals(setOf(p1, p2, p3), nodes.map { it.point }.toSet(), "Cleanup failed")
+            assertEquals(setOf(p2), nodes[0].edges.map { it.node.point }.toSet(), "Cleanup failed")
+            assertEquals(setOf(p1, p3), nodes[1].edges.map { it.node.point }.toSet(), "Cleanup failed")
+            assertEquals(setOf(p2), nodes[2].edges.map { it.node.point }.toSet(), "Cleanup failed")
+            assertEquals(snapshot.toList(), nodes, "Cleanup failed")
         }
     }
 }
