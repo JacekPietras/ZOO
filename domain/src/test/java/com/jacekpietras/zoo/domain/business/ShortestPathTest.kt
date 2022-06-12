@@ -141,6 +141,24 @@ internal class ShortestPathTest {
             assertEquals(expected, result)
         }
 
+        @Test
+        fun `find shortest path close to edges`() = runBlockingTest {
+            val start = PointD(1.2, 1.1)
+            val end = PointD(2.1, 1.8)
+
+            val result = GraphAnalyzer.getShortestPath(
+                endPoint = end,
+                startPoint = start,
+            )
+
+            val expected = listOf(
+                PointD(1.2, 1.0),
+                PointD(2.0, 1.0),
+                PointD(2.0, 1.8),
+            )
+            assertEquals(expected, result)
+        }
+
         @AfterEach
         fun `verify graph nodes not changed`() = runBlockingTest {
             val p1 = PointD(1, 1)
