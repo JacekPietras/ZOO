@@ -124,6 +124,23 @@ internal class ShortestPathTest {
             assertEquals(expected, result)
         }
 
+        @Test
+        fun `find shortest path close to edge`() = runBlockingTest {
+            val start = PointD(1.2, 1.1)
+            val end = PointD(1.5, 1.2)
+
+            val result = GraphAnalyzer.getShortestPath(
+                endPoint = end,
+                startPoint = start,
+            )
+
+            val expected = listOf(
+                PointD(1.2, 1.0),
+                PointD(1.5, 1.0),
+            )
+            assertEquals(expected, result)
+        }
+
         @AfterEach
         fun `verify graph nodes not changed`() = runBlockingTest {
             val p1 = PointD(1, 1)
@@ -138,4 +155,38 @@ internal class ShortestPathTest {
             assertEquals(snapshot.toList(), nodes, "Cleanup failed")
         }
     }
+
+//    @Nested
+//    @DisplayName("Real problem")
+//    inner class RealProblem {
+//
+//        init {
+//            val roads = listOf(
+//                MapItemEntity.PathEntity(
+//                    listOf(
+//                        PointD(x = 19.84980956743604, y = 50.05389690987041),
+//                        PointD(x = 19.84918406297732, y = 50.053710591445)
+//                    ),
+//                )
+//            )
+//            GraphAnalyzer.initialize(roads, emptyList())
+//        }
+//
+//        @Test
+//        fun `find shortest path inside edge`() = runBlockingTest {
+//            val start = PointD(x = 19.84932634283142, y = 50.05382008212765)
+//            val end = PointD(x = 19.8496133, y = 50.0538533)
+//
+//            val result = GraphAnalyzer.getShortestPath(
+//                endPoint = end,
+//                startPoint = start,
+//            )
+//
+//            val expected = listOf(
+//                start,
+//                end,
+//            )
+//            assertEquals(expected, result)
+//        }
+//    }
 }
