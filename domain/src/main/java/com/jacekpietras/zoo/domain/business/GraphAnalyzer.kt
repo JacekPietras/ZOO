@@ -20,36 +20,38 @@ internal object GraphAnalyzer {
     fun isInitialized(): Boolean = nodes != null
 
     suspend fun getTerminalPoints(): List<PointD> =
-        waitForNodes()
-            .asSequence()
-            .filter { it.edges.size > 2 }
-            .map { it.point }
-            .toList()
+        mutex.withLock {
+            waitForNodes()
+                .asSequence()
+                .filter { it.edges.size > 2 }
+                .map { it.point }
+                .toList()
+        }
 
     suspend fun getSnappedPointOnEdge(
         point: PointD,
         technicalAllowed: Boolean,
     ): SnappedOnEdge =
-        snapper.getSnappedOnEdge(
-            waitForNodes(),
-            point,
-            technicalAllowed
-        )
+        mutex.withLock {
+            snapper.getSnappedOnEdge(
+                waitForNodes(),
+                point,
+                technicalAllowed
+            )
+        }
 
     suspend fun getShortestPathWithContext(
         endPoint: SnappedOnEdge,
         startPoint: SnappedOnEdge,
         technicalAllowed: Boolean = false,
-    ): List<Node> {
+    ): List<Node> =
         mutex.withLock {
-
-            return getShortestPathJob(
+            getShortestPathJob(
                 start = startPoint.makeNode(),
                 end = endPoint.makeNode(),
                 technicalAllowed = technicalAllowed,
             )
         }
-    }
 
     suspend fun getShortestPath(
         endPoint: PointD,
