@@ -9,6 +9,8 @@ import com.jacekpietras.zoo.data.parser.SvgParser
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.Region.AnimalRegion
+import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.async
@@ -70,6 +72,12 @@ internal class MapRepositoryImpl(
 
     override suspend fun getRoads(): List<PathEntity> =
         roads.map(::PathEntity)
+
+    // todo code those regions in map
+    override suspend fun getDarkRegions(): List<Region> =
+        listOf(
+            AnimalRegion(RegionId("nocny-pawilon"))
+        )
 
     override fun observeVisitedRoads(): Flow<List<VisitedRoadEdge>> =
         visitedRoadsWatcher.dataFlow

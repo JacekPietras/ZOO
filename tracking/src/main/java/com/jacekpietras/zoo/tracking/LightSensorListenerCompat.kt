@@ -9,7 +9,7 @@ import android.hardware.SensorManager
 import android.hardware.SensorManager.SENSOR_DELAY_NORMAL
 
 class LightSensorListenerCompat(
-    private val onLightChanged: (Boolean, value:Float) -> Unit,
+    private val onLightChanged: (value:Float) -> Unit,
 ) {
 
     private var sensorManager: SensorManager? = null
@@ -17,7 +17,7 @@ class LightSensorListenerCompat(
 
         override fun onSensorChanged(event: SensorEvent?) {
             if (event != null) {
-                onLightChanged.invoke(event.values[0] > DARK, event.values[0])
+                onLightChanged.invoke(event.values[0])
             }
         }
 
@@ -34,10 +34,5 @@ class LightSensorListenerCompat(
     fun removeLightSensorListener() {
         sensorManager?.unregisterListener(listener)
         sensorManager = null
-    }
-
-    private companion object {
-
-        const val DARK = 20
     }
 }

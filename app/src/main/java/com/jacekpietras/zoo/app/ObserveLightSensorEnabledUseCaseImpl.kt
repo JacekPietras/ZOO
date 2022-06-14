@@ -10,5 +10,4 @@ class ObserveLightSensorEnabledUseCaseImpl(
 
     override fun run(): Flow<Boolean> =
         gpsRepository.observeLightSensorEnabled()
-
 }

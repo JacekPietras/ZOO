@@ -1,12 +1,12 @@
 package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.zoo.domain.repository.GpsRepository
-import kotlinx.coroutines.flow.Flow
 
-class ObserveCompassUseCase(
+class StartLightSensorUseCase(
     private val gpsRepository: GpsRepository,
 ) {
 
-    fun run(): Flow<Float> =
-        gpsRepository.observeCompass()
+    fun run() {
+        gpsRepository.enableLightSensor()
+    }
 }

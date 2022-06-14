@@ -12,11 +12,10 @@ import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
 import com.jacekpietras.zoo.data.parser.TxtParser
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 internal class GpsRepositoryImpl(
     private val context: Context,
@@ -27,6 +26,7 @@ internal class GpsRepositoryImpl(
 ) : GpsRepository {
 
     private val compass = MutableStateFlow(0f)
+    private val luminance = MutableStateFlow(1000f)
 
     private val debugHistory by lazy {
         if (BuildConfig.DEBUG) {
@@ -79,11 +79,13 @@ internal class GpsRepositoryImpl(
         gpsDao.insert(gpsHistoryMapper.from(position))
     }
 
-    override fun getCompass(): Flow<Float> =
+    override fun observeCompass(): Flow<Float> =
         compass
 
-    override suspend fun insertCompass(angle: Float) {
-        compass.emit(angle)
+    override fun insertCompass(angle: Float) {
+        CoroutineScope(Dispatchers.Default).launch {
+            compass.emit(angle)
+        }
     }
 
     override fun observeCompassEnabled(): Flow<Boolean> =
@@ -95,6 +97,23 @@ internal class GpsRepositoryImpl(
 
     override fun disableCompass() {
         compassEnabledWatcher.notifyUpdated(false)
+    }
+
+    override fun insertLuminance(luminance: Float) {
+        CoroutineScope(Dispatchers.Default).launch {
+            this@GpsRepositoryImpl.luminance.emit(luminance)
+        }
+    }
+
+    override fun observeLuminance(): Flow<Float> =
+        luminance
+
+    override fun enableLightSensor() {
+        lightSensorEnabledWatcher.notifyUpdated(true)
+    }
+
+    override fun disableLightSensor() {
+        lightSensorEnabledWatcher.notifyUpdated(false)
     }
 
     override fun observeLightSensorEnabled(): Flow<Boolean> =

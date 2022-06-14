@@ -1,21 +1,17 @@
 package com.jacekpietras.zoo.domain.interactor
 
-import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.repository.GpsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ObserveRegionsWithAnimalsInUserPositionUseCase(
-    private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
+    private val observeRegionsInUserPositionUseCase: ObserveRegionsInUserPositionUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
-    private val gpsRepository: GpsRepository,
 ) {
 
     fun run(): Flow<List<Pair<Region, List<AnimalEntity>>>> =
-        gpsRepository.observeLatestPosition()
-            .map { position -> getRegionsContainingPointUseCase.run(PointD(position.lon, position.lat)) }
+        observeRegionsInUserPositionUseCase.run()
             .map { regions ->
                 regions
                     .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }

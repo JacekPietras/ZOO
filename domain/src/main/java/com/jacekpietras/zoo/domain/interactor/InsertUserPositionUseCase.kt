@@ -7,6 +7,9 @@ import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.repository.GpsRepository
 import com.jacekpietras.zoo.domain.repository.MapRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class InsertUserPositionUseCase(
     private val gpsRepository: GpsRepository,
@@ -18,7 +21,7 @@ class InsertUserPositionUseCase(
     private val pathListSnapper = PathListSnapper()
     private val pathSnapper = PathSnapper()
 
-    suspend fun run(position: GpsHistoryEntity) {
+    fun run(position: GpsHistoryEntity) = CoroutineScope(Dispatchers.IO).launch {
         val bounds = worldBoundsUseCase.run()
         if (bounds.contains(position.lon, position.lat)) {
             if (lastPosition == null) {

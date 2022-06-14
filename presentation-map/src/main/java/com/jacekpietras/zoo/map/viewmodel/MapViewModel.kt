@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.jacekpietras.core.*
+import com.jacekpietras.core.NullSafeMutableLiveData
+import com.jacekpietras.core.PointD
+import com.jacekpietras.core.combine
+import com.jacekpietras.core.reduce
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
@@ -31,6 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.plus
+import timber.log.Timber
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -38,6 +42,7 @@ internal class MapViewModel(
     mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
+    observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
@@ -96,6 +101,13 @@ internal class MapViewModel(
 
         observeCompassUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(compass = it) } }
+            .launchIn(viewModelScope + dispatcherProvider.default)
+
+        observeSuggestedThemeTypeUseCase.run()
+            .onEach {
+                volatileState.reduceOnMain { copy(suggestedThemeType = it) }
+                Timber.e("dupa $it")
+            }
             .launchIn(viewModelScope + dispatcherProvider.default)
 
         getUserPositionUseCase.run()

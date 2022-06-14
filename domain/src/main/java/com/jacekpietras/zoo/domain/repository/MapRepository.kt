@@ -27,6 +27,8 @@ interface MapRepository {
 
     suspend fun getRoads(): List<PathEntity>
 
+    suspend fun getDarkRegions(): List<Region>
+
     fun observeVisitedRoads(): Flow<List<VisitedRoadEdge>>
 
     fun getVisitedRoads(): List<VisitedRoadEdge>?

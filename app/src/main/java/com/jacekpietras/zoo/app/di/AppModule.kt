@@ -19,7 +19,9 @@ val appModule = module {
     }
 
     factory<OnLightSensorUpdate> {
-        OnLightSensorUpdateImpl()
+        OnLightSensorUpdateImpl(
+            gpsRepository = get(),
+        )
     }
 
     factory<ObserveCompassEnabledUseCase> {

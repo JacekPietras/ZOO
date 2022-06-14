@@ -39,11 +39,10 @@ class TrackingService : LifecycleService() {
         onCompassUpdate(angle)
     }
     private var compassIsWorking = false
-    private var lightIsWorking = false
-
-    private val lightListener = LightSensorListenerCompat { light, value ->
-        onLightSensorUpdate(light, value)
+    private val lightSensorListener = LightSensorListenerCompat { value ->
+        onLightSensorUpdate(value)
     }
+    private var lightSensorIsWorking = false
 
     override fun onCreate() {
         super.onCreate()
@@ -131,17 +130,17 @@ class TrackingService : LifecycleService() {
     }
 
     private fun lightStart() {
-        if (!lightIsWorking) {
-            lightListener.addLightSensorListener(this)
-            lightIsWorking = true
+        if (!lightSensorIsWorking) {
+            lightSensorListener.addLightSensorListener(this)
+            lightSensorIsWorking = true
         }
     }
 
     private fun lightStop() {
-        if (lightIsWorking) {
+        if (lightSensorIsWorking) {
             Timber.v("Light sensor stopped")
-            lightListener.removeLightSensorListener()
-            lightIsWorking = false
+            lightSensorListener.removeLightSensorListener()
+            lightSensorIsWorking = false
         }
     }
 

@@ -17,15 +17,23 @@ interface GpsRepository {
 
     suspend fun insertPosition(position: GpsHistoryEntity)
 
-    fun getCompass(): Flow<Float>
+    fun observeCompass(): Flow<Float>
 
-    suspend fun insertCompass(angle: Float)
+    fun insertCompass(angle: Float)
 
     fun enableCompass()
 
     fun disableCompass()
 
     fun observeCompassEnabled(): Flow<Boolean>
+
+    fun insertLuminance(luminance: Float)
+
+    fun observeLuminance(): Flow<Float>
+
+    fun enableLightSensor()
+
+    fun disableLightSensor()
 
     fun observeLightSensorEnabled(): Flow<Boolean>
 }
