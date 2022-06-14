@@ -3,10 +3,7 @@ package com.jacekpietras.zoo.core.ui
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,7 +75,7 @@ fun ClosableRowView(
             Text(
                 textAlign = TextAlign.Center,
                 text = title.toString(LocalContext.current),
-                color = Color.Black,
+                color = MaterialTheme.colors.onSurface,
             )
         }
         SideIconView(
@@ -104,7 +101,7 @@ private fun SideIconView(
     ) {
         Icon(
             painter = painterResource(iconRes),
-            tint = Color.Black,
+            tint = MaterialTheme.colors.onSurface,
             contentDescription = stringResource(contentDescription)
         )
     }
