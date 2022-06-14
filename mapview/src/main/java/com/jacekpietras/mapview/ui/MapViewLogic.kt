@@ -292,7 +292,7 @@ class MapViewLogic<T>(
 
         when {
             leftMargin + rightMargin < 0 -> {
-                zoom *= .99f
+                zoom *= 1 + leftMargin + rightMargin
                 centerGpsCoordinate = PointD(worldBounds.centerX(), centerGpsCoordinate.y)
                 result = true
             }
@@ -316,7 +316,7 @@ class MapViewLogic<T>(
 
         when {
             topMargin + bottomMargin < 0 -> {
-                zoom *= .99f
+                zoom *= 1 + topMargin + bottomMargin
                 centerGpsCoordinate = PointD(centerGpsCoordinate.x, worldBounds.centerY())
                 result = true
             }
@@ -347,9 +347,9 @@ class MapViewLogic<T>(
 
         visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
 
-        if (preventedGoingOutsideWorld()) {
+        while (preventedGoingOutsideWorld()) {
             cutOutNotVisible(false)
-            return
+//            return
         }
         if (!invalidate) {
             return
