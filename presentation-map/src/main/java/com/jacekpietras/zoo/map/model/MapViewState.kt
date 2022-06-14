@@ -5,6 +5,7 @@ import com.jacekpietras.zoo.core.text.Text
 
 internal data class MapViewState(
     val compass: Float = 0f,
+    val isDarkModeSuggested: Boolean = false,
     val userPosition: PointD = PointD(0.0, 0.0),
     val snappedPoint: PointD? = null,
     val shortestPath: List<PointD> = emptyList(),

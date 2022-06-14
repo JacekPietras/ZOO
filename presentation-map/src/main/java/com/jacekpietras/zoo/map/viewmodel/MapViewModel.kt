@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.plus
-import timber.log.Timber
 
 internal class MapViewModel(
     animalId: AnimalId?,
@@ -104,10 +103,7 @@ internal class MapViewModel(
             .launchIn(viewModelScope + dispatcherProvider.default)
 
         observeSuggestedThemeTypeUseCase.run()
-            .onEach {
-                volatileState.reduceOnMain { copy(suggestedThemeType = it) }
-                Timber.e("dupa $it")
-            }
+            .onEach { state.reduceOnMain { copy(suggestedThemeType = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
 
         getUserPositionUseCase.run()

@@ -14,6 +14,7 @@ import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapAction
@@ -34,6 +35,7 @@ internal class MapViewStateMapper() {
     fun from(state: MapState): MapViewState = with(state) {
         MapViewState(
             isGuidanceShown = isToolbarOpened,
+            isDarkModeSuggested = suggestedThemeType == ThemeType.NIGHT,
             isBackArrowShown = toolbarMode is MapToolbarMode.SelectedAnimalMode,
             title = when (toolbarMode) {
                 is MapToolbarMode.SelectedAnimalMode -> Text(toolbarMode.animal.name) + toolbarMode.distance.metersToText()

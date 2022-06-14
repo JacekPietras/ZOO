@@ -7,20 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -44,9 +37,7 @@ import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.map.R
-import com.jacekpietras.zoo.map.model.MapEffect.CenterAtPoint
-import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
-import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
+import com.jacekpietras.zoo.map.model.MapEffect.*
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.router.MapRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
@@ -77,8 +68,10 @@ class ComposableMapFragment : Fragment() {
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
-            ZooTheme {
-                val viewState by viewModel.viewState.observeAsState()
+            val viewState by viewModel.viewState.observeAsState()
+            ZooTheme(
+                isDarkTheme = isSystemInDarkTheme() || (viewState?.isDarkModeSuggested == true)
+            ) {
                 viewState?.let { MapScreen(it) }
             }
         }

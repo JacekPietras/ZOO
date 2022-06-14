@@ -39,8 +39,8 @@ class TrackingService : LifecycleService() {
         onCompassUpdate(angle)
     }
     private var compassIsWorking = false
-    private val lightSensorListener = LightSensorListenerCompat { value ->
-        onLightSensorUpdate(value)
+    private val lightSensorListener = LightSensorListenerCompat { luminance ->
+        onLightSensorUpdate(luminance)
     }
     private var lightSensorIsWorking = false
 

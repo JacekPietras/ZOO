@@ -19,7 +19,8 @@ object ZooTheme {
 
 @Composable
 fun ZooTheme(
-    colors: ZooColors = ZooColors(darkTheme = isSystemInDarkTheme()),
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
+    colors: ZooColors = ZooColors(darkTheme = isDarkTheme),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
