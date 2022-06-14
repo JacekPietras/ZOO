@@ -48,7 +48,7 @@ class AnimalFragment : Fragment() {
                         objectList = mapData,
                     )
                     mapLogic.onRotate(-12f)
-                    mapLogic.onScale(Float.MAX_VALUE)
+                    mapLogic.onScale(0f, 0f, Float.MAX_VALUE)
                 }
             }
 

@@ -158,18 +158,31 @@ class MapViewLogic<T>(
         }
     }
 
-    fun onTransform(scale: Float, rotate: Float, vX: Float, vY: Float) {
+    fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
+        val mX = pinchCorrection(cX, scale, currentWidth)
+        val mY = pinchCorrection(cY, scale, currentHeight)
+
         zoom *= scale
         worldRotation += rotate
         centeringAtUser = false
-        centerGpsCoordinate += toMovementInWorld(vX, vY)
+        centerGpsCoordinate += toMovementInWorld(vX + mX, vY + mY)
 
         cutOutNotVisible()
     }
 
-    fun onScale(scale: Float) {
+    private fun pinchCorrection(pinchPoint: Float, scale: Float, size: Int): Float {
+        val toCenter = -pinchPoint / size + 0.5f
+        val sizeChange = size * (scale - 1)
+        return toCenter * sizeChange
+    }
+
+    fun onScale(cX: Float, cY: Float, scale: Float) {
+        val mX = pinchCorrection(cX, scale, currentWidth)
+        val mY = pinchCorrection(cY, scale, currentHeight)
+
         if (scale != 1f) {
             zoom *= scale
+            centerGpsCoordinate += toMovementInWorld(mX, mY)
             cutOutNotVisible()
         }
     }

@@ -12,16 +12,14 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.*
 
 @Composable
 fun ComposableMapView(
     modifier: Modifier = Modifier,
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
-    onTransform: ((Float, Float, Float, Float) -> Unit)? = null,
+    onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
 ) {
     Canvas(
@@ -42,12 +40,14 @@ fun ComposableMapView(
     }
 }
 
-private fun Modifier.addOnTransform(onTransform: ((Float, Float, Float, Float) -> Unit)?): Modifier {
+private fun Modifier.addOnTransform(onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)?): Modifier {
     onTransform ?: return this
 
     return pointerInput(Unit) {
-        detectTransformGestures { _, pan, zoomChange, rotationChange ->
+        detectTransformGestures { c, pan, zoomChange, rotationChange ->
             onTransform(
+                c.x,
+                c.y,
                 1 / zoomChange,
                 -rotationChange,
                 -pan.x,
