@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.core.R
 import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.theme.ZooTheme
 
 @Composable
 fun ClosableToolbarView(
@@ -31,7 +32,7 @@ fun ClosableToolbarView(
 ) {
     Card(
         shape = RectangleShape,
-        backgroundColor = Color.White,
+        backgroundColor = ZooTheme.colors.surface,
         elevation = 6.dp,
         modifier = modifier.fillMaxWidth(),
     ) {
