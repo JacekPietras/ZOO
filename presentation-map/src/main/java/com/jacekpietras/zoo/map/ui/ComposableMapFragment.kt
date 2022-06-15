@@ -198,8 +198,11 @@ class ComposableMapFragment : Fragment() {
     }
 
     private fun applyDarkTheme(viewState: MapViewState?) {
-        viewModel.onDarkModeChange((resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES)
         setDefaultNightMode(if (viewState?.isNightThemeSuggested == true) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
+        val isNightTheme = (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
+        viewModel.onDarkModeChange(isNightTheme) {
+//            requireActivity().recreate()
+        }
     }
 
     private fun MapWorldViewState.applyToMap() {

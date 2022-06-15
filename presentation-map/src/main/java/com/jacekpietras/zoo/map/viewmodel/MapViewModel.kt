@@ -353,7 +353,7 @@ internal class MapViewModel(
         stopCompassUseCase.run()
     }
 
-    fun onDarkModeChange(isNightMode: Boolean) {
+    fun onDarkModeChange(isNightMode: Boolean, whenChanged:()->Unit) {
         when (currentState.isNightThemeApplied) {
             null -> {
                 state.reduce { copy(isNightThemeApplied = isNightMode) }
@@ -361,6 +361,7 @@ internal class MapViewModel(
             !isNightMode -> {
                 state.reduce { copy(isNightThemeApplied = isNightMode) }
                 refreshMapState()
+                whenChanged()
             }
         }
     }

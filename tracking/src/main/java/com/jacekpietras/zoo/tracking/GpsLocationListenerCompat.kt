@@ -136,7 +136,7 @@ class GpsLocationListenerCompat(
         LocationRequest
             .create()
             .apply {
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                priority = Priority.PRIORITY_HIGH_ACCURACY
                 interval = 100
                 fastestInterval = 100
                 smallestDisplacement = 1f
@@ -174,8 +174,8 @@ class GpsLocationListenerCompat(
         private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
     ) : LocationCallback() {
 
-        override fun onLocationAvailability(available: LocationAvailability?) {
-            onGpsStatusChanged(available?.isLocationAvailable ?: false)
+        override fun onLocationAvailability(available: LocationAvailability) {
+            onGpsStatusChanged(available.isLocationAvailable)
         }
 
         override fun onLocationResult(locationResult: LocationResult) {

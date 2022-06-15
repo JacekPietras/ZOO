@@ -42,8 +42,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
 import coil.compose.ImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.android.material.color.MaterialColors
@@ -223,9 +227,10 @@ private fun ImageCarousel(
             state = state,
             contentPadding = PaddingValues(start = sidePadding, end = sidePadding, top = sidePadding),
         ) { page ->
-            val painter = rememberImagePainter(
-                data = listState.value.getOrNull(page) ?: "no image",
-                builder = { crossfade(true) },
+            val painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current).data(data = listState.value.getOrNull(page) ?: "no image").apply(block = fun ImageRequest.Builder.() {
+                    crossfade(true)
+                }).build()
             )
 
             BoxWithConstraints {
@@ -238,13 +243,13 @@ private fun ImageCarousel(
                         .height(256.dp)
                         .shimmerWhen(
                             width = maxWidth,
-                            condition = { painter.state is ImagePainter.State.Loading },
+                            condition = { painter.state is AsyncImagePainter.State.Loading },
                         ),
                 )
             }
 
             val painterState = painter.state
-            if (painterState is ImagePainter.State.Error) {
+            if (painterState is AsyncImagePainter.State.Error) {
                 val afterRemoving = listState.value - (painterState.result.request.data as String)
 
                 if (afterRemoving.isEmpty()) {

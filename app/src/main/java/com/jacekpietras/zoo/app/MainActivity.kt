@@ -1,11 +1,15 @@
 package com.jacekpietras.zoo.app
 
+import android.content.res.Configuration
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Process
 import android.os.Process.killProcess
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -19,7 +23,13 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.getDefaultNightMode())
         super.onCreate(savedInstanceState)
+
+
+//        delegate.localNightMode = if((resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM
+
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
         binding.navView.setupWithNavController(findNavController())
         setContentView(binding.root)

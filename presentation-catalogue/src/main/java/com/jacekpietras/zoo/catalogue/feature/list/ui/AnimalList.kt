@@ -14,10 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
 import coil.compose.ImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.jacekpietras.zoo.catalogue.BuildConfig
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.common.ui.shimmerWhen
@@ -48,10 +52,9 @@ internal fun AnimalList(
                         .clickable { onAnimalClicked(animal.id) },
                     contentAlignment = Alignment.BottomEnd,
                 ) {
-                    val painter = rememberImagePainter(
-                        data = animal.img ?: "no image",
-                        builder = { crossfade(true) }
-                    )
+                    val painter = rememberAsyncImagePainter(ImageRequest.Builder(LocalContext.current).data(data = animal.img ?: "no image").apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build())
                     Image(
                         painter = painter,
                         contentDescription = null, // it's background
@@ -60,10 +63,10 @@ internal fun AnimalList(
                             .fillMaxSize()
                             .shimmerWhen(
                                 width = maxWidth,
-                                condition = { painter.state is ImagePainter.State.Loading },
+                                condition = { painter.state is AsyncImagePainter.State.Loading },
                             )
                     )
-                    if (painter.state is ImagePainter.State.Error) {
+                    if (painter.state is AsyncImagePainter.State.Error) {
                         Image(
                             painter = painterResource(R.drawable.pic_banana_leaf_rasterized_2),
                             contentDescription = null, // decorative element
