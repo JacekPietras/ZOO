@@ -21,7 +21,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.jacekpietras.zoo.catalogue.BuildConfig
 import com.jacekpietras.zoo.catalogue.R
-import com.jacekpietras.zoo.catalogue.common.ui.shimmerWhen
+import com.jacekpietras.zoo.core.ui.shimmerWhen
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueListItem
 import com.jacekpietras.zoo.core.theme.ZooTheme
 

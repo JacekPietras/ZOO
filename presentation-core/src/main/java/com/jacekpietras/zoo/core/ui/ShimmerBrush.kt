@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.catalogue.common.ui
+package com.jacekpietras.zoo.core.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.LinearEasing
@@ -37,7 +37,7 @@ private fun shimmerBrush(
 
 @SuppressLint("ComposableModifierFactory")
 @Composable
-internal fun Modifier.shimmerWhen(width: Dp, condition: () -> Boolean): Modifier =
+fun Modifier.shimmerWhen(width: Dp, condition: () -> Boolean): Modifier =
     if (condition()) {
         val infiniteTransition = rememberInfiniteTransition()
         val shimmerTransition = infiniteTransition.animateFloat(

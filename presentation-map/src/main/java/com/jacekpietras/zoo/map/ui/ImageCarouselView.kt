@@ -28,7 +28,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberImagePainter
+import com.jacekpietras.zoo.core.ui.shimmerWhen
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.model.MapCarouselItem
@@ -136,11 +138,16 @@ private fun AnimalCarouselItem(
 
 @Composable
 private fun AnimalImageView(url: String?, size: Dp) {
+    val painter = imagePainter(url)
     Image(
-        painter = imagePainter(url),
+        painter = painter,
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier
+            .shimmerWhen(
+                width = size,
+                condition = { painter.state is AsyncImagePainter.State.Loading },
+            )
             .height(size)
             .width(size)
     )
