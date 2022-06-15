@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -69,8 +70,16 @@ class ComposableMapFragment : Fragment() {
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
             val viewState by viewModel.viewState.observeAsState()
+
+//            val isNightMode = (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
+            val shouldBeNightMode =  (viewState?.isDarkModeSuggested == true)
+
+            if (isSystemInDarkTheme() != shouldBeNightMode) {
+                setDefaultNightMode(if (shouldBeNightMode) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
+            }
+
             ZooTheme(
-                isDarkTheme = isSystemInDarkTheme() || (viewState?.isDarkModeSuggested == true)
+//                isDarkTheme = isSystemInDarkTheme() || (viewState?.isDarkModeSuggested == true)
             ) {
                 viewState?.let { MapScreen(it) }
             }
