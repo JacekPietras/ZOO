@@ -15,5 +15,6 @@ internal data class MapState(
     val snappedPoint: PointD? = null,
     val shortestPath: List<PointD> = emptyList(),
     val isToolbarOpened: Boolean = false,
+    val isNightThemeApplied: Boolean? = null,
     val toolbarMode: MapToolbarMode? = null,
 )

@@ -1,5 +1,8 @@
 package com.jacekpietras.zoo.map.ui
 
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -72,23 +74,17 @@ class ComposableMapFragment : Fragment() {
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
             val viewState by viewModel.viewState.observeAsState()
+            applyDarkTheme(viewState)
 
-//            val isNightMode = (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
-            val shouldBeNightMode = (viewState?.isDarkModeSuggested == true)
-
-            if (isSystemInDarkTheme() != shouldBeNightMode) {
-                setDefaultNightMode(if (shouldBeNightMode) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
-
-                viewModel.mapWorldViewState.value?.applyToMap()
-                viewModel.volatileViewState.value?.applyToMap()
-            }
-
-            ZooTheme(
-//                isDarkTheme = isSystemInDarkTheme() || (viewState?.isDarkModeSuggested == true)
-            ) {
+            ZooTheme {
                 viewState?.let { MapScreen(it) }
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        applyDarkTheme(viewModel.viewState.value)
     }
 
     @Composable
@@ -199,6 +195,11 @@ class ComposableMapFragment : Fragment() {
 
     private fun toast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun applyDarkTheme(viewState: MapViewState?) {
+        viewModel.onDarkModeChange((resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES)
+        setDefaultNightMode(if (viewState?.isNightThemeSuggested == true) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
     private fun MapWorldViewState.applyToMap() {
