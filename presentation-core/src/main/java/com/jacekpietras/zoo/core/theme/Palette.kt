@@ -7,6 +7,9 @@ import androidx.compose.ui.graphics.Color
 object Palette {
 
     val gray200 = Color(0xffeeeeee)
+    val gray600 = Color(0xff757575)
+    val gray800 = Color(0xff424242)
+    val gray900 = Color(0xff212121)
     val white = Color.White
     val black = Color.Black
     val error = Color.Red

@@ -28,8 +28,8 @@ class ZooColors(
     val textTertiaryOnSurface: Color = if (darkTheme) textPrimaryOnSurface.copy(alpha = 0.5f) else textPrimaryOnSurface.copy(alpha = 0.7f)
 
     val divider: Color = if (darkTheme) onSurface.copy(alpha = 0.5f) else onSurface.copy(alpha = 0.7f)
-    val shimmerBg: Color = Palette.gray200
-    val shimmerShine: Color = Palette.white
+    val shimmerBg: Color = if (darkTheme) Palette.gray900 else Palette.gray200
+    val shimmerShine: Color = if (darkTheme) Palette.gray800 else Palette.white
 }
 
 internal val ZooColors.MaterialColors: Colors
