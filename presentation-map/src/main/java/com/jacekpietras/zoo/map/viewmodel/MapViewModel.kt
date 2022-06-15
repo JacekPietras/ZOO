@@ -352,22 +352,4 @@ internal class MapViewModel(
     fun onStopEvent() {
         stopCompassUseCase.run()
     }
-
-    fun onDarkModeChange(isNightMode: Boolean, whenChanged:()->Unit) {
-        when (currentState.isNightThemeApplied) {
-            null -> {
-                state.reduce { copy(isNightThemeApplied = isNightMode) }
-            }
-            !isNightMode -> {
-                state.reduce { copy(isNightThemeApplied = isNightMode) }
-                refreshMapState()
-                whenChanged()
-            }
-        }
-    }
-
-    private fun refreshMapState() {
-        volatileState.value = volatileState.value
-        mapWorldState.value = mapWorldState.value
-    }
 }
