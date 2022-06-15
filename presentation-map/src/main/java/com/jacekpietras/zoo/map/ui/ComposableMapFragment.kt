@@ -40,6 +40,8 @@ import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapEffect.*
 import com.jacekpietras.zoo.map.model.MapViewState
+import com.jacekpietras.zoo.map.model.MapVolatileViewState
+import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.GpsPermissionRequester
@@ -72,10 +74,13 @@ class ComposableMapFragment : Fragment() {
             val viewState by viewModel.viewState.observeAsState()
 
 //            val isNightMode = (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
-            val shouldBeNightMode =  (viewState?.isDarkModeSuggested == true)
+            val shouldBeNightMode = (viewState?.isDarkModeSuggested == true)
 
             if (isSystemInDarkTheme() != shouldBeNightMode) {
                 setDefaultNightMode(if (shouldBeNightMode) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
+
+                viewModel.mapWorldViewState.value?.applyToMap()
+                viewModel.volatileViewState.value?.applyToMap()
             }
 
             ZooTheme(
@@ -174,23 +179,8 @@ class ComposableMapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(viewModel) {
-            mapWorldViewState.observe(viewLifecycleOwner) {
-                with(it) {
-                    mapLogic.worldData = MapViewLogic.WorldData(
-                        bounds = worldBounds,
-                        objectList = mapData,
-                    )
-                }
-            }
-            volatileViewState.observe(viewLifecycleOwner) {
-                with(it) {
-                    mapLogic.userData = MapViewLogic.UserData(
-                        userPosition = userPosition,
-                        compass = compass,
-                        objectList = mapData,
-                    )
-                }
-            }
+            mapWorldViewState.observe(viewLifecycleOwner) { it.applyToMap() }
+            volatileViewState.observe(viewLifecycleOwner) { it.applyToMap() }
 
             effect.observe(viewLifecycleOwner) {
                 when (it) {
@@ -209,5 +199,20 @@ class ComposableMapFragment : Fragment() {
 
     private fun toast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun MapWorldViewState.applyToMap() {
+        mapLogic.worldData = MapViewLogic.WorldData(
+            bounds = worldBounds,
+            objectList = mapData,
+        )
+    }
+
+    private fun MapVolatileViewState.applyToMap() {
+        mapLogic.userData = MapViewLogic.UserData(
+            userPosition = userPosition,
+            compass = compass,
+            objectList = mapData,
+        )
     }
 }
