@@ -1,28 +1,40 @@
 package com.jacekpietras.zoo.core.ui
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.jacekpietras.zoo.core.R
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.core.theme.ZooTheme
+import kotlin.math.roundToInt
 
+private const val INITIAL = 0
+private const val SWIPED = 1
+
+@ExperimentalMaterialApi
 @Composable
 fun ClosableToolbarView(
     modifier: Modifier = Modifier,
     title: Text,
     isBackArrowShown: Boolean = true,
+    isSwipable: Boolean = false,
     onBack: () -> Unit = {},
     onClose: () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit = {},
@@ -31,7 +43,12 @@ fun ClosableToolbarView(
         shape = RectangleShape,
         backgroundColor = ZooTheme.colors.surface,
         elevation = 6.dp,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .applySwipeable(
+                isSwipable = isSwipable,
+                onClose = onClose,
+            ),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -45,6 +62,48 @@ fun ClosableToolbarView(
             content.invoke(this)
         }
     }
+}
+
+@SuppressLint("UnnecessaryComposedModifier")
+@ExperimentalMaterialApi
+private fun Modifier.applySwipeable(
+    isSwipable: Boolean,
+    onClose: () -> Unit,
+): Modifier =
+    if (isSwipable) {
+        applySwipeable(onClose)
+    } else {
+        this
+    }
+
+@ExperimentalMaterialApi
+private fun Modifier.applySwipeable(
+    onClose: () -> Unit,
+): Modifier = composed {
+    var size by remember { mutableStateOf(Size.Zero) }
+    val swipeableState = rememberSwipeableState(0)
+    val height = if (size.height == 0f) 1f else -size.height
+
+    if (swipeableState.isAnimationRunning) {
+        DisposableEffect(Unit) {
+            onDispose {
+                if (swipeableState.currentValue == SWIPED) {
+                    onClose()
+                }
+            }
+        }
+    }
+
+    onSizeChanged {
+        size = it.toSize()
+    }
+        .swipeable(
+            state = swipeableState,
+            anchors = mapOf(height to SWIPED, 0f to INITIAL),
+            thresholds = { _, _ -> FractionalThreshold(0.3f) },
+            orientation = Orientation.Vertical
+        )
+        .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
 }
 
 @Composable
