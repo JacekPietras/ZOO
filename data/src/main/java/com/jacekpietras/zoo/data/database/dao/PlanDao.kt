@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface PlanDao {
 
-    @Query("SELECT * FROM plan WHERE planId = :planId")
-    fun observePlan(planId:String): Flow<PlanDto>
+    @Query("SELECT * FROM `plan` WHERE planId = :planId")
+    fun observePlan(planId:String): Flow<PlanDto?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(plan: PlanDto)

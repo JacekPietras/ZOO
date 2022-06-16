@@ -6,6 +6,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 
 internal class PlanRepositoryImpl(
@@ -21,5 +22,6 @@ internal class PlanRepositoryImpl(
 
     override fun observePlan(planId: PlanId): Flow<PlanEntity> =
         planDao.observePlan(planId.id)
+            .filterNotNull()
             .map(planMapper::from)
 }
