@@ -47,14 +47,14 @@ private fun DrawScope.drawCircleSafe(
     radius: Float,
     center: Offset,
 ) {
-    try {
+    if (center == Offset(Float.NaN, Float.NaN)) {
+        Timber.w("Could Crash at drawCircle, offset:$center")
+    } else {
         drawCircle(
             color,
             radius,
             center,
         )
-    } catch (e: IllegalStateException) {
-        Timber.w(e, "Crash at drawCircle, offset:$center")
     }
 }
 
