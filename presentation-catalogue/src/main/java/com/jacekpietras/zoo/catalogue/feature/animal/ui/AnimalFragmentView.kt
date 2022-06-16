@@ -380,7 +380,6 @@ private fun SimpleButton(
         )
     }
 
-@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 private fun AnimalFragmentPreview() {

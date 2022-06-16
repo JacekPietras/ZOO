@@ -182,8 +182,10 @@ class MapViewLogic<T>(
 
         if (scale != 1f) {
             zoom *= scale
-            centerGpsCoordinate += toMovementInWorld(mX, mY)
-            cutOutNotVisible()
+            if (::visibleGpsCoordinate.isInitialized) {
+                centerGpsCoordinate += toMovementInWorld(mX, mY)
+                cutOutNotVisible()
+            }
         }
     }
 

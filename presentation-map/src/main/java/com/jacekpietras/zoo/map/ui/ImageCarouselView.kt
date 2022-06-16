@@ -6,14 +6,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
@@ -29,7 +22,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.jacekpietras.zoo.core.ui.shimmerWhen
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
@@ -108,10 +102,13 @@ private fun RegionCarouselItem(
 }
 
 @Composable
-private fun imagePainter(url: String?) = rememberImagePainter(
-    data = url ?: "no image",
-    builder = { crossfade(true) }
-)
+private fun imagePainter(url: String?) =
+    rememberAsyncImagePainter(
+        ImageRequest.Builder(LocalContext.current)
+            .data(data = url ?: "no image")
+            .apply(block = fun ImageRequest.Builder.() { crossfade(true) })
+            .build()
+    )
 
 @Composable
 private fun AnimalCarouselItem(
