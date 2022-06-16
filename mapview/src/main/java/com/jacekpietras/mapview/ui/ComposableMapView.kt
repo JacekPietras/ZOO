@@ -7,12 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.*
+import timber.log.Timber
 
 @Composable
 fun ComposableMapView(
@@ -34,9 +36,25 @@ fun ComposableMapView(
             when (it) {
                 is RenderPathItem -> drawPath(it.shape, it.paint, false)
                 is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
-                is RenderCircleItem -> drawCircle(it.paint.color, it.radius, Offset(it.cX, it.cY))
+                is RenderCircleItem -> drawCircleSafe(it.paint.color, it.radius, Offset(it.cX, it.cY))
             }
         }
+    }
+}
+
+private fun DrawScope.drawCircleSafe(
+    color: Color,
+    radius: Float,
+    center: Offset,
+) {
+    try {
+        drawCircle(
+            color,
+            radius,
+            center,
+        )
+    } catch (e: IllegalStateException) {
+        Timber.w(e)
     }
 }
 
