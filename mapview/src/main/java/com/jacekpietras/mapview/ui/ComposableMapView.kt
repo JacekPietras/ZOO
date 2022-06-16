@@ -54,7 +54,7 @@ private fun DrawScope.drawCircleSafe(
             center,
         )
     } catch (e: IllegalStateException) {
-        Timber.w(e)
+        Timber.w(e, "Crash at drawCircle, offset:$center")
     }
 }
 
