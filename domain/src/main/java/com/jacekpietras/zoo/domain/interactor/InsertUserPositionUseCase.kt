@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
+import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.domain.business.PathListSnapper
 import com.jacekpietras.zoo.domain.business.PathSnapper
 import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
@@ -15,6 +16,7 @@ class InsertUserPositionUseCase(
     private val gpsRepository: GpsRepository,
     private val worldBoundsUseCase: GetWorldBoundsUseCase,
     private val mapRepository: MapRepository,
+    private val stopNavigationUseCase: StopNavigationUseCase,
 ) {
 
     private var lastPosition: GpsHistoryEntity? = null
@@ -33,6 +35,16 @@ class InsertUserPositionUseCase(
             addVisitedPart(lastPosition, position)
 
             lastPosition = position
+        } else {
+            val distanceToWorld = haversine(
+                bounds.centerX(),
+                bounds.centerY(),
+                position.lon,
+                position.lat,
+            )
+            if (distanceToWorld > FAR_FROM_WORLD) {
+                stopNavigationUseCase.run()
+            }
         }
     }
 
@@ -51,5 +63,10 @@ class InsertUserPositionUseCase(
         val alreadyVisited = checkNotNull(mapRepository.getVisitedRoads())
         val updated = pathListSnapper.merge(alreadyVisited, snappedEdge)
         mapRepository.updateVisitedRoads(updated)
+    }
+
+    private companion object {
+
+        const val FAR_FROM_WORLD = 2_000
     }
 }

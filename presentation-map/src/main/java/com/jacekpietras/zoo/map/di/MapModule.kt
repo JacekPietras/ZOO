@@ -45,6 +45,7 @@ val mapModule = module {
             getAnimalsInRegionUseCase = get(),
             stopCompassUseCase = get(),
             startCompassUseCase = get(),
+            startNavigationUseCase = get(),
             observeVisitedRoadsUseCase = get(),
             loadMapUseCase = get(),
             loadVisitedRouteUseCase = get(),

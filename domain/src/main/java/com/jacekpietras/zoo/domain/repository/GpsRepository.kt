@@ -36,4 +36,10 @@ interface GpsRepository {
     fun disableLightSensor()
 
     fun observeLightSensorEnabled(): Flow<Boolean>
+
+    fun enableNavigation()
+
+    fun disableNavigation()
+
+    fun observeNavigationEnabled(): Flow<Boolean>
 }

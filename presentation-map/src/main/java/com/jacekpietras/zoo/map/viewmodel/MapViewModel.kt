@@ -44,6 +44,7 @@ internal class MapViewModel(
     observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
+    private val startNavigationUseCase: StartNavigationUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
@@ -235,6 +236,7 @@ internal class MapViewModel(
     }
 
     fun onLocationButtonClicked(permissionChecker: GpsPermissionRequester) {
+        startNavigationUseCase.run()
         permissionChecker.checkPermissions(
             rationaleTitle = R.string.gps_permission_rationale_title,
             rationaleContent = R.string.gps_permission_rationale_content,

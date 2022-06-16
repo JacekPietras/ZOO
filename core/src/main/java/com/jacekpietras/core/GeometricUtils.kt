@@ -331,6 +331,7 @@ private fun rayCrossesSegment(
     }
 }
 
+// Distance in meters
 fun haversine(p1x: Double, p1y: Double, p2x: Double, p2y: Double): Double {
     val dLat: Double = Math.toRadians(p2y - p1y)
     val dLon: Double = Math.toRadians(p2x - p1x)

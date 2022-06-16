@@ -34,6 +34,16 @@ val domainModule = module {
         )
     }
     factory {
+        StopNavigationUseCase(
+            gpsRepository = get(),
+        )
+    }
+    factory {
+        StartNavigationUseCase(
+            gpsRepository = get(),
+        )
+    }
+    factory {
         FindRegionUseCase(
             mapRepository = get(),
         )
@@ -201,6 +211,7 @@ val domainModule = module {
             gpsRepository = get(),
             mapRepository = get(),
             worldBoundsUseCase = get(),
+            stopNavigationUseCase = get(),
         )
     }
     factory {

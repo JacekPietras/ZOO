@@ -35,4 +35,10 @@ val appModule = module {
             gpsRepository = get(),
         )
     }
+
+    factory<ObserveNavigationEnabledUseCase> {
+        ObserveNavigationEnabledUseCaseImpl(
+            gpsRepository = get(),
+        )
+    }
 }

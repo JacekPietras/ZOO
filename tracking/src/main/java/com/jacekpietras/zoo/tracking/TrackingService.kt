@@ -18,6 +18,7 @@ class TrackingService : LifecycleService() {
     private val onLocationUpdate: OnLocationUpdate by inject()
     private val onCompassUpdate: OnCompassUpdate by inject()
     private val onLightSensorUpdate: OnLightSensorUpdate by inject()
+    private val observeNavigationEnabledUseCase: ObserveNavigationEnabledUseCase by inject()
     private val observeCompassEnabledUseCase: ObserveCompassEnabledUseCase by inject()
     private val observeLightSensorEnabledUseCase: ObserveLightSensorEnabledUseCase by inject()
     private var serviceUtils: ServiceUtils? = null
@@ -57,6 +58,13 @@ class TrackingService : LifecycleService() {
             actionBroadcast = ACTION_STOP_SERVICE,
         )
 
+        observeNavigationEnabledUseCase.run().observe(lifecycleOwner = this) { enabled ->
+            if (!enabled) {
+                stopEverything()
+                stopSelf()
+            }
+        }
+
         observeCompassEnabledUseCase.run().observe(lifecycleOwner = this) { enabled ->
             if (enabled) {
                 compassStart()
@@ -74,10 +82,14 @@ class TrackingService : LifecycleService() {
         }
     }
 
-    override fun onDestroy() {
+    private fun stopEverything() {
         compassStop()
         lightStop()
         navigationStop()
+    }
+
+    override fun onDestroy() {
+        stopEverything()
         super.onDestroy()
     }
 

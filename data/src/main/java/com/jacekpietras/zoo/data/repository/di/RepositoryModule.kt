@@ -43,6 +43,7 @@ internal val repositoryModule = module {
             gpsHistoryMapper = get(),
             compassEnabledWatcher = get(named(COMPASS_ENABLED)),
             lightSensorEnabledWatcher = get(named(LIGHT_SENSOR_ENABLED)),
+            navigationEnabledWatcher = get(named(NAVIGATION_ENABLED)),
         )
     }
 

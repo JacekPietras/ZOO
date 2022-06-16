@@ -14,6 +14,9 @@ val cacheModule = module {
     single(named(LIGHT_SENSOR_ENABLED)) {
         buildColdWatcher(initValue = false)
     }
+    single(named(NAVIGATION_ENABLED)) {
+        buildColdWatcher(initValue = false)
+    }
 
     single(named(MAP_ROADS)) {
         buildColdWatcher<List<MapItemEntity.PathEntity>>()
@@ -37,6 +40,7 @@ val cacheModule = module {
 
 const val COMPASS_ENABLED = "CompassEnabledWatcher"
 const val LIGHT_SENSOR_ENABLED = "LightSensorEnabledWatcher"
+const val NAVIGATION_ENABLED = "NavigationEnabledWatcher"
 const val MAP_ROADS = "MapRoads"
 const val MAP_LINES = "MapLines"
 const val MAP_TECHNICAL = "MapTechnical"

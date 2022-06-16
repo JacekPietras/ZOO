@@ -23,6 +23,7 @@ internal class GpsRepositoryImpl(
     private val gpsHistoryMapper: GpsHistoryMapper,
     private val compassEnabledWatcher: Watcher<Boolean>,
     private val lightSensorEnabledWatcher: Watcher<Boolean>,
+    private val navigationEnabledWatcher: Watcher<Boolean>,
 ) : GpsRepository {
 
     private val compass = MutableStateFlow(0f)
@@ -118,4 +119,15 @@ internal class GpsRepositoryImpl(
 
     override fun observeLightSensorEnabled(): Flow<Boolean> =
         lightSensorEnabledWatcher.dataFlow
+
+    override fun enableNavigation() {
+        navigationEnabledWatcher.notifyUpdated(true)
+    }
+
+    override fun disableNavigation() {
+        navigationEnabledWatcher.notifyUpdated(false)
+    }
+
+    override fun observeNavigationEnabled(): Flow<Boolean> =
+        navigationEnabledWatcher.dataFlow
 }
