@@ -1,4 +1,7 @@
 package com.jacekpietras.zoo.planner.model
 
-class PlannerItem {
-}
+import com.jacekpietras.zoo.core.text.Text
+
+data class PlannerItem(
+    val text: Text,
+)

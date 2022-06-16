@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
@@ -28,7 +29,7 @@ internal class PlannerViewModel(
                 .onEach {
                     state.reduceOnMain {
                         copy(
-                            plan = it.stages.map { it.animals.joinToString() }
+                            plan = it.stages.map { it.animals.map(AnimalEntity::name).joinToString() }
                         )
                     }
                 }

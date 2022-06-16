@@ -1,10 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
@@ -12,17 +8,10 @@ import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
-import com.jacekpietras.zoo.domain.interactor.GetAnimalPositionUseCase
-import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
-import com.jacekpietras.zoo.domain.interactor.GetShortestPathUseCase
-import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.IsAnimalFavoriteUseCase
-import com.jacekpietras.zoo.domain.interactor.IsAnimalSeenUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveAviaryUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveBuildingsUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveRoadsUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.RegionId
@@ -38,6 +27,7 @@ internal class AnimalViewModel(
     isAnimalSeenUseCase: IsAnimalSeenUseCase,
     isAnimalFavoriteUseCase: IsAnimalFavoriteUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
+    private val addToCurrentPlanUseCase: AddToCurrentPlanUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     observeBuildingsUseCase: ObserveBuildingsUseCase,
@@ -118,6 +108,8 @@ internal class AnimalViewModel(
     fun onFavoriteClicked() {
         val isFavorite = (currentState.isFavorite ?: false).not()
         val animalId = currentState.animalId
+        // fixme multiple regions! we want only one of them
+        val regionId = currentState.animal.regionInZoo.first()
 
         launchInBackground {
             state.reduceOnMain { copy(isFavorite = isFavorite) }
@@ -125,6 +117,7 @@ internal class AnimalViewModel(
                 animalId = animalId,
                 isFavorite = isFavorite,
             )
+            addToCurrentPlanUseCase.run(regionId)
         }
     }
 }

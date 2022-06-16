@@ -24,4 +24,8 @@ internal class PlanRepositoryImpl(
         planDao.observePlan(planId.id)
             .filterNotNull()
             .map(planMapper::from)
+
+    override suspend fun getPlan(planId: PlanId): PlanEntity? =
+        planDao.getPlan(planId.id)
+            ?.let(planMapper::from)
 }

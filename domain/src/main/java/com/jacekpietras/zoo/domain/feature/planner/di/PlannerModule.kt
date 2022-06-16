@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.planner.di
 
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.UpdateCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
 import org.koin.dsl.module
 
 val plannerModule = module {
@@ -9,10 +9,11 @@ val plannerModule = module {
         ObserveCurrentPlanUseCase(
             planRepository = get(),
             getAnimalsInRegionUseCase = get(),
+            isAnimalInPlanUseCase = get(),
         )
     }
     factory {
-        UpdateCurrentPlanUseCase(
+        AddToCurrentPlanUseCase(
             planRepository = get(),
         )
     }

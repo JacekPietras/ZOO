@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.planner.interactor
 
+import com.jacekpietras.zoo.domain.feature.favorites.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CURRENT_PLAN_ID
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.map
 class ObserveCurrentPlanUseCase(
     private val planRepository: PlanRepository,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
+    private val isAnimalInPlanUseCase: IsAnimalFavoriteUseCase,
 ) {
 
     fun run(): Flow<PlanEntity> =
@@ -19,6 +21,7 @@ class ObserveCurrentPlanUseCase(
                     stages = plan.stages.map { stage ->
                         stage.copy(
                             animals = getAnimalsInRegionUseCase.run(stage.regionId)
+                                .filter { isAnimalInPlanUseCase.run(it.id) }
                         )
                     }
                 )
