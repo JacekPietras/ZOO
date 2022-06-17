@@ -50,6 +50,7 @@ val mapModule = module {
             loadMapUseCase = get(),
             loadVisitedRouteUseCase = get(),
             observeSuggestedThemeTypeUseCase = get(),
+            observeCurrentPlanPathUseCase = get(),
         )
     }
 }

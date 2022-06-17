@@ -15,6 +15,7 @@ import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.extensions.mapInBackground
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathUseCase
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
@@ -29,10 +30,7 @@ import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.plus
 
 internal class MapViewModel(
@@ -45,6 +43,7 @@ internal class MapViewModel(
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
+    observeCurrentPlanPathUseCase: ObserveCurrentPlanPathUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
@@ -101,6 +100,11 @@ internal class MapViewModel(
 
         observeCompassUseCase.run()
             .onEach { volatileState.reduceOnMain { copy(compass = it) } }
+            .launchIn(viewModelScope + dispatcherProvider.default)
+
+        observeCurrentPlanPathUseCase.run()
+            .distinctUntilChanged()
+            .onEach { volatileState.reduceOnMain { copy(shortestPath = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
 
         observeSuggestedThemeTypeUseCase.run()
