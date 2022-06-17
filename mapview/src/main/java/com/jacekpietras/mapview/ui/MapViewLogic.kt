@@ -177,15 +177,14 @@ class MapViewLogic<T>(
     }
 
     fun onScale(cX: Float, cY: Float, scale: Float) {
-        val mX = pinchCorrection(cX, scale, currentWidth)
-        val mY = pinchCorrection(cY, scale, currentHeight)
-
         if (scale != 1f) {
+            val mX = pinchCorrection(cX, scale, currentWidth)
+            val mY = pinchCorrection(cY, scale, currentHeight)
             zoom *= scale
-            if (::visibleGpsCoordinate.isInitialized) {
+            if (::visibleGpsCoordinate.isInitialized && scale != Float.MAX_VALUE) {
                 centerGpsCoordinate += toMovementInWorld(mX, mY)
-                cutOutNotVisible()
             }
+            cutOutNotVisible()
         }
     }
 
@@ -351,7 +350,6 @@ class MapViewLogic<T>(
 
         while (preventedGoingOutsideWorld()) {
             cutOutNotVisible(false)
-//            return
         }
         if (!invalidate) {
             return

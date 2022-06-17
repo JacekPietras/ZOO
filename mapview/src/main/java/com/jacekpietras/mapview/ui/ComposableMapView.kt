@@ -30,7 +30,10 @@ fun ComposableMapView(
             .addOnTransform(onTransform)
             .addOnClick(onClick)
     ) {
-        onSizeChanged(size.width.toInt(), size.height.toInt())
+        val (width, height) = size.width.toInt() to size.height.toInt()
+        if (width > 0 && height > 0) {
+            onSizeChanged(width, height)
+        }
 
         mapList?.forEach {
             when (it) {

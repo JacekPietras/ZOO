@@ -15,6 +15,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
 import com.jacekpietras.zoo.core.theme.ZooTheme
@@ -42,17 +43,8 @@ class AnimalFragment : Fragment() {
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View = ComposeView(requireContext()).apply {
         setContent {
             val viewState by viewModel.viewState.observeAsState()
+            viewState?.updateMap()
 
-            viewState?.let {
-                with(it) {
-                    mapLogic.worldData = MapViewLogic.WorldData(
-                        bounds = worldBounds,
-                        objectList = mapData,
-                    )
-                    mapLogic.onRotate(-12f)
-                    mapLogic.onScale(0f, 0f, Float.MAX_VALUE)
-                }
-            }
 
             ZooTheme {
                 AnimalFragmentView(
@@ -66,5 +58,14 @@ class AnimalFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun AnimalViewState.updateMap() {
+        mapLogic.worldData = MapViewLogic.WorldData(
+            bounds = worldBounds,
+            objectList = mapData,
+        )
+        mapLogic.onRotate(-12f)
+        mapLogic.onScale(0f, 0f, Float.MAX_VALUE)
     }
 }
