@@ -11,6 +11,7 @@ import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.MapItemEntity
@@ -28,6 +29,7 @@ internal class AnimalViewModel(
     isAnimalFavoriteUseCase: IsAnimalFavoriteUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addToCurrentPlanUseCase: AddToCurrentPlanUseCase,
+    private val removeToCurrentPlanUseCase: RemoveToCurrentPlanUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     observeBuildingsUseCase: ObserveBuildingsUseCase,
@@ -117,7 +119,11 @@ internal class AnimalViewModel(
                 animalId = animalId,
                 isFavorite = isFavorite,
             )
-            addToCurrentPlanUseCase.run(regionId)
+            if (isFavorite) {
+                addToCurrentPlanUseCase.run(regionId)
+            } else {
+                removeToCurrentPlanUseCase.run(regionId)
+            }
         }
     }
 }

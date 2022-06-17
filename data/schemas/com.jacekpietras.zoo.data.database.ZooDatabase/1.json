@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "82cfbe008c06a09354210564468283d5",
+    "identityHash": "e7bf1a3a889f052ed1d39bfab42c4af2",
     "entities": [
       {
         "tableName": "gps_history",
@@ -64,13 +64,19 @@
       },
       {
         "tableName": "plan",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`planId` TEXT NOT NULL, `stages` TEXT NOT NULL, PRIMARY KEY(`planId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`planId` TEXT NOT NULL, `optimizationTime` INTEGER, `stages` TEXT NOT NULL, PRIMARY KEY(`planId`))",
         "fields": [
           {
             "fieldPath": "planId",
             "columnName": "planId",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "optimizationTime",
+            "columnName": "optimizationTime",
+            "affinity": "INTEGER",
+            "notNull": false
           },
           {
             "fieldPath": "stages",
@@ -92,7 +98,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '82cfbe008c06a09354210564468283d5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e7bf1a3a889f052ed1d39bfab42c4af2')"
     ]
   }
 }

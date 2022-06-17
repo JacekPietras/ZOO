@@ -9,14 +9,20 @@ import com.jacekpietras.zoo.domain.model.RegionId
 internal class PlanMapper {
 
     fun from(planDto: PlanDto): PlanEntity =
-        PlanEntity(
-            planId = planDto.planId.let(::PlanId),
-            stages = planDto.stages.map { Stage(RegionId(it)) }
-        )
+        with(planDto) {
+            PlanEntity(
+                planId = planId.let(::PlanId),
+                optimizationTime = optimizationTime,
+                stages = stages.map { Stage(RegionId(it)) },
+            )
+        }
 
     fun from(planEntity: PlanEntity): PlanDto =
-        PlanDto(
-            planId = planEntity.planId.id,
-            stages = planEntity.stages.map(Stage::regionId).map(RegionId::id)
-        )
+        with(planEntity) {
+            PlanDto(
+                planId = planId.id,
+                optimizationTime = optimizationTime,
+                stages = stages.map(Stage::regionId).map(RegionId::id),
+            )
+        }
 }

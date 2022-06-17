@@ -5,6 +5,7 @@ import com.jacekpietras.zoo.domain.model.RegionId
 
 data class PlanEntity(
     val planId: PlanId,
+    val optimizationTime: Long?,
     val stages: List<Stage>,
 ) {
 

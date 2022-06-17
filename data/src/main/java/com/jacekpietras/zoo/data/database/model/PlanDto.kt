@@ -6,5 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "plan")
 internal data class PlanDto(
     @PrimaryKey val planId: String,
+    val optimizationTime: Long? = null,
     val stages: List<String>,
 )

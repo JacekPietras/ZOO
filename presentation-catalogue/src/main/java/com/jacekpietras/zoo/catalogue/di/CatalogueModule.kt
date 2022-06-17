@@ -32,6 +32,7 @@ val catalogueModule = module {
             isAnimalFavoriteUseCase = get(),
             setAnimalFavoriteUseCase = get(),
             addToCurrentPlanUseCase = get(),
+            removeToCurrentPlanUseCase = get(),
             observeWorldBoundsUseCase = get(),
             observeBuildingsUseCase = get(),
             observeAviaryUseCase = get(),
