@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
+import timber.log.Timber
 import java.util.*
 import kotlin.math.exp
 import kotlin.random.Random
@@ -21,6 +22,12 @@ class SimulatedAnnealing<T> : SalesmanProblemSolver<T> {
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>? = null,
     ): Pair<Double, List<T>> {
+        val ignoredPoints = immutablePositions?.size ?: 0
+        if (request.size - ignoredPoints < 3) {
+            Timber.d("Optimization cannot be done, not enough points ${request.size} ($ignoredPoints ignored)")
+            return request.distance(distanceCalculation) to request
+        }
+
         var t = startingTemperature
         var i = 0
         var bestDistance = request.distance(distanceCalculation)
