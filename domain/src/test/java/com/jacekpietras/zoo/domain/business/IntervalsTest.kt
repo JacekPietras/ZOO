@@ -1,9 +1,9 @@
 package com.jacekpietras.zoo.domain.business
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import com.jacekpietras.zoo.domain.business.model.Intervals
+import com.jacekpietras.zoo.domain.business.model.minus
+import com.jacekpietras.zoo.domain.business.model.plus
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
