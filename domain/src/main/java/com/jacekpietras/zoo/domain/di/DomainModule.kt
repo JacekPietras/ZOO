@@ -136,7 +136,8 @@ val domainModule = module {
     }
     factory {
         ObserveAviaryUseCase(
-            mapRepository = get()
+            mapRepository = get(),
+            planRepository= get(),
         )
     }
     factory {

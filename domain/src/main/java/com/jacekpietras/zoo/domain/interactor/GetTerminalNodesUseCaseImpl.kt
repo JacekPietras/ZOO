@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.interactor
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.business.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CURRENT_PLAN_ID
+import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 
 internal class GetTerminalNodesUseCaseImpl(
@@ -15,7 +16,12 @@ internal class GetTerminalNodesUseCaseImpl(
     override suspend fun run(): List<PointD> {
 //        initializeGraphAnalyzerIfNeededUseCase.run()
 //        return graphAnalyzer.getTerminalPoints()
-        return planRepository.getPlan(CURRENT_PLAN_ID)?.stages?.map { getRegionCenterPointUseCase.run(it.regionId) }
+        return planRepository.getPlan(CURRENT_PLAN_ID)?.stages?.map {
+            when (it) {
+                is Stage.InRegion -> getRegionCenterPointUseCase.run(it.regionId)
+                is Stage.InUserPosition -> it.point
+            }
+        }
             ?: emptyList()
     }
 }

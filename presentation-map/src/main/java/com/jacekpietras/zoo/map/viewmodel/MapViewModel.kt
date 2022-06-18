@@ -134,31 +134,32 @@ internal class MapViewModel(
         observeRegionsWithAnimalsInUserPositionUseCase.run()
             .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
+launchInMain {
+    combine(
+        observeWorldBoundsUseCase.run(),
+        observeBuildingsUseCase.run(),
+        observeAviaryUseCase.run(),
+        observeRoadsUseCase.run(),
+        observeMapLinesUseCase.run(),
+        observeOldTakenRouteUseCase.run(),
+        observeTechnicalRoadsUseCase.run(),
+    ) { worldBounds, buildings, aviary, roads, lines, rawTakenRoute, technicalRoads ->
+        val terminalPoints = onBackground { getTerminalNodesUseCase.run() }
 
-        combine(
-            observeWorldBoundsUseCase.run(),
-            observeBuildingsUseCase.run(),
-            observeAviaryUseCase.run(),
-            observeRoadsUseCase.run(),
-            observeMapLinesUseCase.run(),
-            observeOldTakenRouteUseCase.run(),
-            observeTechnicalRoadsUseCase.run(),
-        ) { worldBounds, buildings, aviary, roads, lines, rawTakenRoute, technicalRoads ->
-            val terminalPoints = onBackground { getTerminalNodesUseCase.run()}
-
-            mapWorldState.reduceOnMain {
-                copy(
-                    worldBounds = worldBounds,
-                    buildings = buildings,
-                    aviary = aviary,
-                    lines = lines,
-                    roads = roads,
-                    technicalRoads = technicalRoads,
-                    rawOldTakenRoute = rawTakenRoute,
-                    terminalPoints = terminalPoints,
-                )
-            }
-        }.launchIn(viewModelScope)
+        mapWorldState.reduceOnMain {
+            copy(
+                worldBounds = worldBounds,
+                buildings = emptyList(),
+                aviary = aviary,
+                lines = lines,
+                roads = roads,
+                technicalRoads = technicalRoads,
+                rawOldTakenRoute = rawTakenRoute,
+                terminalPoints = terminalPoints,
+            )
+        }
+    }.launchIn(viewModelScope)
+}
     }
 
     private suspend fun navigationToAnimal(animal: AnimalEntity, regionId: RegionId?) {
