@@ -55,7 +55,7 @@ internal class MySalesmanProblemSolver(
                     nextPoint,
                     technicalAllowedAtStart = false,
                     technicalAllowedAtEnd = false,
-                )
+                ).reversed()
                 Calculation(
                     distance = path.toLengthInMeters(),
                     list = path,
