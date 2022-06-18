@@ -22,7 +22,7 @@ class RemoveToCurrentPlanUseCase(
                 if (plannedAnimalsInRegion.isEmpty()) {
                     it.copy(
                         optimizationTime = null,
-                        stages = it.stages - Stage(regionId)
+                        stages = it.stages - Stage.InRegion(regionId)
                     )
                 } else {
                     it

@@ -13,12 +13,12 @@ class AddToCurrentPlanUseCase(
     suspend fun run(regionId: RegionId) {
         val plan = (planRepository.getPlan(CURRENT_PLAN_ID) ?: newPlan())
             .let {
-                if (it.stages.map(Stage::regionId).contains(regionId)) {
+                if (it.stages.filterIsInstance<Stage.InRegion>().map(Stage.InRegion::regionId).contains(regionId)) {
                     it
                 } else {
                     it.copy(
                         optimizationTime = null,
-                        stages = it.stages + Stage(regionId)
+                        stages = it.stages + Stage.InRegion(regionId)
                     )
                 }
             }

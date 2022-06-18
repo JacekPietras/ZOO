@@ -6,6 +6,7 @@ import com.jacekpietras.zoo.domain.business.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.repository.MapRepository
+import timber.log.Timber
 
 internal class MySalesmanProblemSolver(
     private val graphAnalyzer: GraphAnalyzer,
@@ -13,31 +14,57 @@ internal class MySalesmanProblemSolver(
 ) {
 
     private val cache: MutableList<CachedCalculation> = mutableListOf()
-    private val tsp: SalesmanProblemSolver<RegionId> = SimulatedAnnealing()
+    private val tsp: SalesmanProblemSolver<Stage> = SimulatedAnnealing()
 
     suspend fun findShortPath(stages: List<Stage>): List<Pair<Stage, List<PointD>>> {
-        val regions = stages.map { it.regionId }
+        val methodRunCache = mutableMapOf<Pair<PointD, PointD>, Calculation>()
+
         val result = tsp.run(
-            request = regions,
-            distanceCalculation = { a, b -> getDistance(a, b) },
+            request = stages,
+            distanceCalculation = { a, b -> getCalculation(a, b, methodRunCache).distance },
         )
 
         val points = result
             .zipWithNext { prev, next ->
-                Stage(prev) to getCalculation(prev, next).list
+                prev to getCalculation(prev, next, methodRunCache).list
             }
-        val tail = Stage(result.last()) to emptyList<PointD>()
+        val tail = result.last() to emptyList<PointD>()
         return points + tail
     }
 
-    suspend fun getDistance(prev: RegionId, next: RegionId): Double =
+    suspend fun getDistance(prev: Stage, next: Stage): Double =
         getCalculation(prev, next).distance
 
-    private suspend fun getCalculation(prev: RegionId, next: RegionId): CachedCalculation =
-        cache.find { it.from == prev && it.to == next }
-            ?: calculate(prev, next)
+    private suspend fun getCalculation(prev: Stage, next: Stage, methodRunCache: MutableMap<Pair<PointD, PointD>, Calculation>? = null): Calculation =
+        if (prev is Stage.InRegion && next is Stage.InRegion) {
+            cache.find { it.from == prev.regionId && it.to == next.regionId }
+                ?: calculate(prev.regionId, next.regionId)
+        } else {
+            // fixme check if it works!
+            val prevPoint = prev.getCenter()
+            val nextPoint = next.getCenter()
+            val found = methodRunCache?.get(prevPoint to nextPoint)
+            if (found != null) {
+                Timber.e("Found locally cached user path")
+                found
+            } else {
+                if (methodRunCache != null) {
+                    Timber.e("NOT Found locally cached user path")
+                }
+                val path = graphAnalyzer.getShortestPath(
+                    prevPoint,
+                    nextPoint,
+                    technicalAllowedAtStart = false,
+                    technicalAllowedAtEnd = false,
+                )
+                Calculation(
+                    distance = path.toLengthInMeters(),
+                    list = path,
+                ).also { methodRunCache?.put(prevPoint to nextPoint, it) }
+            }
+        }
 
-    private suspend fun calculate(prev: RegionId, next: RegionId): CachedCalculation {
+    private suspend fun calculate(prev: RegionId, next: RegionId): Calculation {
         val prevPoint = prev.getCenter()
         val nextPoint = next.getCenter()
         val list = graphAnalyzer.getShortestPath(
@@ -66,6 +93,12 @@ internal class MySalesmanProblemSolver(
         return calculationAsc
     }
 
+    private suspend fun Stage.getCenter(): PointD =
+        when (this) {
+            is Stage.InRegion -> this.regionId.getCenter()
+            is Stage.InUserPosition -> this.point
+        }
+
     private suspend fun RegionId.getCenter(): PointD =
         mapRepository.getCurrentRegions().first { it.first.id == this }.second.findCenter()
 
@@ -75,6 +108,11 @@ internal class MySalesmanProblemSolver(
     private class CachedCalculation(
         val from: RegionId,
         val to: RegionId,
+        distance: Double,
+        list: List<PointD>,
+    ) : Calculation(distance, list)
+
+    private open class Calculation(
         val distance: Double,
         val list: List<PointD>,
     )

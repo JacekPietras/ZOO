@@ -11,6 +11,8 @@ val plannerModule = module {
         PlannerViewModel(
             stateMapper = get(),
             observeCurrentPlanUseCase = get(),
+            getAnimalsInRegionUseCase = get(),
+            isAnimalInPlanUseCase = get(),
         )
     }
 

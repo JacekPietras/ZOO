@@ -63,7 +63,7 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
     }
 
     private suspend fun List<Stage>.distance(): Double =
-        zipWithNext { a, b -> mySalesmanProblemSolver.getDistance(a.regionId, b.regionId) }.sum()
+        zipWithNext { a, b -> mySalesmanProblemSolver.getDistance(a, b) }.sum()
 
     companion object {
 

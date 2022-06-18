@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.planner.model
 
-import com.jacekpietras.zoo.domain.model.AnimalEntity
+import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.model.RegionId
 
 data class PlanEntity(
@@ -15,9 +15,15 @@ data class PlanEntity(
     }
 }
 
-data class Stage(
-    val regionId: RegionId,
-    val animals: List<AnimalEntity> = emptyList(),
-)
+sealed class Stage {
+
+    data class InRegion(
+        val regionId: RegionId,
+    ) : Stage()
+
+    data class InUserPosition(
+        val point: PointD,
+    ) : Stage()
+}
 
 class PlanId(val id: String)

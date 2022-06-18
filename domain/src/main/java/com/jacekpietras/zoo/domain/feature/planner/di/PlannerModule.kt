@@ -7,8 +7,6 @@ val plannerModule = module {
     factory {
         ObserveCurrentPlanUseCase(
             planRepository = get(),
-            getAnimalsInRegionUseCase = get(),
-            isAnimalInPlanUseCase = get(),
         )
     }
     factory {
