@@ -23,22 +23,17 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
 ) : ObserveCurrentPlanPathUseCase {
 
     private var lastCalculated: List<Stage> = emptyList()
+    private var lastGpsPointTimestamp: Long = 0L
 
     override fun run(): Flow<List<PointD>> =
         planRepository.observePlan(CURRENT_PLAN_ID)
             .distinctUntilChanged { _, new -> new.stages == lastCalculated }
-            .onEach {
-                Timber.e("found new plan")
-            }
             .combine(observeUserPosition()) { plan, userPosition ->
                 val userStage = listOfNotNull(userPosition?.let { Stage.InUserPosition(it) })
                 plan.copy(stages = userStage + plan.stages)
             }
             .refreshPeriodically(MINUTE)
             .measureMap({ Timber.d("Optimization took $it") }) { plan ->
-                if (BuildConfig.DEBUG) {
-                    Timber.d("Optimization started")
-                }
 
                 val result = mySalesmanProblemSolver.findShortPath(
                     stages = plan.stages,
@@ -92,19 +87,17 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
             delay(period)
         }
     }
-        .onEach {
-            Timber.e("found new tick")
-        }
 
     @Suppress("USELESS_CAST")
     private fun observeUserPosition(): Flow<PointD?> =
         gpsRepository.observeLatestPosition()
             .map { PointD(it.lon, it.lat) as PointD? }
+            .map { it to System.currentTimeMillis() }
+            .distinctUntilChanged { _, new -> new.second < lastGpsPointTimestamp + GPS_MIN_INTERVAL }
+            .onEach { lastGpsPointTimestamp = it.second }
+            .map { it.first }
             .onStart { emit(null) }
             .distinctUntilChanged()
-            .onEach {
-                Timber.e("found new point $it")
-            }
 
     private suspend fun List<Stage>.distance(): Double =
         zipWithNext { a, b -> mySalesmanProblemSolver.getDistance(a, b) }.sum()
@@ -112,5 +105,6 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
     companion object {
 
         const val MINUTE = 60 * 1000L
+        const val GPS_MIN_INTERVAL = 5 * 1000L
     }
 }

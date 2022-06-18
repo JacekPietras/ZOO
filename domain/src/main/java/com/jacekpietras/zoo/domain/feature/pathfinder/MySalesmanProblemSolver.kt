@@ -43,7 +43,6 @@ internal class MySalesmanProblemSolver(
             cache.find { it.from == prev.regionId && it.to == next.regionId }
                 ?: calculate(prev.regionId, next.regionId)
         } else {
-            // fixme check if it works!
             val prevPoint = prev.getCenter()
             val nextPoint = next.getCenter()
             val found = methodRunCache?.get(prevPoint to nextPoint)
