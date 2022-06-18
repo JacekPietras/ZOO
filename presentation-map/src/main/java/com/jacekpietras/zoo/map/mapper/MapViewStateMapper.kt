@@ -86,7 +86,7 @@ internal class MapViewStateMapper {
                 fromPolygons(buildings, buildingPaint),
                 fromPolygons(aviary, aviaryPaint),
                 fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
-//                fromPoints(terminalPoints, terminalPaint),
+                fromPoints(terminalPoints, terminalPaint),
             ),
         )
     }
@@ -215,10 +215,11 @@ internal class MapViewStateMapper {
             fillColor = MapColor.Hard(Color.RED),
             radius = MapDimension.Dynamic.World(meters = 1.0),
         )
-        val shortestPathPaint: MapPaint = MapPaint.Stroke(
+        val shortestPathPaint: MapPaint = MapPaint.DashedStroke(
 //            strokeColor = MapColor.Hard(Color.BLUE),
             strokeColor = MapColor.Hard(Color.argb(50, 0, 0, 255)),
             width = MapDimension.Static.Screen(4),
+            pattern = MapDimension.Static.Screen(dp = 3),
         )
         val snappedPointPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Hard(Color.BLUE),

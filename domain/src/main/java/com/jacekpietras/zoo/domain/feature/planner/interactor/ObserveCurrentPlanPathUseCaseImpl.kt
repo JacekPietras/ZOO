@@ -32,12 +32,12 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
                                 val after = resultStages.distance()
                                 Timber.w("Found shorter path $before -> $after")
                             }
-                            planRepository.getPlan(CURRENT_PLAN_ID)
-                                ?.copy(
+                            plan
+                                .copy(
                                     optimizationTime = System.currentTimeMillis(),
                                     stages = resultStages,
                                 )
-                                ?.also {
+                                .also {
                                     planRepository.setPlan(it)
                                 }
                         }

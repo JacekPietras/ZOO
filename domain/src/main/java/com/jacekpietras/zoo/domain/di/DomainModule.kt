@@ -258,6 +258,8 @@ val domainModule = module {
         GetTerminalNodesUseCaseImpl(
             initializeGraphAnalyzerIfNeededUseCase = get(),
             graphAnalyzer = get(),
+            getRegionCenterPointUseCase = get(),
+            planRepository = get(),
         )
     }
     factory {

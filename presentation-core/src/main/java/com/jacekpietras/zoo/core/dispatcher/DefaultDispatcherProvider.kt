@@ -45,29 +45,23 @@ object DispatcherProviderWrapper {
 val ViewModel.dispatcherProvider
     get() = DispatcherProviderWrapper.provider
 
-fun ViewModel.launchInBackground(block: suspend CoroutineScope.() -> Unit) {
+fun ViewModel.launchInBackground(block: suspend CoroutineScope.() -> Unit) =
     viewModelScope.launch(dispatcherProvider.default, block = block)
-}
 
-fun ViewModel.launchInIO(block: suspend CoroutineScope.() -> Unit) {
+fun ViewModel.launchInIO(block: suspend CoroutineScope.() -> Unit) =
     viewModelScope.launch(dispatcherProvider.io, block = block)
-}
 
-fun ViewModel.launchInMain(block: suspend CoroutineScope.() -> Unit) {
+fun ViewModel.launchInMain(block: suspend CoroutineScope.() -> Unit) =
     viewModelScope.launch(dispatcherProvider.main, block = block)
-}
 
-suspend fun <T> ViewModel.onBackground(block: suspend CoroutineScope.() -> T) {
+suspend fun <T> ViewModel.onBackground(block: suspend CoroutineScope.() -> T) =
     withContext(dispatcherProvider.default, block)
-}
 
-suspend fun <T> ViewModel.onIO(block: suspend CoroutineScope.() -> T) {
+suspend fun <T> ViewModel.onIO(block: suspend CoroutineScope.() -> T) =
     withContext(dispatcherProvider.io, block)
-}
 
-suspend fun <T> ViewModel.onMain(block: suspend CoroutineScope.() -> T) {
+suspend fun <T> ViewModel.onMain(block: suspend CoroutineScope.() -> T) =
     withContext(dispatcherProvider.main, block)
-}
 
 suspend fun <T> Channel<T>.sendOnMain(element: T) {
     withContext(DispatcherProviderWrapper.provider.main) {

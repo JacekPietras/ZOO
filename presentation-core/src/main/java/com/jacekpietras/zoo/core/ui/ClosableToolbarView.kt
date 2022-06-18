@@ -103,7 +103,7 @@ private fun Modifier.applySwipeable(
             thresholds = { _, _ -> FractionalThreshold(0.4f) },
             orientation = Orientation.Vertical
         )
-        .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
+        .offset { IntOffset(0, swipeableState.offset.value.roundToInt().coerceAtMost(0)) }
 }
 
 @Composable
