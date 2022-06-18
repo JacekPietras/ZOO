@@ -13,9 +13,32 @@ import kotlin.time.measureTime
 class SimulatedAnnealingTest {
 
     @Test
-    fun doATest() {
-        val bestExpected = 2591.2322650196093
-        val initial = generateInitialTravel(seed = 1000)
+    fun `test over 15`() {
+        repeat(100) {
+            doTest(
+                seed = 1000,
+                numberOfCities = 15,
+                bestExpected = 2213.471145583158,
+            )
+        }
+    }
+
+    @Test
+    fun `test over 30`() {
+        repeat(100) {
+            doTest(
+                seed = 2000,
+                numberOfCities = 30,
+                bestExpected = 4861.186475289512,
+            )
+        }
+    }
+
+    private fun doTest(seed: Long, numberOfCities: Int, bestExpected: Double) {
+        val initial = generateInitialTravel(
+            seed = seed,
+            numberOfCities = numberOfCities,
+        )
         val initialDistance = initial.distance()
         var result: Double
 
@@ -26,12 +49,16 @@ class SimulatedAnnealingTest {
             ).first
         }
 
-        println("$initialDistance / $result / $bestExpected | in $duration")
+        if (result < bestExpected) {
+            println("New record: $result")
+        }
+
+        println("${initialDistance.toInt()}\t/ ${result.toInt()}\t/ ${bestExpected.toInt()}\t| in $duration")
     }
 
     private fun generateInitialTravel(
-        @Suppress("SameParameterValue") seed: Long,
-        numberOfCities: Int = 15,
+        seed: Long,
+        numberOfCities: Int,
     ): List<City> {
         val random = Random(seed)
         return MutableList(numberOfCities) {
