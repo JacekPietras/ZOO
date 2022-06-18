@@ -21,7 +21,6 @@ class RemoveToCurrentPlanUseCase(
                     .filter { animal -> isAnimalFavoriteUseCase.run(animal.id) }
                 if (plannedAnimalsInRegion.isEmpty()) {
                     it.copy(
-                        optimizationTime = null,
                         stages = it.stages - Stage.InRegion(regionId)
                     )
                 } else {
@@ -34,7 +33,6 @@ class RemoveToCurrentPlanUseCase(
     private fun newPlan(): PlanEntity =
         PlanEntity(
             planId = CURRENT_PLAN_ID,
-            optimizationTime = null,
             stages = emptyList(),
         )
 }

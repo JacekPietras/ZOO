@@ -17,7 +17,6 @@ class AddToCurrentPlanUseCase(
                     it
                 } else {
                     it.copy(
-                        optimizationTime = null,
                         stages = it.stages + Stage.InRegion(regionId)
                     )
                 }
@@ -28,7 +27,6 @@ class AddToCurrentPlanUseCase(
     private fun newPlan(): PlanEntity =
         PlanEntity(
             planId = CURRENT_PLAN_ID,
-            optimizationTime = null,
             stages = emptyList(),
         )
 }

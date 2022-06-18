@@ -12,7 +12,6 @@ internal class PlanMapper {
         with(planDto) {
             PlanEntity(
                 planId = planId.let(::PlanId),
-                optimizationTime = optimizationTime,
                 stages = stages.map { Stage.InRegion(RegionId(it)) },
             )
         }
@@ -21,7 +20,6 @@ internal class PlanMapper {
         with(planEntity) {
             PlanDto(
                 planId = planId.id,
-                optimizationTime = optimizationTime,
                 stages = stages.filterIsInstance<Stage.InRegion>().map { it.regionId }.map(RegionId::id),
             )
         }

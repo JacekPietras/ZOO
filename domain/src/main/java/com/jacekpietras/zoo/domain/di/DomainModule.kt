@@ -8,7 +8,9 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.di.pathFinderModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.interactor.*
 import org.koin.dsl.module
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 val domainModule = module {
 
     single {

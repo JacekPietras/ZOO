@@ -6,7 +6,6 @@ import com.jacekpietras.zoo.domain.business.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.repository.MapRepository
-import timber.log.Timber
 
 internal class MySalesmanProblemSolver(
     private val graphAnalyzer: GraphAnalyzer,
@@ -45,12 +44,8 @@ internal class MySalesmanProblemSolver(
             val nextPoint = next.getCenter()
             val found = methodRunCache?.get(prevPoint to nextPoint)
             if (found != null) {
-                Timber.e("Found locally cached user path")
                 found
             } else {
-                if (methodRunCache != null) {
-                    Timber.e("NOT Found locally cached user path")
-                }
                 val path = graphAnalyzer.getShortestPath(
                     prevPoint,
                     nextPoint,

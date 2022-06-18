@@ -10,18 +10,6 @@ class GetUserPositionUseCase(
 ) {
 
     fun run(): Flow<PointD> =
-        gpsRepository.observeLatestPosition().map { PointD(it.lon, it.lat) }
-
-
-//        flow {
-//            while (true) {
-//                emit(
-//                    LatLon(
-//                        lat = 5 + sin(System.currentTimeMillis() / 1000.0),
-//                        lon = 5 + cos(System.currentTimeMillis() / 1000.0),
-//                    )
-//                )
-//                delay(500)
-//            }
-//        }
+        gpsRepository.observeLatestPosition()
+            .map { PointD(it.lon, it.lat) }
 }
