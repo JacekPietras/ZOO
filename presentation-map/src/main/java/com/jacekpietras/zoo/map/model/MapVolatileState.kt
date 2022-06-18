@@ -11,4 +11,5 @@ internal data class MapVolatileState(
     val takenRoute: List<MapItemEntity.PathEntity> = emptyList(),
     val visitedRoads: List<MapItemEntity.PathEntity> = emptyList(),
     val shortestPath: List<PointD> = emptyList(),
+    val plannedPath: List<PointD> = emptyList(),
 )

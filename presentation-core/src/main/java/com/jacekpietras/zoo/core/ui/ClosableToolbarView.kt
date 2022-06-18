@@ -100,7 +100,7 @@ private fun Modifier.applySwipeable(
         .swipeable(
             state = swipeableState,
             anchors = mapOf(height to SWIPED, 0f to INITIAL),
-            thresholds = { _, _ -> FractionalThreshold(0.3f) },
+            thresholds = { _, _ -> FractionalThreshold(0.4f) },
             orientation = Orientation.Vertical
         )
         .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }

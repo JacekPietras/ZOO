@@ -15,7 +15,7 @@ import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.*
 import kotlin.random.Random
 
-internal class MapViewStateMapper() {
+internal class MapViewStateMapper {
 
     private val carouselSeed = Random.nextLong()
 
@@ -65,7 +65,11 @@ internal class MapViewStateMapper() {
             mapData = flatListOf(
                 fromPaths(visitedRoads, visitedRoadsPaint),
                 fromPaths(takenRoute, takenRoutePaint),
-                fromPath(shortestPath, shortestPathPaint),
+                if (shortestPath.isNotEmpty()) {
+                    fromPath(shortestPath, shortestPathPaint)
+                } else {
+                    fromPath(plannedPath, shortestPathPaint)
+                },
                 fromPoint(userPosition, userPositionPaint),
                 fromPoint(snappedPoint, snappedPointPaint),
             ),

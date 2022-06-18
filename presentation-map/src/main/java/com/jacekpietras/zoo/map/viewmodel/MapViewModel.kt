@@ -104,7 +104,7 @@ internal class MapViewModel(
 
         observeCurrentPlanPathUseCase.run()
             .distinctUntilChanged()
-            .onEach { volatileState.reduceOnMain { copy(shortestPath = it) } }
+            .onEach { volatileState.reduceOnMain { copy(plannedPath = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
 
         observeSuggestedThemeTypeUseCase.run()
