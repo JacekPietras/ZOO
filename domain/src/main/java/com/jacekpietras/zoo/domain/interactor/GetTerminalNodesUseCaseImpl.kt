@@ -9,7 +9,8 @@ internal class GetTerminalNodesUseCaseImpl(
 ) : GetTerminalNodesUseCase {
 
     override suspend fun run(): List<PointD> {
-        initializeGraphAnalyzerIfNeededUseCase.run()
-        return graphAnalyzer.getTerminalPoints()
+//        initializeGraphAnalyzerIfNeededUseCase.run()
+//        return graphAnalyzer.getTerminalPoints()
+        return emptyList()
     }
 }
