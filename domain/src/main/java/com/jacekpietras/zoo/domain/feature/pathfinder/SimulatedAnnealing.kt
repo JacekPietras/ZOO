@@ -23,7 +23,7 @@ class SimulatedAnnealing<T> : SalesmanProblemSolver<T> {
         var bestDistance = request.distance(distanceCalculation)
         var bestTravel = request
 
-        var travel = ArrayList(request)
+        var travel = ArrayList(request).shuffled()
 
         while (t > 0.1 && i < numberOfIterations) {
             val travelVariation = travel.makeVariation()
