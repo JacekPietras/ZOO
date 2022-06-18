@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.core.PointD
+import com.jacekpietras.zoo.domain.business.model.Node
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest

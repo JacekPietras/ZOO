@@ -1,8 +1,7 @@
 package com.jacekpietras.zoo.domain.model
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.domain.business.Intervals
-
+import com.jacekpietras.zoo.domain.business.model.Intervals
 
 sealed class VisitedRoadEdge(
     open val from: PointD,

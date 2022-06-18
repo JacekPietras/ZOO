@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.business
+package com.jacekpietras.zoo.domain.business.model
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine

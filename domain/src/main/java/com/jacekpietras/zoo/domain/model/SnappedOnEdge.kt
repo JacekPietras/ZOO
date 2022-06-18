@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.model
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.domain.business.Node
+import com.jacekpietras.zoo.domain.business.model.Node
 
 internal data class SnappedOnEdge(
     val point: PointD,

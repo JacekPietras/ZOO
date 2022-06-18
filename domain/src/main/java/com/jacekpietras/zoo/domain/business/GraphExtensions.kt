@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.pow2
+import com.jacekpietras.zoo.domain.business.model.Node
 import kotlin.math.sqrt
 
 internal fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean) -> Unit) {

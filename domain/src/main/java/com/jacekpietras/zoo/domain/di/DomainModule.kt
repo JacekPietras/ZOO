@@ -4,6 +4,7 @@ import com.jacekpietras.zoo.domain.business.GraphAnalyzer
 import com.jacekpietras.zoo.domain.business.PathListSnapper
 import com.jacekpietras.zoo.domain.business.PathSnapper
 import com.jacekpietras.zoo.domain.feature.favorites.di.favoritesModule
+import com.jacekpietras.zoo.domain.feature.pathfinder.di.pathFinderModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.interactor.*
 import org.koin.dsl.module
@@ -270,4 +271,4 @@ val domainModule = module {
             mapRepository = get(),
         )
     }
-} + favoritesModule + plannerModule
+} + favoritesModule + plannerModule + pathFinderModule

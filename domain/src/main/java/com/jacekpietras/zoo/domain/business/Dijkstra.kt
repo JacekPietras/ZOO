@@ -1,5 +1,7 @@
 package com.jacekpietras.zoo.domain.business
 
+import com.jacekpietras.zoo.domain.business.model.Node
+
 internal class Dijkstra(
     vertices: Set<Node>,
     private val start: Node,

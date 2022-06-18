@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.business
+package com.jacekpietras.zoo.domain.business.model
 
 class Intervals<T : Comparable<T>>(
     range: List<ClosedRange<T>>

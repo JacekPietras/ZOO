@@ -4,6 +4,7 @@ package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.business.PathSnapper.VisitedRoadEdgePart
+import com.jacekpietras.zoo.domain.business.model.Intervals
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 

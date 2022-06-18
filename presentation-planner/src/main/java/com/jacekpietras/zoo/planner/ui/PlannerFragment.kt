@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,12 +45,11 @@ class PlannerFragment : Fragment() {
                             backgroundColor = ZooTheme.colors.surface,
                             elevation = 4.dp,
                             modifier = Modifier
-                                .height(128.dp)
                                 .fillMaxSize(),
                         ) {
                             Text(
                                 text = item.text.toString(LocalContext.current),
-                                modifier = Modifier.padding(horizontal = 16.dp),
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                 style = MaterialTheme.typography.subtitle2,
                                 color = ZooTheme.colors.onSurface,
                             )

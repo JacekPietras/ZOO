@@ -4,6 +4,8 @@ package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
+import com.jacekpietras.zoo.domain.business.model.Intervals
+import com.jacekpietras.zoo.domain.business.model.Node
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.SnappedOnEdge
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
