@@ -4,16 +4,20 @@ import java.util.*
 import kotlin.math.exp
 import kotlin.random.Random
 
-class SimulatedAnnealing<T> {
+class SimulatedAnnealing<T> : SalesmanProblemSolver<T> {
 
-    fun simulateAnnealing(
+    override suspend fun run(
         request: List<T>,
-        distanceCalculation: (T, T) -> Double,
-        startingTemperature: Double = 10000.0,
-        numberOfIterations: Int = 100000,
-        coolingRate: Double = 0.99,
-    ): Pair<Double, List<T>> {
+        distanceCalculation: suspend (T, T) -> Double,
+    ): List<T> = simulateAnnealing(
+        request = request,
+        distanceCalculation = distanceCalculation,
+    ).second
 
+    suspend fun simulateAnnealing(
+        request: List<T>,
+        distanceCalculation: suspend (T, T) -> Double,
+    ): Pair<Double, List<T>> {
         var t = startingTemperature
         var i = 0
         var bestDistance = request.distance(distanceCalculation)
@@ -52,6 +56,13 @@ class SimulatedAnnealing<T> {
     private fun List<T>.generateRandomIndex(): Int =
         Random.nextInt(size)
 
-    private fun List<T>.distance(distanceCalculation: (T, T) -> Double): Double =
-        zipWithNext { a, b -> distanceCalculation(a, b) }.sum()
+    private suspend fun List<T>.distance(distanceCalculation: suspend (T, T) -> Double): Double =
+        zipWithNext { a, b -> distanceCalculation.invoke(a, b) }.sum()
+
+    private companion object {
+
+        const val startingTemperature = 10000.0
+        const val numberOfIterations = 100000
+        const val coolingRate = 0.99
+    }
 }

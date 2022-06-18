@@ -1,6 +1,8 @@
 package com.jacekpietras.zoo.domain.business
 
 import com.jacekpietras.zoo.domain.feature.pathfinder.SimulatedAnnealing
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.math.abs
 import kotlin.math.pow
@@ -9,6 +11,7 @@ import kotlin.random.Random
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
+@ExperimentalCoroutinesApi
 @ExperimentalTime
 class SimulatedAnnealingTest {
 
@@ -34,7 +37,7 @@ class SimulatedAnnealingTest {
         }
     }
 
-    private fun doAnnealingTest(seed: Long, numberOfCities: Int, bestExpected: Double) {
+    private fun doAnnealingTest(seed: Long, numberOfCities: Int, bestExpected: Double) = runTest {
         val initial = generateInitialTravel(
             seed = seed,
             numberOfCities = numberOfCities,
