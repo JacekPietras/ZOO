@@ -7,9 +7,9 @@ import com.jacekpietras.zoo.domain.business.PathSnapper.VisitedRoadEdgePart
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 
-internal class PathListSnapper {
-
-    private val pathSnapper = PathSnapper()
+internal class PathListSnapper(
+    private val pathSnapper: PathSnapper,
+) {
 
     suspend fun snapToEdges(list: List<MapItemEntity.PathEntity>): List<VisitedRoadEdge> =
         list

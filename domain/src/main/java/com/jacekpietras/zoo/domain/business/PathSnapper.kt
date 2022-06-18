@@ -10,7 +10,9 @@ import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import kotlin.math.max
 import kotlin.math.min
 
-internal class PathSnapper {
+internal class PathSnapper(
+    private val graphAnalyzer: GraphAnalyzer,
+) {
 
     suspend fun snapToEdges(path: MapItemEntity.PathEntity): List<VisitedRoadEdge> =
         snapToEdgeParts(path)
@@ -27,7 +29,7 @@ internal class PathSnapper {
             .normalizeEdgeDirection()
 
     private suspend fun List<PointD>.snapPointsToRoad(): List<SnappedOnEdge> =
-        map { GraphAnalyzer.getSnappedPointOnEdge(it, false) }
+        map { graphAnalyzer.getSnappedPointOnEdge(it, false) }
 
     private suspend fun List<SnappedOnEdge>.fillMissingCorners(): List<List<SnappedOnEdge>> =
         zipWithNext { start, end ->
@@ -40,7 +42,7 @@ internal class PathSnapper {
                     listOf(start, SnappedOnEdge(commonNode.point, commonNode, commonNode), end)
                 }
                 else -> {
-                    GraphAnalyzer.getShortestPathWithContext(
+                    graphAnalyzer.getShortestPathWithContext(
                         startPoint = start,
                         endPoint = end,
                     )

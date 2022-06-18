@@ -3,7 +3,7 @@ package com.jacekpietras.zoo.domain.business
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.model.MapItemEntity
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
@@ -17,12 +17,12 @@ internal class ShortestPathTest {
     inner class WhenThreePointGraph {
 
         private val snapshot: MutableSet<Node>
-
-        //      [3]
-        //       |
-        // [1]--[2]
+        private val graphAnalyzer: GraphAnalyzer = GraphAnalyzer()
 
         init {
+            //      [3]
+            //       |
+            // [1]--[2]
             val roads = listOf(
                 MapItemEntity.PathEntity(
                     listOf(
@@ -32,16 +32,16 @@ internal class ShortestPathTest {
                     ),
                 )
             )
-            GraphAnalyzer.initialize(roads, emptyList())
-            snapshot = runBlocking { GraphAnalyzer.waitForNodes() }
+            graphAnalyzer.initialize(roads, emptyList())
+            snapshot = runBlocking { graphAnalyzer.waitForNodes() }
         }
 
         @Test
-        fun `find shortest path from ends of graph`() = runBlockingTest {
+        fun `find shortest path from ends of graph`() = runTest {
             val start = PointD(1, 1)
             val end = PointD(2, 2)
 
-            val result = GraphAnalyzer.getShortestPath(
+            val result = graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
@@ -55,11 +55,11 @@ internal class ShortestPathTest {
         }
 
         @Test
-        fun `find shortest path from end and middle of graph`() = runBlockingTest {
+        fun `find shortest path from end and middle of graph`() = runTest {
             val start = PointD(1, 1)
             val end = PointD(2, 1)
 
-            val result = GraphAnalyzer.getShortestPath(
+            val result = graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
@@ -72,11 +72,11 @@ internal class ShortestPathTest {
         }
 
         @Test
-        fun `find shortest path from end and outside of graph`() = runBlockingTest {
+        fun `find shortest path from end and outside of graph`() = runTest {
             val start = PointD(1, 1)
             val end = PointD(2, 3)
 
-            val result = GraphAnalyzer.getShortestPath(
+            val result = graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
@@ -90,11 +90,11 @@ internal class ShortestPathTest {
         }
 
         @Test
-        fun `find shortest path from middle of paths`() = runBlockingTest {
+        fun `find shortest path from middle of paths`() = runTest {
             val start = PointD(1.5, 1.0)
             val end = PointD(2.0, 1.5)
 
-            val result = GraphAnalyzer.getShortestPath(
+            val result = graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
@@ -108,11 +108,11 @@ internal class ShortestPathTest {
         }
 
         @Test
-        fun `find shortest path inside edge`() = runBlockingTest {
+        fun `find shortest path inside edge`() = runTest {
             val start = PointD(1.2, 1.0)
             val end = PointD(1.8, 1.0)
 
-            val result = GraphAnalyzer.getShortestPath(
+            val result = graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
@@ -125,11 +125,11 @@ internal class ShortestPathTest {
         }
 
         @Test
-        fun `find shortest path close to edge`() = runBlockingTest {
+        fun `find shortest path close to edge`() = runTest {
             val start = PointD(1.2, 1.1)
             val end = PointD(1.5, 1.2)
 
-            val result = GraphAnalyzer.getShortestPath(
+            val result = graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
@@ -142,11 +142,11 @@ internal class ShortestPathTest {
         }
 
         @Test
-        fun `find shortest path close to edges`() = runBlockingTest {
+        fun `find shortest path close to edges`() = runTest {
             val start = PointD(1.2, 1.1)
             val end = PointD(2.1, 1.8)
 
-            val result = GraphAnalyzer.getShortestPath(
+            val result = graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
@@ -160,11 +160,11 @@ internal class ShortestPathTest {
         }
 
         @AfterEach
-        fun `verify graph nodes not changed`() = runBlockingTest {
+        fun `verify graph nodes not changed`() = runTest {
             val p1 = PointD(1, 1)
             val p2 = PointD(2, 1)
             val p3 = PointD(2, 2)
-            val nodes = GraphAnalyzer.waitForNodes().toList()
+            val nodes = graphAnalyzer.waitForNodes().toList()
 
             assertEquals(setOf(p1, p2, p3), nodes.map { it.point }.toSet(), "Cleanup failed")
             assertEquals(setOf(p2), nodes[0].edges.map { it.node.point }.toSet(), "Cleanup failed")
@@ -173,38 +173,4 @@ internal class ShortestPathTest {
             assertEquals(snapshot.toList(), nodes, "Cleanup failed")
         }
     }
-
-//    @Nested
-//    @DisplayName("Real problem")
-//    inner class RealProblem {
-//
-//        init {
-//            val roads = listOf(
-//                MapItemEntity.PathEntity(
-//                    listOf(
-//                        PointD(x = 19.84980956743604, y = 50.05389690987041),
-//                        PointD(x = 19.84918406297732, y = 50.053710591445)
-//                    ),
-//                )
-//            )
-//            GraphAnalyzer.initialize(roads, emptyList())
-//        }
-//
-//        @Test
-//        fun `find shortest path inside edge`() = runBlockingTest {
-//            val start = PointD(x = 19.84932634283142, y = 50.05382008212765)
-//            val end = PointD(x = 19.8496133, y = 50.0538533)
-//
-//            val result = GraphAnalyzer.getShortestPath(
-//                endPoint = end,
-//                startPoint = start,
-//            )
-//
-//            val expected = listOf(
-//                start,
-//                end,
-//            )
-//            assertEquals(expected, result)
-//        }
-//    }
 }

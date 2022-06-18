@@ -1,11 +1,28 @@
 package com.jacekpietras.zoo.domain.di
 
+import com.jacekpietras.zoo.domain.business.GraphAnalyzer
+import com.jacekpietras.zoo.domain.business.PathListSnapper
+import com.jacekpietras.zoo.domain.business.PathSnapper
 import com.jacekpietras.zoo.domain.feature.favorites.di.favoritesModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.interactor.*
 import org.koin.dsl.module
 
 val domainModule = module {
+
+    single {
+        GraphAnalyzer()
+    }
+    factory {
+        PathSnapper(
+            graphAnalyzer = get(),
+        )
+    }
+    factory {
+        PathListSnapper(
+            pathSnapper = get(),
+        )
+    }
 
     factory {
         GetRegionsInUserPositionUseCase(
@@ -134,20 +151,23 @@ val domainModule = module {
             mapRepository = get()
         )
     }
-    factory {
-        InitializeGraphAnalyzerIfNeededUseCase(
-            mapRepository = get()
+    factory<InitializeGraphAnalyzerIfNeededUseCase> {
+        InitializeGraphAnalyzerIfNeededUseCaseImpl(
+            mapRepository = get(),
+            graphAnalyzer = get(),
         )
     }
-    factory {
-        GetShortestPathUseCase(
+    factory<GetShortestPathUseCase> {
+        GetShortestPathUseCaseImpl(
             initializeGraphAnalyzerIfNeededUseCase = get(),
+            graphAnalyzer = get(),
         )
     }
-    factory {
-        GetShortestPathFromUserUseCase(
+    factory<GetShortestPathFromUserUseCase> {
+        GetShortestPathFromUserUseCaseImpl(
             getUserPositionUseCase = get(),
             initializeGraphAnalyzerIfNeededUseCase = get(),
+            graphAnalyzer = get(),
         )
     }
     factory {
@@ -174,11 +194,12 @@ val domainModule = module {
             mapRepository = get(),
         )
     }
-    factory {
-        LoadVisitedRouteUseCase(
+    factory<LoadVisitedRouteUseCase> {
+        LoadVisitedRouteUseCaseImpl(
             mapRepository = get(),
             gpsRepository = get(),
             initializeGraphAnalyzerIfNeededUseCase = get(),
+            pathListSnapper = get(),
         )
     }
     factory {
@@ -206,12 +227,14 @@ val domainModule = module {
             gpsRepository = get(),
         )
     }
-    factory {
-        InsertUserPositionUseCase(
+    factory<InsertUserPositionUseCase> {
+        InsertUserPositionUseCaseImpl(
             gpsRepository = get(),
             mapRepository = get(),
             worldBoundsUseCase = get(),
             stopNavigationUseCase = get(),
+            pathListSnapper = get(),
+            pathSnapper = get(),
         )
     }
     factory {
@@ -230,9 +253,10 @@ val domainModule = module {
             gpsRepository = get(),
         )
     }
-    factory {
-        GetTerminalNodesUseCase(
+    factory<GetTerminalNodesUseCase> {
+        GetTerminalNodesUseCaseImpl(
             initializeGraphAnalyzerIfNeededUseCase = get(),
+            graphAnalyzer = get(),
         )
     }
     factory {

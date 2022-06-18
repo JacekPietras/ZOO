@@ -7,7 +7,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal object GraphAnalyzer {
+internal class GraphAnalyzer {
 
     private var nodes: MutableSet<Node>? = null
     private val snapper = PointSnapper()
