@@ -9,11 +9,16 @@ sealed class MapItemEntity {
         val vertices: List<PointD>
     ) : MapItemEntity() {
 
-        fun findCenter(): PointD {
-            val request = arrayOf(vertices.map { arrayOf(it.x, it.y) }.toTypedArray())
-            val result = PolyLabel.polyLabel(request, 0.0000001)
-            return PointD(result.coordinates[0], result.coordinates[1])
-        }
+        fun findCenter(): PointD =
+            if (vertices.size <= 4) {
+                val x = vertices.sumOf { it.x } / vertices.size
+                val y = vertices.sumOf { it.y } / vertices.size
+                PointD(x, y)
+            } else {
+                val request = arrayOf(vertices.map { arrayOf(it.x, it.y) }.toTypedArray())
+                PolyLabel.polyLabel(request, 0.0000001)
+                    .let { PointD(it.coordinates[0], it.coordinates[1]) }
+            }
 
         constructor(vararg pairs: Pair<Number, Number>)
                 : this(pairs.asIterable().map { PointD(it.first.toDouble(), it.second.toDouble()) })
