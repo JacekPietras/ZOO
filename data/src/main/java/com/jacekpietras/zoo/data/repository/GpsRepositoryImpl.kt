@@ -29,7 +29,7 @@ internal class GpsRepositoryImpl(
     private val compass = MutableStateFlow(0f)
     private val luminance = MutableStateFlow(1000f)
 
-    private val debugHistory by lazy {
+    private val debugHistory:List<List<GpsHistoryEntity>> by lazy {
         if (BuildConfig.DEBUG) {
             val ola1 = TxtParser(context, R.raw.ola_14_02_21)
             val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
@@ -40,8 +40,9 @@ internal class GpsRepositoryImpl(
             val jack4 = TxtParser(context, R.raw.jacek_18_03_22)
             val eliza3 = TxtParser(context, R.raw.eliza_08_05_21)
 
-            jack4.result
-//            ola1.result
+            emptyList()
+//             jack4.result
+//            + ola1.result
 //                        + jack1.result
 //                        + jack2.result + ola2.result
 //                        + jack3.result + ola3.result + eliza3.result

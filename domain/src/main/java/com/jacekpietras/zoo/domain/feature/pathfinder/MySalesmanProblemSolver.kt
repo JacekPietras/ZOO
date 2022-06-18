@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.feature.pathfinder
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.haversine
 import com.jacekpietras.zoo.domain.business.GraphAnalyzer
+import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.repository.MapRepository
 
@@ -14,19 +15,23 @@ internal class MySalesmanProblemSolver(
     private val cache: MutableList<CachedCalculation> = mutableListOf()
     private val tsp: SalesmanProblemSolver<RegionId> = SimulatedAnnealing()
 
-    suspend fun findShortPath(regions: List<RegionId>): List<Pair<RegionId, List<PointD>>> {
+    suspend fun findShortPath(stages: List<Stage>): List<Pair<Stage, List<PointD>>> {
+        val regions = stages.map { it.regionId }
         val result = tsp.run(
             request = regions,
-            distanceCalculation = { a, b -> getCalculation(a, b).distance },
+            distanceCalculation = { a, b -> getDistance(a, b) },
         )
 
         val points = result
             .zipWithNext { prev, next ->
-                prev to getCalculation(prev, next).list
+                Stage(prev) to getCalculation(prev, next).list
             }
-        val tail = result.last() to emptyList<PointD>()
+        val tail = Stage(result.last()) to emptyList<PointD>()
         return points + tail
     }
+
+    suspend fun getDistance(prev: RegionId, next: RegionId): Double =
+        getCalculation(prev, next).distance
 
     private suspend fun getCalculation(prev: RegionId, next: RegionId): CachedCalculation =
         cache.find { it.from == prev && it.to == next }
@@ -35,7 +40,12 @@ internal class MySalesmanProblemSolver(
     private suspend fun calculate(prev: RegionId, next: RegionId): CachedCalculation {
         val prevPoint = prev.getCenter()
         val nextPoint = next.getCenter()
-        val list = graphAnalyzer.getShortestPath(prevPoint, nextPoint)
+        val list = graphAnalyzer.getShortestPath(
+            prevPoint,
+            nextPoint,
+            technicalAllowedAtStart = false,
+            technicalAllowedAtEnd = false,
+        )
         val distance = list.toLengthInMeters()
         val calculationAsc = CachedCalculation(
             from = prev,

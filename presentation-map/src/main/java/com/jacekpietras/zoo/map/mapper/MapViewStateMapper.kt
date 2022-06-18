@@ -216,8 +216,9 @@ internal class MapViewStateMapper {
             radius = MapDimension.Dynamic.World(meters = 1.0),
         )
         val shortestPathPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Hard(Color.BLUE),
-            width = MapDimension.Static.Screen(2),
+//            strokeColor = MapColor.Hard(Color.BLUE),
+            strokeColor = MapColor.Hard(Color.argb(50, 0, 0, 255)),
+            width = MapDimension.Static.Screen(4),
         )
         val snappedPointPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Hard(Color.BLUE),

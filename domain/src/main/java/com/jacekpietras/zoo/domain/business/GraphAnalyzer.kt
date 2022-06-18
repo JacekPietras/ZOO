@@ -57,7 +57,8 @@ internal class GraphAnalyzer {
     suspend fun getShortestPath(
         endPoint: PointD,
         startPoint: PointD?,
-        technicalAllowed: Boolean = false,
+        technicalAllowedAtStart: Boolean = true,
+        technicalAllowedAtEnd: Boolean = false,
     ): List<PointD> {
         mutex.withLock {
             val nodes = waitForNodes()
@@ -65,13 +66,13 @@ internal class GraphAnalyzer {
             if (startPoint == null) return listOf(endPoint)
             if (nodes.isEmpty()) return listOf(endPoint)
 
-            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = true).makeNode()
-            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowed).makeNode()
+            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart).makeNode()
+            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd).makeNode()
 
             return getShortestPathJob(
                 start = snapStart,
                 end = snapEnd,
-                technicalAllowed = technicalAllowed,
+                technicalAllowed = technicalAllowedAtEnd,
             ).map { PointD(it.x, it.y) }
         }
     }

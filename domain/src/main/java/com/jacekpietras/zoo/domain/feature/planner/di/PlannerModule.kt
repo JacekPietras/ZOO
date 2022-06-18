@@ -1,9 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.planner.di
 
-import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveToCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.*
 import org.koin.dsl.module
 
 val plannerModule = module {
@@ -26,10 +23,10 @@ val plannerModule = module {
             isAnimalFavoriteUseCase = get(),
         )
     }
-    factory {
-        ObserveCurrentPlanPathUseCase(
+    factory<ObserveCurrentPlanPathUseCase> {
+        ObserveCurrentPlanPathUseCaseImpl(
             planRepository = get(),
-            calculateShortestPathUseCase = get(),
+            mySalesmanProblemSolver = get(),
         )
     }
 }
