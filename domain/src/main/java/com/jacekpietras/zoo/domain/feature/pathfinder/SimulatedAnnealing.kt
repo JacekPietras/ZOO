@@ -4,15 +4,15 @@ import java.util.*
 import kotlin.math.exp
 import kotlin.random.Random
 
-class SimulatedAnnealing<Obj> {
+class SimulatedAnnealing<T> {
 
     fun simulateAnnealing(
-        request: List<Obj>,
-        distanceCalculation: (Obj, Obj) -> Double,
+        request: List<T>,
+        distanceCalculation: (T, T) -> Double,
         startingTemperature: Double = 10000000.0,
         numberOfIterations: Int = 100000,
         coolingRate: Double = 0.999,
-    ): Pair<Double, List<Obj>> {
+    ): Pair<Double, List<T>> {
 
         var t = startingTemperature
         var i = 0
@@ -39,7 +39,7 @@ class SimulatedAnnealing<Obj> {
         return bestDistance to bestTravel
     }
 
-    private fun <T> List<T>.makeVariation(): ArrayList<T> {
+    private fun List<T>.makeVariation(): ArrayList<T> {
         val a = generateRandomIndex()
         var b = generateRandomIndex()
         while (a == b) {
@@ -52,9 +52,9 @@ class SimulatedAnnealing<Obj> {
         return variation
     }
 
-    private fun <T> List<T>.generateRandomIndex(): Int =
+    private fun List<T>.generateRandomIndex(): Int =
         Random.nextInt(size)
 
-    private fun List<Obj>.distance(distanceCalculation: (Obj, Obj) -> Double): Double =
+    private fun List<T>.distance(distanceCalculation: (T, T) -> Double): Double =
         zipWithNext { a, b -> distanceCalculation(a, b) }.sum()
 }
