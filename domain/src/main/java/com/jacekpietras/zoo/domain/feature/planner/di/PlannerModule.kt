@@ -29,7 +29,7 @@ val plannerModule = module {
     factory {
         ObserveCurrentPlanPathUseCase(
             planRepository = get(),
-            mapRepository = get(),
+            calculateShortestPathUseCase = get(),
         )
     }
 }
