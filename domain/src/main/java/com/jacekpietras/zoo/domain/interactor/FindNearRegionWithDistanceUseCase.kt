@@ -18,8 +18,5 @@ class FindNearRegionWithDistanceUseCase(
             .minByOrNull { (_, length) -> length }
 
     private fun List<PointD>.toLengthInMeters(): Double =
-        this
-            .zipWithNext()
-            .map { (p1, p2) -> haversine(p1.x, p1.y, p2.x, p2.y) }
-            .sum()
+        zipWithNext().sumOf { (p1, p2) -> haversine(p1.x, p1.y, p2.x, p2.y) }
 }
