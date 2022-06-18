@@ -32,20 +32,29 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
                 val userStage = listOf(Stage.InUserPosition(userPosition))
                 plan.copy(stages = userStage + plan.stages)
             }
-            .measureMap({ Timber.w("Optimization took $it") }) { plan ->
-                val result = mySalesmanProblemSolver.findShortPath(plan.stages)
+            .measureMap({ Timber.d("Optimization took $it") }) { plan ->
+                val result = mySalesmanProblemSolver.findShortPath(
+                    stages = plan.stages,
+                    immutablePositions = plan.stages.mapIndexed { i, stage ->
+                        if (stage is Stage.InRegion) {
+                            null
+                        } else {
+                            i
+                        }
+                    }.filterNotNull()
+                )
                 val resultStages = result.map { it.first }
                 val resultDistance = result.map { it.second }.flatten()
 
                 if (BuildConfig.DEBUG) {
-                    Timber.w("Optimization ${resultStages.distance()}m")
+                    Timber.d("Optimization ${resultStages.distance()}m")
                 }
 
                 if (plan.stages != resultStages) {
                     if (BuildConfig.DEBUG) {
                         val before = plan.stages.distance()
                         val after = resultStages.distance()
-                        Timber.w("Found new path $before -> $after")
+                        Timber.d("Found new path $before -> $after")
                     }
                     plan.copy(stages = resultStages)
                         .also { planRepository.setPlan(it) }

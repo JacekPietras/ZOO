@@ -15,12 +15,16 @@ internal class MySalesmanProblemSolver(
     private val cache: MutableList<CachedCalculation> = mutableListOf()
     private val tsp: SalesmanProblemSolver<Stage> = SimulatedAnnealing()
 
-    suspend fun findShortPath(stages: List<Stage>): List<Pair<Stage, List<PointD>>> {
+    suspend fun findShortPath(
+        stages: List<Stage>,
+        immutablePositions: List<Int>? = null,
+    ): List<Pair<Stage, List<PointD>>> {
         val methodRunCache = mutableMapOf<Pair<PointD, PointD>, Calculation>()
 
         val result = tsp.run(
             request = stages,
             distanceCalculation = { a, b -> getCalculation(a, b, methodRunCache).distance },
+            immutablePositions = immutablePositions,
         )
 
         val points = result
