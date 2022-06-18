@@ -53,7 +53,7 @@ class SimulatedAnnealingTest {
             println("New record: $result")
         }
 
-        println("${initialDistance.toInt()}\t/ ${result.toInt()}\t/ ${bestExpected.toInt()}\t| in $duration")
+        println("${initialDistance.toInt()} / ${result.toInt()} / ${bestExpected.toInt()} | in $duration")
     }
 
     private fun generateInitialTravel(

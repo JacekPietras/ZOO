@@ -9,9 +9,9 @@ class SimulatedAnnealing<T> {
     fun simulateAnnealing(
         request: List<T>,
         distanceCalculation: (T, T) -> Double,
-        startingTemperature: Double = 1000.0,
-        numberOfIterations: Int = 1000,
-        coolingRate: Double = 0.9,
+        startingTemperature: Double = 10000.0,
+        numberOfIterations: Int = 100000,
+        coolingRate: Double = 0.99,
     ): Pair<Double, List<T>> {
 
         var t = startingTemperature
@@ -39,18 +39,15 @@ class SimulatedAnnealing<T> {
         return bestDistance to bestTravel
     }
 
-    private fun List<T>.makeVariation(): ArrayList<T> {
-        val a = generateRandomIndex()
-        var b = generateRandomIndex()
-        while (a == b) {
-            b = generateRandomIndex()
+    private fun List<T>.makeVariation(): ArrayList<T> =
+        ArrayList(this).also {
+            val a = generateRandomIndex()
+            var b = generateRandomIndex()
+            while (a == b) {
+                b = generateRandomIndex()
+            }
+            Collections.swap(it, a, b)
         }
-
-        val variation = ArrayList(this)
-        Collections.swap(variation, a, b)
-
-        return variation
-    }
 
     private fun List<T>.generateRandomIndex(): Int =
         Random.nextInt(size)
