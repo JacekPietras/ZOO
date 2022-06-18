@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.feature.planner.interactor
 import com.jacekpietras.core.BuildConfig
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.MySalesmanProblemSolver
+import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CURRENT_PLAN_ID
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
@@ -21,30 +22,30 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
     private val gpsRepository: GpsRepository,
 ) : ObserveCurrentPlanPathUseCase {
 
+    private var lastCalculated: List<Stage> = emptyList()
+
     override fun run(): Flow<List<PointD>> =
         planRepository.observePlan(CURRENT_PLAN_ID)
-            .distinctUntilChanged { old, new -> old.stages == new.stages }
+            .distinctUntilChanged { _, new -> new.stages == lastCalculated }
             .onEach {
                 Timber.e("found new plan")
             }
-            .refreshPeriodically(MINUTE)
             .combine(observeUserPosition()) { plan, userPosition ->
-                val userStage = listOf(Stage.InUserPosition(userPosition))
+                val userStage = listOfNotNull(userPosition?.let { Stage.InUserPosition(it) })
                 plan.copy(stages = userStage + plan.stages)
             }
+            .refreshPeriodically(MINUTE)
             .measureMap({ Timber.d("Optimization took $it") }) { plan ->
+                if (BuildConfig.DEBUG) {
+                    Timber.d("Optimization started")
+                }
+
                 val result = mySalesmanProblemSolver.findShortPath(
                     stages = plan.stages,
-                    immutablePositions = plan.stages.mapIndexed { i, stage ->
-                        if (stage is Stage.InRegion) {
-                            null
-                        } else {
-                            i
-                        }
-                    }.filterNotNull()
+                    immutablePositions = notRegionIndexes(plan)
                 )
                 val resultStages = result.map { it.first }
-                val resultDistance = result.map { it.second }.flatten()
+                val resultPath = result.map { it.second }.flatten()
 
                 if (BuildConfig.DEBUG) {
                     Timber.d("Optimization ${resultStages.distance()}m")
@@ -56,12 +57,24 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
                         val after = resultStages.distance()
                         Timber.d("Found new path $before -> $after")
                     }
+                    lastCalculated = resultStages.filterIsInstance<Stage.InRegion>()
                     plan.copy(stages = resultStages)
                         .also { planRepository.setPlan(it) }
                 }
 
-                resultDistance
+                resultPath
             }
+
+    private fun notRegionIndexes(plan: PlanEntity) =
+        plan.stages
+            .mapIndexed { i, stage ->
+                if (stage is Stage.InRegion) {
+                    null
+                } else {
+                    i
+                }
+            }
+            .filterNotNull()
 
     private fun <T, Y> Flow<T>.measureMap(onMeasure: (Duration) -> Unit, block: suspend (T) -> Y): Flow<Y> = map {
         var result: Y
@@ -83,9 +96,11 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
             Timber.e("found new tick")
         }
 
-    private fun observeUserPosition(): Flow<PointD> =
+    @Suppress("USELESS_CAST")
+    private fun observeUserPosition(): Flow<PointD?> =
         gpsRepository.observeLatestPosition()
-            .map { PointD(it.lon, it.lat) }
+            .map { PointD(it.lon, it.lat) as PointD? }
+            .onStart { emit(null) }
             .distinctUntilChanged()
             .onEach {
                 Timber.e("found new point $it")
