@@ -9,9 +9,9 @@ class SimulatedAnnealing<T> {
     fun simulateAnnealing(
         request: List<T>,
         distanceCalculation: (T, T) -> Double,
-        startingTemperature: Double = 10000000.0,
-        numberOfIterations: Int = 100000,
-        coolingRate: Double = 0.999,
+        startingTemperature: Double = 1000.0,
+        numberOfIterations: Int = 1000,
+        coolingRate: Double = 0.9,
     ): Pair<Double, List<T>> {
 
         var t = startingTemperature

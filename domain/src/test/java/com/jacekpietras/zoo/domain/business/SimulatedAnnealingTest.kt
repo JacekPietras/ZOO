@@ -13,9 +13,9 @@ import kotlin.time.measureTime
 class SimulatedAnnealingTest {
 
     @Test
-    fun `test over 15`() {
+    fun `Annealing test over 15`() {
         repeat(100) {
-            doTest(
+            doAnnealingTest(
                 seed = 1000,
                 numberOfCities = 15,
                 bestExpected = 2213.471145583158,
@@ -24,9 +24,9 @@ class SimulatedAnnealingTest {
     }
 
     @Test
-    fun `test over 30`() {
+    fun `Annealing test over 30`() {
         repeat(100) {
-            doTest(
+            doAnnealingTest(
                 seed = 2000,
                 numberOfCities = 30,
                 bestExpected = 4861.186475289512,
@@ -34,7 +34,7 @@ class SimulatedAnnealingTest {
         }
     }
 
-    private fun doTest(seed: Long, numberOfCities: Int, bestExpected: Double) {
+    private fun doAnnealingTest(seed: Long, numberOfCities: Int, bestExpected: Double) {
         val initial = generateInitialTravel(
             seed = seed,
             numberOfCities = numberOfCities,
