@@ -43,7 +43,7 @@ class SimulatedAnnealingTest {
         var result: Double
 
         val duration = measureTime {
-            result = SimulatedAnnealing().simulateAnnealing(
+            result = SimulatedAnnealing<City>().simulateAnnealing(
                 request = initial,
                 distanceCalculation = { a, b -> a.distanceToCity(b) },
             ).first

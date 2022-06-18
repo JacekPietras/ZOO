@@ -4,9 +4,9 @@ import java.util.*
 import kotlin.math.exp
 import kotlin.random.Random
 
-class SimulatedAnnealing {
+class SimulatedAnnealing<Obj> {
 
-    fun <Obj> simulateAnnealing(
+    fun simulateAnnealing(
         request: List<Obj>,
         distanceCalculation: (Obj, Obj) -> Double,
         startingTemperature: Double = 10000000.0,
@@ -55,6 +55,6 @@ class SimulatedAnnealing {
     private fun <T> List<T>.generateRandomIndex(): Int =
         Random.nextInt(size)
 
-    private fun <Obj> List<Obj>.distance(distanceCalculation: (Obj, Obj) -> Double): Double =
+    private fun List<Obj>.distance(distanceCalculation: (Obj, Obj) -> Double): Double =
         zipWithNext { a, b -> distanceCalculation(a, b) }.sum()
 }
