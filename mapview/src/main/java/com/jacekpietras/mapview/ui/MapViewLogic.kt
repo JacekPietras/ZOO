@@ -195,6 +195,13 @@ class MapViewLogic<T>(
         }
     }
 
+    fun setRotate(rotate: Float) {
+        if (rotate != worldRotation) {
+            worldRotation = rotate
+            cutOutNotVisible()
+        }
+    }
+
     fun onScroll(vX: Float, vY: Float) {
         if (vX != 0f || vY != 0f) {
             centeringAtUser = false
