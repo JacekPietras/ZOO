@@ -52,7 +52,7 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
                         val after = resultStages.distance()
                         Timber.d("Found new path $before -> $after")
                     }
-                    lastCalculated = resultStages.filterIsInstance<Stage.InRegion>()
+                    lastCalculated = resultStages.filter { it !is Stage.InUserPosition }
                     plan.copy(stages = resultStages)
                         .also { planRepository.setPlan(it) }
                 }
