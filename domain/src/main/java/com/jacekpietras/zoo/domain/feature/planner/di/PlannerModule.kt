@@ -14,6 +14,7 @@ val plannerModule = module {
     factory {
         AddToCurrentPlanUseCase(
             planRepository = get(),
+            getAnimalUseCase = get(),
         )
     }
     factory {
@@ -21,6 +22,7 @@ val plannerModule = module {
             planRepository = get(),
             getAnimalsInRegionUseCase = get(),
             isAnimalFavoriteUseCase = get(),
+            getAnimalUseCase = get(),
         )
     }
     factory<ObserveCurrentPlanPathUseCase> {

@@ -129,9 +129,9 @@ internal class AnimalViewModel(
                 isFavorite = isFavorite,
             )
             if (isFavorite) {
-                addToCurrentPlanUseCase.run(regionId)
+                addToCurrentPlanUseCase.run(animalId)
             } else {
-                removeFromCurrentPlanUseCase.run(regionId)
+                removeFromCurrentPlanUseCase.run(animalId)
             }
         }
     }

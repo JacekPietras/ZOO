@@ -16,9 +16,24 @@ data class PlanEntity(
 
 sealed class Stage {
 
-    data class InRegion(
-        val regionId: RegionId,
-    ) : Stage()
+    sealed class InRegion(
+        open val regionId: RegionId,
+    ) : Stage() {
+
+        companion object {
+
+            operator fun invoke(regionId: RegionId): InRegion = Single(regionId)
+        }
+    }
+
+    data class Single(
+        override val regionId: RegionId,
+    ) : InRegion(regionId)
+
+    data class Multiple(
+        override val regionId: RegionId,
+        val alternatives: List<RegionId>,
+    ) : InRegion(regionId)
 
     data class InUserPosition(
         val point: PointD,
