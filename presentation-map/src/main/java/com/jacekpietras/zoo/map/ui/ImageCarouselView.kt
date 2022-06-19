@@ -105,8 +105,8 @@ private fun RegionCarouselItem(
 private fun imagePainter(url: String?) =
     rememberAsyncImagePainter(
         ImageRequest.Builder(LocalContext.current)
-            .data(data = url ?: "no image")
-            .apply(block = fun ImageRequest.Builder.() { crossfade(true) })
+            .data(data = url)
+            .crossfade(true)
             .build()
     )
 

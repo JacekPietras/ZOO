@@ -207,10 +207,10 @@ private fun ImageCarousel(
             contentPadding = PaddingValues(start = sidePadding, end = sidePadding, top = sidePadding),
         ) { page ->
             val painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current).data(data = listState.value.getOrNull(page) ?: "no image")
-                    .apply(block = fun ImageRequest.Builder.() {
-                        crossfade(true)
-                    }).build()
+                ImageRequest.Builder(LocalContext.current)
+                    .data(data = listState.value.getOrNull(page))
+                    .crossfade(true)
+                    .build()
             )
 
             BoxWithConstraints {

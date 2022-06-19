@@ -21,9 +21,9 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.jacekpietras.zoo.catalogue.BuildConfig
 import com.jacekpietras.zoo.catalogue.R
-import com.jacekpietras.zoo.core.ui.shimmerWhen
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueListItem
 import com.jacekpietras.zoo.core.theme.ZooTheme
+import com.jacekpietras.zoo.core.ui.shimmerWhen
 
 @Composable
 internal fun AnimalList(
@@ -49,8 +49,11 @@ internal fun AnimalList(
                         .clickable { onAnimalClicked(animal.id) },
                     contentAlignment = Alignment.BottomEnd,
                 ) {
-                    val painter = rememberAsyncImagePainter(ImageRequest.Builder(LocalContext.current).data(data = animal.img ?: "no image")
-                        .apply(block = fun ImageRequest.Builder.() { crossfade(true) }).build()
+                    val painter = rememberAsyncImagePainter(
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(data = animal.img)
+                            .crossfade(true)
+                            .build()
                     )
                     Image(
                         painter = painter,
