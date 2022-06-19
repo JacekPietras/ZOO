@@ -6,5 +6,11 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "plan")
 internal data class PlanDto(
     @PrimaryKey val planId: String,
-    val stages: List<String>,
+    val stages: List<StageDto>,
+)
+
+internal data class StageDto(
+    val mutable: Boolean,
+    val regionId: String,
+    val alternatives: List<String>?,
 )

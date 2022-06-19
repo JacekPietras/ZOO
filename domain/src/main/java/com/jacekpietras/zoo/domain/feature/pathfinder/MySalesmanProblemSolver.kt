@@ -27,6 +27,10 @@ internal class MySalesmanProblemSolver(
             immutablePositions = immutablePositions,
         )
 
+        if (result.isEmpty()) {
+            return emptyList()
+        }
+
         val points = result
             .zipWithNext { prev, next ->
                 prev to getCalculation(prev, next, methodRunCache).list

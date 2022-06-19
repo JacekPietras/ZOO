@@ -74,7 +74,7 @@ internal class PlannerViewModel(
                     animals.forEach { animal ->
                         setAnimalFavoriteUseCase.run(animal.id, false)
                     }
-                    removeFromCurrentPlanUseCase.run(stage.regionId)
+                    removeFromCurrentPlanUseCase.run(stage)
                 }
         }
     }

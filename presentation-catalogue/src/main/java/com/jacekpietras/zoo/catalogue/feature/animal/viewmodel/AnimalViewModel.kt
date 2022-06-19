@@ -119,8 +119,6 @@ internal class AnimalViewModel(
     fun onFavoriteClicked() {
         val isFavorite = (currentState.isFavorite ?: false).not()
         val animalId = currentState.animalId
-        // fixme multiple regions! we want only one of them
-        val regionId = currentState.animal.regionInZoo.first()
 
         launchInBackground {
             state.reduceOnMain { copy(isFavorite = isFavorite) }

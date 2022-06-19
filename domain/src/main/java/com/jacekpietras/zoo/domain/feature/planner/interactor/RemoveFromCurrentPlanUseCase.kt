@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.RegionId
 
 class RemoveFromCurrentPlanUseCase(
     private val planRepository: PlanRepository,
@@ -17,20 +18,41 @@ class RemoveFromCurrentPlanUseCase(
 ) {
 
     suspend fun run(animalId: AnimalId) {
-        val animal = getAnimalUseCase.run(animalId)
         val plan = getPlan()
-        val regions = animal.regionInZoo
+        val regions = getAnimalUseCase.run(animalId).regionInZoo
 
-        val plannedAnimalsInRegion = getAnimalsInRegionUseCase.run(regionId)
-            .filter { animal -> isAnimalFavoriteUseCase.run(animal.id) }
-        if (plannedAnimalsInRegion.isEmpty()) {
+        if (regions.isEmpty()) return
+
+        if (regions.first().getFavoriteAnimals(animalId).isNotEmpty()) return
+
+        if (regions.size == 1) {
             val newPlan = plan.copy(
-                stages = plan.stages.fil - Stage.InRegion(regionId)
+                stages = plan.stages
+                    .filter { stage -> stage !is Stage.Single || stage.regionId != regions.first() }
+            )
+            planRepository.setPlan(newPlan)
+
+        } else if (regions.size > 1) {
+            val newPlan = plan.copy(
+                stages = plan.stages
+                    .filter { stage -> stage !is Stage.Multiple || stage.alternatives != regions }
             )
             planRepository.setPlan(newPlan)
         }
-
     }
+
+    suspend fun run(stage: Stage) {
+        val plan = getPlan()
+        val newPlan = plan.copy(
+            stages = plan.stages - stage
+        )
+        planRepository.setPlan(newPlan)
+    }
+
+    private suspend fun RegionId.getFavoriteAnimals(ignored: AnimalId): List<AnimalId> =
+        getAnimalsInRegionUseCase.run(this)
+            .filter { animal -> animal.id != ignored && isAnimalFavoriteUseCase.run(animal.id) }
+            .map { it.id }
 
     private suspend fun getPlan(): PlanEntity =
         (planRepository.getPlan(CURRENT_PLAN_ID) ?: newPlan())

@@ -6,6 +6,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.RegionId
 
 class AddToCurrentPlanUseCase(
     private val planRepository: PlanRepository,
@@ -13,20 +14,37 @@ class AddToCurrentPlanUseCase(
 ) {
 
     suspend fun run(animalId: AnimalId) {
-        val animal = getAnimalUseCase.run(animalId)
         val plan = getPlan()
-        val regions = animal.regionInZoo
+        val regions = getAnimalUseCase.run(animalId).regionInZoo
 
-        // fixme solve multiple regions
+        if (plan.containsRegions(regions)) return
 
-        if (!plan.stages.filterIsInstance<Stage.InRegion>()
-                .map(Stage.InRegion::regionId).contains(regionId)
-        ) {
-            val newPlan = plan.copy(
-                stages = plan.stages + Stage.InRegion(regionId)
+        val newPlan = plan.copy(
+            stages = plan.stages + makeNewRegion(regions)
+        )
+        planRepository.setPlan(newPlan)
+    }
+
+    private fun makeNewRegion(regions: List<RegionId>) =
+        if (regions.size == 1) {
+            Stage.Single(
+                regionId = regions.first(),
+                mutable = true,
             )
-            planRepository.setPlan(newPlan)
+        } else {
+            Stage.Multiple(
+                regionId = regions.first(),
+                mutable = true,
+                alternatives = regions,
+            )
         }
+
+    private fun PlanEntity.containsRegions(
+        regions: List<RegionId>,
+    ) = when {
+        regions.isEmpty() -> true
+        regions.size == 1 -> singleRegionStages.any { it.regionId == regions.first() }
+        else -> multipleRegionStages.any { it.alternatives == regions }
     }
 
     private suspend fun getPlan(): PlanEntity =
