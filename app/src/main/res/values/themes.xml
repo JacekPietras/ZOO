@@ -20,7 +20,7 @@
         <item name="colorMapRoadVisited">#D1FAE1</item>
         <item name="colorMapRoadBorder">#D7DBDD</item>
         <item name="colorMapTaken">?colorPrimary</item>
-        <item name="colorMapTechnical">#FFC9C9</item>
+        <item name="colorMapTechnical">#FFF0F0</item>
         <item name="colorMapTechnicalBorder">#D7DBDD</item>
 
         <item name="colorSmallMapBackground">#A1DAB8</item>
