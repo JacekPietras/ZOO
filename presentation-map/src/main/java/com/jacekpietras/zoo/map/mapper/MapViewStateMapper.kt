@@ -211,11 +211,11 @@ internal class MapViewStateMapper {
             strokeColor = MapColor.Attribute(R.attr.colorMapRoadVisited),
             width = MapDimension.Dynamic.World(2.0),
         )
-        val technicalPaint: MapPaint = MapPaint.StrokeWithBorder(
+        val technicalPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Attribute(R.attr.colorMapTechnical),
             width = MapDimension.Dynamic.World(2.0),
-            borderColor = MapColor.Attribute(R.attr.colorMapTechnicalBorder),
-            borderWidth = MapDimension.Static.Screen(1),
+//            borderColor = MapColor.Attribute(R.attr.colorMapTechnicalBorder),
+//            borderWidth = MapDimension.Static.Screen(1),
         )
         val linesPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Hard(Color.rgb(240, 180, 140)),
