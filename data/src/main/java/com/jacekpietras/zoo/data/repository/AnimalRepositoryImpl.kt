@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
 
 class AnimalRepositoryImpl(
     private val context: Context,
@@ -128,10 +127,12 @@ class AnimalRepositoryImpl(
             }
             ?: emptyList()
 
-    companion object {
-        private var storedAnimals: List<AnimalEntity> = emptyList()
-    }
     private fun String.correctSpecialCharacters(): String =
         replace("&#8222;", "„")
             .replace("&#8221;", "”")
+
+    companion object {
+
+        private var storedAnimals: List<AnimalEntity> = emptyList()
+    }
 }

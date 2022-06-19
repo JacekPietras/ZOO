@@ -8,7 +8,7 @@ import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.model.RegionId
 
-class RemoveToCurrentPlanUseCase(
+class RemoveFromCurrentPlanUseCase(
     private val planRepository: PlanRepository,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val isAnimalFavoriteUseCase: IsAnimalFavoriteUseCase,

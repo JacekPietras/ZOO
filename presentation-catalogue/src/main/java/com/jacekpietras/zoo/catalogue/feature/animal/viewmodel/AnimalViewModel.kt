@@ -5,13 +5,14 @@ import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
+import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
-import com.jacekpietras.zoo.domain.feature.favorites.interactor.IsAnimalFavoriteUseCase
+import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveToCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.MapItemEntity
@@ -20,16 +21,17 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.plus
 
 internal class AnimalViewModel(
     animalId: AnimalId,
     mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
     isAnimalSeenUseCase: IsAnimalSeenUseCase,
-    isAnimalFavoriteUseCase: IsAnimalFavoriteUseCase,
+    observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addToCurrentPlanUseCase: AddToCurrentPlanUseCase,
-    private val removeToCurrentPlanUseCase: RemoveToCurrentPlanUseCase,
+    private val removeFromCurrentPlanUseCase: RemoveFromCurrentPlanUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     observeBuildingsUseCase: ObserveBuildingsUseCase,
@@ -68,16 +70,23 @@ internal class AnimalViewModel(
                         roads = roads,
                     )
                 }
-            }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope + dispatcherProvider.default)
+
+            observeAnimalFavoritesUseCase.run()
+                .onEach { favorites ->
+                    val isFavorite = favorites.contains(animalId)
+                    state.reduceOnMain {
+                        copy(isFavorite = isFavorite)
+                    }
+                }
+                .launchIn(viewModelScope + dispatcherProvider.default)
 
             val isSeen = isAnimalSeenUseCase.run(animalId)
-            val isFavorite = isAnimalFavoriteUseCase.run(animalId)
             val positions = getAnimalPositionUseCase.run(animalId)
 
             state.reduceOnMain {
                 copy(
                     isSeen = isSeen,
-                    isFavorite = isFavorite,
                     animalPositions = positions,
                 )
             }
@@ -122,7 +131,7 @@ internal class AnimalViewModel(
             if (isFavorite) {
                 addToCurrentPlanUseCase.run(regionId)
             } else {
-                removeToCurrentPlanUseCase.run(regionId)
+                removeFromCurrentPlanUseCase.run(regionId)
             }
         }
     }

@@ -17,7 +17,7 @@ val plannerModule = module {
         )
     }
     factory {
-        RemoveToCurrentPlanUseCase(
+        RemoveFromCurrentPlanUseCase(
             planRepository = get(),
             getAnimalsInRegionUseCase = get(),
             isAnimalFavoriteUseCase = get(),

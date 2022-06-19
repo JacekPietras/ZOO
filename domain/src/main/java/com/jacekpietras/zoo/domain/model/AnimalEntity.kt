@@ -1,10 +1,6 @@
 package com.jacekpietras.zoo.domain.model
 
-import com.jacekpietras.zoo.domain.model.Division.AMPHIBIAN
-import com.jacekpietras.zoo.domain.model.Division.BIRD
-import com.jacekpietras.zoo.domain.model.Division.FISH
-import com.jacekpietras.zoo.domain.model.Division.MAMMAL
-import com.jacekpietras.zoo.domain.model.Division.REPTILE
+import com.jacekpietras.zoo.domain.model.Division.*
 
 data class AnimalEntity(
     val id: AnimalId = AnimalId("id"),
@@ -31,7 +27,7 @@ data class Feeding(
     val note: String?,
 )
 
-class AnimalId(id: String) {
+class AnimalId(id: String) : Comparable<AnimalId> {
 
     val id: String = id
         .trim()
@@ -55,6 +51,23 @@ class AnimalId(id: String) {
         .replace("Ń", "n")
         .replace(" ", "-")
         .lowercase()
+
+    override fun compareTo(other: AnimalId): Int =
+        id.compareTo(other.id)
+
+    override fun hashCode(): Int =
+        id.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AnimalId
+
+        if (id != other.id) return false
+
+        return true
+    }
 }
 
 enum class Division {

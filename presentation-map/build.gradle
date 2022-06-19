@@ -8,7 +8,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 dependencies {
     implementation project(':core')
     implementation project(':mapview')
-    implementation project(':presentation-core')
+    api project(':presentation-core')
     implementation project(':domain')
     implementation project(':tracking')
 

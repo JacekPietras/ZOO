@@ -12,7 +12,9 @@ val plannerModule = module {
             stateMapper = get(),
             observeCurrentPlanUseCase = get(),
             getAnimalsInRegionUseCase = get(),
-            isAnimalInPlanUseCase = get(),
+            observeAnimalFavoritesUseCase = get(),
+            removeFromCurrentPlanUseCase = get(),
+            setAnimalFavoriteUseCase = get(),
         )
     }
 

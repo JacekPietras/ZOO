@@ -31,9 +31,9 @@ import coil.request.ImageRequest
 import com.jacekpietras.zoo.core.ui.shimmerWhen
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.AnimalDivisionValue
 import com.jacekpietras.zoo.map.model.MapCarouselItem
-import com.jacekpietras.zoo.core.R as CoreR
 
 @Composable
 fun ImageCarouselView(
@@ -169,14 +169,14 @@ private fun AnimalImageView(url: String?, size: Dp, division: AnimalDivisionValu
 
 private fun AnimalDivisionValue?.getIcon(): Int =
     when (this) {
-        AnimalDivisionValue.MAMMAL -> CoreR.drawable.ic_animal_lion_24
-        AnimalDivisionValue.BIRD -> CoreR.drawable.ic_animal_bird_24
-        AnimalDivisionValue.AMPHIBIAN -> CoreR.drawable.ic_animal_frog_24
-        AnimalDivisionValue.REPTILE -> CoreR.drawable.ic_animal_snake_24
-        AnimalDivisionValue.FISH -> CoreR.drawable.ic_animal_fish_24
-        AnimalDivisionValue.ARTHROPOD -> CoreR.drawable.ic_animal_spider_24
-        AnimalDivisionValue.MOLLUSCA -> CoreR.drawable.ic_animal_snail_24
-        null -> CoreR.drawable.ic_close_24
+        AnimalDivisionValue.MAMMAL -> R.drawable.ic_animal_lion_24
+        AnimalDivisionValue.BIRD -> R.drawable.ic_animal_bird_24
+        AnimalDivisionValue.AMPHIBIAN -> R.drawable.ic_animal_frog_24
+        AnimalDivisionValue.REPTILE -> R.drawable.ic_animal_snake_24
+        AnimalDivisionValue.FISH -> R.drawable.ic_animal_fish_24
+        AnimalDivisionValue.ARTHROPOD -> R.drawable.ic_animal_spider_24
+        AnimalDivisionValue.MOLLUSCA -> R.drawable.ic_animal_snail_24
+        null -> R.drawable.ic_close_24
     }
 
 @SuppressLint("ComposableModifierFactory")
