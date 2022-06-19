@@ -10,6 +10,7 @@ sealed class MapCarouselItem(
 
     data class Animal(
         val id: AnimalId,
+        val division: AnimalDivisionValue,
         override val name: Text,
         val photoUrl: String?,
     ) : MapCarouselItem(name)
@@ -21,5 +22,9 @@ sealed class MapCarouselItem(
         val photoUrlRightTop: String?,
         val photoUrlLeftBottom: String?,
         val photoUrlRightBottom: String?,
+        val divisionLeftTop: AnimalDivisionValue?,
+        val divisionRightTop: AnimalDivisionValue?,
+        val divisionLeftBottom: AnimalDivisionValue?,
+        val divisionRightBottom: AnimalDivisionValue?,
     ) : MapCarouselItem(name)
 }

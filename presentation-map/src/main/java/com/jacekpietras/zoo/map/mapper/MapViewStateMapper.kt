@@ -6,6 +6,7 @@ import com.jacekpietras.mapview.model.*
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.AnimalEntity
+import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region
@@ -147,15 +148,22 @@ internal class MapViewStateMapper {
         mutableListOf<MapCarouselItem>().apply {
             regionsWithAnimals.forEach { (region, animalsInRegion) ->
                 if (animalsInRegion.size > 5 && regionsWithAnimals.size > 1) {
-                    val images = animalsInRegion.map { it.photos }.flatten().shuffled(Random(carouselSeed))
+                    val images = animalsInRegion
+                        .map { animal -> animal.photos.map { photo -> photo to animal.division } }
+                        .flatten()
+                        .shuffled(Random(carouselSeed))
                     add(
                         MapCarouselItem.Region(
                             id = region.id,
                             name = region.id.id.findReadableName(),
-                            photoUrlLeftTop = images.getOrNull(0),
-                            photoUrlRightTop = images.getOrNull(1),
-                            photoUrlLeftBottom = images.getOrNull(2),
-                            photoUrlRightBottom = images.getOrNull(3),
+                            photoUrlLeftTop = images.getOrNull(0)?.first,
+                            photoUrlRightTop = images.getOrNull(1)?.first,
+                            photoUrlLeftBottom = images.getOrNull(2)?.first,
+                            photoUrlRightBottom = images.getOrNull(3)?.first,
+                            divisionLeftTop = images.getOrNull(0)?.second?.toViewValue(),
+                            divisionRightTop = images.getOrNull(1)?.second?.toViewValue(),
+                            divisionLeftBottom = images.getOrNull(2)?.second?.toViewValue(),
+                            divisionRightBottom = images.getOrNull(3)?.second?.toViewValue(),
                         )
                     )
                 } else {
@@ -163,6 +171,7 @@ internal class MapViewStateMapper {
                         add(
                             MapCarouselItem.Animal(
                                 id = animal.id,
+                                division = animal.division.toViewValue(),
                                 name = Text(animal.name),
                                 photoUrl = animal.photos.shuffled(Random(carouselSeed)).firstOrNull(),
                             )
@@ -176,6 +185,9 @@ internal class MapViewStateMapper {
                 { (it as? MapCarouselItem.Animal)?.photoUrl == null },
             )
         )
+
+    private fun Division.toViewValue(): AnimalDivisionValue =
+        AnimalDivisionValue.valueOf(name)
 
     private companion object {
 
