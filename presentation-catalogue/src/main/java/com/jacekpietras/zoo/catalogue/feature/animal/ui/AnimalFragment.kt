@@ -45,7 +45,6 @@ class AnimalFragment : Fragment() {
             val viewState by viewModel.viewState.observeAsState()
             viewState?.updateMap()
 
-
             ZooTheme {
                 AnimalFragmentView(
                     viewState = viewState,
