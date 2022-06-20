@@ -5,7 +5,7 @@ import java.util.*
 import kotlin.math.exp
 import kotlin.random.Random
 
-class SimulatedAnnealing<T> : SalesmanProblemSolver<T> {
+class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
 
     override suspend fun run(
         request: List<T>,

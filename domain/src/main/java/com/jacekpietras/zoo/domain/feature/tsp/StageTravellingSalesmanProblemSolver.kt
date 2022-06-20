@@ -7,13 +7,13 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
 
-internal class MySalesmanProblemSolver(
+internal class StageTravellingSalesmanProblemSolver(
     private val graphAnalyzer: GraphAnalyzer,
     private val mapRepository: MapRepository,
+    private val tspAlgorithm: TravelingSalesmanProblemAlgorithm<Stage>,
 ) {
 
     private val cache: MutableList<CachedCalculation> = mutableListOf()
-    private val tsp: SalesmanProblemSolver<Stage> = SimulatedAnnealing()
 
     suspend fun findShortPath(
         stages: List<Stage>,
@@ -21,7 +21,7 @@ internal class MySalesmanProblemSolver(
     ): Pair<List<Stage>, List<PointD>> {
         val methodRunCache = mutableMapOf<Pair<PointD, PointD>, Calculation>()
 
-        val (distance, resultStages) = tsp.run(
+        val (distance, resultStages) = tspAlgorithm.run(
             request = stages,
             distanceCalculation = { a, b -> getCalculation(a, b, methodRunCache).distance },
             immutablePositions = immutablePositions,

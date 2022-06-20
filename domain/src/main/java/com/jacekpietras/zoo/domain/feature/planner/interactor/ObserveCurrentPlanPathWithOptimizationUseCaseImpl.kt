@@ -7,7 +7,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CU
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
-import com.jacekpietras.zoo.domain.feature.tsp.MySalesmanProblemSolver
+import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -18,7 +18,7 @@ import kotlin.time.measureTime
 @ExperimentalTime
 internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
-    private val mySalesmanProblemSolver: MySalesmanProblemSolver,
+    private val tspSolver: StageTravellingSalesmanProblemSolver,
     private val gpsRepository: GpsRepository,
 ) : ObserveCurrentPlanPathWithOptimizationUseCase {
 
@@ -35,7 +35,7 @@ internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
             .refreshPeriodically(MINUTE)
             .measureMap({ Timber.d("Optimization took $it") }) { currentPlan ->
                 val (resultStages, resultPath) =
-                    mySalesmanProblemSolver.findShortPath(
+                    tspSolver.findShortPath(
                         stages = currentPlan.stages,
                         immutablePositions = notRegionIndexes(currentPlan)
                     )
@@ -100,7 +100,7 @@ internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
             .distinctUntilChanged()
 
     private suspend fun List<Stage>.distance(): Double =
-        zipWithNext { a, b -> mySalesmanProblemSolver.getDistance(a, b) }.sum()
+        zipWithNext { a, b -> tspSolver.getDistance(a, b) }.sum()
 
     companion object {
 

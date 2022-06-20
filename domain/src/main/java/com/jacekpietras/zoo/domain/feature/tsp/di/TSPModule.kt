@@ -1,13 +1,15 @@
 package com.jacekpietras.zoo.domain.feature.tsp.di
 
-import com.jacekpietras.zoo.domain.feature.tsp.MySalesmanProblemSolver
+import com.jacekpietras.zoo.domain.feature.tsp.SimulatedAnnealing
+import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
 import org.koin.dsl.module
 
 val tspModule = module {
     single {
-        MySalesmanProblemSolver(
+        StageTravellingSalesmanProblemSolver(
             mapRepository = get(),
             graphAnalyzer = get(),
+            tsp = SimulatedAnnealing(),
         )
     }
 }
