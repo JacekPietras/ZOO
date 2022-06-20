@@ -19,7 +19,7 @@ internal class StageTravellingSalesmanProblemSolver(
     suspend fun findShortPath(
         stages: List<Stage>,
     ): Pair<List<Stage>, List<PointD>> {
-        val immutablePositions: List<Int> = stages.immutablePositions()
+        val immutablePositions = stages.immutablePositions()
         val pointCalculationCache = PointCalculationCache()
 
         val (_, resultStages) = optionCreator.run(stages)

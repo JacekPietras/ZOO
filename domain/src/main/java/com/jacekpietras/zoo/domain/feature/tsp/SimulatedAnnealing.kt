@@ -12,9 +12,8 @@ internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?,
     ): Pair<Double, List<T>> {
-        val ignoredPoints = immutablePositions?.size ?: 0
-        if (points.size - ignoredPoints < 3) {
-            Timber.d("Optimization cannot be done, not enough points ${points.size} ($ignoredPoints ignored)")
+        if (points.size <= 2) {
+            Timber.d("Optimization cannot be done, not enough points ${points.size}")
             return points.distance(distanceCalculation) to points
         }
 
@@ -23,7 +22,7 @@ internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
         var bestDistance = points.distance(distanceCalculation)
         var bestTravel = points
 
-        var travel = ArrayList(points).shuffled()
+        var travel = ArrayList(points)
 
         while (t > 0.1 && i < numberOfIterations) {
             val travelVariation = travel.makeVariation(immutablePositions)
