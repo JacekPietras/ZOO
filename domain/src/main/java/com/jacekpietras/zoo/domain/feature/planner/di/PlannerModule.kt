@@ -25,8 +25,8 @@ val plannerModule = module {
             getAnimalUseCase = get(),
         )
     }
-    factory<ObserveCurrentPlanPathUseCase> {
-        ObserveCurrentPlanPathUseCaseImpl(
+    factory<ObserveCurrentPlanPathWithOptimizationUseCase> {
+        ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
             planRepository = get(),
             mySalesmanProblemSolver = get(),
             gpsRepository = get(),

@@ -16,7 +16,7 @@ import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.*
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
@@ -48,7 +48,7 @@ internal class MapViewModel(
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
-    observeCurrentPlanPathUseCase: ObserveCurrentPlanPathUseCase,
+    observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
     getUserPositionUseCase: GetUserPositionUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,

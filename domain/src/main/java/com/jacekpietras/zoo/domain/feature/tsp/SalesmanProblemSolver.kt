@@ -6,5 +6,5 @@ interface SalesmanProblemSolver<T> {
         request: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>? = null,
-    ):  List<T>
+    ):  Pair<Double, List<T>>
 }

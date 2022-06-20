@@ -16,11 +16,11 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 @ExperimentalTime
-internal class ObserveCurrentPlanPathUseCaseImpl(
+internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
     private val mySalesmanProblemSolver: MySalesmanProblemSolver,
     private val gpsRepository: GpsRepository,
-) : ObserveCurrentPlanPathUseCase {
+) : ObserveCurrentPlanPathWithOptimizationUseCase {
 
     private var lastCalculated: List<Stage> = emptyList()
     private var lastGpsPointTimestamp: Long = 0L
@@ -34,23 +34,19 @@ internal class ObserveCurrentPlanPathUseCaseImpl(
             }
             .refreshPeriodically(MINUTE)
             .measureMap({ Timber.d("Optimization took $it") }) { plan ->
-
-                val result = mySalesmanProblemSolver.findShortPath(
+                val (distance, resultStages, resultPath) = mySalesmanProblemSolver.findShortPath(
                     stages = plan.stages,
                     immutablePositions = notRegionIndexes(plan)
                 )
-                val resultStages = result.map { it.first }
-                val resultPath = result.map { it.second }.flatten()
 
                 if (BuildConfig.DEBUG) {
-                    Timber.d("Optimization ${resultStages.distance()}m")
+                    Timber.d("Optimization ${distance}m")
                 }
 
                 if (plan.stages != resultStages) {
                     if (BuildConfig.DEBUG) {
                         val before = plan.stages.distance()
-                        val after = resultStages.distance()
-                        Timber.d("Found new path $before -> $after")
+                        Timber.d("Found new path $before -> $distance")
                     }
                     lastCalculated = resultStages.filter { it !is Stage.InUserPosition }
                     plan.copy(stages = resultStages)

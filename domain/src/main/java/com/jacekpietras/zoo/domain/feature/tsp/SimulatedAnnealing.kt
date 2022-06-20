@@ -11,16 +11,6 @@ class SimulatedAnnealing<T> : SalesmanProblemSolver<T> {
         request: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?,
-    ): List<T> = simulateAnnealing(
-        request = request,
-        distanceCalculation = distanceCalculation,
-        immutablePositions = immutablePositions,
-    ).second
-
-    suspend fun simulateAnnealing(
-        request: List<T>,
-        distanceCalculation: suspend (T, T) -> Double,
-        immutablePositions: List<Int>? = null,
     ): Pair<Double, List<T>> {
         val ignoredPoints = immutablePositions?.size ?: 0
         if (request.size - ignoredPoints < 3) {

@@ -18,25 +18,21 @@ internal class MySalesmanProblemSolver(
     suspend fun findShortPath(
         stages: List<Stage>,
         immutablePositions: List<Int>? = null,
-    ): List<Pair<Stage, List<PointD>>> {
+    ): Triple<Double, List<Stage>, List<PointD>> {
         val methodRunCache = mutableMapOf<Pair<PointD, PointD>, Calculation>()
 
-        val result = tsp.run(
+        val (distance, resultStages) = tsp.run(
             request = stages,
             distanceCalculation = { a, b -> getCalculation(a, b, methodRunCache).distance },
             immutablePositions = immutablePositions,
         )
 
-        if (result.isEmpty()) {
-            return emptyList()
-        }
-
-        val points = result
+        val resultPath = resultStages
             .zipWithNext { prev, next ->
-                prev to getCalculation(prev, next, methodRunCache).list
-            }
-        val tail = result.last() to emptyList<PointD>()
-        return points + tail
+                getCalculation(prev, next, methodRunCache).list
+            }.flatten()
+
+        return Triple(distance, resultStages, resultPath)
     }
 
     suspend fun getDistance(prev: Stage, next: Stage): Double =
