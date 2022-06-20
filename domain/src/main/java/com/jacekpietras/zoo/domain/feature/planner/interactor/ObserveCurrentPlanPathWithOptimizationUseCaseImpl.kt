@@ -35,10 +35,7 @@ internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
             .refreshPeriodically(MINUTE)
             .measureMap({ Timber.d("Optimization took $it") }) { currentPlan ->
                 val (resultStages, resultPath) =
-                    tspSolver.findShortPath(
-                        stages = currentPlan.stages,
-                        immutablePositions = notRegionIndexes(currentPlan)
-                    )
+                    tspSolver.findShortPath(currentPlan.stages)
 
                 if (currentPlan.stages != resultStages) {
                     saveBetterPlan(currentPlan, resultStages)
@@ -59,17 +56,6 @@ internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
         lastCalculated = resultStages.filter { it !is Stage.InUserPosition }
         planRepository.setPlan(currentPlan.copy(stages = resultStages))
     }
-
-    private fun notRegionIndexes(plan: PlanEntity) =
-        plan.stages
-            .mapIndexed { i, stage ->
-                if (stage is Stage.InRegion) {
-                    null
-                } else {
-                    i
-                }
-            }
-            .filterNotNull()
 
     private fun <T, Y> Flow<T>.measureMap(onMeasure: (Duration) -> Unit, block: suspend (T) -> Y): Flow<Y> = map {
         var result: Y

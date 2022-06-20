@@ -17,8 +17,8 @@ internal class StageTravellingSalesmanProblemSolver(
 
     suspend fun findShortPath(
         stages: List<Stage>,
-        immutablePositions: List<Int>? = null,
     ): Pair<List<Stage>, List<PointD>> {
+        val immutablePositions: List<Int> = stages.immutablePositions()
         val pointCalculationCache = PointCalculationCache()
 
         val (distance, resultStages) = tspAlgorithm.run(
@@ -29,6 +29,14 @@ internal class StageTravellingSalesmanProblemSolver(
 
         return Pair(resultStages, resultStages.makePath(pointCalculationCache))
     }
+
+    private fun List<Stage>.immutablePositions() =
+        mapIndexed { i, stage ->
+            when (stage) {
+                is Stage.InRegion -> i.takeIf { !stage.mutable }
+                is Stage.InUserPosition -> i
+            }
+        }.filterNotNull()
 
     private suspend fun List<Stage>.makePath(pointCalculationCache: PointCalculationCache) =
         zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).path }
