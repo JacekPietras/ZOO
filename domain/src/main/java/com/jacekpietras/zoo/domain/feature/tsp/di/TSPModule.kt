@@ -9,7 +9,7 @@ val tspModule = module {
         StageTravellingSalesmanProblemSolver(
             mapRepository = get(),
             graphAnalyzer = get(),
-            tsp = SimulatedAnnealing(),
+            tspAlgorithm = SimulatedAnnealing(),
         )
     }
 }
