@@ -13,13 +13,13 @@ internal class StageTravellingSalesmanProblemSolver(
     private val tspAlgorithm: TravelingSalesmanProblemAlgorithm<Stage>,
 ) {
 
-    private val cache: MutableList<CachedCalculation> = mutableListOf()
+    private val cache: MutableList<RegionCalculation> = mutableListOf()
 
     suspend fun findShortPath(
         stages: List<Stage>,
         immutablePositions: List<Int>? = null,
     ): Pair<List<Stage>, List<PointD>> {
-        val methodRunCache = mutableMapOf<Pair<PointD, PointD>, Calculation>()
+        val methodRunCache = PointCalculationCache()
 
         val (distance, resultStages) = tspAlgorithm.run(
             request = stages,
@@ -27,18 +27,18 @@ internal class StageTravellingSalesmanProblemSolver(
             immutablePositions = immutablePositions,
         )
 
-        val resultPath = resultStages
-            .zipWithNext { prev, next ->
-                getCalculation(prev, next, methodRunCache).list
-            }.flatten()
-
-        return Pair(resultStages, resultPath)
+        return Pair(resultStages, resultStages.makePath(methodRunCache))
     }
+
+    private suspend fun List<Stage>.makePath(methodRunCache: PointCalculationCache) =
+        zipWithNext { prev, next ->
+            getCalculation(prev, next, methodRunCache).list
+        }.flatten()
 
     suspend fun getDistance(prev: Stage, next: Stage): Double =
         getCalculation(prev, next).distance
 
-    private suspend fun getCalculation(prev: Stage, next: Stage, methodRunCache: MutableMap<Pair<PointD, PointD>, Calculation>? = null): Calculation =
+    private suspend fun getCalculation(prev: Stage, next: Stage, methodRunCache: PointCalculationCache? = null): Calculation =
         if (prev is Stage.InRegion && next is Stage.InRegion) {
             cache.find { it.from == prev.regionId && it.to == next.regionId }
                 ?: calculate(prev.regionId, next.regionId)
@@ -72,13 +72,13 @@ internal class StageTravellingSalesmanProblemSolver(
             technicalAllowedAtEnd = false,
         )
         val distance = list.toLengthInMeters()
-        val calculationAsc = CachedCalculation(
+        val calculationAsc = RegionCalculation(
             from = prev,
             to = next,
             distance = distance,
             list = list.reversed(),
         )
-        val calculationDesc = CachedCalculation(
+        val calculationDesc = RegionCalculation(
             from = next,
             to = prev,
             distance = distance,
@@ -103,15 +103,18 @@ internal class StageTravellingSalesmanProblemSolver(
     private fun List<PointD>.toLengthInMeters(): Double =
         zipWithNext().sumOf { (p1, p2) -> haversine(p1.x, p1.y, p2.x, p2.y) }
 
-    private class CachedCalculation(
-        val from: RegionId,
-        val to: RegionId,
-        distance: Double,
-        list: List<PointD>,
-    ) : Calculation(distance, list)
-
-    private open class Calculation(
-        val distance: Double,
-        val list: List<PointD>,
-    )
 }
+
+private typealias PointCalculationCache = LinkedHashMap<Pair<PointD, PointD>, Calculation>
+
+private class RegionCalculation(
+    val from: RegionId,
+    val to: RegionId,
+    distance: Double,
+    list: List<PointD>,
+) : Calculation(distance, list)
+
+private open class Calculation(
+    val distance: Double,
+    val list: List<PointD>,
+)
