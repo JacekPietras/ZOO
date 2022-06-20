@@ -18,7 +18,7 @@ internal class MySalesmanProblemSolver(
     suspend fun findShortPath(
         stages: List<Stage>,
         immutablePositions: List<Int>? = null,
-    ): Triple<Double, List<Stage>, List<PointD>> {
+    ): Pair<List<Stage>, List<PointD>> {
         val methodRunCache = mutableMapOf<Pair<PointD, PointD>, Calculation>()
 
         val (distance, resultStages) = tsp.run(
@@ -32,7 +32,7 @@ internal class MySalesmanProblemSolver(
                 getCalculation(prev, next, methodRunCache).list
             }.flatten()
 
-        return Triple(distance, resultStages, resultPath)
+        return Pair(resultStages, resultPath)
     }
 
     suspend fun getDistance(prev: Stage, next: Stage): Double =

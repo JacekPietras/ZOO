@@ -8,7 +8,6 @@ data class PlanEntity(
     val stages: List<Stage>,
 ) {
 
-    val regionStages get() = stages.filterIsInstance<Stage.InRegion>()
     val singleRegionStages get() = stages.filterIsInstance<Stage.Single>()
     val multipleRegionStages get() = stages.filterIsInstance<Stage.Multiple>()
 

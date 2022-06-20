@@ -33,28 +33,32 @@ internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
                 plan.copy(stages = userStage + plan.stages)
             }
             .refreshPeriodically(MINUTE)
-            .measureMap({ Timber.d("Optimization took $it") }) { plan ->
-                val (distance, resultStages, resultPath) = mySalesmanProblemSolver.findShortPath(
-                    stages = plan.stages,
-                    immutablePositions = notRegionIndexes(plan)
-                )
+            .measureMap({ Timber.d("Optimization took $it") }) { currentPlan ->
+                val (resultStages, resultPath) =
+                    mySalesmanProblemSolver.findShortPath(
+                        stages = currentPlan.stages,
+                        immutablePositions = notRegionIndexes(currentPlan)
+                    )
 
-                if (BuildConfig.DEBUG) {
-                    Timber.d("Optimization ${distance}m")
-                }
-
-                if (plan.stages != resultStages) {
-                    if (BuildConfig.DEBUG) {
-                        val before = plan.stages.distance()
-                        Timber.d("Found new path $before -> $distance")
-                    }
-                    lastCalculated = resultStages.filter { it !is Stage.InUserPosition }
-                    plan.copy(stages = resultStages)
-                        .also { planRepository.setPlan(it) }
+                if (currentPlan.stages != resultStages) {
+                    saveBetterPlan(currentPlan, resultStages)
                 }
 
                 resultPath
             }
+
+    private suspend fun saveBetterPlan(
+        currentPlan: PlanEntity,
+        resultStages: List<Stage>
+    ) {
+        if (BuildConfig.DEBUG) {
+            val currentDistance = currentPlan.stages.distance()
+            val resultDistance = resultStages.distance()
+            Timber.d("Found better tsp solution $currentDistance -> $resultDistance")
+        }
+        lastCalculated = resultStages.filter { it !is Stage.InUserPosition }
+        planRepository.setPlan(currentPlan.copy(stages = resultStages))
+    }
 
     private fun notRegionIndexes(plan: PlanEntity) =
         plan.stages
