@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.interactor
 
-import com.jacekpietras.zoo.domain.gateway.MailGateway
-import com.jacekpietras.zoo.domain.repository.GpsRepository
+import com.jacekpietras.zoo.domain.feature.mail.gateway.MailGateway
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

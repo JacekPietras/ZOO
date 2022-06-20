@@ -1,7 +1,8 @@
 package com.jacekpietras.zoo.domain.model
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.domain.business.model.Intervals
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.Intervals
 
 sealed class VisitedRoadEdge(
     open val from: PointD,

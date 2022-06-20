@@ -2,12 +2,12 @@ package com.jacekpietras.zoo.domain.feature.planner.interactor
 
 import com.jacekpietras.core.BuildConfig
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.domain.feature.pathfinder.MySalesmanProblemSolver
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CURRENT_PLAN_ID
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
-import com.jacekpietras.zoo.domain.repository.GpsRepository
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
+import com.jacekpietras.zoo.domain.feature.tsp.MySalesmanProblemSolver
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber

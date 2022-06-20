@@ -1,11 +1,11 @@
 package com.jacekpietras.zoo.domain.feature.planner.interactor
 
+import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.IsAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CURRENT_PLAN_ID
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
-import com.jacekpietras.zoo.domain.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId

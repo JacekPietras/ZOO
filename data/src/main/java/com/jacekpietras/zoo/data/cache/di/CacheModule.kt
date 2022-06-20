@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.data.cache.di
 
 import com.jacekpietras.zoo.data.cache.watcher.buildColdWatcher
-import com.jacekpietras.zoo.domain.model.MapItemEntity
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

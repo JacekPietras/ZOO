@@ -1,65 +1,21 @@
 package com.jacekpietras.zoo.domain.di
 
-import com.jacekpietras.zoo.domain.business.GraphAnalyzer
-import com.jacekpietras.zoo.domain.business.PathListSnapper
-import com.jacekpietras.zoo.domain.business.PathSnapper
+import com.jacekpietras.zoo.domain.feature.animal.di.animalModule
 import com.jacekpietras.zoo.domain.feature.favorites.di.favoritesModule
+import com.jacekpietras.zoo.domain.feature.map.di.mapModule
 import com.jacekpietras.zoo.domain.feature.pathfinder.di.pathFinderModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
+import com.jacekpietras.zoo.domain.feature.sensors.di.sensorsModule
+import com.jacekpietras.zoo.domain.feature.tsp.di.tspModule
 import com.jacekpietras.zoo.domain.interactor.*
 import org.koin.dsl.module
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 val domainModule = module {
-
-    single {
-        GraphAnalyzer()
-    }
-    factory {
-        PathSnapper(
-            graphAnalyzer = get(),
-        )
-    }
-    factory {
-        PathListSnapper(
-            pathSnapper = get(),
-        )
-    }
-
     factory {
         GetRegionsInUserPositionUseCase(
             getRegionsContainingPointUseCase = get(),
-            gpsRepository = get(),
-        )
-    }
-    factory {
-        StopCompassUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory {
-        StartCompassUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory {
-        StopLightSensorUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory {
-        StartLightSensorUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory {
-        StopNavigationUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory {
-        StartNavigationUseCase(
             gpsRepository = get(),
         )
     }
@@ -79,19 +35,8 @@ val domainModule = module {
         )
     }
     factory {
-        ObserveBuildingsUseCase(
-            mapRepository = get()
-        )
-    }
-    factory {
         GetAnimalsInRegionUseCase(
             animalRepository = get()
-        )
-    }
-    factory {
-        GetAnimalPositionUseCase(
-            getAnimalUseCase = get(),
-            getRegionCenterPointUseCase = get(),
         )
     }
     factory {
@@ -99,21 +44,6 @@ val domainModule = module {
             findRegionUseCase = get(),
             getRegionCenterPointUseCase = get(),
             getShortestPathUseCase = get(),
-        )
-    }
-    factory {
-        ObserveFilteredAnimalsUseCase(
-            animalRepository = get()
-        )
-    }
-    factory {
-        GetAnimalUseCase(
-            animalRepository = get()
-        )
-    }
-    factory {
-        GetAnimalsByDivisionUseCase(
-            animalRepository = get()
         )
     }
     factory {
@@ -135,50 +65,6 @@ val domainModule = module {
         )
     }
     factory {
-        ObserveAviaryUseCase(
-            mapRepository = get()
-        )
-    }
-    factory {
-        ObserveWorldBoundsUseCase(
-            mapRepository = get()
-        )
-    }
-    factory {
-        GetWorldBoundsUseCase(
-            mapRepository = get()
-        )
-    }
-    factory {
-        ObserveRoadsUseCase(
-            mapRepository = get()
-        )
-    }
-    factory<InitializeGraphAnalyzerIfNeededUseCase> {
-        InitializeGraphAnalyzerIfNeededUseCaseImpl(
-            mapRepository = get(),
-            graphAnalyzer = get(),
-        )
-    }
-    factory<GetShortestPathUseCase> {
-        GetShortestPathUseCaseImpl(
-            initializeGraphAnalyzerIfNeededUseCase = get(),
-            graphAnalyzer = get(),
-        )
-    }
-    factory<GetShortestPathFromUserUseCase> {
-        GetShortestPathFromUserUseCaseImpl(
-            getUserPositionUseCase = get(),
-            initializeGraphAnalyzerIfNeededUseCase = get(),
-            graphAnalyzer = get(),
-        )
-    }
-    factory {
-        ObserveTechnicalRoadsUseCase(
-            mapRepository = get(),
-        )
-    }
-    factory {
         ObserveVisitedRoadsUseCase(
             mapRepository = get(),
         )
@@ -192,27 +78,12 @@ val domainModule = module {
             gpsRepository = get(),
         )
     }
-    factory {
-        LoadMapUseCase(
-            mapRepository = get(),
-        )
-    }
     factory<LoadVisitedRouteUseCase> {
         LoadVisitedRouteUseCaseImpl(
             mapRepository = get(),
             gpsRepository = get(),
             initializeGraphAnalyzerIfNeededUseCase = get(),
             pathListSnapper = get(),
-        )
-    }
-    factory {
-        ObserveMapLinesUseCase(
-            mapRepository = get(),
-        )
-    }
-    factory {
-        LoadAnimalsUseCase(
-            animalRepository = get(),
         )
     }
     factory {
@@ -247,30 +118,8 @@ val domainModule = module {
         )
     }
     factory {
-        ObserveCompassUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory {
-        InsertUserCompassUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory<GetTerminalNodesUseCase> {
-        GetTerminalNodesUseCaseImpl(
-            initializeGraphAnalyzerIfNeededUseCase = get(),
-            graphAnalyzer = get(),
-        )
-    }
-    factory {
-        IsAnimalSeenUseCase(
-            getAnimalUseCase = get(),
-            isRegionSeenUseCase = get(),
-        )
-    }
-    factory {
         IsRegionSeenUseCase(
             mapRepository = get(),
         )
     }
-} + favoritesModule + plannerModule + pathFinderModule
+} + favoritesModule + plannerModule + tspModule + pathFinderModule + sensorsModule + mapModule + animalModule

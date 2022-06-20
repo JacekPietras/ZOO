@@ -10,8 +10,8 @@ import com.jacekpietras.zoo.data.cache.watcher.Watcher
 import com.jacekpietras.zoo.data.database.dao.GpsDao
 import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
 import com.jacekpietras.zoo.data.parser.TxtParser
-import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
-import com.jacekpietras.zoo.domain.repository.GpsRepository
+import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

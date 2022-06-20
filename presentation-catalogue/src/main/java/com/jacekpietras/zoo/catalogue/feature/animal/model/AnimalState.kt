@@ -4,7 +4,7 @@ import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
-import com.jacekpietras.zoo.domain.model.MapItemEntity
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 
 internal data class AnimalState(
     val animalId: AnimalId,

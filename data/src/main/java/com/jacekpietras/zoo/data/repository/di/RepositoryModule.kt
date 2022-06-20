@@ -4,11 +4,11 @@ import com.jacekpietras.zoo.data.cache.di.*
 import com.jacekpietras.zoo.data.database.ZooDatabase
 import com.jacekpietras.zoo.data.parser.RegionIdAdapter
 import com.jacekpietras.zoo.data.repository.*
+import com.jacekpietras.zoo.domain.feature.animal.repository.AnimalRepository
 import com.jacekpietras.zoo.domain.feature.favorites.repository.FavoritesRepository
+import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
-import com.jacekpietras.zoo.domain.repository.AnimalRepository
-import com.jacekpietras.zoo.domain.repository.GpsRepository
-import com.jacekpietras.zoo.domain.repository.MapRepository
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.koin.android.ext.koin.androidContext

@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.data.database.mapper
 
 import com.jacekpietras.zoo.data.database.model.GpsHistoryDto
-import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
+import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 
 internal class GpsHistoryMapper {
 

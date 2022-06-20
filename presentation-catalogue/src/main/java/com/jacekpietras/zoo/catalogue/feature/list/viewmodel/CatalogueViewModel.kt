@@ -13,9 +13,9 @@ import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouter
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
-import com.jacekpietras.zoo.domain.interactor.LoadAnimalsUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveFilteredAnimalsUseCase
-import com.jacekpietras.zoo.domain.model.AnimalFilter
+import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
+import com.jacekpietras.zoo.domain.feature.animal.interactor.ObserveFilteredAnimalsUseCase
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalFilter
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.MutableStateFlow

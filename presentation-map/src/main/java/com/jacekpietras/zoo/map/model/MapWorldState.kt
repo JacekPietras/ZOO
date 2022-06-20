@@ -2,8 +2,8 @@ package com.jacekpietras.zoo.map.model
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
 
 internal data class MapWorldState(
     val worldBounds: RectD = RectD(),

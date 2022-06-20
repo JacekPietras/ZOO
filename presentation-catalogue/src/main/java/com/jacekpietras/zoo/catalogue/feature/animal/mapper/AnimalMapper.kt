@@ -14,7 +14,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
 import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.domain.model.Feeding
-import com.jacekpietras.zoo.domain.model.MapItemEntity
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 
 internal class AnimalMapper {
 

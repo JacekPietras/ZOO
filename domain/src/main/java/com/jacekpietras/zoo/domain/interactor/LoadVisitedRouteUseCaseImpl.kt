@@ -1,11 +1,12 @@
 package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.domain.business.PathListSnapper
-import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
-import com.jacekpietras.zoo.domain.model.MapItemEntity
-import com.jacekpietras.zoo.domain.repository.GpsRepository
-import com.jacekpietras.zoo.domain.repository.MapRepository
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
+import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
+import com.jacekpietras.zoo.domain.feature.pathfinder.PathListSnapper
+import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.InitializeGraphAnalyzerIfNeededUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 
 internal class LoadVisitedRouteUseCaseImpl(
     private val mapRepository: MapRepository,

@@ -2,8 +2,8 @@ package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.polygonContains
+import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.repository.MapRepository
 
 class GetRegionsContainingPointUseCase(
     private val mapRepository: MapRepository,

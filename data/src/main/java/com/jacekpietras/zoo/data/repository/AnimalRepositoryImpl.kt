@@ -5,8 +5,9 @@ import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.parser.AnimalListWebParser
 import com.jacekpietras.zoo.data.parser.AnimalWebParser
 import com.jacekpietras.zoo.data.parser.makeStreamFromUrl
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalFilter
+import com.jacekpietras.zoo.domain.feature.animal.repository.AnimalRepository
 import com.jacekpietras.zoo.domain.model.*
-import com.jacekpietras.zoo.domain.repository.AnimalRepository
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

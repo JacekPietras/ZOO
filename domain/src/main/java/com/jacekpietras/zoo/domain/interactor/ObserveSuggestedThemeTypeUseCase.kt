@@ -1,8 +1,10 @@
 package com.jacekpietras.zoo.domain.interactor
 
+import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartLightSensorUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopLightSensorUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.model.ThemeType
-import com.jacekpietras.zoo.domain.repository.GpsRepository
-import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.flow.*
 
 class ObserveSuggestedThemeTypeUseCase(

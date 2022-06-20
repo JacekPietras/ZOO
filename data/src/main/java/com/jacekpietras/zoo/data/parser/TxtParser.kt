@@ -5,7 +5,7 @@ import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import androidx.annotation.RawRes
 import com.jacekpietras.core.cutOut
 import com.jacekpietras.core.haversine
-import com.jacekpietras.zoo.domain.model.GpsHistoryEntity
+import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 
 internal class TxtParser(context: Context, @RawRes rawRes: Int) {
 

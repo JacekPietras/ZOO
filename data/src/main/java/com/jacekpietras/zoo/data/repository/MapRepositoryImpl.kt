@@ -6,13 +6,13 @@ import com.jacekpietras.core.RectD
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.cache.watcher.Watcher
 import com.jacekpietras.zoo.data.parser.SvgParser
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PathEntity
-import com.jacekpietras.zoo.domain.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.Region.AnimalRegion
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
-import com.jacekpietras.zoo.domain.repository.MapRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

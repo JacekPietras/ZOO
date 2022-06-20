@@ -4,7 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.jacekpietras.zoo.domain.gateway.MailGateway
+import com.jacekpietras.zoo.domain.feature.mail.gateway.MailGateway
 import timber.log.Timber
 
 

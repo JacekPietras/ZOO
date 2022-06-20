@@ -12,7 +12,15 @@ import com.jacekpietras.zoo.core.dispatcher.*
 import com.jacekpietras.zoo.core.extensions.mapInBackground
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
+import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.*
+import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.*
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId

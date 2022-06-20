@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.domain.interactor
 
 import com.jacekpietras.core.PointD
+import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.model.RegionId
-import com.jacekpietras.zoo.domain.repository.MapRepository
 
 class GetRegionCenterPointUseCase(
     private val mapRepository: MapRepository,
