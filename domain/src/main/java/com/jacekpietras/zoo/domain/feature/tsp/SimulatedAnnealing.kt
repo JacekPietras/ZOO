@@ -8,22 +8,22 @@ import kotlin.random.Random
 internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
 
     override suspend fun run(
-        request: List<T>,
+        points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?,
     ): Pair<Double, List<T>> {
         val ignoredPoints = immutablePositions?.size ?: 0
-        if (request.size - ignoredPoints < 3) {
-            Timber.d("Optimization cannot be done, not enough points ${request.size} ($ignoredPoints ignored)")
-            return request.distance(distanceCalculation) to request
+        if (points.size - ignoredPoints < 3) {
+            Timber.d("Optimization cannot be done, not enough points ${points.size} ($ignoredPoints ignored)")
+            return points.distance(distanceCalculation) to points
         }
 
         var t = startingTemperature
         var i = 0
-        var bestDistance = request.distance(distanceCalculation)
-        var bestTravel = request
+        var bestDistance = points.distance(distanceCalculation)
+        var bestTravel = points
 
-        var travel = ArrayList(request).shuffled()
+        var travel = ArrayList(points).shuffled()
 
         while (t > 0.1 && i < numberOfIterations) {
             val travelVariation = travel.makeVariation(immutablePositions)

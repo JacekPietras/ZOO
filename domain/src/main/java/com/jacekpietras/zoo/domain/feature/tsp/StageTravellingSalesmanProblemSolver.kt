@@ -19,50 +19,39 @@ internal class StageTravellingSalesmanProblemSolver(
         stages: List<Stage>,
         immutablePositions: List<Int>? = null,
     ): Pair<List<Stage>, List<PointD>> {
-        val methodRunCache = PointCalculationCache()
+        val pointCalculationCache = PointCalculationCache()
 
         val (distance, resultStages) = tspAlgorithm.run(
-            request = stages,
-            distanceCalculation = { a, b -> getCalculation(a, b, methodRunCache).distance },
+            points = stages,
+            distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
             immutablePositions = immutablePositions,
         )
 
-        return Pair(resultStages, resultStages.makePath(methodRunCache))
+        return Pair(resultStages, resultStages.makePath(pointCalculationCache))
     }
 
-    private suspend fun List<Stage>.makePath(methodRunCache: PointCalculationCache) =
-        zipWithNext { prev, next ->
-            getCalculation(prev, next, methodRunCache).list
-        }.flatten()
+    private suspend fun List<Stage>.makePath(pointCalculationCache: PointCalculationCache) =
+        zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).path }
+            .flatten()
 
     suspend fun getDistance(prev: Stage, next: Stage): Double =
-        getCalculation(prev, next).distance
+        calculate(prev, next, PointCalculationCache()).distance
 
-    private suspend fun getCalculation(prev: Stage, next: Stage, methodRunCache: PointCalculationCache? = null): Calculation =
+    private suspend fun calculate(prev: Stage, next: Stage, pointCalculationCache: PointCalculationCache): Calculation =
         if (prev is Stage.InRegion && next is Stage.InRegion) {
-            cache.find { it.from == prev.regionId && it.to == next.regionId }
-                ?: calculate(prev.regionId, next.regionId)
+            findRegionCalculation(prev, next)
+                ?: calculateRegion(prev.regionId, next.regionId)
         } else {
             val prevPoint = prev.getCenter()
             val nextPoint = next.getCenter()
-            val found = methodRunCache?.get(prevPoint to nextPoint)
-            if (found != null) {
-                found
-            } else {
-                val path = graphAnalyzer.getShortestPath(
-                    prevPoint,
-                    nextPoint,
-                    technicalAllowedAtStart = false,
-                    technicalAllowedAtEnd = false,
-                ).reversed()
-                Calculation(
-                    distance = path.toLengthInMeters(),
-                    list = path,
-                ).also { methodRunCache?.put(prevPoint to nextPoint, it) }
-            }
+            pointCalculationCache[prevPoint to nextPoint]
+                ?: calculatePoint(prevPoint, nextPoint, pointCalculationCache)
         }
 
-    private suspend fun calculate(prev: RegionId, next: RegionId): Calculation {
+    private fun findRegionCalculation(prev: Stage.InRegion, next: Stage.InRegion) =
+        cache.find { it.from == prev.regionId && it.to == next.regionId }
+
+    private suspend fun calculateRegion(prev: RegionId, next: RegionId): Calculation {
         val prevPoint = prev.getCenter()
         val nextPoint = next.getCenter()
         val list = graphAnalyzer.getShortestPath(
@@ -76,19 +65,36 @@ internal class StageTravellingSalesmanProblemSolver(
             from = prev,
             to = next,
             distance = distance,
-            list = list.reversed(),
+            path = list.reversed(),
         )
         val calculationDesc = RegionCalculation(
             from = next,
             to = prev,
             distance = distance,
-            list = list,
+            path = list,
         )
 
         cache.add(calculationAsc)
         cache.add(calculationDesc)
 
         return calculationAsc
+    }
+
+    private suspend fun calculatePoint(
+        prevPoint: PointD,
+        nextPoint: PointD,
+        pointCalculationCache: PointCalculationCache?
+    ): Calculation {
+        val path = graphAnalyzer.getShortestPath(
+            prevPoint,
+            nextPoint,
+            technicalAllowedAtStart = false,
+            technicalAllowedAtEnd = false,
+        ).reversed()
+        return Calculation(
+            distance = path.toLengthInMeters(),
+            path = path,
+        ).also { pointCalculationCache?.put(prevPoint to nextPoint, it) }
     }
 
     private suspend fun Stage.getCenter(): PointD =
@@ -102,7 +108,6 @@ internal class StageTravellingSalesmanProblemSolver(
 
     private fun List<PointD>.toLengthInMeters(): Double =
         zipWithNext().sumOf { (p1, p2) -> haversine(p1.x, p1.y, p2.x, p2.y) }
-
 }
 
 private typealias PointCalculationCache = LinkedHashMap<Pair<PointD, PointD>, Calculation>
@@ -111,10 +116,10 @@ private class RegionCalculation(
     val from: RegionId,
     val to: RegionId,
     distance: Double,
-    list: List<PointD>,
-) : Calculation(distance, list)
+    path: List<PointD>,
+) : Calculation(distance, path)
 
 private open class Calculation(
     val distance: Double,
-    val list: List<PointD>,
+    val path: List<PointD>,
 )
