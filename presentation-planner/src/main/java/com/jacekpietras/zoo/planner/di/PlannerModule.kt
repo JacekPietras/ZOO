@@ -13,7 +13,7 @@ val plannerModule = module {
             observeCurrentPlanUseCase = get(),
             getAnimalsInRegionUseCase = get(),
             observeAnimalFavoritesUseCase = get(),
-            removeFromCurrentPlanUseCase = get(),
+            removeRegionFromCurrentPlanUseCase = get(),
             setAnimalFavoriteUseCase = get(),
         )
     }

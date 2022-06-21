@@ -12,17 +12,30 @@ val plannerModule = module {
         )
     }
     factory {
-        AddToCurrentPlanUseCase(
+        GetOrCreateCurrentPlanUseCase(
             planRepository = get(),
-            getAnimalUseCase = get(),
         )
     }
     factory {
-        RemoveFromCurrentPlanUseCase(
+        AddToCurrentPlanUseCase(
+            planRepository = get(),
+            getAnimalUseCase = get(),
+            getOrCreateCurrentPlanUseCase = get(),
+        )
+    }
+    factory {
+        RemoveAnimalFromCurrentPlanUseCase(
             planRepository = get(),
             getAnimalsInRegionUseCase = get(),
             isAnimalFavoriteUseCase = get(),
             getAnimalUseCase = get(),
+            getOrCreateCurrentPlanUseCase = get(),
+        )
+    }
+    factory {
+        RemoveRegionFromCurrentPlanUseCase(
+            planRepository = get(),
+            getOrCreateCurrentPlanUseCase = get(),
         )
     }
     factory<ObserveCurrentPlanPathWithOptimizationUseCase> {

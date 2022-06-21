@@ -18,12 +18,12 @@ import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveBuildingsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveRoadsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveFromCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.interactor.*
-import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveAnimalFromCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
+import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -39,7 +39,7 @@ internal class AnimalViewModel(
     observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addToCurrentPlanUseCase: AddToCurrentPlanUseCase,
-    private val removeFromCurrentPlanUseCase: RemoveFromCurrentPlanUseCase,
+    private val removeFromCurrentPlanUseCase: RemoveAnimalFromCurrentPlanUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     observeBuildingsUseCase: ObserveBuildingsUseCase,

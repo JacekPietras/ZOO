@@ -11,7 +11,7 @@ import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveFromCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveRegionFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.model.AnimalEntity
@@ -28,7 +28,7 @@ internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
     observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
-    private val removeFromCurrentPlanUseCase: RemoveFromCurrentPlanUseCase,
+    private val removeRegionFromCurrentPlanUseCase: RemoveRegionFromCurrentPlanUseCase,
     observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
 ) : ViewModel() {
@@ -74,7 +74,7 @@ internal class PlannerViewModel(
                     animals.forEach { animal ->
                         setAnimalFavoriteUseCase.run(animal.id, false)
                     }
-                    removeFromCurrentPlanUseCase.run(stage)
+                    removeRegionFromCurrentPlanUseCase.run(stage)
                 }
         }
     }

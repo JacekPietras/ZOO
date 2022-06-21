@@ -28,6 +28,20 @@ sealed class Stage {
 
             operator fun invoke(regionId: RegionId, mutable: Boolean = true): InRegion =
                 Single(regionId, mutable)
+
+            operator fun invoke(regions: List<RegionId>, mutable: Boolean = true) =
+                if (regions.size == 1) {
+                    Single(
+                        regionId = regions.first(),
+                        mutable = mutable,
+                    )
+                } else {
+                    Multiple(
+                        regionId = regions.first(),
+                        mutable = mutable,
+                        alternatives = regions,
+                    )
+                }
         }
     }
 
