@@ -30,7 +30,7 @@ val plannerModule = module {
         )
     }
     factory {
-        AddGateToCurrentPlanUseCase(
+        AddExitToCurrentPlanUseCase(
             addStageToCurrentPlanUseCase = get(),
             findRegionUseCase = get(),
         )

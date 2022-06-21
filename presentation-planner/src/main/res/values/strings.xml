@@ -2,4 +2,5 @@
 <resources>
     <string name="remove_from_plan">Remove from plan</string>
     <string name="planner_empty_text">Your plan is empty.\nAdd animals or select predefined plan.</string>
+    <string name="exit">Exit</string>
 </resources>

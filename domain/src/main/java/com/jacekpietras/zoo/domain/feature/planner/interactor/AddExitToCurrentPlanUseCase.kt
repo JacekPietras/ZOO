@@ -3,7 +3,7 @@ package com.jacekpietras.zoo.domain.feature.planner.interactor
 import com.jacekpietras.zoo.domain.interactor.FindRegionUseCase
 import com.jacekpietras.zoo.domain.model.Region
 
-class AddGateToCurrentPlanUseCase(
+class AddExitToCurrentPlanUseCase(
     private val addStageToCurrentPlanUseCase: AddStageToCurrentPlanUseCase,
     private val findRegionUseCase: FindRegionUseCase,
 ) {

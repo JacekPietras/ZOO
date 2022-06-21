@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
+import com.jacekpietras.zoo.domain.model.Region
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -30,7 +31,8 @@ internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
             .distinctUntilChanged { _, new -> new.stages == lastCalculated }
             .combine(observeUserPosition()) { plan, userPosition ->
                 val userStage = listOfNotNull(userPosition?.let { Stage.InUserPosition(it) })
-                plan.copy(stages = userStage + plan.stages)
+                val exitStage = plan.stages.find { it is Stage.InRegion && it.region is Region.ExitRegion }
+                plan.copy(stages = (userStage + plan.stages - exitStage + exitStage).filterNotNull())
             }
             .refreshPeriodically(MINUTE)
             .measureMap({ Timber.d("Optimization took $it") }) { currentPlan ->

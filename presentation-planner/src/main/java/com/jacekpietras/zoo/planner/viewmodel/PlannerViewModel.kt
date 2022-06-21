@@ -10,7 +10,7 @@ import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.AddGateToCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.AddExitToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveRegionFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
@@ -32,7 +32,7 @@ internal class PlannerViewModel(
     private val removeRegionFromCurrentPlanUseCase: RemoveRegionFromCurrentPlanUseCase,
     observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
-    private val addGateToCurrentPlanUseCase: AddGateToCurrentPlanUseCase,
+    private val addExitToCurrentPlanUseCase: AddExitToCurrentPlanUseCase,
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(PlannerState())
@@ -81,9 +81,9 @@ internal class PlannerViewModel(
         }
     }
 
-    fun onAddGateClicked() {
+    fun onAddExitClicked() {
         launchInBackground {
-            addGateToCurrentPlanUseCase.run()
+            addExitToCurrentPlanUseCase.run()
         }
     }
 }

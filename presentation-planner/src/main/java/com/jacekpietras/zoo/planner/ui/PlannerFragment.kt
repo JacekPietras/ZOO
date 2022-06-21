@@ -25,6 +25,7 @@ class PlannerFragment : Fragment() {
                 PlannerFragmentView(
                     viewState = viewState,
                     onRemove = viewModel::onRemove,
+                    onAddExit = viewModel::onAddExitClicked
                 )
             }
         }

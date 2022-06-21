@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.planner.R
 import com.jacekpietras.zoo.planner.model.PlannerViewState
@@ -24,8 +25,9 @@ import com.jacekpietras.zoo.planner.model.PlannerViewState
 internal fun PlannerFragmentView(
     viewState: PlannerViewState,
     onRemove: (regionId: String) -> Unit,
+    onAddExit: () -> Unit,
 ) {
-    if (viewState.list.isEmpty()) {
+    if (viewState.isEmptyViewVisible) {
         Box(Modifier.fillMaxSize()) {
             Text(
                 text = stringResource(R.string.planner_empty_text),
@@ -69,7 +71,34 @@ internal fun PlannerFragmentView(
             }
         }
     }
+    if (viewState.isAddExitVisible) {
+        SimpleButton(
+            text = Text("Exit"),
+            onClick = onAddExit
+        )
+    }
 }
+
+@Composable
+private fun SimpleButton(
+    modifier: Modifier = Modifier,
+    text: Text,
+    onClick: () -> Unit = {},
+) =
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .defaultMinSize(minHeight = 56.dp)
+            .then(modifier),
+        elevation = null,
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Text(
+            text = text.toString(LocalContext.current),
+            style = MaterialTheme.typography.button,
+            textAlign = TextAlign.Center,
+        )
+    }
 
 @Composable
 private fun SideIconView(
