@@ -40,7 +40,7 @@ internal class PlannerStateMapper {
         return PlannerViewState(
             list = list,
             isEmptyViewVisible = list.isEmpty(),
-            isAddExitVisible = !isExitInPlan,
+            isAddExitVisible = !isExitInPlan && list.isNotEmpty(),
         )
     }
 }
