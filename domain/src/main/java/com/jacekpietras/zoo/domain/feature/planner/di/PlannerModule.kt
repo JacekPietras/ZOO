@@ -17,9 +17,15 @@ val plannerModule = module {
         )
     }
     factory {
-        AddToCurrentPlanUseCase(
+        AddAnimalToCurrentPlanUseCase(
             planRepository = get(),
             getAnimalUseCase = get(),
+            getOrCreateCurrentPlanUseCase = get(),
+        )
+    }
+    factory {
+        AddStageToCurrentPlanUseCase(
+            planRepository = get(),
             getOrCreateCurrentPlanUseCase = get(),
         )
     }

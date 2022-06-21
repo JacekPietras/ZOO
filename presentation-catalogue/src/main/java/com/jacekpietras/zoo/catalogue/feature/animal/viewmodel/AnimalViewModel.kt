@@ -20,7 +20,7 @@ import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveRoadsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.AddToCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.AddAnimalToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveAnimalFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
@@ -38,7 +38,7 @@ internal class AnimalViewModel(
     isAnimalSeenUseCase: IsAnimalSeenUseCase,
     observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
-    private val addToCurrentPlanUseCase: AddToCurrentPlanUseCase,
+    private val addAnimalToCurrentPlanUseCase: AddAnimalToCurrentPlanUseCase,
     private val removeFromCurrentPlanUseCase: RemoveAnimalFromCurrentPlanUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
@@ -135,7 +135,7 @@ internal class AnimalViewModel(
                 isFavorite = isFavorite,
             )
             if (isFavorite) {
-                addToCurrentPlanUseCase.run(animalId)
+                addAnimalToCurrentPlanUseCase.run(animalId)
             } else {
                 removeFromCurrentPlanUseCase.run(animalId)
             }

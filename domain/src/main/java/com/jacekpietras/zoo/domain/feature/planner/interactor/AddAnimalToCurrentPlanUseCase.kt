@@ -7,7 +7,7 @@ import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 
-class AddToCurrentPlanUseCase(
+class AddAnimalToCurrentPlanUseCase(
     private val planRepository: PlanRepository,
     private val getAnimalUseCase: GetAnimalUseCase,
     private val getOrCreateCurrentPlanUseCase: GetOrCreateCurrentPlanUseCase,
