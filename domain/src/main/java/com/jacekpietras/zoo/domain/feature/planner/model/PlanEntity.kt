@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.planner.model
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.domain.model.Region
 
 data class PlanEntity(
     val planId: PlanId,
@@ -20,41 +20,47 @@ data class PlanEntity(
 sealed class Stage {
 
     sealed class InRegion(
-        open val regionId: RegionId,
+        open val region: Region,
         open val mutable: Boolean,
     ) : Stage() {
 
         companion object {
 
-            operator fun invoke(regionId: RegionId, mutable: Boolean = true): InRegion =
-                Single(regionId, mutable)
+            operator fun invoke(region: Region, mutable: Boolean = true): InRegion =
+                Single(region, mutable)
 
-            operator fun invoke(regions: List<RegionId>, mutable: Boolean = true) =
-                if (regions.size == 1) {
-                    Single(
-                        regionId = regions.first(),
-                        mutable = mutable,
-                    )
-                } else {
-                    Multiple(
-                        regionId = regions.first(),
-                        mutable = mutable,
-                        alternatives = regions,
-                    )
+            operator fun invoke(regions: List<Region>, mutable: Boolean = true) =
+                when {
+                    regions.isEmpty() -> {
+                        throw IllegalStateException("trying to add stage with no regions")
+                    }
+                    regions.size == 1 -> {
+                        Single(
+                            region = regions.first(),
+                            mutable = mutable,
+                        )
+                    }
+                    else -> {
+                        Multiple(
+                            region   = regions.first(),
+                            mutable = mutable,
+                            alternatives = regions,
+                        )
+                    }
                 }
         }
     }
 
     data class Single(
-        override val regionId: RegionId,
+        override val region: Region,
         override val mutable: Boolean,
-    ) : InRegion(regionId, mutable)
+    ) : InRegion(region, mutable)
 
     data class Multiple(
-        override val regionId: RegionId,
+        override val region: Region,
         override val mutable: Boolean,
-        val alternatives: List<RegionId>,
-    ) : InRegion(regionId, mutable)
+        val alternatives: List<Region>,
+    ) : InRegion(region, mutable)
 
     data class InUserPosition(
         val point: PointD,

@@ -21,5 +21,4 @@ sealed class Region(
     data class ExitRegion(
         override val id: RegionId,
     ) : Region(id)
-
 }

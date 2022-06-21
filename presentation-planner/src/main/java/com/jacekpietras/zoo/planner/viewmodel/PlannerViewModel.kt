@@ -10,6 +10,7 @@ import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.AddGateToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveRegionFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
@@ -31,6 +32,7 @@ internal class PlannerViewModel(
     private val removeRegionFromCurrentPlanUseCase: RemoveRegionFromCurrentPlanUseCase,
     observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
+    private val addGateToCurrentPlanUseCase: AddGateToCurrentPlanUseCase,
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(PlannerState())
@@ -53,7 +55,7 @@ internal class PlannerViewModel(
 
     private fun Stage.getAnimals(favorites: List<AnimalId>): List<AnimalEntity> =
         if (this is Stage.InRegion) {
-            getAnimalsInRegionUseCase.run(regionId)
+            getAnimalsInRegionUseCase.run(region.id)
                 .filter { animal -> favorites.contains(animal.id) }
         } else {
             emptyList()
@@ -69,13 +71,19 @@ internal class PlannerViewModel(
                         null
                     }
                 }
-                .find { (stage, _) -> stage.regionId.id == regionId }
+                .find { (stage, _) -> stage.region.id.id == regionId }
                 ?.let { (stage, animals) ->
                     animals.forEach { animal ->
                         setAnimalFavoriteUseCase.run(animal.id, false)
                     }
                     removeRegionFromCurrentPlanUseCase.run(stage)
                 }
+        }
+    }
+
+    fun onAddGateClicked() {
+        launchInBackground {
+            addGateToCurrentPlanUseCase.run()
         }
     }
 }

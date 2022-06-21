@@ -53,7 +53,7 @@ internal class StageTravellingSalesmanProblemSolver(
     private suspend fun calculate(prev: Stage, next: Stage, pointCalculationCache: PointCalculationCache): Calculation =
         if (prev is Stage.InRegion && next is Stage.InRegion) {
             findRegionCalculation(prev, next)
-                ?: calculateRegion(prev.regionId, next.regionId)
+                ?: calculateRegion(prev.region.id, next.region.id)
         } else {
             val prevPoint = prev.getCenter()
             val nextPoint = next.getCenter()
@@ -62,7 +62,7 @@ internal class StageTravellingSalesmanProblemSolver(
         }
 
     private fun findRegionCalculation(prev: Stage.InRegion, next: Stage.InRegion) =
-        cache.find { it.from == prev.regionId && it.to == next.regionId }
+        cache.find { it.from == prev.region.id && it.to == next.region.id }
 
     private suspend fun calculateRegion(prev: RegionId, next: RegionId): Calculation {
         val prevPoint = prev.getCenter()
@@ -112,7 +112,7 @@ internal class StageTravellingSalesmanProblemSolver(
 
     private suspend fun Stage.getCenter(): PointD =
         when (this) {
-            is Stage.InRegion -> this.regionId.getCenter()
+            is Stage.InRegion -> this.region.id.getCenter()
             is Stage.InUserPosition -> this.point
         }
 

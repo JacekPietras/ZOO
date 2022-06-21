@@ -2,9 +2,12 @@ package com.jacekpietras.zoo.data.database.mapper
 
 import com.jacekpietras.zoo.data.database.model.PlanDto
 import com.jacekpietras.zoo.data.database.model.StageDto
+import com.jacekpietras.zoo.data.database.model.StageRegionType
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
+import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.Region.AnimalRegion
 import com.jacekpietras.zoo.domain.model.RegionId
 
 internal class PlanMapper {
@@ -18,14 +21,14 @@ internal class PlanMapper {
                         when {
                             alternatives?.isNotEmpty() == true -> {
                                 Stage.Multiple(
-                                    regionId = RegionId(regionId),
+                                    region = makeRegion(regionType, regionId),
                                     mutable = mutable,
-                                    alternatives = alternatives.map(::RegionId),
+                                    alternatives = alternatives.map { makeRegion(regionType, it) },
                                 )
                             }
                             else -> {
                                 Stage.Single(
-                                    regionId = RegionId(regionId),
+                                    region = makeRegion(regionType, regionId),
                                     mutable = mutable,
                                 )
                             }
@@ -46,20 +49,38 @@ internal class PlanMapper {
                         }
                         is Stage.Multiple -> {
                             StageDto(
-                                regionId = stage.regionId.id,
+                                regionId = stage.region.id.id,
                                 mutable = stage.mutable,
-                                alternatives = stage.alternatives.map { it.id },
+                                alternatives = stage.alternatives.map { it.id.id },
+                                regionType = stage.toRegionType(),
                             )
                         }
                         is Stage.Single -> {
                             StageDto(
-                                regionId = stage.regionId.id,
+                                regionId = stage.region.id.id,
                                 mutable = stage.mutable,
                                 alternatives = null,
+                                regionType = stage.toRegionType(),
                             )
                         }
                     }
                 },
             )
+        }
+
+    private fun Stage.InRegion.toRegionType() =
+        when (region) {
+            is AnimalRegion -> StageRegionType.ANIMAL
+            is Region.ExitRegion -> StageRegionType.EXIT
+            is Region.RestaurantRegion -> StageRegionType.RESTAURANT
+            is Region.WcRegion -> StageRegionType.WC
+        }
+
+    private fun makeRegion(type: StageRegionType, regionId: String) =
+        when (type) {
+            StageRegionType.ANIMAL -> AnimalRegion(RegionId(regionId))
+            StageRegionType.EXIT -> Region.ExitRegion(RegionId(regionId))
+            StageRegionType.RESTAURANT -> Region.RestaurantRegion(RegionId(regionId))
+            StageRegionType.WC -> Region.WcRegion(RegionId(regionId))
         }
 }

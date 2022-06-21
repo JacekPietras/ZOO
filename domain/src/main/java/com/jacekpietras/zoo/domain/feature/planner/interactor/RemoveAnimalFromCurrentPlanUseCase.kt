@@ -6,6 +6,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 
 class RemoveAnimalFromCurrentPlanUseCase(
@@ -26,9 +27,9 @@ class RemoveAnimalFromCurrentPlanUseCase(
         val animalIsInSingleRegion = regions.size == 1
 
         val newStages = if (animalIsInSingleRegion) {
-            plan.stages.filter { stage -> stage !is Stage.Single || stage.regionId != regions.first() }
+            plan.stages.filter { stage -> stage !is Stage.Single || stage.region.id != regions.first() }
         } else {
-            plan.stages.filter { stage -> stage !is Stage.Multiple || stage.alternatives != regions }
+            plan.stages.filter { stage -> stage !is Stage.Multiple || stage.alternatives.map(Region::id) != regions }
         }
         val newPlan = plan.copy(stages = newStages)
         planRepository.setPlan(newPlan)

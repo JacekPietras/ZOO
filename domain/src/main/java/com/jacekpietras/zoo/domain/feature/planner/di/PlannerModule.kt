@@ -30,6 +30,12 @@ val plannerModule = module {
         )
     }
     factory {
+        AddGateToCurrentPlanUseCase(
+            addStageToCurrentPlanUseCase = get(),
+            findRegionUseCase = get(),
+        )
+    }
+    factory {
         RemoveAnimalFromCurrentPlanUseCase(
             planRepository = get(),
             getAnimalsInRegionUseCase = get(),

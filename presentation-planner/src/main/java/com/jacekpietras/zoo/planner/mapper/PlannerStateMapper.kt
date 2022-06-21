@@ -16,7 +16,7 @@ internal class PlannerStateMapper {
                     is Stage.InRegion -> {
                         PlannerItem(
                             text = Text(animals.map(AnimalEntity::name).joinToString()),
-                            regionId = stage.regionId.id,
+                            regionId = stage.region.id.id,
                         )
                     }
                     is Stage.InUserPosition -> {

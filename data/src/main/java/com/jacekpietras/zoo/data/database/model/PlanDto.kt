@@ -10,7 +10,15 @@ internal data class PlanDto(
 )
 
 internal data class StageDto(
+    val regionType: StageRegionType,
     val mutable: Boolean,
     val regionId: String,
     val alternatives: List<String>?,
 )
+
+internal enum class StageRegionType {
+    ANIMAL,
+    RESTAURANT,
+    WC,
+    EXIT,
+}
