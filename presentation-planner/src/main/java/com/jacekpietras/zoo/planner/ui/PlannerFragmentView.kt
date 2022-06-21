@@ -38,44 +38,48 @@ internal fun PlannerFragmentView(
             )
         }
     }
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-    ) {
-        items(viewState.list) { item ->
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                backgroundColor = ZooTheme.colors.surface,
-                elevation = 4.dp,
-                modifier = Modifier
-                    .fillMaxSize(),
-            ) {
-                Row {
-                    Text(
-                        text = item.text.toString(LocalContext.current),
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                            .weight(1f)
-                            .align(Alignment.CenterVertically),
-                        style = MaterialTheme.typography.subtitle2,
-                        color = ZooTheme.colors.onSurface,
-                    )
+    Column {
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+        ) {
+            items(viewState.list) { item ->
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    backgroundColor = ZooTheme.colors.surface,
+                    elevation = 4.dp,
+                    modifier = Modifier
+                        .fillMaxSize(),
+                ) {
+                    Row {
+                        Text(
+                            text = item.text.toString(LocalContext.current),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .weight(1f)
+                                .align(Alignment.CenterVertically),
+                            style = MaterialTheme.typography.subtitle2,
+                            color = ZooTheme.colors.onSurface,
+                        )
 
-                    SideIconView(
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        iconRes = R.drawable.ic_close_24,
-                        contentDescription = R.string.remove_from_plan,
-                        onClick = { onRemove(item.regionId) },
-                    )
+                        SideIconView(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            iconRes = R.drawable.ic_close_24,
+                            contentDescription = R.string.remove_from_plan,
+                            onClick = { onRemove(item.regionId) },
+                        )
+                    }
                 }
             }
         }
-    }
-    if (viewState.isAddExitVisible) {
-        SimpleButton(
-            text = Text("Exit"),
-            onClick = onAddExit
-        )
+        if (viewState.isAddExitVisible) {
+            SimpleButton(
+                modifier = Modifier.padding(8.dp).align(Alignment.End),
+                text = Text("Add Exit"),
+                onClick = onAddExit
+            )
+        }
     }
 }
 
