@@ -14,11 +14,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.zIndex
 
 internal fun Modifier.dragOnLongPressToReorder(
+    isFixed: Boolean,
     additionalOffset: Int,
     key: Any,
     lazyListState: LazyListState,
     onOrderingChange: (ReorderingData?) -> Unit,
 ): Modifier = composed {
+    if (isFixed) return@composed this
+
     val offsetY = remember { mutableStateOf(0f) }
     val animateAdditionalOffset by animateIntAsState(targetValue = additionalOffset)
     val animateOffset by animateFloatAsState(targetValue = offsetY.value)
@@ -51,39 +54,30 @@ internal fun Modifier.dragOnLongPressToReorder(
 private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Float): ReorderingData =
     with(lazyListState.layoutInfo) {
         val keyItem = visibleItemsInfo.firstOrNull { it.key == key }
+        val keyIndexInList = visibleItemsInfo.indexOf(keyItem)
         val keyOffset = keyItem?.offset ?: 0
         val keyIndex = keyItem?.index ?: 0
-        val height = if (keyIndex + 1 < visibleItemsInfo.size) {
-            visibleItemsInfo[keyIndex + 1].offset - keyOffset
-        } else if (keyIndex > 0) {
-            keyOffset - visibleItemsInfo[keyIndex - 1].offset
+        val height = if (keyIndexInList + 1 < visibleItemsInfo.size) {
+            visibleItemsInfo[keyIndexInList + 1].offset - keyOffset
+        } else if (keyIndexInList > 0) {
+            keyOffset - visibleItemsInfo[keyIndexInList - 1].offset
         } else {
             0
         }
 
         ReorderingData(
-            firstIndexAfter = visibleItemsInfo.firstOrNull { it.offset > keyOffset + offset }?.index ?: 0,
+            firstIndexAfter = visibleItemsInfo.firstOrNull { it.offset > keyOffset + offset }?.index ?: (visibleItemsInfo.size + 1),
             draggedIndex = keyIndex,
             draggedHeight = height,
         )
     }
 
 internal fun ReorderingData?.getAdditionalOffset(index: Int, isFixed: Boolean): Int {
-    if (this == null || isFixed) {
-        return 0
-    }
-    val positiveOffset =
-        if (index > firstIndexAfter - 1 && index < draggedIndex) {
-            draggedHeight
-        } else {
-            0
-        }
-    val negativeOffset =
-        if (index in (draggedIndex + 1) until firstIndexAfter) {
-            -draggedHeight
-        } else {
-            0
-        }
+    if (this == null || isFixed) return 0
+
+    val positiveOffset = if (index > firstIndexAfter - 1 && index < draggedIndex) draggedHeight else 0
+    val negativeOffset = if (index in (draggedIndex + 1) until firstIndexAfter) -draggedHeight else 0
+
     return positiveOffset + negativeOffset
 }
 
