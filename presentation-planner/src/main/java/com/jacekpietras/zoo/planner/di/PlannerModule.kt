@@ -10,9 +10,7 @@ val plannerModule = module {
     viewModel {
         PlannerViewModel(
             stateMapper = get(),
-            observeCurrentPlanUseCase = get(),
-            getAnimalsInRegionUseCase = get(),
-            observeAnimalFavoritesUseCase = get(),
+            observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase = get(),
             addExitToCurrentPlanUseCase = get(),
             removeRegionFromCurrentPlanUseCase = get(),
             setAnimalFavoriteUseCase = get(),

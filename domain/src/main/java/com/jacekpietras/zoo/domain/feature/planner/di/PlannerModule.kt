@@ -50,11 +50,17 @@ val plannerModule = module {
             getOrCreateCurrentPlanUseCase = get(),
         )
     }
-    factory<ObserveCurrentPlanPathWithOptimizationUseCase> {
-        ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
+    factory<ObserveCurrentPlanWithOptimizationUseCase> {
+        ObserveCurrentPlanWithOptimizationUseCaseImpl(
             planRepository = get(),
             tspSolver = get(),
             gpsRepository = get(),
+            observeCurrentPlanUseCase = get(),
+        )
+    }
+    factory {
+        ObserveCurrentPlanPathWithOptimizationUseCase(
+            observeCurrentPlanWithOptimizationUseCase = get(),
         )
     }
 }

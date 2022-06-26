@@ -8,29 +8,22 @@ import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
-import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddExitToCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveRegionFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
-import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
-import com.jacekpietras.zoo.domain.model.AnimalEntity
-import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 
 internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
-    observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
-    private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
+    observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase: ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase,
     private val removeRegionFromCurrentPlanUseCase: RemoveRegionFromCurrentPlanUseCase,
-    observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addExitToCurrentPlanUseCase: AddExitToCurrentPlanUseCase,
 ) : ViewModel() {
@@ -40,26 +33,10 @@ internal class PlannerViewModel(
     var viewState: LiveData<PlannerViewState> = state.map(stateMapper::from)
 
     init {
-        observeCurrentPlanUseCase.run()
-            .combine(observeAnimalFavoritesUseCase.run()) { plan, favorites ->
-                plan.stages
-                    .map { stage ->
-                        stage to stage.getAnimals(favorites)
-                    }
-            }
-            .onEach {
-                state.reduceOnMain { copy(plan = it) }
-            }
+        observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
+            .onEach { state.reduceOnMain { copy(plan = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
     }
-
-    private fun Stage.getAnimals(favorites: List<AnimalId>): List<AnimalEntity> =
-        if (this is Stage.InRegion) {
-            getAnimalsInRegionUseCase.run(region.id)
-                .filter { animal -> favorites.contains(animal.id) }
-        } else {
-            emptyList()
-        }
 
     fun onRemove(regionId: String) {
         launchInBackground {

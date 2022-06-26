@@ -4,7 +4,6 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CURRENT_PLAN_ID
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class ObserveCurrentPlanUseCase(
     private val planRepository: PlanRepository,
@@ -12,9 +11,4 @@ class ObserveCurrentPlanUseCase(
 
     fun run(): Flow<PlanEntity> =
         planRepository.observePlan(CURRENT_PLAN_ID)
-            .map { plan ->
-                plan.copy(
-                    stages = plan.stages
-                )
-            }
 }

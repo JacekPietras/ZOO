@@ -3,7 +3,6 @@ package com.jacekpietras.zoo.domain.feature.planner.interactor
 import com.jacekpietras.core.BuildConfig
 import com.jacekpietras.core.PointD
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
-import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity.Companion.CURRENT_PLAN_ID
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
@@ -17,33 +16,29 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 @ExperimentalTime
-internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
+internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
-    private val tspSolver: StageTravellingSalesmanProblemSolver,
     private val gpsRepository: GpsRepository,
-) : ObserveCurrentPlanPathWithOptimizationUseCase {
+    private val tspSolver: StageTravellingSalesmanProblemSolver,
+    private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
+) : ObserveCurrentPlanWithOptimizationUseCase {
 
     private var lastCalculated: List<Stage> = emptyList()
     private var lastGpsPointTimestamp: Long = 0L
 
-    override fun run(): Flow<List<PointD>> =
-        planRepository.observePlan(CURRENT_PLAN_ID)
+    override fun run(): Flow<Pair<List<Stage>, List<PointD>>> =
+        observeCurrentPlanUseCase.run()
             .distinctUntilChanged { _, new -> new.stages == lastCalculated }
-            .combine(observeUserPosition()) { plan, userPosition ->
-                val userStage = listOfNotNull(userPosition?.let { Stage.InUserPosition(it) })
-                val exitStage = plan.stages.find { it is Stage.InRegion && it.region is Region.ExitRegion }
-                plan.copy(stages = (userStage + plan.stages - exitStage + exitStage).filterNotNull())
-            }
+            .moveExitToEnd()
+            .combineWithUserPosition()
             .refreshPeriodically(MINUTE)
             .measureMap({ Timber.d("Optimization took $it") }) { currentPlan ->
-                val (resultStages, resultPath) =
-                    tspSolver.findShortPath(currentPlan.stages)
-
-                if (currentPlan.stages != resultStages) {
-                    saveBetterPlan(currentPlan, resultStages)
-                }
-
-                resultPath
+                tspSolver.findShortPathAndStages(currentPlan.stages)
+                    .also { (resultStages, _) ->
+                        if (currentPlan.stages != resultStages) {
+                            saveBetterPlan(currentPlan, resultStages)
+                        }
+                    }
             }
 
     private suspend fun saveBetterPlan(
@@ -75,6 +70,22 @@ internal class ObserveCurrentPlanPathWithOptimizationUseCaseImpl(
             delay(period)
         }
     }
+
+    private fun Flow<PlanEntity>.moveExitToEnd(): Flow<PlanEntity> =
+        map { plan ->
+            val exitStage = plan.stages.find { it is Stage.InRegion && it.region is Region.ExitRegion }
+            if (exitStage != null) {
+                plan.copy(stages = plan.stages - exitStage + exitStage)
+            } else {
+                plan
+            }
+        }
+
+    private fun Flow<PlanEntity>.combineWithUserPosition(): Flow<PlanEntity> =
+        combine(observeUserPosition()) { plan, userPosition ->
+            val userStage = listOfNotNull(userPosition?.let { Stage.InUserPosition(it) })
+            plan.copy(stages = userStage + plan.stages)
+        }
 
     @Suppress("USELESS_CAST")
     private fun observeUserPosition(): Flow<PointD?> =
