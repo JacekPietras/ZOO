@@ -21,6 +21,7 @@ internal class PlannerStateMapper {
                             text = Text(R.string.exit),
                             regionId = stage.region.id.id,
                             isMutable = stage.mutable,
+                            isFixed = true,
                         )
                     } else {
                         PlannerItem(
@@ -35,6 +36,7 @@ internal class PlannerStateMapper {
                     PlannerItem(
                         text = Text("not implemented"),
                         regionId = "not implemented",
+                        isFixed = true,
                     )
                 }
             }

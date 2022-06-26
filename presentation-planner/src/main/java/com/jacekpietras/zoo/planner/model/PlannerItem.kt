@@ -7,4 +7,5 @@ data class PlannerItem(
     val regionId: String,
     val isMultiple: Boolean = false,
     val isMutable: Boolean = false,
+    val isFixed: Boolean = false,
 )

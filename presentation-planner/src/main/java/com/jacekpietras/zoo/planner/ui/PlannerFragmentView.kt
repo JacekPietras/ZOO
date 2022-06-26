@@ -41,22 +41,19 @@ internal fun PlannerFragmentView(
         ) {
             items(
                 count = viewState.list.size,
-                key = { viewState.list[it].hashCode() }
+                key = { viewState.list[it].hashCode() },
             ) { index ->
                 val item = viewState.list[index]
                 val elevation = if (reorderingData.value?.draggedIndex == index) 8.dp else 4.dp
 
-                val additionalOffset = reorderingData.value.getAdditionalOffset(index = index)
-
                 RegionCardView(
                     modifier = Modifier
                         .dragOnLongPressToReorder(
-                            additionalOffset = additionalOffset.toFloat(),
+                            additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed),
                             key = item.hashCode(),
                             lazyListState = lazyListState,
-                        ) { reordering ->
-                            reorderingData.value = reordering
-                        },
+                            onOrderingChange = { reorderingData.value = it },
+                        ),
                     elevation = elevation,
                     text = item.text.toString(LocalContext.current),
                     onRemove = { onRemove(item.regionId) },
