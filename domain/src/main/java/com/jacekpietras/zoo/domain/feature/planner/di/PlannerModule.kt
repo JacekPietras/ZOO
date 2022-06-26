@@ -63,4 +63,11 @@ val plannerModule = module {
             observeCurrentPlanWithOptimizationUseCase = get(),
         )
     }
+    factory {
+        ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase(
+            observeCurrentPlanWithOptimizationUseCase = get(),
+            getAnimalsInRegionUseCase = get(),
+            observeAnimalFavoritesUseCase = get(),
+        )
+    }
 }
