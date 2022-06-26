@@ -13,7 +13,7 @@ internal class StageTravellingSalesmanProblemSolver(
     private val tspAlgorithm: TravelingSalesmanProblemAlgorithm<Stage>,
 ) {
 
-    private val cache: MutableList<RegionCalculation> = mutableListOf()
+    private val regionCalculationCache: MutableList<RegionCalculation> = mutableListOf()
     private val optionCreator = StageListOptionCreator()
 
     suspend fun findShortPathAndStages(
@@ -25,11 +25,6 @@ internal class StageTravellingSalesmanProblemSolver(
 
         return Pair(resultStages, resultStages.makePath(pointCalculationCache))
     }
-
-    suspend fun findShortStages(
-        stages: List<Stage>,
-    ): List<Stage> =
-        findShortStages(stages, PointCalculationCache())
 
     private suspend fun findShortStages(
         stages: List<Stage>,
@@ -76,7 +71,9 @@ internal class StageTravellingSalesmanProblemSolver(
         }
 
     private fun findRegionCalculation(prev: Stage.InRegion, next: Stage.InRegion) =
-        cache.find { it.from == prev.region.id && it.to == next.region.id }
+        synchronized(regionCalculationCache) {
+            regionCalculationCache.find { it.from == prev.region.id && it.to == next.region.id }
+        }
 
     private suspend fun calculateRegion(prev: RegionId, next: RegionId): Calculation {
         val prevPoint = prev.getCenter()
@@ -101,8 +98,10 @@ internal class StageTravellingSalesmanProblemSolver(
             path = list,
         )
 
-        cache.add(calculationAsc)
-        cache.add(calculationDesc)
+        synchronized(regionCalculationCache) {
+            regionCalculationCache.add(calculationAsc)
+            regionCalculationCache.add(calculationDesc)
+        }
 
         return calculationAsc
     }

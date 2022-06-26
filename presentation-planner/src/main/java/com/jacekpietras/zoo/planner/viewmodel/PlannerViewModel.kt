@@ -41,14 +41,14 @@ internal class PlannerViewModel(
     fun onRemove(regionId: String) {
         launchInBackground {
             currentState.plan
-                .mapNotNull { (stage, animals) ->
+                ?.mapNotNull { (stage, animals) ->
                     if (stage is Stage.InRegion) {
                         stage to animals
                     } else {
                         null
                     }
                 }
-                .find { (stage, _) -> stage.region.id.id == regionId }
+                ?.find { (stage, _) -> stage.region.id.id == regionId }
                 ?.let { (stage, animals) ->
                     animals.forEach { animal ->
                         setAnimalFavoriteUseCase.run(animal.id, false)
