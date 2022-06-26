@@ -11,9 +11,13 @@ import com.jacekpietras.zoo.planner.model.PlannerViewState
 
 internal class PlannerStateMapper {
 
-    fun from(state: PlannerState): PlannerViewState {
-        val isExitInPlan = state.plan?.any { (stage, _) -> stage is Stage.InRegion && stage.region is Region.ExitRegion } ?: false
-        val list = state.plan?.map { (stage, animals) ->
+    fun from(state: PlannerState): PlannerViewState =
+        from(state.plan)
+
+    fun from(plan: List<Pair<Stage, List<AnimalEntity>>>?): PlannerViewState {
+
+        val isExitInPlan = plan?.any { (stage, _) -> stage is Stage.InRegion && stage.region is Region.ExitRegion } ?: false
+        val list = plan?.map { (stage, animals) ->
             when (stage) {
                 is Stage.InRegion -> {
                     if (stage.region is Region.ExitRegion) {
@@ -41,7 +45,7 @@ internal class PlannerStateMapper {
                 }
             }
         } ?: emptyList()
-        val isInitialized = state.plan != null
+        val isInitialized = plan != null
 
         return PlannerViewState(
             list = list,

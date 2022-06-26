@@ -2,22 +2,16 @@ package com.jacekpietras.zoo.planner.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
-import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
-import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
-import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.*
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
-import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.flow.map
 
 internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
@@ -29,34 +23,36 @@ internal class PlannerViewModel(
     private val addExitToCurrentPlanUseCase: AddExitToCurrentPlanUseCase,
 ) : ViewModel() {
 
-    private val state = NullSafeMutableLiveData(PlannerState())
-    private val currentState get() = state.value
-    var viewState: LiveData<PlannerViewState> = state.map(stateMapper::from)
+    private val currentPlan = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run().asLiveData()
+
+    //    private val state = NullSafeMutableLiveData(PlannerState())
+//    private val currentState get() = state.value
+    var viewState: LiveData<PlannerViewState> = currentPlan.asFlow().map(stateMapper::from).asLiveData()
 
     init {
-        observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
-            .onEach { state.reduceOnMain { copy(plan = it) } }
-            .launchIn(viewModelScope + dispatcherProvider.default)
+//        observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
+//            .onEach { state.reduceOnMain { copy(plan = it) } }
+//            .launchIn(viewModelScope + dispatcherProvider.default)
     }
 
     fun onMove(fromRegionId: String, toRegionId: String) {
         launchInBackground {
-            val indexFrom = indexOfRegionId(fromRegionId)
-            val indexTo = indexOfRegionId(toRegionId)
-            val plan = currentState.plan
-            val elementFrom = plan?.get(indexFrom)
-
-            if (plan == null || elementFrom == null) return@launchInBackground
-
-            val newPlan = (plan - elementFrom).toMutableList().also { it.add(indexTo, elementFrom.copy(first = (elementFrom.first as Stage.Single).copy(mutable = false))) }
-            state.reduceOnMain { copy(plan = newPlan) }
+//            val indexFrom = indexOfRegionId(fromRegionId)
+//            val indexTo = indexOfRegionId(toRegionId)
+//            val plan = currentPlan
+//            val elementFrom = plan?.get(indexFrom)
+//
+//            if (plan == null || elementFrom == null) return@launchInBackground
+//
+//            val newPlan = (plan - elementFrom).toMutableList().also { it.add(indexTo, elementFrom.copy(first = (elementFrom.first as Stage.Single).copy(mutable = false))) }
+//            state.reduceOnMain { copy(plan = newPlan) }
 
             moveRegionUseCase.run(RegionId(fromRegionId), RegionId(toRegionId))
         }
     }
 
-    private fun indexOfRegionId(regionId: String): Int =
-        currentState.plan?.map { it.first }?.indexOfFirst { it is Stage.InRegion && it.region.id.id == regionId } ?: -1
+//    private fun indexOfRegionId(regionId: String): Int =
+//        currentState.plan?.map { it.first }?.indexOfFirst { it is Stage.InRegion && it.region.id.id == regionId } ?: -1
 
     fun onUnlock(regionId: String) {
         launchInBackground {
@@ -66,7 +62,7 @@ internal class PlannerViewModel(
 
     fun onRemove(regionId: String) {
         launchInBackground {
-            currentState.plan
+            currentPlan.value
                 ?.mapNotNull { (stage, animals) ->
                     if (stage is Stage.InRegion) {
                         stage to animals

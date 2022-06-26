@@ -1,9 +1,6 @@
 package com.jacekpietras.zoo.map.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.combine
@@ -79,7 +76,21 @@ internal class MapViewModel(
     val viewState: LiveData<MapViewState> = state.map(mapper::from)
 
     private val volatileState = NullSafeMutableLiveData(MapVolatileState())
-    val volatileViewState: LiveData<MapVolatileViewState> = volatileState.map(mapper::from)
+    val volatileViewState: LiveData<MapVolatileViewState> =
+        combine(
+            volatileState.asFlow(),
+            observeCurrentPlanPathUseCase.run(),
+            observeVisitedRoadsUseCase.run(),
+            observeTakenRouteUseCase.run(),
+            observeCompassUseCase.run(),
+        ) { state, plannedPath, visitedRoads, takenRoute, compass ->
+            state.copy(
+                plannedPath = plannedPath,
+                compass = compass,
+                visitedRoads = visitedRoads,
+                takenRoute = takenRoute,
+            )
+        }.asLiveData().map(mapper::from)
 
     private val mapWorldState = NullSafeMutableLiveData(MapWorldState())
     var mapWorldViewState: LiveData<MapWorldViewState> = mapWorldState.mapInBackground(mapper::from)
@@ -103,15 +114,6 @@ internal class MapViewModel(
             async { loadVisitedRouteUseCase.run() }
         }
 
-        observeCompassUseCase.run()
-            .onEach { volatileState.reduceOnMain { copy(compass = it) } }
-            .launchIn(viewModelScope + dispatcherProvider.default)
-
-        observeCurrentPlanPathUseCase.run()
-            .distinctUntilChanged()
-            .onEach { volatileState.reduceOnMain { copy(plannedPath = it) } }
-            .launchIn(viewModelScope + dispatcherProvider.default)
-
         observeSuggestedThemeTypeUseCase.run()
             .onEach { state.reduceOnMain { copy(suggestedThemeType = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
@@ -131,14 +133,6 @@ internal class MapViewModel(
             }
             .launchIn(viewModelScope + dispatcherProvider.default)
 
-        observeVisitedRoadsUseCase.run()
-            .onEach { volatileState.reduceOnMain { copy(visitedRoads = it) } }
-            .launchIn(viewModelScope + dispatcherProvider.default)
-
-        observeTakenRouteUseCase.run()
-            .onEach { volatileState.reduceOnMain { copy(takenRoute = it) } }
-            .launchIn(viewModelScope + dispatcherProvider.default)
-
         observeRegionsWithAnimalsInUserPositionUseCase.run()
             .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
@@ -152,7 +146,7 @@ internal class MapViewModel(
             observeOldTakenRouteUseCase.run(),
             observeTechnicalRoadsUseCase.run(),
         ) { worldBounds, buildings, aviary, roads, lines, rawTakenRoute, technicalRoads ->
-            val terminalPoints = onBackground { getTerminalNodesUseCase.run()}
+            val terminalPoints = onBackground { getTerminalNodesUseCase.run() }
 
             mapWorldState.reduceOnMain {
                 copy(
