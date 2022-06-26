@@ -59,7 +59,7 @@ internal fun PlannerFragmentView(
                             onOrderingChange = { reorderingData.value = it },
                             onDragStop = { fromIndex, toIndex ->
                                 val from = viewState.list[fromIndex]
-                                val to = viewState.list[toIndex]
+                                val to = viewState.list[toIndex.coerceAtMost(viewState.list.size - 1)]
                                 onMove(from.regionId, to.regionId)
                             },
                         ),
@@ -67,7 +67,7 @@ internal fun PlannerFragmentView(
                     elevation = elevation,
                     text = item.text.toString(LocalContext.current),
                     onRemove = { onRemove(item.regionId) },
-                    onUnlock = { onUnlock(item.regionId)}
+                    onUnlock = { onUnlock(item.regionId) }
                 )
             }
         }

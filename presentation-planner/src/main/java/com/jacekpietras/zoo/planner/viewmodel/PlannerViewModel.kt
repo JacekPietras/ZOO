@@ -12,6 +12,7 @@ import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
@@ -27,7 +28,7 @@ internal class PlannerViewModel(
 
     //    private val state = NullSafeMutableLiveData(PlannerState())
 //    private val currentState get() = state.value
-    var viewState: LiveData<PlannerViewState> = currentPlan.asFlow().map(stateMapper::from).asLiveData()
+    var viewState: LiveData<PlannerViewState> = currentPlan.asFlow().onStart { emit(emptyList()) }.map(stateMapper::from).asLiveData()
 
     init {
 //        observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
