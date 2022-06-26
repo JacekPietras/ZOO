@@ -9,10 +9,9 @@ import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.AddExitToCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase
-import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveRegionFromCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.*
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
+import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
@@ -24,6 +23,8 @@ internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
     observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase: ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase,
     private val removeRegionFromCurrentPlanUseCase: RemoveRegionFromCurrentPlanUseCase,
+    private val moveRegionUseCase: MoveRegionUseCase,
+    private val makeRegionImmutableUseCase: MakeRegionImmutableUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addExitToCurrentPlanUseCase: AddExitToCurrentPlanUseCase,
 ) : ViewModel() {
@@ -36,6 +37,31 @@ internal class PlannerViewModel(
         observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
             .onEach { state.reduceOnMain { copy(plan = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
+    }
+
+    fun onMove(fromRegionId: String, toRegionId: String) {
+        launchInBackground {
+            val indexFrom = indexOfRegionId(fromRegionId)
+            val indexTo = indexOfRegionId(toRegionId)
+            val plan = currentState.plan
+            val elementFrom = plan?.get(indexFrom)
+
+            if (plan == null || elementFrom == null) return@launchInBackground
+
+            val newPlan = (plan - elementFrom).toMutableList().also { it.add(indexTo, elementFrom.copy(first = (elementFrom.first as Stage.Single).copy(mutable = false))) }
+            state.reduceOnMain { copy(plan = newPlan) }
+
+            moveRegionUseCase.run(RegionId(fromRegionId), RegionId(toRegionId))
+        }
+    }
+
+    private fun indexOfRegionId(regionId: String): Int =
+        currentState.plan?.map { it.first }?.indexOfFirst { it is Stage.InRegion && it.region.id.id == regionId } ?: -1
+
+    fun onUnlock(regionId: String) {
+        launchInBackground {
+            makeRegionImmutableUseCase.run(RegionId(regionId), true)
+        }
     }
 
     fun onRemove(regionId: String) {

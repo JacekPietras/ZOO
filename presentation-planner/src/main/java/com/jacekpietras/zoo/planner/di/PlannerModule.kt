@@ -14,6 +14,8 @@ val plannerModule = module {
             addExitToCurrentPlanUseCase = get(),
             removeRegionFromCurrentPlanUseCase = get(),
             setAnimalFavoriteUseCase = get(),
+            moveRegionUseCase = get(),
+            makeRegionImmutableUseCase = get(),
         )
     }
 

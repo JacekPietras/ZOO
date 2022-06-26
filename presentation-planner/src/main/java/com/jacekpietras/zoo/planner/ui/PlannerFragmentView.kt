@@ -18,11 +18,14 @@ import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.utils.ReorderingData
 import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
 import com.jacekpietras.zoo.planner.utils.getAdditionalOffset
+import timber.log.Timber
 
 @Composable
 internal fun PlannerFragmentView(
     viewState: PlannerViewState,
     onRemove: (regionId: String) -> Unit,
+    onUnlock: (regionId: String) -> Unit,
+    onMove: (from: String, to: String) -> Unit,
     onAddExit: () -> Unit,
 ) {
     if (viewState.isEmptyViewVisible) {
@@ -55,11 +58,18 @@ internal fun PlannerFragmentView(
                             key = item.hashCode(),
                             lazyListState = lazyListState,
                             onOrderingChange = { reorderingData.value = it },
-                            onDragStop = {},
+                            onDragStop = { fromIndex, toIndex ->
+                                val from = viewState.list[fromIndex]
+                                val to = viewState.list[toIndex]
+                                onMove(from.regionId, to.regionId)
+                                Timber.e("dupa ${from.regionId} -> ${to.regionId}")
+                            },
                         ),
+                    isMutable = item.isMutable,
                     elevation = elevation,
                     text = item.text.toString(LocalContext.current),
                     onRemove = { onRemove(item.regionId) },
+                    onUnlock = { onUnlock(item.regionId)}
                 )
             }
         }

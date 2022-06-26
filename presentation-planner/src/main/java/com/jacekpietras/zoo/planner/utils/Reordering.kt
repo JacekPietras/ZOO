@@ -19,7 +19,7 @@ internal fun Modifier.dragOnLongPressToReorder(
     key: Any,
     lazyListState: LazyListState,
     onOrderingChange: (ReorderingData?) -> Unit,
-    onDragStop: () -> Unit,
+    onDragStop: (from: Int, to: Int) -> Unit,
 ): Modifier = composed {
     if (isFixed) return@composed this
 
@@ -38,8 +38,10 @@ internal fun Modifier.dragOnLongPressToReorder(
                 onOrderingChange(getReorderingData(lazyListState, key = key, 0f))
             },
             onDragEnd = {
+                val reorderingData = getReorderingData(lazyListState, key = key, offsetY.value)
+                onDragStop(reorderingData.draggedIndex, reorderingData.firstIndexAfter)
+
                 offsetY.value = 0f
-                onDragStop()
                 onOrderingChange(null)
             },
             onDragCancel = {

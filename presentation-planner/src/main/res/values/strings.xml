@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="remove_from_plan">Remove from plan</string>
+    <string name="unlock">Unlock</string>
     <string name="planner_empty_text">Your plan is empty.\nAdd animals or select predefined plan.</string>
     <string name="exit">Exit</string>
 </resources>

@@ -25,7 +25,9 @@ internal fun RegionCardView(
     modifier: Modifier = Modifier,
     elevation: Dp = 4.dp,
     text: String,
+    isMutable: Boolean = true,
     onRemove: () -> Unit,
+    onUnlock: () -> Unit,
 ) {
     val elevationState by animateDpAsState(elevation)
 
@@ -46,6 +48,15 @@ internal fun RegionCardView(
                 style = MaterialTheme.typography.subtitle2,
                 color = ZooTheme.colors.onSurface,
             )
+
+            if (!isMutable) {
+                SideIconView(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    iconRes = R.drawable.ic_lock_24,
+                    contentDescription = R.string.unlock,
+                    onClick = onUnlock,
+                )
+            }
 
             SideIconView(
                 modifier = Modifier.align(Alignment.CenterVertically),

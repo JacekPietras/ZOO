@@ -24,6 +24,17 @@ val plannerModule = module {
         )
     }
     factory {
+        MakeRegionImmutableUseCase(
+            planRepository = get(),
+        )
+    }
+    factory {
+        MoveRegionUseCase(
+            planRepository = get(),
+            makeRegionImmutableUseCase = get(),
+        )
+    }
+    factory {
         AddStageToCurrentPlanUseCase(
             planRepository = get(),
             getOrCreateCurrentPlanUseCase = get(),
