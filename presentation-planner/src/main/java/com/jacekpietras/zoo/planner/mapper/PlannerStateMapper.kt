@@ -20,11 +20,14 @@ internal class PlannerStateMapper {
                         PlannerItem(
                             text = Text(R.string.exit),
                             regionId = stage.region.id.id,
+                            isMutable = stage.mutable,
                         )
                     } else {
                         PlannerItem(
                             text = Text(animals.map(AnimalEntity::name).joinToString()),
                             regionId = stage.region.id.id,
+                            isMultiple = stage is Stage.Multiple,
+                            isMutable = stage.mutable,
                         )
                     }
                 }
