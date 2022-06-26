@@ -25,7 +25,7 @@ internal fun RegionCardView(
     modifier: Modifier = Modifier,
     elevation: Dp = 4.dp,
     text: String,
-    onRemove: () -> Unit,
+    onRemove: () -> Unit = {},
 ) {
     val elevationState by animateDpAsState(elevation)
 
