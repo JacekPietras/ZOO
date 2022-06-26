@@ -32,12 +32,9 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             .combineWithUserPosition()
             .refreshPeriodically(MINUTE)
             .pushAndDo(
-                fast = { plan ->
-                    Timber.d("Optimization skipped")
-                    plan.stages to emptyList()
-                },
+                fast = { plan -> plan.stages to emptyList() },
                 long = { currentPlan ->
-                    measureMap({ Timber.d("Optimization took $it $this") }) {
+                    measureMap({ Timber.d("Optimization took $it") }) {
                         tspSolver.findShortPathAndStages(currentPlan.stages)
                             .also { (resultStages, _) ->
                                 if (currentPlan.stages != resultStages) {

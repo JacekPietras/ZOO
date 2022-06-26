@@ -18,7 +18,6 @@ import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.utils.ReorderingData
 import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
 import com.jacekpietras.zoo.planner.utils.getAdditionalOffset
-import timber.log.Timber
 
 @Composable
 internal fun PlannerFragmentView(
@@ -62,7 +61,6 @@ internal fun PlannerFragmentView(
                                 val from = viewState.list[fromIndex]
                                 val to = viewState.list[toIndex]
                                 onMove(from.regionId, to.regionId)
-                                Timber.e("dupa ${from.regionId} -> ${to.regionId}")
                             },
                         ),
                     isMutable = item.isMutable,
