@@ -18,6 +18,7 @@ import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.utils.ReorderingData
 import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
 import com.jacekpietras.zoo.planner.utils.getAdditionalOffset
+import timber.log.Timber
 
 @Composable
 internal fun PlannerFragmentView(
@@ -33,6 +34,7 @@ internal fun PlannerFragmentView(
     Column {
         val lazyListState = rememberLazyListState()
         val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
+        val list = viewState.list
 
         LazyColumn(
             modifier = Modifier
@@ -42,10 +44,10 @@ internal fun PlannerFragmentView(
             state = lazyListState,
         ) {
             items(
-                count = viewState.list.size,
-                key = { viewState.list[it].hashCode() },
+                count = list.size,
+                key = { list[it].hashCode() },
             ) { index ->
-                val item = viewState.list[index]
+                val item = list[index]
                 val elevation = if (reorderingData.value?.draggedIndex == index) 8.dp else 4.dp
                 val additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed)
 
@@ -58,8 +60,9 @@ internal fun PlannerFragmentView(
                             lazyListState = lazyListState,
                             onOrderingChange = { reorderingData.value = it },
                             onDragStop = { fromIndex, toIndex ->
-                                val from = viewState.list[fromIndex]
-                                val to = viewState.list[toIndex.coerceAtMost(viewState.list.size - 1)]
+                                val from = list[fromIndex]
+                                val to = list[toIndex.coerceAtMost(list.size - 1)]
+                                Timber.e("dupa a: ${from.regionId} [$fromIndex] -> ${to.regionId} [${toIndex}]")
                                 onMove(from.regionId, to.regionId)
                             },
                         ),
