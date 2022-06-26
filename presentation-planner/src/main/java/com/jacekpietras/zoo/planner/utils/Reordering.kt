@@ -19,6 +19,7 @@ internal fun Modifier.dragOnLongPressToReorder(
     key: Any,
     lazyListState: LazyListState,
     onOrderingChange: (ReorderingData?) -> Unit,
+    onDragStop: () -> Unit,
 ): Modifier = composed {
     if (isFixed) return@composed this
 
@@ -30,7 +31,6 @@ internal fun Modifier.dragOnLongPressToReorder(
         detectDragGesturesAfterLongPress(
             onDrag = { change, offset ->
                 change.consume()
-                // compute calculatedOffset
                 offsetY.value += offset.y
                 onOrderingChange(getReorderingData(lazyListState, key = key, offsetY.value))
             },
@@ -39,6 +39,7 @@ internal fun Modifier.dragOnLongPressToReorder(
             },
             onDragEnd = {
                 offsetY.value = 0f
+                onDragStop()
                 onOrderingChange(null)
             },
             onDragCancel = {

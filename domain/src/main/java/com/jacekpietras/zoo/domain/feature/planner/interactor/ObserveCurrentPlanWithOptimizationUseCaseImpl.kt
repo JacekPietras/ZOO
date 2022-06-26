@@ -8,12 +8,11 @@ import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 
 @ExperimentalTime
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
@@ -32,14 +31,19 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             .moveExitToEnd()
             .combineWithUserPosition()
             .refreshPeriodically(MINUTE)
-            .measureMap({ Timber.d("Optimization took $it") }) { currentPlan ->
-                tspSolver.findShortPathAndStages(currentPlan.stages)
-                    .also { (resultStages, _) ->
-                        if (currentPlan.stages != resultStages) {
-                            saveBetterPlan(currentPlan, resultStages)
-                        }
+            .pushAndDo(
+                fast = { plan -> plan.stages to emptyList() },
+                long = { currentPlan ->
+                    measureMap({ Timber.d("Optimization took $it") }) {
+                        tspSolver.findShortPathAndStages(currentPlan.stages)
+                            .also { (resultStages, _) ->
+                                if (currentPlan.stages != resultStages) {
+                                    saveBetterPlan(currentPlan, resultStages)
+                                }
+                            }
                     }
-            }
+                },
+            )
 
     private suspend fun saveBetterPlan(
         currentPlan: PlanEntity,
@@ -52,13 +56,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         }
         lastCalculated = resultStages.filter { it !is Stage.InUserPosition }
         planRepository.setPlan(currentPlan.copy(stages = resultStages))
-    }
-
-    private fun <T, Y> Flow<T>.measureMap(onMeasure: (Duration) -> Unit, block: suspend (T) -> Y): Flow<Y> = map {
-        var result: Y
-        val measure = measureTime { result = block(it) }
-        onMeasure(measure)
-        result
     }
 
     private fun <T> Flow<T>.refreshPeriodically(period: Long) =
@@ -100,6 +97,24 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     private suspend fun List<Stage>.distance(): Double =
         zipWithNext { a, b -> tspSolver.getDistance(a, b) }.sum()
+
+    private fun <T, Y> Flow<Y>.pushAndDo(
+        fast: (Y) -> T,
+        long: suspend (Y) -> T,
+    ): Flow<T> =
+        object : Flow<T> {
+            var mapped = false
+
+            override suspend fun collect(collector: FlowCollector<T>) {
+                this@pushAndDo.collect { value ->
+                    if (!mapped) {
+                        collector.emit(fast(value))
+                        mapped = true
+                    }
+                    collector.emit(long(value))
+                }
+            }
+        }
 
     companion object {
 

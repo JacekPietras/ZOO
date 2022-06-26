@@ -55,6 +55,7 @@ internal fun PlannerFragmentView(
                             key = item.hashCode(),
                             lazyListState = lazyListState,
                             onOrderingChange = { reorderingData.value = it },
+                            onDragStop = {},
                         ),
                     elevation = elevation,
                     text = item.text.toString(LocalContext.current),
