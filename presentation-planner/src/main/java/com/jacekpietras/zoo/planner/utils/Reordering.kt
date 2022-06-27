@@ -39,9 +39,7 @@ internal fun Modifier.dragOnLongPressToReorder(
             },
             onDragEnd = {
                 val reorderingData = getReorderingData(lazyListState, key = key, offsetY.value)
-                if (reorderingData.fromIndex != reorderingData.toIndex) {
-                    onDragStop(reorderingData.fromIndex, reorderingData.toIndex)
-                }
+                onDragStop(reorderingData.fromIndex, reorderingData.toIndex)
 
                 offsetY.value = 0f
                 onOrderingChange(null)
