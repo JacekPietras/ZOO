@@ -18,7 +18,6 @@ import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.utils.ReorderingData
 import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
-import timber.log.Timber
 
 @ExperimentalFoundationApi
 @Composable
@@ -87,11 +86,11 @@ private fun ColumnScope.PlannerListView(
                         lazyListState = lazyListState,
                         onOrderingChange = { data->
                             if (data != null) {
-                                Timber.e("dupa    : ${listData.value.map { it.regionId }}")
+//                                Timber.e("dupa    : ${listData.value.map { it.regionId }}")
                                 listData.value = (listData.value - listData.value[data.fromIndex])
                                     .toMutableList()
                                     .also { it.add(data.toIndex, listData.value[data.fromIndex]) }
-                                Timber.e("dupa -> : ${listData.value.map { it.regionId }}")
+//                                Timber.e("dupa -> : ${listData.value.map { it.regionId }}")
                             }
 //                            reorderingData.value = it
                         },

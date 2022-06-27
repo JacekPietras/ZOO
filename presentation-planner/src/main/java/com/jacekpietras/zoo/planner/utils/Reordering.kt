@@ -1,9 +1,7 @@
 package com.jacekpietras.zoo.planner.utils
 
-import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -11,10 +9,10 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.zIndex
+import timber.log.Timber
 
 internal fun Modifier.dragOnLongPressToReorder(
     isFixed: Boolean,
-    additionalOffset: Int = 0,
     key: Any,
     lazyListState: LazyListState,
     onOrderingChange: (ReorderingData?) -> Unit,
@@ -23,13 +21,14 @@ internal fun Modifier.dragOnLongPressToReorder(
     if (isFixed) return@composed this
 
     val offsetY = remember { mutableStateOf(0f) }
-    val animateAdditionalOffset by animateIntAsState(targetValue = additionalOffset)
 //    val animateOffset by animateFloatAsState(targetValue = offsetY.value)
 
     pointerInput(Unit) {
         detectDragGesturesAfterLongPress(
             onDrag = { change, offset ->
                 change.consume()
+
+                Timber.e("dupa $offset")
                 offsetY.value += offset.y
 //                onOrderingChange(getReorderingData(lazyListState, key = key, offsetY.value))
 
@@ -38,10 +37,9 @@ internal fun Modifier.dragOnLongPressToReorder(
                     onOrderingChange(reorderingData)
                     offsetY.value = 0f
                 }
-
             },
             onDragStart = {
-                onOrderingChange(getReorderingData(lazyListState, key = key, 0f))
+//                onOrderingChange(getReorderingData(lazyListState, key = key, 0f))
             },
             onDragEnd = {
 //                val reorderingData = getReorderingData(lazyListState, key = key, offsetY.value)
@@ -58,7 +56,7 @@ internal fun Modifier.dragOnLongPressToReorder(
             }
         )
     }
-        .graphicsLayer(translationY = offsetY.value + animateAdditionalOffset)
+        .graphicsLayer(translationY = offsetY.value )
         .zIndex(if (offsetY.value != 0f) 1.0f else 0.0f)
 }
 
