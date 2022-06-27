@@ -39,8 +39,8 @@ internal fun Modifier.dragOnLongPressToReorder(
             },
             onDragEnd = {
                 val reorderingData = getReorderingData(lazyListState, key = key, offsetY.value)
-                if (reorderingData.draggedIndex != reorderingData.toIndex) {
-                    onDragStop(reorderingData.draggedIndex, reorderingData.toIndex)
+                if (reorderingData.fromIndex != reorderingData.toIndex) {
+                    onDragStop(reorderingData.fromIndex, reorderingData.toIndex)
                 }
 
                 offsetY.value = 0f
@@ -84,7 +84,7 @@ private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Fl
 
         ReorderingData(
             toIndex = toIndex,
-            draggedIndex = keyIndex,
+            fromIndex = keyIndex,
             draggedHeight = height,
         )
     }
@@ -92,14 +92,14 @@ private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Fl
 internal fun ReorderingData?.getAdditionalOffset(index: Int, isFixed: Boolean): Int {
     if (this == null || isFixed) return 0
 
-    val positiveOffset = if (index in toIndex until draggedIndex) draggedHeight else 0
-    val negativeOffset = if (index in (draggedIndex + 1)..toIndex) -draggedHeight else 0
+    val positiveOffset = if (index in toIndex until fromIndex) draggedHeight else 0
+    val negativeOffset = if (index in (fromIndex + 1)..toIndex) -draggedHeight else 0
 
     return positiveOffset + negativeOffset
 }
 
 internal class ReorderingData(
+    val fromIndex: Int = 0,
     val toIndex: Int = 0,
-    val draggedIndex: Int = 0,
     val draggedHeight: Int = 0,
 )

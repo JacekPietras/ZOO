@@ -54,7 +54,7 @@ private fun ColumnScope.PlannerListView(
     viewState: PlannerViewState,
     onMove: (from: String, to: String) -> Unit,
     onRemove: (regionId: String) -> Unit,
-    onUnlock: (regionId: String) -> Unit
+    onUnlock: (regionId: String) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
@@ -72,7 +72,7 @@ private fun ColumnScope.PlannerListView(
             key = { viewState.list[it].hashCode() },
         ) { index ->
             val item = viewState.list[index]
-            val elevation = if (reorderingData.value?.draggedIndex == index) 8.dp else 4.dp
+            val elevation = if (reorderingData.value?.fromIndex == index) 8.dp else 4.dp
             val additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed)
 
             RegionCardView(
