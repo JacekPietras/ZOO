@@ -39,7 +39,7 @@ internal fun Modifier.dragOnLongPressToReorder(
             },
             onDragEnd = {
                 val reorderingData = getReorderingData(lazyListState, key = key, offsetY.value)
-                onDragStop(reorderingData.draggedIndex, (reorderingData.firstIndexAfter - 1).coerceAtLeast(0))
+                onDragStop(reorderingData.draggedIndex, reorderingData.toIndex)
 
                 offsetY.value = 0f
                 onOrderingChange(null)
@@ -67,9 +67,21 @@ private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Fl
         } else {
             0
         }
+        val firstAfter = visibleItemsInfo.firstOrNull { it.offset > keyOffset + offset }?.index
+            ?: if (visibleItemsInfo.last().offset > keyOffset + offset) {
+                visibleItemsInfo.size
+            } else {
+                visibleItemsInfo.size + 1
+            }
+
+        val toIndex = if (keyIndex < firstAfter) {
+            firstAfter - 1
+        } else {
+            firstAfter
+        }.coerceIn(0..visibleItemsInfo.last().index)
 
         ReorderingData(
-            firstIndexAfter = visibleItemsInfo.firstOrNull { it.offset > keyOffset + offset }?.index ?: (visibleItemsInfo.size + 1),
+            toIndex = toIndex,
             draggedIndex = keyIndex,
             draggedHeight = height,
         )
@@ -78,14 +90,14 @@ private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Fl
 internal fun ReorderingData?.getAdditionalOffset(index: Int, isFixed: Boolean): Int {
     if (this == null || isFixed) return 0
 
-    val positiveOffset = if (index > firstIndexAfter - 1 && index < draggedIndex) draggedHeight else 0
-    val negativeOffset = if (index in (draggedIndex + 1) until firstIndexAfter) -draggedHeight else 0
+    val positiveOffset = if (index in toIndex until draggedIndex) draggedHeight else 0
+    val negativeOffset = if (index in (draggedIndex + 1)..toIndex) -draggedHeight else 0
 
     return positiveOffset + negativeOffset
 }
 
 internal class ReorderingData(
-    val firstIndexAfter: Int = 0,
+    val toIndex: Int = 0,
     val draggedIndex: Int = 0,
     val draggedHeight: Int = 0,
 )

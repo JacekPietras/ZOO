@@ -18,7 +18,6 @@ import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.utils.ReorderingData
 import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
 import com.jacekpietras.zoo.planner.utils.getAdditionalOffset
-import timber.log.Timber
 
 @Composable
 internal fun PlannerFragmentView(
@@ -32,48 +31,12 @@ internal fun PlannerFragmentView(
         EmptyView()
     }
     Column {
-        val lazyListState = rememberLazyListState()
-        val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
-        val list = viewState.list
-
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-            state = lazyListState,
-        ) {
-            items(
-                count = list.size,
-                key = { list[it].hashCode() },
-            ) { index ->
-                val item = list[index]
-                val elevation = if (reorderingData.value?.draggedIndex == index) 8.dp else 4.dp
-                val additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed)
-
-                RegionCardView(
-                    modifier = Modifier
-                        .dragOnLongPressToReorder(
-                            isFixed = item.isFixed,
-                            additionalOffset = additionalOffset,
-                            key = item.hashCode(),
-                            lazyListState = lazyListState,
-                            onOrderingChange = { reorderingData.value = it },
-                            onDragStop = { fromIndex, toIndex ->
-                                val from = list[fromIndex]
-                                val to = list[toIndex.coerceAtMost(list.size - 1)]
-                                Timber.e("dupa a: ${from.regionId} [$fromIndex] -> ${to.regionId} [${toIndex}]")
-                                onMove(from.regionId, to.regionId)
-                            },
-                        ),
-                    isMutable = item.isMutable,
-                    elevation = elevation,
-                    text = item.text.toString(LocalContext.current),
-                    onRemove = { onRemove(item.regionId) },
-                    onUnlock = { onUnlock(item.regionId) }
-                )
-            }
-        }
+        PlannerListView(
+            viewState,
+            onMove,
+            onRemove,
+            onUnlock
+        )
         if (viewState.isAddExitVisible) {
             SimpleButton(
                 modifier = Modifier
@@ -81,6 +44,54 @@ internal fun PlannerFragmentView(
                     .align(Alignment.End),
                 text = Text("Add Exit"),
                 onClick = onAddExit
+            )
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.PlannerListView(
+    viewState: PlannerViewState,
+    onMove: (from: String, to: String) -> Unit,
+    onRemove: (regionId: String) -> Unit,
+    onUnlock: (regionId: String) -> Unit
+) {
+    val lazyListState = rememberLazyListState()
+    val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
+    val listData = remember { mutableStateOf(viewState.list) }
+    listData.value = viewState.list
+
+    LazyColumn(
+        modifier = Modifier.weight(1f),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+        state = lazyListState,
+    ) {
+        items(
+            count = viewState.list.size,
+            key = { viewState.list[it].hashCode() },
+        ) { index ->
+            val item = viewState.list[index]
+            val elevation = if (reorderingData.value?.draggedIndex == index) 8.dp else 4.dp
+            val additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed)
+
+            RegionCardView(
+                modifier = Modifier
+                    .dragOnLongPressToReorder(
+                        isFixed = item.isFixed,
+                        additionalOffset = additionalOffset,
+                        key = item.hashCode(),
+                        lazyListState = lazyListState,
+                        onOrderingChange = { reorderingData.value = it },
+                        onDragStop = { fromIndex, toIndex ->
+                            onMove(listData.value[fromIndex].regionId, listData.value[toIndex].regionId)
+                        },
+                    ),
+                isMutable = item.isMutable,
+                elevation = elevation,
+                text = item.regionId + " (" + item.text.toString(LocalContext.current) + ")",
+                onRemove = { onRemove(item.regionId) },
+                onUnlock = { onUnlock(item.regionId) }
             )
         }
     }

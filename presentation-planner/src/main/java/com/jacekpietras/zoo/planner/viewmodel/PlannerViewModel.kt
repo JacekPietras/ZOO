@@ -19,41 +19,24 @@ internal class PlannerViewModel(
     observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase: ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase,
     private val removeRegionFromCurrentPlanUseCase: RemoveRegionFromCurrentPlanUseCase,
     private val moveRegionUseCase: MoveRegionUseCase,
-    private val makeRegionImmutableUseCase: MakeRegionImmutableUseCase,
+    private val makeRegionImmutableUseCase: SaveRegionImmutableUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addExitToCurrentPlanUseCase: AddExitToCurrentPlanUseCase,
 ) : ViewModel() {
 
     private val currentPlan = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run().asLiveData()
-
-    //    private val state = NullSafeMutableLiveData(PlannerState())
-//    private val currentState get() = state.value
-    var viewState: LiveData<PlannerViewState> = currentPlan.asFlow().onStart { emit(emptyList()) }.map(stateMapper::from).asLiveData()
-
-    init {
-//        observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
-//            .onEach { state.reduceOnMain { copy(plan = it) } }
-//            .launchIn(viewModelScope + dispatcherProvider.default)
-    }
+    var viewState: LiveData<PlannerViewState> =
+        currentPlan
+            .asFlow()
+            .onStart { emit(emptyList()) }
+            .map(stateMapper::from)
+            .asLiveData()
 
     fun onMove(fromRegionId: String, toRegionId: String) {
         launchInBackground {
-//            val indexFrom = indexOfRegionId(fromRegionId)
-//            val indexTo = indexOfRegionId(toRegionId)
-//            val plan = currentPlan
-//            val elementFrom = plan?.get(indexFrom)
-//
-//            if (plan == null || elementFrom == null) return@launchInBackground
-//
-//            val newPlan = (plan - elementFrom).toMutableList().also { it.add(indexTo, elementFrom.copy(first = (elementFrom.first as Stage.Single).copy(mutable = false))) }
-//            state.reduceOnMain { copy(plan = newPlan) }
-
             moveRegionUseCase.run(RegionId(fromRegionId), RegionId(toRegionId))
         }
     }
-
-//    private fun indexOfRegionId(regionId: String): Int =
-//        currentState.plan?.map { it.first }?.indexOfFirst { it is Stage.InRegion && it.region.id.id == regionId } ?: -1
 
     fun onUnlock(regionId: String) {
         launchInBackground {

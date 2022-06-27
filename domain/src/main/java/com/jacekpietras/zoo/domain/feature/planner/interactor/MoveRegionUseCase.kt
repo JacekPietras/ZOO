@@ -4,18 +4,16 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.model.RegionId
-import timber.log.Timber
 
 class MoveRegionUseCase(
     private val planRepository: PlanRepository,
     private val makeRegionImmutableUseCase: MakeRegionImmutableUseCase,
+    private val getOrCreateCurrentPlanUseCase: GetOrCreateCurrentPlanUseCase,
 ) {
 
     suspend fun run(fromRegionId: RegionId, toRegionId: RegionId) {
-        makeRegionImmutableUseCase.run(fromRegionId, false)
-
-        Timber.e("dupa moving region ${fromRegionId.id} to ${toRegionId.id}")
-        val plan = checkNotNull(planRepository.getPlan(PlanEntity.CURRENT_PLAN_ID))
+        var plan = getOrCreateCurrentPlanUseCase.run()
+        plan = makeRegionImmutableUseCase.run(plan, fromRegionId, false)
 
         val indexFrom = plan.indexOf(fromRegionId)
         val indexTo = plan.indexOf(toRegionId)
