@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.planner.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -17,8 +18,9 @@ import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.utils.ReorderingData
 import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
-import com.jacekpietras.zoo.planner.utils.getAdditionalOffset
+import timber.log.Timber
 
+@ExperimentalFoundationApi
 @Composable
 internal fun PlannerFragmentView(
     viewState: PlannerViewState,
@@ -49,6 +51,7 @@ internal fun PlannerFragmentView(
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 private fun ColumnScope.PlannerListView(
     viewState: PlannerViewState,
@@ -68,23 +71,32 @@ private fun ColumnScope.PlannerListView(
         state = lazyListState,
     ) {
         items(
-            count = viewState.list.size,
-            key = { viewState.list[it].hashCode() },
+            count = listData.value .size,
+            key = { listData.value [it].hashCode() },
         ) { index ->
-            val item = viewState.list[index]
+            val item = listData.value [index]
             val elevation = if (reorderingData.value?.fromIndex == index) 8.dp else 4.dp
-            val additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed)
 
             RegionCardView(
                 modifier = Modifier
+                    .animateItemPlacement()
                     .dragOnLongPressToReorder(
                         isFixed = item.isFixed,
-                        additionalOffset = additionalOffset,
+//                        additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed),
                         key = item.hashCode(),
                         lazyListState = lazyListState,
-                        onOrderingChange = { reorderingData.value = it },
+                        onOrderingChange = { data->
+                            if (data != null) {
+                                Timber.e("dupa    : ${listData.value.map { it.regionId }}")
+                                listData.value = (listData.value - listData.value[data.fromIndex])
+                                    .toMutableList()
+                                    .also { it.add(data.toIndex, listData.value[data.fromIndex]) }
+                                Timber.e("dupa -> : ${listData.value.map { it.regionId }}")
+                            }
+//                            reorderingData.value = it
+                        },
                         onDragStop = { fromIndex, toIndex ->
-                            onMove(listData.value[fromIndex].regionId, listData.value[toIndex].regionId)
+//                            onMove(listData.value[fromIndex].regionId, listData.value[toIndex].regionId)
                         },
                     ),
                 isMutable = item.isMutable,
