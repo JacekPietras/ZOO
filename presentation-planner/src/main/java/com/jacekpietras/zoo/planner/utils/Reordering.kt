@@ -17,6 +17,7 @@ internal fun Modifier.dragOnLongPressToReorder(
     isFixed: Boolean,
     additionalOffset: Int?,
     key: Any,
+    index: Int,
     lazyListState: LazyListState,
     onOrderingChange: (ReorderingData?) -> Unit,
     onDragStop: (from: Int, to: Int) -> Unit,
@@ -25,13 +26,22 @@ internal fun Modifier.dragOnLongPressToReorder(
 
     val offsetY = remember { mutableStateOf(0f) }
     val overOffset = remember { mutableStateOf(0f) }
+    val indexOfAdditionalOffset = remember { mutableStateOf<Int?>(null) }
     val shouldAnimateReturn = remember { mutableStateOf(false) }
+    val shouldAnimateReturnIndex = remember { mutableStateOf<Int?>(null) }
     val animateAdditionalOffset by animateIntAsState(targetValue = additionalOffset ?: 0)
     val animateOffset by animateFloatAsState(targetValue = offsetY.value)
     val animateOverOffset by animateFloatAsState(targetValue = overOffset.value)
 
-    val animateOffsetCombined = (animateOffset.takeIf { shouldAnimateReturn.value } ?: animateOverOffset)
-    val animateAdditionalOffsetCombined = (animateAdditionalOffset.takeIf { additionalOffset != null } ?: 0)
+    if (additionalOffset != null && additionalOffset != 0) {
+        indexOfAdditionalOffset.value = index
+    }
+    if (shouldAnimateReturn.value) {
+        shouldAnimateReturnIndex.value = index
+    }
+
+    val animateOffsetCombined = (animateOffset.takeIf { shouldAnimateReturnIndex.value == index } ?: animateOverOffset)
+    val animateAdditionalOffsetCombined = (animateAdditionalOffset.takeIf { indexOfAdditionalOffset.value == index } ?: 0)
 
     pointerInput(Unit) {
         detectDragGesturesAfterLongPress(

@@ -80,6 +80,7 @@ private fun ColumnScope.PlannerListView(
                     .dragOnLongPressToReorder(
                         isFixed = item.isFixed,
                         additionalOffset = additionalOffset,
+                        index = index,
                         key = item.hashCode(),
                         lazyListState = lazyListState,
                         onOrderingChange = { reorderingData.value = it },
