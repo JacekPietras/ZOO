@@ -69,9 +69,9 @@ private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Fl
         }
         val firstAfter = visibleItemsInfo.firstOrNull { it.offset > keyOffset + offset }?.index
             ?: if (visibleItemsInfo.last().offset > keyOffset + offset) {
-                visibleItemsInfo.size
+                visibleItemsInfo.last().index
             } else {
-                visibleItemsInfo.size + 1
+                visibleItemsInfo.last().index + 1
             }
 
         val toIndex = if (keyIndex < firstAfter) {
