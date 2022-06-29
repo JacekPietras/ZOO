@@ -73,7 +73,7 @@ private fun ColumnScope.PlannerListView(
         ) { index ->
             val item = viewState.list[index]
             val elevation = if (reorderingData.value?.fromIndex == index) 8.dp else 4.dp
-            val additionalOffset = reorderingData.value.getAdditionalOffset(index = index, item.isFixed)
+            val additionalOffset = reorderingData.value?.getAdditionalOffset(index = index, item.isFixed)
 
             RegionCardView(
                 modifier = Modifier

@@ -15,7 +15,7 @@ import androidx.compose.ui.zIndex
 
 internal fun Modifier.dragOnLongPressToReorder(
     isFixed: Boolean,
-    additionalOffset: Int,
+    additionalOffset: Int?,
     key: Any,
     lazyListState: LazyListState,
     onOrderingChange: (ReorderingData?) -> Unit,
@@ -24,34 +24,50 @@ internal fun Modifier.dragOnLongPressToReorder(
     if (isFixed) return@composed this
 
     val offsetY = remember { mutableStateOf(0f) }
-    val animateAdditionalOffset by animateIntAsState(targetValue = additionalOffset)
+    val overOffset = remember { mutableStateOf(0f) }
+    val shouldAnimateReturn = remember { mutableStateOf(false) }
+    val animateAdditionalOffset by animateIntAsState(targetValue = additionalOffset ?: 0)
     val animateOffset by animateFloatAsState(targetValue = offsetY.value)
+    val animateOverOffset by animateFloatAsState(targetValue = overOffset.value)
+
+    val animateOffsetCombined = (animateOffset.takeIf { shouldAnimateReturn.value } ?: animateOverOffset)
+    val animateAdditionalOffsetCombined = (animateAdditionalOffset.takeIf { additionalOffset != null } ?: 0)
 
     pointerInput(Unit) {
         detectDragGesturesAfterLongPress(
             onDrag = { change, offset ->
                 change.consume()
                 offsetY.value += offset.y
-                onOrderingChange(getReorderingData(lazyListState, key = key, offsetY.value))
+                val data = getReorderingData(lazyListState, key = key, offsetY.value)
+                overOffset.value = data.overOffset.toFloat()
+
+                onOrderingChange(data)
             },
             onDragStart = {
                 onOrderingChange(getReorderingData(lazyListState, key = key, 0f))
+                shouldAnimateReturn.value = true
             },
             onDragEnd = {
                 val reorderingData = getReorderingData(lazyListState, key = key, offsetY.value)
                 onDragStop(reorderingData.fromIndex, reorderingData.toIndex)
 
+                if (reorderingData.fromIndex != reorderingData.toIndex) {
+                    shouldAnimateReturn.value = false
+                }
+
                 offsetY.value = 0f
+                overOffset.value = 0f
                 onOrderingChange(null)
             },
             onDragCancel = {
                 offsetY.value = 0f
+                overOffset.value = 0f
                 onOrderingChange(null)
             }
         )
     }
-        .graphicsLayer(translationY = animateOffset + animateAdditionalOffset)
-        .zIndex(if (animateOffset != 0f) 1.0f else 0.0f)
+        .graphicsLayer(translationY = animateOffsetCombined + animateAdditionalOffsetCombined)
+        .zIndex(if (animateOffsetCombined != 0f) 1.0f else 0.0f)
 }
 
 private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Float): ReorderingData =
@@ -80,15 +96,19 @@ private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Fl
             firstAfter
         }.coerceIn(0..visibleItemsInfo.last().index)
 
+        val firstAfterOffset = visibleItemsInfo.firstOrNull { it.index == toIndex }?.offset ?: 0
+        val overOffset = keyOffset - firstAfterOffset + offset.toInt()
+
         ReorderingData(
             toIndex = toIndex,
             fromIndex = keyIndex,
             draggedHeight = height,
+            overOffset = overOffset,
         )
     }
 
-internal fun ReorderingData?.getAdditionalOffset(index: Int, isFixed: Boolean): Int {
-    if (this == null || isFixed) return 0
+internal fun ReorderingData.getAdditionalOffset(index: Int, isFixed: Boolean): Int {
+    if (isFixed) return 0
 
     val positiveOffset = if (index in toIndex until fromIndex) draggedHeight else 0
     val negativeOffset = if (index in (fromIndex + 1)..toIndex) -draggedHeight else 0
@@ -100,4 +120,5 @@ internal class ReorderingData(
     val fromIndex: Int = 0,
     val toIndex: Int = 0,
     val draggedHeight: Int = 0,
+    val overOffset: Int = 0,
 )
