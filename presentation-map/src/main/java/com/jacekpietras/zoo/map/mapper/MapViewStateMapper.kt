@@ -4,7 +4,7 @@ import android.graphics.Color
 import com.jacekpietras.core.PointD
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
@@ -26,17 +26,17 @@ internal class MapViewStateMapper {
             isNightThemeSuggested = suggestedThemeType == ThemeType.NIGHT,
             isBackArrowShown = toolbarMode is MapToolbarMode.SelectedAnimalMode,
             title = when (toolbarMode) {
-                is MapToolbarMode.SelectedAnimalMode -> Text(toolbarMode.animal.name) + toolbarMode.distance.metersToText()
-                is MapToolbarMode.NavigableMapActionMode -> Text(toolbarMode.mapAction.title) + toolbarMode.distance.metersToText()
-                is MapToolbarMode.AroundYouMapActionMode -> Text(toolbarMode.mapAction.title)
+                is MapToolbarMode.SelectedAnimalMode -> RichText(toolbarMode.animal.name) + toolbarMode.distance.metersToText()
+                is MapToolbarMode.NavigableMapActionMode -> RichText(toolbarMode.mapAction.title) + toolbarMode.distance.metersToText()
+                is MapToolbarMode.AroundYouMapActionMode -> RichText(toolbarMode.mapAction.title)
                 is MapToolbarMode.SelectedRegionMode -> {
                     if (toolbarMode.regionsWithAnimals.size > 1) {
-                        Text(R.string.selected)
+                        RichText(R.string.selected)
                     } else {
                         toolbarMode.regionsWithAnimals.first().first.id.id.findReadableName()
                     }
                 }
-                else -> Text.Empty
+                else -> RichText.Empty
             },
 
             mapCarouselItems = when (toolbarMode) {
@@ -56,8 +56,8 @@ internal class MapViewStateMapper {
 
     private fun Double?.metersToText() =
         this?.let { distance ->
-            Text(" ") + Text(distance.toInt().toString()) + "m"
-        } ?: Text.Empty
+            RichText(" ") + RichText(distance.toInt().toString()) + "m"
+        } ?: RichText.Empty
 
     fun from(state: MapVolatileState): MapVolatileViewState = with(state) {
         MapVolatileViewState(
@@ -172,7 +172,7 @@ internal class MapViewStateMapper {
                             MapCarouselItem.Animal(
                                 id = animal.id,
                                 division = animal.division.toViewValue(),
-                                name = Text(animal.name),
+                                name = RichText(animal.name),
                                 photoUrl = animal.photos.shuffled(Random(carouselSeed)).firstOrNull(),
                             )
                         )

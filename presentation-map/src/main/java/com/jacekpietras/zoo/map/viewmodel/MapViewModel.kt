@@ -8,7 +8,7 @@ import com.jacekpietras.core.reduce
 import com.jacekpietras.zoo.core.dispatcher.*
 import com.jacekpietras.zoo.core.extensions.mapInBackground
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.*
@@ -198,7 +198,7 @@ internal class MapViewModel(
             uploadHistoryUseCase.run()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
             launchInMain {
-                _effect.send(MapEffect.ShowToast(Text("Upload failed")))
+                _effect.send(MapEffect.ShowToast(RichText("Upload failed")))
             }
         }
     }
@@ -259,7 +259,7 @@ internal class MapViewModel(
     private fun onLocationDenied() {
         if (BuildConfig.DEBUG) {
             launchInMain {
-                _effect.send(MapEffect.ShowToast(Text(R.string.location_denied)))
+                _effect.send(MapEffect.ShowToast(RichText(R.string.location_denied)))
             }
         }
     }
@@ -341,7 +341,7 @@ internal class MapViewModel(
                     }
                 } else {
                     state.reduce { copy(isToolbarOpened = false) }
-                    _effect.send(MapEffect.ShowToast(Text.Res(R.string.cannot_find_near, Text(mapAction.title))))
+                    _effect.send(MapEffect.ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
                 }
             }
         }

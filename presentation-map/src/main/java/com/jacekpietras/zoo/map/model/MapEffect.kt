@@ -1,12 +1,12 @@
 package com.jacekpietras.zoo.map.model
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 
 internal sealed class MapEffect {
 
     data class ShowToast(
-        val text: Text,
+        val text: RichText,
     ) : MapEffect()
 
     object CenterAtUser : MapEffect()

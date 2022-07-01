@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.model
 
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 
 data class TextParagraph(
-    val title: Text,
-    val text: Text,
+    val title: RichText,
+    val text: RichText,
 )

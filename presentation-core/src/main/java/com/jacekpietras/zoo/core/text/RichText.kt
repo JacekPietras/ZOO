@@ -12,13 +12,13 @@ import androidx.core.text.color
 import androidx.core.text.strikeThrough
 import androidx.core.text.underline
 
-sealed class Text {
+sealed class RichText {
 
-    data class Value(val stringValue: CharSequence) : Text()
+    data class Value(val stringValue: CharSequence) : RichText()
 
     data class Res(
         @StringRes val stringRes: Int, val formatArgs: List<Any>
-    ) : Text() {
+    ) : RichText() {
 
         constructor(
             @StringRes stringRes: Int,
@@ -26,27 +26,27 @@ sealed class Text {
         ) : this(stringRes, formatArgs.toList())
     }
 
-    data class Listing(val texts: List<Text>, val separator: Text = COMMA_SEPARATOR) : Text() {
+    data class Listing(val texts: List<RichText>, val separator: RichText = COMMA_SEPARATOR) : RichText() {
 
         constructor() : this(emptyList())
 
-        constructor(vararg texts: Text) : this(texts.toList())
+        constructor(vararg texts: RichText) : this(texts.toList())
 
         constructor(@StringRes vararg texts: Int) : this(texts.toList().map { Res(it) })
     }
 
     data class Concat(
-        val texts: List<Text>,
-    ) : Text() {
+        val texts: List<RichText>,
+    ) : RichText() {
 
-        constructor(vararg texts: Text) : this(texts.toList())
+        constructor(vararg texts: RichText) : this(texts.toList())
     }
 
     data class Plural(
         @PluralsRes val pluralRes: Int,
         val quantity: Int,
         val formatArgs: List<Any>,
-    ) : Text() {
+    ) : RichText() {
 
         constructor(
             @PluralsRes pluralRes: Int,
@@ -57,36 +57,36 @@ sealed class Text {
 
     data class Colored(
         @AttrRes val attrColor: Int,
-        val text: Text,
-    ) : Text()
+        val text: RichText,
+    ) : RichText()
 
     data class Underline(
-        val text: Text,
-    ) : Text()
+        val text: RichText,
+    ) : RichText()
 
     data class StrikeThrough(
-        val text: Text,
-    ) : Text()
+        val text: RichText,
+    ) : RichText()
 
     data class Bold(
-        val text: Text,
-    ) : Text()
+        val text: RichText,
+    ) : RichText()
 
-    object Empty : Text()
+    object Empty : RichText()
 
     companion object {
         val COMMA_SEPARATOR = Value(", ")
 
-        operator fun CharSequence.plus(right: Text): Text =
+        operator fun CharSequence.plus(right: RichText): RichText =
             when (right) {
                 is Empty -> Value(this)
                 is Concat -> right.copy(texts = listOf(Value(this)) + right.texts)
                 else -> Concat(texts = listOf(Value(this), right))
             }
 
-        operator fun invoke(value: String): Text = Value(value)
+        operator fun invoke(value: String): RichText = Value(value)
 
-        operator fun invoke(@StringRes stringRes: Int): Text = Res(stringRes)
+        operator fun invoke(@StringRes stringRes: Int): RichText = Res(stringRes)
     }
 
     fun toCharSeq(context: Context): CharSequence {
@@ -163,7 +163,7 @@ sealed class Text {
     fun toString(context: Context): String =
         toCharSeq(context).toString()
 
-    operator fun plus(right: Text): Text =
+    operator fun plus(right: RichText): RichText =
         when {
             this is Empty && right is Empty -> Empty
             this is Empty -> right
@@ -173,26 +173,26 @@ sealed class Text {
             else -> Concat(texts = listOf(this, right))
         }
 
-    operator fun plus(right: CharSequence): Text =
+    operator fun plus(right: CharSequence): RichText =
         when (this) {
             is Empty -> Value(right)
             is Concat -> this.copy(texts = texts + Value(right))
             else -> Concat(texts = listOf(this, Value(right)))
         }
 
-    fun strikeThrough(): Text =
+    fun strikeThrough(): RichText =
         StrikeThrough(this)
 
-    fun underline(): Text =
+    fun underline(): RichText =
         Underline(this)
 
-    fun bold(): Text =
+    fun bold(): RichText =
         Bold(this)
 }
 
 private fun List<Any>.textsToString(context: Context) =
     map {
-        if (it is Text) {
+        if (it is RichText) {
             it.toCharSeq(context)
         } else {
             it

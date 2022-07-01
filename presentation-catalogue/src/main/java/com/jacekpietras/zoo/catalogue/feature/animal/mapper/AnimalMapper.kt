@@ -12,7 +12,7 @@ import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.model.Feeding
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 
@@ -20,8 +20,8 @@ internal class AnimalMapper {
 
     fun from(state: AnimalState): AnimalViewState =
         AnimalViewState(
-            title = Text(state.animal.name),
-            subTitle = Text(state.animal.nameLatin),
+            title = RichText(state.animal.name),
+            subTitle = RichText(state.animal.nameLatin),
             content = with(state.animal) {
                 listOfNotNull(
                     paragraph(R.string.occurrence, occurrence),
@@ -38,9 +38,9 @@ internal class AnimalMapper {
             images = state.animal.photos,
             isSeen = state.isSeen,
             favoriteButtonText = when {
-                state.isFavorite == null -> Text.Empty
-                state.isFavorite -> Text(R.string.is_not_favorite)
-                else -> Text(R.string.is_favorite)
+                state.isFavorite == null -> RichText.Empty
+                state.isFavorite -> RichText(R.string.is_not_favorite)
+                else -> RichText(R.string.is_favorite)
             },
             worldBounds = state.worldBounds,
             mapData = flatListOf(
@@ -52,27 +52,27 @@ internal class AnimalMapper {
             ),
             feeding =
             if (state.animal.feeding.isNotEmpty()) {
-                Text.Listing(
+                RichText.Listing(
                     listOfNotNull(
                         state.animal.feeding.filterUnique()
                             .map { it.toText() }
-                            .filterNot { it is Text.Empty }
+                            .filterNot { it is RichText.Empty }
                             .takeIf { it.isNotEmpty() }
                             ?.let {
-                                Text.Listing(
+                                RichText.Listing(
                                     it,
-                                    if (it.any { text -> text is Text.Listing }) {
-                                        Text("\n")
+                                    if (it.any { text -> text is RichText.Listing }) {
+                                        RichText("\n")
                                     } else {
-                                        Text(", ")
+                                        RichText(", ")
                                     }
                                 )
                             },
                         state.animal.feeding.filterRepetitive()
                             .toText()
-                            .takeUnless { it is Text.Empty }
+                            .takeUnless { it is RichText.Empty }
                     ),
-                    Text("\n")
+                    RichText("\n")
                 )
             } else {
                 null
@@ -109,45 +109,45 @@ internal class AnimalMapper {
             block(first())
         }
 
-    private fun Feeding.toText(): Text =
+    private fun Feeding.toText(): RichText =
         listOfNotNull(
-            time.takeIf { it.isNotBlank() }?.let(Text::Value),
+            time.takeIf { it.isNotBlank() }?.let(RichText::Value),
             weekdays?.let { weekdays ->
                 if (weekdays.size <= 5) {
-                    weekdays.map { it.toWeekdayName() }.let(Text::Listing)
+                    weekdays.map { it.toWeekdayName() }.let(RichText::Listing)
                 } else {
-                    Text(R.string.all_week_except) + " " +
+                    RichText(R.string.all_week_except) + " " +
                             ((0..6).toList() - weekdays.toSet())
                                 .map { it.toWeekdayName() }
-                                .let(Text::Listing)
+                                .let(RichText::Listing)
                 }
             },
-            note?.let(Text::Value),
+            note?.let(RichText::Value),
         ).let {
             when {
-                it.isEmpty() -> Text.Empty
+                it.isEmpty() -> RichText.Empty
                 it.size == 1 -> it.first()
-                else -> Text.Listing(it, Text("\n"))
+                else -> RichText.Listing(it, RichText("\n"))
             }
         }
 
-    private fun Int.toWeekdayName(): Text =
+    private fun Int.toWeekdayName(): RichText =
         when (this) {
-            0 -> Text(R.string.monday)
-            1 -> Text(R.string.tuesday)
-            2 -> Text(R.string.wednesday)
-            3 -> Text(R.string.thursday)
-            4 -> Text(R.string.friday)
-            5 -> Text(R.string.saturday)
-            6 -> Text(R.string.sunday)
+            0 -> RichText(R.string.monday)
+            1 -> RichText(R.string.tuesday)
+            2 -> RichText(R.string.wednesday)
+            3 -> RichText(R.string.thursday)
+            4 -> RichText(R.string.friday)
+            5 -> RichText(R.string.saturday)
+            6 -> RichText(R.string.sunday)
             else -> throw IllegalArgumentException("There is not weekday $this")
         }
 
     private fun paragraph(@StringRes title: Int, content: String): TextParagraph? =
         if (content.isNotBlank()) {
             TextParagraph(
-                title = Text(title),
-                text = Text(content),
+                title = RichText(title),
+                text = RichText(content),
             )
         } else {
             null

@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.planner.mapper
 
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Region
@@ -17,14 +17,14 @@ internal class PlannerStateMapper {
                 is Stage.InRegion -> {
                     if (stage.region is Region.ExitRegion) {
                         PlannerItem(
-                            text = Text(R.string.exit),
+                            text = RichText(R.string.exit),
                             regionId = stage.region.id.id,
                             isMutable = true,
                             isFixed = true,
                         )
                     } else {
                         PlannerItem(
-                            text = Text(animals.map(AnimalEntity::name).joinToString()),
+                            text = RichText(animals.map(AnimalEntity::name).joinToString()),
                             regionId = stage.region.id.id,
                             isMultiple = stage is Stage.Multiple,
                             isMutable = stage.mutable,
@@ -33,7 +33,7 @@ internal class PlannerStateMapper {
                 }
                 is Stage.InUserPosition -> {
                     PlannerItem(
-                        text = Text("not implemented"),
+                        text = RichText("not implemented"),
                         regionId = "not implemented",
                         isFixed = true,
                         isMutable = true,

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.jacekpietras.zoo.core.R
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import kotlin.math.roundToInt
 
@@ -31,7 +31,7 @@ private const val SWIPED = 1
 @Composable
 fun ClosableToolbarView(
     modifier: Modifier = Modifier,
-    title: Text,
+    title: RichText,
     isBackArrowShown: Boolean = true,
     isSwipable: Boolean = false,
     onBack: () -> Unit = {},
@@ -105,7 +105,7 @@ private fun Modifier.applySwipeable(
 
 @Composable
 fun ClosableRowView(
-    title: Text,
+    title: RichText,
     isBackArrowShown: Boolean = true,
     onBack: () -> Unit = {},
     onClose: () -> Unit = {},

@@ -1,9 +1,9 @@
 package com.jacekpietras.zoo.planner.model
 
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 
 data class PlannerItem(
-    val text: Text,
+    val text: RichText,
     val regionId: String,
     val isMultiple: Boolean = false,
     val isMutable: Boolean = false,

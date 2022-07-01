@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.utils.ReorderingData
 import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
@@ -42,7 +42,7 @@ internal fun PlannerFragmentView(
                 modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.End),
-                text = Text("Add Exit"),
+                text = RichText("Add Exit"),
                 onClick = onAddExit
             )
         }
@@ -101,7 +101,7 @@ private fun ColumnScope.PlannerListView(
 @Composable
 private fun SimpleButton(
     modifier: Modifier = Modifier,
-    text: Text,
+    text: RichText,
     onClick: () -> Unit = {},
 ) =
     Button(

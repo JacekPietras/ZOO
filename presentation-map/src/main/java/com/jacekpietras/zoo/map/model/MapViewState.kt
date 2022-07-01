@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.map.model
 
 import com.jacekpietras.core.PointD
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 
 internal data class MapViewState(
     val compass: Float = 0f,
@@ -12,9 +12,9 @@ internal data class MapViewState(
 
     val isBackArrowShown: Boolean = false,
     val isGuidanceShown: Boolean = false,
-    val title: Text = Text.Empty,
+    val title: RichText = RichText.Empty,
     @Deprecated("used only in old fragment")
-    val content: Text = Text.Empty,
+    val content: RichText = RichText.Empty,
     val mapCarouselItems: List<MapCarouselItem> = emptyList(),
     val isMapActionsVisible: Boolean = false,
     val mapActions: List<MapAction> = emptyList(),

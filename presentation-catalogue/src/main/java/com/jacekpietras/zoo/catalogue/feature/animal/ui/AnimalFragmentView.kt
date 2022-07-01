@@ -34,7 +34,7 @@ import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
-import com.jacekpietras.zoo.core.text.Text
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.shimmerWhen
 
@@ -74,7 +74,7 @@ internal fun AnimalFragmentView(
                         .padding(vertical = 8.dp)
                 ) {
                     TitleView(
-                        text = Text(R.string.feeding),
+                        text = RichText(R.string.feeding),
                         color = ZooTheme.colors.onSecondary,
                     )
                     ParagraphView(
@@ -113,7 +113,7 @@ private fun NavigationButtons(
     ) {
         if (viewState.isNavLinkVisible) {
             SimpleButton(
-                text = Text(R.string.nav),
+                text = RichText(R.string.nav),
                 onClick = onNavClicked,
             )
             SimpleButton(
@@ -157,7 +157,7 @@ private fun ReadMoreButtonsView(
     onWikiClicked: () -> Unit,
 ) {
     if (viewState.isWebLinkVisible || viewState.isWikiLinkVisible) {
-        TitleView(text = Text(R.string.read_more))
+        TitleView(text = RichText(R.string.read_more))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -168,13 +168,13 @@ private fun ReadMoreButtonsView(
         ) {
             if (viewState.isWebLinkVisible) {
                 SimpleButton(
-                    text = Text(R.string.on_web),
+                    text = RichText(R.string.on_web),
                     onClick = onWebClicked,
                 )
             }
             if (viewState.isWikiLinkVisible) {
                 SimpleButton(
-                    text = Text(R.string.on_wiki),
+                    text = RichText(R.string.on_wiki),
                     onClick = onWikiClicked,
                 )
             }
@@ -185,7 +185,7 @@ private fun ReadMoreButtonsView(
 @Composable
 private fun ImageCarousel(
     images: List<String>,
-    contentDescription: Text,
+    contentDescription: RichText,
 ) {
     if (images.isEmpty()) return
     val listState = remember { mutableStateOf(images) }
@@ -276,9 +276,9 @@ private fun HeaderView(
                 ZooTheme.colors.onSurface.copy(alpha = 0.3f)
             }
             val seenText = if (viewState.isSeen) {
-                Text(R.string.seen)
+                RichText(R.string.seen)
             } else {
-                Text(R.string.not_seen)
+                RichText(R.string.not_seen)
             }
 
             Column(
@@ -302,7 +302,7 @@ private fun HeaderView(
 
 @Composable
 private fun TitleView(
-    text: Text,
+    text: RichText,
     color: Color = ZooTheme.colors.onSurface,
 ) {
     Text(
@@ -315,7 +315,7 @@ private fun TitleView(
 
 @Composable
 private fun ParagraphView(
-    text: Text,
+    text: RichText,
     color: Color = ZooTheme.colors.onSurface,
 ) {
     Text(
@@ -328,7 +328,7 @@ private fun ParagraphView(
 
 @Composable
 private fun RowScope.SimpleButton(
-    text: Text,
+    text: RichText,
     onClick: () -> Unit = {},
 ) {
     SimpleButton(
@@ -342,7 +342,7 @@ private fun RowScope.SimpleButton(
 @Composable
 private fun SimpleButton(
     modifier: Modifier = Modifier,
-    text: Text,
+    text: RichText,
     onClick: () -> Unit = {},
 ) =
     Button(
@@ -364,20 +364,20 @@ private fun SimpleButton(
 @Composable
 private fun AnimalFragmentPreview() {
     val viewState = AnimalViewState(
-        title = Text.Value("Title"),
-        subTitle = Text.Value("subtitle"),
+        title = RichText.Value("Title"),
+        subTitle = RichText.Value("subtitle"),
         content = listOf(
             TextParagraph(
-                title = Text.Value("Paragraph"),
-                text = Text.Value("content"),
+                title = RichText.Value("Paragraph"),
+                text = RichText.Value("content"),
             )
         ),
-        feeding = Text.Value("Feeding content"),
+        feeding = RichText.Value("Feeding content"),
         isWikiLinkVisible = true,
         isWebLinkVisible = true,
         isNavLinkVisible = true,
         isSeen = false,
-        favoriteButtonText = Text.Value("Favorite!"),
+        favoriteButtonText = RichText.Value("Favorite!"),
         images = listOf("https://www.medivet.co.uk/globalassets/assets/puppy--kitten/two-puppies-in-garden.jpg")
     )
     AnimalFragmentView(
