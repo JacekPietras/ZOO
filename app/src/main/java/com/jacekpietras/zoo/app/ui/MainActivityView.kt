@@ -1,9 +1,11 @@
 package com.jacekpietras.zoo.app.ui
 
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
@@ -12,15 +14,12 @@ fun MainActivityView() {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { MainBottomNavigationView(navController) },
-        content = { MainNavHost(navController) },
+        content = { padding ->
+            Box(Modifier.padding(padding)) {
+                MainNavHost(navController)
+            }
+        },
     )
-}
-
-@Composable
-fun Catalogue2Screen(navController: NavController) {
-    Button(onClick = { navController.navigate(Screen.Planner.route) }) {
-        Text(text = "Go to planner")
-    }
 }
 
 @Composable

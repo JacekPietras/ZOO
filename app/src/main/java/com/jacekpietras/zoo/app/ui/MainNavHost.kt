@@ -16,16 +16,25 @@ import com.jacekpietras.zoo.planner.ui.PlannerScreen
 @Composable
 fun MainNavHost(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Map.route) {
-        composable(Screen.Catalogue.route, arguments = regionIdArg.stringType) {
+        composable(Screen.Catalogue.route) {
             CatalogueScreen(navController, it.regionId)
         }
+        composable("${Screen.Catalogue.route}/{$regionIdArg}", arguments = regionIdArg.stringType) {
+            CatalogueScreen(navController, it.regionId)
+        }
+
         composable(Screen.Map.route) {
             MapScreen(navController)
         }
+        composable("${Screen.Map.route}/{$animalIdArg}/{$regionIdArg}", arguments = animalIdArg.stringType + regionIdArg.stringType) {
+            MapScreen(navController)
+        }
+
         composable(Screen.Planner.route) {
             PlannerScreen(navController)
         }
-        composable("animal/{animalId}", arguments = animalIdArg.stringType) {
+
+        composable("${Screen.Animal.route}/{$animalIdArg}", arguments = animalIdArg.stringType) {
             AnimalScreen(navController, it.animalId)
         }
     }

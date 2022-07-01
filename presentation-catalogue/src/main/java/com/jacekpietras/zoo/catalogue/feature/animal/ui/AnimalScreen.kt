@@ -14,6 +14,7 @@ import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
+import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
 import org.koin.androidx.compose.getViewModel
@@ -26,7 +27,7 @@ fun AnimalScreen(
 ) {
     val activity = LocalContext.current.getActivity()
     val viewModel = getViewModel<AnimalViewModel> { parametersOf(animalId) }
-    val router by lazy { AnimalRouterImpl({ activity }, navController) }
+    val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
 
     val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
     val paintBaker by lazy { ComposablePaintBaker(activity) }
