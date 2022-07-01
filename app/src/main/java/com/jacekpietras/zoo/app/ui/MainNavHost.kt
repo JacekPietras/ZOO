@@ -11,6 +11,7 @@ import com.jacekpietras.zoo.app.ui.Screen.Companion.animalIdArg
 import com.jacekpietras.zoo.app.ui.Screen.Companion.regionIdArg
 import com.jacekpietras.zoo.catalogue.feature.animal.ui.AnimalScreen
 import com.jacekpietras.zoo.catalogue.feature.list.ui.CatalogueScreen
+import com.jacekpietras.zoo.map.ui.MapScreen
 import com.jacekpietras.zoo.planner.ui.PlannerScreen
 
 @Composable
@@ -27,7 +28,7 @@ fun MainNavHost(navController: NavHostController) {
             MapScreen(navController)
         }
         composable("${Screen.Map.route}/{$animalIdArg}/{$regionIdArg}", arguments = animalIdArg.stringType + regionIdArg.stringType) {
-            MapScreen(navController)
+            MapScreen(navController, it.animalId, it.regionId)
         }
 
         composable(Screen.Planner.route) {
