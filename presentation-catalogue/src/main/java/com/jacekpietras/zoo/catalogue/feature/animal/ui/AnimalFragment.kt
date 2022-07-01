@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
@@ -22,7 +21,6 @@ import com.jacekpietras.zoo.core.theme.ZooTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-@ExperimentalPagerApi
 class AnimalFragment : Fragment() {
 
     private val args: AnimalFragmentArgs by navArgs()

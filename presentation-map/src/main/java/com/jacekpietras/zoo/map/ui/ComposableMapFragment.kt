@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -48,7 +47,6 @@ import com.jacekpietras.zoo.tracking.GpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-@ExperimentalMaterialApi
 class ComposableMapFragment : Fragment() {
 
     private val args: ComposableMapFragmentArgs? by navArgs()

@@ -18,11 +18,12 @@ android {
 
         // Disabling experimental warnings
         freeCompilerArgs += [
-                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
-                "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
-                "-Xuse-experimental=com.google.accompanist.pager.ExperimentalPagerApi",
-                "-Xuse-experimental=coil.annotation.ExperimentalCoilApi",
+                "-opt-in=kotlin.time.ExperimentalTime",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
+                "-opt-in=coil.annotation.ExperimentalCoilApi",
         ]
     }
 }

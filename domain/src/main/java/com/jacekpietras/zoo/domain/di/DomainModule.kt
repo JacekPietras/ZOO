@@ -9,9 +9,7 @@ import com.jacekpietras.zoo.domain.feature.sensors.di.sensorsModule
 import com.jacekpietras.zoo.domain.feature.tsp.di.tspModule
 import com.jacekpietras.zoo.domain.interactor.*
 import org.koin.dsl.module
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 val domainModule = module {
     factory {
         GetRegionsInUserPositionUseCase(

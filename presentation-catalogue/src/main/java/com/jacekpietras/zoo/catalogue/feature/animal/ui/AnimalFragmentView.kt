@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.android.material.color.MaterialColors
@@ -39,7 +38,6 @@ import com.jacekpietras.zoo.core.text.Text
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.shimmerWhen
 
-@ExperimentalPagerApi
 @Composable
 internal fun AnimalFragmentView(
     viewState: AnimalViewState?,
@@ -184,7 +182,6 @@ private fun ReadMoreButtonsView(
     }
 }
 
-@ExperimentalPagerApi
 @Composable
 private fun ImageCarousel(
     images: List<String>,
@@ -363,7 +360,6 @@ private fun SimpleButton(
         )
     }
 
-@ExperimentalPagerApi
 @Preview(showBackground = true)
 @Composable
 private fun AnimalFragmentPreview() {

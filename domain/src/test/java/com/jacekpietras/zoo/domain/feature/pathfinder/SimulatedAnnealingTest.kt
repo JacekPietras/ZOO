@@ -1,18 +1,14 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.zoo.domain.feature.tsp.SimulatedAnnealing
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
-@ExperimentalCoroutinesApi
-@ExperimentalTime
 class SimulatedAnnealingTest {
 
     @Test

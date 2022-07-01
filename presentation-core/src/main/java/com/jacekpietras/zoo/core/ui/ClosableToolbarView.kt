@@ -28,7 +28,6 @@ import kotlin.math.roundToInt
 private const val INITIAL = 0
 private const val SWIPED = 1
 
-@ExperimentalMaterialApi
 @Composable
 fun ClosableToolbarView(
     modifier: Modifier = Modifier,
@@ -65,7 +64,6 @@ fun ClosableToolbarView(
 }
 
 @SuppressLint("UnnecessaryComposedModifier")
-@ExperimentalMaterialApi
 private fun Modifier.applySwipeable(
     isSwipable: Boolean,
     onClose: () -> Unit,
@@ -76,7 +74,6 @@ private fun Modifier.applySwipeable(
         this
     }
 
-@ExperimentalMaterialApi
 private fun Modifier.applySwipeable(
     onClose: () -> Unit,
 ): Modifier = composed {

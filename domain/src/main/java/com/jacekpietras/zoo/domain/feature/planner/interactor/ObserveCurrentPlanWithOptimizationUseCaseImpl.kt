@@ -12,9 +12,7 @@ import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
     private val gpsRepository: GpsRepository,
@@ -33,15 +31,17 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             .refreshPeriodically(MINUTE)
             .pushAndDo(
                 fast = { plan -> plan.stages to emptyList() },
-                long = { currentPlan ->
-                    measureMap({ Timber.d("Optimization took $it") }) {
-                        tspSolver.findShortPathAndStages(currentPlan.stages)
-                            .also { (resultStages, _) ->
-                                if (currentPlan.stages != resultStages) {
-                                    saveBetterPlan(currentPlan, resultStages)
-                                }
-                            }
-                    }
+                long = { plan ->
+                    // fixme
+                    plan.stages to emptyList()
+//                    measureMap({ Timber.d("Optimization took $it") }) {
+//                        tspSolver.findShortPathAndStages(plan.stages)
+//                            .also { (resultStages, _) ->
+//                                if (plan.stages != resultStages) {
+//                                    saveBetterPlan(plan, resultStages)
+//                                }
+//                            }
+//                    }
                 },
             )
 
