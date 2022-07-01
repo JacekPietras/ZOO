@@ -3,7 +3,6 @@ package com.jacekpietras.zoo.catalogue.feature.animal.ui
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -15,7 +14,6 @@ import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
-import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
