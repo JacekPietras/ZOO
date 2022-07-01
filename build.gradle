@@ -9,7 +9,7 @@ buildscript {
         koin_version = "3.2.0"
         leakcanary_version = "2.9.1"
         coroutines_version = "1.6.3"
-        room_version = "2.4.2"
+        room_version = "2.5.0-alpha02"
         gson_version = "2.9.0"
         activity_version = "1.1.0"
         fragment_version = "1.5.0"

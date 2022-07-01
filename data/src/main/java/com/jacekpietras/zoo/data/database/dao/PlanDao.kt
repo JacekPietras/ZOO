@@ -14,8 +14,8 @@ internal interface PlanDao {
     fun observePlan(planId: String): Flow<PlanDto?>
 
     @Query("SELECT * FROM `plan` WHERE planId = :planId")
-    fun getPlan(planId: String): PlanDto?
+    suspend fun getPlan(planId: String): PlanDto?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(plan: PlanDto)
+    suspend fun insert(plan: PlanDto)
 }

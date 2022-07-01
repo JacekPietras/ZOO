@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.Flow
 internal interface FavoriteDao {
 
     @Query("SELECT isFavorite FROM favorite WHERE animalId = :animalId")
-    fun isFavorite(animalId: String): Boolean
+    suspend fun isFavorite(animalId: String): Boolean
 
     @Query("SELECT animalId FROM favorite WHERE isFavorite = 1")
     fun observeFavorites(): Flow<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(favorite: FavoriteDto)
+    suspend fun insert(favorite: FavoriteDto)
 }
