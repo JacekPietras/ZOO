@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
@@ -15,7 +14,6 @@ import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
 import com.jacekpietras.zoo.core.theme.ZooTheme
-import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -31,38 +29,21 @@ class CatalogueFragment : Fragment() {
         setContent {
             val viewState: CatalogueViewState by viewModel.viewState.observeAsState(initial = CatalogueViewState())
 
-            with(viewState) {
-                ZooTheme {
-                    Column {
-                        if (isRegionShown) {
-                            ClosableToolbarView(
-                                title = regionName,
-                                onBack = { viewModel.onBackClicked(router) },
-                                onClose = { viewModel.onCloseClicked() },
-                            )
-                        }
-                        if (isToolbarVisible) {
-                            ToolbarWithFilters(
-                                filterList,
-                                filtersVisible,
-                                searchVisible,
-                                searchText,
-                                onSearch = viewModel::onSearch,
-                                onSearchClicked = viewModel::onSearchClicked,
-                                onFilterClicked = viewModel::onFilterClicked,
-                            )
-                        }
-                        AnimalList(
-                            animalList = animalList,
-                            onAnimalClicked = { animalId ->
-                                viewModel.onAnimalClicked(
-                                    animalId = animalId,
-                                    router = router
-                                )
-                            },
+            ZooTheme {
+                CatalogueView(
+                    viewState = viewState,
+                    onBackClicked = { viewModel.onBackClicked(router) },
+                    onCloseClicked = viewModel::onCloseClicked,
+                    onSearch = viewModel::onSearch,
+                    onSearchClicked = viewModel::onSearchClicked,
+                    onFilterClicked = viewModel::onFilterClicked,
+                    onAnimalClicked = { animalId ->
+                        viewModel.onAnimalClicked(
+                            animalId = animalId,
+                            router = router
                         )
                     }
-                }
+                )
             }
         }
     }

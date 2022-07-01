@@ -84,13 +84,13 @@ class ComposableMapFragment : Fragment() {
             setDefaultNightMode(if (viewState?.isNightThemeSuggested == true) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
 
             ZooTheme {
-                viewState?.let { MapScreen(it) }
+                viewState?.let { MapView(it) }
             }
         }
     }
 
     @Composable
-    private fun MapScreen(viewState: MapViewState) {
+    private fun MapView(viewState: MapViewState) {
         Column {
             AnimatedVisibility(
                 visibleState = remember { MutableTransitionState(false) }

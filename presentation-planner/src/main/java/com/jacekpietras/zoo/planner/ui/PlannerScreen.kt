@@ -10,6 +10,7 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun PlannerScreen(navController: NavController) {
+
     val viewModel = getViewModel<PlannerViewModel>()
     val viewState by viewModel.viewState.observeAsState(initial = PlannerViewState())
 
