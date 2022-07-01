@@ -5,6 +5,8 @@ import com.jacekpietras.logger.DebugUtilsContextHolder
 import com.jacekpietras.logger.LogSupport
 import com.jacekpietras.zoo.BuildConfig
 import com.jacekpietras.zoo.app.di.appModule
+import com.jacekpietras.zoo.app.logger.FileLogChannel
+import com.jacekpietras.zoo.app.logger.FileLoggingTree
 import com.jacekpietras.zoo.catalogue.di.catalogueModule
 import com.jacekpietras.zoo.data.di.dataModule
 import com.jacekpietras.zoo.domain.di.domainModule

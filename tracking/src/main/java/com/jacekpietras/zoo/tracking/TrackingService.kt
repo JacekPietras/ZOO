@@ -7,7 +7,7 @@ import android.os.Process
 import android.os.Process.killProcess
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
-import com.jacekpietras.zoo.tracking.interactor.*
+import com.jacekpietras.zoo.tracking.contract.interactor.*
 import com.jacekpietras.zoo.tracking.utils.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -15,16 +15,16 @@ import timber.log.Timber
 @SuppressLint("Registered")
 class TrackingService : LifecycleService() {
 
-    private val onLocationUpdate: OnLocationUpdate by inject()
-    private val onCompassUpdate: OnCompassUpdate by inject()
-    private val onLightSensorUpdate: OnLightSensorUpdate by inject()
+    private val onLocationUpdateUseCase: OnLocationUpdateUseCase by inject()
+    private val onCompassUpdateUseCase: OnCompassUpdateUseCase by inject()
+    private val onLightSensorUpdateUseCase: OnLightSensorUpdateUseCase by inject()
     private val observeNavigationEnabledUseCase: ObserveNavigationEnabledUseCase by inject()
     private val observeCompassEnabledUseCase: ObserveCompassEnabledUseCase by inject()
     private val observeLightSensorEnabledUseCase: ObserveLightSensorEnabledUseCase by inject()
     private var serviceUtils: ServiceUtils? = null
     private val gpsLocationListener = GpsLocationListenerCompat(
         onLocationChanged = { time, lat, lon ->
-            onLocationUpdate(time, lat, lon)
+            onLocationUpdateUseCase(time, lat, lon)
         },
         onGpsStatusChanged = { enabled ->
             if (enabled) Timber.i("Gps Status Enabled (a)")
@@ -37,11 +37,11 @@ class TrackingService : LifecycleService() {
     }
     private val compassListener = CompassListenerCompat { angle ->
         Timber.i("Compass angle $angle")
-        onCompassUpdate(angle)
+        onCompassUpdateUseCase(angle)
     }
     private var compassIsWorking = false
     private val lightSensorListener = LightSensorListenerCompat { luminance ->
-        onLightSensorUpdate(luminance)
+        onLightSensorUpdateUseCase(luminance)
     }
     private var lightSensorIsWorking = false
 

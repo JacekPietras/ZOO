@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.tracking.interactor
+package com.jacekpietras.zoo.tracking.contract.interactor
 
 import kotlinx.coroutines.flow.Flow
 

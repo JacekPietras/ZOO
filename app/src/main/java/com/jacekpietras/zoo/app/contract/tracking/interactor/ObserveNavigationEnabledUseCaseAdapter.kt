@@ -1,10 +1,10 @@
-package com.jacekpietras.zoo.app
+package com.jacekpietras.zoo.app.contract.tracking.interactor
 
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
-import com.jacekpietras.zoo.tracking.interactor.ObserveNavigationEnabledUseCase
+import com.jacekpietras.zoo.tracking.contract.interactor.ObserveNavigationEnabledUseCase
 import kotlinx.coroutines.flow.Flow
 
-class ObserveNavigationEnabledUseCaseImpl(
+class ObserveNavigationEnabledUseCaseAdapter(
     private val gpsRepository: GpsRepository,
 ) : ObserveNavigationEnabledUseCase {
 

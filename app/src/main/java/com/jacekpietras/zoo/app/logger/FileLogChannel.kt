@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.app
+package com.jacekpietras.zoo.app.logger
 
 import com.jacekpietras.logger.LogChannel
 

@@ -1,31 +1,31 @@
 package com.jacekpietras.zoo.app.di
 
-import com.jacekpietras.zoo.app.*
-import com.jacekpietras.zoo.tracking.interactor.*
+import com.jacekpietras.zoo.app.contract.tracking.interactor.*
+import com.jacekpietras.zoo.tracking.contract.interactor.*
 import org.koin.dsl.module
 
 val appModule = module {
 
-    factory<OnLocationUpdate> {
-        OnLocationUpdateImpl(
+    factory<OnLocationUpdateUseCase> {
+        OnLocationUpdateUseCaseAdapter(
             insertUserPositionUseCase = get(),
         )
     }
 
-    factory<OnCompassUpdate> {
-        OnCompassUpdateImpl(
+    factory<OnCompassUpdateUseCase> {
+        OnCompassUpdateUseCaseAdapter(
             insertUserCompassUseCase = get(),
         )
     }
 
-    factory<OnLightSensorUpdate> {
-        OnLightSensorUpdateImpl(
+    factory<OnLightSensorUpdateUseCase> {
+        OnLightSensorUpdateUseCaseAdapter(
             gpsRepository = get(),
         )
     }
 
     factory<ObserveCompassEnabledUseCase> {
-        ObserveCompassEnabledUseCaseImpl(
+        ObserveCompassEnabledUseCaseAdapter(
             gpsRepository = get(),
         )
     }
@@ -37,7 +37,7 @@ val appModule = module {
     }
 
     factory<ObserveNavigationEnabledUseCase> {
-        ObserveNavigationEnabledUseCaseImpl(
+        ObserveNavigationEnabledUseCaseAdapter(
             gpsRepository = get(),
         )
     }

@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.app
+package com.jacekpietras.zoo.app.logger
 
 import android.util.Log
 import com.jacekpietras.logger.LogSupport
