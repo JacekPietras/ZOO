@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatActivity
@@ -61,10 +62,10 @@ private fun MapViewLogic<ComposablePaint>.updateMap(viewState: AnimalViewState?)
     onScale(0f, 0f, Float.MAX_VALUE)
 }
 
-private fun Context.getActivity(): AppCompatActivity {
+private fun Context.getActivity(): Activity {
     var currentContext = this
     while (currentContext is ContextWrapper) {
-        if (currentContext is AppCompatActivity) {
+        if (currentContext is Activity) {
             return currentContext
         }
         currentContext = currentContext.baseContext
