@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 internal interface GpsDao {
 
     @Query("SELECT * FROM gps_history ORDER BY timestamp")
-    suspend fun getAll(): List<GpsHistoryDto>
+    fun getAll(): List<GpsHistoryDto>
 
     @Query("SELECT * FROM gps_history ORDER BY timestamp")
     fun observeAll(): Flow<List<GpsHistoryDto>>
@@ -20,5 +20,5 @@ internal interface GpsDao {
     fun getLatest(): Flow<GpsHistoryDto>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(position: GpsHistoryDto)
+    fun insert(position: GpsHistoryDto)
 }

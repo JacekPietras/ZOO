@@ -5,7 +5,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion compose_compiler_version
     }
 }
 
@@ -26,6 +26,7 @@ dependencies {
     implementation "androidx.compose.foundation:foundation:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.navigation:navigation-compose:$navigation_version"
     implementation "androidx.activity:activity-compose:$compose_activity_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_viewmodel_version"
 }

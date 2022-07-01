@@ -11,12 +11,9 @@ import org.koin.dsl.module
 
 val catalogueModule = module {
 
-    viewModel { (regionId: String?) ->
+    viewModel { params ->
         CatalogueViewModel(
-            regionId = regionId
-                ?.takeIf { it.isNotBlank() }
-                ?.takeIf { it != "null" }
-                ?.let(::RegionId),
+            regionId = params[0],
             observeFilteredAnimalsUseCase = get(),
             loadAnimalsUseCase = get(),
             stateMapper = get(),
@@ -24,9 +21,9 @@ val catalogueModule = module {
         )
     }
 
-    viewModel { (animalId: String) ->
+    viewModel { params ->
         AnimalViewModel(
-            animalId = AnimalId(animalId),
+            animalId = AnimalId(params[0]),
             getAnimalUseCase = get(),
             isAnimalSeenUseCase = get(),
             observeAnimalFavoritesUseCase = get(),

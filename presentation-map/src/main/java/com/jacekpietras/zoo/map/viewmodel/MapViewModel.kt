@@ -36,8 +36,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.plus
 
 internal class MapViewModel(
-    animalId: AnimalId?,
-    regionId: RegionId?,
+    animalId: String?,
+    regionId: String?,
     mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
@@ -104,6 +104,16 @@ internal class MapViewModel(
                 async { loadAnimalsUseCase.run() },
                 async { loadMapUseCase.run() },
             ).awaitAll()
+
+            val animalId = animalId
+                ?.takeIf { it.isNotBlank() }
+                ?.takeIf { it != "null" }
+                ?.let(::AnimalId)
+
+            val regionId = regionId
+                ?.takeIf { it.isNotBlank() }
+                ?.takeIf { it != "null" }
+                ?.let(::RegionId)
 
             if (animalId != null) {
                 onMyLocationClicked()

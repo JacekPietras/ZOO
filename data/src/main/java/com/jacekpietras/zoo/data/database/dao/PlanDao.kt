@@ -17,5 +17,5 @@ internal interface PlanDao {
     fun getPlan(planId: String): PlanDto?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(plan: PlanDto)
+    fun insert(plan: PlanDto)
 }

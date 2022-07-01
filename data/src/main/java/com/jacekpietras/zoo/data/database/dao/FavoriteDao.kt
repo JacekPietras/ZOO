@@ -17,5 +17,5 @@ internal interface FavoriteDao {
     fun observeFavorites(): Flow<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(favorite: FavoriteDto)
+    fun insert(favorite: FavoriteDto)
 }

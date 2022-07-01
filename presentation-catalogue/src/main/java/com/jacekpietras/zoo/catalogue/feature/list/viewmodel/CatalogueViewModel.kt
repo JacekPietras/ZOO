@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 internal class CatalogueViewModel(
-    regionId: RegionId?,
+    regionId: String?,
     private val observeFilteredAnimalsUseCase: ObserveFilteredAnimalsUseCase,
     private val stateMapper: CatalogueStateMapper,
     private val divisionMapper: DivisionMapper,
@@ -34,7 +34,12 @@ internal class CatalogueViewModel(
     private val state = NullSafeMutableLiveData(CatalogueState())
     var viewState: LiveData<CatalogueViewState> = state.map(stateMapper::from)
 
-    private val filterFlow = MutableStateFlow(AnimalFilter(regionId = regionId))
+    private val filterFlow = MutableStateFlow(AnimalFilter(
+        regionId = regionId
+            ?.takeIf { it.isNotBlank() }
+            ?.takeIf { it != "null" }
+            ?.let(::RegionId)
+    ))
 
     init {
         launchInBackground {

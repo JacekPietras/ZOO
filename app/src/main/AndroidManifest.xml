@@ -16,7 +16,7 @@
         android:theme="@style/Theme.ZOO">
 
         <activity
-            android:name=".app.MainActivity"
+            android:name=".app.ui.MainActivity"
             android:exported="true">
 
             <nav-graph android:value="@navigation/mobile_navigation" />

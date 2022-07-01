@@ -13,16 +13,10 @@ val mapModule = module {
         MapViewStateMapper()
     }
 
-    viewModel { (animalId: String?, regionId: String?) ->
+    viewModel { params ->
         MapViewModel(
-            animalId = animalId
-                ?.takeIf { it.isNotBlank() }
-                ?.takeIf { it != "null" }
-                ?.let(::AnimalId),
-            regionId = regionId
-                ?.takeIf { it.isNotBlank() }
-                ?.takeIf { it != "null" }
-                ?.let(::RegionId),
+            animalId = params[0],
+            regionId = params[1],
             mapper = get(),
             observeWorldBoundsUseCase = get(),
             observeCompassUseCase = get(),
