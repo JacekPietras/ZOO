@@ -9,7 +9,7 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 
 class AnimalRouterImpl(
-    private val activityFactory: () -> Activity,
+    private val activityProvider: () -> Activity,
     private val navController: NavController,
 ) : AnimalRouter {
 
@@ -19,11 +19,11 @@ class AnimalRouterImpl(
 
     override fun navigateToWeb(link: String) {
         val intent = Intent(ACTION_VIEW, Uri.parse(link))
-        activityFactory().startActivity(intent)
+        activityProvider().startActivity(intent)
     }
 
     override fun navigateToWiki(link: String) {
         val intent = Intent(ACTION_VIEW, Uri.parse(link))
-        activityFactory().startActivity(intent)
+        activityProvider().startActivity(intent)
     }
 }
