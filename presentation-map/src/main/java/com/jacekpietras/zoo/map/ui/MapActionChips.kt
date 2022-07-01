@@ -29,7 +29,7 @@ import com.jacekpietras.zoo.map.model.MapAction
 internal fun MapActionChips(
     isVisible: Boolean,
     mapActions: List<MapAction>,
-    onMapActionClicked: (MapAction) -> Unit
+    onMapActionClicked: (MapAction) -> Unit,
 ) {
     AnimatedVisibility(
         visibleState = remember { MutableTransitionState(isVisible) }
