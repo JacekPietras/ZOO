@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -150,10 +149,9 @@ class ComposableMapFragment : Fragment() {
 
     @Composable
     private fun LocationButtonView(modifier: Modifier = Modifier) {
-        val context = LocalContext.current
         FloatingActionButton(
             modifier = modifier,
-            onClick = { viewModel.onLocationButtonClicked(permissionChecker, context) },
+            onClick = { viewModel.onLocationButtonClicked(permissionChecker) },
             backgroundColor = ZooTheme.colors.surface,
         ) {
             Icon(

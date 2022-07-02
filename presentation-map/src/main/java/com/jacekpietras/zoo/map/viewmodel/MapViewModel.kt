@@ -63,8 +63,8 @@ import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
+import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
-import com.jacekpietras.zoo.tracking.service.TrackingService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
@@ -109,6 +109,8 @@ internal class MapViewModel(
     private val findNearRegionWithDistance: FindNearRegionWithDistanceUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
+
+    private val trackingServiceStarter: TrackingServiceStarter,
 ) : ViewModel() {
 
     private val state = NullSafeMutableLiveData(MapState())
@@ -288,12 +290,12 @@ internal class MapViewModel(
         }
     }
 
-    fun onLocationButtonClicked(permissionChecker: GpsPermissionRequester, context: Context) {
+    fun onLocationButtonClicked(permissionChecker: GpsPermissionRequester) {
         startNavigationUseCase.run()
         permissionChecker.checkPermissions(
             onDenied = { onLocationDenied() },
             onGranted = {
-                TrackingService.start(context)
+                trackingServiceStarter.run()
                 onMyLocationClicked()
             },
         )
