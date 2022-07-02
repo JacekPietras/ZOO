@@ -55,7 +55,7 @@ import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
-import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
+import com.jacekpietras.zoo.tracking.permissions.LegacyGpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -66,7 +66,7 @@ class ComposableMapFragment : Fragment() {
         parametersOf(args?.animalId, args?.regionId)
     }
     private val router by lazy { MapRouterImpl(findNavController()) }
-    private val permissionChecker = GpsPermissionRequester(fragment = this)
+    private val permissionChecker = LegacyGpsPermissionRequester(fragment = this)
 
     private val paintBaker by lazy { ComposablePaintBaker(requireActivity()) }
     private val mapLogic = MapViewLogic(

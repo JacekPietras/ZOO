@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.map.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow

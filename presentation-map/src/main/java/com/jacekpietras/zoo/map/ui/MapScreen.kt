@@ -50,7 +50,7 @@ import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapComposeRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
-import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
+import com.jacekpietras.zoo.tracking.permissions.ComposeGpsPermissionRequester
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -64,7 +64,7 @@ fun MapScreen(
     val activity = LocalContext.current.getActivity()
     val viewModel = getViewModel<MapViewModel> { parametersOf(animalId, regionId) }
     val router by lazy { MapComposeRouterImpl({ activity }, navController) }
-//    val permissionChecker = GpsPermissionRequester(fragment = this)
+    val permissionChecker = ComposeGpsPermissionRequester()
 
     val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
     val paintBaker by lazy { ComposablePaintBaker(activity) }
@@ -86,7 +86,7 @@ fun MapScreen(
             viewState2,
             onBack = { viewModel.onBackClicked(router) },
             onClose = viewModel::onCloseClicked,
-            onLocationClicked = {},//{ viewModel.onLocationButtonClicked(permissionChecker) }, // fixme implement permission checker
+            onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },
             onCameraClicked = { viewModel.onCameraButtonClicked(router) },
             onAnimalClicked = { viewModel.onAnimalClicked(router, it) },
             onRegionClicked = { viewModel.onRegionClicked(router, it) },
