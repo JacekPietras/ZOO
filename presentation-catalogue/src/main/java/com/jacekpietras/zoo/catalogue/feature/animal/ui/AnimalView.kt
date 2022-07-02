@@ -39,7 +39,7 @@ import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.shimmerWhen
 
 @Composable
-internal fun AnimalFragmentView(
+internal fun AnimalView(
     viewState: AnimalViewState?,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
     onWebClicked: () -> Unit,
@@ -362,7 +362,7 @@ private fun SimpleButton(
 
 @Preview(showBackground = true)
 @Composable
-private fun AnimalFragmentPreview() {
+private fun AnimalViewPreview() {
     val viewState = AnimalViewState(
         title = RichText.Value("Title"),
         subTitle = RichText.Value("subtitle"),
@@ -380,7 +380,7 @@ private fun AnimalFragmentPreview() {
         favoriteButtonText = RichText.Value("Favorite!"),
         images = listOf("https://www.medivet.co.uk/globalassets/assets/puppy--kitten/two-puppies-in-garden.jpg")
     )
-    AnimalFragmentView(
+    AnimalView(
         viewState = viewState,
         mapList = emptyList(),
         onWebClicked = {},

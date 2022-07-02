@@ -14,7 +14,7 @@ fun PlannerScreen(navController: NavController) {
     val viewModel = getViewModel<PlannerViewModel>()
     val viewState by viewModel.viewState.observeAsState(initial = PlannerViewState())
 
-    PlannerFragmentView(
+    PlannerView(
         viewState = viewState,
         onRemove = viewModel::onRemove,
         onUnlock = viewModel::onUnlock,

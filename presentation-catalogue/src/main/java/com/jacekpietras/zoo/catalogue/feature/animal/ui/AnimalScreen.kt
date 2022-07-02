@@ -39,7 +39,7 @@ fun AnimalScreen(
     val viewState by viewModel.viewState.observeAsState()
     mapLogic.updateMap(viewState)
 
-    AnimalFragmentView(
+    AnimalView(
         viewState = viewState,
         mapList = mapList.observeAsState().value,
         onWebClicked = { viewModel.onWebClicked(router) },

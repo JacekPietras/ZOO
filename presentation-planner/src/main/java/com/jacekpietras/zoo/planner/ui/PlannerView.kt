@@ -20,7 +20,7 @@ import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
 import com.jacekpietras.zoo.planner.utils.getAdditionalOffset
 
 @Composable
-internal fun PlannerFragmentView(
+internal fun PlannerView(
     viewState: PlannerViewState,
     onRemove: (regionId: String) -> Unit,
     onUnlock: (regionId: String) -> Unit,

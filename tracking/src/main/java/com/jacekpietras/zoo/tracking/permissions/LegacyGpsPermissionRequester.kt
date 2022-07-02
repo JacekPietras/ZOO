@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartIntentSend
 import androidx.fragment.app.Fragment
 import com.jacekpietras.zoo.tracking.utils.getAppCompatActivity
 
+@Suppress("unused")
 class LegacyGpsPermissionRequester(fragment: Fragment) : GpsPermissionRequester {
 
     private var activity = fragment.requireActivity().getAppCompatActivity()
