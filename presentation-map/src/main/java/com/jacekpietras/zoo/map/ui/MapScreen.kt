@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.map.ui
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
@@ -45,12 +46,17 @@ import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.zoo.core.extensions.observe
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapAction
+import com.jacekpietras.zoo.map.model.MapEffect.CenterAtPoint
+import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
+import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
@@ -84,6 +90,19 @@ fun MapScreen(
     )
 
     val viewState by viewModel.viewState.observeAsState()
+    val context = LocalContext.current
+
+    viewModel.mapWorldViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
+    viewModel.volatileViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
+
+    viewModel.effect.observe(LocalLifecycleOwner.current) {
+        when (it) {
+            is ShowToast -> toast(context, it.text)
+            is CenterAtUser -> mapLogic.centerAtUserPosition()
+            is CenterAtPoint -> mapLogic.centerAtPoint(it.point)
+        }
+    }
+
     setDefaultNightMode(viewState?.isNightThemeSuggested)
 
     OnPauseListener { viewModel.onStopEvent() }
@@ -216,27 +235,9 @@ private fun CameraButtonView(
     }
 }
 
-// fixme implement them:
-//override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//    super.onViewCreated(view, savedInstanceState)
-//
-//    with(viewModel) {
-//        mapWorldViewState.observe(viewLifecycleOwner) { mapLogic.applyToMap(it) }
-//        volatileViewState.observe(viewLifecycleOwner) { mapLogic.applyToMap(it) }
-//
-//        effect.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is ShowToast -> toast(it.text.toString(requireContext()))
-//                is CenterAtUser -> mapLogic.centerAtUserPosition()
-//                is CenterAtPoint -> mapLogic.centerAtPoint(it.point)
-//            }
-//        }
-//    }
-//}
-
-//private fun toast(text: String) {
-//    Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
-//}
+private fun toast(context: Context, text: RichText) {
+    Toast.makeText(context, text.toString(context), Toast.LENGTH_SHORT).show()
+}
 
 private fun MapViewLogic<ComposablePaint>.applyToMap(viewState: MapWorldViewState) {
     worldData = MapViewLogic.WorldData(
