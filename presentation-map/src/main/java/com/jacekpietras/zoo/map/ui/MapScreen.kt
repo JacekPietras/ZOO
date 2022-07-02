@@ -17,10 +17,12 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,11 +30,15 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.jacekpietras.mapview.model.ComposablePaint
@@ -60,7 +66,6 @@ fun MapScreen(
     animalId: String? = null,
     regionId: String? = null,
 ) {
-
     val activity = LocalContext.current.getActivity()
     val viewModel = getViewModel<MapViewModel> { parametersOf(animalId, regionId) }
     val router by lazy { MapComposeRouterImpl({ activity }, navController) }
@@ -79,29 +84,34 @@ fun MapScreen(
     )
 
     val viewState by viewModel.viewState.observeAsState()
-    setDefaultNightMode(if (viewState?.isNightThemeSuggested == true) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
+    setDefaultNightMode(viewState?.isNightThemeSuggested)
 
-    viewState?.let { viewState2 ->
-        MapView(
-            viewState2,
-            onBack = { viewModel.onBackClicked(router) },
-            onClose = viewModel::onCloseClicked,
-            onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },
-            onCameraClicked = { viewModel.onCameraButtonClicked(router) },
-            onAnimalClicked = { viewModel.onAnimalClicked(router, it) },
-            onRegionClicked = { viewModel.onRegionClicked(router, it) },
-            onSizeChanged = mapLogic::onSizeChanged,
-            onClick = mapLogic::onClick,
-            onTransform = mapLogic::onTransform,
-            onMapActionClicked = viewModel::onMapActionClicked,
-            mapList = mapList,
-        )
-    }
+    OnPauseListener { viewModel.onStopEvent() }
+
+    MapView(
+        viewState,
+        onBack = { viewModel.onBackClicked(router) },
+        onClose = viewModel::onCloseClicked,
+        onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },
+        onCameraClicked = { viewModel.onCameraButtonClicked(router) },
+        onAnimalClicked = { viewModel.onAnimalClicked(router, it) },
+        onRegionClicked = { viewModel.onRegionClicked(router, it) },
+        onSizeChanged = mapLogic::onSizeChanged,
+        onClick = mapLogic::onClick,
+        onTransform = mapLogic::onTransform,
+        onMapActionClicked = viewModel::onMapActionClicked,
+        mapList = mapList,
+    )
+}
+
+@Composable
+private fun setDefaultNightMode(nightTheme: Boolean?) {
+    setDefaultNightMode(if (nightTheme == true) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
 }
 
 @Composable
 private fun MapView(
-    viewState: MapViewState,
+    viewState: MapViewState?,
     onBack: () -> Unit,
     onClose: () -> Unit,
     onLocationClicked: () -> Unit,
@@ -114,6 +124,8 @@ private fun MapView(
     onMapActionClicked: (MapAction) -> Unit,
     mapList: MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>,
 ) {
+    if (viewState == null) return
+
     Column {
         AnimatedVisibility(
             visibleState = remember { MutableTransitionState(false) }
@@ -221,11 +233,6 @@ private fun CameraButtonView(
 //        }
 //    }
 //}
-//
-//override fun onPause() {
-//    super.onPause()
-//    viewModel.onStopEvent()
-//}
 
 //private fun toast(text: String) {
 //    Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
@@ -256,3 +263,25 @@ private fun Context.getActivity(): Activity {
     }
     throw IllegalStateException("Activity not available")
 }
+
+@Composable
+private fun OnPauseListener(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    onPause: () -> Unit,
+) {
+    val currentOnPause by rememberUpdatedState(onPause)
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                currentOnPause()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+}
+

@@ -146,19 +146,19 @@ internal class MapViewModel(
                 async { loadMapUseCase.run() },
             ).awaitAll()
 
-            val animalId = animalId
+            val animalIdObj = animalId
                 ?.takeIf { it.isNotBlank() }
                 ?.takeIf { it != "null" }
                 ?.let(::AnimalId)
 
-            val regionId = regionId
+            val regionIdObj = regionId
                 ?.takeIf { it.isNotBlank() }
                 ?.takeIf { it != "null" }
                 ?.let(::RegionId)
 
-            if (animalId != null) {
+            if (animalIdObj != null) {
                 onMyLocationClicked()
-                navigationToAnimal(getAnimalUseCase.run(animalId), regionId)
+                navigationToAnimal(getAnimalUseCase.run(animalIdObj), regionIdObj)
             }
 
             @Suppress("DeferredResultUnused")
