@@ -1,7 +1,7 @@
 @file:Suppress("DEPRECATION")
 @file:SuppressLint("MissingPermission")
 
-package com.jacekpietras.zoo.tracking
+package com.jacekpietras.zoo.tracking.listener
 
 import android.annotation.SuppressLint
 import android.app.Service

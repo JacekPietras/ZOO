@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.tracking
+package com.jacekpietras.zoo.tracking.service
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,12 @@ import android.os.Process
 import android.os.Process.killProcess
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
+import com.jacekpietras.zoo.tracking.R
 import com.jacekpietras.zoo.tracking.contract.interactor.*
+import com.jacekpietras.zoo.tracking.listener.CompassListenerCompat
+import com.jacekpietras.zoo.tracking.listener.GpsLocationListenerCompat
+import com.jacekpietras.zoo.tracking.listener.GpsStatusListenerCompat
+import com.jacekpietras.zoo.tracking.listener.LightSensorListenerCompat
 import com.jacekpietras.zoo.tracking.utils.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber

@@ -9,7 +9,7 @@
 
     <application>
         <service
-            android:name=".TrackingService"
+            android:name=".service.TrackingService"
             android:foregroundServiceType="location"
             android:enabled="true"
             android:exported="false" />

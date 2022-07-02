@@ -50,6 +50,7 @@ import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapComposeRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
+import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 

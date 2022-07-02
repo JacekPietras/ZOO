@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,13 +48,15 @@ import com.jacekpietras.zoo.core.extensions.observe
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.map.R
-import com.jacekpietras.zoo.map.model.MapEffect.*
+import com.jacekpietras.zoo.map.model.MapEffect.CenterAtPoint
+import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
+import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
-import com.jacekpietras.zoo.tracking.GpsPermissionRequester
+import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -147,9 +150,10 @@ class ComposableMapFragment : Fragment() {
 
     @Composable
     private fun LocationButtonView(modifier: Modifier = Modifier) {
+        val context = LocalContext.current
         FloatingActionButton(
             modifier = modifier,
-            onClick = { viewModel.onLocationButtonClicked(permissionChecker) },
+            onClick = { viewModel.onLocationButtonClicked(permissionChecker, context) },
             backgroundColor = ZooTheme.colors.surface,
         ) {
             Icon(

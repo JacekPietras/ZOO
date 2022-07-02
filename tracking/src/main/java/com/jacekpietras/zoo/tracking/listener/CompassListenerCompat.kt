@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.tracking
+package com.jacekpietras.zoo.tracking.listener
 
 import android.content.Context
 import android.content.Context.SENSOR_SERVICE

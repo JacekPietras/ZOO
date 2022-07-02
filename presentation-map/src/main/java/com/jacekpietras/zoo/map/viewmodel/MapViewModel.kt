@@ -1,24 +1,51 @@
 package com.jacekpietras.zoo.map.viewmodel
 
-import androidx.lifecycle.*
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.combine
 import com.jacekpietras.core.reduce
-import com.jacekpietras.zoo.core.dispatcher.*
+import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
+import com.jacekpietras.zoo.core.dispatcher.launchInBackground
+import com.jacekpietras.zoo.core.dispatcher.launchInMain
+import com.jacekpietras.zoo.core.dispatcher.onBackground
+import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.extensions.mapInBackground
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.*
+import com.jacekpietras.zoo.domain.feature.map.interactor.GetTerminalNodesUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveBuildingsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapLinesUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveRoadsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTechnicalRoadsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
-import com.jacekpietras.zoo.domain.interactor.*
+import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
+import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
+import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.Region
@@ -26,13 +53,26 @@ import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
-import com.jacekpietras.zoo.map.model.*
+import com.jacekpietras.zoo.map.model.MapAction
+import com.jacekpietras.zoo.map.model.MapEffect
+import com.jacekpietras.zoo.map.model.MapState
+import com.jacekpietras.zoo.map.model.MapToolbarMode
+import com.jacekpietras.zoo.map.model.MapViewState
+import com.jacekpietras.zoo.map.model.MapVolatileState
+import com.jacekpietras.zoo.map.model.MapVolatileViewState
+import com.jacekpietras.zoo.map.model.MapWorldState
+import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
-import com.jacekpietras.zoo.tracking.GpsPermissionRequester
+import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
+import com.jacekpietras.zoo.tracking.service.TrackingService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.plus
 
 internal class MapViewModel(
@@ -248,15 +288,14 @@ internal class MapViewModel(
         }
     }
 
-    fun onLocationButtonClicked(permissionChecker: GpsPermissionRequester) {
+    fun onLocationButtonClicked(permissionChecker: GpsPermissionRequester, context: Context) {
         startNavigationUseCase.run()
         permissionChecker.checkPermissions(
-            rationaleTitle = R.string.gps_permission_rationale_title,
-            rationaleContent = R.string.gps_permission_rationale_content,
-            deniedTitle = R.string.gps_permission_denied_title,
-            deniedContent = R.string.gps_permission_denied_content,
-            onFailed = { onLocationDenied() },
-            onPermission = { onMyLocationClicked() },
+            onDenied = { onLocationDenied() },
+            onGranted = {
+                TrackingService.start(context)
+                onMyLocationClicked()
+            },
         )
     }
 

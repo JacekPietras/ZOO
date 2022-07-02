@@ -4,10 +4,6 @@
     <string name="my_location">My location</string>
     <string name="upload">Upload</string>
     <string name="selected">Selected</string>
-    <string name="gps_permission_rationale_title">Tracing Permission</string>
-    <string name="gps_permission_rationale_content">We will use your current GPS permission to show you journey progress. Application will store only data inside ZOO.</string>
-    <string name="gps_permission_denied_title">Tracing Permission</string>
-    <string name="gps_permission_denied_content">You Denied Tracking Permission for that app permanently. You can change it in Settings.</string>
     <string name="title_map">Map</string>
     <string name="location_denied">Location denied</string>
     <string name="wc">WC</string>
