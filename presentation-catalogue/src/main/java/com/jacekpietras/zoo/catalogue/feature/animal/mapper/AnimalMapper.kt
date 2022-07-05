@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.mapper
 
 import androidx.annotation.StringRes
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem

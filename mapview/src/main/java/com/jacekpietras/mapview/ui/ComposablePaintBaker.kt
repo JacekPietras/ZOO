@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect.Companion.dashPathEffect
 import androidx.compose.ui.graphics.StrokeCap
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint

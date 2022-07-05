@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.centerpoint
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 
 internal object CenterPointFinder {
 

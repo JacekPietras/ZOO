@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 
 internal data class SnappedOnEdge(
     val point: PointD,

@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.core.RectD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapItem
 
 internal class MapWorldViewState(

@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.map.interactor
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.InitializeGraphAnalyzerIfNeededUseCase
 

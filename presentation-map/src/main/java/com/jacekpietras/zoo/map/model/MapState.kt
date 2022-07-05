@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.ThemeType

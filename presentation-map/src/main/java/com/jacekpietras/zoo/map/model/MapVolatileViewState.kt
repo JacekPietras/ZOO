@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.zoo.core.text.RichText
 

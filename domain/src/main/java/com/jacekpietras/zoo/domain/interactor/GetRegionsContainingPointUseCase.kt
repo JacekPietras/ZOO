@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.interactor
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.polygonContains
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.polygonContains
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.model.Region
 

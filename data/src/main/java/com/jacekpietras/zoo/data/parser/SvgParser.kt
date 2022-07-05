@@ -3,9 +3,9 @@ package com.jacekpietras.zoo.data.parser
 import android.content.Context
 import android.graphics.Matrix
 import androidx.annotation.XmlRes
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
-import com.jacekpietras.core.polygonContains
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.RectD
+import com.jacekpietras.geometry.polygonContains
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId

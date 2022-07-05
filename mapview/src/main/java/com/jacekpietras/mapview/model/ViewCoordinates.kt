@@ -1,6 +1,10 @@
 package com.jacekpietras.mapview.model
 
-import com.jacekpietras.core.*
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.RectD
+import com.jacekpietras.geometry.containsLine
+import com.jacekpietras.geometry.haversine
+import com.jacekpietras.geometry.polygonContains
 import kotlin.math.pow
 import kotlin.math.sqrt
 

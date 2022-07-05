@@ -1,6 +1,6 @@
 package com.jacekpietras.mapview.model
 
-import com.jacekpietras.core.*
+import com.jacekpietras.geometry.*
 
 class PolygonD(val vertices: List<PointD>) {
 

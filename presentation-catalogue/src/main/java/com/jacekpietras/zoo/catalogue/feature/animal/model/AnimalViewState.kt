@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.model
 
-import com.jacekpietras.core.RectD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.zoo.core.text.RichText
 

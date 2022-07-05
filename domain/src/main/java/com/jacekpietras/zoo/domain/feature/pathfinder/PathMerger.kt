@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 
 internal class PathMerger(private val paths: List<MapItemEntity.PathEntity>) {

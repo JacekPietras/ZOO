@@ -6,8 +6,8 @@ import android.util.TypedValue
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import com.google.android.material.color.MaterialColors
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.haversine
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.haversine
 
 sealed class MapPaint {
 

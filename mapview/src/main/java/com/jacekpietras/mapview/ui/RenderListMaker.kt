@@ -1,7 +1,7 @@
 package com.jacekpietras.mapview.ui
 
 import android.graphics.Matrix
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.ViewCoordinates

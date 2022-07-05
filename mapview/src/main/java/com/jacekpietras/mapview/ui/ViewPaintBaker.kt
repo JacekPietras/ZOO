@@ -3,7 +3,7 @@ package com.jacekpietras.mapview.ui
 import android.content.Context
 import android.graphics.DashPathEffect
 import android.graphics.Paint
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder

@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.map.interactor
 
-import com.jacekpietras.core.RectD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 
 class GetWorldBoundsUseCase(

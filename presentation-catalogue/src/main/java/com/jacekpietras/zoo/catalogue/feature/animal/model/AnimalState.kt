@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
 

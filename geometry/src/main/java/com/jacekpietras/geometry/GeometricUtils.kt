@@ -1,4 +1,4 @@
-package com.jacekpietras.core
+package com.jacekpietras.geometry
 
 import android.graphics.RectF
 import kotlin.math.*

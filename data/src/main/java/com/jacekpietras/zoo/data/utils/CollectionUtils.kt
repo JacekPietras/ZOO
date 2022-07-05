@@ -1,4 +1,4 @@
-package com.jacekpietras.core
+package com.jacekpietras.zoo.data.utils
 
 inline fun <T> Iterable<T>.cutOut(
     predicate: (a: T, b: T) -> Boolean,

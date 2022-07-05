@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.map.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.centerpoint.CenterPointFinder
 
 sealed class MapItemEntity {

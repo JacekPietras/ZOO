@@ -2,7 +2,7 @@ package com.jacekpietras.mapview.utils
 
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 
 fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
     val result = DoubleArray(list.size * 2)

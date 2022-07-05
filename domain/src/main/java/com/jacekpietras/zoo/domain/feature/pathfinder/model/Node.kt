@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder.model
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.haversine
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.haversine
 
 internal data class Node(
     val point: PointD,

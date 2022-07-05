@@ -3,8 +3,7 @@ apply from: "$rootDir/common.gradle"
 apply plugin: "de.mannodermaus.android-junit5"
 
 dependencies {
-    implementation project(':core')
-
+    implementation project(':geometry')
     //Test
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter"

@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 dependencies {
-    implementation project(':core')
+    implementation project(':geometry')
     implementation project(':mapview')
     api project(':presentation-core')
     implementation project(':domain')

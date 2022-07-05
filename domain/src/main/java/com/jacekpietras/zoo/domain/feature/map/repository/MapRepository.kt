@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.map.repository
 
-import com.jacekpietras.core.RectD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.Region

@@ -1,8 +1,8 @@
 package com.jacekpietras.mapview.ui
 
 import android.graphics.Matrix
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.pointsToDoubleArray

@@ -1,7 +1,7 @@
 package com.jacekpietras.mapview.model
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.containsLine
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.containsLine
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

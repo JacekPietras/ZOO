@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.RectD
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.cache.watcher.Watcher
 import com.jacekpietras.zoo.data.parser.SvgParser

@@ -1,14 +1,13 @@
 package com.jacekpietras.zoo.domain.feature.planner.interactor
 
-import com.jacekpietras.core.BuildConfig
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.BuildConfig
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber

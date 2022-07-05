@@ -1,4 +1,4 @@
-package com.jacekpietras.core
+package com.jacekpietras.geometry
 
 import android.graphics.Rect
 import android.graphics.RectF

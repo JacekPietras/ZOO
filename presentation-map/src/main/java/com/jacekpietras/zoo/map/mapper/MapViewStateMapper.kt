@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.map.mapper
 
 import android.graphics.Color
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.*
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.RichText

@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.catalogue.feature.animal.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState

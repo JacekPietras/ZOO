@@ -6,7 +6,7 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain

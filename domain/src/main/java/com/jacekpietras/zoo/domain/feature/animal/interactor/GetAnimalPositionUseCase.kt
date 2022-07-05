@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.animal.interactor
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.interactor.GetRegionCenterPointUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
 

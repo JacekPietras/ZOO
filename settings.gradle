@@ -1,5 +1,5 @@
 include ':mapview'
-include ':core'
+include ':geometry'
 include ':tracking'
 include ':logger'
 include ':presentation-core'

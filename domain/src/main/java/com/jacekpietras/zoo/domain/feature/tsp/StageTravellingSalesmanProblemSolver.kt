@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.tsp
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.haversine
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage

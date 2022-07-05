@@ -3,7 +3,7 @@ package com.jacekpietras.mapview.ui
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.*
 import com.jacekpietras.mapview.utils.drawPath
 

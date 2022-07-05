@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Intervals
 

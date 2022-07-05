@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.planner.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.model.Region
 
 data class PlanEntity(

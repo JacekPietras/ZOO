@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
-import com.jacekpietras.core.PointD
-import com.jacekpietras.core.pow2
+import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.pow2
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import kotlin.math.sqrt
 

@@ -1,6 +1,6 @@
 package com.jacekpietras.mapview.model
 
-import com.jacekpietras.core.PointD
+import com.jacekpietras.geometry.PointD
 
 sealed class MapItem(
     open val paint: MapPaint,

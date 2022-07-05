@@ -2,19 +2,23 @@ package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
 import android.text.format.DateUtils
-import com.jacekpietras.core.cutOut
-import com.jacekpietras.core.haversine
+import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.data.BuildConfig
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.cache.watcher.Watcher
 import com.jacekpietras.zoo.data.database.dao.GpsDao
 import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
 import com.jacekpietras.zoo.data.parser.TxtParser
+import com.jacekpietras.zoo.data.utils.cutOut
 import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 internal class GpsRepositoryImpl(
@@ -29,7 +33,7 @@ internal class GpsRepositoryImpl(
     private val compass = MutableStateFlow(0f)
     private val luminance = MutableStateFlow(1000f)
 
-    private val debugHistory:List<List<GpsHistoryEntity>> by lazy {
+    private val debugHistory: List<List<GpsHistoryEntity>> by lazy {
         if (BuildConfig.DEBUG) {
             val ola1 = TxtParser(context, R.raw.ola_14_02_21)
             val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
