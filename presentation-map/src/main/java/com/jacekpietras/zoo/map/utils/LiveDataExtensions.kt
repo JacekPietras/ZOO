@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.core.extensions
+package com.jacekpietras.zoo.map.utils
 
 import android.annotation.SuppressLint
 import androidx.annotation.MainThread
@@ -8,10 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProviderWrapper
-import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive

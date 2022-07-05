@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.catalogue.R
-import com.jacekpietras.zoo.catalogue.res.colorPrimary
 
 @Composable
 internal fun ToolbarIcon(
@@ -32,7 +31,7 @@ internal fun ToolbarIcon(
             .padding(padding)
             .then(Modifier.size(24.dp + 8.dp + 8.dp))
             .background(
-                color = if (selected) colorPrimary() else Color.Transparent,
+                color = if (selected) MaterialTheme.colors.primary else Color.Transparent,
                 shape = CircleShape,
             ),
         onClick = onClick,

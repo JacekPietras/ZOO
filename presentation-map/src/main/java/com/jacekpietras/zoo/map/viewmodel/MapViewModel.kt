@@ -12,10 +12,10 @@ import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.core.dispatcher.onBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
-import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
-import com.jacekpietras.zoo.core.extensions.mapInBackground
-import com.jacekpietras.zoo.core.extensions.reduce
-import com.jacekpietras.zoo.core.extensions.reduceOnMain
+import com.jacekpietras.zoo.map.utils.NullSafeMutableLiveData
+import com.jacekpietras.zoo.map.utils.mapInBackground
+import com.jacekpietras.zoo.map.utils.reduce
+import com.jacekpietras.zoo.map.utils.reduceOnMain
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
