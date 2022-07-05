@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.planner.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavController
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.viewmodel.PlannerViewModel
@@ -12,7 +12,7 @@ import org.koin.androidx.compose.getViewModel
 fun PlannerScreen(navController: NavController) {
 
     val viewModel = getViewModel<PlannerViewModel>()
-    val viewState by viewModel.viewState.observeAsState(initial = PlannerViewState())
+    val viewState by viewModel.viewState.collectAsState(initial = PlannerViewState())
 
     PlannerView(
         viewState = viewState,

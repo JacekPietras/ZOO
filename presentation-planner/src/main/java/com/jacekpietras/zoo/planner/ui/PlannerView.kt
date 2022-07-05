@@ -1,11 +1,19 @@
 package com.jacekpietras.zoo.planner.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,10 +40,11 @@ internal fun PlannerView(
     }
     Column {
         PlannerListView(
-            viewState,
-            onMove,
-            onRemove,
-            onUnlock
+            modifier = Modifier.weight(1f),
+            viewState = viewState,
+            onMove = onMove,
+            onRemove = onRemove,
+            onUnlock = onUnlock,
         )
         if (viewState.isAddExitVisible) {
             SimpleButton(
@@ -50,7 +59,8 @@ internal fun PlannerView(
 }
 
 @Composable
-private fun ColumnScope.PlannerListView(
+private fun PlannerListView(
+    modifier: Modifier = Modifier,
     viewState: PlannerViewState,
     onMove: (from: String, to: String) -> Unit,
     onRemove: (regionId: String) -> Unit,
@@ -58,11 +68,10 @@ private fun ColumnScope.PlannerListView(
 ) {
     val lazyListState = rememberLazyListState()
     val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
-    val listData = remember { mutableStateOf(viewState.list) }
-    listData.value = viewState.list
+    val listData by remember { mutableStateOf(viewState.list) }.also { it.value = viewState.list }
 
     LazyColumn(
-        modifier = Modifier.weight(1f),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
         state = lazyListState,
@@ -85,7 +94,7 @@ private fun ColumnScope.PlannerListView(
                         lazyListState = lazyListState,
                         onOrderingChange = { reorderingData.value = it },
                         onDragStop = { fromIndex, toIndex ->
-                            onMove(listData.value[fromIndex].regionId, listData.value[toIndex].regionId)
+                            onMove(listData[fromIndex].regionId, listData[toIndex].regionId)
                         },
                     ),
                 isMutable = item.isMutable,
