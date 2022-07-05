@@ -30,26 +30,3 @@ inline fun <T> Iterable<T>.cutOut(
     }
     return result
 }
-
-inline fun <T> Iterable<T>.forEachWithNext(block: (a: T, b: T) -> Unit) {
-    val iterator = iterator()
-    if (!iterator.hasNext()) return
-    var current = iterator.next()
-    while (iterator.hasNext()) {
-        val next = iterator.next()
-        block(current, next)
-        current = next
-    }
-}
-
-inline fun <T, Y, U, R> Collection<Triple<T, Y, U>>.mapTriple(transform: (T, Y, U) -> R): List<R> {
-    val destination = ArrayList<R>(this.size)
-    forEach { destination.add(transform(it.first, it.second, it.third)) }
-    return destination
-}
-
-inline fun <T, Y, R> Collection<Pair<T, Y>>.mapPair(transform: (T, Y) -> R): List<R> {
-    val destination = ArrayList<R>(this.size)
-    forEach { destination.add(transform(it.first, it.second)) }
-    return destination
-}

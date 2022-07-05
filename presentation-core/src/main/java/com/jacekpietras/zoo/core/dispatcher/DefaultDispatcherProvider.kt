@@ -2,8 +2,11 @@ package com.jacekpietras.zoo.core.dispatcher
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DefaultDispatcherProvider : DispatcherProvider {
 
@@ -62,9 +65,3 @@ suspend fun <T> ViewModel.onIO(block: suspend CoroutineScope.() -> T) =
 
 suspend fun <T> ViewModel.onMain(block: suspend CoroutineScope.() -> T) =
     withContext(dispatcherProvider.main, block)
-
-suspend fun <T> Channel<T>.sendOnMain(element: T) {
-    withContext(DispatcherProviderWrapper.provider.main) {
-        send(element)
-    }
-}

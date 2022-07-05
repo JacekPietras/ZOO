@@ -6,9 +6,7 @@ import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
@@ -16,6 +14,7 @@ import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -28,7 +27,7 @@ fun AnimalScreen(
     val viewModel = getViewModel<AnimalViewModel> { parametersOf(animalId) }
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
 
-    val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
+    val mapList = MutableStateFlow<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList())
     val paintBaker by lazy { ComposablePaintBaker(activity) }
     val mapLogic = MapViewLogic(
         invalidate = { mapList.value = it },
@@ -42,7 +41,7 @@ fun AnimalScreen(
 
     AnimalView(
         viewState = viewState,
-        mapList = mapList.observeAsState().value,
+        mapList = mapList.collectAsState().value,
         onWebClicked = { viewModel.onWebClicked(router) },
         onWikiClicked = { viewModel.onWikiClicked(router) },
         onNavClicked = { viewModel.onNavClicked(router) },

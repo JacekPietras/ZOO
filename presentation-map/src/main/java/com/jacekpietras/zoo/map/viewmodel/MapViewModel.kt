@@ -6,16 +6,15 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.jacekpietras.core.NullSafeMutableLiveData
 import com.jacekpietras.core.PointD
-import com.jacekpietras.core.combine
-import com.jacekpietras.core.reduce
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.core.dispatcher.onBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
+import com.jacekpietras.zoo.core.extensions.NullSafeMutableLiveData
 import com.jacekpietras.zoo.core.extensions.mapInBackground
+import com.jacekpietras.zoo.core.extensions.reduce
 import com.jacekpietras.zoo.core.extensions.reduceOnMain
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
@@ -63,6 +62,7 @@ import com.jacekpietras.zoo.map.model.MapWorldState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
+import com.jacekpietras.zoo.map.utils.combine
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

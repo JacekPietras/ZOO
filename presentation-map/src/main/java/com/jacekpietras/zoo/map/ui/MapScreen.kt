@@ -19,6 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +41,6 @@ import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
@@ -63,6 +63,7 @@ import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouterImpl
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import com.jacekpietras.zoo.tracking.permissions.rememberGpsPermissionRequesterState
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -77,7 +78,7 @@ fun MapScreen(
     val router = MapRouterImpl({ activity }, navController)
     val permissionChecker = rememberGpsPermissionRequesterState()
 
-    val mapList = MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>()
+    val mapList = MutableStateFlow<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList())
     val paintBaker by lazy { ComposablePaintBaker(activity) }
     val mapLogic = MapViewLogic(
         invalidate = { mapList.value = it },
@@ -119,7 +120,7 @@ fun MapScreen(
         onClick = mapLogic::onClick,
         onTransform = mapLogic::onTransform,
         onMapActionClicked = viewModel::onMapActionClicked,
-        mapList = mapList,
+        mapList = mapList.collectAsState().value,
     )
 }
 
@@ -141,7 +142,7 @@ private fun MapView(
     onClick: (Float, Float) -> Unit,
     onTransform: (Float, Float, Float, Float, Float, Float) -> Unit,
     onMapActionClicked: (MapAction) -> Unit,
-    mapList: MutableLiveData<List<MapViewLogic.RenderItem<ComposablePaint>>>,
+    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
     if (viewState == null) return
 
@@ -180,7 +181,7 @@ private fun MapView(
                 onSizeChanged = onSizeChanged,
                 onClick = onClick,
                 onTransform = onTransform,
-                mapList = mapList.observeAsState().value,
+                mapList = mapList,
             )
             MapActionChips(
                 isVisible = viewState.isMapActionsVisible,

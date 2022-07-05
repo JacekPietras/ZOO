@@ -20,6 +20,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+inline fun <T> NullSafeMutableLiveData<T>.reduce(block: T.() -> T) {
+    value = block(value)
+}
+
+class NullSafeMutableLiveData<T>(value: T) : MutableLiveData<T>(value) {
+
+    override fun getValue(): T = checkNotNull(super.getValue())
+}
+
 suspend inline fun <T> MutableLiveData<T>.reduceOnMain(crossinline block: suspend T.() -> T) {
     withContext(DispatcherProviderWrapper.provider.main) {
         value = block(checkNotNull(value))
@@ -32,8 +41,8 @@ suspend inline fun <T> MutableStateFlow<T>.reduceOnMain(crossinline block: suspe
     }
 }
 
-suspend fun <T> ViewModel.onMain(block: suspend CoroutineScope.() -> T) {
-    withContext(dispatcherProvider.main, block)
+suspend fun <T> onMain(block: suspend CoroutineScope.() -> T) {
+    withContext(DispatcherProviderWrapper.provider.main, block)
 }
 
 @PublishedApi

@@ -5,7 +5,6 @@ import android.graphics.Matrix
 import androidx.annotation.XmlRes
 import com.jacekpietras.core.PointD
 import com.jacekpietras.core.RectD
-import com.jacekpietras.core.mapPair
 import com.jacekpietras.core.polygonContains
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Region
@@ -184,6 +183,12 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
             map { listOf(it.x.toFloat(), it.y.toFloat()) }.flatten().toFloatArray()
         matrix.mapPoints(pointsArray)
         return pointsArray.toList().windowed(size = 2, step = 2).map { PointD(it[0], it[1]) }
+    }
+
+    private inline fun <T, Y, R> Collection<Pair<T, Y>>.mapPair(transform: (T, Y) -> R): List<R> {
+        val destination = ArrayList<R>(this.size)
+        forEach { destination.add(transform(it.first, it.second)) }
+        return destination
     }
 
     private companion object {
