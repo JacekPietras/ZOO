@@ -2,12 +2,23 @@ package com.jacekpietras.zoo.core.extensions
 
 import android.annotation.SuppressLint
 import androidx.annotation.MainThread
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.jacekpietras.zoo.core.dispatcher.DispatcherProviderWrapper
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 suspend inline fun <T> MutableLiveData<T>.reduceOnMain(crossinline block: suspend T.() -> T) {
     withContext(DispatcherProviderWrapper.provider.main) {
@@ -15,7 +26,7 @@ suspend inline fun <T> MutableLiveData<T>.reduceOnMain(crossinline block: suspen
     }
 }
 
-suspend inline fun <T> NullSafeMutableLiveData<T>.reduceOnMain(crossinline block: suspend T.() -> T) {
+suspend inline fun <T> MutableStateFlow<T>.reduceOnMain(crossinline block: suspend T.() -> T) {
     withContext(DispatcherProviderWrapper.provider.main) {
         value = block(value)
     }
@@ -23,11 +34,6 @@ suspend inline fun <T> NullSafeMutableLiveData<T>.reduceOnMain(crossinline block
 
 suspend fun <T> ViewModel.onMain(block: suspend CoroutineScope.() -> T) {
     withContext(dispatcherProvider.main, block)
-}
-
-class NullSafeMutableLiveData<T>(value: T) : MutableLiveData<T>(value) {
-
-    override fun getValue(): T = checkNotNull(super.getValue())
 }
 
 @PublishedApi
@@ -82,30 +88,6 @@ fun <X, Y> LiveData<X>.mapInBackground(mapFunction: (X) -> Y): LiveData<Y> {
             withContext(DispatcherProviderWrapper.provider.main) {
                 parent.ensureActive()
                 result.value = mapped
-            }
-            job = null
-        }
-    })
-
-    return result
-}
-
-@MainThread
-fun <X, Y> LiveData<X>.mapNotNullInBackground(mapFunction: (X) -> Y?): LiveData<Y> {
-    val result = MediatorLiveData<Y>()
-    val scope = CoroutineScope(DispatcherProviderWrapper.provider.default)
-    var job: Job? = null
-
-    result.addSource(this, Observer<X> { x ->
-        if (x == null) return@Observer
-        job?.cancel()
-        job = scope.launch {
-            val mapped = mapFunction(x)
-            val parent = this
-            ensureActive()
-            withContext(DispatcherProviderWrapper.provider.main) {
-                parent.ensureActive()
-                mapped?.let { result.value = it }
             }
             job = null
         }

@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.catalogue.feature.list.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavController
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouterImpl
@@ -17,7 +17,7 @@ fun CatalogueScreen(
 ) {
     val viewModel = getViewModel<CatalogueViewModel> { parametersOf(regionId) }
     val router = CatalogueRouterImpl(navController)
-    val viewState: CatalogueViewState by viewModel.viewState.observeAsState(initial = CatalogueViewState())
+    val viewState by viewModel.viewState.collectAsState(initial = CatalogueViewState())
 
     CatalogueView(
         viewState = viewState,

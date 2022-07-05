@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.catalogue.feature.animal.mapper
 
 import androidx.annotation.StringRes
 import com.jacekpietras.core.PointD
+import com.jacekpietras.core.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
@@ -13,13 +14,22 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
 import com.jacekpietras.zoo.core.text.RichText
-import com.jacekpietras.zoo.domain.model.Feeding
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
+import com.jacekpietras.zoo.domain.model.Feeding
 
 internal class AnimalMapper {
 
-    fun from(state: AnimalState): AnimalViewState =
-        AnimalViewState(
+    fun from(
+        worldBounds: RectD,
+        buildings: List<MapItemEntity.PolygonEntity>,
+        aviary: List<MapItemEntity.PolygonEntity>,
+        roads: List<MapItemEntity.PathEntity>,
+        pathsToAnimal: List<MapItemEntity.PathEntity>,
+        state: AnimalState,
+    ): AnimalViewState? {
+        if (state.animal == null) return null
+
+        return AnimalViewState(
             title = RichText(state.animal.name),
             subTitle = RichText(state.animal.nameLatin),
             content = with(state.animal) {
@@ -42,12 +52,12 @@ internal class AnimalMapper {
                 state.isFavorite -> RichText(R.string.is_not_favorite)
                 else -> RichText(R.string.is_favorite)
             },
-            worldBounds = state.worldBounds,
+            worldBounds = worldBounds,
             mapData = flatListOf(
-                fromPaths(state.roads, roadPaint),
-                fromPaths(state.pathsToAnimal, pathPaint),
-                fromPolygons(state.buildings, buildingPaint),
-                fromPolygons(state.aviary, aviaryPaint),
+                fromPaths(roads, roadPaint),
+                fromPaths(pathsToAnimal, pathPaint),
+                fromPolygons(buildings, buildingPaint),
+                fromPolygons(aviary, aviaryPaint),
                 fromPoints(state.animalPositions, positionsPaint),
             ),
             feeding =
@@ -78,6 +88,7 @@ internal class AnimalMapper {
                 null
             },
         )
+    }
 
     private fun List<Feeding>.filterRepetitive(): Feeding =
         Feeding(

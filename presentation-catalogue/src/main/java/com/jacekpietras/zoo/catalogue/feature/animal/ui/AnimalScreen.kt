@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
@@ -36,7 +37,7 @@ fun AnimalScreen(
         bakeDimension = { paintBaker.bakeDimension(it) },
     )
 
-    val viewState by viewModel.viewState.observeAsState()
+    val viewState by viewModel.viewState.collectAsState(null)
     mapLogic.updateMap(viewState)
 
     AnimalView(
