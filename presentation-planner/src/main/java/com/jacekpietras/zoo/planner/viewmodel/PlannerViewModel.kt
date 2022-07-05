@@ -28,11 +28,9 @@ internal class PlannerViewModel(
     private val addExitToCurrentPlanUseCase: AddExitToCurrentPlanUseCase,
 ) : ViewModel() {
 
-    private val currentPlan = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
+    private val state = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-    var viewState: Flow<PlannerViewState> =
-        currentPlan
-            .map(stateMapper::from)
+    var viewState: Flow<PlannerViewState> = state.map(stateMapper::from)
 
     fun onMove(fromRegionId: String, toRegionId: String) {
         launchInBackground {
@@ -48,7 +46,7 @@ internal class PlannerViewModel(
 
     fun onRemove(regionId: String) {
         launchInBackground {
-            currentPlan.value
+            state.value
                 .mapNotNull { (stage, animals) ->
                     if (stage is Stage.InRegion) {
                         stage to animals
