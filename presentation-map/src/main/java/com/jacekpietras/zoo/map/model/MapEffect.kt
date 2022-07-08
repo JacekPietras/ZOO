@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.map.model
 
-import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.core.text.RichText
 
 internal sealed class MapEffect {
@@ -10,8 +9,4 @@ internal sealed class MapEffect {
     ) : MapEffect()
 
     object CenterAtUser : MapEffect()
-
-    data class CenterAtPoint(
-        val point: PointD,
-    ) : MapEffect()
 }

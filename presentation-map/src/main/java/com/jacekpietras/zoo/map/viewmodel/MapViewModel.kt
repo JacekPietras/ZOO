@@ -48,6 +48,8 @@ import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
+import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
+import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
 import com.jacekpietras.zoo.map.model.MapState
 import com.jacekpietras.zoo.map.model.MapToolbarMode
 import com.jacekpietras.zoo.map.model.MapViewState
@@ -135,9 +137,6 @@ internal class MapViewModel(
     private val mapWorldState = NullSafeMutableLiveData(MapWorldState())
     var mapWorldViewState: LiveData<MapWorldViewState> = mapWorldState.mapInBackground(mapper::from)
 
-//    private val _effect = Channel<MapEffect>()
-//    val effect: Flow<MapEffect> = _effect.receiveAsFlow()
-
     init {
         launchInBackground {
             listOf(
@@ -156,7 +155,7 @@ internal class MapViewModel(
                 ?.let(::RegionId)
 
             if (animalIdObj != null) {
-                onMyLocationClicked()
+                sendEffect(CenterAtUser)
                 navigationToAnimal(getAnimalUseCase.run(animalIdObj), regionIdObj)
             }
 
@@ -247,7 +246,7 @@ internal class MapViewModel(
         try {
             uploadHistoryUseCase.run()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
-            sendEffect(MapEffect.ShowToast(RichText("Upload failed")))
+            sendEffect(ShowToast(RichText("Upload failed")))
         }
     }
 
@@ -292,18 +291,14 @@ internal class MapViewModel(
             onDenied = { onLocationDenied() },
             onGranted = {
                 trackingServiceStarter.run()
-                onMyLocationClicked()
+                sendEffect(CenterAtUser)
             },
         )
     }
 
-    private fun onMyLocationClicked() {
-        sendEffect(MapEffect.CenterAtUser)
-    }
-
     private fun onLocationDenied() {
         if (BuildConfig.DEBUG) {
-            sendEffect(MapEffect.ShowToast(RichText(R.string.location_denied)))
+            sendEffect(ShowToast(RichText(R.string.location_denied)))
         }
     }
 
@@ -334,7 +329,7 @@ internal class MapViewModel(
     }
 
     fun onMapActionClicked(mapAction: MapAction) {
-        onMyLocationClicked()
+        sendEffect(CenterAtUser)
         val toolbarMode = when (mapAction) {
             MapAction.AROUND_YOU -> MapToolbarMode.AroundYouMapActionMode(mapAction)
             MapAction.UPLOAD -> {
@@ -384,7 +379,7 @@ internal class MapViewModel(
                     }
                 } else {
                     state.reduce { copy(isToolbarOpened = false) }
-                    sendEffect(MapEffect.ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
+                    sendEffect(ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
                 }
             }
         }

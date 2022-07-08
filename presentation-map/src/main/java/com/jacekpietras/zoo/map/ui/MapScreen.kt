@@ -54,7 +54,6 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.MapAction
-import com.jacekpietras.zoo.map.model.MapEffect.CenterAtPoint
 import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
 import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
 import com.jacekpietras.zoo.map.model.MapViewState
@@ -102,7 +101,6 @@ fun MapScreen(
                 when (val effect = it.first()) {
                     is ShowToast -> toast(context, effect.text)
                     is CenterAtUser -> mapLogic.centerAtUserPosition()
-                    is CenterAtPoint -> mapLogic.centerAtPoint(effect.point)
                 }
                 viewModel.consumeEffect()
             }
