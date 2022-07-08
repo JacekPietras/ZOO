@@ -63,8 +63,8 @@ fun MapScreen(
     }
     LaunchedEffect("effects") {
         viewModel.effects.collect {
-            Timber.e("dupa collected effect")
             if (it.isNotEmpty()) {
+                Timber.e("dupa collected effect")
                 when (val effect = it.first()) {
                     is ShowToast -> toast(context, effect.text)
                     is CenterAtUser -> mapLogic.centerAtUserPosition()

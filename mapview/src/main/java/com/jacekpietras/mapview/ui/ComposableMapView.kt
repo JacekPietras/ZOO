@@ -13,7 +13,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.*
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
 import timber.log.Timber
 
 @Composable
@@ -22,7 +24,7 @@ fun ComposableMapView(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
+    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
     Canvas(
         modifier = modifier
@@ -30,12 +32,13 @@ fun ComposableMapView(
             .addOnTransform(onTransform)
             .addOnClick(onClick)
     ) {
+        Timber.e("dupa canvas drawn ${mapList.size} items")
         val (width, height) = size.width.toInt() to size.height.toInt()
         if (width > 0 && height > 0) {
             onSizeChanged(width, height)
         }
 
-        mapList?.forEach {
+        mapList.forEach {
             when (it) {
                 is RenderPathItem -> drawPath(it.shape, it.paint, false)
                 is RenderPolygonItem -> drawPath(it.shape, it.paint, true)

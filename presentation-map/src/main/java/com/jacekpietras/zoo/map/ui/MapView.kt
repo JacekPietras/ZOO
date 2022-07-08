@@ -27,6 +27,7 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapViewState
+import timber.log.Timber
 
 @Composable
 internal fun MapView(
@@ -44,6 +45,8 @@ internal fun MapView(
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
     if (viewState == null) return
+
+    Timber.e("dupa mapView recomposed")
 
     Column {
         AnimatedVisibility(

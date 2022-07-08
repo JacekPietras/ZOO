@@ -41,7 +41,7 @@ import com.jacekpietras.zoo.core.ui.shimmerWhen
 @Composable
 internal fun AnimalView(
     viewState: AnimalViewState?,
-    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
+    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
     onWebClicked: () -> Unit,
     onWikiClicked: () -> Unit,
     onNavClicked: () -> Unit,
@@ -126,7 +126,7 @@ private fun NavigationButtons(
 
 @Composable
 private fun MapView(
-    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>?,
+    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
     onMapSizeChanged: (Int, Int) -> Unit,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }

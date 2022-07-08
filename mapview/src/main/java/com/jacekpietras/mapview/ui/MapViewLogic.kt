@@ -3,7 +3,11 @@ package com.jacekpietras.mapview.ui
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
-import com.jacekpietras.mapview.model.*
+import com.jacekpietras.mapview.model.MapDimension
+import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.mapview.model.MapPaint
+import com.jacekpietras.mapview.model.PaintHolder
+import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import java.util.concurrent.atomic.AtomicBoolean
@@ -159,6 +163,8 @@ class MapViewLogic<T>(
     }
 
     fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
+        if (!::visibleGpsCoordinate.isInitialized) return
+
         val mX = pinchCorrection(cX, scale, currentWidth)
         val mY = pinchCorrection(cY, scale, currentHeight)
 
@@ -220,6 +226,8 @@ class MapViewLogic<T>(
             }
 
     fun onClick(x: Float, y: Float) {
+        if (!::visibleGpsCoordinate.isInitialized) return
+
         val point = FloatArray(2)
         point[0] = x
         point[1] = y
