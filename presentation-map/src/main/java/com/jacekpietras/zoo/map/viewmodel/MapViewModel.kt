@@ -111,7 +111,7 @@ internal class MapViewModel(
     val effects = MutableStateFlow<List<MapEffect>>(emptyList())
 
     private val state = MutableStateFlow(MapState())
-    val viewState: Flow<MapViewState> = state.map(mapper::from)
+    val viewState: Flow<MapViewState> = state.map(mapper::from).flowOnBackground()
 
     private val volatileState = MutableStateFlow(MapVolatileState())
     val volatileViewState: Flow<MapVolatileViewState> =
@@ -121,14 +121,8 @@ internal class MapViewModel(
             observeVisitedRoadsUseCase.run(),
             observeTakenRouteUseCase.run(),
             observeCompassUseCase.run(),
-        ) { state, plannedPath, visitedRoads, takenRoute, compass ->
-            state.copy(
-                plannedPath = plannedPath,
-                compass = compass,
-                visitedRoads = visitedRoads,
-                takenRoute = takenRoute,
-            )
-        }.map(mapper::from).flowOnBackground()
+            mapper::from,
+        ).flowOnBackground()
 
     private val mapWorldState = MutableStateFlow(MapWorldState())
     var mapWorldViewState: Flow<MapWorldViewState> = mapWorldState.map(mapper::from).flowOnBackground()

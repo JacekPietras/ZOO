@@ -2,18 +2,32 @@ package com.jacekpietras.zoo.map.mapper
 
 import android.graphics.Color
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.mapview.model.*
+import com.jacekpietras.mapview.model.MapColor
+import com.jacekpietras.mapview.model.MapDimension
+import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.mapview.model.MapPaint
+import com.jacekpietras.mapview.model.PathD
+import com.jacekpietras.mapview.model.PolygonD
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.RichText
-import com.jacekpietras.zoo.domain.model.AnimalEntity
-import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.model.AnimalEntity
+import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
-import com.jacekpietras.zoo.map.model.*
+import com.jacekpietras.zoo.map.model.AnimalDivisionValue
+import com.jacekpietras.zoo.map.model.MapAction
+import com.jacekpietras.zoo.map.model.MapCarouselItem
+import com.jacekpietras.zoo.map.model.MapState
+import com.jacekpietras.zoo.map.model.MapToolbarMode
+import com.jacekpietras.zoo.map.model.MapViewState
+import com.jacekpietras.zoo.map.model.MapVolatileState
+import com.jacekpietras.zoo.map.model.MapVolatileViewState
+import com.jacekpietras.zoo.map.model.MapWorldState
+import com.jacekpietras.zoo.map.model.MapWorldViewState
 import kotlin.random.Random
 
 internal class MapViewStateMapper {
@@ -59,7 +73,13 @@ internal class MapViewStateMapper {
             RichText(" ") + RichText(distance.toInt().toString()) + "m"
         } ?: RichText.Empty
 
-    fun from(state: MapVolatileState): MapVolatileViewState = with(state) {
+    fun from(
+        state: MapVolatileState,
+        plannedPath: List<PointD> = emptyList(),
+        visitedRoads: List<PathEntity> = emptyList(),
+        takenRoute: List<PathEntity> = emptyList(),
+        compass: Float = 0f,
+    ): MapVolatileViewState = with(state) {
         MapVolatileViewState(
             compass = compass,
             userPosition = userPosition,
