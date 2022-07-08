@@ -65,6 +65,7 @@ import com.jacekpietras.zoo.map.utils.reduceOnMain
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -108,7 +109,7 @@ internal class MapViewModel(
     private val trackingServiceStarter: TrackingServiceStarter,
 ) : ViewModel() {
 
-    val effects = NullSafeMutableLiveData<List<MapEffect>>(emptyList())
+    val effects = MutableStateFlow<List<MapEffect>>(emptyList())
 
     private val state = NullSafeMutableLiveData(MapState())
     private val currentState get() = checkNotNull(state.value)

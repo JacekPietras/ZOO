@@ -19,6 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -95,14 +96,16 @@ fun MapScreen(
     viewModel.mapWorldViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
     viewModel.volatileViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
 
-    viewModel.effects.observe(LocalLifecycleOwner.current) {
-        if (it.isNotEmpty()) {
-            when (val effect = it.first()) {
-                is ShowToast -> toast(context, effect.text)
-                is CenterAtUser -> mapLogic.centerAtUserPosition()
-                is CenterAtPoint -> mapLogic.centerAtPoint(effect.point)
+    LaunchedEffect(Unit) {
+        viewModel.effects.collect {
+            if (it.isNotEmpty()) {
+                when (val effect = it.first()) {
+                    is ShowToast -> toast(context, effect.text)
+                    is CenterAtUser -> mapLogic.centerAtUserPosition()
+                    is CenterAtPoint -> mapLogic.centerAtPoint(effect.point)
+                }
+                viewModel.consumeEffect()
             }
-            viewModel.consumeEffect()
         }
     }
 
