@@ -2,6 +2,7 @@
 <resources>
     <string name="around_you">Around you</string>
     <string name="my_location">My location</string>
+    <string name="take_photo">Take photo</string>
     <string name="upload">Upload</string>
     <string name="selected">Selected</string>
     <string name="title_map">Map</string>

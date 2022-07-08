@@ -181,10 +181,7 @@ internal class MapViewModel(
             animal.regionInZoo
         }
 
-        val pathToNearestWithDistance = findNearRegionWithDistance.run { it.id in regionIds } ?: return
-
-        val shortestPath = pathToNearestWithDistance.first
-        val distance = pathToNearestWithDistance.second
+        val (shortestPath, distance) = findNearRegionWithDistance.run { it.id in regionIds } ?: return
 
         state.reduceOnMain {
             copy(
@@ -320,8 +317,7 @@ internal class MapViewModel(
                 }
             onMain {
                 if (nearWithDistance != null) {
-                    val path = nearWithDistance.first
-                    val distance = nearWithDistance.second
+                    val (path, distance) = nearWithDistance
 
                     (state.value.toolbarMode as? MapToolbarMode.NavigableMapActionMode)?.let { currentMode ->
                         state.reduce {

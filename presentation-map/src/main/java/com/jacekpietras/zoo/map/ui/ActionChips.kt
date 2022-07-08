@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.map.model.MapAction
 
 @Composable
-internal fun MapActionChips(
+internal fun ActionChips(
     isVisible: Boolean,
     mapActions: List<MapAction>,
     onMapActionClicked: (MapAction) -> Unit,
