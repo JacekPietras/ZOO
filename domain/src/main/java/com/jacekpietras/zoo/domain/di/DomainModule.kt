@@ -95,7 +95,7 @@ val domainModule = module {
         )
     }
     factory {
-        GetUserPositionUseCase(
+        ObserveUserPositionUseCase(
             gpsRepository = get(),
         )
     }

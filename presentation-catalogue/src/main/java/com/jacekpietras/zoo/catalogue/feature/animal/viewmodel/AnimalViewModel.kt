@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
@@ -24,7 +23,7 @@ import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddAnimalToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveAnimalFromCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +32,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
 
 internal class AnimalViewModel(
     animalId: AnimalId,
@@ -44,28 +42,26 @@ internal class AnimalViewModel(
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addAnimalToCurrentPlanUseCase: AddAnimalToCurrentPlanUseCase,
     private val removeFromCurrentPlanUseCase: RemoveAnimalFromCurrentPlanUseCase,
-
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     observeBuildingsUseCase: ObserveBuildingsUseCase,
     observeAviaryUseCase: ObserveAviaryUseCase,
     observeRoadsUseCase: ObserveRoadsUseCase,
+    observeUserPositionUseCase: ObserveUserPositionUseCase,
     getAnimalPositionUseCase: GetAnimalPositionUseCase,
-    observeUserPositionUseCase: GetUserPositionUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
 ) : ViewModel() {
 
     private val state = MutableStateFlow(AnimalState(animalId = animalId))
     private val currentState get() = state.value
-    val viewState: Flow<AnimalViewState?> =
-        combine(
-            observeWorldBoundsUseCase.run().flowOn(dispatcherProvider.default),
-            observeBuildingsUseCase.run().flowOn(dispatcherProvider.default),
-            observeAviaryUseCase.run().flowOn(dispatcherProvider.default),
-            observeRoadsUseCase.run().flowOn(dispatcherProvider.default),
-            observeUserPositionUseCase.run().map(this::getPaths).flowOn(dispatcherProvider.default),
-            state,
-            mapper::from,
-        )
+    val viewState: Flow<AnimalViewState?> = combine(
+        observeWorldBoundsUseCase.run().flowOn(dispatcherProvider.default),
+        observeBuildingsUseCase.run().flowOn(dispatcherProvider.default),
+        observeAviaryUseCase.run().flowOn(dispatcherProvider.default),
+        observeRoadsUseCase.run().flowOn(dispatcherProvider.default),
+        observeUserPositionUseCase.run().map(this::getPaths).flowOn(dispatcherProvider.default),
+        state,
+        mapper::from,
+    )
 
     init {
         launchInBackground {
@@ -79,7 +75,7 @@ internal class AnimalViewModel(
                         copy(isFavorite = isFavorite)
                     }
                 }
-                .launchIn(viewModelScope + dispatcherProvider.default)
+                .launchIn(this)
 
             val isSeen = isAnimalSeenUseCase.run(animalId)
             val positions = getAnimalPositionUseCase.run(animalId)

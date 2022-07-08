@@ -17,9 +17,8 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 internal class CatalogueViewModel(
@@ -30,25 +29,26 @@ internal class CatalogueViewModel(
     loadAnimalsUseCase: LoadAnimalsUseCase,
 ) : ViewModel() {
 
-    private val state = MutableStateFlow(CatalogueState())
-    var viewState: Flow<CatalogueViewState> = state.map(stateMapper::from)
-
     private val filterFlow = MutableStateFlow(AnimalFilter(
         regionId = regionId
             ?.takeIf { it.isNotBlank() }
             ?.takeIf { it != "null" }
             ?.let(::RegionId)
     ))
+    private val animalFlow = filterFlow
+        .onEach { onMain { state.reduce { copy(filter = it) } } }
+        .flatMapLatest { observeFilteredAnimalsUseCase.run(it) }
+
+    private val state = MutableStateFlow(CatalogueState())
+    var viewState: Flow<CatalogueViewState> = combine(
+        state,
+        animalFlow,
+        stateMapper::from
+    )
 
     init {
         launchInBackground {
             loadAnimalsUseCase.run()
-
-            filterFlow
-                .onEach { onMain { state.reduce { copy(filter = it) } } }
-                .flatMapLatest { observeFilteredAnimalsUseCase.run(it) }
-                .onEach { onMain { state.reduce { copy(animalList = it) } } }
-                .launchIn(this)
         }
     }
 

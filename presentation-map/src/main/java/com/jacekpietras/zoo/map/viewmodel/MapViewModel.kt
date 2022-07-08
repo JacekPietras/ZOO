@@ -36,7 +36,7 @@ import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
-import com.jacekpietras.zoo.domain.interactor.GetUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
@@ -85,7 +85,7 @@ internal class MapViewModel(
     private val startCompassUseCase: StartCompassUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
     observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
-    getUserPositionUseCase: GetUserPositionUseCase,
+    observeUserPositionUseCase: ObserveUserPositionUseCase,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     observeBuildingsUseCase: ObserveBuildingsUseCase,
@@ -169,7 +169,7 @@ internal class MapViewModel(
             .onEach { state.reduceOnMain { copy(suggestedThemeType = it) } }
             .launchIn(viewModelScope + dispatcherProvider.default)
 
-        getUserPositionUseCase.run()
+        observeUserPositionUseCase.run()
             .onEach {
                 volatileState.reduceOnMain { copy(userPosition = it) }
                 with(currentState) {
