@@ -6,6 +6,9 @@ import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.jacekpietras.mapview.model.ComposablePaint
@@ -14,7 +17,6 @@ import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -27,26 +29,38 @@ fun AnimalScreen(
     val viewModel = getViewModel<AnimalViewModel> { parametersOf(animalId) }
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
 
-    val mapList = MutableStateFlow<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList())
-    val paintBaker by lazy { ComposablePaintBaker(activity) }
-    val mapLogic = MapViewLogic(
-        invalidate = { mapList.value = it },
-        bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
-        bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
-        bakeDimension = { paintBaker.bakeDimension(it) },
-    )
+    var mapList by remember { mutableStateOf<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList()) }
+    val mapLogic = remember {
+        makeComposableMapLogic(
+            activity = activity,
+            invalidate = { mapList = it },
+        )
+    }
 
     val viewState by viewModel.viewState.collectAsState(null)
     mapLogic.updateMap(viewState)
 
     AnimalView(
         viewState = viewState,
-        mapList = mapList.collectAsState().value,
+        mapList = mapList,
         onWebClicked = { viewModel.onWebClicked(router) },
         onWikiClicked = { viewModel.onWikiClicked(router) },
         onNavClicked = { viewModel.onNavClicked(router) },
         onFavoriteClicked = viewModel::onFavoriteClicked,
         onMapSizeChanged = mapLogic::onSizeChanged,
+    )
+}
+
+private fun makeComposableMapLogic(
+    activity: Activity,
+    invalidate: (List<MapViewLogic.RenderItem<ComposablePaint>>) -> Unit
+): MapViewLogic<ComposablePaint> {
+    val paintBaker by lazy { ComposablePaintBaker(activity) }
+    return MapViewLogic(
+        invalidate = invalidate,
+        bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
+        bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
+        bakeDimension = { paintBaker.bakeDimension(it) },
     )
 }
 

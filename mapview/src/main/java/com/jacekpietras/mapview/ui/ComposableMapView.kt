@@ -32,7 +32,6 @@ fun ComposableMapView(
             .addOnTransform(onTransform)
             .addOnClick(onClick)
     ) {
-        Timber.e("dupa canvas drawn ${mapList.size} items")
         val (width, height) = size.width.toInt() to size.height.toInt()
         if (width > 0 && height > 0) {
             onSizeChanged(width, height)
