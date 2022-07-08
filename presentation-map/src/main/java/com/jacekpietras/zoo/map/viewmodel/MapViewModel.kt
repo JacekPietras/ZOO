@@ -122,7 +122,7 @@ internal class MapViewModel(
         mapper::from,
     ).flowOnBackground()
 
-    var mapWorldViewState: Flow<MapWorldViewState> = combine(
+    val mapWorldViewState: Flow<MapWorldViewState> = combine(
         observeWorldBoundsUseCase.run(),
         observeBuildingsUseCase.run(),
         observeAviaryUseCase.run(),
@@ -130,7 +130,7 @@ internal class MapViewModel(
         observeMapLinesUseCase.run(),
         observeTechnicalRoadsUseCase.run(),
         observeOldTakenRouteUseCase.run(),
-        mapper::from
+        mapper::from,
     ).flowOnBackground()
 
     init {

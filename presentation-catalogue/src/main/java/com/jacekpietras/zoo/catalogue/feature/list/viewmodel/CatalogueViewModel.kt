@@ -41,10 +41,10 @@ internal class CatalogueViewModel(
         .flatMapLatest { observeFilteredAnimalsUseCase.run(it) }
 
     private val state = MutableStateFlow(CatalogueState())
-    var viewState: Flow<CatalogueViewState> = combine(
+    val viewState: Flow<CatalogueViewState> = combine(
         state,
         animalFlow,
-        stateMapper::from
+        stateMapper::from,
     ).flowOnBackground()
 
     init {

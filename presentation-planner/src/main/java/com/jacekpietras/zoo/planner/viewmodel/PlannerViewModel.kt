@@ -31,7 +31,7 @@ internal class PlannerViewModel(
 
     private val state = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-    var viewState: Flow<PlannerViewState> = state.map(stateMapper::from).flowOnBackground()
+    val viewState: Flow<PlannerViewState> = state.map(stateMapper::from).flowOnBackground()
 
     fun onMove(fromRegionId: String, toRegionId: String) {
         launchInBackground {
