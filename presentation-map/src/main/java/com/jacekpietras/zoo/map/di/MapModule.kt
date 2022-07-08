@@ -34,7 +34,6 @@ val mapModule = module {
             observeMapLinesUseCase = get(),
             observeUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
-            getTerminalNodesUseCase = get(),
             getShortestPathUseCase = get(),
             loadAnimalsUseCase = get(),
             observeRegionsWithAnimalsInUserPositionUseCase = get(),

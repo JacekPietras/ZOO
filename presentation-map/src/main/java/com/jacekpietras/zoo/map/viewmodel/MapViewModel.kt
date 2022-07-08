@@ -6,12 +6,10 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
-import com.jacekpietras.zoo.core.dispatcher.onBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.GetTerminalNodesUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveBuildingsUseCase
@@ -55,7 +53,6 @@ import com.jacekpietras.zoo.map.model.MapToolbarMode
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
-import com.jacekpietras.zoo.map.model.MapWorldState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
@@ -66,7 +63,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 
@@ -77,11 +73,12 @@ internal class MapViewModel(
 
     observeCompassUseCase: ObserveCompassUseCase,
     observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
+    observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
+    observeUserPositionUseCase: ObserveUserPositionUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
-    observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
-    observeUserPositionUseCase: ObserveUserPositionUseCase,
+    private val trackingServiceStarter: TrackingServiceStarter,
 
     observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
     observeBuildingsUseCase: ObserveBuildingsUseCase,
@@ -92,7 +89,6 @@ internal class MapViewModel(
     observeOldTakenRouteUseCase: ObserveOldTakenRouteUseCase,
     observeMapLinesUseCase: ObserveMapLinesUseCase,
     observeVisitedRoadsUseCase: ObserveVisitedRoadsUseCase,
-    getTerminalNodesUseCase: GetTerminalNodesUseCase,
 
     loadAnimalsUseCase: LoadAnimalsUseCase,
     loadMapUseCase: LoadMapUseCase,
@@ -104,28 +100,38 @@ internal class MapViewModel(
     private val findNearRegionWithDistance: FindNearRegionWithDistanceUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
-
-    private val trackingServiceStarter: TrackingServiceStarter,
 ) : ViewModel() {
 
     val effects = MutableStateFlow<List<MapEffect>>(emptyList())
 
     private val state = MutableStateFlow(MapState())
-    val viewState: Flow<MapViewState> = state.map(mapper::from).flowOnBackground()
+    val viewState: Flow<MapViewState> = combine(
+        state,
+        observeSuggestedThemeTypeUseCase.run(),
+        observeRegionsWithAnimalsInUserPositionUseCase.run(),
+        mapper::from,
+    ).flowOnBackground()
 
     private val volatileState = MutableStateFlow(MapVolatileState())
-    val volatileViewState: Flow<MapVolatileViewState> =
-        combine(
-            volatileState,
-            observeCurrentPlanPathUseCase.run(),
-            observeVisitedRoadsUseCase.run(),
-            observeTakenRouteUseCase.run(),
-            observeCompassUseCase.run(),
-            mapper::from,
-        ).flowOnBackground()
+    val volatileViewState: Flow<MapVolatileViewState> = combine(
+        volatileState,
+        observeCurrentPlanPathUseCase.run(),
+        observeVisitedRoadsUseCase.run(),
+        observeTakenRouteUseCase.run(),
+        observeCompassUseCase.run(),
+        mapper::from,
+    ).flowOnBackground()
 
-    private val mapWorldState = MutableStateFlow(MapWorldState())
-    var mapWorldViewState: Flow<MapWorldViewState> = mapWorldState.map(mapper::from).flowOnBackground()
+    var mapWorldViewState: Flow<MapWorldViewState> = combine(
+        observeWorldBoundsUseCase.run(),
+        observeBuildingsUseCase.run(),
+        observeAviaryUseCase.run(),
+        observeRoadsUseCase.run(),
+        observeMapLinesUseCase.run(),
+        observeTechnicalRoadsUseCase.run(),
+        observeOldTakenRouteUseCase.run(),
+        mapper::from
+    ).flowOnBackground()
 
     init {
         launchInBackground {
@@ -149,13 +155,8 @@ internal class MapViewModel(
                 navigationToAnimal(getAnimalUseCase.run(animalIdObj), regionIdObj)
             }
 
-            @Suppress("DeferredResultUnused")
-            async { loadVisitedRouteUseCase.run() }
+            loadVisitedRouteUseCase.run()
         }
-
-        observeSuggestedThemeTypeUseCase.run()
-            .onEach { state.reduceOnMain { copy(suggestedThemeType = it) } }
-            .launchIn(viewModelScope + dispatcherProvider.default)
 
         observeUserPositionUseCase.run()
             .onEach {
@@ -171,35 +172,6 @@ internal class MapViewModel(
                 }
             }
             .launchIn(viewModelScope + dispatcherProvider.default)
-
-        observeRegionsWithAnimalsInUserPositionUseCase.run()
-            .onEach { state.reduceOnMain { copy(regionsWithAnimalsInUserPosition = it) } }
-            .launchIn(viewModelScope + dispatcherProvider.default)
-
-        combine(
-            observeWorldBoundsUseCase.run(),
-            observeBuildingsUseCase.run(),
-            observeAviaryUseCase.run(),
-            observeRoadsUseCase.run(),
-            observeMapLinesUseCase.run(),
-            observeOldTakenRouteUseCase.run(),
-            observeTechnicalRoadsUseCase.run(),
-        ) { worldBounds, buildings, aviary, roads, lines, rawTakenRoute, technicalRoads ->
-            val terminalPoints = onBackground { getTerminalNodesUseCase.run() }
-
-            mapWorldState.reduceOnMain {
-                copy(
-                    worldBounds = worldBounds,
-                    buildings = buildings,
-                    aviary = aviary,
-                    lines = lines,
-                    roads = roads,
-                    technicalRoads = technicalRoads,
-                    rawOldTakenRoute = rawTakenRoute,
-                    terminalPoints = terminalPoints,
-                )
-            }
-        }.launchIn(viewModelScope)
     }
 
     private suspend fun navigationToAnimal(animal: AnimalEntity, regionId: RegionId?) {

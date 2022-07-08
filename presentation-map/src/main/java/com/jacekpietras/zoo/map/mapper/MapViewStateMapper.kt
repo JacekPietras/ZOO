@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.map.mapper
 
 import android.graphics.Color
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
@@ -26,7 +27,6 @@ import com.jacekpietras.zoo.map.model.MapToolbarMode
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
-import com.jacekpietras.zoo.map.model.MapWorldState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import kotlin.random.Random
 
@@ -34,7 +34,11 @@ internal class MapViewStateMapper {
 
     private val carouselSeed = Random.nextLong()
 
-    fun from(state: MapState): MapViewState = with(state) {
+    fun from(
+        state: MapState,
+        suggestedThemeType: ThemeType,
+        regionsWithAnimalsInUserPosition: List<Pair<Region, List<AnimalEntity>>>,
+    ): MapViewState = with(state) {
         MapViewState(
             isGuidanceShown = isToolbarOpened,
             isNightThemeSuggested = suggestedThemeType == ThemeType.NIGHT,
@@ -56,7 +60,7 @@ internal class MapViewStateMapper {
             mapCarouselItems = when (toolbarMode) {
                 is MapToolbarMode.MapActionMode ->
                     when (toolbarMode.mapAction) {
-                        MapAction.AROUND_YOU -> getCarousel(state.regionsWithAnimalsInUserPosition)
+                        MapAction.AROUND_YOU -> getCarousel(regionsWithAnimalsInUserPosition)
                         else -> emptyList()
                     }
                 is MapToolbarMode.SelectedRegionMode -> getCarousel(toolbarMode.regionsWithAnimals)
@@ -97,20 +101,25 @@ internal class MapViewStateMapper {
         )
     }
 
-    fun from(state: MapWorldState): MapWorldViewState = with(state) {
-        MapWorldViewState(
-            worldBounds = worldBounds,
-            mapData = flatListOf(
-                fromPaths(technicalRoads, technicalPaint),
-                fromPaths(roads, roadPaint),
-                fromPaths(lines, linesPaint),
-                fromPolygons(buildings, buildingPaint),
-                fromPolygons(aviary, aviaryPaint),
-                fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
-                fromPoints(terminalPoints, terminalPaint),
-            ),
-        )
-    }
+    fun from(
+        worldBounds: RectD,
+        buildings: List<PolygonEntity>,
+        aviary: List<PolygonEntity>,
+        roads: List<PathEntity>,
+        lines: List<PathEntity>,
+        technicalRoads: List<PathEntity>,
+        rawOldTakenRoute: List<PathEntity>,
+    ): MapWorldViewState = MapWorldViewState(
+        worldBounds = worldBounds,
+        mapData = flatListOf(
+            fromPaths(technicalRoads, technicalPaint),
+            fromPaths(roads, roadPaint),
+            fromPaths(lines, linesPaint),
+            fromPolygons(buildings, buildingPaint),
+            fromPolygons(aviary, aviaryPaint),
+            fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
+        ),
+    )
 
     private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
 
