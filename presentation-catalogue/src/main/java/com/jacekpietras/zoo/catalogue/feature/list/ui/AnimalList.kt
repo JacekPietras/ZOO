@@ -34,14 +34,15 @@ internal fun AnimalList(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
     ) {
-        items(animalList) { animal ->
+        items(animalList, key = { it.id }) { animal ->
             Card(
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .height(128.dp)
+                    .fillMaxSize(),
                 shape = RoundedCornerShape(8.dp),
                 backgroundColor = ZooTheme.colors.surface,
                 elevation = 4.dp,
-                modifier = Modifier
-                    .height(128.dp)
-                    .fillMaxSize(),
             ) {
                 BoxWithConstraints(
                     modifier = Modifier
