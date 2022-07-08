@@ -8,8 +8,16 @@ import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
@@ -31,16 +39,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             .pushAndDo(
                 fast = { plan -> plan.stages to emptyList() },
                 long = { plan ->
-                    // fixme
-                    plan.stages to emptyList()
-//                    measureMap({ Timber.d("Optimization took $it") }) {
-//                        tspSolver.findShortPathAndStages(plan.stages)
-//                            .also { (resultStages, _) ->
-//                                if (plan.stages != resultStages) {
-//                                    saveBetterPlan(plan, resultStages)
-//                                }
-//                            }
-//                    }
+                    measureMap({ Timber.d("Optimization took $it") }) {
+                        tspSolver.findShortPathAndStages(plan.stages)
+                            .also { (resultStages, _) ->
+                                if (plan.stages != resultStages) {
+                                    saveBetterPlan(plan, resultStages)
+                                }
+                            }
+                    }
                 },
             )
 
