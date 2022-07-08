@@ -22,7 +22,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -89,11 +88,15 @@ fun MapScreen(
         onStartCentering = { viewModel.onStartCentering() },
     )
 
-    val viewState by viewModel.viewState.observeAsState()
+    val viewState by viewModel.viewState.collectAsState(null)
     val context = LocalContext.current
 
-    viewModel.mapWorldViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
-    viewModel.volatileViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
+    LaunchedEffect(Unit) {
+        viewModel.mapWorldViewState.collect { mapLogic.applyToMap(it) }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.volatileViewState.collect { mapLogic.applyToMap(it) }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect {

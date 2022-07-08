@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -49,19 +51,13 @@ val ViewModel.dispatcherProvider
     get() = DispatcherProviderWrapper.provider
 
 fun ViewModel.launchInBackground(block: suspend CoroutineScope.() -> Unit) =
-    viewModelScope.launch(dispatcherProvider.default, block = block)
+    viewModelScope.launch(DispatcherProviderWrapper.provider.default, block = block)
 
-fun ViewModel.launchInIO(block: suspend CoroutineScope.() -> Unit) =
-    viewModelScope.launch(dispatcherProvider.io, block = block)
+suspend fun <T> onBackground(block: suspend CoroutineScope.() -> T) =
+    withContext(DispatcherProviderWrapper.provider.default, block)
 
-fun ViewModel.launchInMain(block: suspend CoroutineScope.() -> Unit) =
-    viewModelScope.launch(dispatcherProvider.main, block = block)
+suspend fun <T> onMain(block: suspend CoroutineScope.() -> T) =
+    withContext(DispatcherProviderWrapper.provider.main, block)
 
-suspend fun <T> ViewModel.onBackground(block: suspend CoroutineScope.() -> T) =
-    withContext(dispatcherProvider.default, block)
-
-suspend fun <T> ViewModel.onIO(block: suspend CoroutineScope.() -> T) =
-    withContext(dispatcherProvider.io, block)
-
-suspend fun <T> ViewModel.onMain(block: suspend CoroutineScope.() -> T) =
-    withContext(dispatcherProvider.main, block)
+fun <T> Flow<T>.flowOnBackground(): Flow<T> =
+    flowOn(DispatcherProviderWrapper.provider.default)

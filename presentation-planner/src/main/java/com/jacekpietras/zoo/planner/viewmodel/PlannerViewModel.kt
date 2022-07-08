@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.planner.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddExitToCurrentPlanUseCase
@@ -30,7 +31,7 @@ internal class PlannerViewModel(
 
     private val state = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-    var viewState: Flow<PlannerViewState> = state.map(stateMapper::from)
+    var viewState: Flow<PlannerViewState> = state.map(stateMapper::from).flowOnBackground()
 
     fun onMove(fromRegionId: String, toRegionId: String) {
         launchInBackground {

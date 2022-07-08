@@ -1,13 +1,10 @@
 package com.jacekpietras.zoo.map.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
+import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
@@ -45,6 +42,9 @@ import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
+import com.jacekpietras.zoo.map.extensions.combine
+import com.jacekpietras.zoo.map.extensions.reduce
+import com.jacekpietras.zoo.map.extensions.reduceOnMain
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
@@ -59,17 +59,14 @@ import com.jacekpietras.zoo.map.model.MapWorldState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
-import com.jacekpietras.zoo.map.utils.NullSafeMutableLiveData
-import com.jacekpietras.zoo.map.utils.combine
-import com.jacekpietras.zoo.map.utils.mapInBackground
-import com.jacekpietras.zoo.map.utils.reduce
-import com.jacekpietras.zoo.map.utils.reduceOnMain
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 
@@ -113,14 +110,13 @@ internal class MapViewModel(
 
     val effects = MutableStateFlow<List<MapEffect>>(emptyList())
 
-    private val state = NullSafeMutableLiveData(MapState())
-    private val currentState get() = checkNotNull(state.value)
-    val viewState: LiveData<MapViewState> = state.map(mapper::from)
+    private val state = MutableStateFlow(MapState())
+    val viewState: Flow<MapViewState> = state.map(mapper::from)
 
-    private val volatileState = NullSafeMutableLiveData(MapVolatileState())
-    val volatileViewState: LiveData<MapVolatileViewState> =
+    private val volatileState = MutableStateFlow(MapVolatileState())
+    val volatileViewState: Flow<MapVolatileViewState> =
         combine(
-            volatileState.asFlow(),
+            volatileState,
             observeCurrentPlanPathUseCase.run(),
             observeVisitedRoadsUseCase.run(),
             observeTakenRouteUseCase.run(),
@@ -132,10 +128,10 @@ internal class MapViewModel(
                 visitedRoads = visitedRoads,
                 takenRoute = takenRoute,
             )
-        }.asLiveData().map(mapper::from)
+        }.map(mapper::from).flowOnBackground()
 
-    private val mapWorldState = NullSafeMutableLiveData(MapWorldState())
-    var mapWorldViewState: LiveData<MapWorldViewState> = mapWorldState.mapInBackground(mapper::from)
+    private val mapWorldState = MutableStateFlow(MapWorldState())
+    var mapWorldViewState: Flow<MapWorldViewState> = mapWorldState.map(mapper::from).flowOnBackground()
 
     init {
         launchInBackground {
@@ -170,7 +166,7 @@ internal class MapViewModel(
         observeUserPositionUseCase.run()
             .onEach {
                 volatileState.reduceOnMain { copy(userPosition = it) }
-                with(currentState) {
+                with(state.value) {
                     if (isToolbarOpened) {
                         when (toolbarMode) {
                             is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
@@ -361,7 +357,7 @@ internal class MapViewModel(
                     val path = nearWithDistance.first
                     val distance = nearWithDistance.second
 
-                    (currentState.toolbarMode as? MapToolbarMode.NavigableMapActionMode)?.let { currentMode ->
+                    (state.value.toolbarMode as? MapToolbarMode.NavigableMapActionMode)?.let { currentMode ->
                         state.reduce {
                             copy(
                                 toolbarMode = currentMode.copy(

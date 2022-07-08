@@ -9,6 +9,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.catalogue.utils.combine
 import com.jacekpietras.zoo.catalogue.utils.reduceOnMain
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
+import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalPositionUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
@@ -52,7 +53,6 @@ internal class AnimalViewModel(
 ) : ViewModel() {
 
     private val state = MutableStateFlow(AnimalState(animalId = animalId))
-    private val currentState get() = state.value
     val viewState: Flow<AnimalViewState?> = combine(
         observeWorldBoundsUseCase.run().flowOn(dispatcherProvider.default),
         observeBuildingsUseCase.run().flowOn(dispatcherProvider.default),
@@ -61,7 +61,7 @@ internal class AnimalViewModel(
         observeUserPositionUseCase.run().map(this::getPaths).flowOn(dispatcherProvider.default),
         state,
         mapper::from,
-    )
+    ).flowOnBackground()
 
     init {
         launchInBackground {
@@ -92,26 +92,26 @@ internal class AnimalViewModel(
     private suspend fun getPaths(
         position: PointD
     ): List<MapItemEntity.PathEntity> {
-        return currentState.animalPositions
+        return state.value.animalPositions
             .map { getShortestPathUseCase.run(position, it) }
             .map { MapItemEntity.PathEntity(it) }
     }
 
     fun onWikiClicked(router: AnimalRouter) {
-        router.navigateToWiki(checkNotNull(currentState.animal).wiki)
+        router.navigateToWiki(checkNotNull(state.value.animal).wiki)
     }
 
     fun onWebClicked(router: AnimalRouter) {
-        router.navigateToWeb(checkNotNull(currentState.animal).web)
+        router.navigateToWeb(checkNotNull(state.value.animal).web)
     }
 
     fun onNavClicked(router: AnimalRouter, regionId: RegionId? = null) {
-        router.navigateToMap(checkNotNull(currentState.animal).id, regionId)
+        router.navigateToMap(checkNotNull(state.value.animal).id, regionId)
     }
 
     fun onFavoriteClicked() {
-        val isFavorite = (currentState.isFavorite ?: false).not()
-        val animalId = currentState.animalId
+        val isFavorite = (state.value.isFavorite ?: false).not()
+        val animalId = state.value.animalId
 
         launchInBackground {
             state.reduceOnMain { copy(isFavorite = isFavorite) }
