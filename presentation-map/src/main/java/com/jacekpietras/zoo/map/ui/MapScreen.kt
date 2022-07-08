@@ -46,7 +46,6 @@ import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
-import com.jacekpietras.zoo.map.utils.observe
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
@@ -96,11 +95,14 @@ fun MapScreen(
     viewModel.mapWorldViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
     viewModel.volatileViewState.observe(LocalLifecycleOwner.current) { mapLogic.applyToMap(it) }
 
-    viewModel.effect.observe(LocalLifecycleOwner.current) {
-        when (it) {
-            is ShowToast -> toast(context, it.text)
-            is CenterAtUser -> mapLogic.centerAtUserPosition()
-            is CenterAtPoint -> mapLogic.centerAtPoint(it.point)
+    viewModel.effects.observe(LocalLifecycleOwner.current) {
+        if (it.isNotEmpty()) {
+            when (val effect = it.first()) {
+                is ShowToast -> toast(context, effect.text)
+                is CenterAtUser -> mapLogic.centerAtUserPosition()
+                is CenterAtPoint -> mapLogic.centerAtPoint(effect.point)
+            }
+            viewModel.consumeEffect()
         }
     }
 

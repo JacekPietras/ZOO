@@ -9,13 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
-import com.jacekpietras.zoo.core.dispatcher.launchInMain
 import com.jacekpietras.zoo.core.dispatcher.onBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
-import com.jacekpietras.zoo.map.utils.NullSafeMutableLiveData
-import com.jacekpietras.zoo.map.utils.mapInBackground
-import com.jacekpietras.zoo.map.utils.reduce
-import com.jacekpietras.zoo.map.utils.reduceOnMain
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
@@ -36,12 +31,12 @@ import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
 import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
 import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.model.AnimalEntity
@@ -62,16 +57,17 @@ import com.jacekpietras.zoo.map.model.MapWorldState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
+import com.jacekpietras.zoo.map.utils.NullSafeMutableLiveData
 import com.jacekpietras.zoo.map.utils.combine
+import com.jacekpietras.zoo.map.utils.mapInBackground
+import com.jacekpietras.zoo.map.utils.reduce
+import com.jacekpietras.zoo.map.utils.reduceOnMain
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.plus
 
 internal class MapViewModel(
@@ -112,6 +108,8 @@ internal class MapViewModel(
     private val trackingServiceStarter: TrackingServiceStarter,
 ) : ViewModel() {
 
+    val effects = NullSafeMutableLiveData<List<MapEffect>>(emptyList())
+
     private val state = NullSafeMutableLiveData(MapState())
     private val currentState get() = checkNotNull(state.value)
     val viewState: LiveData<MapViewState> = state.map(mapper::from)
@@ -136,8 +134,8 @@ internal class MapViewModel(
     private val mapWorldState = NullSafeMutableLiveData(MapWorldState())
     var mapWorldViewState: LiveData<MapWorldViewState> = mapWorldState.mapInBackground(mapper::from)
 
-    private val _effect = Channel<MapEffect>()
-    val effect: Flow<MapEffect> = _effect.receiveAsFlow()
+//    private val _effect = Channel<MapEffect>()
+//    val effect: Flow<MapEffect> = _effect.receiveAsFlow()
 
     init {
         launchInBackground {
@@ -248,9 +246,7 @@ internal class MapViewModel(
         try {
             uploadHistoryUseCase.run()
         } catch (ignored: UploadHistoryUseCase.UploadFailed) {
-            launchInMain {
-                _effect.send(MapEffect.ShowToast(RichText("Upload failed")))
-            }
+            sendEffect(MapEffect.ShowToast(RichText("Upload failed")))
         }
     }
 
@@ -301,16 +297,12 @@ internal class MapViewModel(
     }
 
     private fun onMyLocationClicked() {
-        launchInMain {
-            _effect.send(MapEffect.CenterAtUser)
-        }
+        sendEffect(MapEffect.CenterAtUser)
     }
 
     private fun onLocationDenied() {
         if (BuildConfig.DEBUG) {
-            launchInMain {
-                _effect.send(MapEffect.ShowToast(RichText(R.string.location_denied)))
-            }
+            sendEffect(MapEffect.ShowToast(RichText(R.string.location_denied)))
         }
     }
 
@@ -391,7 +383,7 @@ internal class MapViewModel(
                     }
                 } else {
                     state.reduce { copy(isToolbarOpened = false) }
-                    _effect.send(MapEffect.ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
+                    sendEffect(MapEffect.ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
                 }
             }
         }
@@ -406,5 +398,13 @@ internal class MapViewModel(
 
     fun onStopEvent() {
         stopCompassUseCase.run()
+    }
+
+    fun consumeEffect() {
+        effects.value = effects.value.drop(1)
+    }
+
+    private fun sendEffect(effect: MapEffect) {
+        effects.value += effect
     }
 }
