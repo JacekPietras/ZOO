@@ -4,6 +4,7 @@ import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Region
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 class ObserveRegionsWithAnimalsInUserPositionUseCase(
     private val observeRegionsInUserPositionUseCase: ObserveRegionsInUserPositionUseCase,
@@ -17,4 +18,5 @@ class ObserveRegionsWithAnimalsInUserPositionUseCase(
                     .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
                     .filter { (_, animals) -> animals.isNotEmpty() }
             }
+            .onStart { emit(emptyList()) }
 }

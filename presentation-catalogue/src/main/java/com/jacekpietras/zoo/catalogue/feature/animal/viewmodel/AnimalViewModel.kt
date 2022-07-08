@@ -8,7 +8,6 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.catalogue.utils.combine
 import com.jacekpietras.zoo.catalogue.utils.reduceOnMain
-import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalPositionUseCase
@@ -29,10 +28,10 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 internal class AnimalViewModel(
     animalId: AnimalId,
@@ -54,11 +53,11 @@ internal class AnimalViewModel(
 
     private val state = MutableStateFlow(AnimalState(animalId = animalId))
     val viewState: Flow<AnimalViewState?> = combine(
-        observeWorldBoundsUseCase.run().flowOn(dispatcherProvider.default),
-        observeBuildingsUseCase.run().flowOn(dispatcherProvider.default),
-        observeAviaryUseCase.run().flowOn(dispatcherProvider.default),
-        observeRoadsUseCase.run().flowOn(dispatcherProvider.default),
-        observeUserPositionUseCase.run().map(this::getPaths).flowOn(dispatcherProvider.default),
+        observeWorldBoundsUseCase.run(),
+        observeBuildingsUseCase.run(),
+        observeAviaryUseCase.run(),
+        observeRoadsUseCase.run(),
+        observeUserPositionUseCase.run().map(this::getPaths).onStart { emit(emptyList()) },
         state,
         mapper::from,
     ).flowOnBackground()

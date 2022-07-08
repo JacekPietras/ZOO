@@ -37,6 +37,7 @@ class ObserveSuggestedThemeTypeUseCase(
                     ThemeType.DAY
                 }
             }
+            .onStart { emit(ThemeType.DAY) }
             .distinctUntilChanged()
             .onCompletion { stopLightSensorUseCase.run() }
     }

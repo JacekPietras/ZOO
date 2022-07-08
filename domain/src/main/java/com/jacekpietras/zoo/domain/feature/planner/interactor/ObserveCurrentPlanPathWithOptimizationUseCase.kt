@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.feature.planner.interactor
 import com.jacekpietras.geometry.PointD
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 class ObserveCurrentPlanPathWithOptimizationUseCase(
     private val observeCurrentPlanWithOptimizationUseCase: ObserveCurrentPlanWithOptimizationUseCase,
@@ -11,4 +12,5 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     fun run(): Flow<List<PointD>> =
         observeCurrentPlanWithOptimizationUseCase.run()
             .map { (_, path) -> path }
+            .onStart { emit(emptyList()) }
 }
