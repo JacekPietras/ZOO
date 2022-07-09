@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.domain.feature.pathfinder.interactor
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
-import com.jacekpietras.zoo.domain.interactor.ObserveUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
 import kotlinx.coroutines.flow.firstOrNull
 
 internal class GetShortestPathFromUserUseCaseImpl(

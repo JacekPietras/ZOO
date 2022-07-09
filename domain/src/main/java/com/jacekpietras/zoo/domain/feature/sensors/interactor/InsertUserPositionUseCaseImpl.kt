@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.interactor
+package com.jacekpietras.zoo.domain.feature.sensors.interactor
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
@@ -7,7 +7,6 @@ import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.PathListSnapper
 import com.jacekpietras.zoo.domain.feature.pathfinder.PathSnapper
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopNavigationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import kotlinx.coroutines.CoroutineScope

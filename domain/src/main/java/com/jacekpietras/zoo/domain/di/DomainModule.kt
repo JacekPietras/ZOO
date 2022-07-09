@@ -6,6 +6,10 @@ import com.jacekpietras.zoo.domain.feature.map.di.mapModule
 import com.jacekpietras.zoo.domain.feature.pathfinder.di.pathFinderModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.feature.sensors.di.sensorsModule
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.InsertUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.InsertUserPositionUseCaseImpl
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.feature.tsp.di.tspModule
 import com.jacekpietras.zoo.domain.interactor.*
 import org.koin.dsl.module

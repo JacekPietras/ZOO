@@ -30,9 +30,9 @@ import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
-import com.jacekpietras.zoo.domain.interactor.UploadHistoryUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.Region

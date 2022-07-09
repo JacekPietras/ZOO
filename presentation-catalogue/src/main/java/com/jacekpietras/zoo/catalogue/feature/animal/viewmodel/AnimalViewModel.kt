@@ -23,7 +23,7 @@ import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddAnimalToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveAnimalFromCurrentPlanUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.Flow

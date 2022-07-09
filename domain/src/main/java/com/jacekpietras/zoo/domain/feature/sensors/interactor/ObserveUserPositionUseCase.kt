@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.interactor
+package com.jacekpietras.zoo.domain.feature.sensors.interactor
 
 import android.text.format.DateUtils.HOUR_IN_MILLIS
 import com.jacekpietras.geometry.PointD

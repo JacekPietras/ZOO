@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.interactor
+package com.jacekpietras.zoo.domain.feature.sensors.interactor
 
 import com.jacekpietras.zoo.domain.feature.mail.gateway.MailGateway
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
