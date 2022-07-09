@@ -27,4 +27,5 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$navigation_version"
     implementation "androidx.activity:activity-compose:$compose_activity_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_viewmodel_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:$immutable_collections_version"
 }

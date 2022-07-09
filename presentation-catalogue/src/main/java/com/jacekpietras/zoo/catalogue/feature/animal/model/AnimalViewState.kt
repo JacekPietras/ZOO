@@ -1,9 +1,11 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.model
 
+import androidx.compose.runtime.Immutable
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.zoo.core.text.RichText
 
+@Immutable
 internal data class AnimalViewState(
     val title: RichText,
     val subTitle: RichText,

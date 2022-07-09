@@ -28,6 +28,7 @@ import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.random.Random
 
 internal class MapViewStateMapper {
@@ -67,11 +68,12 @@ internal class MapViewStateMapper {
                     }
                 is MapToolbarMode.SelectedRegionMode -> getCarousel(toolbarMode.regionsWithAnimals)
                 else -> emptyList()
-            },
+            }.toImmutableList(),
             isMapActionsVisible = !isToolbarOpened,
             mapActions = MapAction.values().asList()
                 .filterOutNavigationActions(isValidLocation)
-                .filterOutDebugActions(),
+                .filterOutDebugActions()
+                .toImmutableList(),
         )
     }
 
@@ -89,7 +91,7 @@ internal class MapViewStateMapper {
             if (BuildConfig.DEBUG) {
                 it
             } else {
-                it - MapAction.UPLOAD
+                it - actionsWhenDebug
             }
         }
 
@@ -118,7 +120,7 @@ internal class MapViewStateMapper {
                 },
                 fromPoint(userPosition, userPositionPaint),
                 fromPoint(snappedPoint, snappedPointPaint),
-            ),
+            ).toImmutableList(),
         )
     }
 
