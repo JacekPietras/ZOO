@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
@@ -27,16 +28,19 @@ class AnimalRepositoryImpl(
 ) : AnimalRepository {
 
     private val animalFlow = MutableStateFlow<List<AnimalEntity>>(emptyList())
+    private val mutex = Mutex()
 
     override suspend fun loadAnimals() {
         withContext(Dispatchers.IO) {
-            if (storedAnimals.isEmpty()) {
-                storedAnimals = context.resources.openRawResource(R.raw.animals)
-                    .bufferedReader()
-                    .readText()
-                    .parseJsonAnimals()
-                    .sortedBy { it.name }
-                animalFlow.value = storedAnimals
+            mutex.lock {
+                if (storedAnimals.isEmpty()) {
+                    storedAnimals = context.resources.openRawResource(R.raw.animals)
+                        .bufferedReader()
+                        .readText()
+                        .parseJsonAnimals()
+                        .sortedBy { it.name }
+                    animalFlow.value = storedAnimals
+                }
             }
         }
     }
