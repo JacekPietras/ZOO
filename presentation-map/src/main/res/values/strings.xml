@@ -11,4 +11,5 @@
     <string name="restaurant">Restaurant</string>
     <string name="exit">Exit</string>
     <string name="cannot_find_near">Cannot find near %s</string>
+    <string name="outside_world_warning">You are outside ZOO</string>
 </resources>

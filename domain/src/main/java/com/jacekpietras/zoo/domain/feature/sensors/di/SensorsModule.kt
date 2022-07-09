@@ -44,4 +44,31 @@ val sensorsModule = module {
             gpsRepository = get(),
         )
     }
+    factory {
+        ObserveUserPositionUseCase(
+            gpsRepository = get(),
+        )
+    }
+    factory<InsertUserPositionUseCase> {
+        InsertUserPositionUseCaseImpl(
+            gpsRepository = get(),
+            mapRepository = get(),
+            worldBoundsUseCase = get(),
+            stopNavigationUseCase = get(),
+            pathListSnapper = get(),
+            pathSnapper = get(),
+            gpsEventsRepository = get(),
+        )
+    }
+    factory {
+        UploadHistoryUseCase(
+            mailGateway = get(),
+            gpsRepository = get(),
+        )
+    }
+    factory {
+        ObserveOutsideWorldEventUseCase(
+            gpsEventsRepository = get(),
+        )
+    }
 }

@@ -19,9 +19,12 @@ import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseC
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveOutsideWorldEventUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
@@ -30,9 +33,7 @@ import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.Region
@@ -90,6 +91,7 @@ internal class MapViewModel(
     loadMapUseCase: LoadMapUseCase,
     loadVisitedRouteUseCase: LoadVisitedRouteUseCase,
     observeRegionsWithAnimalsInUserPositionUseCase: ObserveRegionsWithAnimalsInUserPositionUseCase,
+    observeOutsideWorldEventUseCase: ObserveOutsideWorldEventUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
@@ -155,6 +157,10 @@ internal class MapViewModel(
                     }
                 }
             }
+            .launchIn(viewModelScope + dispatcherProvider.default)
+
+        observeOutsideWorldEventUseCase.run()
+            .onEach { sendEffect(ShowToast(RichText(R.string.outside_world_warning))) }
             .launchIn(viewModelScope + dispatcherProvider.default)
     }
 

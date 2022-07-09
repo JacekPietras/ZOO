@@ -9,6 +9,7 @@ import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.PathListSnapper
 import com.jacekpietras.zoo.domain.feature.pathfinder.PathSnapper
 import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsEventsRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,7 @@ internal class InsertUserPositionUseCaseImpl(
     private val stopNavigationUseCase: StopNavigationUseCase,
     private val pathListSnapper: PathListSnapper,
     private val pathSnapper: PathSnapper,
+    private val gpsEventsRepository: GpsEventsRepository,
 ) : InsertUserPositionUseCase {
 
     override fun run(position: GpsHistoryEntity) {
@@ -38,6 +40,7 @@ internal class InsertUserPositionUseCaseImpl(
                 )
                 if (distanceToWorld > FAR_FROM_WORLD) {
                     stopNavigationUseCase.run()
+                    gpsEventsRepository.insertOutsideWorldEvent()
                 }
             }
         }

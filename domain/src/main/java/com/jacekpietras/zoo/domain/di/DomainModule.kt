@@ -99,27 +99,6 @@ val domainModule = module {
         )
     }
     factory {
-        ObserveUserPositionUseCase(
-            gpsRepository = get(),
-        )
-    }
-    factory<InsertUserPositionUseCase> {
-        InsertUserPositionUseCaseImpl(
-            gpsRepository = get(),
-            mapRepository = get(),
-            worldBoundsUseCase = get(),
-            stopNavigationUseCase = get(),
-            pathListSnapper = get(),
-            pathSnapper = get(),
-        )
-    }
-    factory {
-        UploadHistoryUseCase(
-            mailGateway = get(),
-            gpsRepository = get(),
-        )
-    }
-    factory {
         IsRegionSeenUseCase(
             mapRepository = get(),
         )

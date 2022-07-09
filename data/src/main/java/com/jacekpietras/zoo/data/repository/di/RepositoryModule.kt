@@ -1,13 +1,27 @@
 package com.jacekpietras.zoo.data.repository.di
 
-import com.jacekpietras.zoo.data.cache.di.*
+import com.jacekpietras.zoo.data.cache.di.COMPASS_ENABLED
+import com.jacekpietras.zoo.data.cache.di.LIGHT_SENSOR_ENABLED
+import com.jacekpietras.zoo.data.cache.di.MAP_AVIARY
+import com.jacekpietras.zoo.data.cache.di.MAP_BUILDINGS
+import com.jacekpietras.zoo.data.cache.di.MAP_LINES
+import com.jacekpietras.zoo.data.cache.di.MAP_ROADS
+import com.jacekpietras.zoo.data.cache.di.MAP_TECHNICAL
+import com.jacekpietras.zoo.data.cache.di.MAP_VISITED_ROADS
+import com.jacekpietras.zoo.data.cache.di.NAVIGATION_ENABLED
 import com.jacekpietras.zoo.data.database.ZooDatabase
 import com.jacekpietras.zoo.data.parser.RegionIdAdapter
-import com.jacekpietras.zoo.data.repository.*
+import com.jacekpietras.zoo.data.repository.AnimalRepositoryImpl
+import com.jacekpietras.zoo.data.repository.FavoritesRepositoryImpl
+import com.jacekpietras.zoo.data.repository.GpsEventsRepositoryImpl
+import com.jacekpietras.zoo.data.repository.GpsRepositoryImpl
+import com.jacekpietras.zoo.data.repository.MapRepositoryImpl
+import com.jacekpietras.zoo.data.repository.PlanRepositoryImpl
 import com.jacekpietras.zoo.domain.feature.animal.repository.AnimalRepository
 import com.jacekpietras.zoo.domain.feature.favorites.repository.FavoritesRepository
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
+import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsEventsRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -47,18 +61,24 @@ internal val repositoryModule = module {
         )
     }
 
+    single<GpsEventsRepository> {
+        GpsEventsRepositoryImpl()
+    }
+
     single<AnimalRepository> {
         AnimalRepositoryImpl(
             context = androidContext(),
             moshi = get(),
         )
     }
-    single<FavoritesRepository> {
+
+    factory<FavoritesRepository> {
         FavoritesRepositoryImpl(
             favoritesDao = get<ZooDatabase>().favoriteDao(),
         )
     }
-    single<PlanRepository> {
+
+    factory<PlanRepository> {
         PlanRepositoryImpl(
             planDao = get<ZooDatabase>().planDao(),
             planMapper = get(),
