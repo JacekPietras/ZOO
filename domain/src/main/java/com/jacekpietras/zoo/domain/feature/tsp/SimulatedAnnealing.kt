@@ -44,12 +44,15 @@ internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
 
     private fun List<T>.makeVariation(
         immutablePositions: List<Int>? = null,
-    ): ArrayList<T> =
-        ArrayList(this).also {
+    ): ArrayList<T> {
+        val minimalSizeToVariate = (immutablePositions?.size ?: 0) + 2
+        if (size < minimalSizeToVariate) throw IllegalStateException("Size $size is too small to make variation with ${immutablePositions?.size} blocked positions")
+        return ArrayList(this).also {
             val a = generateRandomIndex(immutablePositions)
             val b = generateRandomIndex((immutablePositions ?: emptyList()) + a)
             Collections.swap(it, a, b)
         }
+    }
 
     private fun List<T>.generateRandomIndex(ignored: List<Int>?): Int {
         while (true) {

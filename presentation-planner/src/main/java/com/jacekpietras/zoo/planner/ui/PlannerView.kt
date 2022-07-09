@@ -12,7 +12,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,9 +22,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.planner.model.PlannerViewState
-import com.jacekpietras.zoo.planner.utils.ReorderingData
-import com.jacekpietras.zoo.planner.utils.dragOnLongPressToReorder
-import com.jacekpietras.zoo.planner.utils.getAdditionalOffset
+import com.jacekpietras.zoo.planner.reordering.ReorderingData
+import com.jacekpietras.zoo.planner.reordering.dragOnLongPressToReorder
+import com.jacekpietras.zoo.planner.reordering.getAdditionalOffset
 
 @Composable
 internal fun PlannerView(

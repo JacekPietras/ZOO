@@ -30,6 +30,7 @@ internal class PlannerViewModel(
 ) : ViewModel() {
 
     private val state = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
+        .flowOnBackground()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val viewState: Flow<PlannerViewState> = state.map(stateMapper::from).flowOnBackground()
 

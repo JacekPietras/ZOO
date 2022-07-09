@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.planner.utils
+package com.jacekpietras.zoo.planner.reordering
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
