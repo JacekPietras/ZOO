@@ -17,7 +17,10 @@ internal interface GpsDao {
     fun observeAll(): Flow<List<GpsHistoryDto>>
 
     @Query("SELECT * FROM gps_history ORDER BY timestamp DESC LIMIT 1")
-    fun getLatest(): Flow<GpsHistoryDto>
+    fun observeLatest(): Flow<GpsHistoryDto>
+
+    @Query("SELECT * FROM gps_history ORDER BY timestamp DESC LIMIT 1")
+    suspend fun getLatest(): GpsHistoryDto?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(position: GpsHistoryDto)

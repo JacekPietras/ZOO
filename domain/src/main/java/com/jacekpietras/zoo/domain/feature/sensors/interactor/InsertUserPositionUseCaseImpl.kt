@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.sensors.interactor
 
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.domain.feature.map.interactor.GetWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
@@ -22,22 +23,12 @@ internal class InsertUserPositionUseCaseImpl(
     private val pathSnapper: PathSnapper,
 ) : InsertUserPositionUseCase {
 
-    // fixme it doesn't have sense in factory created use case...
-    private var lastPosition: GpsHistoryEntity? = null
-
     override fun run(position: GpsHistoryEntity) {
         CoroutineScope(Dispatchers.IO).launch {
             val bounds = worldBoundsUseCase.run()
-            if (bounds.contains(position.lon, position.lat)) {
-                if (lastPosition == null) {
-                    lastPosition = gpsRepository.getAllPositions().lastOrNull()
-                }
-
+            if (bounds.contains(position)) {
                 gpsRepository.insertPosition(position)
-
-                addVisitedPart(lastPosition, position)
-
-                lastPosition = position
+                addVisitedPart(position)
             } else {
                 val distanceToWorld = haversine(
                     bounds.centerX(),
@@ -52,8 +43,8 @@ internal class InsertUserPositionUseCaseImpl(
         }
     }
 
-    private suspend fun addVisitedPart(prev: GpsHistoryEntity?, next: GpsHistoryEntity) {
-        prev ?: return
+    private suspend fun addVisitedPart(next: GpsHistoryEntity) {
+        val prev = gpsRepository.getLatestPosition() ?: return
         if (!mapRepository.areVisitedRoadsCalculated()) return
 
         val path = MapItemEntity.PathEntity(
@@ -68,6 +59,9 @@ internal class InsertUserPositionUseCaseImpl(
         val updated = pathListSnapper.merge(alreadyVisited, snappedEdge)
         mapRepository.updateVisitedRoads(updated)
     }
+
+    private fun RectD.contains(point: GpsHistoryEntity): Boolean =
+        contains(point.lon, point.lat)
 
     private companion object {
 
