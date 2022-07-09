@@ -45,9 +45,10 @@ private fun RowScope.BottomNavigationItemView(
         selected = currentDestination?.hierarchy?.any { it.route == route } == true,
         onClick = {
             navController.navigate(route) {
-                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                popUpTo(navController.graph.findStartDestination().id) {
+                    inclusive = true
+                }
                 launchSingleTop = true
-                restoreState = true
             }
         }
     )
