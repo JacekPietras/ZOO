@@ -64,8 +64,7 @@ internal class AnimalViewModel(
 
     init {
         launchInBackground {
-            val animal = getAnimalUseCase.run(animalId)
-            state.reduceOnMain { copy(animal = animal) }
+            loadAnimal(getAnimalUseCase, animalId)
 
             observeAnimalFavoritesUseCase.run()
                 .onEach { favorites ->
@@ -86,6 +85,14 @@ internal class AnimalViewModel(
                 )
             }
         }
+    }
+
+    private suspend fun loadAnimal(
+        getAnimalUseCase: GetAnimalUseCase,
+        animalId: AnimalId
+    ) {
+        val animal = getAnimalUseCase.run(animalId)
+        state.reduceOnMain { copy(animal = animal) }
     }
 
     private suspend fun getPaths(

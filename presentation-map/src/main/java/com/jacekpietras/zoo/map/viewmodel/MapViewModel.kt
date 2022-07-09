@@ -57,8 +57,7 @@ import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -135,24 +134,14 @@ internal class MapViewModel(
 
     init {
         launchInBackground {
-            listOf(
-                async { loadAnimalsUseCase.run() },
-                async { loadMapUseCase.run() },
-            ).awaitAll()
+            delay(500L)
 
-            val animalIdObj = animalId
-                ?.takeIf { it.isNotBlank() }
-                ?.takeIf { it != "null" }
-                ?.let(::AnimalId)
+            loadMapUseCase.run()
+            loadAnimalsUseCase.run()
 
-            val regionIdObj = regionId
-                ?.takeIf { it.isNotBlank() }
-                ?.takeIf { it != "null" }
-                ?.let(::RegionId)
-
-            if (animalIdObj != null) {
+            animalId.toAnimalId()?.let { animalId ->
                 sendEffect(CenterAtUser)
-                navigationToAnimal(getAnimalUseCase.run(animalIdObj), regionIdObj)
+                navigationToAnimal(getAnimalUseCase.run(animalId), regionId.toRegionId())
             }
 
             loadVisitedRouteUseCase.run()
@@ -174,6 +163,16 @@ internal class MapViewModel(
             }
             .launchIn(viewModelScope + dispatcherProvider.default)
     }
+
+    private fun String?.toAnimalId(): AnimalId? =
+        this?.takeIf { it.isNotBlank() }
+            ?.takeIf { it != "null" }
+            ?.let(::AnimalId)
+
+    private fun String?.toRegionId(): RegionId? =
+        this?.takeIf { it.isNotBlank() }
+            ?.takeIf { it != "null" }
+            ?.let(::RegionId)
 
     private suspend fun navigationToAnimal(animal: AnimalEntity, regionId: RegionId?) {
         val regionIds = if (regionId != null) {

@@ -5,7 +5,6 @@ import com.jacekpietras.zoo.catalogue.feature.list.mapper.CatalogueStateMapper
 import com.jacekpietras.zoo.catalogue.feature.list.mapper.DivisionMapper
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
 import com.jacekpietras.zoo.domain.model.AnimalId
-import com.jacekpietras.zoo.domain.model.RegionId
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -15,7 +14,6 @@ val catalogueModule = module {
         CatalogueViewModel(
             regionId = params[0],
             observeFilteredAnimalsUseCase = get(),
-            loadAnimalsUseCase = get(),
             stateMapper = get(),
             divisionMapper = get(),
         )

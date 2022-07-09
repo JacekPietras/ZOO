@@ -6,6 +6,7 @@ class LoadAnimalsUseCase(
     private val animalRepository: AnimalRepository,
 ) {
 
-    suspend fun run() =
-        animalRepository.scrapTestAnimals()
+    suspend fun run() {
+        animalRepository.loadAnimals()
+    }
 }

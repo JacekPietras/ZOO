@@ -25,7 +25,7 @@ class AnimalRepositoryImpl(
 
     private val animalFlow = MutableStateFlow<List<AnimalEntity>>(emptyList())
 
-    override suspend fun scrapTestAnimals() {
+    override suspend fun loadAnimals() {
         withContext(Dispatchers.IO) {
             if (storedAnimals.isEmpty()) {
                 storedAnimals = context.resources.openRawResource(R.raw.animals)

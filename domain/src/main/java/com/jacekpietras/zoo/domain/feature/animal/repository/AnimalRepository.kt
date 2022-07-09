@@ -11,7 +11,7 @@ interface AnimalRepository {
 
     suspend fun scrapAllAnimals()
 
-    suspend fun scrapTestAnimals()
+    suspend fun loadAnimals()
 
     fun getAnimals(regionId: RegionId): List<AnimalEntity>
 
