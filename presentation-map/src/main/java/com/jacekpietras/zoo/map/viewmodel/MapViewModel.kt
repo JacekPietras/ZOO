@@ -57,7 +57,6 @@ import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -134,8 +133,6 @@ internal class MapViewModel(
 
     init {
         launchInBackground {
-            delay(500L)
-
             loadMapUseCase.run()
             loadAnimalsUseCase.run()
 
