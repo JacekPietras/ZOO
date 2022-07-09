@@ -35,7 +35,6 @@ val mapModule = module {
             observeUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
             getShortestPathUseCase = get(),
-            loadAnimalsUseCase = get(),
             observeRegionsWithAnimalsInUserPositionUseCase = get(),
             getAnimalUseCase = get(),
             findNearRegionWithDistance = get(),

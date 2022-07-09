@@ -23,7 +23,7 @@ class ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase(
                     }
             }
 
-    private fun Stage.getAnimals(favorites: List<AnimalId>): List<AnimalEntity> =
+    private suspend fun Stage.getAnimals(favorites: List<AnimalId>): List<AnimalEntity> =
         if (this is Stage.InRegion) {
             getAnimalsInRegionUseCase.run(region.id)
                 .filter { animal -> favorites.contains(animal.id) }

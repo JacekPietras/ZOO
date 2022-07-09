@@ -8,6 +8,8 @@ class GetAnimalsInRegionUseCase(
     private val animalRepository: AnimalRepository,
 ) {
 
-    fun run(regionId: RegionId): List<AnimalEntity> =
-        animalRepository.getAnimals(regionId)
+    suspend fun run(regionId: RegionId): List<AnimalEntity> {
+        animalRepository.loadAnimals()
+        return animalRepository.getAnimals(regionId)
+    }
 }

@@ -7,7 +7,10 @@ import com.jacekpietras.zoo.data.parser.AnimalWebParser
 import com.jacekpietras.zoo.data.parser.makeStreamFromUrl
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalFilter
 import com.jacekpietras.zoo.domain.feature.animal.repository.AnimalRepository
-import com.jacekpietras.zoo.domain.model.*
+import com.jacekpietras.zoo.domain.model.AnimalEntity
+import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.domain.model.divisionFromPolishTag
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -78,13 +81,6 @@ class AnimalRepositoryImpl(
     override fun getAnimals(regionId: RegionId): List<AnimalEntity> =
         storedAnimals.filter { it.regionInZoo.contains(regionId) }
 
-    override fun getAnimals(division: Division?): List<AnimalEntity> =
-        if (division == null) {
-            storedAnimals
-        } else {
-            storedAnimals.filter { it.division == division }
-        }
-
     override fun observeAnimals(filter: AnimalFilter): Flow<List<AnimalEntity>> =
         animalFlow
             .map {
@@ -116,7 +112,7 @@ class AnimalRepositoryImpl(
 
     private fun String.parseJsonAnimals(): List<AnimalEntity> =
         animalJsonAdapter.fromJson(this)
-            ?.map{
+            ?.map {
                 it.copy(
                     occurrence = it.occurrence.correctSpecialCharacters(),
                     environment = it.environment.correctSpecialCharacters(),

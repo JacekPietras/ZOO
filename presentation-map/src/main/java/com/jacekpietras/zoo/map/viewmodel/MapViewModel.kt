@@ -9,7 +9,6 @@ import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
-import com.jacekpietras.zoo.domain.feature.animal.interactor.LoadAnimalsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveBuildingsUseCase
@@ -88,7 +87,6 @@ internal class MapViewModel(
     observeMapLinesUseCase: ObserveMapLinesUseCase,
     observeVisitedRoadsUseCase: ObserveVisitedRoadsUseCase,
 
-    loadAnimalsUseCase: LoadAnimalsUseCase,
     loadMapUseCase: LoadMapUseCase,
     loadVisitedRouteUseCase: LoadVisitedRouteUseCase,
     observeRegionsWithAnimalsInUserPositionUseCase: ObserveRegionsWithAnimalsInUserPositionUseCase,
@@ -134,7 +132,6 @@ internal class MapViewModel(
     init {
         launchInBackground {
             loadMapUseCase.run()
-            loadAnimalsUseCase.run()
 
             animalId.toAnimalId()?.let { animalId ->
                 sendEffect(CenterAtUser)
