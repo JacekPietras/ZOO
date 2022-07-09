@@ -1124,25 +1124,6 @@
 		"regionInZoo": [ "egzotarium" ],
 		"photos": []
 	},
-		{
-    		"id": {
-    			"id": "scynk-wielki"
-    		},
-    		"language": "pl",
-    		"name": "Scynk Wielki",
-    		"nameLatin": "Tiliqua gigas",
-    		"occurrence": "Nowa Gwinea i okoliczne wyspy.",
-    		"environment": "Preferuje suche, ciepłe i urozmaicone środowiska.",
-    		"food": "Wszystkożerny. Jego pokarm stanowią ślimaki, stawonogi, mniejsze jaszczurki, padlina.",
-    		"division": "REPTILE",
-    		"multiplication": "",
-    		"protectionAndThreats": "",
-    		"facts": "Osiąga około 50 cm długości",
-    		"wiki": "https://pl.wikipedia.org/wiki/Tiliqua",
-    		"web": "",
-    		"regionInZoo": [ "egzotarium" ],
-    		"photos": []
-    	},
 	{
 		"id": {
 			"id": "ptasznik-kedzierzawy"
