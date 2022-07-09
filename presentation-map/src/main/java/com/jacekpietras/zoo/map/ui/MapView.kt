@@ -43,37 +43,14 @@ internal fun MapView(
     onMapActionClicked: (MapAction) -> Unit,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
-    if (viewState == null) return
-
     Column {
-        AnimatedVisibility(
-            visibleState = remember { MutableTransitionState(false) }
-                .apply { targetState = viewState.isGuidanceShown },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            var size by remember { mutableStateOf(Size.Zero) }
-
-            ClosableToolbarView(
-                modifier = Modifier
-                    .onSizeChanged {
-                        size = it.toSize()
-                    },
-                isSwipable = true,
-                title = viewState.title,
-                isBackArrowShown = viewState.isBackArrowShown,
-                onBack = onBack,
-                onClose = onClose,
-            ) {
-
-                val carouselItemWidth: Dp = (with(LocalDensity.current) { (size.width).toDp() } - 32.dp) / 3.5f
-                ImageCarouselView(
-                    viewState.mapCarouselItems,
-                    carouselItemWidth,
-                    onAnimalClicked = onAnimalClicked,
-                    onRegionClicked = onRegionClicked,
-                )
-            }
-        }
+        MapToolbar(
+            viewState = viewState,
+            onBack = onBack,
+            onClose = onClose,
+            onAnimalClicked = onAnimalClicked,
+            onRegionClicked = onRegionClicked,
+        )
         Box(modifier = Modifier) {
             ComposableMapView(
                 modifier = Modifier.fillMaxSize(),
@@ -83,8 +60,8 @@ internal fun MapView(
                 mapList = mapList,
             )
             ActionChips(
-                isVisible = viewState.isMapActionsVisible,
-                mapActions = viewState.mapActions,
+                isVisible = viewState?.isMapActionsVisible ?: false,
+                mapActions = viewState?.mapActions ?: emptyList(),
                 onMapActionClicked = onMapActionClicked,
             )
             ActionButtons(
@@ -92,6 +69,46 @@ internal fun MapView(
                     .align(Alignment.BottomEnd),
                 onCameraClicked = onCameraClicked,
                 onLocationClicked = onLocationClicked,
+            )
+        }
+    }
+}
+
+@Composable
+private fun MapToolbar(
+    viewState: MapViewState?,
+    onBack: () -> Unit,
+    onClose: () -> Unit,
+    onAnimalClicked: (AnimalId) -> Unit,
+    onRegionClicked: (RegionId) -> Unit
+) {
+    if (viewState == null) return
+
+    AnimatedVisibility(
+        visibleState = remember { MutableTransitionState(false) }
+            .apply { targetState = viewState.isGuidanceShown },
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        var size by remember { mutableStateOf(Size.Zero) }
+
+        ClosableToolbarView(
+            modifier = Modifier
+                .onSizeChanged {
+                    size = it.toSize()
+                },
+            isSwipable = true,
+            title = viewState.title,
+            isBackArrowShown = viewState.isBackArrowShown,
+            onBack = onBack,
+            onClose = onClose,
+        ) {
+
+            val carouselItemWidth: Dp = (with(LocalDensity.current) { (size.width).toDp() } - 32.dp) / 3.5f
+            ImageCarouselView(
+                viewState.mapCarouselItems,
+                carouselItemWidth,
+                onAnimalClicked = onAnimalClicked,
+                onRegionClicked = onRegionClicked,
             )
         }
     }
