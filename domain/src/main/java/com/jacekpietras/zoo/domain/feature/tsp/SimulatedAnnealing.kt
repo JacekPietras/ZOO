@@ -16,6 +16,10 @@ internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
             Timber.d("Optimization cannot be done, not enough points ${points.size}")
             return points.distance(distanceCalculation) to points
         }
+        if (points.size - (immutablePositions?.size ?: 0) <= 2) {
+            Timber.d("Optimization cannot be done, not enough points ${points.size} (${immutablePositions?.size} is blocked)")
+            return points.distance(distanceCalculation) to points
+        }
 
         var t = startingTemperature
         var i = 0
