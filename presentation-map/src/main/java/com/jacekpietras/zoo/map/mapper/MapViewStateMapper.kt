@@ -39,6 +39,8 @@ internal class MapViewStateMapper {
         suggestedThemeType: ThemeType,
         regionsWithAnimalsInUserPosition: List<Pair<Region, List<AnimalEntity>>>,
     ): MapViewState = with(state) {
+        val isValidLocation = userPosition != PointD()
+
         MapViewState(
             isGuidanceShown = isToolbarOpened,
             isNightThemeSuggested = suggestedThemeType == ThemeType.NIGHT,
@@ -67,10 +69,29 @@ internal class MapViewStateMapper {
                 else -> emptyList()
             },
             isMapActionsVisible = !isToolbarOpened,
-            mapActions = MapAction.values()
-                .filter { BuildConfig.DEBUG || it != MapAction.UPLOAD },
+            mapActions = MapAction.values().asList()
+                .filterOutNavigationActions(isValidLocation)
+                .filterOutDebugActions(),
         )
     }
+
+    private fun List<MapAction>.filterOutNavigationActions(isValidLocation: Boolean): List<MapAction> =
+        let {
+            if (isValidLocation) {
+                it
+            } else {
+                it - actionsWithNavigation
+            }
+        }
+
+    private fun List<MapAction>.filterOutDebugActions(): List<MapAction> =
+        let {
+            if (BuildConfig.DEBUG) {
+                it
+            } else {
+                it - MapAction.UPLOAD
+            }
+        }
 
     private fun Double?.metersToText() =
         this?.let { distance ->
@@ -219,6 +240,16 @@ internal class MapViewStateMapper {
         AnimalDivisionValue.valueOf(name)
 
     private companion object {
+
+        val actionsWhenDebug = listOf(
+            MapAction.UPLOAD,
+        )
+        val actionsWithNavigation = listOf(
+            MapAction.AROUND_YOU,
+            MapAction.WC,
+            MapAction.RESTAURANT,
+            MapAction.EXIT,
+        )
 
         val buildingPaint: MapPaint = MapPaint.FillWithBorder(
             fillColor = MapColor.Attribute(R.attr.colorMapBuilding),

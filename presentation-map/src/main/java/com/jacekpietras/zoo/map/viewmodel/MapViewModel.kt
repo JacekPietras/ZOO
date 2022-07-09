@@ -161,6 +161,7 @@ internal class MapViewModel(
         observeUserPositionUseCase.run()
             .onEach {
                 volatileState.reduceOnMain { copy(userPosition = it) }
+                state.reduceOnMain { copy(userPosition = it) }
                 with(state.value) {
                     if (isToolbarOpened) {
                         when (toolbarMode) {
