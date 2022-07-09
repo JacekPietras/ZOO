@@ -3,7 +3,6 @@ package com.jacekpietras.zoo.map.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -43,7 +42,14 @@ internal fun MapView(
     onMapActionClicked: (MapAction) -> Unit,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
-    Column {
+    Box {
+        ComposableMapView(
+            modifier = Modifier.fillMaxSize(),
+            onSizeChanged = onSizeChanged,
+            onClick = onClick,
+            onTransform = onTransform,
+            mapList = mapList,
+        )
         MapToolbar(
             viewState = viewState,
             onBack = onBack,
@@ -51,26 +57,17 @@ internal fun MapView(
             onAnimalClicked = onAnimalClicked,
             onRegionClicked = onRegionClicked,
         )
-        Box(modifier = Modifier) {
-            ComposableMapView(
-                modifier = Modifier.fillMaxSize(),
-                onSizeChanged = onSizeChanged,
-                onClick = onClick,
-                onTransform = onTransform,
-                mapList = mapList,
-            )
-            ActionChips(
-                isVisible = viewState?.isMapActionsVisible ?: false,
-                mapActions = viewState?.mapActions ?: emptyList(),
-                onMapActionClicked = onMapActionClicked,
-            )
-            ActionButtons(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd),
-                onCameraClicked = onCameraClicked,
-                onLocationClicked = onLocationClicked,
-            )
-        }
+        ActionChips(
+            isVisible = viewState?.isMapActionsVisible ?: false,
+            mapActions = viewState?.mapActions ?: emptyList(),
+            onMapActionClicked = onMapActionClicked,
+        )
+        ActionButtons(
+            modifier = Modifier
+                .align(Alignment.BottomEnd),
+            onCameraClicked = onCameraClicked,
+            onLocationClicked = onLocationClicked,
+        )
     }
 }
 
