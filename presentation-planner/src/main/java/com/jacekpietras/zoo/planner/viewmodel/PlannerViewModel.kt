@@ -48,15 +48,7 @@ internal class PlannerViewModel(
 
     fun onRemove(regionId: String) {
         launchInBackground {
-            state.value
-                .mapNotNull { (stage, animals) ->
-                    if (stage is Stage.InRegion) {
-                        stage to animals
-                    } else {
-                        null
-                    }
-                }
-                .find { (stage, _) -> stage.region.id.id == regionId }
+            getStageWithRegion(regionId)
                 ?.let { (stage, animals) ->
                     animals.forEach { animal ->
                         setAnimalFavoriteUseCase.run(animal.id, false)
@@ -71,4 +63,15 @@ internal class PlannerViewModel(
             addExitToCurrentPlanUseCase.run()
         }
     }
+
+    private fun getStageWithRegion(regionId: String) =
+        state.value
+            .mapNotNull { (stage, animals) ->
+                if (stage is Stage.InRegion) {
+                    stage to animals
+                } else {
+                    null
+                }
+            }
+            .find { (stage, _) -> stage.region.id.id == regionId }
 }

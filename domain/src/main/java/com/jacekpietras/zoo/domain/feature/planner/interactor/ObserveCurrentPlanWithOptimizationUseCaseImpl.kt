@@ -32,7 +32,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     override fun run(): Flow<Pair<List<Stage>, List<PointD>>> =
         observeCurrentPlanUseCase.run()
-            .distinctUntilChanged { _, new -> new.stages == lastCalculated }
+            .distinctUntilChanged { _, new -> new.stages == lastCalculated && new.stages.size > 2 }
             .moveExitToEnd()
             .combineWithUserPosition()
             .refreshPeriodically(MINUTE)
