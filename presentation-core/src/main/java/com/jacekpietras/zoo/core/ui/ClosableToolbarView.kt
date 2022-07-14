@@ -50,7 +50,7 @@ fun ClosableToolbarView(
             ),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.statusBarsPadding().fillMaxWidth(),
         ) {
             ClosableRowView(
                 isBackArrowShown = isBackArrowShown,

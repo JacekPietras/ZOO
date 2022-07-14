@@ -52,6 +52,7 @@ internal fun AnimalView(
 
     Column(
         modifier = Modifier
+            .statusBarsPadding()
             .verticalScroll(rememberScrollState()),
     ) {
         ImageCarousel(images = viewState.images, contentDescription = viewState.title)

@@ -33,6 +33,7 @@ internal fun ToolbarWithFilters(
     ) {
         Box(
             modifier = Modifier
+                .statusBarsPadding()
                 .height(48.dp)
                 .fillMaxWidth(),
         ) {

@@ -1,7 +1,10 @@
 package com.jacekpietras.zoo.catalogue.feature.list.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import com.jacekpietras.zoo.catalogue.feature.list.model.AnimalDivision
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
@@ -16,7 +19,7 @@ internal fun CatalogueView(
     onFilterClicked: (AnimalDivision) -> Unit,
     onAnimalClicked: (animalId: String) -> Unit,
 ) {
-    Column {
+    Column{
         if (viewState.isRegionShown) {
             ClosableToolbarView(
                 title = viewState.regionName,

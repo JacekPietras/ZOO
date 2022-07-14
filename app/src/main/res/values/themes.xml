@@ -28,8 +28,7 @@
         <item name="colorSmallMapRoad">#FFFFFF</item>
         <item name="colorSmallMapAnimal">#F44336</item>
 
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
 
         <item name="toolbarElevation">4dp</item>

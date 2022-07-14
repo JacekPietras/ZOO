@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +38,9 @@ internal fun PlannerView(
     if (viewState.isEmptyViewVisible) {
         EmptyView()
     }
-    Column {
+    Column(
+        Modifier.statusBarsPadding(),
+    ) {
         PlannerListView(
             modifier = Modifier.weight(1f),
             viewState = viewState,

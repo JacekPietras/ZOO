@@ -53,5 +53,4 @@ dependencies {
 
     //Memory Leak finder
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
-
 }

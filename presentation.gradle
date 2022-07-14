@@ -28,4 +28,7 @@ dependencies {
     implementation "androidx.activity:activity-compose:$compose_activity_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_viewmodel_version"
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:$immutable_collections_version"
+
+    // Insets
+    implementation "androidx.compose.foundation:foundation:$compose_version"
 }
