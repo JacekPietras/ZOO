@@ -260,17 +260,20 @@ class MapViewLogic<T>(
                     pointsToDoubleArray(item.path.vertices),
                     inner,
                     border,
+                    item.minZoom,
                 )
                 is MapItem.PolygonMapItem -> PreparedItem.PreparedPolygonItem(
                     pointsToDoubleArray(item.polygon.vertices),
                     inner,
                     border,
+                    item.minZoom,
                 )
                 is MapItem.CircleMapItem -> PreparedItem.PreparedCircleItem(
                     item.point,
                     item.radius,
                     inner,
                     border,
+                    item.minZoom,
                 )
             }
         }
@@ -385,27 +388,31 @@ class MapViewLogic<T>(
 
     internal sealed class PreparedItem<T>(
         open val paintHolder: PaintHolder<T>,
-        open val outerPaintHolder: PaintHolder<T>? = null,
+        open val outerPaintHolder: PaintHolder<T>?,
+        open val minZoom: Float?,
     ) {
 
         class PreparedPathItem<T>(
             val shape: DoubleArray,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
-        ) : PreparedItem<T>(paintHolder, outerPaintHolder)
+            override val minZoom: Float? = null,
+        ) : PreparedItem<T>(paintHolder, outerPaintHolder, minZoom)
 
         class PreparedPolygonItem<T>(
             val shape: DoubleArray,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
-        ) : PreparedItem<T>(paintHolder, outerPaintHolder)
+            override val minZoom: Float? = null,
+        ) : PreparedItem<T>(paintHolder, outerPaintHolder, minZoom)
 
         class PreparedCircleItem<T>(
             val point: PointD,
             val radius: MapDimension,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
-        ) : PreparedItem<T>(paintHolder, outerPaintHolder)
+            override val minZoom: Float? = null,
+        ) : PreparedItem<T>(paintHolder, outerPaintHolder, minZoom)
     }
 
     sealed class RenderItem<T> {

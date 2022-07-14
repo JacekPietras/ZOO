@@ -137,7 +137,7 @@ internal class MapViewStateMapper {
         mapData = flatListOf(
             fromPaths(technicalRoads, technicalPaint),
             fromPaths(roads, roadPaint),
-            fromPaths(lines, linesPaint),
+            fromPaths(lines, linesPaint, 0.001f),
             fromPolygons(buildings, buildingPaint),
             fromPolygons(aviary, aviaryPaint),
             fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
@@ -146,30 +146,30 @@ internal class MapViewStateMapper {
 
     private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
 
-    private fun fromPolygons(
-        polygons: List<PolygonEntity>,
-        paint: MapPaint
-    ): List<MapItem> =
+    private fun fromPolygons(polygons: List<PolygonEntity>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         polygons.map { polygon ->
             MapItem.PolygonMapItem(
                 PolygonD(polygon.vertices),
                 paint,
+                minZoom,
             )
         }
 
-    private fun fromPath(path: List<PointD>, paint: MapPaint): List<MapItem> =
+    private fun fromPath(path: List<PointD>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         listOf(
             MapItem.PathMapItem(
                 PathD(path),
                 paint,
+                minZoom,
             )
         )
 
-    private fun fromPaths(paths: List<PathEntity>, paint: MapPaint): List<MapItem> =
+    private fun fromPaths(paths: List<PathEntity>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         paths.map { path ->
             MapItem.PathMapItem(
                 PathD(path.vertices),
                 paint,
+                minZoom,
             )
         }
 

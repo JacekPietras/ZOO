@@ -41,7 +41,6 @@ import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.extensions.combine
 import com.jacekpietras.zoo.map.extensions.combineWithIgnoredFlow
 import com.jacekpietras.zoo.map.extensions.reduce
-import com.jacekpietras.zoo.map.extensions.reduce
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
@@ -62,7 +61,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 internal class MapViewModel(
     animalId: String?,

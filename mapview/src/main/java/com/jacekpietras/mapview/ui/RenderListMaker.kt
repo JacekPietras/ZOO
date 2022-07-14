@@ -36,34 +36,40 @@ internal class RenderListMaker<T>(
         preparedList.forEach { item ->
             when (item) {
                 is MapViewLogic.PreparedItem.PreparedPolygonItem -> {
-                    visibleGpsCoordinate
-                        .transformPolygon(item.shape)
-                        ?.withMatrix(matrix, worldRotation)
-                        ?.let { polygon ->
-                            item.addToRender(polygon)
-                        }
+                    if (item.minZoom.isBiggerThanZoom())
+                        visibleGpsCoordinate
+                            .transformPolygon(item.shape)
+                            ?.withMatrix(matrix, worldRotation)
+                            ?.let { polygon ->
+                                item.addToRender(polygon)
+                            }
                 }
                 is MapViewLogic.PreparedItem.PreparedPathItem -> {
-                    visibleGpsCoordinate
-                        .transformPath(item.shape)
-                        .map { it.withMatrix(matrix, worldRotation) }
-                        .forEach { path ->
-                            item.addToRender(path)
-                        }
+                    if (item.minZoom.isBiggerThanZoom())
+                        visibleGpsCoordinate
+                            .transformPath(item.shape)
+                            .map { it.withMatrix(matrix, worldRotation) }
+                            .forEach { path ->
+                                item.addToRender(path)
+                            }
                 }
                 is MapViewLogic.PreparedItem.PreparedCircleItem -> {
-                    visibleGpsCoordinate
-                        .transformPoint(item.point)
-                        .withMatrix(matrix, worldRotation)
-                        .let { path ->
-                            item.addToRender(path)
-                        }
+                    if (item.minZoom.isBiggerThanZoom())
+                        visibleGpsCoordinate
+                            .transformPoint(item.point)
+                            .withMatrix(matrix, worldRotation)
+                            .let { path ->
+                                item.addToRender(path)
+                            }
                 }
             }
         }
 
         return borders + insides
     }
+
+    private fun Float?.isBiggerThanZoom(): Boolean =
+        this == null || this > zoom
 
     private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {
         if (worldRotation != 0f) {
