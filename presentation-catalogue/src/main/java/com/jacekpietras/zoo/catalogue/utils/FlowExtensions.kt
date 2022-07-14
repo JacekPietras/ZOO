@@ -2,10 +2,19 @@ package com.jacekpietras.zoo.catalogue.utils
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
-inline fun <T> MutableStateFlow<T>.reduce(block: T.() -> T) {
+internal inline fun <T> MutableStateFlow<T>.reduce(block: T.() -> T) {
     value = block(value)
 }
+
+internal fun <T> Flow<T>.combineWithIgnoredFlow(ignored: Flow<Any>): Flow<T> =
+    kotlinx.coroutines.flow.combine(
+        this,
+        ignored.filter { false }.map {}.onStart { emit(Unit) },
+    ) { item, _ -> item }
 
 fun <T1, T2, T3, T4, T5, T6, R> combine(
     flow1: Flow<T1>,

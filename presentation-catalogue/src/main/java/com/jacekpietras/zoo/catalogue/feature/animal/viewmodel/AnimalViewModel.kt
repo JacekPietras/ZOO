@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.catalogue.utils.combine
+import com.jacekpietras.zoo.catalogue.utils.combineWithIgnoredFlow
 import com.jacekpietras.zoo.catalogue.utils.reduce
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
@@ -28,17 +29,16 @@ import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 internal class AnimalViewModel(
-    animalId: AnimalId,
+    private val animalId: AnimalId,
     mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
     isAnimalSeenUseCase: IsAnimalSeenUseCase,
-    observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
+    private val observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
     private val addAnimalToCurrentPlanUseCase: AddAnimalToCurrentPlanUseCase,
     private val removeFromCurrentPlanUseCase: RemoveAnimalFromCurrentPlanUseCase,
@@ -60,28 +60,18 @@ internal class AnimalViewModel(
         observeUserPositionUseCase.run().map(this::getPaths).onStart { emit(emptyList()) },
         state,
         mapper::from,
-    ).flowOnBackground()
+    )
+        .combineWithIgnoredFlow(animalFavoritesObservation())
+        .flowOnBackground()
 
     init {
         launchInBackground {
             loadAnimal(getAnimalUseCase, animalId)
 
-            observeAnimalFavoritesUseCase.run()
-                .onEach { favorites ->
-                    val isFavorite = favorites.contains(animalId)
-                    state.reduce {
-                        copy(isFavorite = isFavorite)
-                    }
-                }
-                .launchIn(this)
-
-            val isSeen = isAnimalSeenUseCase.run(animalId)
-            val positions = getAnimalPositionUseCase.run(animalId)
-
             state.reduce {
                 copy(
-                    isSeen = isSeen,
-                    animalPositions = positions,
+                    isSeen = isAnimalSeenUseCase.run(animalId),
+                    animalPositions = getAnimalPositionUseCase.run(animalId),
                 )
             }
         }
@@ -132,4 +122,11 @@ internal class AnimalViewModel(
             }
         }
     }
+
+    private fun animalFavoritesObservation() =
+        observeAnimalFavoritesUseCase.run()
+            .onEach { favorites ->
+                val isFavorite = favorites.contains(animalId)
+                state.reduce { copy(isFavorite = isFavorite) }
+            }
 }

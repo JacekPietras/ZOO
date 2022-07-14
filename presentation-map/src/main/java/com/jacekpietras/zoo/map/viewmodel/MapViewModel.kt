@@ -39,6 +39,7 @@ import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.extensions.combine
+import com.jacekpietras.zoo.map.extensions.combineWithIgnoredFlow
 import com.jacekpietras.zoo.map.extensions.reduce
 import com.jacekpietras.zoo.map.extensions.reduce
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
@@ -372,10 +373,4 @@ internal class MapViewModel(
                 state.reduce { copy(userPosition = PointD()) }
                 sendEffect(ShowToast(RichText(R.string.outside_world_warning)))
             }
-
-    private fun <T> Flow<T>.combineWithIgnoredFlow(ignored: Flow<Any>): Flow<T> =
-        combine(
-            this,
-            ignored.filter { false }.map {}.onStart { emit(Unit) },
-        ) { item, _ -> item }
 }
