@@ -60,6 +60,7 @@ import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
@@ -100,7 +101,8 @@ internal class MapViewModel(
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) : ViewModel() {
 
-    val effects = MutableStateFlow<List<MapEffect>>(emptyList())
+    private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
+    val effects: Flow<List<MapEffect>> = _effects.filter { it.isNotEmpty() }
 
     private val state = MutableStateFlow(MapState())
     val viewState: Flow<MapViewState> = combine(
@@ -354,11 +356,13 @@ internal class MapViewModel(
         stopCompassUseCase.run()
     }
 
-    fun consumeEffect() {
-        effects.value = effects.value.drop(1)
+    fun consumeEffect(): MapEffect {
+        val removed = _effects.value.first()
+        _effects.value = _effects.value.drop(1)
+        return removed
     }
 
     private fun sendEffect(effect: MapEffect) {
-        effects.value += effect
+        _effects.value += effect
     }
 }
