@@ -1,9 +1,7 @@
 package com.jacekpietras.zoo.map.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.zoo.core.dispatcher.dispatcherProvider
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
@@ -61,11 +59,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.plus
 
 internal class MapViewModel(
     animalId: String?,
@@ -75,7 +71,7 @@ internal class MapViewModel(
     observeCompassUseCase: ObserveCompassUseCase,
     observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
     observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
-    observeUserPositionUseCase: ObserveUserPositionUseCase,
+    private val observeUserPositionUseCase: ObserveUserPositionUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
@@ -104,9 +100,9 @@ internal class MapViewModel(
 ) : ViewModel() {
 
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
-    val effects: Flow<List<MapEffect>> = _effects
-        .combineWithOutsideWorldEvent()
+    val effects: Flow<Unit> = _effects
         .filter { it.isNotEmpty() }
+        .map { }
 
     private val state = MutableStateFlow(MapState())
     val viewState: Flow<MapViewState> = combine(
@@ -114,7 +110,10 @@ internal class MapViewModel(
         observeSuggestedThemeTypeUseCase.run(),
         observeRegionsWithAnimalsInUserPositionUseCase.run(),
         mapper::from,
-    ).flowOnBackground()
+    )
+        .combineWithIgnoredFlow(userPositionObservation())
+        .combineWithIgnoredFlow(outsideWorldEventObservation())
+        .flowOnBackground()
 
     private val volatileState = MutableStateFlow(MapVolatileState())
     val volatileViewState: Flow<MapVolatileViewState> = combine(
@@ -148,22 +147,6 @@ internal class MapViewModel(
 
             loadVisitedRouteUseCase.run()
         }
-
-        observeUserPositionUseCase.run()
-            .onEach {
-                volatileState.reduceOnMain { copy(userPosition = it) }
-                state.reduceOnMain { copy(userPosition = it) }
-                with(state.value) {
-                    if (isToolbarOpened) {
-                        when (toolbarMode) {
-                            is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
-                            is MapToolbarMode.SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
-                            else -> Unit
-                        }
-                    }
-                }
-            }
-            .launchIn(viewModelScope + dispatcherProvider.default)
     }
 
     private fun String?.toAnimalId(): AnimalId? =
@@ -305,42 +288,41 @@ internal class MapViewModel(
                 isToolbarOpened = toolbarMode != null,
             )
         }
-        if (toolbarMode is MapToolbarMode.NavigableMapActionMode) startNavigationToNearestRegion(mapAction)
+        if (toolbarMode is MapToolbarMode.NavigableMapActionMode) {
+            launchInBackground { startNavigationToNearestRegion(mapAction) }
+        }
     }
 
-    private fun startNavigationToNearestRegion(mapAction: MapAction) {
-        launchInBackground {
-            val nearWithDistance =
-                when (mapAction) {
-                    MapAction.WC -> findNearRegionWithDistance<Region.WcRegion>()
-                    MapAction.RESTAURANT -> findNearRegionWithDistance<Region.RestaurantRegion>()
-                    MapAction.EXIT -> findNearRegionWithDistance<Region.ExitRegion>()
-                    else -> throw IllegalStateException("Don't expect navigation to $mapAction")
-                }
-            onMain {
-                if (nearWithDistance != null) {
-                    val (path, distance) = nearWithDistance
+    private suspend fun startNavigationToNearestRegion(mapAction: MapAction) {
+        val nearWithDistance = when (mapAction) {
+            MapAction.WC -> findNearRegionWithDistance<Region.WcRegion>()
+            MapAction.RESTAURANT -> findNearRegionWithDistance<Region.RestaurantRegion>()
+            MapAction.EXIT -> findNearRegionWithDistance<Region.ExitRegion>()
+            else -> throw IllegalStateException("Don't expect navigation to $mapAction")
+        }
+        onMain {
+            if (nearWithDistance != null) {
+                val (path, distance) = nearWithDistance
 
-                    (state.value.toolbarMode as? MapToolbarMode.NavigableMapActionMode)?.let { currentMode ->
-                        state.reduce {
-                            copy(
-                                toolbarMode = currentMode.copy(
-                                    path = path,
-                                    distance = distance,
-                                ),
-                            )
-                        }
-                        volatileState.reduce {
-                            copy(
-                                snappedPoint = path.last(),
-                                shortestPath = path,
-                            )
-                        }
+                (state.value.toolbarMode as? MapToolbarMode.NavigableMapActionMode)?.let { currentMode ->
+                    state.reduce {
+                        copy(
+                            toolbarMode = currentMode.copy(
+                                path = path,
+                                distance = distance,
+                            ),
+                        )
                     }
-                } else {
-                    state.reduce { copy(isToolbarOpened = false) }
-                    sendEffect(ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
+                    volatileState.reduce {
+                        copy(
+                            snappedPoint = path.last(),
+                            shortestPath = path,
+                        )
+                    }
                 }
+            } else {
+                state.reduce { copy(isToolbarOpened = false) }
+                sendEffect(ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
             }
         }
     }
@@ -356,29 +338,44 @@ internal class MapViewModel(
         stopCompassUseCase.run()
     }
 
-    fun consumeEffect(effect: MapEffect) {
-        if (_effects.value.firstOrNull() == effect) {
-            _effects.value = _effects.value.drop(1)
-        }
+    fun consumeEffect(): MapEffect {
+        val removed = _effects.value.first()
+        _effects.value = _effects.value.drop(1)
+        return removed
     }
 
     private fun sendEffect(effect: MapEffect) {
         _effects.value = _effects.value + effect
     }
 
-    @Suppress("USELESS_CAST")
-    private fun Flow<List<MapEffect>>.combineWithOutsideWorldEvent() =
+    private fun userPositionObservation() =
+        observeUserPositionUseCase.run()
+            .onEach {
+                volatileState.reduceOnMain { copy(userPosition = it) }
+                state.reduceOnMain { copy(userPosition = it) }
+                with(state.value) {
+                    if (isToolbarOpened) {
+                        when (toolbarMode) {
+                            is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
+                            is MapToolbarMode.SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
+                            else -> Unit
+                        }
+                    }
+                }
+            }
+            .flowOnBackground()
+
+    private fun outsideWorldEventObservation() =
+        observeOutsideWorldEventUseCase.run()
+            .onEach {
+                volatileState.reduceOnMain { copy(userPosition = PointD()) }
+                state.reduceOnMain { copy(userPosition = PointD()) }
+                sendEffect(ShowToast(RichText(R.string.outside_world_warning)))
+            }
+
+    private fun <T> Flow<T>.combineWithIgnoredFlow(ignored: Flow<Any>): Flow<T> =
         combine(
             this,
-            observeOutsideWorldEventUseCase.run()
-                .map { ShowToast(RichText(R.string.outside_world_warning)) }
-                .onEach {
-                    volatileState.reduceOnMain { copy(userPosition = PointD()) }
-                    state.reduceOnMain { copy(userPosition = PointD()) }
-                }
-                .let { it as Flow<MapEffect?> }
-                .onStart { emit(null) },
-        ) { effects, outsideWorldEffect ->
-            if (outsideWorldEffect != null) effects + outsideWorldEffect else effects
-        }
+            ignored.filter { false }.map {}.onStart { emit(Unit) },
+        ) { item, _ -> item }
 }
