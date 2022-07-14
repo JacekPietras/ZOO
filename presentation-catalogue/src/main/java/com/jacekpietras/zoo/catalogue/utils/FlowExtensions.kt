@@ -1,18 +1,10 @@
 package com.jacekpietras.zoo.catalogue.utils
 
-import com.jacekpietras.zoo.core.dispatcher.DispatcherProviderWrapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.withContext
 
 inline fun <T> MutableStateFlow<T>.reduce(block: T.() -> T) {
     value = block(value)
-}
-
-suspend inline fun <T> MutableStateFlow<T>.reduceOnMain(crossinline block: suspend T.() -> T) {
-    withContext(DispatcherProviderWrapper.provider.main) {
-        value = block(value)
-    }
 }
 
 fun <T1, T2, T3, T4, T5, T6, R> combine(

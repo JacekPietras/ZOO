@@ -40,7 +40,7 @@ import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.extensions.combine
 import com.jacekpietras.zoo.map.extensions.reduce
-import com.jacekpietras.zoo.map.extensions.reduceOnMain
+import com.jacekpietras.zoo.map.extensions.reduce
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
@@ -168,7 +168,7 @@ internal class MapViewModel(
 
         val (shortestPath, distance) = findNearRegionWithDistance.run { it.id in regionIds } ?: return
 
-        state.reduceOnMain {
+        state.reduce {
             copy(
                 toolbarMode = MapToolbarMode.SelectedAnimalMode(
                     animal = animal,
@@ -178,7 +178,7 @@ internal class MapViewModel(
                 isToolbarOpened = true,
             )
         }
-        volatileState.reduceOnMain {
+        volatileState.reduce {
             copy(
                 snappedPoint = shortestPath.last(),
                 shortestPath = shortestPath,
@@ -209,12 +209,12 @@ internal class MapViewModel(
                 .filter { (_, animals) -> animals.isNotEmpty() }
 
             if (regionsAndAnimals.isEmpty()) {
-                state.reduceOnMain {
+                state.reduce {
                     copy(isToolbarOpened = false)
                 }
                 return@launchInBackground
             } else {
-                state.reduceOnMain {
+                state.reduce {
                     copy(
                         toolbarMode = MapToolbarMode.SelectedRegionMode(regionsAndAnimals),
                         isToolbarOpened = true,
@@ -225,7 +225,7 @@ internal class MapViewModel(
         volatileState.reduce { copy(snappedPoint = point) }
         launchInBackground {
             val shortestPath = getShortestPathUseCase.run(point)
-            volatileState.reduceOnMain { copy(shortestPath = shortestPath) }
+            volatileState.reduce { copy(shortestPath = shortestPath) }
         }
     }
 
@@ -351,8 +351,8 @@ internal class MapViewModel(
     private fun userPositionObservation() =
         observeUserPositionUseCase.run()
             .onEach {
-                volatileState.reduceOnMain { copy(userPosition = it) }
-                state.reduceOnMain { copy(userPosition = it) }
+                volatileState.reduce { copy(userPosition = it) }
+                state.reduce { copy(userPosition = it) }
                 with(state.value) {
                     if (isToolbarOpened) {
                         when (toolbarMode) {
@@ -368,8 +368,8 @@ internal class MapViewModel(
     private fun outsideWorldEventObservation() =
         observeOutsideWorldEventUseCase.run()
             .onEach {
-                volatileState.reduceOnMain { copy(userPosition = PointD()) }
-                state.reduceOnMain { copy(userPosition = PointD()) }
+                volatileState.reduce { copy(userPosition = PointD()) }
+                state.reduce { copy(userPosition = PointD()) }
                 sendEffect(ShowToast(RichText(R.string.outside_world_warning)))
             }
 

@@ -7,7 +7,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.catalogue.utils.combine
-import com.jacekpietras.zoo.catalogue.utils.reduceOnMain
+import com.jacekpietras.zoo.catalogue.utils.reduce
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalPositionUseCase
@@ -69,7 +69,7 @@ internal class AnimalViewModel(
             observeAnimalFavoritesUseCase.run()
                 .onEach { favorites ->
                     val isFavorite = favorites.contains(animalId)
-                    state.reduceOnMain {
+                    state.reduce {
                         copy(isFavorite = isFavorite)
                     }
                 }
@@ -78,7 +78,7 @@ internal class AnimalViewModel(
             val isSeen = isAnimalSeenUseCase.run(animalId)
             val positions = getAnimalPositionUseCase.run(animalId)
 
-            state.reduceOnMain {
+            state.reduce {
                 copy(
                     isSeen = isSeen,
                     animalPositions = positions,
@@ -92,7 +92,7 @@ internal class AnimalViewModel(
         animalId: AnimalId
     ) {
         val animal = getAnimalUseCase.run(animalId)
-        state.reduceOnMain { copy(animal = animal) }
+        state.reduce { copy(animal = animal) }
     }
 
     private suspend fun getPaths(
@@ -120,7 +120,7 @@ internal class AnimalViewModel(
         val animalId = state.value.animalId
 
         launchInBackground {
-            state.reduceOnMain { copy(isFavorite = isFavorite) }
+            state.reduce { copy(isFavorite = isFavorite) }
             setAnimalFavoriteUseCase.run(
                 animalId = animalId,
                 isFavorite = isFavorite,
