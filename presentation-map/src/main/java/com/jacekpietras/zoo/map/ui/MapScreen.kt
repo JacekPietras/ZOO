@@ -59,7 +59,7 @@ fun MapScreen(
     }
     LaunchedEffect("effects") {
         viewModel.effects.collect {
-            when (val effect = viewModel.consumeEffect()) {
+            when (val effect = it.first().also(viewModel::consumeEffect)) {
                 is ShowToast -> toast(context, effect.text)
                 is CenterAtUser -> mapLogic.centerAtUserPosition()
             }

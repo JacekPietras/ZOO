@@ -62,7 +62,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.plus
 
 internal class MapViewModel(
@@ -92,7 +94,7 @@ internal class MapViewModel(
     loadMapUseCase: LoadMapUseCase,
     loadVisitedRouteUseCase: LoadVisitedRouteUseCase,
     observeRegionsWithAnimalsInUserPositionUseCase: ObserveRegionsWithAnimalsInUserPositionUseCase,
-    observeOutsideWorldEventUseCase: ObserveOutsideWorldEventUseCase,
+    private val observeOutsideWorldEventUseCase: ObserveOutsideWorldEventUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
@@ -102,7 +104,9 @@ internal class MapViewModel(
 ) : ViewModel() {
 
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
-    val effects: Flow<List<MapEffect>> = _effects.filter { it.isNotEmpty() }
+    val effects: Flow<List<MapEffect>> = _effects
+        .combineWithOutsideWorldEvent()
+        .filter { it.isNotEmpty() }
 
     private val state = MutableStateFlow(MapState())
     val viewState: Flow<MapViewState> = combine(
@@ -159,10 +163,6 @@ internal class MapViewModel(
                     }
                 }
             }
-            .launchIn(viewModelScope + dispatcherProvider.default)
-
-        observeOutsideWorldEventUseCase.run()
-            .onEach { sendEffect(ShowToast(RichText(R.string.outside_world_warning))) }
             .launchIn(viewModelScope + dispatcherProvider.default)
     }
 
@@ -356,13 +356,29 @@ internal class MapViewModel(
         stopCompassUseCase.run()
     }
 
-    fun consumeEffect(): MapEffect {
-        val removed = _effects.value.first()
-        _effects.value = _effects.value.drop(1)
-        return removed
+    fun consumeEffect(effect: MapEffect) {
+        if (_effects.value.firstOrNull() == effect) {
+            _effects.value = _effects.value.drop(1)
+        }
     }
 
     private fun sendEffect(effect: MapEffect) {
-        _effects.value += effect
+        _effects.value = _effects.value + effect
     }
+
+    @Suppress("USELESS_CAST")
+    private fun Flow<List<MapEffect>>.combineWithOutsideWorldEvent() =
+        combine(
+            this,
+            observeOutsideWorldEventUseCase.run()
+                .map { ShowToast(RichText(R.string.outside_world_warning)) }
+                .onEach {
+                    volatileState.reduceOnMain { copy(userPosition = PointD()) }
+                    state.reduceOnMain { copy(userPosition = PointD()) }
+                }
+                .let { it as Flow<MapEffect?> }
+                .onStart { emit(null) },
+        ) { effects, outsideWorldEffect ->
+            if (outsideWorldEffect != null) effects + outsideWorldEffect else effects
+        }
 }
