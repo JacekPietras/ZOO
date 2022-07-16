@@ -125,7 +125,7 @@ internal class MapViewStateMapper {
                 },
                 fromPoint(userPosition, userPositionPaint),
                 fromPoint(snappedPoint, snappedPointPaint),
-                fromIcon(userPosition, R.drawable.ic_animal_lion_24),
+//                fromIcon(userPosition, R.drawable.ic_animal_lion_24),
             ).toImmutableList(),
         )
     }

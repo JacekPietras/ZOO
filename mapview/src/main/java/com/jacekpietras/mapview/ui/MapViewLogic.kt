@@ -467,6 +467,7 @@ class MapViewLogic<T>(
             val cX: Float,
             val cY: Float,
             @DrawableRes val iconRes: Int,
+            val iconSize: Int = 24,
         ) : RenderItem<T>()
     }
 

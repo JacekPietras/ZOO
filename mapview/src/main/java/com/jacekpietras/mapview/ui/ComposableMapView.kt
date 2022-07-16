@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderIconItem
@@ -65,7 +67,9 @@ fun ComposableMapView(
 private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
     with(LocalDensity.current) {
         Image(
-            modifier = Modifier.offset(x = item.cX.toDp(), y = item.cY.toDp()),
+            modifier = Modifier
+                .offset(x = item.cX.toDp() - item.iconSize.dp / 2, y = item.cY.toDp() - item.iconSize.dp / 2)
+                .requiredSize(item.iconSize.dp),
             painter = painterResource(item.iconRes),
             contentDescription = null,
         )
