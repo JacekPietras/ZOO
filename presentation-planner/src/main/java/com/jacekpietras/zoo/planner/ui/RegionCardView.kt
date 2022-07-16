@@ -59,7 +59,7 @@ internal fun RegionCardView(
                 )
             }
 
-            if (!isSeen) {
+            if (isSeen) {
                 SideIconView(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     iconRes = R.drawable.ic_eye_24,

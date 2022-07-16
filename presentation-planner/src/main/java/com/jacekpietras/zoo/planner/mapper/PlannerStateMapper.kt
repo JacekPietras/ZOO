@@ -33,10 +33,10 @@ internal class PlannerStateMapper {
                         )
                     }
                 }
-                is Stage.InUserPosition -> {
+                is Stage.InUserPosition -> { // fixme make nice item
                     PlannerItem(
-                        text = RichText("not implemented"),
-                        regionId = "not implemented",
+                        text = RichText.Empty,
+                        regionId = "User Position",
                         isFixed = true,
                         isMutable = true,
                     )
