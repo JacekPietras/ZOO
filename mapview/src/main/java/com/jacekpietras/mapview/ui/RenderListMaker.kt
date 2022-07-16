@@ -48,6 +48,7 @@ internal class RenderListMaker<T>(
                 is PreparedPolygonItem -> {
                     visibleGpsCoordinate
                         .transformPolygon(item.shape)
+                        ?.withMatrix(matrix, worldRotation)
                         ?.let { polygon ->
                             item.addToRender(polygon)
                         }
@@ -56,12 +57,14 @@ internal class RenderListMaker<T>(
                     visibleGpsCoordinate
                         .transformPath(item.shape)
                         .forEach { path ->
-                            item.addToRender(path)
+                            val polygon = path.withMatrix(matrix, worldRotation)
+                            item.addToRender(polygon)
                         }
                 }
                 is PreparedCircleItem -> {
                     visibleGpsCoordinate
                         .transformPoint(item.point)
+                        ?.withMatrix(matrix, worldRotation)
                         ?.let { point ->
                             item.addToRender(point)
                         }
@@ -69,6 +72,7 @@ internal class RenderListMaker<T>(
                 is PreparedIconItem -> {
                     visibleGpsCoordinate
                         .transformPoint(item.point)
+                        ?.withMatrix(matrix, worldRotation)
                         ?.let { point ->
                             item.addToRender(point)
                         }
@@ -89,74 +93,77 @@ internal class RenderListMaker<T>(
         return this
     }
 
-    private fun MapViewLogic.PreparedItem<T>.addToRender(
-        notRotatedArray: FloatArray,
+    private fun PreparedPolygonItem<T>.addToRender(
+        array: FloatArray,
     ) {
-        val array = notRotatedArray.withMatrix(matrix, worldRotation)
-
-        when (this) {
-            is PreparedPolygonItem -> {
-                insides.add(
-                    MapViewLogic.RenderItem.RenderPolygonItem(
-                        array,
-                        paintHolder.takePaint(),
-                    )
+        insides.add(
+            MapViewLogic.RenderItem.RenderPolygonItem(
+                array,
+                paintHolder.takePaint(),
+            )
+        )
+        if (outerPaintHolder != null) {
+            borders.add(
+                MapViewLogic.RenderItem.RenderPolygonItem(
+                    array,
+                    outerPaintHolder.takePaint(),
                 )
-                if (outerPaintHolder != null) {
-                    borders.add(
-                        MapViewLogic.RenderItem.RenderPolygonItem(
-                            array,
-                            outerPaintHolder.takePaint(),
-                        )
-                    )
-                }
-            }
-            is PreparedPathItem -> {
-                insides.add(
-                    MapViewLogic.RenderItem.RenderPathItem(
-                        array,
-                        paintHolder.takePaint(),
-                    )
-                )
-                if (outerPaintHolder != null) {
-                    borders.add(
-                        MapViewLogic.RenderItem.RenderPathItem(
-                            array,
-                            outerPaintHolder.takePaint(),
-                        )
-                    )
-                }
-            }
-            is PreparedCircleItem -> {
-                insides.add(
-                    MapViewLogic.RenderItem.RenderCircleItem(
-                        array[0],
-                        array[1],
-                        radius.takeDimension(),
-                        paintHolder.takePaint(),
-                    )
-                )
-                if (outerPaintHolder != null) {
-                    borders.add(
-                        MapViewLogic.RenderItem.RenderCircleItem(
-                            array[0],
-                            array[1],
-                            radius.takeDimension(),
-                            outerPaintHolder.takePaint(),
-                        )
-                    )
-                }
-            }
-            is PreparedIconItem -> {
-                icons.add(
-                    MapViewLogic.RenderItem.RenderIconItem(
-                        array[0],
-                        array[1],
-                        icon,
-                    )
-                )
-            }
+            )
         }
+    }
+
+    private fun PreparedPathItem<T>.addToRender(
+        array: FloatArray,
+    ) {
+        insides.add(
+            MapViewLogic.RenderItem.RenderPathItem(
+                array,
+                paintHolder.takePaint(),
+            )
+        )
+        if (outerPaintHolder != null) {
+            borders.add(
+                MapViewLogic.RenderItem.RenderPathItem(
+                    array,
+                    outerPaintHolder.takePaint(),
+                )
+            )
+        }
+    }
+
+    private fun PreparedCircleItem<T>.addToRender(
+        array: FloatArray,
+    ) {
+        insides.add(
+            MapViewLogic.RenderItem.RenderCircleItem(
+                array[0],
+                array[1],
+                radius.takeDimension(),
+                paintHolder.takePaint(),
+            )
+        )
+        if (outerPaintHolder != null) {
+            borders.add(
+                MapViewLogic.RenderItem.RenderCircleItem(
+                    array[0],
+                    array[1],
+                    radius.takeDimension(),
+                    outerPaintHolder.takePaint(),
+                )
+            )
+        }
+    }
+
+    private fun PreparedIconItem<T>.addToRender(
+        array: FloatArray,
+    ) {
+        icons.add(
+            MapViewLogic.RenderItem.RenderIconItem(
+                array[0],
+                array[1],
+                icon,
+            )
+        )
     }
 
     private fun MapDimension.takeDimension(): Float =

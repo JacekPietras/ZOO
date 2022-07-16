@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderIconItem
@@ -63,11 +63,13 @@ fun ComposableMapView(
 
 @Composable
 private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
-    Image(
-        modifier = Modifier.offset(x = item.cX.dp, y = item.cY.dp),
-        painter = painterResource(item.iconRes),
-        contentDescription = null,
-    )
+    with(LocalDensity.current) {
+        Image(
+            modifier = Modifier.offset(x = item.cX.toDp(), y = item.cY.toDp()),
+            painter = painterResource(item.iconRes),
+            contentDescription = null,
+        )
+    }
 }
 
 private fun DrawScope.drawCircleSafe(

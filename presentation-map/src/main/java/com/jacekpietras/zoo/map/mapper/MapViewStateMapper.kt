@@ -1,11 +1,13 @@
 package com.jacekpietras.zoo.map.mapper
 
 import android.graphics.Color
+import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.mapview.model.MapItem.IconMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.CircleMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PathMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PolygonMapItem
@@ -123,6 +125,7 @@ internal class MapViewStateMapper {
                 },
                 fromPoint(userPosition, userPositionPaint),
                 fromPoint(snappedPoint, snappedPointPaint),
+                fromIcon(userPosition, R.drawable.ic_animal_lion_24),
             ).toImmutableList(),
         )
     }
@@ -193,6 +196,18 @@ internal class MapViewStateMapper {
                     point,
                     (paint as MapPaint.Circle).radius,
                     paint,
+                )
+            )
+        } else {
+            emptyList()
+        }
+
+    private fun fromIcon(point: PointD?, @DrawableRes icon:Int): List<MapItem> =
+        if (point != null) {
+            listOf(
+                IconMapItem(
+                    point,
+                    icon,
                 )
             )
         } else {
