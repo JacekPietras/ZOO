@@ -118,12 +118,23 @@ internal class PathSnapper(
                 val nodes = (prev.getUniqueNodes() + next.getUniqueNodes()).toList()
                 check(nodes.size == 2) { "there is no line between $prev -> $next" }
 
-                val diff = nodes[1].x - nodes[0].x
-                val prevPercent = (prev.point.x - nodes[0].x) / diff
-                val nextPercent = (next.point.x - nodes[0].x) / diff
+                val diffX = nodes[1].x - nodes[0].x
+                val (prevPercent, nextPercent) = if (diffX != 0.0) {
+                    val prevPercent = (prev.point.x - nodes[0].x) / diffX
+                    val nextPercent = (next.point.x - nodes[0].x) / diffX
+                    prevPercent to nextPercent
+                } else {
+                    val diffY = nodes[1].y - nodes[0].y
 
-                check(prevPercent in 0.0..1.0)
-                check(nextPercent in 0.0..1.0)
+                    check(diffY != 0.0) { "there is distance between $prev -> $next" }
+
+                    val prevPercent = (prev.point.y - nodes[0].y) / diffY
+                    val nextPercent = (next.point.y - nodes[0].y) / diffY
+                    prevPercent to nextPercent
+                }
+
+                check(prevPercent in 0.0..1.0) { "percent value is $prevPercent" }
+                check(nextPercent in 0.0..1.0) { "percent value is $nextPercent" }
 
                 VisitedRoadEdgePart(
                     from = nodes[0].point,
