@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="toolbarElevation" format="dimension|reference" />
+    <attr name="mapIconColor" format="color" />
 </resources>

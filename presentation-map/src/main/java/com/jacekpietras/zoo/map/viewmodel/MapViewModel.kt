@@ -28,6 +28,7 @@ import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
 import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveRegionCentersUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
@@ -83,6 +84,7 @@ internal class MapViewModel(
     observeTechnicalRoadsUseCase: ObserveTechnicalRoadsUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
     observeOldTakenRouteUseCase: ObserveOldTakenRouteUseCase,
+    observeRegionCentersUseCase: ObserveRegionCentersUseCase,
     observeMapLinesUseCase: ObserveMapLinesUseCase,
     observeVisitedRoadsUseCase: ObserveVisitedRoadsUseCase,
 
@@ -132,6 +134,7 @@ internal class MapViewModel(
         observeMapLinesUseCase.run(),
         observeTechnicalRoadsUseCase.run(),
         observeOldTakenRouteUseCase.run(),
+        observeRegionCentersUseCase.run(),
         mapper::from,
     ).flowOnBackground()
 

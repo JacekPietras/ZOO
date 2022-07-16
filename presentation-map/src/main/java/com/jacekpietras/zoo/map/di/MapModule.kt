@@ -32,6 +32,7 @@ val mapModule = module {
             observeAviaryUseCase = get(),
             observeTechnicalRoadsUseCase = get(),
             observeMapLinesUseCase = get(),
+            observeRegionCentersUseCase = get(),
             observeUserPositionUseCase = get(),
             uploadHistoryUseCase = get(),
             getShortestPathUseCase = get(),

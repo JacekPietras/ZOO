@@ -99,6 +99,11 @@ val domainModule = module {
         )
     }
     factory {
+        ObserveRegionCentersUseCase(
+            mapRepository = get(),
+        )
+    }
+    factory {
         IsRegionSeenUseCase(
             mapRepository = get(),
         )

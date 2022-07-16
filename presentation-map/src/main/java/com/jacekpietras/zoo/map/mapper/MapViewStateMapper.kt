@@ -21,6 +21,7 @@ import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
@@ -125,7 +126,6 @@ internal class MapViewStateMapper {
                 },
                 fromPoint(userPosition, userPositionPaint),
                 fromPoint(snappedPoint, snappedPointPaint),
-//                fromIcon(userPosition, R.drawable.ic_animal_lion_24),
             ).toImmutableList(),
         )
     }
@@ -138,6 +138,7 @@ internal class MapViewStateMapper {
         lines: List<PathEntity>,
         technicalRoads: List<PathEntity>,
         rawOldTakenRoute: List<PathEntity>,
+        regionsWithCenters: List<Pair<RegionId, PointD>>,
     ): MapWorldViewState = MapWorldViewState(
         worldBounds = worldBounds,
         mapData = flatListOf(
@@ -147,8 +148,27 @@ internal class MapViewStateMapper {
             fromPolygons(buildings, buildingPaint),
             fromPolygons(aviary, aviaryPaint),
             fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
+            fromRegions(regionsWithCenters),
         ),
     )
+
+    private fun fromRegions(regions: List<Pair<RegionId, PointD>>): List<MapItem> =
+        regions.mapNotNull { (regionId, position) ->
+            val icon = when {
+                regionId.id.startsWith("wc-") -> R.drawable.ic_wc_24
+                else -> {
+                    when (regionId.id) {
+                        "wejscie",
+                        "wyjscie" -> R.drawable.ic_animal_lion_24
+                        else -> return@mapNotNull null
+                    }
+                }
+            }
+            IconMapItem(
+                point = position,
+                icon = icon,
+            )
+        }
 
     private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
 
@@ -196,18 +216,6 @@ internal class MapViewStateMapper {
                     point,
                     (paint as MapPaint.Circle).radius,
                     paint,
-                )
-            )
-        } else {
-            emptyList()
-        }
-
-    private fun fromIcon(point: PointD?, @DrawableRes icon:Int): List<MapItem> =
-        if (point != null) {
-            listOf(
-                IconMapItem(
-                    point,
-                    icon,
                 )
             )
         } else {
