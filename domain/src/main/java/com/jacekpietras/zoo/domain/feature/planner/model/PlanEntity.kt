@@ -25,6 +25,12 @@ sealed class Stage {
         open val seen: Boolean,
     ) : Stage() {
 
+        fun copyWithSeen(seen: Boolean): InRegion =
+            when (this) {
+                is Single -> copy(seen = seen)
+                is Multiple -> copy(seen = seen)
+            }
+
         companion object {
 
             operator fun invoke(region: Region, mutable: Boolean = true, seen: Boolean = false): InRegion =

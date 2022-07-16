@@ -6,12 +6,25 @@ import com.jacekpietras.zoo.domain.feature.map.di.mapModule
 import com.jacekpietras.zoo.domain.feature.pathfinder.di.pathFinderModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.feature.sensors.di.sensorsModule
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.InsertUserPositionUseCase
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.InsertUserPositionUseCaseImpl
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.feature.tsp.di.tspModule
-import com.jacekpietras.zoo.domain.interactor.*
+import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
+import com.jacekpietras.zoo.domain.interactor.FindRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetAnimalsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionCenterPointUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.IsRegionSeenUseCase
+import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCaseImpl
+import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveRegionCentersUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveRegionsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
+import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -33,7 +46,7 @@ val domainModule = module {
     }
     factory {
         GetRegionCenterPointUseCase(
-            mapRepository = get(),
+            getRegionUseCase = get(),
         )
     }
     factory {
@@ -105,6 +118,12 @@ val domainModule = module {
     }
     factory {
         IsRegionSeenUseCase(
+            mapRepository = get(),
+            getRegionUseCase = get(),
+        )
+    }
+    factory {
+        GetRegionUseCase(
             mapRepository = get(),
         )
     }

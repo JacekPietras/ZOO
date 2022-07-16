@@ -58,6 +58,9 @@ val sensorsModule = module {
             pathListSnapper = get(),
             pathSnapper = get(),
             gpsEventsRepository = get(),
+            getOrCreateCurrentPlanUseCase = get(),
+            getRegionUseCase = get(),
+            planRepository = get(),
         )
     }
     factory {

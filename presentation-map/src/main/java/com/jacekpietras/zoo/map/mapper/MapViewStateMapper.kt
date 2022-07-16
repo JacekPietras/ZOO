@@ -156,7 +156,7 @@ internal class MapViewStateMapper {
         regions.mapNotNull { (region, position) ->
             val icon = when (region) {
                 is Region.WcRegion -> R.drawable.ic_wc_24
-                is Region.ExitRegion -> R.drawable.ic_animal_lion_24
+                is Region.ExitRegion -> R.drawable.ic_door_24
                 else -> return@mapNotNull null
 //                else -> {
 //                    when (region.id.id) {

@@ -8,13 +8,14 @@ import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 
 class IsRegionSeenUseCase(
     private val mapRepository: MapRepository,
+    private val getRegionUseCase: GetRegionUseCase,
 ) {
 
     suspend fun run(regionId: RegionId): Boolean {
         if (!mapRepository.areVisitedRoadsCalculated()) return false
 
         val alreadyVisited = mapRepository.getVisitedRoads()
-        val region = mapRepository.getCurrentRegions().first { it.first.id == regionId }.second
+        val (_, region) = getRegionUseCase.run(regionId)
 
         alreadyVisited.forEach { edge ->
             edge.forEachPath {

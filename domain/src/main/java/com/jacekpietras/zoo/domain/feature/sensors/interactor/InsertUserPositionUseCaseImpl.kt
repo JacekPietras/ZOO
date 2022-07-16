@@ -3,14 +3,19 @@ package com.jacekpietras.zoo.domain.feature.sensors.interactor
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.haversine
+import com.jacekpietras.geometry.polygonContains
 import com.jacekpietras.zoo.domain.feature.map.interactor.GetWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.PathListSnapper
 import com.jacekpietras.zoo.domain.feature.pathfinder.PathSnapper
+import com.jacekpietras.zoo.domain.feature.planner.interactor.GetOrCreateCurrentPlanUseCase
+import com.jacekpietras.zoo.domain.feature.planner.model.Stage
+import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsEventsRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
+import com.jacekpietras.zoo.domain.interactor.GetRegionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +28,9 @@ internal class InsertUserPositionUseCaseImpl(
     private val pathListSnapper: PathListSnapper,
     private val pathSnapper: PathSnapper,
     private val gpsEventsRepository: GpsEventsRepository,
+    private val getOrCreateCurrentPlanUseCase: GetOrCreateCurrentPlanUseCase,
+    private val getRegionUseCase: GetRegionUseCase,
+    private val planRepository: PlanRepository,
 ) : InsertUserPositionUseCase {
 
     override fun run(position: GpsHistoryEntity) {
@@ -31,6 +39,7 @@ internal class InsertUserPositionUseCaseImpl(
             if (bounds.contains(position)) {
                 gpsRepository.insertPosition(position)
                 addVisitedPart(position)
+                addVisitedPlannerStage(position)
             } else {
                 val distanceToWorld = haversine(
                     bounds.centerX(),
@@ -42,6 +51,26 @@ internal class InsertUserPositionUseCaseImpl(
                     stopNavigationUseCase.run()
                     gpsEventsRepository.insertOutsideWorldEvent()
                 }
+            }
+        }
+    }
+
+    private suspend fun addVisitedPlannerStage(position: GpsHistoryEntity) {
+        val plan = getOrCreateCurrentPlanUseCase.run()
+        plan.stages.filterIsInstance<Stage.InRegion>().firstOrNull { !it.seen }?.let { firstUnseenStage ->
+            val (_, polygon) = getRegionUseCase.run(firstUnseenStage.region.id)
+            val arrived = polygonContains(polygon.vertices, PointD(position.lon, position.lat))
+            if (arrived) {
+                val stageAsSeen = firstUnseenStage.copyWithSeen(seen = true)
+                val newStages = plan.stages.map { stage ->
+                    if (stage == firstUnseenStage) {
+                        stageAsSeen
+                    } else {
+                        stage
+                    }
+                }
+                val newPlan = plan.copy(stages = newStages)
+                planRepository.setPlan(newPlan)
             }
         }
     }
