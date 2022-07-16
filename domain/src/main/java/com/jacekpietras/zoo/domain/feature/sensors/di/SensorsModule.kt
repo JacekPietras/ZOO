@@ -74,4 +74,9 @@ val sensorsModule = module {
             gpsEventsRepository = get(),
         )
     }
+    factory {
+        ObserveArrivalAtRegionEventUseCase(
+            gpsEventsRepository = get(),
+        )
+    }
 }

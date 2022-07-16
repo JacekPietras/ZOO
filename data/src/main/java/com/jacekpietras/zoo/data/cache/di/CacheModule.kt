@@ -1,7 +1,9 @@
 package com.jacekpietras.zoo.data.cache.di
 
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
+import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -36,11 +38,19 @@ val cacheModule = module {
     single(named(MAP_VISITED_ROADS)) {
         MutableStateFlow<List<VisitedRoadEdge>>(value = emptyList())
     }
+    single(named(OUTSIDE_WORLD_EVENTS)) {
+        MutableSharedFlow<Unit>()
+    }
+    single(named(ARRIVAL_AT_REGION_EVENTS)) {
+        MutableSharedFlow<Region>()
+    }
 }
 
 const val COMPASS_ENABLED = "CompassEnabledWatcher"
 const val LIGHT_SENSOR_ENABLED = "LightSensorEnabledWatcher"
 const val NAVIGATION_ENABLED = "NavigationEnabledWatcher"
+const val OUTSIDE_WORLD_EVENTS = "OutsideWorldEvents"
+const val ARRIVAL_AT_REGION_EVENTS = "ArrivalAtRegionEvents"
 const val MAP_ROADS = "MapRoads"
 const val MAP_LINES = "MapLines"
 const val MAP_TECHNICAL = "MapTechnical"

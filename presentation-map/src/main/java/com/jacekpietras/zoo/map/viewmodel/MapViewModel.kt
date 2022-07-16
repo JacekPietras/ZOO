@@ -16,6 +16,7 @@ import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTechnicalRoadsU
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseCase
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveArrivalAtRegionEventUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveOutsideWorldEventUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
@@ -92,6 +93,7 @@ internal class MapViewModel(
     loadVisitedRouteUseCase: LoadVisitedRouteUseCase,
     observeRegionsWithAnimalsInUserPositionUseCase: ObserveRegionsWithAnimalsInUserPositionUseCase,
     private val observeOutsideWorldEventUseCase: ObserveOutsideWorldEventUseCase,
+    private val observeArrivalAtRegionEventUseCase: ObserveArrivalAtRegionEventUseCase,
     private val getAnimalsInRegionUseCase: GetAnimalsInRegionUseCase,
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
@@ -114,6 +116,7 @@ internal class MapViewModel(
     )
         .combineWithIgnoredFlow(userPositionObservation())
         .combineWithIgnoredFlow(outsideWorldEventObservation())
+        .combineWithIgnoredFlow(arrivalAtRegionEventObservation())
         .flowOnBackground()
 
     private val volatileState = MutableStateFlow(MapVolatileState())
@@ -374,4 +377,17 @@ internal class MapViewModel(
                 state.reduce { copy(userPosition = PointD()) }
                 sendEffect(ShowToast(RichText(R.string.outside_world_warning)))
             }
+
+    private fun arrivalAtRegionEventObservation() =
+        observeArrivalAtRegionEventUseCase.run()
+            .onEach { region ->
+                val regionsAndAnimals = listOf(region to getAnimalsInRegionUseCase.run(region.id))
+                state.reduce {
+                    copy(
+                        toolbarMode = MapToolbarMode.SelectedRegionMode(regionsAndAnimals),
+                        isToolbarOpened = true,
+                    )
+                }
+            }
+            .flowOnBackground()
 }

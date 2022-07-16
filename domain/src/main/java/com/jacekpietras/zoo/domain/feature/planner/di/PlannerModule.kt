@@ -19,7 +19,6 @@ val plannerModule = module {
             planRepository = get(),
             getAnimalUseCase = get(),
             getOrCreateCurrentPlanUseCase = get(),
-            isAnimalSeenUseCase = get(),
         )
     }
     factory {

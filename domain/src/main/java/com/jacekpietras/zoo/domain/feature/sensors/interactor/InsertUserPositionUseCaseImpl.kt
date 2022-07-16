@@ -71,6 +71,7 @@ internal class InsertUserPositionUseCaseImpl(
                 }
                 val newPlan = plan.copy(stages = newStages)
                 planRepository.setPlan(newPlan)
+                gpsEventsRepository.insertArrivalAtRegionEvent(stageAsSeen.region)
             }
         }
     }

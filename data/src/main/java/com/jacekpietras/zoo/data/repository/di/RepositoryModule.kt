@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.data.repository.di
 
+import com.jacekpietras.zoo.data.cache.di.ARRIVAL_AT_REGION_EVENTS
 import com.jacekpietras.zoo.data.cache.di.COMPASS_ENABLED
 import com.jacekpietras.zoo.data.cache.di.LIGHT_SENSOR_ENABLED
 import com.jacekpietras.zoo.data.cache.di.MAP_AVIARY
@@ -9,6 +10,7 @@ import com.jacekpietras.zoo.data.cache.di.MAP_ROADS
 import com.jacekpietras.zoo.data.cache.di.MAP_TECHNICAL
 import com.jacekpietras.zoo.data.cache.di.MAP_VISITED_ROADS
 import com.jacekpietras.zoo.data.cache.di.NAVIGATION_ENABLED
+import com.jacekpietras.zoo.data.cache.di.OUTSIDE_WORLD_EVENTS
 import com.jacekpietras.zoo.data.database.ZooDatabase
 import com.jacekpietras.zoo.data.parser.RegionIdAdapter
 import com.jacekpietras.zoo.data.repository.AnimalRepositoryImpl
@@ -62,7 +64,10 @@ internal val repositoryModule = module {
     }
 
     single<GpsEventsRepository> {
-        GpsEventsRepositoryImpl()
+        GpsEventsRepositoryImpl(
+            outsideWorldEvents = get(named(OUTSIDE_WORLD_EVENTS)),
+            arrivalAtRegionEvents = get(named(ARRIVAL_AT_REGION_EVENTS)),
+        )
     }
 
     single<AnimalRepository> {

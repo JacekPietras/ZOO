@@ -13,17 +13,15 @@ class AddAnimalToCurrentPlanUseCase(
     private val planRepository: PlanRepository,
     private val getAnimalUseCase: GetAnimalUseCase,
     private val getOrCreateCurrentPlanUseCase: GetOrCreateCurrentPlanUseCase,
-    private val isAnimalSeenUseCase: IsAnimalSeenUseCase,
 ) {
 
     suspend fun run(animalId: AnimalId) {
         val plan = getOrCreateCurrentPlanUseCase.run()
         val regions = getAnimalUseCase.run(animalId).regionInZoo
-        val seen = isAnimalSeenUseCase.run(animalId)
 
         if (plan.containsRegions(regions)) return
 
-        val newStages = plan.stages + Stage.InRegion(regions = regions.map(::AnimalRegion), seen = seen)
+        val newStages = plan.stages + Stage.InRegion(regions = regions.map(::AnimalRegion))
         val newPlan = plan.copy(stages = newStages)
         planRepository.setPlan(newPlan)
     }
