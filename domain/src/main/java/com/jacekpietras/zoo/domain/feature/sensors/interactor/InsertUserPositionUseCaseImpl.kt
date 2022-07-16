@@ -37,9 +37,9 @@ internal class InsertUserPositionUseCaseImpl(
         CoroutineScope(Dispatchers.IO).launch {
             val bounds = worldBoundsUseCase.run()
             if (bounds.contains(position)) {
-                gpsRepository.insertPosition(position)
                 addVisitedPart(position)
                 addVisitedPlannerStage(position)
+                gpsRepository.insertPosition(position)
             } else {
                 val distanceToWorld = haversine(
                     bounds.centerX(),
