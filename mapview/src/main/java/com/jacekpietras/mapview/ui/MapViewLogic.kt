@@ -1,6 +1,8 @@
 package com.jacekpietras.mapview.ui
 
 import android.graphics.Matrix
+import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapDimension
@@ -8,6 +10,9 @@ import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.ViewCoordinates
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPathItem
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
 import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import java.util.concurrent.atomic.AtomicBoolean
@@ -248,31 +253,40 @@ class MapViewLogic<T>(
         val borderPaints = mutableMapOf<MapPaint, PaintHolder<T>?>()
 
         return map { item ->
-            val inner = innerPaints[item.paint]
-                ?: bakeCanvasPaint(item.paint)
-                    .also { innerPaints[item.paint] = it }
-            val border = borderPaints[item.paint]
-                ?: bakeBorderCanvasPaint(item.paint)
-                    .also { borderPaints[item.paint] = it }
-
             when (item) {
-                is MapItem.PathMapItem -> PreparedItem.PreparedPathItem(
-                    pointsToDoubleArray(item.path.vertices),
-                    inner,
-                    border,
-                    item.minZoom,
-                )
-                is MapItem.PolygonMapItem -> PreparedItem.PreparedPolygonItem(
-                    pointsToDoubleArray(item.polygon.vertices),
-                    inner,
-                    border,
-                    item.minZoom,
-                )
-                is MapItem.CircleMapItem -> PreparedItem.PreparedCircleItem(
+                is MapItem.MapColoredItem -> {
+                    val inner = innerPaints[item.paint]
+                        ?: bakeCanvasPaint(item.paint)
+                            .also { innerPaints[item.paint] = it }
+                    val border = borderPaints[item.paint]
+                        ?: bakeBorderCanvasPaint(item.paint)
+                            .also { borderPaints[item.paint] = it }
+
+                    when (item) {
+                        is MapItem.MapColoredItem.PathMapItem -> PreparedPathItem(
+                            pointsToDoubleArray(item.path.vertices),
+                            inner,
+                            border,
+                            item.minZoom,
+                        )
+                        is MapItem.MapColoredItem.PolygonMapItem -> PreparedPolygonItem(
+                            pointsToDoubleArray(item.polygon.vertices),
+                            inner,
+                            border,
+                            item.minZoom,
+                        )
+                        is MapItem.MapColoredItem.CircleMapItem -> PreparedCircleItem(
+                            item.point,
+                            item.radius,
+                            inner,
+                            border,
+                            item.minZoom,
+                        )
+                    }
+                }
+                is MapItem.IconMapItem -> PreparedItem.PreparedIconItem(
                     item.point,
-                    item.radius,
-                    inner,
-                    border,
+                    item.icon,
                     item.minZoom,
                 )
             }
@@ -387,51 +401,72 @@ class MapViewLogic<T>(
     }
 
     internal sealed class PreparedItem<T>(
-        open val paintHolder: PaintHolder<T>,
-        open val outerPaintHolder: PaintHolder<T>?,
         open val minZoom: Float?,
     ) {
 
-        class PreparedPathItem<T>(
-            val shape: DoubleArray,
-            override val paintHolder: PaintHolder<T>,
-            override val outerPaintHolder: PaintHolder<T>? = null,
-            override val minZoom: Float? = null,
-        ) : PreparedItem<T>(paintHolder, outerPaintHolder, minZoom)
+        internal sealed class PreparedColoredItem<T>(
+            open val paintHolder: PaintHolder<T>,
+            open val outerPaintHolder: PaintHolder<T>?,
+            override val minZoom: Float?,
+        ) : PreparedItem<T>(minZoom) {
 
-        class PreparedPolygonItem<T>(
-            val shape: DoubleArray,
-            override val paintHolder: PaintHolder<T>,
-            override val outerPaintHolder: PaintHolder<T>? = null,
-            override val minZoom: Float? = null,
-        ) : PreparedItem<T>(paintHolder, outerPaintHolder, minZoom)
+            class PreparedPathItem<T>(
+                val shape: DoubleArray,
+                override val paintHolder: PaintHolder<T>,
+                override val outerPaintHolder: PaintHolder<T>? = null,
+                override val minZoom: Float? = null,
+            ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom)
 
-        class PreparedCircleItem<T>(
+            class PreparedPolygonItem<T>(
+                val shape: DoubleArray,
+                override val paintHolder: PaintHolder<T>,
+                override val outerPaintHolder: PaintHolder<T>? = null,
+                override val minZoom: Float? = null,
+            ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom)
+
+            class PreparedCircleItem<T>(
+                val point: PointD,
+                val radius: MapDimension,
+                override val paintHolder: PaintHolder<T>,
+                override val outerPaintHolder: PaintHolder<T>? = null,
+                override val minZoom: Float? = null,
+            ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom)
+        }
+
+        class PreparedIconItem<T>(
             val point: PointD,
-            val radius: MapDimension,
-            override val paintHolder: PaintHolder<T>,
-            override val outerPaintHolder: PaintHolder<T>? = null,
+            @DrawableRes val icon: Int,
             override val minZoom: Float? = null,
-        ) : PreparedItem<T>(paintHolder, outerPaintHolder, minZoom)
+        ) : PreparedItem<T>(minZoom)
     }
 
     sealed class RenderItem<T> {
 
+        @Immutable
         class RenderPathItem<T>(
             val shape: FloatArray,
             val paint: T,
         ) : RenderItem<T>()
 
+        @Immutable
         class RenderPolygonItem<T>(
             val shape: FloatArray,
             val paint: T,
         ) : RenderItem<T>()
 
+        @Immutable
         class RenderCircleItem<T>(
             val cX: Float,
             val cY: Float,
             val radius: Float,
             val paint: T,
+        ) : RenderItem<T>()
+
+        @Immutable
+        class RenderIconItem<T>(
+            val cX: Float,
+            val cY: Float,
+            @DrawableRes val iconRes: Int,
         ) : RenderItem<T>()
     }
 

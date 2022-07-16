@@ -101,12 +101,15 @@ internal class ViewCoordinates(
             null
         }
 
-    fun transformPoint(p: PointD): FloatArray {
-        val result = FloatArray(2)
-        result[0] = p.x.transformX()
-        result[1] = p.y.transformY()
-        return result
-    }
+    fun transformPoint(p: PointD): FloatArray? =
+        if (visibleRectRotated.contains(p)) {
+            val result = FloatArray(2)
+            result[0] = p.x.transformX()
+            result[1] = p.y.transformY()
+            result
+        } else {
+            null
+        }
 
     fun deTransformPoint(x: Float, y: Float): PointD =
         PointD(

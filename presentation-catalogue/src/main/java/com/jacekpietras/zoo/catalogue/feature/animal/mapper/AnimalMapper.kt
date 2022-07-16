@@ -6,6 +6,9 @@ import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.mapview.model.MapItem.MapColoredItem.CircleMapItem
+import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PathMapItem
+import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PolygonMapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
@@ -171,7 +174,7 @@ internal class AnimalMapper {
         paint: MapPaint
     ): List<MapItem> =
         polygons.map { polygon ->
-            MapItem.PolygonMapItem(
+            PolygonMapItem(
                 PolygonD(polygon.vertices),
                 paint,
             )
@@ -179,7 +182,7 @@ internal class AnimalMapper {
 
     private fun fromPaths(paths: List<MapItemEntity.PathEntity>, paint: MapPaint): List<MapItem> =
         paths.map { path ->
-            MapItem.PathMapItem(
+            PathMapItem(
                 PathD(path.vertices),
                 paint,
             )
@@ -187,7 +190,7 @@ internal class AnimalMapper {
 
     private fun fromPoints(points: List<PointD>, paint: MapPaint): List<MapItem> =
         points.map { point ->
-            MapItem.CircleMapItem(
+            CircleMapItem(
                 point,
                 (paint as MapPaint.Circle).radius,
                 paint,

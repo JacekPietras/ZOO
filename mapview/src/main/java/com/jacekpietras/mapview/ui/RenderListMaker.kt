@@ -5,6 +5,10 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.ViewCoordinates
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPathItem
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedIconItem
 
 internal class RenderListMaker<T>(
     private val visibleGpsCoordinate: ViewCoordinates,
@@ -18,6 +22,7 @@ internal class RenderListMaker<T>(
 
     private val borders = mutableListOf<MapViewLogic.RenderItem<T>>()
     private val insides = mutableListOf<MapViewLogic.RenderItem<T>>()
+    private val icons = mutableListOf<MapViewLogic.RenderItem<T>>()
     private val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
     private val dynamicDimensions = mutableMapOf<MapDimension, Float>()
     private val matrix = Matrix()
@@ -32,40 +37,46 @@ internal class RenderListMaker<T>(
     fun translate(preparedList: List<MapViewLogic.PreparedItem<T>>): List<MapViewLogic.RenderItem<T>> {
         borders.clear()
         insides.clear()
+        icons.clear()
 
         preparedList.forEach { item ->
+            if (!item.minZoom.isBiggerThanZoom()) {
+                return@forEach
+            }
+
             when (item) {
-                is MapViewLogic.PreparedItem.PreparedPolygonItem -> {
-                    if (item.minZoom.isBiggerThanZoom())
-                        visibleGpsCoordinate
-                            .transformPolygon(item.shape)
-                            ?.withMatrix(matrix, worldRotation)
-                            ?.let { polygon ->
-                                item.addToRender(polygon)
-                            }
+                is PreparedPolygonItem -> {
+                    visibleGpsCoordinate
+                        .transformPolygon(item.shape)
+                        ?.let { polygon ->
+                            item.addToRender(polygon)
+                        }
                 }
-                is MapViewLogic.PreparedItem.PreparedPathItem -> {
-                    if (item.minZoom.isBiggerThanZoom())
-                        visibleGpsCoordinate
-                            .transformPath(item.shape)
-                            .map { it.withMatrix(matrix, worldRotation) }
-                            .forEach { path ->
-                                item.addToRender(path)
-                            }
+                is PreparedPathItem -> {
+                    visibleGpsCoordinate
+                        .transformPath(item.shape)
+                        .forEach { path ->
+                            item.addToRender(path)
+                        }
                 }
-                is MapViewLogic.PreparedItem.PreparedCircleItem -> {
-                    if (item.minZoom.isBiggerThanZoom())
-                        visibleGpsCoordinate
-                            .transformPoint(item.point)
-                            .withMatrix(matrix, worldRotation)
-                            .let { path ->
-                                item.addToRender(path)
-                            }
+                is PreparedCircleItem -> {
+                    visibleGpsCoordinate
+                        .transformPoint(item.point)
+                        ?.let { point ->
+                            item.addToRender(point)
+                        }
+                }
+                is PreparedIconItem -> {
+                    visibleGpsCoordinate
+                        .transformPoint(item.point)
+                        ?.let { point ->
+                            item.addToRender(point)
+                        }
                 }
             }
         }
 
-        return borders + insides
+        return borders + insides + icons
     }
 
     private fun Float?.isBiggerThanZoom(): Boolean =
@@ -79,10 +90,12 @@ internal class RenderListMaker<T>(
     }
 
     private fun MapViewLogic.PreparedItem<T>.addToRender(
-        array: FloatArray,
+        notRotatedArray: FloatArray,
     ) {
+        val array = notRotatedArray.withMatrix(matrix, worldRotation)
+
         when (this) {
-            is MapViewLogic.PreparedItem.PreparedPolygonItem -> {
+            is PreparedPolygonItem -> {
                 insides.add(
                     MapViewLogic.RenderItem.RenderPolygonItem(
                         array,
@@ -93,12 +106,12 @@ internal class RenderListMaker<T>(
                     borders.add(
                         MapViewLogic.RenderItem.RenderPolygonItem(
                             array,
-                            outerPaintHolder!!.takePaint(),
+                            outerPaintHolder.takePaint(),
                         )
                     )
                 }
             }
-            is MapViewLogic.PreparedItem.PreparedPathItem -> {
+            is PreparedPathItem -> {
                 insides.add(
                     MapViewLogic.RenderItem.RenderPathItem(
                         array,
@@ -109,12 +122,12 @@ internal class RenderListMaker<T>(
                     borders.add(
                         MapViewLogic.RenderItem.RenderPathItem(
                             array,
-                            outerPaintHolder!!.takePaint(),
+                            outerPaintHolder.takePaint(),
                         )
                     )
                 }
             }
-            is MapViewLogic.PreparedItem.PreparedCircleItem -> {
+            is PreparedCircleItem -> {
                 insides.add(
                     MapViewLogic.RenderItem.RenderCircleItem(
                         array[0],
@@ -129,10 +142,19 @@ internal class RenderListMaker<T>(
                             array[0],
                             array[1],
                             radius.takeDimension(),
-                            outerPaintHolder!!.takePaint(),
+                            outerPaintHolder.takePaint(),
                         )
                     )
                 }
+            }
+            is PreparedIconItem -> {
+                icons.add(
+                    MapViewLogic.RenderItem.RenderIconItem(
+                        array[0],
+                        array[1],
+                        icon,
+                    )
+                )
             }
         }
     }

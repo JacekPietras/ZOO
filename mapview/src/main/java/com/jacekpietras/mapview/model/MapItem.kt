@@ -1,28 +1,40 @@
 package com.jacekpietras.mapview.model
 
+import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
 
 sealed class MapItem(
-    open val paint: MapPaint,
     open val minZoom: Float?,
 ) {
 
-    class PathMapItem(
-        val path: PathD,
-        override val paint: MapPaint,
-        override val minZoom: Float? = null,
-    ) : MapItem(paint, minZoom)
+    sealed class MapColoredItem(
+        open val paint: MapPaint,
+        override val minZoom: Float?,
+    ) : MapItem(minZoom) {
 
-    class PolygonMapItem(
-        val polygon: PolygonD,
-        override val paint: MapPaint,
-        override val minZoom: Float? = null,
-    ) : MapItem(paint, minZoom)
+        class PathMapItem(
+            val path: PathD,
+            override val paint: MapPaint,
+            override val minZoom: Float? = null,
+        ) : MapColoredItem(paint, minZoom)
 
-    class CircleMapItem(
+        class PolygonMapItem(
+            val polygon: PolygonD,
+            override val paint: MapPaint,
+            override val minZoom: Float? = null,
+        ) : MapColoredItem(paint, minZoom)
+
+        class CircleMapItem(
+            val point: PointD,
+            val radius: MapDimension,
+            override val paint: MapPaint,
+            override val minZoom: Float? = null,
+        ) : MapColoredItem(paint, minZoom)
+    }
+
+    class IconMapItem(
         val point: PointD,
-        val radius: MapDimension,
-        override val paint: MapPaint,
+        @DrawableRes val icon: Int,
         override val minZoom: Float? = null,
-    ) : MapItem(paint, minZoom)
+    ) : MapItem(minZoom)
 }

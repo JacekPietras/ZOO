@@ -6,6 +6,9 @@ import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.mapview.model.MapItem.MapColoredItem.CircleMapItem
+import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PathMapItem
+import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PolygonMapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
@@ -148,7 +151,7 @@ internal class MapViewStateMapper {
 
     private fun fromPolygons(polygons: List<PolygonEntity>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         polygons.map { polygon ->
-            MapItem.PolygonMapItem(
+            PolygonMapItem(
                 PolygonD(polygon.vertices),
                 paint,
                 minZoom,
@@ -157,7 +160,7 @@ internal class MapViewStateMapper {
 
     private fun fromPath(path: List<PointD>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         listOf(
-            MapItem.PathMapItem(
+            PathMapItem(
                 PathD(path),
                 paint,
                 minZoom,
@@ -166,7 +169,7 @@ internal class MapViewStateMapper {
 
     private fun fromPaths(paths: List<PathEntity>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         paths.map { path ->
-            MapItem.PathMapItem(
+            PathMapItem(
                 PathD(path.vertices),
                 paint,
                 minZoom,
@@ -176,7 +179,7 @@ internal class MapViewStateMapper {
     @Suppress("unused")
     private fun fromPoints(points: List<PointD>, paint: MapPaint): List<MapItem> =
         points.map { point ->
-            MapItem.CircleMapItem(
+            CircleMapItem(
                 point,
                 (paint as MapPaint.Circle).radius,
                 paint,
@@ -186,7 +189,7 @@ internal class MapViewStateMapper {
     private fun fromPoint(point: PointD?, paint: MapPaint): List<MapItem> =
         if (point != null) {
             listOf(
-                MapItem.CircleMapItem(
+                CircleMapItem(
                     point,
                     (paint as MapPaint.Circle).radius,
                     paint,

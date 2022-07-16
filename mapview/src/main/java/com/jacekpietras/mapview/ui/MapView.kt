@@ -57,6 +57,7 @@ class MapView @JvmOverloads constructor(
                 is RenderPathItem -> canvas.drawPath(it.shape, it.paint, false)
                 is RenderPolygonItem -> canvas.drawPath(it.shape, it.paint, true)
                 is RenderCircleItem -> canvas.drawCircle(it.cX, it.cY, it.radius, it.paint)
+                is RenderIconItem -> TODO("draw image on canvas")
             }
         }
     }

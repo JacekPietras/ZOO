@@ -1,8 +1,11 @@
 package com.jacekpietras.mapview.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -12,8 +15,11 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderIconItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
 import timber.log.Timber
@@ -26,25 +32,42 @@ fun ComposableMapView(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
-    Canvas(
-        modifier = modifier
-            .clipToBounds()
-            .addOnTransform(onTransform)
-            .addOnClick(onClick)
-    ) {
-        val (width, height) = size.width.toInt() to size.height.toInt()
-        if (width > 0 && height > 0) {
-            onSizeChanged(width, height)
-        }
+    val (icons, canvasItems) = mapList.partition { it is RenderIconItem }
 
-        mapList.forEach {
-            when (it) {
-                is RenderPathItem -> drawPath(it.shape, it.paint, false)
-                is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
-                is RenderCircleItem -> drawCircleSafe(it.paint.color, it.radius, Offset(it.cX, it.cY))
+    Box {
+        Canvas(
+            modifier = modifier
+                .clipToBounds()
+                .addOnTransform(onTransform)
+                .addOnClick(onClick)
+        ) {
+            val (width, height) = size.width.toInt() to size.height.toInt()
+            if (width > 0 && height > 0) {
+                onSizeChanged(width, height)
+            }
+
+            canvasItems.forEach {
+                when (it) {
+                    is RenderPathItem -> drawPath(it.shape, it.paint, false)
+                    is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
+                    is RenderCircleItem -> drawCircleSafe(it.paint.color, it.radius, Offset(it.cX, it.cY))
+                    is RenderIconItem -> Unit
+                }
             }
         }
+        icons.forEach {
+            MapIcon(it as RenderIconItem<ComposablePaint>)
+        }
     }
+}
+
+@Composable
+private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
+    Image(
+        modifier = Modifier.offset(x = item.cX.dp, y = item.cY.dp),
+        painter = painterResource(item.iconRes),
+        contentDescription = null,
+    )
 }
 
 private fun DrawScope.drawCircleSafe(
