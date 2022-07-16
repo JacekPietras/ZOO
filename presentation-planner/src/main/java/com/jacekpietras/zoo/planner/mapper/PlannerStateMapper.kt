@@ -21,6 +21,7 @@ internal class PlannerStateMapper {
                             regionId = stage.region.id.id,
                             isMutable = true,
                             isFixed = true,
+                            isSeen = stage.seen,
                         )
                     } else {
                         PlannerItem(
