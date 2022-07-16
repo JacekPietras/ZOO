@@ -5,7 +5,6 @@ import android.text.format.DateUtils
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.data.BuildConfig
 import com.jacekpietras.zoo.data.R
-import com.jacekpietras.zoo.data.cache.watcher.Watcher
 import com.jacekpietras.zoo.data.database.dao.GpsDao
 import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
 import com.jacekpietras.zoo.data.parser.TxtParser
@@ -25,9 +24,9 @@ internal class GpsRepositoryImpl(
     private val context: Context,
     private val gpsDao: GpsDao,
     private val gpsHistoryMapper: GpsHistoryMapper,
-    private val compassEnabledWatcher: Watcher<Boolean>,
-    private val lightSensorEnabledWatcher: Watcher<Boolean>,
-    private val navigationEnabledWatcher: Watcher<Boolean>,
+    private val compassEnabledWatcher: MutableStateFlow<Boolean>,
+    private val lightSensorEnabledWatcher: MutableStateFlow<Boolean>,
+    private val navigationEnabledWatcher: MutableStateFlow<Boolean>,
 ) : GpsRepository {
 
     private val compass = MutableStateFlow(0f)
@@ -98,14 +97,14 @@ internal class GpsRepositoryImpl(
     }
 
     override fun observeCompassEnabled(): Flow<Boolean> =
-        compassEnabledWatcher.dataFlow
+        compassEnabledWatcher
 
     override fun enableCompass() {
-        compassEnabledWatcher.notifyUpdated(true)
+        compassEnabledWatcher.value = (true)
     }
 
     override fun disableCompass() {
-        compassEnabledWatcher.notifyUpdated(false)
+        compassEnabledWatcher.value = (false)
     }
 
     override fun insertLuminance(luminance: Float) {
@@ -118,24 +117,24 @@ internal class GpsRepositoryImpl(
         luminance
 
     override fun enableLightSensor() {
-        lightSensorEnabledWatcher.notifyUpdated(true)
+        lightSensorEnabledWatcher.value = (true)
     }
 
     override fun disableLightSensor() {
-        lightSensorEnabledWatcher.notifyUpdated(false)
+        lightSensorEnabledWatcher.value = (false)
     }
 
     override fun observeLightSensorEnabled(): Flow<Boolean> =
-        lightSensorEnabledWatcher.dataFlow
+        lightSensorEnabledWatcher
 
     override fun enableNavigation() {
-        navigationEnabledWatcher.notifyUpdated(true)
+        navigationEnabledWatcher.value = (true)
     }
 
     override fun disableNavigation() {
-        navigationEnabledWatcher.notifyUpdated(false)
+        navigationEnabledWatcher.value = (false)
     }
 
     override fun observeNavigationEnabled(): Flow<Boolean> =
-        navigationEnabledWatcher.dataFlow
+        navigationEnabledWatcher
 }

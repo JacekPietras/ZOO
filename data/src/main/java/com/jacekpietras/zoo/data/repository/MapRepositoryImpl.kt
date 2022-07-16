@@ -4,7 +4,6 @@ import android.content.Context
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.zoo.data.R
-import com.jacekpietras.zoo.data.cache.watcher.Watcher
 import com.jacekpietras.zoo.data.parser.SvgParser
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
@@ -17,17 +16,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOf
 
 
 internal class MapRepositoryImpl(
     context: Context,
-    private val roadsWatcher: Watcher<List<PathEntity>>,
-    private val technicalWatcher: Watcher<List<PathEntity>>,
-    private val linesWatcher: Watcher<List<PathEntity>>,
-    private val buildingsWatcher: Watcher<List<PolygonEntity>>,
-    private val aviaryWatcher: Watcher<List<PolygonEntity>>,
-    private val visitedRoadsWatcher: Watcher<List<VisitedRoadEdge>>,
+    private val roadsWatcher: MutableStateFlow<List<PathEntity>?>,
+    private val technicalWatcher: MutableStateFlow<List<PathEntity>?>,
+    private val linesWatcher: MutableStateFlow<List<PathEntity>?>,
+    private val buildingsWatcher: MutableStateFlow<List<PolygonEntity>?>,
+    private val aviaryWatcher: MutableStateFlow<List<PolygonEntity>?>,
+    private val visitedRoadsWatcher: MutableStateFlow<List<VisitedRoadEdge>>,
 ) : MapRepository {
 
     private val parser by lazy { SvgParser(context, R.xml.map) }
@@ -41,7 +42,6 @@ internal class MapRepositoryImpl(
     private val lines: List<List<PointD>> by lazy { parser.getPointsByGroup("lines") }
     private val roads: List<List<PointD>> by lazy { parser.getPointsByGroup("paths") }
 
-    private var visitedRoads: List<VisitedRoadEdge>? = null
     private var visitedRoadsCalculated = false
 
     override suspend fun loadMap() {
@@ -49,11 +49,11 @@ internal class MapRepositoryImpl(
             isMapLoaded = true
             parser
             listOf(
-                async { buildingsWatcher.notifyUpdated(buildings.map(::PolygonEntity)) },
-                async { aviaryWatcher.notifyUpdated(aviary.map(::PolygonEntity)) },
-                async { roadsWatcher.notifyUpdated(roads.map(::PathEntity)) },
-                async { technicalWatcher.notifyUpdated(technical.map(::PathEntity)) },
-                async { linesWatcher.notifyUpdated(lines.map(::PathEntity)) },
+                async { buildingsWatcher.value = (buildings.map(::PolygonEntity)) },
+                async { aviaryWatcher.value = (aviary.map(::PolygonEntity)) },
+                async { roadsWatcher.value = (roads.map(::PathEntity)) },
+                async { technicalWatcher.value = (technical.map(::PathEntity)) },
+                async { linesWatcher.value = (lines.map(::PathEntity)) },
             ).awaitAll()
         }
     }
@@ -62,13 +62,13 @@ internal class MapRepositoryImpl(
         isMapLoaded
 
     override fun observeBuildings(): Flow<List<PolygonEntity>> =
-        buildingsWatcher.dataFlow
+        buildingsWatcher.filterNotNull()
 
     override fun observeAviary(): Flow<List<PolygonEntity>> =
-        aviaryWatcher.dataFlow
+        aviaryWatcher.filterNotNull()
 
     override fun observeRoads(): Flow<List<PathEntity>> =
-        roadsWatcher.dataFlow
+        roadsWatcher.filterNotNull()
 
     override suspend fun getRoads(): List<PathEntity> =
         roads.map(::PathEntity)
@@ -80,28 +80,27 @@ internal class MapRepositoryImpl(
         )
 
     override fun observeVisitedRoads(): Flow<List<VisitedRoadEdge>> =
-        visitedRoadsWatcher.dataFlow
+        visitedRoadsWatcher
 
     override fun updateVisitedRoads(list: List<VisitedRoadEdge>) {
         visitedRoadsCalculated = true
-        visitedRoads = list
-        visitedRoadsWatcher.notifyUpdated(list)
+        visitedRoadsWatcher.value = list
     }
 
-    override fun getVisitedRoads(): List<VisitedRoadEdge>? =
-        visitedRoads
+    override fun getVisitedRoads(): List<VisitedRoadEdge> =
+        visitedRoadsWatcher.value
 
     override fun areVisitedRoadsCalculated(): Boolean =
         visitedRoadsCalculated
 
     override fun observeTechnicalRoads(): Flow<List<PathEntity>> =
-        technicalWatcher.dataFlow
+        technicalWatcher.filterNotNull()
 
     override suspend fun getTechnicalRoads(): List<PathEntity> =
         technical.map(::PathEntity)
 
     override fun observeLines(): Flow<List<PathEntity>> =
-        linesWatcher.dataFlow
+        linesWatcher.filterNotNull()
 
     override suspend fun getCurrentRegions(): List<Pair<Region, PolygonEntity>> =
         regions

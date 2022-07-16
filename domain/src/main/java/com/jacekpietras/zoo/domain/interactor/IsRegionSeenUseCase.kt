@@ -13,7 +13,7 @@ class IsRegionSeenUseCase(
     suspend fun run(regionId: RegionId): Boolean {
         if (!mapRepository.areVisitedRoadsCalculated()) return false
 
-        val alreadyVisited = checkNotNull(mapRepository.getVisitedRoads())
+        val alreadyVisited = mapRepository.getVisitedRoads()
         val region = mapRepository.getCurrentRegions().first { it.first.id == regionId }.second
 
         alreadyVisited.forEach { edge ->

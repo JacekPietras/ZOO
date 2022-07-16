@@ -1,40 +1,40 @@
 package com.jacekpietras.zoo.data.cache.di
 
-import com.jacekpietras.zoo.data.cache.watcher.buildStateFlow
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val cacheModule = module {
 
     single(named(COMPASS_ENABLED)) {
-        buildStateFlow(initValue = false)
+        MutableStateFlow(value = false)
     }
     single(named(LIGHT_SENSOR_ENABLED)) {
-        buildStateFlow(initValue = false)
+        MutableStateFlow(value = false)
     }
     single(named(NAVIGATION_ENABLED)) {
-        buildStateFlow(initValue = false)
+        MutableStateFlow(value = false)
     }
 
     single(named(MAP_ROADS)) {
-        buildStateFlow<List<MapItemEntity.PathEntity>>()
+        MutableStateFlow<List<MapItemEntity.PathEntity>?>(value = null)
     }
     single(named(MAP_TECHNICAL)) {
-        buildStateFlow<List<MapItemEntity.PathEntity>>()
+        MutableStateFlow<List<MapItemEntity.PathEntity>?>(value = null)
     }
     single(named(MAP_LINES)) {
-        buildStateFlow<List<MapItemEntity.PathEntity>>(initValue = emptyList())
+        MutableStateFlow<List<MapItemEntity.PathEntity>?>(value = null)
     }
     single(named(MAP_BUILDINGS)) {
-        buildStateFlow<List<MapItemEntity.PolygonEntity>>()
+        MutableStateFlow<List<MapItemEntity.PolygonEntity>?>(value = null)
     }
     single(named(MAP_AVIARY)) {
-        buildStateFlow<List<MapItemEntity.PolygonEntity>>()
+        MutableStateFlow<List<MapItemEntity.PolygonEntity>?>(value = null)
     }
     single(named(MAP_VISITED_ROADS)) {
-        buildStateFlow<List<VisitedRoadEdge>>(initValue = emptyList())
+        MutableStateFlow<List<VisitedRoadEdge>>(value = emptyList())
     }
 }
 

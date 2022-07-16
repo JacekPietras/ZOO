@@ -58,7 +58,7 @@ internal class InsertUserPositionUseCaseImpl(
         )
         val snappedEdge = pathSnapper.snapToEdges(path)
 
-        val alreadyVisited = checkNotNull(mapRepository.getVisitedRoads())
+        val alreadyVisited = mapRepository.getVisitedRoads()
         val updated = pathListSnapper.merge(alreadyVisited, snappedEdge)
         mapRepository.updateVisitedRoads(updated)
     }

@@ -31,7 +31,7 @@ interface MapRepository {
 
     fun observeVisitedRoads(): Flow<List<VisitedRoadEdge>>
 
-    fun getVisitedRoads(): List<VisitedRoadEdge>?
+    fun getVisitedRoads(): List<VisitedRoadEdge>
 
     fun updateVisitedRoads(list: List<VisitedRoadEdge>)
 
