@@ -22,14 +22,15 @@ sealed class Stage {
     sealed class InRegion(
         open val region: Region,
         open val mutable: Boolean,
+        open val seen: Boolean,
     ) : Stage() {
 
         companion object {
 
-            operator fun invoke(region: Region, mutable: Boolean = true): InRegion =
-                Single(region, mutable)
+            operator fun invoke(region: Region, mutable: Boolean = true, seen: Boolean = false): InRegion =
+                Single(region, mutable, seen)
 
-            operator fun invoke(regions: List<Region>, mutable: Boolean = true) =
+            operator fun invoke(regions: List<Region>, mutable: Boolean = true, seen: Boolean = false) =
                 when {
                     regions.isEmpty() -> {
                         throw IllegalStateException("trying to add stage with no regions")
@@ -38,13 +39,15 @@ sealed class Stage {
                         Single(
                             region = regions.first(),
                             mutable = mutable,
+                            seen = seen,
                         )
                     }
                     else -> {
                         Multiple(
-                            region   = regions.first(),
+                            region = regions.first(),
                             mutable = mutable,
                             alternatives = regions,
+                            seen = seen,
                         )
                     }
                 }
@@ -54,13 +57,15 @@ sealed class Stage {
     data class Single(
         override val region: Region,
         override val mutable: Boolean,
-    ) : InRegion(region, mutable)
+        override val seen: Boolean,
+    ) : InRegion(region, mutable, seen)
 
     data class Multiple(
         override val region: Region,
         override val mutable: Boolean,
+        override val seen: Boolean,
         val alternatives: List<Region>,
-    ) : InRegion(region, mutable)
+    ) : InRegion(region, mutable, seen)
 
     data class InUserPosition(
         val point: PointD,

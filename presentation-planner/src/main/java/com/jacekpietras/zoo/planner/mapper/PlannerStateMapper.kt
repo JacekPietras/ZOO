@@ -28,6 +28,8 @@ internal class PlannerStateMapper {
                             regionId = stage.region.id.id,
                             isMultiple = stage is Stage.Multiple,
                             isMutable = stage.mutable,
+                            isFixed = stage.seen,
+                            isSeen = stage.seen,
                         )
                     }
                 }

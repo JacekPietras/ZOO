@@ -8,4 +8,5 @@ data class PlannerItem(
     val isMultiple: Boolean = false,
     val isMutable: Boolean = false,
     val isFixed: Boolean = false,
+    val isSeen: Boolean = false,
 )

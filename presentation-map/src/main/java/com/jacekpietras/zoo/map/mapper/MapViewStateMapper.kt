@@ -138,7 +138,7 @@ internal class MapViewStateMapper {
         lines: List<PathEntity>,
         technicalRoads: List<PathEntity>,
         rawOldTakenRoute: List<PathEntity>,
-        regionsWithCenters: List<Pair<RegionId, PointD>>,
+        regionsWithCenters: List<Pair<Region, PointD>>,
     ): MapWorldViewState = MapWorldViewState(
         worldBounds = worldBounds,
         mapData = flatListOf(
@@ -152,17 +152,19 @@ internal class MapViewStateMapper {
         ),
     )
 
-    private fun fromRegions(regions: List<Pair<RegionId, PointD>>): List<MapItem> =
-        regions.mapNotNull { (regionId, position) ->
-            val icon = when {
-                regionId.id.startsWith("wc-") -> R.drawable.ic_wc_24
-                else -> {
-                    when (regionId.id) {
-                        "wejscie",
-                        "wyjscie" -> R.drawable.ic_animal_lion_24
-                        else -> return@mapNotNull null
-                    }
-                }
+    private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =
+        regions.mapNotNull { (region, position) ->
+            val icon = when (region) {
+                is Region.WcRegion -> R.drawable.ic_wc_24
+                is Region.ExitRegion -> R.drawable.ic_animal_lion_24
+                else -> return@mapNotNull null
+//                else -> {
+//                    when (region.id.id) {
+//                        "wejscie",
+//                        "wyjscie" -> R.drawable.ic_animal_lion_24
+//                        else -> return@mapNotNull null
+//                    }
+//                }
             }
             IconMapItem(
                 point = position,

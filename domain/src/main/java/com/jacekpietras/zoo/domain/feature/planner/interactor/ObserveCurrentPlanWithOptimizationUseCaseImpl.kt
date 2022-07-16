@@ -40,7 +40,10 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                 fast = { plan -> plan.stages to emptyList() },
                 long = { plan ->
                     measureMap({ Timber.d("Optimization took $it") }) {
-                        tspSolver.findShortPathAndStages(plan.stages)
+                        val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
+
+                        tspSolver.findShortPathAndStages(notSeen)
+                            .let { (resultStages, path) -> (seen + resultStages) to path }
                             .also { (resultStages, _) ->
                                 if (plan.stages != resultStages) {
                                     saveBetterPlan(plan, resultStages)
@@ -86,7 +89,9 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private fun Flow<PlanEntity>.combineWithUserPosition(): Flow<PlanEntity> =
         combine(observeUserPosition()) { plan, userPosition ->
             val userStage = listOfNotNull(userPosition?.let { Stage.InUserPosition(it) })
-            plan.copy(stages = userStage + plan.stages)
+            val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
+
+            plan.copy(stages = seen + userStage + notSeen)
         }
 
     @Suppress("USELESS_CAST")

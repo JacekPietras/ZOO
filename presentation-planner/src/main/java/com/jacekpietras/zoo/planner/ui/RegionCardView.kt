@@ -26,6 +26,7 @@ internal fun RegionCardView(
     elevation: Dp = 4.dp,
     text: String,
     isMutable: Boolean = true,
+    isSeen: Boolean = false,
     onRemove: () -> Unit,
     onUnlock: () -> Unit,
 ) {
@@ -53,6 +54,15 @@ internal fun RegionCardView(
                 SideIconView(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     iconRes = R.drawable.ic_lock_24,
+                    contentDescription = R.string.unlock,
+                    onClick = onUnlock,
+                )
+            }
+
+            if (!isSeen) {
+                SideIconView(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    iconRes = R.drawable.ic_eye_24,
                     contentDescription = R.string.unlock,
                     onClick = onUnlock,
                 )

@@ -12,6 +12,7 @@ internal data class PlanDto(
 internal data class StageDto(
     val regionType: StageRegionType,
     val mutable: Boolean,
+    val seen: Boolean,
     val regionId: String,
     val alternatives: List<String>?,
 )

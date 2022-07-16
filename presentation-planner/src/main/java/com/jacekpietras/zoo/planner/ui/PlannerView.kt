@@ -100,6 +100,7 @@ private fun PlannerListView(
                         },
                     ),
                 isMutable = item.isMutable,
+                isSeen = item.isSeen,
                 elevation = elevation,
                 text = item.regionId + " (" + item.text.toString(LocalContext.current) + ")",
                 onRemove = { onRemove(item.regionId) },

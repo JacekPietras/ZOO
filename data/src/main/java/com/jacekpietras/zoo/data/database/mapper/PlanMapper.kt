@@ -23,6 +23,7 @@ internal class PlanMapper {
                                 Stage.Multiple(
                                     region = makeRegion(regionType, regionId),
                                     mutable = mutable,
+                                    seen = seen,
                                     alternatives = alternatives.map { makeRegion(regionType, it) },
                                 )
                             }
@@ -30,6 +31,7 @@ internal class PlanMapper {
                                 Stage.Single(
                                     region = makeRegion(regionType, regionId),
                                     mutable = mutable,
+                                    seen = seen,
                                 )
                             }
                         }
@@ -51,6 +53,7 @@ internal class PlanMapper {
                             StageDto(
                                 regionId = stage.region.id.id,
                                 mutable = stage.mutable,
+                                seen = stage.seen,
                                 alternatives = stage.alternatives.map { it.id.id },
                                 regionType = stage.toRegionType(),
                             )
@@ -59,6 +62,7 @@ internal class PlanMapper {
                             StageDto(
                                 regionId = stage.region.id.id,
                                 mutable = stage.mutable,
+                                seen = stage.seen,
                                 alternatives = null,
                                 regionType = stage.toRegionType(),
                             )
