@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.map.mapper
 
 import android.graphics.Color
-import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapColor
@@ -21,7 +20,6 @@ import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
@@ -157,14 +155,13 @@ internal class MapViewStateMapper {
             val icon = when (region) {
                 is Region.WcRegion -> R.drawable.ic_wc_24
                 is Region.ExitRegion -> R.drawable.ic_door_24
-                else -> return@mapNotNull null
-//                else -> {
-//                    when (region.id.id) {
-//                        "wejscie",
-//                        "wyjscie" -> R.drawable.ic_animal_lion_24
-//                        else -> return@mapNotNull null
-//                    }
-//                }
+//                else -> return@mapNotNull null
+                else -> {
+                    when (region.id.id) {
+                        "wielkie-koty" -> R.drawable.ic_region_big_cats_24
+                        else -> return@mapNotNull null
+                    }
+                }
             }
             IconMapItem(
                 point = position,
