@@ -3,7 +3,6 @@ apply from: "$rootDir/common.gradle"
 apply from: "$rootDir/presentation.gradle"
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
 
 dependencies {
     implementation project(':geometry')
@@ -21,8 +20,4 @@ dependencies {
 
     //Image Loader
     implementation "io.coil-kt:coil-compose:$coil_version"
-
-    //Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 }

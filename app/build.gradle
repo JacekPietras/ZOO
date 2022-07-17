@@ -2,7 +2,6 @@ apply plugin: "com.android.application"
 apply from: "$rootDir/common.gradle"
 apply from: "$rootDir/presentation.gradle"
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     defaultConfig {
@@ -44,12 +43,6 @@ dependencies {
     implementation project(':presentation-planner')
     implementation project(':logger')
     implementation project(':tracking')
-
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-
-    //Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
     //Memory Leak finder
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"

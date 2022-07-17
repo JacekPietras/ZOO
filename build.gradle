@@ -19,7 +19,6 @@ buildscript {
         moshi_version = "1.13.0"
         coil_version = "2.1.0"
         navigation_version = "2.5.0"
-        constraintlayout_version = "2.1.4"
         timber_version = "5.0.1"
         junit_jupiter = "5.8.2"
         junit5_version = "1.8.2.1"
@@ -46,7 +45,6 @@ buildscript {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:$junit5_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
     }
 }
 
