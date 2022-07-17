@@ -31,6 +31,8 @@ class ZooColors(
     val shimmerBg: Color = Palette.gray200 onNight Palette.gray900
     val shimmerShine: Color = Palette.white onNight Palette.gray800
 
+    val mapColors = MapColors(nightTheme)
+
     private infix fun <T> T.onNight(right: T): T = if (nightTheme) right else this
 }
 

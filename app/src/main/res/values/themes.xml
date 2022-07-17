@@ -14,7 +14,6 @@
         <item name="colorMapTaken">?colorPrimary</item>
         <item name="colorMapTechnical">#FFF0F0</item>
         <item name="colorMapTechnicalBorder">#D7DBDD</item>
-        <item name="mapIconColor">#000000</item>
 
         <item name="colorSmallMapBackground">#A1DAB8</item>
         <item name="colorSmallMapBuilding">#768A7E</item>
