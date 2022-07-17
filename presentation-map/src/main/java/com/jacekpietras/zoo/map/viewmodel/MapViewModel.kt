@@ -1,8 +1,14 @@
 package com.jacekpietras.zoo.map.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.ui.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
+import com.jacekpietras.zoo.core.dispatcher.flowOnMain
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.text.RichText
@@ -41,13 +47,13 @@ import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
+import com.jacekpietras.zoo.map.extensions.applyToMap
 import com.jacekpietras.zoo.map.extensions.combine
 import com.jacekpietras.zoo.map.extensions.combineWithIgnoredFlow
 import com.jacekpietras.zoo.map.extensions.reduce
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
-import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
 import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
 import com.jacekpietras.zoo.map.model.MapState
 import com.jacekpietras.zoo.map.model.MapToolbarMode
@@ -66,6 +72,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 internal class MapViewModel(
+    context: Context,
     animalId: String?,
     regionId: String?,
     private val mapper: MapViewStateMapper,
@@ -103,10 +110,50 @@ internal class MapViewModel(
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) : ViewModel() {
 
+    private val paintBaker = ComposablePaintBaker(context)
+
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
     val effects: Flow<Unit> = _effects
         .filter { it.isNotEmpty() }
         .map { }
+
+    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic {
+        mapList.value = it
+    }
+
+    val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
+
+    private val mapColors = MutableStateFlow(MapColors())
+
+    private val volatileState = MutableStateFlow(MapVolatileState())
+    private val volatileViewState: Flow<MapVolatileViewState> = combine(
+        volatileState,
+        mapColors,
+        observeCurrentPlanPathUseCase.run(),
+        observeVisitedRoadsUseCase.run(),
+        observeTakenRouteUseCase.run(),
+        observeCompassUseCase.run(),
+        mapper::from,
+    )
+        .flowOnBackground()
+        .onEach(mapLogic::applyToMap)
+        .flowOnMain()
+
+    private val mapWorldViewState: Flow<MapWorldViewState> = combine(
+        mapColors,
+        observeWorldBoundsUseCase.run(),
+        observeBuildingsUseCase.run(),
+        observeAviaryUseCase.run(),
+        observeRoadsUseCase.run(),
+        observeMapLinesUseCase.run(),
+        observeTechnicalRoadsUseCase.run(),
+        observeOldTakenRouteUseCase.run(),
+        observeRegionCentersUseCase.run(),
+        mapper::from,
+    )
+        .flowOnBackground()
+        .onEach(mapLogic::applyToMap)
+        .flowOnMain()
 
     private val state = MutableStateFlow(MapState())
     val viewState: Flow<MapViewState> = combine(
@@ -118,36 +165,16 @@ internal class MapViewModel(
         .combineWithIgnoredFlow(userPositionObservation())
         .combineWithIgnoredFlow(outsideWorldEventObservation())
         .combineWithIgnoredFlow(arrivalAtRegionEventObservation())
+        .combineWithIgnoredFlow(volatileViewState)
+        .combineWithIgnoredFlow(mapWorldViewState)
         .flowOnBackground()
-
-    private val volatileState = MutableStateFlow(MapVolatileState())
-    val volatileViewState: Flow<MapVolatileViewState> = combine(
-        volatileState,
-        observeCurrentPlanPathUseCase.run(),
-        observeVisitedRoadsUseCase.run(),
-        observeTakenRouteUseCase.run(),
-        observeCompassUseCase.run(),
-        mapper::from,
-    ).flowOnBackground()
-
-    val mapWorldViewState: Flow<MapWorldViewState> = combine(
-        observeWorldBoundsUseCase.run(),
-        observeBuildingsUseCase.run(),
-        observeAviaryUseCase.run(),
-        observeRoadsUseCase.run(),
-        observeMapLinesUseCase.run(),
-        observeTechnicalRoadsUseCase.run(),
-        observeOldTakenRouteUseCase.run(),
-        observeRegionCentersUseCase.run(),
-        mapper::from,
-    ).flowOnBackground()
 
     init {
         launchInBackground {
             loadMapUseCase.run()
 
             animalId.toAnimalId()?.let { animalId ->
-                sendEffect(CenterAtUser)
+                centerAtUserPosition()
                 navigationToAnimal(getAnimalUseCase.run(animalId), regionId.toRegionId())
             }
 
@@ -200,15 +227,15 @@ internal class MapViewModel(
         }
     }
 
-    fun onStopCentering() {
+    private fun onStopCentering() {
         stopCompassUseCase.run()
     }
 
-    fun onStartCentering() {
+    private fun onStartCentering() {
         startCompassUseCase.run()
     }
 
-    fun onPointPlaced(point: PointD) {
+    private fun onPointPlaced(point: PointD) {
         launchInBackground {
             val regionsAndAnimals = getRegionsContainingPointUseCase.run(point)
                 .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
@@ -241,7 +268,7 @@ internal class MapViewModel(
             onDenied = { onLocationDenied() },
             onGranted = {
                 trackingServiceStarter.run()
-                sendEffect(CenterAtUser)
+                centerAtUserPosition()
             },
         )
     }
@@ -279,7 +306,7 @@ internal class MapViewModel(
     }
 
     fun onMapActionClicked(mapAction: MapAction) {
-        sendEffect(CenterAtUser)
+        centerAtUserPosition()
         val toolbarMode = when (mapAction) {
             MapAction.AROUND_YOU -> MapToolbarMode.AroundYouMapActionMode(mapAction)
             MapAction.UPLOAD -> {
@@ -393,6 +420,37 @@ internal class MapViewModel(
             .flowOnBackground()
 
     fun fillColors(colors: MapColors) {
-        mapper.setColors(colors)
+        mapList.value = emptyList()
+        mapColors.value = colors
+    }
+
+    private fun makeComposableMapLogic(
+        invalidate: (List<RenderItem<ComposablePaint>>) -> Unit
+    ): MapViewLogic<ComposablePaint> {
+        return MapViewLogic(
+            invalidate = invalidate,
+            bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
+            bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
+            bakeDimension = { paintBaker.bakeDimension(it) },
+            setOnPointPlacedListener = { onPointPlaced(it) },
+            onStopCentering = { onStopCentering() },
+            onStartCentering = { onStartCentering() },
+        )
+    }
+
+    private fun centerAtUserPosition() {
+        mapLogic.centerAtUserPosition()
+    }
+
+    fun onSizeChanged(width: Int, height: Int) {
+        mapLogic.onSizeChanged(width, height)
+    }
+
+    fun onClick(x: Float, y: Float) {
+        mapLogic.onClick(x, y)
+    }
+
+    fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
+        mapLogic.onTransform(cX, cY, scale, rotate, vX, vY)
     }
 }

@@ -61,3 +61,6 @@ suspend fun <T> onMain(block: suspend CoroutineScope.() -> T) =
 
 fun <T> Flow<T>.flowOnBackground(): Flow<T> =
     flowOn(DispatcherProviderWrapper.provider.default)
+
+fun <T> Flow<T>.flowOnMain(): Flow<T> =
+    flowOn(DispatcherProviderWrapper.provider.main)

@@ -7,6 +7,4 @@ internal sealed class MapEffect {
     data class ShowToast(
         val text: RichText,
     ) : MapEffect()
-
-    object CenterAtUser : MapEffect()
 }

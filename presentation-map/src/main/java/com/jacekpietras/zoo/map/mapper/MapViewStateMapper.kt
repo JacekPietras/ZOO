@@ -34,16 +34,12 @@ import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.random.Random
 
 internal class MapViewStateMapper {
 
     private val carouselSeed = Random.nextLong()
-    private lateinit var mapColors: MapColors
-
-    fun setColors(colors: MapColors) {
-        mapColors = colors
-    }
 
     fun from(
         state: MapState,
@@ -112,8 +108,9 @@ internal class MapViewStateMapper {
 
     fun from(
         state: MapVolatileState,
+        mapColors :MapColors,
         plannedPath: List<PointD> = emptyList(),
-        visitedRoads: List<PathEntity> = emptyList(),
+        visitedRoads: List< PathEntity> = emptyList(),
         takenRoute: List<PathEntity> = emptyList(),
         compass: Float = 0f,
     ): MapVolatileViewState =
@@ -138,6 +135,7 @@ internal class MapViewStateMapper {
         }
 
     fun from(
+        mapColors :MapColors,
         worldBounds: RectD,
         buildings: List<PolygonEntity>,
         aviary: List<PolygonEntity>,

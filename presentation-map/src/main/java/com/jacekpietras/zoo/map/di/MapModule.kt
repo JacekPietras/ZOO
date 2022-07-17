@@ -4,6 +4,7 @@ import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -20,6 +21,7 @@ val mapModule = module {
 
     viewModel { params ->
         MapViewModel(
+            context = androidContext(),
             animalId = params[0],
             regionId = params[1],
             mapper = get(),
