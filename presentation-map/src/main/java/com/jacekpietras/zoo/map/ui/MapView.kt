@@ -52,16 +52,6 @@ internal fun MapView(
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
     Box {
-        if (BuildConfig.DEBUG) {
-            Text(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .align(Alignment.TopCenter),
-                text = ("l:" + viewState?.luminanceText),
-                style = MaterialTheme.typography.caption,
-                color = ZooTheme.colors.textPrimaryOnSurface,
-            )
-        }
         ComposableMapView(
             modifier = Modifier.fillMaxSize(),
             onSizeChanged = onSizeChanged,
@@ -87,6 +77,16 @@ internal fun MapView(
             onCameraClicked = onCameraClicked,
             onLocationClicked = onLocationClicked,
         )
+        if (BuildConfig.DEBUG) {
+            Text(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .align(Alignment.BottomCenter),
+                text = ("l:" + viewState?.luminanceText),
+                style = MaterialTheme.typography.caption,
+                color = ZooTheme.colors.textPrimaryOnSurface,
+            )
+        }
     }
 }
 

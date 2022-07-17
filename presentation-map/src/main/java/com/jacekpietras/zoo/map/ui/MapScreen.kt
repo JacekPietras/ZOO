@@ -70,6 +70,7 @@ fun MapScreen(
 
     val viewState by viewModel.viewState.collectAsState(null)
 
+    // fixme dont work without AppCompat Activity
     setDefaultNightMode(viewState?.isNightThemeSuggested)
 
     MapView(
