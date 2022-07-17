@@ -5,7 +5,13 @@ import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartLightSensorUs
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopLightSensorUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.model.ThemeType
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 class ObserveSuggestedThemeTypeUseCase(
     private val observeRegionsInUserPositionUseCase: ObserveRegionsInUserPositionUseCase,
@@ -16,10 +22,12 @@ class ObserveSuggestedThemeTypeUseCase(
 ) {
 
     fun run(): Flow<Pair<ThemeType, Float>> {
-        return observeRegionsInUserPositionUseCase.run()
-            .combine(flow { emit(mapRepository.getDarkRegions()) }) { regions, darkRegions ->
-                regions.any { it in darkRegions }
-            }
+        return combine(
+            observeRegionsInUserPositionUseCase.run(),
+            darkRegions,
+        ) { regions, darkRegions ->
+            regions.any { it in darkRegions }
+        }
             .distinctUntilChanged()
             .onEach { isDarkRegion ->
                 if (isDarkRegion) {
@@ -41,6 +49,8 @@ class ObserveSuggestedThemeTypeUseCase(
             .distinctUntilChanged()
             .onCompletion { stopLightSensorUseCase.run() }
     }
+
+    private val darkRegions = flow { emit(mapRepository.getDarkRegions()) }
 
     private companion object {
 

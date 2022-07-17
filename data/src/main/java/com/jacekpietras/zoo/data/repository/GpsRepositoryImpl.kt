@@ -30,7 +30,7 @@ internal class GpsRepositoryImpl(
 ) : GpsRepository {
 
     private val compass = MutableStateFlow(0f)
-    private val luminance = MutableStateFlow(1000f)
+    private val luminance = MutableStateFlow<Float?>(null)
 
     private val debugHistory: List<List<GpsHistoryEntity>> by lazy {
         if (BuildConfig.DEBUG) {
@@ -100,39 +100,38 @@ internal class GpsRepositoryImpl(
         compassEnabledWatcher
 
     override fun enableCompass() {
-        compassEnabledWatcher.value = (true)
+        compassEnabledWatcher.value = true
     }
 
     override fun disableCompass() {
-        compassEnabledWatcher.value = (false)
+        compassEnabledWatcher.value = false
     }
 
     override fun insertLuminance(luminance: Float) {
-        CoroutineScope(Dispatchers.Default).launch {
-            this@GpsRepositoryImpl.luminance.emit(luminance)
-        }
+        this@GpsRepositoryImpl.luminance.value = luminance
     }
 
     override fun observeLuminance(): Flow<Float> =
-        luminance
+        luminance.filterNotNull()
 
     override fun enableLightSensor() {
-        lightSensorEnabledWatcher.value = (true)
+        lightSensorEnabledWatcher.value = true
     }
 
     override fun disableLightSensor() {
-        lightSensorEnabledWatcher.value = (false)
+        lightSensorEnabledWatcher.value = false
+        this@GpsRepositoryImpl.luminance.value = null
     }
 
     override fun observeLightSensorEnabled(): Flow<Boolean> =
         lightSensorEnabledWatcher
 
     override fun enableNavigation() {
-        navigationEnabledWatcher.value = (true)
+        navigationEnabledWatcher.value = true
     }
 
     override fun disableNavigation() {
-        navigationEnabledWatcher.value = (false)
+        navigationEnabledWatcher.value = false
     }
 
     override fun observeNavigationEnabled(): Flow<Boolean> =
