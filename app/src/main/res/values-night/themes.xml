@@ -4,13 +4,6 @@
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">#16753C</item>
-        <item name="colorPrimaryVariant">#16753C</item>
-        <item name="colorOnPrimary">#000000</item>
-
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">#16753C</item>
-        <item name="colorSecondaryVariant">#16753C</item>
-        <item name="colorOnSecondary">#000000</item>
 
         <!-- Map Colors -->
         <item name="colorMapBackground">#121a26</item>
@@ -31,7 +24,5 @@
 
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
-
-        <item name="toolbarElevation">4dp</item>
     </style>
 </resources>
