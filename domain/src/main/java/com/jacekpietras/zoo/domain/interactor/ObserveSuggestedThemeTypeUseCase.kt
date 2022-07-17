@@ -15,7 +15,7 @@ class ObserveSuggestedThemeTypeUseCase(
     private val gpsRepository: GpsRepository,
 ) {
 
-    fun run(): Flow<ThemeType> {
+    fun run(): Flow<Pair<ThemeType, Float>> {
         return observeRegionsInUserPositionUseCase.run()
             .combine(flow { emit(mapRepository.getDarkRegions()) }) { regions, darkRegions ->
                 regions.any { it in darkRegions }
@@ -35,15 +35,15 @@ class ObserveSuggestedThemeTypeUseCase(
                     ThemeType.NIGHT
                 } else {
                     ThemeType.DAY
-                }
+                } to luminance
             }
-            .onStart { emit(ThemeType.DAY) }
+            .onStart { emit(ThemeType.DAY to -1f) }
             .distinctUntilChanged()
             .onCompletion { stopLightSensorUseCase.run() }
     }
 
     private companion object {
 
-        const val LOW_LUMINANCE = 20
+        const val LOW_LUMINANCE = 40
     }
 }

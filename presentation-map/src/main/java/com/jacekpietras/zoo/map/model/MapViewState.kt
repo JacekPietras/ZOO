@@ -12,6 +12,7 @@ internal data class MapViewState(
     val isBackArrowShown: Boolean = false,
     val isGuidanceShown: Boolean = false,
     val title: RichText = RichText.Empty,
+    val luminanceText: String = "",
     val mapCarouselItems: ImmutableList<MapCarouselItem> = persistentListOf(),
     val isMapActionsVisible: Boolean = false,
     val mapActions: ImmutableList<MapAction> = persistentListOf(),

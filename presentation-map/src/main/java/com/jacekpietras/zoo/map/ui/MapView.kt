@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,9 +28,11 @@ import androidx.compose.ui.unit.toSize
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.domain.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapViewState
 
@@ -48,6 +52,16 @@ internal fun MapView(
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
     Box {
+        if (BuildConfig.DEBUG) {
+            Text(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .align(Alignment.TopCenter),
+                text = ("l:" + viewState?.luminanceText),
+                style = MaterialTheme.typography.caption,
+                color = ZooTheme.colors.textPrimaryOnSurface,
+            )
+        }
         ComposableMapView(
             modifier = Modifier.fillMaxSize(),
             onSizeChanged = onSizeChanged,

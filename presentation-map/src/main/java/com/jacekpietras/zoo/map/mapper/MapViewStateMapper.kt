@@ -41,10 +41,11 @@ internal class MapViewStateMapper {
 
     fun from(
         state: MapState,
-        suggestedThemeType: ThemeType,
+        suggestedThemeTypeAndLuminance: Pair<ThemeType, Float?>,
         regionsWithAnimalsInUserPosition: List<Pair<Region, List<AnimalEntity>>>,
     ): MapViewState = with(state) {
         val isValidLocation = userPosition != PointD()
+        val (suggestedThemeType, luminance) = suggestedThemeTypeAndLuminance
 
         MapViewState(
             isGuidanceShown = isToolbarOpened,
@@ -63,7 +64,7 @@ internal class MapViewStateMapper {
                 }
                 else -> RichText.Empty
             },
-
+            luminanceText = luminance?.toInt().toString(),
             mapCarouselItems = when (toolbarMode) {
                 is MapToolbarMode.MapActionMode ->
                     when (toolbarMode.mapAction) {
