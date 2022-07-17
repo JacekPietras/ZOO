@@ -30,8 +30,6 @@ fun MapScreen(
     val router = MapRouterImpl({ activity }, navController)
     val permissionChecker = rememberGpsPermissionRequesterState()
 
-    val mapList by viewModel.mapList.collectAsState(initial = emptyList())
-
     val colors = ZooTheme.colors.mapColors
     LaunchedEffect("colors" + ZooTheme.isNightMode) {
         viewModel.fillColors(colors)
@@ -47,6 +45,7 @@ fun MapScreen(
     OnPauseListener { viewModel.onStopEvent() }
 
     val viewState by viewModel.viewState.collectAsState(null)
+    val mapList by viewModel.mapList.collectAsState(initial = emptyList())
 
     MapView(
         viewState,
