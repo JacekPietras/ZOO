@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LocalAppColors = staticCompositionLocalOf { ZooColors() }
 private val LocalAppDrawable = staticCompositionLocalOf { ZooDrawable() }
@@ -31,6 +32,10 @@ fun ZooTheme(
     drawable: ZooDrawable = ZooDrawable(large = large, nightTheme = isDarkTheme),
     content: @Composable () -> Unit,
 ) {
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.statusBarDarkContentEnabled = !isDarkTheme
+
     CompositionLocalProvider(
         LocalAppColors provides colors,
         LocalAppDrawable provides drawable,

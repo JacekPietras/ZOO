@@ -14,5 +14,5 @@ dependencies {
     implementation "io.coil-kt:coil-compose:$coil_version"
 
     //Pager
-    implementation "com.google.accompanist:accompanist-pager:$pager_version"
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 }

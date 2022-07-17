@@ -22,6 +22,7 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$navigation_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_viewmodel_version"
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:$immutable_collections_version"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
 
     // Insets
     implementation "androidx.compose.foundation:foundation:$compose_version"
