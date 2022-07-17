@@ -2,7 +2,13 @@ package com.jacekpietras.zoo.catalogue.feature.list.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +26,6 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.jacekpietras.zoo.catalogue.BuildConfig
-import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueListItem
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.shimmerWhen
@@ -69,7 +74,7 @@ internal fun AnimalList(
                     )
                     if (painter.state is AsyncImagePainter.State.Error) {
                         Image(
-                            painter = painterResource(R.drawable.pic_banana_leaf_rasterized_2),
+                            painter = painterResource(ZooTheme.drawable.bananaLeafRes),
                             contentDescription = null, // decorative element
                             contentScale = ContentScale.Crop,
                             modifier = Modifier

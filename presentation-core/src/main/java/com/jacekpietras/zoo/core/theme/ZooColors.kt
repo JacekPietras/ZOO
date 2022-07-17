@@ -8,28 +8,30 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 class ZooColors(
-    val darkTheme: Boolean = false,
+    val nightTheme: Boolean = false,
 ) {
 
-    val primary: Color = if (darkTheme) Palette.primaryDark else Palette.primary
+    val primary: Color = Palette.primary onNight Palette.primaryDark
     val onPrimary: Color = Palette.white
 
-    val secondary: Color = if (darkTheme) Palette.secondaryDark else Palette.secondary
+    val secondary: Color = Palette.secondary onNight Palette.secondaryDark
     val onSecondary: Color = Palette.white
 
     val error: Color = Palette.error
     val onError: Color = Palette.white
 
-    val surface: Color = if (darkTheme) Palette.black else Palette.white
-    val onSurface: Color = if (darkTheme) Palette.white.copy(alpha = 0.8f) else Palette.black
+    val surface: Color = Palette.white onNight Palette.black
+    val onSurface: Color = Palette.black onNight Palette.white.copy(alpha = 0.8f)
 
     val textPrimaryOnSurface: Color = onSurface
-    val textSecondaryOnSurface: Color = if (darkTheme) textPrimaryOnSurface.copy(alpha = 0.7f) else textPrimaryOnSurface.copy(alpha = 0.9f)
-    val textTertiaryOnSurface: Color = if (darkTheme) textPrimaryOnSurface.copy(alpha = 0.5f) else textPrimaryOnSurface.copy(alpha = 0.7f)
+    val textSecondaryOnSurface: Color = textPrimaryOnSurface.copy(alpha = 0.9f) onNight textPrimaryOnSurface.copy(alpha = 0.7f)
+    val textTertiaryOnSurface: Color = textPrimaryOnSurface.copy(alpha = 0.7f) onNight textPrimaryOnSurface.copy(alpha = 0.5f)
 
-    val divider: Color = if (darkTheme) onSurface.copy(alpha = 0.5f) else onSurface.copy(alpha = 0.7f)
-    val shimmerBg: Color = if (darkTheme) Palette.gray900 else Palette.gray200
-    val shimmerShine: Color = if (darkTheme) Palette.gray800 else Palette.white
+    val divider: Color = onSurface.copy(alpha = 0.7f) onNight onSurface.copy(alpha = 0.5f)
+    val shimmerBg: Color = Palette.gray200 onNight Palette.gray900
+    val shimmerShine: Color = Palette.white onNight Palette.gray800
+
+    private infix fun <T> T.onNight(right: T): T = if (nightTheme) right else this
 }
 
 internal val ZooColors.MaterialColors: Colors
@@ -46,5 +48,5 @@ internal val ZooColors.MaterialColors: Colors
         onBackground = onSurface,
         onSurface = onSurface,
         onError = onError,
-        isLight = !darkTheme,
+        isLight = !nightTheme,
     )

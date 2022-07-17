@@ -8,6 +8,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 
 private val LocalAppColors = staticCompositionLocalOf { ZooColors() }
+private val LocalAppDrawable = staticCompositionLocalOf { ZooDrawable() }
 
 object ZooTheme {
 
@@ -15,16 +16,24 @@ object ZooTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalAppColors.current
+
+    val drawable: ZooDrawable
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAppDrawable.current
 }
 
 @Composable
 fun ZooTheme(
+    large: Boolean = false,
     isDarkTheme: Boolean = isSystemInDarkTheme(),
-    colors: ZooColors = ZooColors(darkTheme = isDarkTheme),
+    colors: ZooColors = ZooColors(nightTheme = isDarkTheme),
+    drawable: ZooDrawable = ZooDrawable(large = large, nightTheme = isDarkTheme),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
         LocalAppColors provides colors,
+        LocalAppDrawable provides drawable,
     ) {
         MaterialTheme(
             colors = colors.MaterialColors,
