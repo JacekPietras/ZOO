@@ -1,12 +1,13 @@
 package com.jacekpietras.mapview.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -66,12 +67,13 @@ fun ComposableMapView(
 @Composable
 private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
     with(LocalDensity.current) {
-        Image(
+        Icon(
             modifier = Modifier
                 .offset(x = item.cX.toDp() - item.iconSize.dp / 2, y = item.cY.toDp() - item.iconSize.dp / 2)
                 .requiredSize(item.iconSize.dp),
             painter = painterResource(item.iconRes),
             contentDescription = null,
+            tint = colors.onSurface,
         )
     }
 }

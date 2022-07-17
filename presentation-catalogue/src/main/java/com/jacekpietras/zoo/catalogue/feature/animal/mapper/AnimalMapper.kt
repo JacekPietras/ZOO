@@ -17,10 +17,17 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
 import com.jacekpietras.zoo.core.text.RichText
+import com.jacekpietras.zoo.core.theme.MapColors
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.model.Feeding
 
 internal class AnimalMapper {
+
+    private lateinit var mapColors: MapColors
+
+    fun setColors(colors: MapColors) {
+        mapColors = colors
+    }
 
     fun from(
         worldBounds: RectD,
@@ -56,13 +63,16 @@ internal class AnimalMapper {
                 else -> RichText(R.string.is_favorite)
             },
             worldBounds = worldBounds,
-            mapData = flatListOf(
-                fromPaths(roads, roadPaint),
-                fromPaths(pathsToAnimal, pathPaint),
-                fromPolygons(buildings, buildingPaint),
-                fromPolygons(aviary, aviaryPaint),
-                fromPoints(state.animalPositions, positionsPaint),
-            ),
+            mapData =
+            with(ComposeColors(mapColors)) {
+                flatListOf(
+                    fromPaths(roads, roadPaint),
+                    fromPaths(pathsToAnimal, pathPaint),
+                    fromPolygons(buildings, buildingPaint),
+                    fromPolygons(aviary, aviaryPaint),
+                    fromPoints(state.animalPositions, positionsPaint),
+                )
+            },
             feeding =
             if (state.animal.feeding.isNotEmpty()) {
                 RichText.Listing(
@@ -197,25 +207,26 @@ internal class AnimalMapper {
             )
         }
 
-    private companion object {
+
+    private class ComposeColors(mapColors: MapColors) {
 
         val buildingPaint: MapPaint = MapPaint.Fill(
-            fillColor = MapColor.Attribute(R.attr.colorSmallMapBuilding),
+            fillColor = MapColor.Compose(mapColors.colorSmallMapBuilding),
         )
         val aviaryPaint: MapPaint = MapPaint.Fill(
-            fillColor = MapColor.Attribute(R.attr.colorSmallMapBuilding),
+            fillColor = MapColor.Compose(mapColors.colorSmallMapBuilding),
         )
         val roadPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Attribute(R.attr.colorSmallMapRoad),
+            strokeColor = MapColor.Compose(mapColors.colorSmallMapRoad),
             width = MapDimension.Dynamic.World(2.0),
         )
         val pathPaint: MapPaint = MapPaint.DashedStroke(
-            strokeColor = MapColor.Attribute(R.attr.colorSmallMapAnimal),
+            strokeColor = MapColor.Compose(mapColors.colorSmallMapAnimal),
             width = MapDimension.Dynamic.World(4.0),
             pattern = MapDimension.Static.Screen(dp = 4),
         )
         val positionsPaint: MapPaint = MapPaint.Circle(
-            fillColor = MapColor.Attribute(R.attr.colorSmallMapAnimal),
+            fillColor = MapColor.Compose(mapColors.colorSmallMapAnimal),
             radius = MapDimension.Static.Screen(dp = 4),
         )
     }

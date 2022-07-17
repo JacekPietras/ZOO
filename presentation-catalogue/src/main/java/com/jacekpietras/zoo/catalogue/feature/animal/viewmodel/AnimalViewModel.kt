@@ -11,6 +11,7 @@ import com.jacekpietras.zoo.catalogue.utils.combineWithIgnoredFlow
 import com.jacekpietras.zoo.catalogue.utils.reduce
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
+import com.jacekpietras.zoo.core.theme.MapColors
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalPositionUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.IsAnimalSeenUseCase
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.onStart
 
 internal class AnimalViewModel(
     private val animalId: AnimalId,
-    mapper: AnimalMapper = AnimalMapper(),
+    private val mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
     isAnimalSeenUseCase: IsAnimalSeenUseCase,
     private val observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
@@ -129,4 +130,8 @@ internal class AnimalViewModel(
                 val isFavorite = favorites.contains(animalId)
                 state.reduce { copy(isFavorite = isFavorite) }
             }
+
+    fun fillColors(colors: MapColors) {
+        mapper.setColors(colors)
+    }
 }

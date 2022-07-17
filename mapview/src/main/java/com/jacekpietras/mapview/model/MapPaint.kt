@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.color.MaterialColors
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
+import androidx.compose.ui.graphics.Color as ComposeColor
 
 sealed class MapPaint {
 
@@ -103,6 +104,14 @@ sealed class MapColor {
 
         override fun toColorInt(context: Context): Int =
             ContextCompat.getColor(context, colorRes)
+    }
+
+    class Compose(
+        @ColorRes private val color: ComposeColor,
+    ) : MapColor() {
+
+        override fun toColorInt(context: Context): Int =
+            (color.value shr 32).toInt()
     }
 
     class Attribute(

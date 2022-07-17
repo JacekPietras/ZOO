@@ -11,6 +11,7 @@ class MapColors(
 ) {
 
     val colorPrimary = Palette.primary onNight Palette.primaryDark
+
     val colorMapBackground = Color(0xFFf8f9fa) onNight Color(0xFF121a26)
     val colorMapBuilding = Color(0xFFf1f3f4) onNight Color(0xFF2f3a47)
     val colorMapBuildingBorder = Color(0xFFD7DBDD) onNight Color(0xFF0E141E)
@@ -20,7 +21,7 @@ class MapColors(
     val colorMapTaken = Palette.primary onNight Palette.primaryDark
     val colorMapTechnical = Color(0xFFFFF0F0) onNight Color(0xFF221717)
     val colorMapTechnicalBorder = Color(0xFFD7DBDD) onNight Color(0xFF0E141E)
-    val mapIconColor = Palette.black onNight Palette.white
+
     val colorSmallMapBackground = Color(0xFFA1DAB8) onNight Color(0xFFA1DAB8)
     val colorSmallMapBuilding = Color(0xFF768A7E) onNight Color(0xFF768A7E)
     val colorSmallMapRoad = Palette.white onNight Palette.white

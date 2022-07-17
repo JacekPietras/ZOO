@@ -17,6 +17,7 @@ import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
+import com.jacekpietras.zoo.core.theme.ZooTheme
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -27,6 +28,7 @@ fun AnimalScreen(
 ) {
     val activity = LocalContext.current.getActivity()
     val viewModel = getViewModel<AnimalViewModel> { parametersOf(animalId) }
+    viewModel.fillColors(ZooTheme.colors.mapColors)
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
 
     var mapList by remember { mutableStateOf<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList()) }

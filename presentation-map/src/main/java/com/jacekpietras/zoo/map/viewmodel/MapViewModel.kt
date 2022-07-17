@@ -6,6 +6,7 @@ import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.text.RichText
+import com.jacekpietras.zoo.core.theme.MapColors
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
@@ -67,7 +68,7 @@ import kotlinx.coroutines.flow.onEach
 internal class MapViewModel(
     animalId: String?,
     regionId: String?,
-    mapper: MapViewStateMapper,
+    private val mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
     observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
@@ -390,4 +391,8 @@ internal class MapViewModel(
                 }
             }
             .flowOnBackground()
+
+    fun fillColors(colors: MapColors) {
+        mapper.setColors(colors)
+    }
 }

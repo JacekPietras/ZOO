@@ -1,26 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.ZOO" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#16753C</item>
-
-        <!-- Map Colors -->
-        <item name="colorMapBackground">#121a26</item>
-        <item name="colorMapBuilding">#2f3a47</item>
-        <item name="colorMapBuildingBorder">#0E141E</item>
-        <item name="colorMapRoad">#4E5C6C</item>
-        <item name="colorMapRoadVisited">#447C43</item>
-        <item name="colorMapRoadBorder">#0E141E</item>
-        <item name="colorMapTaken">?colorPrimary</item>
-        <item name="colorMapTechnical">#221717</item>
-        <item name="colorMapTechnicalBorder">#0E141E</item>
-
-        <item name="colorSmallMapBackground">#A1DAB8</item>
-        <item name="colorSmallMapBuilding">#768A7E</item>
-        <item name="colorSmallMapRoad">#FFFFFF</item>
-        <item name="colorSmallMapAnimal">#F44336</item>
-
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
     </style>

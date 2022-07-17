@@ -17,6 +17,7 @@ import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem
 import com.jacekpietras.zoo.core.text.RichText
+import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.map.extensions.applyToMap
 import com.jacekpietras.zoo.map.extensions.getActivity
 import com.jacekpietras.zoo.map.model.MapEffect.CenterAtUser
@@ -36,6 +37,7 @@ fun MapScreen(
     val context = LocalContext.current
     val activity = context.getActivity()
     val viewModel = getViewModel<MapViewModel> { parametersOf(animalId, regionId) }
+    viewModel.fillColors(ZooTheme.colors.mapColors)
     val router = MapRouterImpl({ activity }, navController)
     val permissionChecker = rememberGpsPermissionRequesterState()
 

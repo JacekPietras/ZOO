@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <attr name="colorSmallMapBackground" format="color|reference" />
-    <attr name="colorSmallMapBuilding" format="color|reference" />
-    <attr name="colorSmallMapRoad" format="color|reference" />
-    <attr name="colorSmallMapAnimal" format="color|reference" />
-</resources>
