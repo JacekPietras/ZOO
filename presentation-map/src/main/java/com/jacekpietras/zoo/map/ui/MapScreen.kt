@@ -3,9 +3,6 @@ package com.jacekpietras.zoo.map.ui
 import android.app.Activity
 import android.content.Context
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -70,9 +67,6 @@ fun MapScreen(
 
     val viewState by viewModel.viewState.collectAsState(null)
 
-    // fixme dont work without AppCompat Activity
-    setDefaultNightMode(viewState?.isNightThemeSuggested)
-
     MapView(
         viewState,
         onBack = { viewModel.onBackClicked(router) },
@@ -104,11 +98,6 @@ private fun makeComposableMapLogic(
         onStopCentering = { viewModel.onStopCentering() },
         onStartCentering = { viewModel.onStartCentering() },
     )
-}
-
-@Composable
-private fun setDefaultNightMode(nightTheme: Boolean?) {
-    setDefaultNightMode(if (nightTheme == true) MODE_NIGHT_YES else MODE_NIGHT_FOLLOW_SYSTEM)
 }
 
 private fun toast(context: Context, text: RichText) {

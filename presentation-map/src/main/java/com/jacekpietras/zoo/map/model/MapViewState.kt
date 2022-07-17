@@ -8,7 +8,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class MapViewState(
-    val isNightThemeSuggested: Boolean = false,
     val isBackArrowShown: Boolean = false,
     val isGuidanceShown: Boolean = false,
     val title: RichText = RichText.Empty,

@@ -45,11 +45,10 @@ internal class MapViewStateMapper {
         regionsWithAnimalsInUserPosition: List<Pair<Region, List<AnimalEntity>>>,
     ): MapViewState = with(state) {
         val isValidLocation = userPosition != PointD()
-        val (suggestedThemeType, luminance) = suggestedThemeTypeAndLuminance
+        val (_, luminance) = suggestedThemeTypeAndLuminance
 
         MapViewState(
             isGuidanceShown = isToolbarOpened,
-            isNightThemeSuggested = suggestedThemeType == ThemeType.NIGHT,
             isBackArrowShown = toolbarMode is MapToolbarMode.SelectedAnimalMode,
             title = when (toolbarMode) {
                 is MapToolbarMode.SelectedAnimalMode -> RichText(toolbarMode.animal.name) + toolbarMode.distance.metersToText()
