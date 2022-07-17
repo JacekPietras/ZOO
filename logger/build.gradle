@@ -1,5 +1,2 @@
 apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
-
-dependencies {
-}

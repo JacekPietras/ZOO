@@ -20,8 +20,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel = getViewModel<MainViewModel>()
             val viewState by viewModel.viewState.collectAsState(null)
+            val isNightTheme = viewState?.isNightModeSuggested == true || isSystemInDarkTheme()
 
-            ZooTheme(isDarkTheme = viewState?.isNightModeSuggested == true || isSystemInDarkTheme()) {
+            ZooTheme(isDarkTheme = isNightTheme) {
                 MainActivityView()
             }
         }

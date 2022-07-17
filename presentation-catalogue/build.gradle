@@ -4,10 +4,11 @@ apply from: "$rootDir/presentation.gradle"
 apply plugin: 'kotlin-kapt'
 
 dependencies {
+    api project(':presentation-core')
+
     implementation project(':domain')
     implementation project(':geometry')
     implementation project(':mapview')
-    api project(':presentation-core')
 
     //Image Loader
     implementation "io.coil-kt:coil-compose:$coil_version"

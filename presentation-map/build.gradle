@@ -5,9 +5,10 @@ apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'kotlin-kapt'
 
 dependencies {
+    api project(':presentation-core')
+
     implementation project(':geometry')
     implementation project(':mapview')
-    api project(':presentation-core')
     implementation project(':domain')
     implementation project(':tracking')
 
