@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,8 +29,12 @@ fun AnimalScreen(
 ) {
     val activity = LocalContext.current.getActivity()
     val viewModel = getViewModel<AnimalViewModel> { parametersOf(animalId) }
-    viewModel.fillColors(ZooTheme.colors.mapColors)
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
+
+    val colors = ZooTheme.colors.mapColors
+    LaunchedEffect(ZooTheme.isNightMode) {
+        viewModel.fillColors(colors)
+    }
 
     var mapList by remember { mutableStateOf<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList()) }
     val mapLogic = remember {

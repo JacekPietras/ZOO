@@ -37,12 +37,11 @@ fun MapScreen(
     val context = LocalContext.current
     val activity = context.getActivity()
     val viewModel = getViewModel<MapViewModel> { parametersOf(animalId, regionId) }
-    viewModel.fillColors(ZooTheme.colors.mapColors)
     val router = MapRouterImpl({ activity }, navController)
     val permissionChecker = rememberGpsPermissionRequesterState()
 
-    var mapList by remember { mutableStateOf<List<RenderItem<ComposablePaint>>>(emptyList()) }
-    val mapLogic = remember {
+    var mapList by remember(ZooTheme.isNightMode) { mutableStateOf<List<RenderItem<ComposablePaint>>>(emptyList()) }
+    val mapLogic = remember(ZooTheme.isNightMode) {
         makeComposableMapLogic(
             activity = activity,
             viewModel = viewModel,
@@ -50,13 +49,17 @@ fun MapScreen(
         )
     }
 
-    LaunchedEffect("mapWorld") {
+    val colors = ZooTheme.colors.mapColors
+    LaunchedEffect(ZooTheme.isNightMode) {
+        viewModel.fillColors(colors)
+    }
+    LaunchedEffect("mapWorld" + ZooTheme.isNightMode) {
         viewModel.mapWorldViewState.collect(mapLogic::applyToMap)
     }
-    LaunchedEffect("volatile") {
+    LaunchedEffect("volatile" + ZooTheme.isNightMode) {
         viewModel.volatileViewState.collect(mapLogic::applyToMap)
     }
-    LaunchedEffect("effects") {
+    LaunchedEffect("effects" + ZooTheme.isNightMode) {
         viewModel.effects.collect {
             when (val effect = viewModel.consumeEffect()) {
                 is ShowToast -> toast(context, effect.text)

@@ -10,6 +10,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LocalAppColors = staticCompositionLocalOf { ZooColors() }
 private val LocalAppDrawable = staticCompositionLocalOf { ZooDrawable() }
+private val LocalIsNightMode = staticCompositionLocalOf { false }
 
 object ZooTheme {
 
@@ -22,6 +23,11 @@ object ZooTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalAppDrawable.current
+
+    val isNightMode: Boolean
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalIsNightMode.current
 }
 
 @Composable
@@ -39,6 +45,7 @@ fun ZooTheme(
     CompositionLocalProvider(
         LocalAppColors provides colors,
         LocalAppDrawable provides drawable,
+        LocalIsNightMode provides isDarkTheme,
     ) {
         MaterialTheme(
             colors = colors.MaterialColors,
