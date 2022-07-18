@@ -73,9 +73,7 @@ internal class AnimalViewModel(
         .combineWithIgnoredFlow(animalFavoritesObservation())
         .flowOnBackground()
 
-    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic {
-        mapList.value = it
-    }
+    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
 
     val mapList = MutableStateFlow<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList())
 
@@ -154,10 +152,8 @@ internal class AnimalViewModel(
         mapLogic.onSizeChanged(width, height)
     }
 
-    private fun makeComposableMapLogic(
-        invalidate: (List<MapViewLogic.RenderItem<ComposablePaint>>) -> Unit
-    ): MapViewLogic<ComposablePaint> = MapViewLogic(
-        invalidate = invalidate,
+    private fun makeComposableMapLogic() = MapViewLogic(
+        invalidate = { mapList.value = it },
         paintBaker = paintBaker
     )
 

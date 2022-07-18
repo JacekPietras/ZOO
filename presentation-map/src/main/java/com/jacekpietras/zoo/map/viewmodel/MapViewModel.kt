@@ -117,9 +117,7 @@ internal class MapViewModel(
         .filter { it.isNotEmpty() }
         .map { }
 
-    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic {
-        mapList.value = it
-    }
+    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
 
     val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
 
@@ -424,10 +422,8 @@ internal class MapViewModel(
         mapColors.value = colors
     }
 
-    private fun makeComposableMapLogic(
-        invalidate: (List<RenderItem<ComposablePaint>>) -> Unit
-    ): MapViewLogic<ComposablePaint> = MapViewLogic(
-        invalidate = invalidate,
+    private fun makeComposableMapLogic() = MapViewLogic(
+        invalidate = { mapList.value = it },
         paintBaker = paintBaker,
         setOnPointPlacedListener = { onPointPlaced(it) },
         onStopCentering = { onStopCentering() },
