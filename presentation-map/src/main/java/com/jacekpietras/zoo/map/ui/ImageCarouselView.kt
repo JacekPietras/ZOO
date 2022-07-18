@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -163,6 +164,7 @@ private fun AnimalImageView(url: String?, size: Dp, division: AnimalDivisionValu
         onSuccess = { painterState.value = it },
         onError = { painterState.value = it },
         error = painterResource(id = division.getIcon()),
+        colorFilter = if (painterState.value is AsyncImagePainter.State.Error) ColorFilter.tint(color = MaterialTheme.colors.onBackground) else null,
         modifier = Modifier
             .shimmerWhen(
                 width = size,

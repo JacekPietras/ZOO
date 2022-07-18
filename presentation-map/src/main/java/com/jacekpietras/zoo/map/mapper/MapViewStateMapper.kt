@@ -168,7 +168,7 @@ internal class MapViewStateMapper {
 //                else -> return@mapNotNull null
                 else -> {
                     when (region.id.id) {
-                        "wielkie-koty" -> R.drawable.ic_region_big_cats_24
+                        "wielkie-koty-2" -> R.drawable.ic_region_big_cats_24
                         else -> return@mapNotNull null
                     }
                 }

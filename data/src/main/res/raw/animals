@@ -3380,7 +3380,7 @@
 		"facts": "Lwy azjatyckie są nieco mniejsze od swoich afrykańskich kuzynów.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lew_azjatycki",
 		"web": "https://zoo-krakow.pl/lew-azjatycki/",
-		"regionInZoo": [ "wielkie-koty" ],
+		"regionInZoo": [ "wielkie-koty-3" ],
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/lew-azjatycki3.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/DSC_7363-—-kopia.jpg"
@@ -3402,7 +3402,7 @@
 		"facts": "Jest świetnym pływakiem. Od lamparta odróżnia go krępa budowa ciała, krótszy ogon i obecność plamek wewnątrz rozetek na tułowiu.",
 		"wiki": "https://pl.wikipedia.org/wiki/Jaguar_ameryka%C5%84ski",
 		"web": "https://zoo-krakow.pl/jaguar/",
-		"regionInZoo": [ "wielkie-koty" ],
+		"regionInZoo": [ "wielkie-koty-3" ],
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/jaguar2.jpg"
 		]
@@ -3423,7 +3423,7 @@
 		"facts": "Znakomicie pływa i wspina się na drzewa.",
 		"wiki": "https://pl.wikipedia.org/wiki/Lampart_plamisty",
 		"web": "https://zoo-krakow.pl/pantera-chinska-3/",
-		"regionInZoo": [ "wielkie-koty" ],
+		"regionInZoo": [ "wielkie-koty-2" ],
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-chińska2.jpg"
 		]
@@ -3444,7 +3444,7 @@
 		"facts": "Tygrys amurski jest największym ze współcześnie żyjących kotów: osiąga masę do 320 kg, długość ciała do 2,5 m. Posiada najjaśniejsze i najdłuższe futro spośród tygrysów. Prowadzi samotniczy tryb życia. Jeden osobnik zajmuje terytorium do 1000 km2.",
 		"wiki": "https://pl.wikipedia.org/wiki/Tygrys_syberyjski",
 		"web": "https://zoo-krakow.pl/tygrys-amurski/",
-		"regionInZoo": [ "wielkie-koty" ],
+		"regionInZoo": [ "wielkie-koty-1" ],
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tygrys-amurski.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/tygrys-amurski1.jpg"
@@ -3466,7 +3466,7 @@
 		"facts": "Ubarwienie futra doskonale maskuje ją wśród skał i śniegu, zwiększając szansę na skuteczne polowanie.",
 		"wiki": "https://pl.wikipedia.org/wiki/Irbis_%C5%9Bnie%C5%BCny",
 		"web": "https://zoo-krakow.pl/pantera-sniezna/",
-		"regionInZoo": [ "wielkie-koty" ],
+		"regionInZoo": [ "wielkie-koty-2" ],
 		"photos": [
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna4-e1592200746602.jpg",
 			"https://zoo-krakow.pl/wp-content/uploads/2016/04/pantera-śnieżna12.jpg",

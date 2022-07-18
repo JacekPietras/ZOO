@@ -6,7 +6,8 @@ object Dictionary {
 
     fun String.findReadableName(): RichText =
         when (this) {
-            "wejscie" -> RichText(R.string.wejscie)
+            "wejscie",
+            "wejscie-sezonowe" -> RichText(R.string.wejscie)
             "wyjscie" -> RichText(R.string.wyjscie)
             "bazanty-papugi" -> RichText(R.string.bazanty_papugi)
             "pazurzatki" -> RichText(R.string.pazurzatki)
@@ -20,7 +21,9 @@ object Dictionary {
             "wilki" -> RichText(R.string.wilki)
             "tapiry-strusie-zebry" -> RichText(R.string.tapiry_strusie_zebry)
             "male-drapiezniki" -> RichText(R.string.male_drapiezniki)
-            "wielkie-koty" -> RichText(R.string.wielkie_koty)
+            "wielkie-koty-1",
+            "wielkie-koty-2",
+            "wielkie-koty-3" -> RichText(R.string.wielkie_koty)
             "ptaki-wodne-maly-staw" -> RichText(R.string.ptaki_wodne_maly_staw)
             "wielblady-i-gwanko" -> RichText(R.string.wielblady_i_gwanko)
             "kob-sniady" -> RichText(R.string.kob_sniady)
