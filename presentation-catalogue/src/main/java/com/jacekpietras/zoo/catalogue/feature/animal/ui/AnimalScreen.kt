@@ -1,21 +1,12 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.ui
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.ComposablePaintBaker
-import com.jacekpietras.mapview.ui.MapViewLogic
-import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
+import com.jacekpietras.zoo.catalogue.feature.animal.extensions.getActivity
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel
 import com.jacekpietras.zoo.core.theme.ZooTheme
@@ -32,20 +23,12 @@ fun AnimalScreen(
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
 
     val colors = ZooTheme.colors.mapColors
-    LaunchedEffect(ZooTheme.isNightMode) {
+    LaunchedEffect("colors" + ZooTheme.isNightMode) {
         viewModel.fillColors(colors)
     }
 
-    var mapList by remember { mutableStateOf<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList()) }
-    val mapLogic = remember {
-        makeComposableMapLogic(
-            activity = activity,
-            invalidate = { mapList = it },
-        )
-    }
-
     val viewState by viewModel.viewState.collectAsState(null)
-    mapLogic.updateMap(viewState)
+    val mapList by viewModel.mapList.collectAsState(initial = emptyList())
 
     AnimalView(
         viewState = viewState,
@@ -54,41 +37,6 @@ fun AnimalScreen(
         onWikiClicked = { viewModel.onWikiClicked(router) },
         onNavClicked = { viewModel.onNavClicked(router) },
         onFavoriteClicked = viewModel::onFavoriteClicked,
-        onMapSizeChanged = mapLogic::onSizeChanged,
+        onMapSizeChanged = viewModel::onSizeChanged,
     )
-}
-
-private fun makeComposableMapLogic(
-    activity: Activity,
-    invalidate: (List<MapViewLogic.RenderItem<ComposablePaint>>) -> Unit
-): MapViewLogic<ComposablePaint> {
-    val paintBaker by lazy { ComposablePaintBaker(activity) }
-    return MapViewLogic(
-        invalidate = invalidate,
-        bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
-        bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
-        bakeDimension = { paintBaker.bakeDimension(it) },
-    )
-}
-
-private fun MapViewLogic<ComposablePaint>.updateMap(viewState: AnimalViewState?) {
-    if (viewState == null) return
-
-    worldData = MapViewLogic.WorldData(
-        bounds = viewState.worldBounds,
-        objectList = viewState.mapData,
-    )
-    setRotate(-23f)
-    onScale(0f, 0f, Float.MAX_VALUE)
-}
-
-private fun Context.getActivity(): Activity {
-    var currentContext = this
-    while (currentContext is ContextWrapper) {
-        if (currentContext is Activity) {
-            return currentContext
-        }
-        currentContext = currentContext.baseContext
-    }
-    throw IllegalStateException("Activity not available")
 }

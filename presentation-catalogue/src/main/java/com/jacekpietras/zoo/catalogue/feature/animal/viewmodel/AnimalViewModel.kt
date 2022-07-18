@@ -1,7 +1,11 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.ui.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
@@ -35,6 +39,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 internal class AnimalViewModel(
+    context: Context,
     private val animalId: AnimalId,
     private val mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
@@ -52,6 +57,8 @@ internal class AnimalViewModel(
     private val getShortestPathUseCase: GetShortestPathUseCase,
 ) : ViewModel() {
 
+    private val paintBaker = ComposablePaintBaker(context)
+
     private val state = MutableStateFlow(AnimalState(animalId = animalId))
     val viewState: Flow<AnimalViewState?> = combine(
         observeWorldBoundsUseCase.run(),
@@ -62,8 +69,15 @@ internal class AnimalViewModel(
         state,
         mapper::from,
     )
+        .onEach { mapLogic.updateMap(it) }
         .combineWithIgnoredFlow(animalFavoritesObservation())
         .flowOnBackground()
+
+    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic {
+        mapList.value = it
+    }
+
+    val mapList = MutableStateFlow<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList())
 
     init {
         launchInBackground {
@@ -132,6 +146,33 @@ internal class AnimalViewModel(
             }
 
     fun fillColors(colors: MapColors) {
+        mapList.value = emptyList()
         mapper.setColors(colors)
+    }
+
+    fun onSizeChanged(width: Int, height: Int) {
+        mapLogic.onSizeChanged(width, height)
+    }
+
+    private fun makeComposableMapLogic(
+        invalidate: (List<MapViewLogic.RenderItem<ComposablePaint>>) -> Unit
+    ): MapViewLogic<ComposablePaint> {
+        return MapViewLogic(
+            invalidate = invalidate,
+            bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
+            bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
+            bakeDimension = { paintBaker.bakeDimension(it) },
+        )
+    }
+
+    private fun MapViewLogic<ComposablePaint>.updateMap(viewState: AnimalViewState?) {
+        if (viewState == null) return
+
+        worldData = MapViewLogic.WorldData(
+            bounds = viewState.worldBounds,
+            objectList = viewState.mapData,
+        )
+        setRotate(-23f)
+        onScale(0f, 0f, Float.MAX_VALUE)
     }
 }
