@@ -426,15 +426,13 @@ internal class MapViewModel(
 
     private fun makeComposableMapLogic(
         invalidate: (List<RenderItem<ComposablePaint>>) -> Unit
-    ): MapViewLogic<ComposablePaint> {
-        return MapViewLogic(
-            invalidate = invalidate,
-            paintBaker = paintBaker,
-            setOnPointPlacedListener = { onPointPlaced(it) },
-            onStopCentering = { onStopCentering() },
-            onStartCentering = { onStartCentering() },
-        )
-    }
+    ): MapViewLogic<ComposablePaint> = MapViewLogic(
+        invalidate = invalidate,
+        paintBaker = paintBaker,
+        setOnPointPlacedListener = { onPointPlaced(it) },
+        onStopCentering = { onStopCentering() },
+        onStartCentering = { onStartCentering() },
+    )
 
     private fun centerAtUserPosition() {
         mapLogic.centerAtUserPosition()
