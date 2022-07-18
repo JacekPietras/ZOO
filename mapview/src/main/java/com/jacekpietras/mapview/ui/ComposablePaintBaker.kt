@@ -12,9 +12,9 @@ import com.jacekpietras.mapview.model.PaintHolder
 
 class ComposablePaintBaker(
     private val context: Context,
-) {
+) : PaintBaker<ComposablePaint> {
 
-    fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float =
+    override fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float =
         when (dimension) {
             is MapDimension.Dynamic -> { zoom, position, screenWidthInPixels ->
                 dimension.toPixels(zoom, position, screenWidthInPixels)
@@ -24,7 +24,7 @@ class ComposablePaintBaker(
             }
         }
 
-    fun bakeCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
+    override fun bakeCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
         when (paint) {
             is MapPaint.DashedStroke -> paint.toCanvasPaint()
             is MapPaint.Fill -> paint.toCanvasPaint()
@@ -34,7 +34,7 @@ class ComposablePaintBaker(
             is MapPaint.Circle -> paint.toCanvasPaint()
         }
 
-    fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint>? =
+    override fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint>? =
         when (paint) {
             is MapPaint.DashedStroke -> null
             is MapPaint.Fill -> null

@@ -11,13 +11,9 @@ class MapView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : GesturedView(context, attrs, defStyleAttr) {
 
-    private val paintBaker = ViewPaintBaker(context)
-
     val logic = MapViewLogic(
         invalidate = { invalidate() },
-        bakeCanvasPaint = paintBaker::bakeCanvasPaint,
-        bakeBorderCanvasPaint = paintBaker::bakeBorderCanvasPaint,
-        bakeDimension = paintBaker::bakeDimension,
+        paintBaker = ViewPaintBaker(context),
     )
 
     init {

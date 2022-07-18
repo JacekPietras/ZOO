@@ -10,9 +10,9 @@ import com.jacekpietras.mapview.model.PaintHolder
 
 internal class ViewPaintBaker(
     private val context: Context,
-) {
+) : PaintBaker<Paint> {
 
-    fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float =
+    override fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float =
         when (dimension) {
             is MapDimension.Dynamic -> { zoom, position, screenWidthInPixels ->
                 dimension.toPixels(zoom, position, screenWidthInPixels)
@@ -22,7 +22,7 @@ internal class ViewPaintBaker(
             }
         }
 
-    fun bakeCanvasPaint(paint: MapPaint): PaintHolder<Paint> =
+    override fun bakeCanvasPaint(paint: MapPaint): PaintHolder<Paint> =
         when (paint) {
             is MapPaint.DashedStroke -> paint.toCanvasPaint()
             is MapPaint.Fill -> paint.toCanvasPaint()
@@ -32,7 +32,7 @@ internal class ViewPaintBaker(
             is MapPaint.Circle -> paint.toCanvasPaint()
         }
 
-    fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<Paint>? =
+    override fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<Paint>? =
         when (paint) {
             is MapPaint.DashedStroke -> null
             is MapPaint.Fill -> null

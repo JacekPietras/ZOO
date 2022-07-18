@@ -429,9 +429,7 @@ internal class MapViewModel(
     ): MapViewLogic<ComposablePaint> {
         return MapViewLogic(
             invalidate = invalidate,
-            bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
-            bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
-            bakeDimension = { paintBaker.bakeDimension(it) },
+            paintBaker = paintBaker,
             setOnPointPlacedListener = { onPointPlaced(it) },
             onStopCentering = { onStopCentering() },
             onStartCentering = { onStartCentering() },

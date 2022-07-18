@@ -24,9 +24,7 @@ import kotlin.math.sin
 class MapViewLogic<T>(
     private val doAnimation: ((progress: Float) -> Unit) -> Unit = ::doAnimation,
     private val invalidate: (List<RenderItem<T>>) -> Unit,
-    private val bakeCanvasPaint: (MapPaint) -> PaintHolder<T>,
-    private val bakeBorderCanvasPaint: (MapPaint) -> PaintHolder<T>?,
-    private val bakeDimension: (MapDimension) -> ((Double, PointD, Int) -> Float),
+    var paintBaker: PaintBaker<T>,
     private var onStopCentering: (() -> Unit)? = null,
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
@@ -256,10 +254,10 @@ class MapViewLogic<T>(
             when (item) {
                 is MapItem.MapColoredItem -> {
                     val inner = innerPaints[item.paint]
-                        ?: bakeCanvasPaint(item.paint)
+                        ?: paintBaker.bakeCanvasPaint(item.paint)
                             .also { innerPaints[item.paint] = it }
                     val border = borderPaints[item.paint]
-                        ?: bakeBorderCanvasPaint(item.paint)
+                        ?: paintBaker.bakeBorderCanvasPaint(item.paint)
                             .also { borderPaints[item.paint] = it }
 
                     when (item) {
@@ -394,7 +392,7 @@ class MapViewLogic<T>(
             currentHeight = currentHeight,
             zoom = zoom,
             centerGpsCoordinate = centerGpsCoordinate,
-            bakeDimension = bakeDimension,
+            bakeDimension = paintBaker::bakeDimension,
         ).translate(worldPreparedList + volatilePreparedList)
 
         invalidate(renderList!!)

@@ -159,9 +159,7 @@ internal class AnimalViewModel(
     ): MapViewLogic<ComposablePaint> {
         return MapViewLogic(
             invalidate = invalidate,
-            bakeCanvasPaint = { paintBaker.bakeCanvasPaint(it) },
-            bakeBorderCanvasPaint = { paintBaker.bakeBorderCanvasPaint(it) },
-            bakeDimension = { paintBaker.bakeDimension(it) },
+            paintBaker = paintBaker
         )
     }
 
