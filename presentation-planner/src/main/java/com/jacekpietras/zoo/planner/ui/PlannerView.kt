@@ -80,6 +80,7 @@ private fun TopGradientView() {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         MaterialTheme.colors.background,
+                        MaterialTheme.colors.background,
                         Color.Transparent,
                     )
                 )
