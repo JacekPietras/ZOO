@@ -156,12 +156,10 @@ internal class AnimalViewModel(
 
     private fun makeComposableMapLogic(
         invalidate: (List<MapViewLogic.RenderItem<ComposablePaint>>) -> Unit
-    ): MapViewLogic<ComposablePaint> {
-        return MapViewLogic(
-            invalidate = invalidate,
-            paintBaker = paintBaker
-        )
-    }
+    ): MapViewLogic<ComposablePaint> = MapViewLogic(
+        invalidate = invalidate,
+        paintBaker = paintBaker
+    )
 
     private fun MapViewLogic<ComposablePaint>.updateMap(viewState: AnimalViewState?) {
         if (viewState == null) return
