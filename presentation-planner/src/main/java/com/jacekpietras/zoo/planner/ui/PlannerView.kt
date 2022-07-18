@@ -1,11 +1,18 @@
 package com.jacekpietras.zoo.planner.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +25,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,9 +47,8 @@ internal fun PlannerView(
     if (viewState.isEmptyViewVisible) {
         EmptyView()
     }
-    Column(
-        Modifier.statusBarsPadding(),
-    ) {
+
+    Column {
         PlannerListView(
             modifier = Modifier.weight(1f),
             viewState = viewState,
@@ -58,6 +66,27 @@ internal fun PlannerView(
             )
         }
     }
+
+    TopGradientView()
+}
+
+@Composable
+private fun TopGradientView() {
+    val statusBarsPadding = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
+
+    Box(
+        modifier = Modifier
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colors.background,
+                        Color.Transparent,
+                    )
+                )
+            )
+            .fillMaxWidth()
+            .height(statusBarsPadding)
+    )
 }
 
 @Composable
@@ -88,6 +117,7 @@ private fun PlannerListView(
 
             RegionCardView(
                 modifier = Modifier
+                    .statusBarsPaddingWhen { index == 0 }
                     .dragOnLongPressToReorder(
                         isFixed = item.isFixed,
                         additionalOffset = additionalOffset,
@@ -109,6 +139,13 @@ private fun PlannerListView(
         }
     }
 }
+
+private fun Modifier.statusBarsPaddingWhen(condition: () -> Boolean): Modifier =
+    if (condition()) {
+        statusBarsPadding()
+    } else {
+        this
+    }
 
 @Composable
 private fun SimpleButton(
