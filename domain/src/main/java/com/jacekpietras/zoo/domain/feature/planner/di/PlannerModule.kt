@@ -65,6 +65,12 @@ val plannerModule = module {
             getOrCreateCurrentPlanUseCase = get(),
         )
     }
+    factory {
+        UnseeRegionInCurrentPlanUseCase(
+            planRepository = get(),
+            getOrCreateCurrentPlanUseCase = get(),
+        )
+    }
     factory<ObserveCurrentPlanWithOptimizationUseCase> {
         ObserveCurrentPlanWithOptimizationUseCaseImpl(
             planRepository = get(),

@@ -43,6 +43,7 @@ internal fun PlannerView(
     viewState: PlannerViewState,
     onRemove: (regionId: String) -> Unit,
     onUnlock: (regionId: String) -> Unit,
+    onUnsee: (regionId: String) -> Unit,
     onMove: (from: String, to: String) -> Unit,
     onAddExit: () -> Unit,
 ) {
@@ -57,6 +58,7 @@ internal fun PlannerView(
             onMove = onMove,
             onRemove = onRemove,
             onUnlock = onUnlock,
+            onUnsee = onUnsee,
         )
         if (viewState.isAddExitVisible) {
             SimpleButton(
@@ -99,6 +101,7 @@ private fun PlannerListView(
     onMove: (from: String, to: String) -> Unit,
     onRemove: (regionId: String) -> Unit,
     onUnlock: (regionId: String) -> Unit,
+    onUnsee: (regionId: String) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
@@ -141,7 +144,8 @@ private fun PlannerListView(
                 elevation = elevation,
                 text = item.regionId + " (" + item.text.toString(LocalContext.current) + ")",
                 onRemove = { onRemove(item.regionId) },
-                onUnlock = { onUnlock(item.regionId) }
+                onUnlock = { onUnlock(item.regionId) },
+                onUnsee = { onUnsee(item.regionId) },
             )
         }
     }

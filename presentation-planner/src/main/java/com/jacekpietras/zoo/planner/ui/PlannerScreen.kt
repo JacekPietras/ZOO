@@ -18,7 +18,8 @@ fun PlannerScreen(navController: NavController) {
         viewState = viewState,
         onRemove = viewModel::onRemove,
         onUnlock = viewModel::onUnlock,
+        onUnsee = viewModel::onUnsee,
         onMove = viewModel::onMove,
-        onAddExit = viewModel::onAddExitClicked
+        onAddExit = viewModel::onAddExitClicked,
     )
 }

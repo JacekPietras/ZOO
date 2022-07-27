@@ -29,6 +29,7 @@ internal fun RegionCardView(
     isSeen: Boolean = false,
     onRemove: () -> Unit,
     onUnlock: () -> Unit,
+    onUnsee: () -> Unit,
 ) {
     val elevationState by animateDpAsState(elevation)
 
@@ -63,8 +64,8 @@ internal fun RegionCardView(
                 SideIconView(
                     modifier = Modifier.align(Alignment.CenterVertically),
                     iconRes = R.drawable.ic_visibility_24,
-                    contentDescription = R.string.unlock,
-                    onClick = onUnlock,
+                    contentDescription = R.string.unsee,
+                    onClick = onUnsee,
                 )
             }
 

@@ -10,6 +10,7 @@ import com.jacekpietras.zoo.domain.feature.planner.interactor.MoveRegionUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveRegionFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.SaveRegionImmutableUseCase
+import com.jacekpietras.zoo.domain.feature.planner.interactor.UnseeRegionInCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
@@ -23,6 +24,7 @@ internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
     observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase: ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase,
     private val removeRegionFromCurrentPlanUseCase: RemoveRegionFromCurrentPlanUseCase,
+    private val unseeRegionInCurrentPlanUseCase: UnseeRegionInCurrentPlanUseCase,
     private val moveRegionUseCase: MoveRegionUseCase,
     private val makeRegionImmutableUseCase: SaveRegionImmutableUseCase,
     private val setAnimalFavoriteUseCase: SetAnimalFavoriteUseCase,
@@ -43,6 +45,12 @@ internal class PlannerViewModel(
     fun onUnlock(regionId: String) {
         launchInBackground {
             makeRegionImmutableUseCase.run(RegionId(regionId), true)
+        }
+    }
+
+    fun onUnsee(regionId: String) {
+        launchInBackground {
+            unseeRegionInCurrentPlanUseCase.run(RegionId(regionId))
         }
     }
 
