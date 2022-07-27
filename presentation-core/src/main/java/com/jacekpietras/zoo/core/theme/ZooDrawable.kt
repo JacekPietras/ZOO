@@ -13,7 +13,7 @@ class ZooDrawable(
 ) {
 
     @DrawableRes
-    val bananaLeafRes: Int = R.drawable.pic_banana_leaf_day onNight R.drawable.pic_banana_leaf_night
+    val bananaLeafRes: Int = R.drawable.pic_leaf_day onNight R.drawable.pic_leaf_night
 
     private infix fun <T> T.onNight(right: T): T = if (nightTheme) right else this
 }
