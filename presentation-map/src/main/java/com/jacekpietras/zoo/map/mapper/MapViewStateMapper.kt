@@ -34,7 +34,6 @@ import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.random.Random
 
 internal class MapViewStateMapper {
@@ -108,9 +107,9 @@ internal class MapViewStateMapper {
 
     fun from(
         state: MapVolatileState,
-        mapColors :MapColors,
+        mapColors: MapColors,
         plannedPath: List<PointD> = emptyList(),
-        visitedRoads: List< PathEntity> = emptyList(),
+        visitedRoads: List<PathEntity> = emptyList(),
         takenRoute: List<PathEntity> = emptyList(),
         compass: Float = 0f,
     ): MapVolatileViewState =
@@ -135,7 +134,7 @@ internal class MapViewStateMapper {
         }
 
     fun from(
-        mapColors :MapColors,
+        mapColors: MapColors,
         worldBounds: RectD,
         buildings: List<PolygonEntity>,
         aviary: List<PolygonEntity>,
@@ -151,7 +150,7 @@ internal class MapViewStateMapper {
                 mapData = flatListOf(
                     fromPaths(technicalRoads, technicalPaint),
                     fromPaths(roads, roadPaint),
-                    fromPaths(lines, linesPaint, 0.001f),
+                    fromPaths(lines, linesPaint, ZOOM_CLOSE),
                     fromPolygons(buildings, buildingPaint),
                     fromPolygons(aviary, aviaryPaint),
                     fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
@@ -162,13 +161,13 @@ internal class MapViewStateMapper {
 
     private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =
         regions.mapNotNull { (region, position) ->
-            val icon = when (region) {
-                is Region.WcRegion -> R.drawable.ic_wc_24
-                is Region.ExitRegion -> R.drawable.ic_door_24
+            val (icon, minZoom) = when (region) {
+                is Region.WcRegion -> R.drawable.ic_wc_24 to ZOOM_MEDIUM
+                is Region.ExitRegion -> R.drawable.ic_door_24 to ZOOM_MEDIUM
 //                else -> return@mapNotNull null
                 else -> {
                     when (region.id.id) {
-                        "wielkie-koty-2" -> R.drawable.ic_region_big_cats_24
+                        "wielkie-koty-2" -> R.drawable.ic_region_big_cats_24 to null
                         else -> return@mapNotNull null
                     }
                 }
@@ -176,6 +175,7 @@ internal class MapViewStateMapper {
             IconMapItem(
                 point = position,
                 icon = icon,
+                minZoom = minZoom,
             )
         }
 
@@ -342,5 +342,8 @@ internal class MapViewStateMapper {
             MapAction.RESTAURANT,
             MapAction.EXIT,
         )
+
+        val ZOOM_CLOSE = 0.001f
+        val ZOOM_MEDIUM = 0.002f
     }
 }
