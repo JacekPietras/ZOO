@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.catalogue.utils
+package com.jacekpietras.zoo.planner.extensions
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

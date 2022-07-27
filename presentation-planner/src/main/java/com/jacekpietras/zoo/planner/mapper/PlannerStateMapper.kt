@@ -6,11 +6,15 @@ import com.jacekpietras.zoo.domain.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.planner.R
 import com.jacekpietras.zoo.planner.model.PlannerItem
+import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 
 internal class PlannerStateMapper {
 
-    fun from(plan: List<Pair<Stage, List<AnimalEntity>>>?): PlannerViewState {
+    fun from(
+        state: PlannerState,
+        plan: List<Pair<Stage, List<AnimalEntity>>>?
+    ): PlannerViewState {
         val isExitInPlan = plan?.any { (stage, _) -> stage is Stage.InRegion && stage.region is Region.ExitRegion } ?: false
         val list = plan?.map { (stage, animals) ->
             when (stage) {
@@ -49,6 +53,7 @@ internal class PlannerStateMapper {
             list = list,
             isEmptyViewVisible = list.isEmpty(),
             isAddExitVisible = !isExitInPlan && list.isNotEmpty(),
+            isShowingUnseeDialog = state.regionUnderUnseeing != null,
         )
     }
 }

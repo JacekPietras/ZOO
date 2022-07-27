@@ -13,11 +13,14 @@ import com.jacekpietras.zoo.domain.feature.planner.interactor.SaveRegionImmutabl
 import com.jacekpietras.zoo.domain.feature.planner.interactor.UnseeRegionInCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.planner.extensions.reduce
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
+import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 internal class PlannerViewModel(
@@ -31,10 +34,17 @@ internal class PlannerViewModel(
     private val addExitToCurrentPlanUseCase: AddExitToCurrentPlanUseCase,
 ) : ViewModel() {
 
-    private val state = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
+    private val planState = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
         .flowOnBackground()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-    val viewState: Flow<PlannerViewState> = state.map(stateMapper::from).flowOnBackground()
+
+    private val state = MutableStateFlow(PlannerState())
+    val viewState: Flow<PlannerViewState> =
+        combine(
+            state,
+            planState,
+            stateMapper::from,
+        ).flowOnBackground()
 
     fun onMove(fromRegionId: String, toRegionId: String) {
         launchInBackground {
@@ -49,8 +59,19 @@ internal class PlannerViewModel(
     }
 
     fun onUnsee(regionId: String) {
-        launchInBackground {
-            unseeRegionInCurrentPlanUseCase.run(RegionId(regionId))
+        state.reduce { copy(regionUnderUnseeing = RegionId(regionId)) }
+    }
+
+    fun onUnseeDiscarded() {
+        state.reduce { copy(regionUnderUnseeing = null) }
+    }
+
+    fun onUnseen() {
+        state.value.regionUnderUnseeing?.let { regionId ->
+            state.reduce { copy(regionUnderUnseeing = null) }
+            launchInBackground {
+                unseeRegionInCurrentPlanUseCase.run(regionId)
+            }
         }
     }
 
@@ -73,7 +94,7 @@ internal class PlannerViewModel(
     }
 
     private fun getStageWithRegion(regionId: String) =
-        state.value
+        planState.value
             .mapNotNull { (stage, animals) ->
                 if (stage is Stage.InRegion) {
                     stage to animals

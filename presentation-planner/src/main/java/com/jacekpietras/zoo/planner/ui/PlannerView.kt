@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.core.text.RichText
+import com.jacekpietras.zoo.planner.R
 import com.jacekpietras.zoo.planner.model.PlannerItem
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.reordering.ReorderingData
@@ -44,6 +48,8 @@ internal fun PlannerView(
     onRemove: (regionId: String) -> Unit,
     onUnlock: (regionId: String) -> Unit,
     onUnsee: (regionId: String) -> Unit,
+    onUnseen: () -> Unit,
+    onUnseeDiscarded: () -> Unit,
     onMove: (from: String, to: String) -> Unit,
     onAddExit: () -> Unit,
 ) {
@@ -72,6 +78,37 @@ internal fun PlannerView(
     }
 
     TopGradientView()
+
+    if (viewState.isShowingUnseeDialog) {
+        AlertDialog(
+            onDismissRequest = { onUnseeDiscarded() },
+            title = {
+                Text(text = stringResource(R.string.unsee_dialog_title))
+            },
+            text = {
+                Text(text = stringResource(R.string.unsee_dialog_content))
+            },
+            buttons = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 24.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End),
+                ) {
+                    Button(
+                        onClick = { onUnseeDiscarded() }
+                    ) {
+                        Text(text = stringResource(R.string.unsee_dialog_button_decline))
+                    }
+                    Button(
+                        onClick = { onUnseen() }
+                    ) {
+                        Text(text = stringResource(R.string.unsee_dialog_button_confirm))
+                    }
+                }
+            }
+        )
+    }
 }
 
 @Composable

@@ -5,4 +5,8 @@
     <string name="unsee">Meet again</string>
     <string name="planner_empty_text">Your plan is empty.\nAdd animals or select predefined plan.</string>
     <string name="exit">Exit</string>
+    <string name="unsee_dialog_title">Meet again</string>
+    <string name="unsee_dialog_content">Do you want to remove these animals from sight and see them again today?</string>
+    <string name="unsee_dialog_button_decline">No</string>
+    <string name="unsee_dialog_button_confirm">Yes</string>
 </resources>

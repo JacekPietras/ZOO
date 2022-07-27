@@ -7,4 +7,5 @@ internal data class PlannerViewState(
     val list: List<PlannerItem> = emptyList(),
     val isEmptyViewVisible: Boolean = false,
     val isAddExitVisible: Boolean = false,
+    val isShowingUnseeDialog: Boolean = false,
 )
