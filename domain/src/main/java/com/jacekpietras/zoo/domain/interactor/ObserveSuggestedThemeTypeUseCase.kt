@@ -39,7 +39,7 @@ class ObserveSuggestedThemeTypeUseCase(
             .combine(
                 gpsRepository.observeLuminance()
             ) { isDarkRegion, luminance ->
-                if (isDarkRegion && luminance < LOW_LUMINANCE) {
+                if (isDarkRegion && luminance >= 0 && luminance < LOW_LUMINANCE) {
                     ThemeType.NIGHT
                 } else {
                     ThemeType.DAY

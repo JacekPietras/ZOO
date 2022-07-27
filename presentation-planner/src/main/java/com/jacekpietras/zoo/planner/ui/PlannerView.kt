@@ -20,6 +20,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.core.text.RichText
+import com.jacekpietras.zoo.planner.model.PlannerItem
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import com.jacekpietras.zoo.planner.reordering.ReorderingData
 import com.jacekpietras.zoo.planner.reordering.dragOnLongPressToReorder
@@ -102,6 +104,10 @@ private fun PlannerListView(
     val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
     val listData by remember { mutableStateOf(viewState.list) }.also { it.value = viewState.list }
 
+    LaunchedEffect("scroll" + listData.isNotEmpty()) {
+        lazyListState.animateScrollToItem(listData.firstNotSeen())
+    }
+
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -140,6 +146,9 @@ private fun PlannerListView(
         }
     }
 }
+
+private fun List<PlannerItem>.firstNotSeen(): Int =
+    indexOfFirst { !it.isSeen }.minus(1).takeIf { it >= 0 } ?: 0
 
 private fun Modifier.statusBarsPaddingWhen(condition: () -> Boolean): Modifier =
     if (condition()) {
