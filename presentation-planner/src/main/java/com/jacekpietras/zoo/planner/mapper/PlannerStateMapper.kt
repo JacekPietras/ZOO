@@ -32,7 +32,7 @@ internal class PlannerStateMapper {
                             text = RichText(animals.map(AnimalEntity::name).joinToString()),
                             regionId = stage.region.id.id,
                             isMultiple = stage is Stage.Multiple,
-                            isMutable = stage.mutable,
+                            isMutable = stage.mutable || stage.seen,
                             isFixed = stage.seen,
                             isSeen = stage.seen,
                         )
