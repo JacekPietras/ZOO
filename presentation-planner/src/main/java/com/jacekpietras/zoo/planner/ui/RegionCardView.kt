@@ -27,6 +27,7 @@ internal fun RegionCardView(
     text: String,
     isMutable: Boolean = true,
     isSeen: Boolean = false,
+    isRemovable: Boolean = true,
     onRemove: () -> Unit,
     onUnlock: () -> Unit,
     onUnsee: () -> Unit,
@@ -69,12 +70,13 @@ internal fun RegionCardView(
                 )
             }
 
+            if(isRemovable){
             SideIconView(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 iconRes = R.drawable.ic_close_24,
                 contentDescription = R.string.remove_from_plan,
                 onClick = onRemove,
-            )
+            )}
         }
     }
 }

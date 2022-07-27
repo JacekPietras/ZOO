@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.feature.planner.interactor
 import com.jacekpietras.geometry.BuildConfig
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
+import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
@@ -32,6 +33,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     override fun run(): Flow<Pair<List<Stage>, List<PointD>>> =
         observeCurrentPlanUseCase.run()
+            .onStartEmitEmptyPlan()
             .distinctUntilChanged { _, new -> new.stages == lastCalculated && new.stages.size > 2 }
             .moveExitToEnd()
             .combineWithUserPosition()
@@ -52,6 +54,16 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     }
                 },
             )
+
+    private fun Flow<PlanEntity>.onStartEmitEmptyPlan(): Flow<PlanEntity> =
+        onStart {
+            emit(
+                PlanEntity(
+                    planId = PlanId("empty"),
+                    stages = emptyList(),
+                )
+            )
+        }
 
     private suspend fun saveBetterPlan(
         currentPlan: PlanEntity,
