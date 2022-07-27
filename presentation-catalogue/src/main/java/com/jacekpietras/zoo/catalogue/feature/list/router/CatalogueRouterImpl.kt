@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.catalogue.feature.list.router
 
 import androidx.navigation.NavController
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 
 internal class CatalogueRouterImpl(
     private val navController: NavController,

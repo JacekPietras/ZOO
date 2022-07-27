@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import androidx.navigation.NavController
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 
 class AnimalRouterImpl(

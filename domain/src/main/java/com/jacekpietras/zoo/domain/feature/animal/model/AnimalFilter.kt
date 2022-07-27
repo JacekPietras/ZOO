@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.domain.feature.animal.model
 
-import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.model.RegionId
 
 data class AnimalFilter(

@@ -30,7 +30,7 @@ import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.MapViewLogic
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.model.MapAction

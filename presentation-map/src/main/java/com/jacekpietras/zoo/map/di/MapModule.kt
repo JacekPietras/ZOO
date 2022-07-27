@@ -54,6 +54,7 @@ val mapModule = module {
             observeCurrentPlanPathUseCase = get(),
             trackingServiceStarter = get(),
             observeArrivalAtRegionEventUseCase = get(),
+            observeAnimalFavoritesUseCase = get(),
         )
     }
 }

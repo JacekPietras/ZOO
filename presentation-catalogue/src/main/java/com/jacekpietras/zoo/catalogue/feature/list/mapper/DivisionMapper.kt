@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.catalogue.feature.list.mapper
 
 import com.jacekpietras.zoo.catalogue.feature.list.model.AnimalDivision
-import com.jacekpietras.zoo.domain.model.Division
+import com.jacekpietras.zoo.domain.feature.animal.model.Division
 
 internal class DivisionMapper {
 

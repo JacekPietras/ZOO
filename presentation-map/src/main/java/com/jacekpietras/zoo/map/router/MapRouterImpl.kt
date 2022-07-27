@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.provider.MediaStore
 import androidx.navigation.NavController
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 
 internal class MapRouterImpl(

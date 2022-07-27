@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.map.router
 
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 
 internal interface MapRouter {

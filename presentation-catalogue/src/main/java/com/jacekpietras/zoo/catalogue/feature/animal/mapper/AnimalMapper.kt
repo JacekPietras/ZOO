@@ -19,7 +19,7 @@ import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.MapColors
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
-import com.jacekpietras.zoo.domain.model.Feeding
+import com.jacekpietras.zoo.domain.feature.animal.model.Feeding
 
 internal class AnimalMapper {
 

@@ -36,7 +36,7 @@ internal class PlannerViewModel(
 
     private val planState = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
         .flowOnBackground()
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val state = MutableStateFlow(PlannerState())
     val viewState: Flow<PlannerViewState> =
@@ -94,7 +94,7 @@ internal class PlannerViewModel(
     }
 
     private fun getStageWithRegion(regionId: String) =
-        planState.value
+        checkNotNull(planState.value)
             .mapNotNull { (stage, animals) ->
                 if (stage is Stage.InRegion) {
                     stage to animals

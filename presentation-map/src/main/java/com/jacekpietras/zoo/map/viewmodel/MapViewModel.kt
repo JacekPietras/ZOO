@@ -41,8 +41,9 @@ import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPos
 import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
-import com.jacekpietras.zoo.domain.model.AnimalEntity
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
@@ -96,6 +97,7 @@ internal class MapViewModel(
     observeRegionCentersUseCase: ObserveRegionCentersUseCase,
     observeMapLinesUseCase: ObserveMapLinesUseCase,
     observeVisitedRoadsUseCase: ObserveVisitedRoadsUseCase,
+    observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
 
     loadMapUseCase: LoadMapUseCase,
     loadVisitedRouteUseCase: LoadVisitedRouteUseCase,
@@ -158,6 +160,7 @@ internal class MapViewModel(
         state,
         observeSuggestedThemeTypeUseCase.run(),
         observeRegionsWithAnimalsInUserPositionUseCase.run(),
+        observeAnimalFavoritesUseCase.run(),
         mapper::from,
     )
         .combineWithIgnoredFlow(userPositionObservation())

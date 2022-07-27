@@ -7,10 +7,10 @@ import com.jacekpietras.zoo.data.parser.AnimalWebParser
 import com.jacekpietras.zoo.data.parser.makeStreamFromUrl
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalFilter
 import com.jacekpietras.zoo.domain.feature.animal.repository.AnimalRepository
-import com.jacekpietras.zoo.domain.model.AnimalEntity
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
-import com.jacekpietras.zoo.domain.model.divisionFromPolishTag
+import com.jacekpietras.zoo.domain.feature.animal.model.divisionFromPolishTag
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

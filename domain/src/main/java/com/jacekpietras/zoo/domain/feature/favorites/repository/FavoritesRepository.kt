@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.favorites.repository
 
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import kotlinx.coroutines.flow.Flow
 
 interface FavoritesRepository {

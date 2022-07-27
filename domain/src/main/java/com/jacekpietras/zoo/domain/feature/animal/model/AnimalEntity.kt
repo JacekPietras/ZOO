@@ -1,6 +1,7 @@
-package com.jacekpietras.zoo.domain.model
+package com.jacekpietras.zoo.domain.feature.animal.model
 
-import com.jacekpietras.zoo.domain.model.Division.*
+import com.jacekpietras.zoo.domain.feature.animal.model.Division.*
+import com.jacekpietras.zoo.domain.model.RegionId
 
 data class AnimalEntity(
     val id: AnimalId = AnimalId("id"),

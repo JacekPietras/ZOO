@@ -16,10 +16,11 @@ import com.jacekpietras.mapview.model.PolygonD
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.MapColors
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.Division
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.domain.model.AnimalEntity
-import com.jacekpietras.zoo.domain.model.Division
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
@@ -44,6 +45,7 @@ internal class MapViewStateMapper {
         state: MapState,
         suggestedThemeTypeAndLuminance: Pair<ThemeType, Float?>,
         regionsWithAnimalsInUserPosition: List<Pair<Region, List<AnimalEntity>>>,
+        animalFavorites: List<AnimalId>,
     ): MapViewState = with(state) {
         val isValidLocation = userPosition != PointD()
         val (_, luminance) = suggestedThemeTypeAndLuminance
@@ -68,10 +70,10 @@ internal class MapViewStateMapper {
             mapCarouselItems = when (toolbarMode) {
                 is MapToolbarMode.MapActionMode ->
                     when (toolbarMode.mapAction) {
-                        MapAction.AROUND_YOU -> getCarousel(regionsWithAnimalsInUserPosition)
+                        MapAction.AROUND_YOU -> getCarousel(regionsWithAnimalsInUserPosition, animalFavorites)
                         else -> emptyList()
                     }
-                is MapToolbarMode.SelectedRegionMode -> getCarousel(toolbarMode.regionsWithAnimals)
+                is MapToolbarMode.SelectedRegionMode -> getCarousel(toolbarMode.regionsWithAnimals, animalFavorites)
                 else -> emptyList()
             }.toImmutableList(),
             isMapActionsVisible = !isToolbarOpened,
@@ -231,7 +233,10 @@ internal class MapViewStateMapper {
             emptyList()
         }
 
-    private fun getCarousel(regionsWithAnimals: List<Pair<Region, List<AnimalEntity>>>) =
+    private fun getCarousel(
+        regionsWithAnimals: List<Pair<Region, List<AnimalEntity>>>,
+        animalFavorites: List<AnimalId>,
+    ) =
         mutableListOf<MapCarouselItem>().apply {
             regionsWithAnimals.forEach { (region, animalsInRegion) ->
                 if (animalsInRegion.size > 5 && regionsWithAnimals.size > 1) {
@@ -269,6 +274,7 @@ internal class MapViewStateMapper {
         }.sortedWith(
             compareBy(
                 { it !is MapCarouselItem.Region },
+                { it is MapCarouselItem.Animal && it.id !in animalFavorites },
                 { (it as? MapCarouselItem.Animal)?.photoUrl == null },
             )
         )

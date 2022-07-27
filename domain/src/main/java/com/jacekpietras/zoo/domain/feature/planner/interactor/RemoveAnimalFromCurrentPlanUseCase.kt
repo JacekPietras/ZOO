@@ -5,7 +5,7 @@ import com.jacekpietras.zoo.domain.feature.favorites.interactor.IsAnimalFavorite
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 

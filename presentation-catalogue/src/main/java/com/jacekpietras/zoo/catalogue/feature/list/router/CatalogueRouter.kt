@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.catalogue.feature.list.router
 
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 
 internal interface CatalogueRouter {
 

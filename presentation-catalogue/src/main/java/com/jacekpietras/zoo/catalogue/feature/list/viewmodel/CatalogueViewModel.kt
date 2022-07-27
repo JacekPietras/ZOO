@@ -12,7 +12,7 @@ import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.domain.feature.animal.interactor.ObserveFilteredAnimalsUseCase
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalFilter
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

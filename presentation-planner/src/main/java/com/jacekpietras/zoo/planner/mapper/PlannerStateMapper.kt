@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.planner.mapper
 
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
-import com.jacekpietras.zoo.domain.model.AnimalEntity
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.planner.R
 import com.jacekpietras.zoo.planner.model.PlannerItem
@@ -47,12 +47,12 @@ internal class PlannerStateMapper {
                     )
                 }
             }
-        } ?: emptyList()
+        }
 
         return PlannerViewState(
-            list = list,
-            isEmptyViewVisible = list.isEmpty(),
-            isAddExitVisible = !isExitInPlan && list.isNotEmpty(),
+            list = list?: emptyList(),
+            isEmptyViewVisible = list?.isEmpty() == true,
+            isAddExitVisible = !isExitInPlan && list?.isNotEmpty() == true,
             isShowingUnseeDialog = state.regionUnderUnseeing != null,
         )
     }

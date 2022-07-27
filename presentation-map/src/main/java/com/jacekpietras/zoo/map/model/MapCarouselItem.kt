@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.map.model
 
 import com.jacekpietras.zoo.core.text.RichText
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 
 sealed class MapCarouselItem(

@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.domain.feature.animal.interactor
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.interactor.GetRegionCenterPointUseCase
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 
 class GetAnimalPositionUseCase(
     private val getAnimalUseCase: GetAnimalUseCase,

@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.animal.interactor
 
 import com.jacekpietras.zoo.domain.interactor.IsRegionSeenUseCase
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 
 class IsAnimalSeenUseCase(
     private val getAnimalUseCase: GetAnimalUseCase,

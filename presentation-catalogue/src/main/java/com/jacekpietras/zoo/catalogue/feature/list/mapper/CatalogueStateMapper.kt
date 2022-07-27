@@ -5,7 +5,7 @@ import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueState
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.RichText
-import com.jacekpietras.zoo.domain.model.AnimalEntity
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
 
 internal class CatalogueStateMapper(
     private val divisionMapper: DivisionMapper,

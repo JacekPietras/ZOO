@@ -1,8 +1,8 @@
 package com.jacekpietras.zoo.domain.feature.animal.repository
 
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalFilter
-import com.jacekpietras.zoo.domain.model.AnimalEntity
-import com.jacekpietras.zoo.domain.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.flow.Flow
 
