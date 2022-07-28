@@ -45,7 +45,7 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             distance = ARROW_M,
         )
 
-        return version1(
+        return version2(
             arrowTip,
             arrowBase,
         )
@@ -55,9 +55,14 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         a: PointD,
         b: PointD,
     ): Double {
-        val y = sin(b.y - a.y) * cos(b.x)
-        val x = cos(a.x) * sin(b.x) -
-                sin(a.x) * cos(b.x) * cos(b.y - a.y)
+        val ax = Math.toRadians(a.x)
+        val ay = Math.toRadians(a.y)
+        val bx = Math.toRadians(b.x)
+        val by = Math.toRadians(b.y)
+
+        val y = sin(by - ay) * cos(bx)
+        val x = cos(ax) * sin(bx) -
+                sin(ax) * cos(bx) * cos(by - ay)
         val t = atan2(y, x)
         return (t * 180 / Math.PI + 360) % 360
     }
@@ -66,19 +71,24 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         arrowTip: PointD,
         arrowBase: PointD,
     ): List<PointD> {
-        val meridianAtPoint = 0//27
         val bearing = bearing(arrowTip, arrowBase)
 
         val earthRadius = 6378000.1
         val d = ARROW_M / earthRadius
-        val p1 = perpendicular(arrowBase, d = d, bearing + 90 + meridianAtPoint)
-        val p2 = perpendicular(arrowBase, d = d, bearing - 90 + meridianAtPoint)
+        val p1 = perpendicular(arrowBase, d, bearing + 90)
+        val p2 = perpendicular(arrowBase, d, bearing - 90)
 
         val longerTip = pointInDistance(
             begin = arrowBase,
             end = arrowTip,
             distance = ARROW_M * 2,
         )
+
+        val a = bearing(arrowTip, arrowBase)
+        val b = bearing(p2, p1)
+        val c = abs(a - b).toInt()
+
+        Timber.e("dupa bearing angle $c (${a.toInt()})")
 
         return listOf(
             longerTip,
