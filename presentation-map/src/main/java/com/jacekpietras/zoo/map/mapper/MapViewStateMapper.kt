@@ -118,6 +118,7 @@ internal class MapViewStateMapper {
     ): MapVolatileViewState {
         val plannedPath = navigationPath.points
         val turnPath = navigationPath.firstTurn
+        val turnArrowPath = navigationPath.firstTurnArrow
 
         return with(state) {
             with(ComposeColors(mapColors)) {
@@ -130,7 +131,9 @@ internal class MapViewStateMapper {
                         if (shortestPath.isNotEmpty()) {
                             fromPath(shortestPath, shortestPathPaint)
                         } else {
-                            fromPath(plannedPath, shortestPathPaint) + fromPath(turnPath, turnPaint, ZOOM_MEDIUM)
+                            fromPath(plannedPath, shortestPathPaint) +
+                                    fromPath(turnPath, turnPaint, ZOOM_MEDIUM) +
+                                    fromPolygon(PolygonEntity(turnArrowPath), turnArrowPaint, ZOOM_MEDIUM)
                         },
                         fromPoint(userPosition, userPositionPaint),
                         fromPoint(snappedPoint, snappedPointPaint),
@@ -187,6 +190,15 @@ internal class MapViewStateMapper {
         }
 
     private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
+
+    private fun fromPolygon(polygon: PolygonEntity, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
+        listOf(
+            PolygonMapItem(
+                PolygonD(polygon.vertices),
+                paint,
+                minZoom,
+            )
+        )
 
     private fun fromPolygons(polygons: List<PolygonEntity>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         polygons.map { polygon ->
@@ -321,6 +333,9 @@ internal class MapViewStateMapper {
         val turnPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Hard(Color.argb(255, 150, 150, 255)),
             width = MapDimension.Dynamic.World(2.0),
+        )
+        val turnArrowPaint: MapPaint = MapPaint.Fill(
+            fillColor = MapColor.Hard(Color.argb(255, 150, 150, 255)),
         )
 
         val shortestPathPaint: MapPaint = MapPaint.DashedStroke(
