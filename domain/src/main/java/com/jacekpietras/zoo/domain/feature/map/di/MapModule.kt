@@ -1,6 +1,16 @@
 package com.jacekpietras.zoo.domain.feature.map.di
 
-import com.jacekpietras.zoo.domain.feature.map.interactor.*
+import com.jacekpietras.zoo.domain.feature.map.interactor.GetTerminalNodesUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.GetTerminalNodesUseCaseImpl
+import com.jacekpietras.zoo.domain.feature.map.interactor.GetWorldBoundsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveBuildingsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapLinesUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveRoadsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTechnicalRoadsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTerminalNodesUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseCase
 import org.koin.dsl.module
 
 val mapModule = module {
@@ -43,6 +53,11 @@ val mapModule = module {
         GetTerminalNodesUseCaseImpl(
             initializeGraphAnalyzerIfNeededUseCase = get(),
             graphAnalyzer = get(),
+        )
+    }
+    factory {
+        ObserveTerminalNodesUseCase(
+            getTerminalNodesUseCase = get(),
         )
     }
     factory {

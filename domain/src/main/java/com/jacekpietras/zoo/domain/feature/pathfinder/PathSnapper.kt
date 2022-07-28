@@ -112,29 +112,30 @@ internal class PathSnapper(
     private fun List<List<SnappedOnEdge>>.filterDuplicatesInRow(): List<List<SnappedOnEdge>> =
         map { it.filterWithPrev { prev, next -> prev.point != next.point } }
 
+    private fun getPercentOfSegment(begin: Node, end: Node, point: PointD): Double {
+        val diffX = end.x - begin.x
+        val percent = if (diffX != 0.0) {
+            (point.x - begin.x) / diffX
+        } else {
+            val diffY = end.y - begin.y
+
+            check(diffY != 0.0) { "there is no distance between $begin -> $end" }
+
+            (point.y - begin.y) / diffY
+        }
+        check(percent in 0.0..1.0) { "percent value is $percent" }
+
+        return percent
+    }
+
     private fun List<List<SnappedOnEdge>>.connectPointsIntoEdges(): List<VisitedRoadEdgePart> =
         map { continuous ->
             continuous.zipWithNext { prev, next ->
                 val nodes = (prev.getUniqueNodes() + next.getUniqueNodes()).toList()
                 check(nodes.size == 2) { "there is no line between $prev -> $next" }
 
-                val diffX = nodes[1].x - nodes[0].x
-                val (prevPercent, nextPercent) = if (diffX != 0.0) {
-                    val prevPercent = (prev.point.x - nodes[0].x) / diffX
-                    val nextPercent = (next.point.x - nodes[0].x) / diffX
-                    prevPercent to nextPercent
-                } else {
-                    val diffY = nodes[1].y - nodes[0].y
-
-                    check(diffY != 0.0) { "there is distance between $prev -> $next" }
-
-                    val prevPercent = (prev.point.y - nodes[0].y) / diffY
-                    val nextPercent = (next.point.y - nodes[0].y) / diffY
-                    prevPercent to nextPercent
-                }
-
-                check(prevPercent in 0.0..1.0) { "percent value is $prevPercent" }
-                check(nextPercent in 0.0..1.0) { "percent value is $nextPercent" }
+                val prevPercent = getPercentOfSegment(nodes[0], nodes[1], prev.point)
+                val nextPercent = getPercentOfSegment(nodes[0], nodes[1], next.point)
 
                 VisitedRoadEdgePart(
                     from = nodes[0].point,

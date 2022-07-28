@@ -82,6 +82,7 @@ val plannerModule = module {
     factory {
         ObserveCurrentPlanPathWithOptimizationUseCase(
             observeCurrentPlanWithOptimizationUseCase = get(),
+            observeTerminalNodesUseCase = get(),
         )
     }
     factory {

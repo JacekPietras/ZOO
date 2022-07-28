@@ -21,15 +21,14 @@ sealed class VisitedRoadEdge(
                 Partially(
                     from = to,
                     to = from,
-                    visited =
-                    mutableListOf<ClosedRange<Double>>()
+                    visited = mutableListOf<ClosedRange<Double>>()
                         .apply {
                             visited.forEach { start, end ->
                                 add((1 - end)..(1 - start))
                             }
                             reverse()
                         }
-                        .let { Intervals(it) }
+                        .let(::Intervals)
                 )
             }
         }
@@ -42,16 +41,12 @@ sealed class VisitedRoadEdge(
 
         fun toPath(): List<MapItemEntity.PathEntity> {
             val array = visited.toDoubleArray()
-            return mutableListOf<MapItemEntity.PathEntity>().apply {
-                for (i in 0 until (array.size) step 2) {
-                    val diff = to - from
-                    val moveStart = diff * array[i]
-                    val moveEnd = diff * array[i + 1]
+            return (0 until (array.size) step 2).map { i ->
+                val diff = to - from
+                val moveStart = diff * array[i]
+                val moveEnd = diff * array[i + 1]
 
-                    add(
-                        MapItemEntity.PathEntity(listOf(from + moveStart, from + moveEnd))
-                    )
-                }
+                MapItemEntity.PathEntity(listOf(from + moveStart, from + moveEnd))
             }
         }
 

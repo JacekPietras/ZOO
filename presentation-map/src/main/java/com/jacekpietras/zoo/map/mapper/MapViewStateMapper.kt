@@ -21,6 +21,7 @@ import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.feature.animal.model.Division
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
+import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase.NavigationPath
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
@@ -110,12 +111,15 @@ internal class MapViewStateMapper {
     fun from(
         state: MapVolatileState,
         mapColors: MapColors,
-        plannedPath: List<PointD> = emptyList(),
+        navigationPath: NavigationPath,
         visitedRoads: List<PathEntity> = emptyList(),
         takenRoute: List<PathEntity> = emptyList(),
         compass: Float = 0f,
-    ): MapVolatileViewState =
-        with(state) {
+    ): MapVolatileViewState {
+        val plannedPath = navigationPath.points
+        val turnPath = navigationPath.firstTurn
+
+        return with(state) {
             with(ComposeColors(mapColors)) {
                 MapVolatileViewState(
                     compass = compass,
@@ -126,7 +130,7 @@ internal class MapViewStateMapper {
                         if (shortestPath.isNotEmpty()) {
                             fromPath(shortestPath, shortestPathPaint)
                         } else {
-                            fromPath(plannedPath, shortestPathPaint)
+                            fromPath(plannedPath, shortestPathPaint) + fromPath(turnPath, turnPaint, ZOOM_MEDIUM)
                         },
                         fromPoint(userPosition, userPositionPaint),
                         fromPoint(snappedPoint, snappedPointPaint),
@@ -134,6 +138,7 @@ internal class MapViewStateMapper {
                 )
             }
         }
+    }
 
     fun from(
         mapColors: MapColors,
@@ -210,13 +215,14 @@ internal class MapViewStateMapper {
             )
         }
 
-    @Suppress("unused")
-    private fun fromPoints(points: List<PointD>, paint: MapPaint): List<MapItem> =
+    @Suppress("unused", "SameParameterValue")
+    private fun fromPoints(points: List<PointD>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         points.map { point ->
             CircleMapItem(
                 point,
                 (paint as MapPaint.Circle).radius,
                 paint,
+                minZoom,
             )
         }
 
@@ -311,6 +317,10 @@ internal class MapViewStateMapper {
         val linesPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Hard(Color.rgb(240, 180, 140)),
             width = MapDimension.Dynamic.World(0.5),
+        )
+        val turnPaint: MapPaint = MapPaint.Stroke(
+            strokeColor = MapColor.Hard(Color.argb(255, 150, 150, 255)),
+            width = MapDimension.Dynamic.World(2.0),
         )
 
         val shortestPathPaint: MapPaint = MapPaint.DashedStroke(
