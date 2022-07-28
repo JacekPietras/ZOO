@@ -7,6 +7,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import timber.log.Timber
+import kotlin.math.abs
+import kotlin.math.asin
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 class ObserveCurrentPlanPathWithOptimizationUseCase(
@@ -17,7 +23,7 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     fun run(): Flow<NavigationPath> =
         combine(
             observePath(),
-            observeTerminalNodesUseCase.run(),
+            observeTerminalNodesUseCase.run()
         ) { (points, nodes) ->
             val turnPoints = getTurnPoints(points, nodes)
 
@@ -43,6 +49,56 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             arrowTip,
             arrowBase,
         )
+    }
+
+    private fun bearing(
+        a: PointD,
+        b: PointD,
+    ): Double {
+        val y = sin(b.y - a.y) * cos(b.x)
+        val x = cos(a.x) * sin(b.x) -
+                sin(a.x) * cos(b.x) * cos(b.y - a.y)
+        val t = atan2(y, x)
+        return (t * 180 / Math.PI + 360) % 360
+    }
+
+    private fun version2(
+        arrowTip: PointD,
+        arrowBase: PointD,
+    ): List<PointD> {
+        val meridianAtPoint = 0//27
+        val bearing = bearing(arrowTip, arrowBase)
+
+        val earthRadius = 6378000.1
+        val d = ARROW_M / earthRadius
+        val p1 = perpendicular(arrowBase, d = d, bearing + 90 + meridianAtPoint)
+        val p2 = perpendicular(arrowBase, d = d, bearing - 90 + meridianAtPoint)
+
+        val longerTip = pointInDistance(
+            begin = arrowBase,
+            end = arrowTip,
+            distance = ARROW_M * 2,
+        )
+
+        return listOf(
+            longerTip,
+            p1,
+            p2,
+        )
+    }
+
+    private fun perpendicular(arrowBase: PointD, d: Double, b: Double): PointD {
+        val brng = Math.toRadians(b)
+        val lat1 = Math.toRadians(arrowBase.x)
+        val lon1 = Math.toRadians(arrowBase.y)
+
+        var x = asin(sin(lat1) * cos(d) + cos(lat1) * sin(d) * cos(brng))
+        var y = lon1 + atan2(sin(brng) * sin(d) * cos(lat1), cos(d) - sin(lat1) * sin(x))
+
+        x = Math.toDegrees(x)
+        y = Math.toDegrees(y)
+
+        return PointD(x, y)
     }
 
     private fun version1(
@@ -78,6 +134,12 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             end = arrowTip,
             distance = ARROW_M * 2,
         )
+
+        val a = bearing(arrowTip, arrowBase)
+        val b = bearing(point2, point1)
+        val c = abs(a - b).toInt()
+
+        Timber.e("dupa bearing angle $c")
 
         return listOf(
             longerTip,
@@ -157,6 +219,6 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     private companion object {
 
         const val DISTANCE_M = 10
-        const val ARROW_M = 5
+        const val ARROW_M = 4
     }
 }
