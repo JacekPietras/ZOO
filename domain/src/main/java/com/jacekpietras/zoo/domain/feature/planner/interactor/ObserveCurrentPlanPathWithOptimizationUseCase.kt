@@ -22,8 +22,23 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             observePath(),
             observeTerminalNodesUseCase.run()
         ) { (points, nodes) ->
-            if (arrowIsNeeded(points, nodes)) {
-                val turnPoints = getTurnPoints(points, nodes)
+
+            val indexOfFirstTurns = points.indexOfFirst(predicate = { it in nodes }, amount = 2)
+            val turnWithArrow = indexOfFirstTurns
+                .mapNotNull { turnPointIndex ->
+                    val turnPoint = points[turnPointIndex]
+                    val countOfCrossingsOnTurn = points.count { it == turnPoint }
+                    val arrowIsNeeded = countOfCrossingsOnTurn > 1
+                    if (arrowIsNeeded) {
+                        turnPointIndex
+                    } else {
+                        null
+                    }
+                }
+                .firstOrNull()
+
+            if (turnWithArrow != null) {
+                val turnPoints = getTurnPoints(turnWithArrow, points)
 
                 NavigationPath(
                     points = points,
@@ -39,10 +54,15 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             }
         }
 
-    private fun arrowIsNeeded(points: List<PointD>, nodes: List<PointD>): Boolean {
-        val firstTurnPoint = points.firstOrNull { it in nodes }
-        val countOfCrossingsOnFirstTurn = points.count { it == firstTurnPoint }
-        return countOfCrossingsOnFirstTurn > 1
+    private inline fun <T> List<T>.indexOfFirst(predicate: (T) -> Boolean, amount: Int): List<Int> {
+        val result = mutableListOf<Int>()
+        for ((index, item) in this.withIndex()) {
+            if (predicate(item)) {
+                result.add(index)
+                if (result.size == amount) return result
+            }
+        }
+        return result
     }
 
     private fun makeArrow(list: List<PointD>): List<PointD> {
@@ -119,12 +139,11 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     }
 
     private fun getTurnPoints(
+        indexOfTurn: Int,
         points: List<PointD>,
-        nodes: List<PointD>,
     ): List<PointD> {
-        val indexOfFirstTurn = points.indexOfFirst { it in nodes }
-        val turnPoints = if (indexOfFirstTurn >= 0) {
-            getBehindOfTurn(indexOfFirstTurn, points) + getForwardOfTurn(indexOfFirstTurn, points).drop(1)
+        val turnPoints = if (indexOfTurn >= 0) {
+            getBehindOfTurn(indexOfTurn, points) + getForwardOfTurn(indexOfTurn, points).drop(1)
         } else {
             emptyList()
         }
@@ -155,8 +174,8 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         return listOfPoints
     }
 
-    private fun getBehindOfTurn(first: Int, points: List<PointD>): List<PointD> =
-        getAroundTurn(points, range = first downTo 0).reversed()
+    private fun getBehindOfTurn(last: Int, points: List<PointD>): List<PointD> =
+        getAroundTurn(points, range = last downTo 0).reversed()
 
     private fun getForwardOfTurn(first: Int, points: List<PointD>): List<PointD> =
         getAroundTurn(points, range = first until points.size)
