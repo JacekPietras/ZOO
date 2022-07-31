@@ -134,6 +134,7 @@ internal class MapViewStateMapper {
                             fromPath(plannedPath, shortestPathPaint) +
                                     fromPath(turnPath, turnPaint, ZOOM_MEDIUM) +
                                     fromPolygon(PolygonEntity(turnArrowPath), turnArrowPaint, ZOOM_MEDIUM)
+//                                    fromPath(turnArrowPath, takenRoutePaint, ZOOM_MEDIUM)
                         },
                         fromPoint(userPosition, userPositionPaint),
                         fromPoint(snappedPoint, snappedPointPaint),

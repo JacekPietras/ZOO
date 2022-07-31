@@ -14,6 +14,9 @@ import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.MapColors
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveBuildingsUseCase
@@ -41,9 +44,6 @@ import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPos
 import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveVisitedRoadsUseCase
-import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
-import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
-import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
@@ -69,6 +69,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
@@ -125,13 +126,19 @@ internal class MapViewModel(
 
     private val mapColors = MutableStateFlow(MapColors())
 
+    private val observeTakenRoute = if (BuildConfig.DEBUG) {
+        observeTakenRouteUseCase.run()
+    } else {
+        flow { }
+    }
+
     private val volatileState = MutableStateFlow(MapVolatileState())
     private val volatileViewState: Flow<MapVolatileViewState> = combine(
         volatileState,
         mapColors,
         observeCurrentPlanPathUseCase.run(),
         observeVisitedRoadsUseCase.run(),
-        observeTakenRouteUseCase.run(),
+        observeTakenRoute,
         observeCompassUseCase.run(),
         mapper::from,
     )

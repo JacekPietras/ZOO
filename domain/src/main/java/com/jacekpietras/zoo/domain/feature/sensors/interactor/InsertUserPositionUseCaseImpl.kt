@@ -58,8 +58,8 @@ internal class InsertUserPositionUseCaseImpl(
     private suspend fun addVisitedPlannerStage(position: GpsHistoryEntity) {
         val plan = getOrCreateCurrentPlanUseCase.run()
         plan.stages.filterIsInstance<Stage.InRegion>().firstOrNull { !it.seen }?.let { firstUnseenStage ->
-            val (_, polygon) = getRegionUseCase.run(firstUnseenStage.region.id)
-            val arrived = polygonContains(polygon.vertices, PointD(position.lon, position.lat))
+            val polygons = firstUnseenStage.getPolygons()
+            val arrived = polygons.any { polygon -> polygonContains(polygon.vertices, PointD(position.lon, position.lat)) }
             if (arrived) {
                 val stageAsSeen = firstUnseenStage.copyWithSeen(seen = true)
                 val newStages = plan.stages.map { stage ->
@@ -75,6 +75,23 @@ internal class InsertUserPositionUseCaseImpl(
             }
         }
     }
+
+    private suspend fun Stage.getPolygons(): List<MapItemEntity.PolygonEntity> =
+        when (this) {
+            is Stage.Single -> {
+                val (_, polygon) = getRegionUseCase.run(region.id)
+                listOf(polygon)
+            }
+            is Stage.Multiple -> {
+                alternatives.map {
+                    val (_, polygon) = getRegionUseCase.run(it.id)
+                    polygon
+                }
+            }
+            is Stage.InUserPosition -> {
+                emptyList()
+            }
+        }
 
     private suspend fun addVisitedPart(next: GpsHistoryEntity) {
         val prev = gpsRepository.getLatestPosition() ?: return
