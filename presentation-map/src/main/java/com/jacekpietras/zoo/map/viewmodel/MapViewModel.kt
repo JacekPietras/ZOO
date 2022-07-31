@@ -65,6 +65,7 @@ import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -244,29 +245,35 @@ internal class MapViewModel(
     }
 
     private fun onPointPlaced(point: PointD) {
-        launchInBackground {
-            val regionsAndAnimals = getRegionsContainingPointUseCase.run(point)
-                .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
-                .filter { (_, animals) -> animals.isNotEmpty() }
+        volatileState.reduce { copy(snappedPoint = point) }
 
-            if (regionsAndAnimals.isEmpty()) {
+        launchInBackground {
+            val regionsAndAnimals = async {
+                getRegionsContainingPointUseCase.run(point)
+                    .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
+                    .filter { (_, animals) -> animals.isNotEmpty() }
+            }
+            val shortestPath = async { getShortestPathUseCase.run(point) }
+
+            if (regionsAndAnimals.await().isEmpty()) {
                 state.reduce {
                     copy(isToolbarOpened = false)
                 }
-                return@launchInBackground
+                volatileState.reduce {
+                    copy(
+                        snappedPoint = null,
+                        shortestPath = emptyList()
+                    )
+                }
             } else {
                 state.reduce {
                     copy(
-                        toolbarMode = MapToolbarMode.SelectedRegionMode(regionsAndAnimals),
+                        toolbarMode = MapToolbarMode.SelectedRegionMode(regionsAndAnimals.await()),
                         isToolbarOpened = true,
                     )
                 }
+                volatileState.reduce { copy(shortestPath = shortestPath.await()) }
             }
-        }
-        volatileState.reduce { copy(snappedPoint = point) }
-        launchInBackground {
-            val shortestPath = getShortestPathUseCase.run(point)
-            volatileState.reduce { copy(shortestPath = shortestPath) }
         }
     }
 
@@ -323,18 +330,12 @@ internal class MapViewModel(
             }
             else -> MapToolbarMode.NavigableMapActionMode(mapAction)
         }
-        state.reduce {
-            copy(
-                toolbarMode = toolbarMode,
-                isToolbarOpened = toolbarMode != null,
-            )
-        }
         if (toolbarMode is MapToolbarMode.NavigableMapActionMode) {
-            launchInBackground { startNavigationToNearestRegion(mapAction) }
+            launchInBackground { startNavigationToNearestRegion(mapAction, toolbarMode) }
         }
     }
 
-    private suspend fun startNavigationToNearestRegion(mapAction: MapAction) {
+    private suspend fun startNavigationToNearestRegion(mapAction: MapAction, toolbarMode: MapToolbarMode.NavigableMapActionMode) {
         val nearWithDistance = when (mapAction) {
             MapAction.WC -> findNearRegionWithDistance<Region.WcRegion>()
             MapAction.RESTAURANT -> findNearRegionWithDistance<Region.RestaurantRegion>()
@@ -345,24 +346,27 @@ internal class MapViewModel(
             if (nearWithDistance != null) {
                 val (path, distance) = nearWithDistance
 
-                (state.value.toolbarMode as? MapToolbarMode.NavigableMapActionMode)?.let { currentMode ->
-                    state.reduce {
-                        copy(
-                            toolbarMode = currentMode.copy(
-                                path = path,
-                                distance = distance,
-                            ),
-                        )
-                    }
-                    volatileState.reduce {
-                        copy(
-                            snappedPoint = path.last(),
-                            shortestPath = path,
-                        )
-                    }
+                state.reduce {
+                    copy(
+                        toolbarMode = toolbarMode.copy(
+                            path = path,
+                            distance = distance,
+                        ),
+                        isToolbarOpened = true,
+                    )
+                }
+                volatileState.reduce {
+                    copy(
+                        snappedPoint = path.last(),
+                        shortestPath = path,
+                    )
                 }
             } else {
-                state.reduce { copy(isToolbarOpened = false) }
+                state.reduce {
+                    copy(
+                        isToolbarOpened = false,
+                    )
+                }
                 sendEffect(ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
             }
         }
@@ -397,7 +401,7 @@ internal class MapViewModel(
                 with(state.value) {
                     if (isToolbarOpened) {
                         when (toolbarMode) {
-                            is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
+                            is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction, toolbarMode)
                             is MapToolbarMode.SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
                             else -> Unit
                         }
