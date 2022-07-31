@@ -22,15 +22,28 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             observePath(),
             observeTerminalNodesUseCase.run()
         ) { (points, nodes) ->
-            val turnPoints = getTurnPoints(points, nodes)
+            if (arrowIsNeeded(points, nodes)) {
+                val turnPoints = getTurnPoints(points, nodes)
 
-            NavigationPath(
-                points = points,
-                firstTurn = turnPoints,
-                firstTurnArrow = makeArrow(turnPoints),
-            )
+                NavigationPath(
+                    points = points,
+                    firstTurn = turnPoints,
+                    firstTurnArrow = makeArrow(turnPoints),
+                )
+            } else {
+                NavigationPath(
+                    points = points,
+                    firstTurn = emptyList(),
+                    firstTurnArrow = emptyList(),
+                )
+            }
         }
 
+    private fun arrowIsNeeded(points: List<PointD>, nodes: List<PointD>): Boolean {
+        val firstTurnPoint = points.firstOrNull { it in nodes }
+        val countOfCrossingsOnFirstTurn = points.count { it == firstTurnPoint }
+        return countOfCrossingsOnFirstTurn > 1
+    }
 
     private fun makeArrow(list: List<PointD>): List<PointD> {
         if (list.size < 2) return emptyList()
