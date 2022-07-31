@@ -67,7 +67,8 @@ internal class MapViewStateMapper {
                 }
                 else -> RichText.Empty
             },
-            navigationText = planState?.let { it.nextStageRegion.id.findReadableName() + it.distance.metersToText() },
+            navigationText = planState?.let { it.nextStageRegion.id.findReadableName() + it.distance.metersToText() } ?: RichText.Empty,
+            isNavigationVisible = planState != null && !isToolbarOpened,
             luminanceText = luminance?.toInt().toString(),
             mapCarouselItems = when (toolbarMode) {
                 is MapToolbarMode.MapActionMode ->

@@ -81,14 +81,15 @@ internal fun MapView(
             onRegionClicked = onRegionClicked,
         )
         Column {
-            val paddingOnChips = if (viewState?.navigationText != null) {
+            val paddingOnChips = if (viewState?.isNavigationVisible == true) {
                 0.dp
             } else {
                 WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
             }
 
             PlannerNavigationToolbar(
-                navigationText = viewState?.navigationText,
+                isNavigationVisible = viewState?.isNavigationVisible ?: false,
+                navigationText = viewState?.navigationText ?: RichText.Empty,
             )
 
             ActionChips(
@@ -118,11 +119,10 @@ internal fun MapView(
 }
 
 @Composable
-fun PlannerNavigationToolbar(navigationText: RichText?) {
-    val isVisible = navigationText != null
+fun PlannerNavigationToolbar(isNavigationVisible: Boolean, navigationText: RichText) {
     AnimatedVisibility(
-        visibleState = remember { MutableTransitionState(isVisible) }
-            .apply { targetState = isVisible },
+        visibleState = remember { MutableTransitionState(isNavigationVisible) }
+            .apply { targetState = isNavigationVisible },
         modifier = Modifier.fillMaxWidth(),
         enter = expandVertically(),
         exit = shrinkVertically(),
@@ -135,13 +135,17 @@ fun PlannerNavigationToolbar(navigationText: RichText?) {
         ) {
             Row(
                 modifier = Modifier
+                    .statusBarsPadding()
+                    .fillMaxWidth()
                     .padding(horizontal = 32.dp)
                     .defaultMinSize(minHeight = 48.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    text = navigationText?.toString(LocalContext.current) ?: "",
+                    text = navigationText.toString(LocalContext.current),
                     color = MaterialTheme.colors.onSurface,
                 )
             }
