@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.map.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.expandVertically
@@ -190,7 +189,6 @@ private fun AnimalDivisionValue?.getIcon(): Int =
         null -> R.drawable.ic_close_24
     }
 
-@SuppressLint("ComposableModifierFactory")
 @Composable
 fun Modifier.placeholderBackgroundWhen(condition: () -> Boolean): Modifier =
     if (condition()) {

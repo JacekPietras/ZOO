@@ -83,6 +83,8 @@ val plannerModule = module {
         ObserveCurrentPlanPathWithOptimizationUseCase(
             observeCurrentPlanWithOptimizationUseCase = get(),
             observeTerminalNodesUseCase = get(),
+            getRegionCenterPointUseCase = get(),
+            getShortestPathUseCase = get(),
         )
     }
     factory {

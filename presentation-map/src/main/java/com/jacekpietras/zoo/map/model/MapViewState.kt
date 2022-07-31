@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.map.model
 
 import androidx.compose.runtime.Immutable
-import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.core.text.RichText
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -12,6 +11,7 @@ internal data class MapViewState(
     val isGuidanceShown: Boolean = false,
     val title: RichText = RichText.Empty,
     val luminanceText: String = "",
+    val navigationText: RichText? = null,
     val mapCarouselItems: ImmutableList<MapCarouselItem> = persistentListOf(),
     val isMapActionsVisible: Boolean = false,
     val mapActions: ImmutableList<MapAction> = persistentListOf(),

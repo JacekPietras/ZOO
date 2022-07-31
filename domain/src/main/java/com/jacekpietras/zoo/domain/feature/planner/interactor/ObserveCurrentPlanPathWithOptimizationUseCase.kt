@@ -3,9 +3,13 @@ package com.jacekpietras.zoo.domain.feature.planner.interactor
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTerminalNodesUseCase
+import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
+import com.jacekpietras.zoo.domain.feature.planner.model.Stage
+import com.jacekpietras.zoo.domain.interactor.GetRegionCenterPointUseCase
+import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.domain.utils.toLengthInMeters
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlin.math.asin
 import kotlin.math.atan2
@@ -15,13 +19,16 @@ import kotlin.math.sin
 class ObserveCurrentPlanPathWithOptimizationUseCase(
     private val observeCurrentPlanWithOptimizationUseCase: ObserveCurrentPlanWithOptimizationUseCase,
     private val observeTerminalNodesUseCase: ObserveTerminalNodesUseCase,
+    private val getRegionCenterPointUseCase: GetRegionCenterPointUseCase,
+    private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) {
 
-    fun run(): Flow<NavigationPath> =
+    fun run(): Flow<NavigationPlan> =
         combine(
-            observePath(),
+            observeCurrentPlanWithOptimizationUseCase.run(),
             observeTerminalNodesUseCase.run()
-        ) { (points, nodes) ->
+        ) { pair, nodes ->
+            val (stages, points) = pair
 
             val indexOfFirstTurns = points.indexOfFirst(predicate = { it in nodes }, amount = 2)
             val turnWithArrow = indexOfFirstTurns
@@ -37,22 +44,36 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
                 }
                 .firstOrNull()
 
+            val firstDestinationStage = stages
+                .filterIsInstance<Stage.InRegion>()
+                .firstOrNull { !it.seen }
+            val distanceToFirstDestinationStage = firstDestinationStage?.let { stage ->
+                val centerPoint = getRegionCenterPointUseCase.run(regionId = stage.region.id)
+                val path = getShortestPathUseCase.run(centerPoint)
+                path.toLengthInMeters()
+            }
+
             if (turnWithArrow != null) {
                 val turnPoints = getTurnPoints(turnWithArrow, points)
 
-                NavigationPath(
+                NavigationPlan(
                     points = points,
+                    stages = stages,
+                    distanceToNextStage = distanceToFirstDestinationStage,
+                    nextStageRegion = firstDestinationStage?.region?.id,
                     firstTurn = turnPoints,
                     firstTurnArrow = makeArrow(turnPoints),
                 )
             } else {
-                NavigationPath(
+                NavigationPlan(
                     points = points,
-                    firstTurn = emptyList(),
-                    firstTurnArrow = emptyList(),
+                    stages = stages,
+                    nextStageRegion = firstDestinationStage?.region?.id,
+                    distanceToNextStage = distanceToFirstDestinationStage,
                 )
             }
         }
+            .onStart { emit(NavigationPlan()) }
 
     private inline fun <T> List<T>.indexOfFirst(predicate: (T) -> Boolean, amount: Int): List<Int> {
         val result = mutableListOf<Int>()
@@ -194,15 +215,13 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         return begin + (diff * percent)
     }
 
-    private fun observePath() =
-        observeCurrentPlanWithOptimizationUseCase.run()
-            .map { (_, path) -> path }
-            .onStart { emit(emptyList()) }
-
-    class NavigationPath(
-        val points: List<PointD>,
-        val firstTurn: List<PointD>,
-        val firstTurnArrow: List<PointD>,
+    class NavigationPlan(
+        val points: List<PointD> = emptyList(),
+        val firstTurn: List<PointD> = emptyList(),
+        val firstTurnArrow: List<PointD> = emptyList(),
+        val stages: List<Stage> = emptyList(),
+        val distanceToNextStage: Double? = null,
+        val nextStageRegion: RegionId? = null,
     )
 
     private companion object {

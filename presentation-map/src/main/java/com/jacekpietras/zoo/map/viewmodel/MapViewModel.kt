@@ -62,6 +62,7 @@ import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
+import com.jacekpietras.zoo.map.model.PlanState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
@@ -82,7 +83,7 @@ internal class MapViewModel(
 
     observeCompassUseCase: ObserveCompassUseCase,
     observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
-    observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
+    private val observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
     private val observeUserPositionUseCase: ObserveUserPositionUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
@@ -133,11 +134,35 @@ internal class MapViewModel(
         flow { }
     }
 
+    private val observeCurrentPlanPath = observeCurrentPlanPathUseCase.run()
+        .onEach { plan ->
+            val distance = plan.distanceToNextStage
+            val nextStageRegion = plan.nextStageRegion
+            if (plan.stages.isNotEmpty() && distance != null && nextStageRegion != null) {
+                launchInBackground {
+                    state.reduce {
+                        copy(
+                            planState = PlanState(
+                                distance = distance,
+                                nextStageRegion = nextStageRegion,
+                            ),
+                        )
+                    }
+                }
+            } else {
+                state.reduce {
+                    copy(
+                        planState = null,
+                    )
+                }
+            }
+        }
+
     private val volatileState = MutableStateFlow(MapVolatileState())
     private val volatileViewState: Flow<MapVolatileViewState> = combine(
         volatileState,
         mapColors,
-        observeCurrentPlanPathUseCase.run(),
+        observeCurrentPlanPath,
         observeVisitedRoadsUseCase.run(),
         observeTakenRoute,
         observeCompassUseCase.run(),

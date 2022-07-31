@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.map.model.MapAction
 
@@ -31,6 +31,7 @@ internal fun ActionChips(
     isVisible: Boolean,
     mapActions: List<MapAction>,
     onMapActionClicked: (MapAction) -> Unit,
+    topPadding: Dp,
 ) {
     AnimatedVisibility(
         visibleState = remember { MutableTransitionState(isVisible) }
@@ -40,7 +41,7 @@ internal fun ActionChips(
         exit = fadeOut() + slideOutVertically(),
     ) {
         LazyRow(
-            Modifier.statusBarsPadding(),
+            Modifier.padding(top = topPadding),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
         ) {

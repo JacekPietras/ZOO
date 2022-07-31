@@ -21,7 +21,7 @@ import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.feature.animal.model.Division
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
-import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase.NavigationPath
+import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase.NavigationPlan
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
@@ -67,6 +67,7 @@ internal class MapViewStateMapper {
                 }
                 else -> RichText.Empty
             },
+            navigationText = planState?.let { it.nextStageRegion.id.findReadableName() + it.distance.metersToText() },
             luminanceText = luminance?.toInt().toString(),
             mapCarouselItems = when (toolbarMode) {
                 is MapToolbarMode.MapActionMode ->
@@ -111,14 +112,14 @@ internal class MapViewStateMapper {
     fun from(
         state: MapVolatileState,
         mapColors: MapColors,
-        navigationPath: NavigationPath,
+        navigationPlan: NavigationPlan,
         visitedRoads: List<PathEntity> = emptyList(),
         takenRoute: List<PathEntity> = emptyList(),
         compass: Float = 0f,
     ): MapVolatileViewState {
-        val plannedPath = navigationPath.points
-        val turnPath = navigationPath.firstTurn
-        val turnArrowPath = navigationPath.firstTurnArrow
+        val plannedPath = navigationPlan.points
+        val turnPath = navigationPlan.firstTurn
+        val turnArrowPath = navigationPlan.firstTurnArrow
 
         return with(state) {
             with(ComposeColors(mapColors)) {

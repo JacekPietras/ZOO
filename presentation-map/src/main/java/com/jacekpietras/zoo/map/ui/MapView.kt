@@ -2,14 +2,24 @@ package com.jacekpietras.zoo.map.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,14 +30,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
 import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
@@ -66,11 +80,24 @@ internal fun MapView(
             onAnimalClicked = onAnimalClicked,
             onRegionClicked = onRegionClicked,
         )
-        ActionChips(
-            isVisible = viewState?.isMapActionsVisible ?: false,
-            mapActions = viewState?.mapActions ?: emptyList(),
-            onMapActionClicked = onMapActionClicked,
-        )
+        Column {
+            val paddingOnChips = if (viewState?.navigationText != null) {
+                0.dp
+            } else {
+                WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
+            }
+
+            PlannerNavigationToolbar(
+                navigationText = viewState?.navigationText,
+            )
+
+            ActionChips(
+                isVisible = viewState?.isMapActionsVisible ?: false,
+                mapActions = viewState?.mapActions ?: emptyList(),
+                onMapActionClicked = onMapActionClicked,
+                topPadding = paddingOnChips,
+            )
+        }
         ActionButtons(
             modifier = Modifier
                 .align(Alignment.BottomEnd),
@@ -86,6 +113,38 @@ internal fun MapView(
                 style = MaterialTheme.typography.caption,
                 color = ZooTheme.colors.textPrimaryOnSurface,
             )
+        }
+    }
+}
+
+@Composable
+fun PlannerNavigationToolbar(navigationText: RichText?) {
+    val isVisible = navigationText != null
+    AnimatedVisibility(
+        visibleState = remember { MutableTransitionState(isVisible) }
+            .apply { targetState = isVisible },
+        modifier = Modifier.fillMaxWidth(),
+        enter = expandVertically(),
+        exit = shrinkVertically(),
+    ) {
+        Card(
+            shape = RectangleShape,
+            backgroundColor = ZooTheme.colors.surface,
+            elevation = 6.dp,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 32.dp)
+                    .defaultMinSize(minHeight = 48.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = navigationText?.toString(LocalContext.current) ?: "",
+                    color = MaterialTheme.colors.onSurface,
+                )
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.model.Region
+import com.jacekpietras.zoo.domain.utils.toLengthInMeters
 
 class FindNearRegionWithDistanceUseCase(
     private val findRegionUseCase: FindRegionUseCase,
@@ -17,7 +18,4 @@ class FindNearRegionWithDistanceUseCase(
             .map { getShortestPathUseCase.run(it) }
             .map { it to it.toLengthInMeters() }
             .minByOrNull { (_, length) -> length }
-
-    private fun List<PointD>.toLengthInMeters(): Double =
-        zipWithNext().sumOf { (p1, p2) -> haversine(p1.x, p1.y, p2.x, p2.y) }
 }
