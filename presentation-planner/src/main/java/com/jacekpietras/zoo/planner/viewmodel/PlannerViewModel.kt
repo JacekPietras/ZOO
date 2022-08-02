@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddExitToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.MoveRegionUseCase
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
 
 internal class PlannerViewModel(
@@ -38,15 +40,25 @@ internal class PlannerViewModel(
         .flowOnBackground()
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    private val planStateChange = MutableStateFlow<List<Pair<Stage, List<AnimalEntity>>>?>(null)
+
     private val state = MutableStateFlow(PlannerState())
     val viewState: Flow<PlannerViewState> =
         combine(
             state,
-            planState,
+            merge(planStateChange, planState),
             stateMapper::from,
         ).flowOnBackground()
 
     fun onMove(fromRegionId: String, toRegionId: String) {
+        val plan = planState.value!!
+
+        val indexFrom = plan.indexOf(fromRegionId)
+        val indexTo = plan.indexOf(toRegionId)
+        val elementFrom = plan[indexFrom]
+
+        planStateChange.value = (plan - elementFrom).toMutableList().also { it.add(indexTo, elementFrom) }
+
         launchInBackground {
             moveRegionUseCase.run(RegionId(fromRegionId), RegionId(toRegionId))
         }
@@ -103,4 +115,7 @@ internal class PlannerViewModel(
                 }
             }
             .find { (stage, _) -> stage.region.id.id == regionId }
+
+    private fun List<Pair<Stage, List<AnimalEntity>>>.indexOf(regionId: String): Int =
+        indexOfFirst { (stage, _) -> stage is Stage.InRegion && stage.region.id.id == regionId }
 }
