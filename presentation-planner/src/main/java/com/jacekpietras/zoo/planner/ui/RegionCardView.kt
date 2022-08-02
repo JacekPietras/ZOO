@@ -70,26 +70,7 @@ internal fun RegionCardView(
     ) {
         Row(Modifier.fillMaxHeight()) {
             Box(Modifier.fillMaxHeight()) {
-                val cardHeight = remember { mutableStateOf(36.dp) }
-                val beginHeight = remember { mutableStateOf(0.dp) }
-                val topLineEnd = if (isFirst || isDragged) {
-                    0.dp
-                } else {
-                    beginHeight.value
-                }
-                val bottomLineEnd = if (isLast || isDragged) {
-                    36.dp
-                } else {
-                    cardHeight.value
-                }
-                val animateTopLineEnd by animateDpAsState(targetValue = topLineEnd)
-                val animateBottomLineEnd by animateDpAsState(targetValue = bottomLineEnd)
-
-                DashedLine(animateTopLineEnd, animateBottomLineEnd, onHeightChanged = {
-                    cardHeight.value = it
-                    beginHeight.value = 14.dp
-                })
-
+                AnimatedDashedLine(isFirst, isDragged, isLast)
                 PositionIcon(isSeen)
             }
 
@@ -149,8 +130,31 @@ private fun PositionIcon(isSeen: Boolean) {
 }
 
 @Composable
+private fun AnimatedDashedLine(isFirst: Boolean, isDragged: Boolean, isLast: Boolean) {
+    val cardHeight = remember { mutableStateOf(36.dp) }
+    val beginHeight = remember { mutableStateOf(14.dp) }
+    val topLine = if (isFirst || isDragged) {
+        14.dp
+    } else {
+        beginHeight.value
+    }
+    val bottomLine = if (isLast || isDragged) {
+        36.dp
+    } else {
+        cardHeight.value
+    }
+    val animateTopLine by animateDpAsState(targetValue = topLine)
+    val animateBottomLine by animateDpAsState(targetValue = bottomLine)
+
+    DashedLine(animateTopLine, animateBottomLine, onHeightChanged = {
+        cardHeight.value = it
+        beginHeight.value = 0.dp
+    })
+}
+
+@Composable
 private fun DashedLine(
-    topLineEnd: Dp,
+    topLineStart: Dp,
     bottomLineStart: Dp,
     onHeightChanged: (Dp) -> Unit,
 ) {
@@ -163,7 +167,7 @@ private fun DashedLine(
     ) {
         onHeightChanged(size.height.toDp())
 
-        dashedLine(start = 0f, end = topLineEnd.toPx(), color = dashColor)
+        dashedLine(start = topLineStart.toPx(), end = 14.dp.toPx(), color = dashColor)
         dashedLine(start = bottomLineStart.toPx(), end = 36.dp.toPx(), color = dashColor)
     }
 }

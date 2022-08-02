@@ -53,8 +53,13 @@ internal fun PlannerListView(
         ) { index ->
             when (val item = viewState.list[index]) {
                 is RegionItem -> {
-                    val isDragged = reorderingData.value?.fromIndex == index
+                    val moveFrom = reorderingData.value?.fromIndex
+                    val isDragged = moveFrom == index
                     val additionalOffset = reorderingData.value?.getAdditionalOffset(index = index, item.isFixed)
+
+                    val moveTo = reorderingData.value?.toIndex
+                    val isFirst = index == 0 || if (index < (moveFrom ?: -1)) moveTo == index else moveTo == index + 1
+                    val isLast = index == listData.size - 1 || if (index < (moveFrom ?: -1)) moveTo == index+1 else moveTo == index
 
                     RegionCardView(
                         modifier = Modifier
@@ -68,14 +73,18 @@ internal fun PlannerListView(
                                 lazyListState = lazyListState,
                                 onOrderingChange = { reorderingData.value = it },
                                 onDragStop = { fromIndex, toIndex ->
-                                    onMove(
-                                        (listData[fromIndex] as RegionItem).regionId,
-                                        (listData[toIndex] as RegionItem).regionId,
-                                    )
+                                    val from = listData[fromIndex]
+                                    val to = listData[toIndex]
+                                    if (from is RegionItem && to is RegionItem) {
+                                        onMove(
+                                            from.regionId,
+                                            to.regionId,
+                                        )
+                                    }
                                 },
                             ),
-                        isFirst = index == 0 || reorderingData.value?.fromIndex == index - 1,
-                        isLast = index == listData.size - 1 || reorderingData.value?.fromIndex == index + 1,
+                        isFirst = isFirst,
+                        isLast = isLast,
                         isMutable = item.isMutable,
                         isSeen = item.isSeen,
                         isRemovable = item.isRemovable,
@@ -88,7 +97,9 @@ internal fun PlannerListView(
                     )
                 }
                 PlannerItem.UserPositionItem -> {
-                    Box {
+                    Box(
+                        Modifier.statusBarsPaddingWhen { index == 0 }
+                    ) {
                         Divider(
                             modifier = Modifier
                                 .align(Alignment.Center)
