@@ -1,14 +1,12 @@
 package com.jacekpietras.zoo.planner.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,7 +46,7 @@ internal fun PlannerListView(
     LazyColumn(
         modifier = modifier,
 //        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+//        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
         state = lazyListState,
     ) {
         items(
@@ -62,6 +60,7 @@ internal fun PlannerListView(
 
                     RegionCardView(
                         modifier = Modifier
+                            .padding(horizontal = 8.dp)
                             .statusBarsPaddingWhen { index == 0 }
                             .dragOnLongPressToReorder(
                                 isFixed = item.isFixed,
@@ -77,6 +76,8 @@ internal fun PlannerListView(
                                     )
                                 },
                             ),
+                        isFirst = index == 0,
+                        isLast = index == listData.size - 1,
                         isMutable = item.isMutable,
                         isSeen = item.isSeen,
                         isRemovable = item.isRemovable,
@@ -89,22 +90,24 @@ internal fun PlannerListView(
                     )
                 }
                 PlannerItem.UserPositionItem -> {
-                    Row {
-                        Icon(
+                    Box {
+                        Divider(
                             modifier = Modifier
-                                .padding(start = 16.dp, end = 16.dp)
-                                .align(Alignment.CenterVertically),
-                            painter = painterResource(id = R.drawable.ic_trip_ball_18),
-                            tint = ZooTheme.colors.onSurface,
-                            contentDescription = null // decorative element
+                                .align(Alignment.Center)
+                                .padding(start = 56.dp),
+                            color = ZooTheme.colors.primary,
+                            thickness = 2.dp,
                         )
-                        Text(
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically),
-                            text = "Your position",
-                            style = MaterialTheme.typography.subtitle2,
-                            color = ZooTheme.colors.textPrimaryOnSurface,
-                        )
+                        Row {
+                            Icon(
+                                modifier = Modifier
+                                    .padding(start = 24.dp)
+                                    .align(Alignment.CenterVertically),
+                                painter = painterResource(id = R.drawable.ic_trip_ball_18),
+                                tint = ZooTheme.colors.primary,
+                                contentDescription = null // decorative element
+                            )
+                        }
                     }
                 }
             }

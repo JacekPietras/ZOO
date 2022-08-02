@@ -7,11 +7,17 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -23,7 +29,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,32 +52,53 @@ internal fun RegionCardView(
     isMutable: Boolean = true,
     isSeen: Boolean = false,
     isRemovable: Boolean = true,
+    isFirst: Boolean = true,
+    isLast: Boolean = true,
     onRemove: () -> Unit,
     onUnlock: () -> Unit,
     onUnsee: () -> Unit,
 ) {
-
     val elevation = if (isDragged) 8.dp else 0.dp
     val elevationState by animateDpAsState(elevation)
 
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .height(IntrinsicSize.Max),
         elevation = elevationState,
         onClick = onUnsee.takeIf { isSeen },
     ) {
-        Row {
-            val iconRes = if (isSeen) {
-                R.drawable.ic_visibility_18
-            } else {
-                R.drawable.ic_trip_circle_18
-            }
+        Row(
+            Modifier.fillMaxHeight()
+        ) {
+            Box(
+                Modifier.fillMaxHeight()
+//                modifier = Modifier.fillMaxHeight()
+            ) {
+                val iconRes = if (isSeen) {
+                    R.drawable.ic_visibility_18
+                } else {
+                    R.drawable.ic_trip_circle_18
+                }
+                val dashColor = ZooTheme.colors.onSurface
+                Canvas(
+                    modifier = Modifier
+                        .padding(start = 25.dp)
+                        .width(2.dp)
+                        .fillMaxHeight()
+                ) {
+                    val height = size.height
 
-            Icon(
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
-                painter = painterResource(id = iconRes),
-                tint = ZooTheme.colors.onSurface.dimWhen(isSeen),
-                contentDescription = null // decorative element
-            )
+                    if (!isFirst) dashedLine(start = 0f, end = 14.dp.toPx(), color = dashColor)
+                    if (!isLast) dashedLine(start = height, end = 36.dp.toPx(), color = dashColor)
+                }
+
+                Icon(
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+                    painter = painterResource(id = iconRes),
+                    tint = ZooTheme.colors.onSurface.dimWhen(isSeen),
+                    contentDescription = null // decorative element
+                )
+            }
 
             Column(
                 modifier = Modifier
@@ -98,14 +128,6 @@ internal fun RegionCardView(
                 )
             }
 
-//            if (isSeen) {
-//                SideIconView(
-//                    iconRes = R.drawable.ic_visibility_24,
-//                    contentDescription = R.string.unsee,
-//                    onClick = onUnsee,
-//                )
-//            }
-
             if (isRemovable) {
                 SideIconView(
                     iconRes = R.drawable.ic_close_24,
@@ -116,6 +138,28 @@ internal fun RegionCardView(
             }
         }
     }
+}
+
+private fun DrawScope.dashedLine(start: Float, end: Float, color: Color) {
+    val size = 4.dp.toPx()
+    val offset = if (start < end) {
+        size / 2
+    } else {
+        -size / 2
+    }
+    drawLine(
+        start = Offset(x = 0f, y = start + offset),
+        end = Offset(x = 0f, y = end),
+        color = color,
+        strokeWidth = 2.dp.toPx(),
+        pathEffect = PathEffect.dashPathEffect(
+            floatArrayOf(
+                size,
+                size,
+            ),
+            phase = 0f,
+        )
+    )
 }
 
 private fun Color.dimWhen(dim: Boolean, amount: Float = 0.5f): Color =
