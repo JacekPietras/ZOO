@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
 
@@ -46,7 +47,7 @@ internal class PlannerViewModel(
     val viewState: Flow<PlannerViewState> =
         combine(
             state,
-            merge(planStateChange, planState),
+            merge(planStateChange.filterNotNull(), planState),
             stateMapper::from,
         ).flowOnBackground()
 

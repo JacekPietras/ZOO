@@ -26,6 +26,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,37 +68,29 @@ internal fun RegionCardView(
         elevation = elevationState,
         onClick = onUnsee.takeIf { isSeen },
     ) {
-        Row(
-            Modifier.fillMaxHeight()
-        ) {
-            Box(
-                Modifier.fillMaxHeight()
-//                modifier = Modifier.fillMaxHeight()
-            ) {
-                val iconRes = if (isSeen) {
-                    R.drawable.ic_visibility_18
+        Row(Modifier.fillMaxHeight()) {
+            Box(Modifier.fillMaxHeight()) {
+                val cardHeight = remember { mutableStateOf(36.dp) }
+                val beginHeight = remember { mutableStateOf(0.dp) }
+                val topLineEnd = if (isFirst || isDragged) {
+                    0.dp
                 } else {
-                    R.drawable.ic_trip_circle_18
+                    beginHeight.value
                 }
-                val dashColor = ZooTheme.colors.onSurface
-                Canvas(
-                    modifier = Modifier
-                        .padding(start = 25.dp)
-                        .width(2.dp)
-                        .fillMaxHeight()
-                ) {
-                    val height = size.height
-
-                    if (!isFirst) dashedLine(start = 0f, end = 14.dp.toPx(), color = dashColor)
-                    if (!isLast) dashedLine(start = height, end = 36.dp.toPx(), color = dashColor)
+                val bottomLineEnd = if (isLast || isDragged) {
+                    36.dp
+                } else {
+                    cardHeight.value
                 }
+                val animateTopLineEnd by animateDpAsState(targetValue = topLineEnd)
+                val animateBottomLineEnd by animateDpAsState(targetValue = bottomLineEnd)
 
-                Icon(
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
-                    painter = painterResource(id = iconRes),
-                    tint = ZooTheme.colors.onSurface.dimWhen(isSeen),
-                    contentDescription = null // decorative element
-                )
+                DashedLine(animateTopLineEnd, animateBottomLineEnd, onHeightChanged = {
+                    cardHeight.value = it
+                    beginHeight.value = 14.dp
+                })
+
+                PositionIcon(isSeen)
             }
 
             Column(
@@ -140,7 +133,44 @@ internal fun RegionCardView(
     }
 }
 
+@Composable
+private fun PositionIcon(isSeen: Boolean) {
+    val iconRes = if (isSeen) {
+        R.drawable.ic_visibility_18
+    } else {
+        R.drawable.ic_trip_circle_18
+    }
+    Icon(
+        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+        painter = painterResource(id = iconRes),
+        tint = ZooTheme.colors.onSurface.dimWhen(isSeen),
+        contentDescription = null // decorative element
+    )
+}
+
+@Composable
+private fun DashedLine(
+    topLineEnd: Dp,
+    bottomLineStart: Dp,
+    onHeightChanged: (Dp) -> Unit,
+) {
+    val dashColor = ZooTheme.colors.onSurface
+    Canvas(
+        modifier = Modifier
+            .padding(start = 25.dp)
+            .width(2.dp)
+            .fillMaxHeight()
+    ) {
+        onHeightChanged(size.height.toDp())
+
+        dashedLine(start = 0f, end = topLineEnd.toPx(), color = dashColor)
+        dashedLine(start = bottomLineStart.toPx(), end = 36.dp.toPx(), color = dashColor)
+    }
+}
+
 private fun DrawScope.dashedLine(start: Float, end: Float, color: Color) {
+    if (start == end) return
+
     val size = 4.dp.toPx()
     val offset = if (start < end) {
         size / 2

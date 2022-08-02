@@ -45,8 +45,6 @@ internal fun PlannerListView(
 
     LazyColumn(
         modifier = modifier,
-//        verticalArrangement = Arrangement.spacedBy(8.dp),
-//        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
         state = lazyListState,
     ) {
         items(
@@ -76,8 +74,8 @@ internal fun PlannerListView(
                                     )
                                 },
                             ),
-                        isFirst = index == 0,
-                        isLast = index == listData.size - 1,
+                        isFirst = index == 0 || reorderingData.value?.fromIndex == index - 1,
+                        isLast = index == listData.size - 1 || reorderingData.value?.fromIndex == index + 1,
                         isMutable = item.isMutable,
                         isSeen = item.isSeen,
                         isRemovable = item.isRemovable,
