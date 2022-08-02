@@ -28,6 +28,7 @@ internal fun Modifier.dragOnLongPressToReorder(
     val overOffset = remember { mutableStateOf(0f) }
     val indexOfAdditionalOffset = remember { mutableStateOf<Int?>(null) }
     val shouldAnimateReturn = remember { mutableStateOf(false) }
+    val shouldBeOnTop = remember { mutableStateOf(false) }
     val shouldAnimateReturnIndex = remember { mutableStateOf<Int?>(null) }
     val animateAdditionalOffset by animateIntAsState(targetValue = additionalOffset ?: 0)
     val animateOffset by animateFloatAsState(targetValue = offsetY.value)
@@ -56,6 +57,7 @@ internal fun Modifier.dragOnLongPressToReorder(
             onDragStart = {
                 onOrderingChange(getReorderingData(lazyListState, key = key, 0f))
                 shouldAnimateReturn.value = true
+                shouldBeOnTop.value = true
             },
             onDragEnd = {
                 val reorderingData = getReorderingData(lazyListState, key = key, offsetY.value)
@@ -64,6 +66,7 @@ internal fun Modifier.dragOnLongPressToReorder(
                 if (reorderingData.fromIndex != reorderingData.toIndex) {
                     shouldAnimateReturn.value = false
                 }
+                shouldBeOnTop.value = false
 
                 offsetY.value = 0f
                 overOffset.value = 0f
@@ -73,11 +76,12 @@ internal fun Modifier.dragOnLongPressToReorder(
                 offsetY.value = 0f
                 overOffset.value = 0f
                 onOrderingChange(null)
+                shouldBeOnTop.value = false
             }
         )
     }
         .graphicsLayer(translationY = animateOffsetCombined + animateAdditionalOffsetCombined)
-        .zIndex(if (animateOffsetCombined != 0f) 1.0f else 0.0f)
+        .zIndex(if (animateOffsetCombined != 0f || shouldBeOnTop.value) 1.0f else 0.0f)
 }
 
 private fun getReorderingData(lazyListState: LazyListState, key: Any, offset: Float): ReorderingData =
