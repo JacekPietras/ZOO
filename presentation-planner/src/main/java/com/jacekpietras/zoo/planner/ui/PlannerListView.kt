@@ -58,8 +58,8 @@ internal fun PlannerListView(
                     val additionalOffset = reorderingData.value?.getAdditionalOffset(index = index, item.isFixed)
 
                     val moveTo = reorderingData.value?.toIndex
-                    val isFirst = index == 0 || if (index < (moveFrom ?: -1)) moveTo == index else moveTo == index + 1
-                    val isLast = index == listData.size - 1 || if (index < (moveFrom ?: -1)) moveTo == index+1 else moveTo == index
+                    val isFirst = index == 0 || if (index < (moveFrom ?: -1)) moveTo == index else moveTo == index - 1
+                    val isLast = index == listData.size - 1 || if (index < (moveFrom ?: -1)) moveTo == index + 1 else moveTo == index
 
                     RegionCardView(
                         modifier = Modifier
