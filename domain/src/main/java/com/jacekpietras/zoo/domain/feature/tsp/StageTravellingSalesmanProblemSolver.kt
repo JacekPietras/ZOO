@@ -6,6 +6,7 @@ import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
+import java.lang.IllegalStateException
 
 internal class StageTravellingSalesmanProblemSolver(
     private val graphAnalyzer: GraphAnalyzer,
@@ -130,7 +131,8 @@ internal class StageTravellingSalesmanProblemSolver(
         }
 
     private suspend fun RegionId.getCenter(): PointD =
-        mapRepository.getCurrentRegions().first { it.first.id == this }.second.findCenter()
+        mapRepository.getCurrentRegions().firstOrNull { it.first.id == this }?.second?.findCenter()
+            ?: throw IllegalStateException("No region with id $this")
 
     private fun List<PointD>.toLengthInMeters(): Double =
         zipWithNext().sumOf { (p1, p2) -> haversine(p1.x, p1.y, p2.x, p2.y) }
