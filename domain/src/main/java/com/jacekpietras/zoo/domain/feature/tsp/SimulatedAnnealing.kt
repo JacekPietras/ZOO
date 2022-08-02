@@ -1,5 +1,8 @@
 package com.jacekpietras.zoo.domain.feature.tsp
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 import kotlin.math.exp
@@ -20,30 +23,31 @@ internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
             Timber.d("Optimization cannot be done, not enough points ${points.size} (${immutablePositions?.size} is blocked)")
             return points.distance(distanceCalculation) to points
         }
+        return withContext(Dispatchers.Default) {
+            var t = startingTemperature
+            var i = 0
+            var bestDistance = points.distance(distanceCalculation)
+            var bestTravel = points
 
-        var t = startingTemperature
-        var i = 0
-        var bestDistance = points.distance(distanceCalculation)
-        var bestTravel = points
+            var travel = ArrayList(points)
 
-        var travel = ArrayList(points)
+            while (t > 0.1 && i < numberOfIterations && isActive) {
+                val travelVariation = travel.makeVariation(immutablePositions)
 
-        while (t > 0.1 && i < numberOfIterations) {
-            val travelVariation = travel.makeVariation(immutablePositions)
+                val variationDistance = travelVariation.distance(distanceCalculation)
+                if (variationDistance < bestDistance) {
+                    bestDistance = variationDistance
+                    bestTravel = travelVariation
+                } else if (exp((bestDistance - variationDistance) / t) < Math.random()) {
+                    travel = travelVariation
+                }
 
-            val variationDistance = travelVariation.distance(distanceCalculation)
-            if (variationDistance < bestDistance) {
-                bestDistance = variationDistance
-                bestTravel = travelVariation
-            } else if (exp((bestDistance - variationDistance) / t) < Math.random()) {
-                travel = travelVariation
+                t *= coolingRate
+                i++
             }
 
-            t *= coolingRate
-            i++
+            bestDistance to bestTravel
         }
-
-        return bestDistance to bestTravel
     }
 
     private fun List<T>.makeVariation(

@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.planner.mapper
 
+import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
@@ -22,16 +23,17 @@ internal class PlannerStateMapper {
                 when (stage) {
                     is Stage.InRegion -> {
                         if (stage.region is Region.ExitRegion) {
-                            PlannerItem(
-                                text = RichText(R.string.exit),
+                            PlannerItem.RegionItem(
+                                title = RichText(R.string.exit),
                                 regionId = stage.region.id.id,
                                 isMutable = true,
                                 isFixed = true,
                                 isSeen = stage.seen,
                             )
                         } else {
-                            PlannerItem(
-                                text = RichText(animals.map(AnimalEntity::name).joinToString()),
+                            PlannerItem.RegionItem(
+                                title = stage.region.id.id.findReadableName(),
+                                info = RichText(animals.map(AnimalEntity::name).joinToString()),
                                 regionId = stage.region.id.id,
                                 isMultiple = stage is Stage.Multiple,
                                 isMutable = stage.mutable || stage.seen,
@@ -40,14 +42,8 @@ internal class PlannerStateMapper {
                             )
                         }
                     }
-                    is Stage.InUserPosition -> { // fixme make nice item
-                        PlannerItem(
-                            text = RichText.Empty,
-                            regionId = "User Position",
-                            isFixed = true,
-                            isMutable = true,
-                            isRemovable = false,
-                        )
+                    is Stage.InUserPosition -> {
+                        PlannerItem.UserPositionItem
                     }
                 }
             }

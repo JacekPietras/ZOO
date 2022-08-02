@@ -23,13 +23,13 @@ internal class Dijkstra(
 
         while (s != vertices) {
             // closest vertex that has not yet been visited
-            val v: Node = delta
+            val v: Node? = delta
                 .asSequence()
                 .filter { !s.contains(it.key) }
-                .minByOrNull { it.value }!!
-                .key
+                .minByOrNull { it.value }
+                ?.key
 
-            v.edges.forEach { neighbor ->
+            v?.edges?.forEach { neighbor ->
                 if (neighbor.node !in s &&
                     (technicalAllowed || !outsideTechnical || !neighbor.technical)
                 ) {
@@ -48,7 +48,7 @@ internal class Dijkstra(
 
             if (v == end) break
 
-            s.add(v)
+            v?.let { s.add(it) }
         }
     }
 
