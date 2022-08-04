@@ -40,8 +40,6 @@ internal class StageTravellingSalesmanProblemSolver(
             var resultStages = stages
 
             optionCreator.run(stages, { stageOption ->
-
-                Timber.d("dupa inner calc 2 $isActive")
                 val (distance, newStages) = tspAlgorithm.run(
                     points = stageOption,
                     distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },

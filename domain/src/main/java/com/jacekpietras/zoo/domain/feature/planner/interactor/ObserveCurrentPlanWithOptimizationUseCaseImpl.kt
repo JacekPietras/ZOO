@@ -38,11 +38,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
                     .onEach {
-                        if (job.take() != null) {
-                            Timber.d("dupa each + cancelling")
-                        } else {
-                            Timber.d("dupa each")
-                        }
                         job.take()?.cancel()
                         job.save(null)
                     }
@@ -62,14 +57,11 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                         long = { plan, collector ->
                             measureMap({ Timber.d("Optimization took $it") }) {
                                 val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
-                                Timber.d("dupa start")
-
                                 coroutineScope {
                                     val findingJob = launch(Dispatchers.Default) {
                                         val result = tspSolver.findShortPathAndStages(notSeen)
                                             .let { (resultStages, path) -> (seen + resultStages) to path }
                                         val (resultStages, _) = result
-                                        Timber.d("dupa end")
                                         job.save(null)
                                         collector.emit(result)
                                         if (plan.stages != resultStages) {
