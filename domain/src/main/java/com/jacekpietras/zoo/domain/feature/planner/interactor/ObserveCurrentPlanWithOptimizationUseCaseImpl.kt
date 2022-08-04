@@ -68,11 +68,11 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                                     val findingJob = launch(Dispatchers.Default) {
                                         val result = tspSolver.findShortPathAndStages(notSeen)
                                             .let { (resultStages, path) -> (seen + resultStages) to path }
-                                            .takeIf { (resultStages, _) -> plan.stages != resultStages }
+                                        val (resultStages, _) = result
                                         Timber.d("dupa end")
                                         job.save(null)
-                                        if (result != null) {
-                                            collector.emit(result)
+                                        collector.emit(result)
+                                        if (plan.stages != resultStages) {
                                             saveBetterPlan(plan, result.first)
                                         }
                                     }
