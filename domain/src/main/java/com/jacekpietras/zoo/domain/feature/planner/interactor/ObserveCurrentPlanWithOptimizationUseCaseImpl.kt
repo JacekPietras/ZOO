@@ -113,13 +113,15 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     private fun Flow<PlanEntity>.moveExitToEnd(): Flow<PlanEntity> =
         map { plan ->
-            val exitStage = plan.stages.find { it is Stage.InRegion && it.region is Region.ExitRegion }
+            val exitStage = plan.stages.find { it.isExit() }
             if (exitStage != null) {
-                plan.copy(stages = plan.stages - exitStage + exitStage)
+                plan.copy(stages = plan.stages.filter { !it.isExit() } + exitStage)
             } else {
                 plan
             }
         }
+
+    private fun Stage.isExit() = this is Stage.InRegion && this.region is Region.ExitRegion
 
     private fun Flow<PlanEntity>.combineWithUserPosition(): Flow<PlanEntity> =
         combine(observeUserPosition()) { plan, userPosition ->
