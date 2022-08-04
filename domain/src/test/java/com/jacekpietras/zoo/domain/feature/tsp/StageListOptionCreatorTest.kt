@@ -120,6 +120,26 @@ class StageListOptionCreatorTest {
     }
 
     @Test
+    fun `check with multiple that can be skipped by copying`() = runTest {
+        val stages = listOf(
+            single("1"),
+            multiple("a", "b", "c"),
+            multiple("a", "b", "c"),
+            single("4"),
+        )
+
+        val received = mutableListOf<List<Stage>>()
+        optionCreator.run(stages, { received.add(it) })
+
+        val expected = setOf(
+            listOf("1", "a", "a", "4"),
+            listOf("1", "b", "b", "4"),
+            listOf("1", "c", "c", "4"),
+        )
+        assertEquals(expected, received.simplify())
+    }
+
+    @Test
     fun `check with multiple multiple times`() = runTest {
         val stages = listOf(
             single("1"),

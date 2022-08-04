@@ -17,9 +17,11 @@ internal class StageListOptionCreator {
                     val afterProblematic = toCheck.subList(problematicIndex + 1, toCheck.size)
                     val problematicStage = toCheck[problematicIndex] as Stage.Multiple
 
-                    val foundAlternative = problematicStage.alternatives.find { alt ->
-                        checked.haveSingleRegion(alt) || toCheck.haveSingleRegion(alt)
-                    }
+                    val foundAlternative = problematicStage.alternatives
+                        .find { alt -> checked.haveSingleRegion(alt) || toCheck.haveSingleRegion(alt) }
+                        ?: problematicStage.alternatives.find { alt -> checked.haveMultipleRegion(alt) }
+
+
                     if (foundAlternative != null) {
                         val stageVariation = problematicStage.copy(region = foundAlternative)
                         run(
@@ -45,6 +47,8 @@ internal class StageListOptionCreator {
     }
 
     private fun List<Stage>.haveSingleRegion(alt: Region): Boolean = any { it is Stage.Single && it.region == alt }
+
+    private fun List<Stage>.haveMultipleRegion(alt: Region): Boolean = any { it is Stage.Multiple && it.region == alt }
 
     private fun <E> List<E>.indexOfFirstOrNull(function: (E) -> Boolean): Int? =
         indexOfFirst(function).takeIf { it != -1 }
