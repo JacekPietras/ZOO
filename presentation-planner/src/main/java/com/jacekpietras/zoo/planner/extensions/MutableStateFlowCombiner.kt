@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
 
@@ -13,9 +14,9 @@ internal class MutableStateFlowCombiner<T>(
     scope: CoroutineScope,
     started: SharingStarted,
     initialValue: T,
-) : Flow<T?> {
+) : StateFlow<T?> {
 
-    var value: T?
+    override var value: T?
         set(value) {
             mutableState.value = value
         }
@@ -23,6 +24,8 @@ internal class MutableStateFlowCombiner<T>(
 
     private val mutableState = MutableStateFlow<T?>(null)
     private val merged = merge(mutableState, flow).stateIn(scope, started, initialValue)
+
+    override val replayCache: List<T?> get() = merged.replayCache
 
     override suspend fun collect(collector: FlowCollector<T?>) = merged.collect(collector)
 
