@@ -86,6 +86,40 @@ class StageListOptionCreatorTest {
     }
 
     @Test
+    fun `check with multiple that can be skipped at begin`() = runTest {
+        val stages = listOf(
+            single("b"),
+            multiple("a", "b", "c"),
+            single("3"),
+        )
+
+        val received = mutableListOf<List<Stage>>()
+        optionCreator.run(stages, { received.add(it) })
+
+        val expected = setOf(
+            listOf("b", "b", "3"),
+        )
+        assertEquals(expected, received.simplify())
+    }
+
+    @Test
+    fun `check with multiple that can be skipped at end`() = runTest {
+        val stages = listOf(
+            single("1"),
+            multiple("a", "b", "c"),
+            single("b"),
+        )
+
+        val received = mutableListOf<List<Stage>>()
+        optionCreator.run(stages, { received.add(it) })
+
+        val expected = setOf(
+            listOf("1", "b", "b"),
+        )
+        assertEquals(expected, received.simplify())
+    }
+
+    @Test
     fun `check with multiple multiple times`() = runTest {
         val stages = listOf(
             single("1"),
