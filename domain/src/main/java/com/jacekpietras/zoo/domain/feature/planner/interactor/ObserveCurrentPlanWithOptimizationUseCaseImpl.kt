@@ -66,16 +66,15 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
                                 coroutineScope {
                                     val findingJob = launch(Dispatchers.Default) {
-                                        tspSolver.findShortPathAndStages(notSeen)
+                                        val result = tspSolver.findShortPathAndStages(notSeen)
                                             .let { (resultStages, path) -> (seen + resultStages) to path }
-                                            .also { Timber.d("dupa end") }
                                             .takeIf { (resultStages, _) -> plan.stages != resultStages }
-                                            ?.also {
-                                                collector.emit(it)
-                                            }
-                                            ?.also { (resultStages, _) ->
-                                                saveBetterPlan(plan, resultStages)
-                                            }
+                                        Timber.d("dupa end")
+                                        job.save(null)
+                                        if (result != null) {
+                                            collector.emit(result)
+                                            saveBetterPlan(plan, result.first)
+                                        }
                                     }
                                     job.save(findingJob)
                                 }

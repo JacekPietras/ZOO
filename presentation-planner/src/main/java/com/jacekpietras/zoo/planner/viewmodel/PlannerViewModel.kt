@@ -79,10 +79,12 @@ internal class PlannerViewModel(
     }
 
     fun onRemove(regionId: String) {
-        planState.value = planState.value?.filterNotInRegion(regionId)
+        val currentPlanState = planState.value
+        planState.value = currentPlanState?.filterNotInRegion(regionId)
         launchInBackground {
-            getStagesAndAnimals(regionId)
-                .forEach { (stage, animals) ->
+            currentPlanState
+                ?.getStagesAndAnimals(regionId)
+                ?.forEach { (stage, animals) ->
                     animals.forEach { animal ->
                         setAnimalFavoriteUseCase.run(animal.id, false)
                     }
@@ -102,15 +104,14 @@ internal class PlannerViewModel(
         }
     }
 
-    private fun getStagesAndAnimals(regionId: String) =
-        checkNotNull(planState.value)
-            .mapNotNull { (stage, animals) ->
-                if (stage is Stage.InRegion) {
-                    stage to animals
-                } else {
-                    null
-                }
+    private fun List<Pair<Stage, List<AnimalEntity>>>.getStagesAndAnimals(regionId: String) =
+        mapNotNull { (stage, animals) ->
+            if (stage is Stage.InRegion) {
+                stage to animals
+            } else {
+                null
             }
+        }
             .filter { (stage, _) -> stage.region.id.id == regionId }
 
     private fun List<Pair<Stage, List<AnimalEntity>>>.copyMoved(fromRegionId: String, toRegionId: String): List<Pair<Stage, List<AnimalEntity>>> {
