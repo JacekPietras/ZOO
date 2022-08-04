@@ -14,6 +14,7 @@ import com.jacekpietras.zoo.domain.feature.planner.interactor.SaveRegionImmutabl
 import com.jacekpietras.zoo.domain.feature.planner.interactor.UnseeRegionInCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.planner.extensions.MutableStateFlowCombiner.Companion.mutableStateIn
 import com.jacekpietras.zoo.planner.extensions.reduce
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerState
@@ -22,9 +23,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.stateIn
 
 internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
@@ -39,34 +37,22 @@ internal class PlannerViewModel(
 
     private val planState = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
         .flowOnBackground()
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-    private val planStateChange = MutableStateFlow<List<Pair<Stage, List<AnimalEntity>>>?>(null)
+        .mutableStateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val state = MutableStateFlow(PlannerState())
     val viewState: Flow<PlannerViewState> =
         combine(
             state,
-            merge(planStateChange.filterNotNull(), planState),
+            planState,
             stateMapper::from,
         ).flowOnBackground()
 
     fun onMove(fromRegionId: String, toRegionId: String) {
-        moveLocally(fromRegionId, toRegionId)
+        planState.value = planState.value?.copyMoved(fromRegionId, toRegionId)
 
         launchInBackground {
             moveRegionUseCase.run(RegionId(fromRegionId), RegionId(toRegionId))
         }
-    }
-
-    private fun moveLocally(fromRegionId: String, toRegionId: String) {
-        val plan = planState.value!!
-
-        val indexFrom = plan.indexOf(fromRegionId)
-        val indexTo = plan.indexOf(toRegionId)
-        val elementFrom = plan[indexFrom]
-
-        planStateChange.value = (plan - elementFrom).toMutableList().also { it.add(indexTo, elementFrom) }
     }
 
     fun onUnlock(regionId: String) {
@@ -93,9 +79,10 @@ internal class PlannerViewModel(
     }
 
     fun onRemove(regionId: String) {
+        planState.value = planState.value?.filterNotInRegion(regionId)
         launchInBackground {
-            getStageWithRegion(regionId)
-                ?.let { (stage, animals) ->
+            getStagesAndAnimals(regionId)
+                .forEach { (stage, animals) ->
                     animals.forEach { animal ->
                         setAnimalFavoriteUseCase.run(animal.id, false)
                     }
@@ -104,13 +91,18 @@ internal class PlannerViewModel(
         }
     }
 
+    private fun List<Pair<Stage, List<AnimalEntity>>>.filterNotInRegion(regionId: String): List<Pair<Stage, List<AnimalEntity>>> =
+        filter { (stage, _) ->
+            (stage is Stage.InRegion && stage.region.id.id != regionId) || stage !is Stage.InRegion
+        }
+
     fun onAddExitClicked() {
         launchInBackground {
             addExitToCurrentPlanUseCase.run()
         }
     }
 
-    private fun getStageWithRegion(regionId: String) =
+    private fun getStagesAndAnimals(regionId: String) =
         checkNotNull(planState.value)
             .mapNotNull { (stage, animals) ->
                 if (stage is Stage.InRegion) {
@@ -119,7 +111,14 @@ internal class PlannerViewModel(
                     null
                 }
             }
-            .find { (stage, _) -> stage.region.id.id == regionId }
+            .filter { (stage, _) -> stage.region.id.id == regionId }
+
+    private fun List<Pair<Stage, List<AnimalEntity>>>.copyMoved(fromRegionId: String, toRegionId: String): List<Pair<Stage, List<AnimalEntity>>> {
+        val indexFrom = indexOf(fromRegionId)
+        val indexTo = indexOf(toRegionId)
+        val elementFrom = this[indexFrom]
+        return (this - elementFrom).toMutableList().also { it.add(indexTo, elementFrom) }
+    }
 
     private fun List<Pair<Stage, List<AnimalEntity>>>.indexOf(regionId: String): Int =
         indexOfFirst { (stage, _) -> stage is Stage.InRegion && stage.region.id.id == regionId }
