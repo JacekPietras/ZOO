@@ -6,7 +6,10 @@ import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
-import java.lang.IllegalStateException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 internal class StageTravellingSalesmanProblemSolver(
     private val graphAnalyzer: GraphAnalyzer,
@@ -31,18 +34,27 @@ internal class StageTravellingSalesmanProblemSolver(
         stages: List<Stage>,
         pointCalculationCache: PointCalculationCache,
     ): List<Stage> {
-        val immutablePositions = stages.immutablePositions()
-        val (_, resultStages) = optionCreator.run(stages)
-            .map { stageOption ->
-                tspAlgorithm.run(
+        return withContext(Dispatchers.Default) {
+            val immutablePositions = stages.immutablePositions()
+            var minDistance = Double.MAX_VALUE
+            var resultStages = stages
+
+            optionCreator.run(stages, { stageOption ->
+
+                Timber.d("dupa inner calc 2 $isActive")
+                val (distance, newStages) = tspAlgorithm.run(
                     points = stageOption,
                     distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
                     immutablePositions = immutablePositions,
                 )
-            }
-            .minByOrNull { (distance, _) -> distance }!!
+                if (minDistance > distance) {
+                    minDistance = distance
+                    resultStages = newStages
+                }
+            })
 
-        return resultStages
+            resultStages
+        }
     }
 
     private fun List<Stage>.immutablePositions() =

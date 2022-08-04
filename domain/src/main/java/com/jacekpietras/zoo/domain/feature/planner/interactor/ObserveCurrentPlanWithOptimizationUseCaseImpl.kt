@@ -10,6 +10,9 @@ import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.utils.measureMap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -20,6 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
@@ -29,33 +33,60 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
 ) : ObserveCurrentPlanWithOptimizationUseCase {
 
-    private var lastCalculated: List<Stage> = emptyList()
-    private var lastGpsPointTimestamp: Long = 0L
-
     override fun run(): Flow<Pair<List<Stage>, List<PointD>>> =
-        observeCurrentPlanUseCase.run()
-            .onStartEmitEmptyPlan()
-            .distinctUntilChanged { _, new -> new.stages == lastCalculated && new.stages.size > 2 }
-            .moveExitToEnd()
-            .combineWithUserPosition()
-            .emptyWhenOnlyUserPosition()
-            .refreshPeriodically(MINUTE)
-            .pushAndDo(
-                fast = { plan -> plan.stages to emptyList() },
-                long = { plan ->
-                    measureMap({ Timber.d("Optimization took $it") }) {
-                        val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
+        Storage<List<Stage>>(emptyList()).let { calculation ->
+            Storage<Job?>(null).let { job ->
+                observeCurrentPlanUseCase.run()
+                    .onEach {
+                        if (job.take() != null) {
+                            Timber.d("dupa each + cancelling")
+                        } else {
+                            Timber.d("dupa each")
+                        }
+                        job.take()?.cancel()
+                        job.save(null)
+                    }
+                    .onStartEmitEmptyPlan()
+                    .distinctUntilChanged { _, new ->
+                        new.stages == calculation.take().filter { it !is Stage.InUserPosition } && new.stages.size > 2
+                    }
+                    .moveExitToEnd()
+                    .combineWithUserPosition()
+                    .emptyWhenOnlyUserPosition()
+                    .refreshPeriodically(MINUTE)
+                    .pushAndDo(
+                        fast = { plan, collector ->
+                            @Suppress("RemoveExplicitTypeArguments")
+                            collector.emit(plan.stages to emptyList<PointD>())
+                        },
+                        long = { plan, collector ->
+                            measureMap({ Timber.d("Optimization took $it") }) {
+                                val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
+                                Timber.d("dupa start")
 
-                        tspSolver.findShortPathAndStages(notSeen)
-                            .let { (resultStages, path) -> (seen + resultStages) to path }
-                            .also { (resultStages, _) ->
-                                if (plan.stages != resultStages) {
-                                    saveBetterPlan(plan, resultStages)
+                                coroutineScope {
+                                    val findingJob = launch(Dispatchers.Default) {
+                                        tspSolver.findShortPathAndStages(notSeen)
+                                            .let { (resultStages, path) -> (seen + resultStages) to path }
+                                            .also { Timber.d("dupa end") }
+                                            .takeIf { (resultStages, _) -> plan.stages != resultStages }
+                                            ?.also {
+                                                collector.emit(it)
+                                            }
+                                            ?.also { (resultStages, _) ->
+                                                saveBetterPlan(plan, resultStages)
+                                            }
+                                    }
+                                    job.save(findingJob)
                                 }
                             }
+                        },
+                    )
+                    .onEach { (resultStages, _) ->
+                        calculation.save(resultStages)
                     }
-                },
-            )
+            }
+        }
 
     private fun Flow<PlanEntity>.onStartEmitEmptyPlan(): Flow<PlanEntity> =
         onStart {
@@ -76,7 +107,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             val resultDistance = resultStages.distance()
             Timber.d("Found better tsp solution $currentDistance -> $resultDistance")
         }
-        lastCalculated = resultStages.filter { it !is Stage.InUserPosition }
         planRepository.setPlan(currentPlan.copy(stages = resultStages))
     }
 
@@ -109,15 +139,16 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         }
 
     @Suppress("USELESS_CAST")
-    private fun observeUserPosition(): Flow<PointD?> =
+    private fun observeUserPosition(): Flow<PointD?> = with(Storage(0L)) {
         gpsRepository.observeLatestPosition()
             .map { PointD(it.lon, it.lat) as PointD? }
             .map { it to System.currentTimeMillis() }
-            .distinctUntilChanged { _, new -> new.second < lastGpsPointTimestamp + GPS_MIN_INTERVAL }
-            .onEach { lastGpsPointTimestamp = it.second }
+            .distinctUntilChanged { _, new -> new.second < take() + GPS_MIN_INTERVAL }
+            .onEach { save(it.second) }
             .map { it.first }
             .onStart { emit(null) }
             .distinctUntilChanged()
+    }
 
     private fun PlanEntity.haveRegions() =
         this.stages.any { stage -> stage is Stage.InRegion }
@@ -134,9 +165,9 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private suspend fun List<Stage>.distance(): Double =
         zipWithNext { a, b -> tspSolver.getDistance(a, b) }.sum()
 
-    private fun <T, Y> Flow<Y>.pushAndDo(
-        fast: (Y) -> T,
-        long: suspend (Y) -> T,
+    private fun <Y, T> Flow<Y>.pushAndDo(
+        fast: suspend (Y, FlowCollector<T>) -> Unit,
+        long: suspend (Y, FlowCollector<T>) -> Unit,
     ): Flow<T> =
         object : Flow<T> {
             var mapped = false
@@ -144,13 +175,22 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             override suspend fun collect(collector: FlowCollector<T>) {
                 this@pushAndDo.collect { value ->
                     if (!mapped) {
-                        collector.emit(fast(value))
+                        fast(value, collector)
                         mapped = true
                     }
-                    collector.emit(long(value))
+                    long(value, collector)
                 }
             }
         }
+
+    private inner class Storage<T>(private var lastCalculated: T) {
+
+        fun take() = lastCalculated
+
+        fun save(it: T) {
+            lastCalculated = it
+        }
+    }
 
     companion object {
 
