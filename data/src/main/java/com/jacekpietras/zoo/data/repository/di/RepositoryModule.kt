@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.data.repository.di
 
 import com.jacekpietras.zoo.data.cache.di.ARRIVAL_AT_REGION_EVENTS
 import com.jacekpietras.zoo.data.cache.di.COMPASS_ENABLED
+import com.jacekpietras.zoo.data.cache.di.CURRENT_PLAN
 import com.jacekpietras.zoo.data.cache.di.LIGHT_SENSOR_ENABLED
 import com.jacekpietras.zoo.data.cache.di.MAP_AVIARY
 import com.jacekpietras.zoo.data.cache.di.MAP_BUILDINGS
@@ -87,6 +88,7 @@ internal val repositoryModule = module {
         PlanRepositoryImpl(
             planDao = get<ZooDatabase>().planDao(),
             planMapper = get(),
+            currentPlan = get(named(CURRENT_PLAN)),
         )
     }
 }

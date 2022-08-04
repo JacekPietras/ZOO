@@ -52,6 +52,14 @@ internal class PlannerViewModel(
         ).flowOnBackground()
 
     fun onMove(fromRegionId: String, toRegionId: String) {
+        moveLocally(fromRegionId, toRegionId)
+
+        launchInBackground {
+            moveRegionUseCase.run(RegionId(fromRegionId), RegionId(toRegionId))
+        }
+    }
+
+    private fun moveLocally(fromRegionId: String, toRegionId: String) {
         val plan = planState.value!!
 
         val indexFrom = plan.indexOf(fromRegionId)
@@ -59,10 +67,6 @@ internal class PlannerViewModel(
         val elementFrom = plan[indexFrom]
 
         planStateChange.value = (plan - elementFrom).toMutableList().also { it.add(indexTo, elementFrom) }
-
-        launchInBackground {
-            moveRegionUseCase.run(RegionId(fromRegionId), RegionId(toRegionId))
-        }
     }
 
     fun onUnlock(regionId: String) {

@@ -78,4 +78,4 @@ sealed class Stage {
     ) : Stage()
 }
 
-class PlanId(val id: String)
+data class PlanId(val id: String)
