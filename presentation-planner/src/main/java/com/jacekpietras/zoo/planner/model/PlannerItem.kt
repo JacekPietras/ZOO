@@ -2,7 +2,9 @@ package com.jacekpietras.zoo.planner.model
 
 import com.jacekpietras.zoo.core.text.RichText
 
-sealed class PlannerItem {
+sealed class PlannerItem(
+    val key: String,
+) {
 
     data class RegionItem(
         val title: RichText = RichText.Empty,
@@ -13,7 +15,7 @@ sealed class PlannerItem {
         val isRemovable: Boolean = true,
         val isFixed: Boolean = false,
         val isSeen: Boolean = false,
-    ) : PlannerItem()
+    ) : PlannerItem(key = regionId)
 
-    object UserPositionItem : PlannerItem()
+    object UserPositionItem : PlannerItem(key = "position")
 }

@@ -70,19 +70,20 @@ internal fun RegionCardView(
     ) {
         Row(Modifier.fillMaxHeight()) {
             Box(Modifier.fillMaxHeight()) {
-                AnimatedDashedLine(isFirst, isDragged, isLast)
-                PositionIcon(isSeen)
+                val defaultShift = 16.dp
+                AnimatedDashedLine(isFirst, isDragged, isLast, defaultShift = defaultShift)
+                PositionIcon(isSeen, defaultShift = defaultShift)
             }
 
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 10.dp)
                     .weight(1f)
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
                     text = title.toString(LocalContext.current),
-                    style = MaterialTheme.typography.subtitle2,
+                    style = MaterialTheme.typography.h6,
                     color = ZooTheme.colors.textPrimaryOnSurface.dimWhen(isSeen),
                 )
                 if (info != RichText.Empty) {
@@ -115,14 +116,17 @@ internal fun RegionCardView(
 }
 
 @Composable
-private fun PositionIcon(isSeen: Boolean) {
+private fun PositionIcon(
+    isSeen: Boolean,
+    defaultShift: Dp,
+) {
     val iconRes = if (isSeen) {
         R.drawable.ic_visibility_18
     } else {
         R.drawable.ic_trip_circle_18
     }
     Icon(
-        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+        modifier = Modifier.padding(start = 16.dp, top = defaultShift, bottom = 16.dp),
         painter = painterResource(id = iconRes),
         tint = ZooTheme.colors.onSurface.dimWhen(isSeen),
         contentDescription = null // decorative element
@@ -130,26 +134,39 @@ private fun PositionIcon(isSeen: Boolean) {
 }
 
 @Composable
-private fun AnimatedDashedLine(isFirst: Boolean, isDragged: Boolean, isLast: Boolean) {
-    val cardHeight = remember { mutableStateOf(36.dp) }
-    val beginHeight = remember { mutableStateOf(14.dp) }
+private fun AnimatedDashedLine(
+    isFirst: Boolean,
+    isDragged: Boolean,
+    isLast: Boolean,
+    defaultShift: Dp = 16.dp,
+    defaultCardHeight: Dp = 36.dp,
+) {
+    val topPadding = defaultShift - 2.dp
+    val cardHeight = remember { mutableStateOf(defaultCardHeight) }
+    val beginHeight = remember { mutableStateOf(topPadding) }
     val topLine = if (isFirst || isDragged) {
-        14.dp
+        topPadding
     } else {
         beginHeight.value
     }
     val bottomLine = if (isLast || isDragged) {
-        36.dp
+        defaultCardHeight
     } else {
         cardHeight.value
     }
     val animateTopLine by animateDpAsState(targetValue = topLine)
     val animateBottomLine by animateDpAsState(targetValue = bottomLine)
 
-    DashedLine(animateTopLine, animateBottomLine, onHeightChanged = {
-        cardHeight.value = it
-        beginHeight.value = 0.dp
-    })
+    DashedLine(
+        topLineStart = animateTopLine,
+        bottomLineStart = animateBottomLine,
+        topPadding = topPadding,
+        defaultCardHeight = defaultCardHeight,
+        onHeightChanged = {
+            cardHeight.value = it
+            beginHeight.value = 0.dp
+        },
+    )
 }
 
 @Composable
@@ -157,18 +174,22 @@ private fun DashedLine(
     topLineStart: Dp,
     bottomLineStart: Dp,
     onHeightChanged: (Dp) -> Unit,
+    topPadding: Dp,
+    defaultCardHeight: Dp,
+    leftPadding: Dp = 24.dp,
+    lineThickness: Dp = 2.dp,
 ) {
     val dashColor = ZooTheme.colors.onSurface
     Canvas(
         modifier = Modifier
-            .padding(start = 25.dp)
-            .width(2.dp)
+            .padding(start = leftPadding + lineThickness / 2)
+            .width(lineThickness)
             .fillMaxHeight()
     ) {
         onHeightChanged(size.height.toDp())
 
-        dashedLine(start = topLineStart.toPx(), end = 14.dp.toPx(), color = dashColor)
-        dashedLine(start = bottomLineStart.toPx(), end = 36.dp.toPx(), color = dashColor)
+        dashedLine(start = topLineStart.toPx(), end = topPadding.toPx(), color = dashColor)
+        dashedLine(start = bottomLineStart.toPx(), end = defaultCardHeight.toPx(), color = dashColor)
     }
 }
 

@@ -49,7 +49,7 @@ internal fun PlannerListView(
     ) {
         items(
             count = viewState.list.size,
-            key = { viewState.list[it].hashCode() },
+            key = { viewState.list[it].key },
         ) { index ->
             when (val item = viewState.list[index]) {
                 is RegionItem -> {
@@ -69,7 +69,7 @@ internal fun PlannerListView(
                                 isFixed = item.isFixed,
                                 additionalOffset = additionalOffset,
                                 index = index,
-                                key = item.hashCode(),
+                                key = item.key,
                                 lazyListState = lazyListState,
                                 onOrderingChange = { reorderingData.value = it },
                                 onDragStop = { fromIndex, toIndex ->
