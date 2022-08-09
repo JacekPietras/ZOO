@@ -47,7 +47,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .moveExitToEnd()
                     .combineWithUserPosition()
                     .refreshPeriodically(MINUTE)
-                    .onEach { plan -> Timber.e("dupa domain update 1 with ${plan.stages.size}") }
                     .pushAndDo(
                         fast = { plan, collector ->
                             @Suppress("RemoveExplicitTypeArguments")
@@ -76,7 +75,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                         calculation.save(resultStages)
                     }
             }
-        }.onEach { (stages, _) -> Timber.e("dupa domain update 2 with ${stages.size}") }
+        }
 
     private suspend fun saveBetterPlan(
         currentPlan: PlanEntity,

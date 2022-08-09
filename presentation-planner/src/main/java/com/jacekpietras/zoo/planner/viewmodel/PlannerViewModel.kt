@@ -23,8 +23,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 
 internal class PlannerViewModel(
     stateMapper: PlannerStateMapper,
@@ -45,7 +43,7 @@ internal class PlannerViewModel(
     val viewState: Flow<PlannerViewState> =
         combine(
             state,
-            planState.onEach { Timber.e("dupa presentation update with ${it?.size}") },
+            planState,
             stateMapper::from,
         ).flowOnBackground()
 
