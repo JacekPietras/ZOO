@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -47,7 +46,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     }
                     .moveExitToEnd()
                     .combineWithUserPosition()
-                    .emptyWhenOnlyUserPosition()
                     .refreshPeriodically(MINUTE)
                     .pushAndDo(
                         fast = { plan, collector ->
@@ -142,18 +140,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             .onStart { emit(null) }
             .distinctUntilChanged()
     }
-
-    private fun PlanEntity.haveRegions() =
-        this.stages.any { stage -> stage is Stage.InRegion }
-
-    private fun Flow<PlanEntity>.emptyWhenOnlyUserPosition(): Flow<PlanEntity> =
-        mapNotNull {
-            if (it.haveRegions()) {
-                it
-            } else {
-                null
-            }
-        }
 
     private suspend fun List<Stage>.distance(): Double =
         zipWithNext { a, b -> tspSolver.getDistance(a, b) }.sum()

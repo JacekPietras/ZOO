@@ -18,6 +18,7 @@ internal class PlannerStateMapper {
     ): PlannerViewState {
         val isExitInPlan = plan?.any { (stage, _) -> stage is Stage.InRegion && stage.region is Region.ExitRegion } ?: false
         val list = plan
+            ?.takeIf { it.haveRegions() }
             ?.removeDuplicateStages()
             ?.map { (stage, animals) ->
                 when (stage) {
@@ -50,11 +51,14 @@ internal class PlannerStateMapper {
 
         return PlannerViewState(
             list = list ?: emptyList(),
-            isEmptyViewVisible = list?.isEmpty() == true,
+            isEmptyViewVisible = plan?.haveRegions() == false,
             isAddExitVisible = !isExitInPlan && list?.isNotEmpty() == true,
             isShowingUnseeDialog = state.regionUnderUnseeing != null,
         )
     }
+
+    private fun List<Pair<Stage, List<AnimalEntity>>>.haveRegions() =
+        this.any { (stage, _) -> stage is Stage.InRegion }
 
     private fun List<Pair<Stage, List<AnimalEntity>>>.removeDuplicateStages() =
         distinctBy { (stage, _) ->
