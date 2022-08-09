@@ -9,6 +9,6 @@ class ObserveCurrentPlanUseCase(
     private val planRepository: PlanRepository,
 ) {
 
-    fun run(): Flow<PlanEntity> =
+    fun run(): Flow<PlanEntity?> =
         planRepository.observePlan(CURRENT_PLAN_ID)
 }

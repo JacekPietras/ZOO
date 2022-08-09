@@ -7,10 +7,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 
 internal class PlanRepositoryImpl(
@@ -28,14 +25,16 @@ internal class PlanRepositoryImpl(
             .let { planDao.insert(it) }
     }
 
-    override fun observePlan(planId: PlanId): Flow<PlanEntity> =
+    override fun observePlan(planId: PlanId): Flow<PlanEntity?> =
         if (planId == PlanEntity.CURRENT_PLAN_ID) {
-            currentPlan
-                .onStart { emit(getPlan(planId)) }
-                .filterNotNull()
+            if (currentPlan.value != null) {
+                currentPlan
+            } else {
+                currentPlan
+                    .onStart { currentPlan.value = getPlan(planId) }
+            }
         } else {
             planDao.observePlan(planId.id)
-                .filterNotNull()
                 .map(planMapper::from)
         }
 

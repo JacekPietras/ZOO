@@ -8,7 +8,7 @@ interface PlanRepository {
 
     suspend fun setPlan(plan: PlanEntity)
 
-    fun observePlan(planId: PlanId): Flow<PlanEntity>
+    fun observePlan(planId: PlanId): Flow<PlanEntity?>
 
     suspend fun getPlan(planId: PlanId): PlanEntity?
 }

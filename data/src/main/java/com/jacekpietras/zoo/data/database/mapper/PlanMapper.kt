@@ -12,32 +12,34 @@ import com.jacekpietras.zoo.domain.model.RegionId
 
 internal class PlanMapper {
 
-    fun from(planDto: PlanDto): PlanEntity =
-        with(planDto) {
-            PlanEntity(
-                planId = planId.let(::PlanId),
-                stages = stages.map { stage ->
-                    with(stage) {
-                        when {
-                            alternatives?.isNotEmpty() == true -> {
-                                Stage.Multiple(
-                                    region = makeRegion(regionType, regionId),
-                                    mutable = mutable,
-                                    seen = seen,
-                                    alternatives = alternatives.map { makeRegion(regionType, it) },
-                                )
-                            }
-                            else -> {
-                                Stage.Single(
-                                    region = makeRegion(regionType, regionId),
-                                    mutable = mutable,
-                                    seen = seen,
-                                )
+    fun from(planDto: PlanDto?): PlanEntity? =
+        planDto?.let {
+            with(it) {
+                PlanEntity(
+                    planId = planId.let(::PlanId),
+                    stages = stages.map { stage ->
+                        with(stage) {
+                            when {
+                                alternatives?.isNotEmpty() == true -> {
+                                    Stage.Multiple(
+                                        region = makeRegion(regionType, regionId),
+                                        mutable = mutable,
+                                        seen = seen,
+                                        alternatives = alternatives.map { makeRegion(regionType, it) },
+                                    )
+                                }
+                                else -> {
+                                    Stage.Single(
+                                        region = makeRegion(regionType, regionId),
+                                        mutable = mutable,
+                                        seen = seen,
+                                    )
+                                }
                             }
                         }
                     }
-                }
-            )
+                )
+            }
         }
 
     fun from(planEntity: PlanEntity): PlanDto =

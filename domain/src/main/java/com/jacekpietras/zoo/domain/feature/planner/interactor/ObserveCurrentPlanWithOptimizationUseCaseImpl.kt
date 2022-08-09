@@ -40,13 +40,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                         job.take()?.cancel()
                         job.save(null)
                     }
-                    .onStartEmitEmptyPlan()
+                    .map { it ?: newEmptyPlan() }
                     .distinctUntilChanged { _, new ->
                         new.stages == calculation.take().filter { it !is Stage.InUserPosition } && new.stages.size > 2
                     }
                     .moveExitToEnd()
                     .combineWithUserPosition()
                     .refreshPeriodically(MINUTE)
+                    .onEach { plan -> Timber.e("dupa domain update 1 with ${plan.stages.size}") }
                     .pushAndDo(
                         fast = { plan, collector ->
                             @Suppress("RemoveExplicitTypeArguments")
@@ -75,17 +76,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                         calculation.save(resultStages)
                     }
             }
-        }
-
-    private fun Flow<PlanEntity>.onStartEmitEmptyPlan(): Flow<PlanEntity> =
-        onStart {
-            emit(
-                PlanEntity(
-                    planId = PlanId("empty"),
-                    stages = emptyList(),
-                )
-            )
-        }
+        }.onEach { (stages, _) -> Timber.e("dupa domain update 2 with ${stages.size}") }
 
     private suspend fun saveBetterPlan(
         currentPlan: PlanEntity,
@@ -162,6 +153,12 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             }
         }
 
+    private fun newEmptyPlan() =
+        PlanEntity(
+            planId = PlanId(EMPTY_PLAN_ID),
+            stages = emptyList(),
+        )
+
     private inner class Storage<T>(private var lastCalculated: T) {
 
         fun take() = lastCalculated
@@ -173,6 +170,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     companion object {
 
+        const val EMPTY_PLAN_ID = "EMPTY"
         const val MINUTE = 60 * 1000L
         const val GPS_MIN_INTERVAL = 5 * 1000L
     }
