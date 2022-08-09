@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 internal class CatalogueViewModel(
     regionId: String?,
@@ -36,6 +37,8 @@ internal class CatalogueViewModel(
     private val animalFlow = filterFlow
         .onEach { onMain { state.reduce { copy(filter = it) } } }
         .flatMapLatest { observeFilteredAnimalsUseCase.run(it) }
+        .flowOnBackground()
+        .onStart { emit(emptyList()) }
 
     private val state = MutableStateFlow(CatalogueState())
     val viewState: Flow<CatalogueViewState> = combine(
