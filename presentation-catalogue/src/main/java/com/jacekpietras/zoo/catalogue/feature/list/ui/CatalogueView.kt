@@ -29,7 +29,7 @@ internal fun CatalogueView(
         }
         if (viewState.isToolbarVisible) {
             ToolbarWithFilters(
-                viewState.filterList,
+                viewState.filter,
                 viewState.filtersVisible,
                 viewState.searchVisible,
                 viewState.searchText,

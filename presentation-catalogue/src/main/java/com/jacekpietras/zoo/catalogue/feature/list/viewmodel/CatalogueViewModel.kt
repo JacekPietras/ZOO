@@ -1,13 +1,13 @@
 package com.jacekpietras.zoo.catalogue.feature.list.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.jacekpietras.zoo.catalogue.extensions.reduce
 import com.jacekpietras.zoo.catalogue.feature.list.mapper.CatalogueStateMapper
 import com.jacekpietras.zoo.catalogue.feature.list.mapper.DivisionMapper
 import com.jacekpietras.zoo.catalogue.feature.list.model.AnimalDivision
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueState
 import com.jacekpietras.zoo.catalogue.feature.list.model.CatalogueViewState
 import com.jacekpietras.zoo.catalogue.feature.list.router.CatalogueRouter
-import com.jacekpietras.zoo.catalogue.extensions.reduce
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.onMain
 import com.jacekpietras.zoo.domain.feature.animal.interactor.ObserveFilteredAnimalsUseCase
@@ -48,13 +48,13 @@ internal class CatalogueViewModel(
         router.navigateToAnimal(AnimalId(animalId))
     }
 
-    fun onFilterClicked(division: AnimalDivision) {
-        val domainDivision = divisionMapper.from(division)
+    fun onFilterClicked(clickedDivision: AnimalDivision) {
+        val domainDivision = divisionMapper.from(clickedDivision)
         filterFlow.value = with(filterFlow.value) {
-            if (divisions.contains(domainDivision)) {
-                copy(divisions = divisions - domainDivision)
+            if (division == domainDivision) {
+                copy(division = null)
             } else {
-                copy(divisions = divisions + domainDivision)
+                copy(division = domainDivision)
             }
         }
     }

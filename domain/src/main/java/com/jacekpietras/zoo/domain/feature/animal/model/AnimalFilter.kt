@@ -4,6 +4,6 @@ import com.jacekpietras.zoo.domain.model.RegionId
 
 data class AnimalFilter(
     val query: String? = null,
-    val divisions: List<Division> = emptyList(),
+    val division: Division? = null,
     val regionId: RegionId? = null,
 )

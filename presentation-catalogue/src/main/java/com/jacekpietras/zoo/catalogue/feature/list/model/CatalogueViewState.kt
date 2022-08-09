@@ -9,7 +9,7 @@ internal data class CatalogueViewState(
     val isRegionShown: Boolean = false,
     val regionName: RichText = RichText.Empty,
     val animalList: List<CatalogueListItem> = emptyList(),
-    val filterList: List<AnimalDivision> = emptyList(),
+    val filter: AnimalDivision? = null,
     val filtersVisible: Boolean = true,
     val searchVisible: Boolean = false,
     val searchText: String = "",

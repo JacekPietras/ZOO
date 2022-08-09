@@ -1,8 +1,20 @@
 package com.jacekpietras.zoo.catalogue.feature.list.ui
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -18,7 +30,7 @@ import com.jacekpietras.zoo.catalogue.feature.list.model.AnimalDivision
 
 @Composable
 internal fun ToolbarWithFilters(
-    filterList: List<AnimalDivision>,
+    filter: AnimalDivision?,
     filtersVisible: Boolean,
     searchVisible: Boolean,
     searchText: String,
@@ -54,7 +66,7 @@ internal fun ToolbarWithFilters(
                     AnimalDivision.values().forEach { animalDivision ->
                         ToolbarIcon(
                             id = animalDivision.iconRes,
-                            selected = filterList.contains(animalDivision),
+                            selected = filter == animalDivision,
                             onClick = { onFilterClicked(animalDivision) },
                         )
                     }
