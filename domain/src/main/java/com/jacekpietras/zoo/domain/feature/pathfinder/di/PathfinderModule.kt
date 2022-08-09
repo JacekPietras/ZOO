@@ -34,7 +34,7 @@ val pathFinderModule = module {
     }
     factory<GetShortestPathFromUserUseCase> {
         GetShortestPathFromUserUseCaseImpl(
-            observeUserPositionUseCase = get(),
+            getUserPositionUseCase = get(),
             initializeGraphAnalyzerIfNeededUseCase = get(),
             graphAnalyzer = get(),
         )

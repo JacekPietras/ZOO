@@ -49,6 +49,11 @@ val sensorsModule = module {
             gpsRepository = get(),
         )
     }
+    factory {
+        GetUserPositionUseCase(
+            gpsRepository = get(),
+        )
+    }
     factory<InsertUserPositionUseCase> {
         InsertUserPositionUseCaseImpl(
             gpsRepository = get(),

@@ -50,6 +50,7 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             val distanceToFirstDestinationStage = firstDestinationStage?.let { stage ->
                 val centerPoint = getRegionCenterPointUseCase.run(regionId = stage.region.id)
                 val path = getShortestPathUseCase.run(centerPoint)
+                val a = 2+2
                 path.toLengthInMeters()
             }
 
