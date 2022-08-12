@@ -29,51 +29,69 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             observeTerminalNodesUseCase.run()
         ) { pair, nodes ->
             val (stages, points) = pair
+            var plan = NavigationPlan(
+                points = points,
+                stages = stages,
+            )
 
-            val indexOfFirstTurns = points.indexOfFirst(predicate = { it in nodes }, amount = 2)
-            val turnWithArrow = indexOfFirstTurns
-                .mapNotNull { turnPointIndex ->
-                    val turnPoint = points[turnPointIndex]
-                    val countOfCrossingsOnTurn = points.count { it == turnPoint }
-                    val arrowIsNeeded = countOfCrossingsOnTurn > 1
-                    if (arrowIsNeeded) {
-                        turnPointIndex
-                    } else {
-                        null
-                    }
+            if (stages.any { it is Stage.InUserPosition }) {
+                plan = plan.withNextDestination()
+
+                val turnWithArrow = getIndexOfTurnWithArrow(points, nodes)
+                if (turnWithArrow != null) {
+                    plan = plan.withArrow(turnWithArrow)
                 }
-                .firstOrNull()
-
-            val firstDestinationStage = stages
-                .filterIsInstance<Stage.InRegion>()
-                .firstOrNull { !it.seen }
-            val distanceToFirstDestinationStage = firstDestinationStage?.let { stage ->
-                val centerPoint = getRegionCenterPointUseCase.run(regionId = stage.region.id)
-                val path = getShortestPathUseCase.run(centerPoint)
-                path.toLengthInMeters()
             }
 
-            if (turnWithArrow != null) {
-                val turnPoints = getTurnPoints(turnWithArrow, points)
-
-                NavigationPlan(
-                    points = points,
-                    stages = stages,
-                    distanceToNextStage = distanceToFirstDestinationStage,
-                    nextStageRegion = firstDestinationStage?.region?.id,
-                    firstTurn = turnPoints,
-                    firstTurnArrow = makeArrow(turnPoints),
-                )
-            } else {
-                NavigationPlan(
-                    points = points,
-                    stages = stages,
-                    nextStageRegion = firstDestinationStage?.region?.id,
-                    distanceToNextStage = distanceToFirstDestinationStage,
-                )
-            }
+            plan
         }
             .onStart { emit(NavigationPlan()) }
+
+    private suspend fun NavigationPlan.withNextDestination(): NavigationPlan {
+        val firstDestinationStage = stages
+            .filterIsInstance<Stage.InRegion>()
+            .firstOrNull { !it.seen }
+        val distanceToFirstDestinationStage = firstDestinationStage?.let { stage ->
+            val centerPoint = getRegionCenterPointUseCase.run(regionId = stage.region.id)
+            val path = getShortestPathUseCase.run(centerPoint)
+            path.toLengthInMeters()
+        }
+        return copy(
+            nextStageRegion = firstDestinationStage?.region?.id,
+            distanceToNextStage = distanceToFirstDestinationStage,
+        )
+    }
+
+    private fun NavigationPlan.withArrow(
+        turnWithArrow: Int,
+    ): NavigationPlan {
+        val turnPoints = getTurnPoints(turnWithArrow, points)
+
+        return copy(
+            firstTurn = turnPoints,
+            firstTurnArrow = makeArrow(turnPoints),
+        )
+    }
+
+    private fun getIndexOfTurnWithArrow(
+        points: List<PointD>,
+        nodes: List<PointD>
+    ): Int? {
+        points
+            .indexOfFirstTurns(nodes)
+            .forEach { turnPointIndex ->
+                val turnPoint = points[turnPointIndex]
+                val countOfCrossingsOnTurn = points.count { it == turnPoint }
+                val arrowIsNeeded = countOfCrossingsOnTurn > 1
+                if (arrowIsNeeded) {
+                    return turnPointIndex
+                }
+            }
+        return null
+    }
+
+    private fun List<PointD>.indexOfFirstTurns(nodes: List<PointD>): List<Int> =
+        indexOfFirst(predicate = { it in nodes }, amount = 2)
 
     private inline fun <T> List<T>.indexOfFirst(predicate: (T) -> Boolean, amount: Int): List<Int> {
         val result = mutableListOf<Int>()
@@ -215,7 +233,7 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         return begin + (diff * percent)
     }
 
-    class NavigationPlan(
+    data class NavigationPlan(
         val points: List<PointD> = emptyList(),
         val firstTurn: List<PointD> = emptyList(),
         val firstTurnArrow: List<PointD> = emptyList(),

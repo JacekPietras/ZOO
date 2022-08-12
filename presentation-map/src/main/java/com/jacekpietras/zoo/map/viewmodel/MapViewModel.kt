@@ -83,7 +83,7 @@ internal class MapViewModel(
 
     observeCompassUseCase: ObserveCompassUseCase,
     observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
-    private val observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
+    observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
     private val observeUserPositionUseCase: ObserveUserPositionUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
@@ -120,7 +120,7 @@ internal class MapViewModel(
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
     val effects: Flow<Unit> = _effects
         .filter { it.isNotEmpty() }
-        .map { }
+        .map { /* Unit */ }
 
     private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
 
@@ -131,7 +131,7 @@ internal class MapViewModel(
     private val observeTakenRoute = if (BuildConfig.DEBUG) {
         observeTakenRouteUseCase.run()
     } else {
-        flow { }
+        flow { /* Unit */ }
     }
 
     private val observeCurrentPlanPath = observeCurrentPlanPathUseCase.run()
