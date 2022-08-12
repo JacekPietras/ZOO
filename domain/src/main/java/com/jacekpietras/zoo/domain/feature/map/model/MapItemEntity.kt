@@ -9,8 +9,10 @@ sealed class MapItemEntity {
         val vertices: List<PointD>
     ) : MapItemEntity() {
 
+        private var cachedCenter: PointD? = null
+
         fun findCenter(): PointD =
-            CenterPointFinder.findCenter(vertices)
+            cachedCenter ?: (CenterPointFinder.findCenter(vertices).also { cachedCenter = it })
 
         constructor(vararg pairs: Pair<Number, Number>)
                 : this(pairs.asIterable().map { PointD(it.first.toDouble(), it.second.toDouble()) })

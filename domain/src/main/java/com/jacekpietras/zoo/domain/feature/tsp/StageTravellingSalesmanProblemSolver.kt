@@ -15,7 +15,7 @@ internal class StageTravellingSalesmanProblemSolver(
     private val tspAlgorithm: TravelingSalesmanProblemAlgorithm<Stage>,
 ) {
 
-    private val regionCalculationCache: MutableList<RegionCalculation> = mutableListOf()
+    private val regionCalculationCache = mutableListOf<RegionCalculation>()
     private val optionCreator = StageListOptionCreator()
 
     suspend fun findShortPathAndStages(
@@ -120,7 +120,7 @@ internal class StageTravellingSalesmanProblemSolver(
     private suspend fun calculatePoint(
         prevPoint: PointD,
         nextPoint: PointD,
-        pointCalculationCache: PointCalculationCache?
+        pointCalculationCache: PointCalculationCache
     ): Calculation {
         val path = graphAnalyzer.getShortestPath(
             prevPoint,
@@ -131,7 +131,7 @@ internal class StageTravellingSalesmanProblemSolver(
         return Calculation(
             distance = path.toLengthInMeters(),
             path = path,
-        ).also { pointCalculationCache?.put(prevPoint to nextPoint, it) }
+        ).also { pointCalculationCache[prevPoint to nextPoint] = it }
     }
 
     private suspend fun Stage.getCenter(): PointD =

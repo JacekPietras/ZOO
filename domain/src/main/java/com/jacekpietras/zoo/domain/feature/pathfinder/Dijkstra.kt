@@ -13,7 +13,7 @@ internal class Dijkstra(
 
     init {
         // shortest distances
-        val delta = vertices.map { it to Double.MAX_VALUE }.toMutableMap()
+        val delta = vertices.associateWith { Double.MAX_VALUE }.toMutableMap()
         delta[start] = 0.0
 
         // subset of vertices, for which we know true distance
