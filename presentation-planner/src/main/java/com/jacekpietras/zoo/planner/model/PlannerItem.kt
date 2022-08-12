@@ -18,4 +18,6 @@ sealed class PlannerItem(
     ) : PlannerItem(key = regionId)
 
     object UserPositionItem : PlannerItem(key = "position")
+
+    object Title : PlannerItem(key = "title")
 }

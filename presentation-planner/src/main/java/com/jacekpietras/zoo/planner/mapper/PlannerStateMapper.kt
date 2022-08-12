@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.planner.R
 import com.jacekpietras.zoo.planner.model.PlannerItem
+import com.jacekpietras.zoo.planner.model.PlannerItem.Title
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 
@@ -48,6 +49,7 @@ internal class PlannerStateMapper {
                     }
                 }
             }
+            ?.addTitle()
 
         return PlannerViewState(
             list = list ?: emptyList(),
@@ -56,6 +58,9 @@ internal class PlannerStateMapper {
             isShowingUnseeDialog = state.regionUnderUnseeing != null,
         )
     }
+
+    private fun List<PlannerItem>.addTitle(): List<PlannerItem> =
+        listOf(Title) + this
 
     private fun List<Pair<Stage, List<AnimalEntity>>>.haveRegions() =
         this.any { (stage, _) -> stage is Stage.InRegion }

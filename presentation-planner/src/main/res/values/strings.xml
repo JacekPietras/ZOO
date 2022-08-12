@@ -9,4 +9,6 @@
     <string name="unsee_dialog_content">Do you want to remove these animals from sight and see them again today?</string>
     <string name="unsee_dialog_button_decline">No</string>
     <string name="unsee_dialog_button_confirm">Yes</string>
+    <string name="planner_title">Your trip</string>
+    <string name="planner_description">There are animals you added to the trip. We will navigate you through the ZOO by shortest path, but take your time. You can always modify that list.</string>
 </resources>
