@@ -70,7 +70,7 @@ internal class StageTravellingSalesmanProblemSolver(
 
     private suspend fun calculate(prev: Stage, next: Stage, pointCalculationCache: PointCalculationCache): Calculation =
         if (prev is Stage.InRegion && next is Stage.InRegion) {
-            findRegionCalculation(prev.region.id, next.region.id)
+            findRegionCalculation(makeKey(prev.region.id, next.region.id))
                 ?: calculateRegion(prev.region.id, next.region.id)
         } else {
             val prevPoint = prev.getCenter()
@@ -79,10 +79,13 @@ internal class StageTravellingSalesmanProblemSolver(
                 ?: calculatePoint(prevPoint, nextPoint, pointCalculationCache)
         }
 
-    private fun findRegionCalculation(prev: RegionId, next: RegionId) =
+    private fun findRegionCalculation(key: String) =
         synchronized(regionCalculationCache) {
-            regionCalculationCache.find { it.from == prev && it.to == next }
+            regionCalculationCache.binarySearchBy(key) { it.key }.let { regionCalculationCache.getOrNull(it) }
         }
+
+    private fun makeKey(prev: RegionId, next: RegionId): String =
+        prev.id + "?" + next.id
 
     private suspend fun calculateRegion(prev: RegionId, next: RegionId): Calculation {
         val prevPoint = prev.getCenter()
@@ -95,14 +98,12 @@ internal class StageTravellingSalesmanProblemSolver(
         )
         val distance = list.toLengthInMeters()
         val calculationAsc = RegionCalculation(
-            from = prev,
-            to = next,
+            key = makeKey(prev, next),
             distance = distance,
             path = list.reversed(),
         )
         val calculationDesc = RegionCalculation(
-            from = next,
-            to = prev,
+            key = makeKey(next, prev),
             distance = distance,
             path = list,
         )
@@ -110,6 +111,7 @@ internal class StageTravellingSalesmanProblemSolver(
         synchronized(regionCalculationCache) {
             regionCalculationCache.add(calculationAsc)
             regionCalculationCache.add(calculationDesc)
+            regionCalculationCache.sortBy { it.key }
         }
 
         return calculationAsc
@@ -149,8 +151,7 @@ internal class StageTravellingSalesmanProblemSolver(
 private typealias PointCalculationCache = LinkedHashMap<Pair<PointD, PointD>, Calculation>
 
 private class RegionCalculation(
-    val from: RegionId,
-    val to: RegionId,
+    val key: String,
     distance: Double,
     path: List<PointD>,
 ) : Calculation(distance, path)
