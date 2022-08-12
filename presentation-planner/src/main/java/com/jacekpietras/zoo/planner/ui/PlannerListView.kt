@@ -62,7 +62,7 @@ internal fun PlannerListView(
                     Column(
                         modifier = Modifier
                             .statusBarsPadding()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = 24.dp)
                             .padding(top = 8.dp, bottom = 24.dp),
                     ) {
                         Text(

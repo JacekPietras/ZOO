@@ -26,6 +26,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -141,18 +142,42 @@ private fun AnimatedDashedLine(
     defaultShift: Dp = 16.dp,
     defaultCardHeight: Dp = 36.dp,
 ) {
-    val topPadding = defaultShift - 2.dp
     val cardHeight = remember { mutableStateOf(defaultCardHeight) }
-    val beginHeight = remember { mutableStateOf(topPadding) }
+    key(cardHeight.value.value) {
+        AnimatedDashedLineWithHeight(
+            defaultShift = defaultShift,
+            isFirst = isFirst,
+            isDragged = isDragged,
+            isLast = isLast,
+            defaultCardHeight = defaultCardHeight,
+            cardHeight = cardHeight.value,
+            onHeightChanged = {
+                cardHeight.value = it
+            },
+        )
+    }
+}
+
+@Composable
+private fun AnimatedDashedLineWithHeight(
+    defaultShift: Dp,
+    isFirst: Boolean,
+    isDragged: Boolean,
+    isLast: Boolean,
+    defaultCardHeight: Dp,
+    cardHeight: Dp,
+    onHeightChanged: (Dp) -> Unit,
+) {
+    val topPadding = defaultShift - 2.dp
     val topLine = if (isFirst || isDragged) {
         topPadding
     } else {
-        beginHeight.value
+        0.dp
     }
     val bottomLine = if (isLast || isDragged) {
         defaultCardHeight
     } else {
-        cardHeight.value
+        cardHeight
     }
     val animateTopLine by animateDpAsState(targetValue = topLine)
     val animateBottomLine by animateDpAsState(targetValue = bottomLine)
@@ -162,10 +187,7 @@ private fun AnimatedDashedLine(
         bottomLineStart = animateBottomLine,
         topPadding = topPadding,
         defaultCardHeight = defaultCardHeight,
-        onHeightChanged = {
-            cardHeight.value = it
-            beginHeight.value = 0.dp
-        },
+        onHeightChanged = onHeightChanged,
     )
 }
 

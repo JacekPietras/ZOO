@@ -7,9 +7,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 internal class StageTravellingSalesmanProblemSolver(
     private val graphAnalyzer: GraphAnalyzer,
@@ -72,7 +70,7 @@ internal class StageTravellingSalesmanProblemSolver(
 
     private suspend fun calculate(prev: Stage, next: Stage, pointCalculationCache: PointCalculationCache): Calculation =
         if (prev is Stage.InRegion && next is Stage.InRegion) {
-            findRegionCalculation(prev, next)
+            findRegionCalculation(prev.region.id, next.region.id)
                 ?: calculateRegion(prev.region.id, next.region.id)
         } else {
             val prevPoint = prev.getCenter()
@@ -81,9 +79,9 @@ internal class StageTravellingSalesmanProblemSolver(
                 ?: calculatePoint(prevPoint, nextPoint, pointCalculationCache)
         }
 
-    private fun findRegionCalculation(prev: Stage.InRegion, next: Stage.InRegion) =
+    private fun findRegionCalculation(prev: RegionId, next: RegionId) =
         synchronized(regionCalculationCache) {
-            regionCalculationCache.find { it.from == prev.region.id && it.to == next.region.id }
+            regionCalculationCache.find { it.from == prev && it.to == next }
         }
 
     private suspend fun calculateRegion(prev: RegionId, next: RegionId): Calculation {

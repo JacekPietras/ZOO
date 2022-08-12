@@ -1,6 +1,15 @@
 package com.jacekpietras.zoo.domain.model
 
-data class RegionId(val id: String)
+class RegionId(val id: String) {
+
+    override fun equals(other: Any?): Boolean {
+        return this === other || id == (other as? RegionId)?.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
 
 sealed class Region(
     open val id: RegionId
