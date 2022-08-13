@@ -47,6 +47,10 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .moveExitToEnd()
                     .combineWithUserPosition()
                     .refreshPeriodically(MINUTE)
+                    .onEach {
+                        job.take()?.cancel()
+                        job.save(null)
+                    }
                     .pushAndDo(
                         fast = { plan, collector ->
                             @Suppress("RemoveExplicitTypeArguments")
