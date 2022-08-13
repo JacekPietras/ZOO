@@ -127,7 +127,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             .distinctUntilChanged { _, new -> new.second < take() + GPS_MIN_INTERVAL }
             .onEach { save(it.second) }
             .map { it.first }
-            .onStart { emit(null) }
+            .onStart { emit(gpsRepository.getLatestPosition()?.let { PointD(it.lon, it.lat) }) }
             .distinctUntilChanged()
     }
 

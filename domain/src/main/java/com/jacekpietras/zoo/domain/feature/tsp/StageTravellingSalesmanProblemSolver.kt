@@ -6,8 +6,7 @@ import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 internal class StageTravellingSalesmanProblemSolver(
     private val graphAnalyzer: GraphAnalyzer,
@@ -47,6 +46,8 @@ internal class StageTravellingSalesmanProblemSolver(
                 resultStages = newStages
             }
         })
+
+        Timber.d("Optimization record ${minDistance.toInt()}m")
 
         return resultStages
     }
