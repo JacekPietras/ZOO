@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.planner.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
@@ -14,14 +13,13 @@ import com.jacekpietras.zoo.domain.feature.planner.interactor.SaveRegionImmutabl
 import com.jacekpietras.zoo.domain.feature.planner.interactor.UnseeRegionInCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.RegionId
-import com.jacekpietras.zoo.planner.extensions.MutableStateFlowCombiner.Companion.mutableStateIn
+import com.jacekpietras.zoo.planner.extensions.MutableStateFlowCombiner2.Companion.mutableStateIn2
 import com.jacekpietras.zoo.planner.extensions.reduce
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 
 internal class PlannerViewModel(
@@ -37,7 +35,7 @@ internal class PlannerViewModel(
 
     private val planState = observeCurrentPlanStagesWithAnimalsAndOptimizationUseCase.run()
         .flowOnBackground()
-        .mutableStateIn(viewModelScope, SharingStarted.Lazily, null)
+        .mutableStateIn2()
 
     private val state = MutableStateFlow(PlannerState())
     val viewState: Flow<PlannerViewState> =

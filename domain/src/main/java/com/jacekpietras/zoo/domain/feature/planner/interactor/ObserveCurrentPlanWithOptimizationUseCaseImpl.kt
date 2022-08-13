@@ -36,10 +36,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
-                    .onEach {
-                        job.take()?.cancel()
-                        job.save(null)
-                    }
                     .map { it ?: newEmptyPlan() }
                     .distinctUntilChanged { _, new ->
                         new.stages == calculation.take().filter { it !is Stage.InUserPosition } && new.stages.size > 2

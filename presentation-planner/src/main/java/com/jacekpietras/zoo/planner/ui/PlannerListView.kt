@@ -128,6 +128,7 @@ internal fun PlannerListView(
                                     }
                                 },
                             ),
+                        key = item.key,
                         isFirst = isFirst,
                         isLast = isLast,
                         isMutable = item.isMutable,

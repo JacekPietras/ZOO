@@ -38,7 +38,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.core.text.RichText
@@ -48,6 +47,7 @@ import com.jacekpietras.zoo.planner.R
 @Composable
 internal fun RegionCardView(
     modifier: Modifier = Modifier,
+    key: Any,
     isDragged: Boolean,
     title: RichText,
     info: RichText,
@@ -72,7 +72,7 @@ internal fun RegionCardView(
         Row(Modifier.fillMaxHeight()) {
             Box(Modifier.fillMaxHeight()) {
                 val defaultShift = 16.dp
-                AnimatedDashedLine(isFirst, isDragged, isLast, defaultShift = defaultShift)
+                AnimatedDashedLine(key, isFirst, isDragged, isLast, defaultShift = defaultShift)
                 PositionIcon(isSeen, defaultShift = defaultShift)
             }
 
@@ -136,6 +136,7 @@ private fun PositionIcon(
 
 @Composable
 private fun AnimatedDashedLine(
+    key: Any,
     isFirst: Boolean,
     isDragged: Boolean,
     isLast: Boolean,
@@ -143,7 +144,7 @@ private fun AnimatedDashedLine(
     defaultCardHeight: Dp = 36.dp,
 ) {
     val cardHeight = remember { mutableStateOf(defaultCardHeight) }
-    key(cardHeight.value.value) {
+    key(cardHeight.value.value.toString() + "|" + key) {
         AnimatedDashedLineWithHeight(
             defaultShift = defaultShift,
             isFirst = isFirst,
@@ -303,20 +304,4 @@ private fun SideIconView(
             contentDescription = stringResource(contentDescription)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun RegionCardViewPreview() {
-    RegionCardView(
-        isDragged = false,
-        title = RichText.Value("Title"),
-        info = RichText.Value("some additional information"),
-        isMutable = true,
-        isSeen = false,
-        isRemovable = true,
-        onRemove = {},
-        onUnlock = {},
-        onUnsee = {},
-    )
 }
