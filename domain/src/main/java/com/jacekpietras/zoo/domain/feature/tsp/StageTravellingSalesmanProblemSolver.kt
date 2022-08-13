@@ -32,25 +32,23 @@ internal class StageTravellingSalesmanProblemSolver(
         stages: List<Stage>,
         pointCalculationCache: PointCalculationCache,
     ): List<Stage> {
-        return withContext(Dispatchers.Default) {
-            val immutablePositions = stages.immutablePositions()
-            var minDistance = Double.MAX_VALUE
-            var resultStages = stages
+        val immutablePositions = stages.immutablePositions()
+        var minDistance = Double.MAX_VALUE
+        var resultStages = stages
 
-            optionCreator.run(stages, { stageOption ->
-                val (distance, newStages) = tspAlgorithm.run(
-                    points = stageOption,
-                    distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
-                    immutablePositions = immutablePositions,
-                )
-                if (minDistance > distance) {
-                    minDistance = distance
-                    resultStages = newStages
-                }
-            })
+        optionCreator.run(stages, { stageOption ->
+            val (distance, newStages) = tspAlgorithm.run(
+                points = stageOption,
+                distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
+                immutablePositions = immutablePositions,
+            )
+            if (minDistance > distance) {
+                minDistance = distance
+                resultStages = newStages
+            }
+        })
 
-            resultStages
-        }
+        return resultStages
     }
 
     private fun List<Stage>.immutablePositions() =
