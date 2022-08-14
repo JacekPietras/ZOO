@@ -2,10 +2,8 @@ package com.jacekpietras.zoo.map.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
@@ -120,12 +118,17 @@ internal fun MapView(
 
 @Composable
 fun PlannerNavigationToolbar(isNavigationVisible: Boolean, navigationText: RichText) {
+    val statusBarsPadding = statusBarPaddingInt()
     AnimatedVisibility(
         visibleState = remember { MutableTransitionState(isNavigationVisible) }
             .apply { targetState = isNavigationVisible },
         modifier = Modifier.fillMaxWidth(),
-        enter = expandVertically(),
-        exit = shrinkVertically(),
+        enter = slideInVertically(
+            initialOffsetY = { -it - statusBarsPadding }
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { -it - statusBarsPadding }
+        ),
     ) {
         Card(
             shape = RectangleShape,
@@ -152,6 +155,11 @@ fun PlannerNavigationToolbar(isNavigationVisible: Boolean, navigationText: RichT
         }
     }
 }
+
+@Composable
+private fun statusBarPaddingInt(): Int =
+    with(LocalDensity.current) { WindowInsets.systemBars.asPaddingValues().calculateTopPadding().toPx() }
+        .toInt()
 
 @Composable
 private fun MapToolbar(
