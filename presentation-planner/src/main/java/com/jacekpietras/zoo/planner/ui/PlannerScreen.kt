@@ -22,6 +22,6 @@ fun PlannerScreen(navController: NavController) {
         onUnseen = viewModel::onUnseen,
         onUnseeDiscarded = viewModel::onUnseeDiscarded,
         onMove = viewModel::onMove,
-        onAddExit = viewModel::onAddExitClicked,
+        onSuggestedItemClicked = viewModel::onSuggestedItemClicked,
     )
 }

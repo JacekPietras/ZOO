@@ -6,6 +6,10 @@ sealed class PlannerItem(
     val key: String,
 ) {
 
+    object Header : PlannerItem(key = "header")
+
+    object UserPositionItem : PlannerItem(key = "position")
+
     data class RegionItem(
         val title: RichText = RichText.Empty,
         val info: RichText = RichText.Empty,
@@ -17,7 +21,5 @@ sealed class PlannerItem(
         val isSeen: Boolean = false,
     ) : PlannerItem(key = regionId)
 
-    object UserPositionItem : PlannerItem(key = "position")
-
-    object Title : PlannerItem(key = "title")
+    object Footer : PlannerItem(key = "footer")
 }

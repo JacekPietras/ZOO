@@ -18,6 +18,7 @@ import com.jacekpietras.zoo.planner.extensions.reduce
 import com.jacekpietras.zoo.planner.mapper.PlannerStateMapper
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
+import com.jacekpietras.zoo.planner.model.SuggestedItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -91,12 +92,18 @@ internal class PlannerViewModel(
         }
     }
 
+    fun onSuggestedItemClicked(suggestedItem: SuggestedItem) {
+        when (suggestedItem) {
+            is SuggestedItem.Exit -> onAddExitClicked()
+        }
+    }
+
     private fun List<Pair<Stage, List<AnimalEntity>>>.filterNotInRegion(regionId: String): List<Pair<Stage, List<AnimalEntity>>> =
         filter { (stage, _) ->
             (stage is Stage.InRegion && stage.region.id.id != regionId) || stage !is Stage.InRegion
         }
 
-    fun onAddExitClicked() {
+    private fun onAddExitClicked() {
         launchInBackground {
             addExitToCurrentPlanUseCase.run()
         }

@@ -7,9 +7,11 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.planner.R
 import com.jacekpietras.zoo.planner.model.PlannerItem
-import com.jacekpietras.zoo.planner.model.PlannerItem.Title
+import com.jacekpietras.zoo.planner.model.PlannerItem.Footer
+import com.jacekpietras.zoo.planner.model.PlannerItem.Header
 import com.jacekpietras.zoo.planner.model.PlannerState
 import com.jacekpietras.zoo.planner.model.PlannerViewState
+import com.jacekpietras.zoo.planner.model.SuggestedItem
 
 internal class PlannerStateMapper {
 
@@ -17,7 +19,11 @@ internal class PlannerStateMapper {
         state: PlannerState,
         plan: List<Pair<Stage, List<AnimalEntity>>>?
     ): PlannerViewState {
+
+        val suggestedItems = mutableListOf<SuggestedItem>()
         val isExitInPlan = plan?.any { (stage, _) -> stage is Stage.InRegion && stage.region is Region.ExitRegion } ?: false
+        if (!isExitInPlan) suggestedItems.add(SuggestedItem.Exit)
+
         val list = plan
             ?.takeIf { it.haveRegions() }
             ?.removeDuplicateStages()
@@ -49,18 +55,27 @@ internal class PlannerStateMapper {
                     }
                 }
             }
-            ?.addTitle()
+            ?.addHeader()
+            ?.addFooter(suggestedItems.isNotEmpty())
 
         return PlannerViewState(
             list = list ?: emptyList(),
+            suggestedItems = suggestedItems,
             isEmptyViewVisible = plan?.haveRegions() == false,
-            isAddExitVisible = !isExitInPlan && list?.isNotEmpty() == true,
             isShowingUnseeDialog = state.regionUnderUnseeing != null,
         )
     }
 
-    private fun List<PlannerItem>.addTitle(): List<PlannerItem> =
-        listOf(Title) + this
+    private fun List<PlannerItem>.addHeader(): List<PlannerItem> =
+        listOf(Header) + this
+
+    private fun List<PlannerItem>.addFooter(enabled: Boolean): List<PlannerItem> =
+        if (enabled) {
+            this + Footer
+        } else {
+            this
+        }
+
 
     private fun List<Pair<Stage, List<AnimalEntity>>>.haveRegions() =
         this.any { (stage, _) -> stage is Stage.InRegion }

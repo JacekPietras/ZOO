@@ -24,9 +24,12 @@ import androidx.compose.ui.unit.dp
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.planner.R
 import com.jacekpietras.zoo.planner.model.PlannerItem
+import com.jacekpietras.zoo.planner.model.PlannerItem.Footer
+import com.jacekpietras.zoo.planner.model.PlannerItem.Header
 import com.jacekpietras.zoo.planner.model.PlannerItem.RegionItem
 import com.jacekpietras.zoo.planner.model.PlannerItem.UserPositionItem
 import com.jacekpietras.zoo.planner.model.PlannerViewState
+import com.jacekpietras.zoo.planner.model.SuggestedItem
 import com.jacekpietras.zoo.planner.reordering.ReorderingData
 import com.jacekpietras.zoo.planner.reordering.dragOnLongPressToReorder
 import com.jacekpietras.zoo.planner.reordering.getAdditionalOffset
@@ -39,11 +42,13 @@ internal fun PlannerListView(
     onRemove: (regionId: String) -> Unit,
     onUnlock: (regionId: String) -> Unit,
     onUnsee: (regionId: String) -> Unit,
+    onSuggestedItemClicked: (suggestedItem: SuggestedItem) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
     val listData by remember { mutableStateOf(viewState.list) }.also { it.value = viewState.list }
     val firstRegion = viewState.list.indexOfFirst { it is RegionItem || it is UserPositionItem }
+    val lastRegion = viewState.list.indexOfLast { it is RegionItem || it is UserPositionItem }
 
     LaunchedEffect("scroll" + listData.isNotEmpty()) {
         lazyListState.animateScrollToItem(listData.firstNotSeen())
@@ -58,45 +63,11 @@ internal fun PlannerListView(
             key = { viewState.list[it].key },
         ) { index ->
             when (val item = viewState.list[index]) {
-                PlannerItem.Title -> {
-                    Column(
-                        modifier = Modifier
-                            .statusBarsPadding()
-                            .padding(horizontal = 24.dp)
-                            .padding(top = 8.dp, bottom = 24.dp),
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.planner_title),
-                            style = MaterialTheme.typography.h5,
-                            color = ZooTheme.colors.textPrimaryOnSurface,
-                        )
-                        Text(
-                            text = stringResource(id = R.string.planner_description),
-                            style = MaterialTheme.typography.body1,
-                            color = ZooTheme.colors.textSecondaryOnSurface,
-                        )
-                    }
+                is Header -> {
+                    HeaderView()
                 }
-                UserPositionItem -> {
-                    Box {
-                        Divider(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(start = 56.dp),
-                            color = ZooTheme.colors.primary,
-                            thickness = 2.dp,
-                        )
-                        Row {
-                            Icon(
-                                modifier = Modifier
-                                    .padding(start = 24.dp)
-                                    .align(Alignment.CenterVertically),
-                                painter = painterResource(id = R.drawable.ic_trip_ball_18),
-                                tint = ZooTheme.colors.primary,
-                                contentDescription = null // decorative element
-                            )
-                        }
-                    }
+                is UserPositionItem -> {
+                    UserPositionView()
                 }
                 is RegionItem -> {
                     val moveFrom = reorderingData.value?.fromIndex
@@ -105,7 +76,7 @@ internal fun PlannerListView(
 
                     val moveTo = reorderingData.value?.toIndex
                     val isFirst = index == firstRegion || if (index < (moveFrom ?: -1)) moveTo == index else moveTo == index - 1
-                    val isLast = index == listData.size - 1 || if (index < (moveFrom ?: -1)) moveTo == index + 1 else moveTo == index
+                    val isLast = index == lastRegion || if (index < (moveFrom ?: -1)) moveTo == index + 1 else moveTo == index
 
                     RegionCardView(
                         modifier = Modifier
@@ -142,7 +113,82 @@ internal fun PlannerListView(
                         onUnsee = { onUnsee(item.regionId) },
                     )
                 }
+                is Footer -> {
+                    FooterView(
+                        viewState.suggestedItems,
+                        onSuggestedItemClicked,
+                    )
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun HeaderView() {
+    Column(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(horizontal = 24.dp)
+            .padding(top = 8.dp, bottom = 24.dp),
+    ) {
+        Text(
+            text = stringResource(id = R.string.planner_title),
+            style = MaterialTheme.typography.h5,
+            color = ZooTheme.colors.textPrimaryOnSurface,
+        )
+        Text(
+            text = stringResource(id = R.string.planner_description),
+            style = MaterialTheme.typography.body1,
+            color = ZooTheme.colors.textSecondaryOnSurface,
+        )
+    }
+}
+
+@Composable
+private fun FooterView(
+    items: List<SuggestedItem>,
+    onSuggestedItemClicked: (suggestedItem: SuggestedItem) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .padding(top = 8.dp),
+    ) {
+        Text(
+            modifier = Modifier.padding(bottom = 8.dp),
+            text = stringResource(id = R.string.planner_suggestion_title),
+            style = MaterialTheme.typography.h5,
+            color = ZooTheme.colors.textPrimaryOnSurface,
+        )
+        items.forEach { item ->
+            SuggestionButton(
+                text = item.text,
+                onClick = { onSuggestedItemClicked(item) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun UserPositionView() {
+    Box {
+        Divider(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(start = 56.dp),
+            color = ZooTheme.colors.primary,
+            thickness = 2.dp,
+        )
+        Row {
+            Icon(
+                modifier = Modifier
+                    .padding(start = 24.dp)
+                    .align(Alignment.CenterVertically),
+                painter = painterResource(id = R.drawable.ic_trip_ball_18),
+                tint = ZooTheme.colors.primary,
+                contentDescription = null // decorative element
+            )
         }
     }
 }
