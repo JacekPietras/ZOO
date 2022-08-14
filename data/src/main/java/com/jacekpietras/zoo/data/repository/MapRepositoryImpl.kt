@@ -154,6 +154,6 @@ internal class MapRepositoryImpl(
 
     companion object {
 
-        const val TREE_PER_SQUARE_METER = 0.002
+        const val TREE_PER_SQUARE_METER = 0.001
     }
 }
