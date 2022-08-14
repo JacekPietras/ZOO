@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.parser.SvgParser
@@ -27,6 +28,7 @@ internal class MapRepositoryImpl(
     private val linesWatcher: MutableStateFlow<List<PathEntity>?>,
     private val waterWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val forestWatcher: MutableStateFlow<List<PolygonEntity>?>,
+    private val treesWatcher: MutableStateFlow<List<PointD>?>,
     private val buildingsWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val aviaryWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val visitedRoadsWatcher: MutableStateFlow<List<VisitedRoadEdge>>,
@@ -37,8 +39,8 @@ internal class MapRepositoryImpl(
     private var visitedRoadsCalculated = false
 
     override suspend fun loadMap() {
+        isMapLoaded = true
         coroutineScope {
-            isMapLoaded = true
             val parser = SvgParser(context, R.xml.map)
             listOf(
                 async { regionsWatcher.value = parser.regions },
@@ -50,6 +52,7 @@ internal class MapRepositoryImpl(
                 async { linesWatcher.value = (parser.getPointsByGroup("lines").map(::PathEntity)) },
                 async { waterWatcher.value = (parser.getPointsByGroup("water").map(::PolygonEntity)) },
                 async { forestWatcher.value = (parser.getPointsByGroup("forest").map(::PolygonEntity)) },
+                async { treesWatcher.value = emptyList() },
             ).awaitAll()
         }
     }
@@ -68,6 +71,9 @@ internal class MapRepositoryImpl(
 
     override fun observeForest(): Flow<List<PolygonEntity>> =
         forestWatcher.filterNotNull()
+
+    override fun observeTrees(): Flow<List<PointD>> =
+        treesWatcher.filterNotNull()
 
     override fun observeRoads(): Flow<List<PathEntity>> =
         roadsWatcher.filterNotNull()

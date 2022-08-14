@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.data.cache.di
 
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
-import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
@@ -42,6 +42,9 @@ val cacheModule = module {
     single(named(MAP_FOREST)) {
         MutableStateFlow<List<PolygonEntity>?>(value = null)
     }
+    single(named(MAP_TREES)) {
+        MutableStateFlow<List<PointD>?>(value = null)
+    }
     single(named(MAP_WATER)) {
         MutableStateFlow<List<PolygonEntity>?>(value = null)
     }
@@ -77,6 +80,7 @@ const val MAP_LINES = "MapLines"
 const val MAP_TECHNICAL = "MapTechnical"
 const val MAP_AVIARY = "MapAviary"
 const val MAP_FOREST = "MapForest"
+const val MAP_TREES = "MapTrees"
 const val MAP_WATER = "MapWater"
 const val MAP_BUILDINGS = "MapBuildings"
 const val MAP_VISITED_ROADS = "MapVisitedRoads"

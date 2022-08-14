@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.map.repository
 
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
@@ -26,6 +27,8 @@ interface MapRepository {
     fun observeWater(): Flow<List<PolygonEntity>>
 
     fun observeForest(): Flow<List<PolygonEntity>>
+
+    fun observeTrees(): Flow<List<PointD>>
 
     fun observeRoads(): Flow<List<PathEntity>>
 

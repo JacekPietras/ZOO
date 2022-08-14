@@ -11,6 +11,7 @@ import com.jacekpietras.zoo.data.cache.di.MAP_LINES
 import com.jacekpietras.zoo.data.cache.di.MAP_REGIONS
 import com.jacekpietras.zoo.data.cache.di.MAP_ROADS
 import com.jacekpietras.zoo.data.cache.di.MAP_TECHNICAL
+import com.jacekpietras.zoo.data.cache.di.MAP_TREES
 import com.jacekpietras.zoo.data.cache.di.MAP_VISITED_ROADS
 import com.jacekpietras.zoo.data.cache.di.MAP_WATER
 import com.jacekpietras.zoo.data.cache.di.MAP_WORLD_RECT
@@ -55,6 +56,7 @@ internal val repositoryModule = module {
             buildingsWatcher = get(named(MAP_BUILDINGS)),
             aviaryWatcher = get(named(MAP_AVIARY)),
             forestWatcher = get(named(MAP_FOREST)),
+            treesWatcher = get(named(MAP_TREES)),
             waterWatcher = get(named(MAP_WATER)),
             visitedRoadsWatcher = get(named(MAP_VISITED_ROADS)),
             regionsWatcher = get(named(MAP_REGIONS)),

@@ -12,6 +12,7 @@ import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapObjectsUseCa
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveRoadsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTechnicalRoadsUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTerminalNodesUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTreesUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWaterUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseCase
 import org.koin.dsl.module
@@ -79,6 +80,11 @@ val mapModule = module {
         )
     }
     factory {
+        ObserveTreesUseCase(
+            mapRepository = get(),
+        )
+    }
+    factory {
         ObserveMapObjectsUseCase(
             observeWorldBoundsUseCase = get(),
             observeBuildingsUseCase = get(),
@@ -86,6 +92,7 @@ val mapModule = module {
             observeRoadsUseCase = get(),
             observeWaterUseCase = get(),
             observeForestUseCase = get(),
+            observeTreesUseCase = get(),
             observeTechnicalRoadsUseCase = get(),
             observeOldTakenRouteUseCase = get(),
             observeRegionCentersUseCase = get(),
