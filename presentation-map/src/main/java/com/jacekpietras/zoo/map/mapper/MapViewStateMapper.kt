@@ -161,11 +161,21 @@ internal class MapViewStateMapper {
                         fromPolygons(aviary, aviaryPaint),
                         fromPolygons(water, waterPaint, ZOOM_MEDIUM),
                         fromPolygons(forest, forestPaint, ZOOM_MEDIUM),
+                        fromTrees(trees, ZOOM_CLOSE),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
                         fromRegions(regionsWithCenters),
                     ),
                 )
             }
+        }
+
+    private fun fromTrees(trees: List<PointD>, minZoom: Float? = null): List<MapItem> =
+        trees.map { position ->
+            IconMapItem(
+                point = position,
+                icon = R.drawable.ic_grass_24,
+                minZoom = minZoom,
+            )
         }
 
     private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =

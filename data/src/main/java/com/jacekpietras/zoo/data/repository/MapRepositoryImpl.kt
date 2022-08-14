@@ -3,6 +3,8 @@ package com.jacekpietras.zoo.data.repository
 import android.content.Context
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
+import com.jacekpietras.geometry.haversine
+import com.jacekpietras.geometry.polygonContains
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.parser.SvgParser
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
@@ -19,6 +21,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlin.math.abs
+import kotlin.random.Random
 
 internal class MapRepositoryImpl(
     private val context: Context,
@@ -54,6 +58,8 @@ internal class MapRepositoryImpl(
                 async { forestWatcher.value = (parser.getPointsByGroup("forest").map(::PolygonEntity)) },
                 async { treesWatcher.value = emptyList() },
             ).awaitAll()
+
+            generateTrees()
         }
     }
 
@@ -118,4 +124,34 @@ internal class MapRepositoryImpl(
 
     override suspend fun getWorldBounds(): RectD =
         observeWorldBounds().first()
+
+    private suspend fun generateTrees() {
+        treesWatcher.value = observeForest().first().map { forest ->
+            val left = forest.left()
+            val right = forest.right()
+            val top = forest.top()
+            val bottom = forest.bottom()
+            val width = right - left
+            val height = bottom - top
+            val widthPositive = width > 0
+            val heightPositive = height > 0
+
+            val field = haversine(left, top, right, top) * haversine(left, top, left, bottom)
+            val trees = (field * TREE_PER_SQUARE_METER).toInt()
+
+            (0..trees).mapNotNull {
+                val x = left + if (widthPositive) random(width) else -random(width)
+                val y = top + if (heightPositive) random(height) else -random(height)
+
+                PointD(x, y).takeIf { polygonContains(forest.vertices, it) }
+            }
+        }.flatten()
+    }
+
+    private fun random(num: Double) = Random.nextDouble(abs(num))
+
+    companion object {
+
+        const val TREE_PER_SQUARE_METER = 0.005
+    }
 }

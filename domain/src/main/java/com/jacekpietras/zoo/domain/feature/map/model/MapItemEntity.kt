@@ -14,6 +14,18 @@ sealed class MapItemEntity {
         fun findCenter(): PointD =
             cachedCenter ?: (CenterPointFinder.findCenter(vertices).also { cachedCenter = it })
 
+        fun left(): Double = vertices.minBy { it.x }.x
+
+        fun right(): Double = vertices.maxBy { it.x }.x
+
+        fun top(): Double = vertices.minBy { it.y }.y
+
+        fun bottom(): Double = vertices.maxBy { it.y }.y
+
+        fun width(): Double = right() - left()
+
+        fun height(): Double = bottom() - top()
+
         constructor(vararg pairs: Pair<Number, Number>)
                 : this(pairs.asIterable().map { PointD(it.first.toDouble(), it.second.toDouble()) })
     }
