@@ -1,8 +1,10 @@
 package com.jacekpietras.zoo.planner.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -128,9 +130,11 @@ internal fun PlannerListView(
 private fun HeaderView() {
     Column(
         modifier = Modifier
+            .fillMaxWidth()
             .statusBarsPadding()
-            .padding(horizontal = 24.dp)
-            .padding(top = 8.dp, bottom = 24.dp),
+            .padding(bottom = 16.dp)
+            .background(ZooTheme.colors.surfaceSecondary)
+            .padding(horizontal = 24.dp, vertical = 8.dp),
     ) {
         Text(
             text = stringResource(id = R.string.planner_title),
@@ -152,8 +156,9 @@ private fun FooterView(
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 24.dp)
-            .padding(top = 8.dp),
+            .fillMaxWidth()
+            .background(ZooTheme.colors.surfaceSecondary)
+            .padding(horizontal = 24.dp, vertical = 8.dp),
     ) {
         Text(
             modifier = Modifier.padding(bottom = 8.dp),

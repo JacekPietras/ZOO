@@ -5,6 +5,7 @@ package com.jacekpietras.zoo.core.theme
 import androidx.compose.material.Colors
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import com.jacekpietras.zoo.core.theme.Palette.secondarySurface
 
 @Immutable
 class ZooColors(
@@ -22,6 +23,8 @@ class ZooColors(
 
     val surface: Color = Palette.white onNight Palette.black
     val onSurface: Color = Palette.black onNight Palette.white.copy(alpha = 0.8f)
+
+    val surfaceSecondary: Color = secondarySurface onNight secondarySurface.copy(alpha = 0.1f)
 
     val textPrimaryOnSurface: Color = onSurface
     val textSecondaryOnSurface: Color = textPrimaryOnSurface.copy(alpha = 0.9f) onNight textPrimaryOnSurface.copy(alpha = 0.7f)
