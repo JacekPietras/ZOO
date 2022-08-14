@@ -5,6 +5,7 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.ViewCoordinates
+import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedBitmapItem
 import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedCircleItem
 import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPathItem
 import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
@@ -70,6 +71,14 @@ internal class RenderListMaker<T>(
                         }
                 }
                 is PreparedIconItem -> {
+                    visibleGpsCoordinate
+                        .transformPoint(item.point)
+                        ?.withMatrix(matrix, worldRotation)
+                        ?.let { point ->
+                            item.addToRender(point)
+                        }
+                }
+                is PreparedBitmapItem -> {
                     visibleGpsCoordinate
                         .transformPoint(item.point)
                         ?.withMatrix(matrix, worldRotation)
@@ -162,6 +171,18 @@ internal class RenderListMaker<T>(
                 array[0],
                 array[1],
                 icon,
+            )
+        )
+    }
+
+    private fun PreparedBitmapItem<T>.addToRender(
+        array: FloatArray,
+    ) {
+        icons.add(
+            MapViewLogic.RenderItem.RenderBitmapItem(
+                array[0],
+                array[1],
+                bitmap,
             )
         )
     }

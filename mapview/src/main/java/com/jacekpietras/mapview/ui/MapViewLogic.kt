@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.ui
 
+import android.graphics.Bitmap
 import android.graphics.Matrix
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
@@ -287,6 +288,11 @@ class MapViewLogic<T>(
                     item.icon,
                     item.minZoom,
                 )
+                is MapItem.BitmapMapItem -> PreparedItem.PreparedBitmapItem(
+                    item.point,
+                    item.bitmap,
+                    item.minZoom,
+                )
             }
         }
     }
@@ -436,6 +442,12 @@ class MapViewLogic<T>(
             @DrawableRes val icon: Int,
             override val minZoom: Float? = null,
         ) : PreparedItem<T>(minZoom)
+
+        class PreparedBitmapItem<T>(
+            val point: PointD,
+            val bitmap: Bitmap,
+            override val minZoom: Float? = null,
+        ) : PreparedItem<T>(minZoom)
     }
 
     sealed class RenderItem<T> {
@@ -466,6 +478,13 @@ class MapViewLogic<T>(
             val cY: Float,
             @DrawableRes val iconRes: Int,
             val iconSize: Int = 24,
+        ) : RenderItem<T>()
+
+        @Immutable
+        class RenderBitmapItem<T>(
+            val cX: Float,
+            val cY: Float,
+            val bitmap: Bitmap,
         ) : RenderItem<T>()
     }
 

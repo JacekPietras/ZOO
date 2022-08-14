@@ -1,6 +1,7 @@
 package com.jacekpietras.mapview.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
@@ -21,6 +23,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderBitmapItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderIconItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
@@ -35,7 +38,7 @@ fun ComposableMapView(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
-    val (icons, canvasItems) = mapList.partition { it is RenderIconItem }
+    val (icons, canvasItems) = mapList.partition { it is RenderIconItem || it is RenderBitmapItem }
 
     Box {
         Canvas(
@@ -54,12 +57,17 @@ fun ComposableMapView(
                     is RenderPathItem -> drawPath(it.shape, it.paint, false)
                     is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
                     is RenderCircleItem -> drawCircleSafe(it.paint.color, it.radius, Offset(it.cX, it.cY))
+                    is RenderBitmapItem -> Unit
                     is RenderIconItem -> Unit
                 }
             }
         }
         icons.forEach {
-            MapIcon(it as RenderIconItem<ComposablePaint>)
+            when (it) {
+                is RenderBitmapItem -> MapBitmap(it)
+                is RenderIconItem -> MapIcon(it)
+                else -> Unit
+            }
         }
     }
 }
@@ -74,6 +82,18 @@ private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
             painter = painterResource(item.iconRes),
             contentDescription = null,
             tint = colors.onSurface,
+        )
+    }
+}
+
+@Composable
+private fun MapBitmap(item: RenderBitmapItem<ComposablePaint>) {
+    with(LocalDensity.current) {
+        Image(
+            modifier = Modifier
+                .offset(x = (item.cX - item.bitmap.width / 2).toDp(), y = (item.cY - item.bitmap.height).toDp()),
+            bitmap = item.bitmap.asImageBitmap(),
+            contentDescription = null,
         )
     }
 }

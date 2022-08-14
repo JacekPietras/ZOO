@@ -1,10 +1,12 @@
 package com.jacekpietras.zoo.map.mapper
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
+import com.jacekpietras.mapview.model.MapItem.BitmapMapItem
 import com.jacekpietras.mapview.model.MapItem.IconMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.CircleMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PathMapItem
@@ -147,6 +149,7 @@ internal class MapViewStateMapper {
 
     fun from(
         mapColors: MapColors,
+        treeBitmap: Bitmap,
         mapObjects: ObserveMapObjectsUseCase.MapObject,
     ): MapWorldViewState =
         with(mapObjects) {
@@ -161,7 +164,7 @@ internal class MapViewStateMapper {
                         fromPaths(lines, linesPaint, ZOOM_CLOSE),
                         fromPolygons(buildings, buildingPaint),
                         fromPolygons(aviary, aviaryPaint),
-                        fromTrees(trees),
+                        fromTrees(trees, treeBitmap),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
                         fromRegions(regionsWithCenters),
                     ),
@@ -169,14 +172,19 @@ internal class MapViewStateMapper {
             }
         }
 
-    private fun fromTrees(trees: List<Pair<PointD, Float>>): List<MapItem> =
+    private fun fromTrees(trees: List<Pair<PointD, Float>>, treeBitmap: Bitmap): List<MapItem> =
         trees.map { (position, zoom) ->
             val finalZoom = ZOOM_CLOSE + zoom * (ZOOM_FAR - ZOOM_CLOSE)
-            IconMapItem(
+            BitmapMapItem(
                 point = position,
-                icon = R.drawable.ic_grass_24,
+                bitmap = treeBitmap,
                 minZoom = finalZoom,
             )
+//            IconMapItem(
+//                point = position,
+//                icon = R.drawable.ic_grass_24,
+//                minZoom = finalZoom,
+//            )
         }
 
     private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =

@@ -1,7 +1,11 @@
 package com.jacekpietras.zoo.map.viewmodel
 
 import android.content.Context
+import android.graphics.Bitmap
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
@@ -62,11 +66,15 @@ import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 
 internal class MapViewModel(
     context: Context,
@@ -113,6 +121,12 @@ internal class MapViewModel(
     val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
 
     private val mapColors = MutableStateFlow(MapColors())
+    private val treeBitmap: StateFlow<Bitmap?> = flow {
+        val bitmap = ContextCompat.getDrawable(context, R.drawable.ic_grass_24)?.toBitmap()
+        emit(bitmap)
+    }
+        .flowOnBackground()
+        .stateIn(viewModelScope, WhileSubscribed(), null)
 
     private val observeTakenRoute = if (BuildConfig.DEBUG) {
         observeTakenRouteUseCase.run()
@@ -160,6 +174,7 @@ internal class MapViewModel(
 
     private val mapWorldViewState: Flow<MapWorldViewState> = combine(
         mapColors,
+        treeBitmap.filterNotNull(),
         observeMapObjectsUseCase.run(),
         mapper::from,
     )
@@ -193,6 +208,11 @@ internal class MapViewModel(
 
             loadVisitedRouteUseCase.run()
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        treeBitmap.value?.recycle()
     }
 
     private fun String?.toAnimalId(): AnimalId? =
