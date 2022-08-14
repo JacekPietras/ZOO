@@ -9,6 +9,6 @@ class ObserveTreesUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    fun run(): Flow<List<PointD>> =
+    fun run(): Flow<List<Pair<PointD, Float>>> =
         mapRepository.observeTrees()
 }

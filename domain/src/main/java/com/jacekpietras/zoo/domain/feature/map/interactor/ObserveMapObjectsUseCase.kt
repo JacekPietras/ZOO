@@ -45,7 +45,7 @@ class ObserveMapObjectsUseCase(
         val aviary: List<PolygonEntity>,
         val water: List<PolygonEntity>,
         val forest: List<PolygonEntity>,
-        val trees: List<PointD>,
+        val trees: List<Pair<PointD, Float>>,
         val roads: List<PathEntity>,
         val lines: List<PathEntity>,
         val technicalRoads: List<PathEntity>,

@@ -32,7 +32,7 @@ internal class MapRepositoryImpl(
     private val linesWatcher: MutableStateFlow<List<PathEntity>?>,
     private val waterWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val forestWatcher: MutableStateFlow<List<PolygonEntity>?>,
-    private val treesWatcher: MutableStateFlow<List<PointD>?>,
+    private val treesWatcher: MutableStateFlow<List<Pair<PointD, Float>>?>,
     private val buildingsWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val aviaryWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val visitedRoadsWatcher: MutableStateFlow<List<VisitedRoadEdge>>,
@@ -78,7 +78,7 @@ internal class MapRepositoryImpl(
     override fun observeForest(): Flow<List<PolygonEntity>> =
         forestWatcher.filterNotNull()
 
-    override fun observeTrees(): Flow<List<PointD>> =
+    override fun observeTrees(): Flow<List<Pair<PointD, Float>>> =
         treesWatcher.filterNotNull()
 
     override fun observeRoads(): Flow<List<PathEntity>> =
@@ -144,7 +144,7 @@ internal class MapRepositoryImpl(
                 val y = top + if (heightPositive) random(height) else -random(height)
 
                 PointD(x, y).takeIf { polygonContains(forest.vertices, it) }
-            }
+            }.map { it to Random.nextFloat() }
         }.flatten()
     }
 

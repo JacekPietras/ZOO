@@ -28,7 +28,7 @@ interface MapRepository {
 
     fun observeForest(): Flow<List<PolygonEntity>>
 
-    fun observeTrees(): Flow<List<PointD>>
+    fun observeTrees(): Flow<List<Pair<PointD, Float>>>
 
     fun observeRoads(): Flow<List<PathEntity>>
 

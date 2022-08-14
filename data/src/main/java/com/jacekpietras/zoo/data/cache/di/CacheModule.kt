@@ -43,7 +43,7 @@ val cacheModule = module {
         MutableStateFlow<List<PolygonEntity>?>(value = null)
     }
     single(named(MAP_TREES)) {
-        MutableStateFlow<List<PointD>?>(value = null)
+        MutableStateFlow<List<Pair<PointD, Float>>?>(value = null)
     }
     single(named(MAP_WATER)) {
         MutableStateFlow<List<PolygonEntity>?>(value = null)

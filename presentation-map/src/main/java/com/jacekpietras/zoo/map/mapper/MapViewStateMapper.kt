@@ -161,7 +161,7 @@ internal class MapViewStateMapper {
                         fromPolygons(aviary, aviaryPaint),
                         fromPolygons(water, waterPaint, ZOOM_MEDIUM),
                         fromPolygons(forest, forestPaint, ZOOM_MEDIUM),
-                        fromTrees(trees, ZOOM_CLOSE),
+                        fromTrees(trees),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
                         fromRegions(regionsWithCenters),
                     ),
@@ -169,12 +169,13 @@ internal class MapViewStateMapper {
             }
         }
 
-    private fun fromTrees(trees: List<PointD>, minZoom: Float? = null): List<MapItem> =
-        trees.map { position ->
+    private fun fromTrees(trees: List<Pair<PointD, Float>>): List<MapItem> =
+        trees.map { (position, zoom) ->
+            val finalZoom = ZOOM_CLOSE + zoom * (ZOOM_FAR - ZOOM_CLOSE)
             IconMapItem(
                 point = position,
                 icon = R.drawable.ic_grass_24,
-                minZoom = minZoom,
+                minZoom = finalZoom,
             )
         }
 
@@ -389,7 +390,8 @@ internal class MapViewStateMapper {
             MapAction.EXIT,
         )
 
-        val ZOOM_CLOSE = 0.001f
-        val ZOOM_MEDIUM = 0.002f
+        const val ZOOM_CLOSE = 0.001f
+        const val ZOOM_MEDIUM = 0.002f
+        const val ZOOM_FAR = 0.004f
     }
 }
