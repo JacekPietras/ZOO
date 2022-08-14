@@ -6,10 +6,14 @@ import com.jacekpietras.zoo.data.cache.di.CURRENT_PLAN
 import com.jacekpietras.zoo.data.cache.di.LIGHT_SENSOR_ENABLED
 import com.jacekpietras.zoo.data.cache.di.MAP_AVIARY
 import com.jacekpietras.zoo.data.cache.di.MAP_BUILDINGS
+import com.jacekpietras.zoo.data.cache.di.MAP_FOREST
 import com.jacekpietras.zoo.data.cache.di.MAP_LINES
+import com.jacekpietras.zoo.data.cache.di.MAP_REGIONS
 import com.jacekpietras.zoo.data.cache.di.MAP_ROADS
 import com.jacekpietras.zoo.data.cache.di.MAP_TECHNICAL
 import com.jacekpietras.zoo.data.cache.di.MAP_VISITED_ROADS
+import com.jacekpietras.zoo.data.cache.di.MAP_WATER
+import com.jacekpietras.zoo.data.cache.di.MAP_WORLD_RECT
 import com.jacekpietras.zoo.data.cache.di.NAVIGATION_ENABLED
 import com.jacekpietras.zoo.data.cache.di.OUTSIDE_WORLD_EVENTS
 import com.jacekpietras.zoo.data.database.ZooDatabase
@@ -44,12 +48,16 @@ internal val repositoryModule = module {
     single<MapRepository> {
         MapRepositoryImpl(
             context = androidContext(),
+            worldRectWatcher = get(named(MAP_WORLD_RECT)),
             roadsWatcher = get(named(MAP_ROADS)),
             technicalWatcher = get(named(MAP_TECHNICAL)),
             linesWatcher = get(named(MAP_LINES)),
             buildingsWatcher = get(named(MAP_BUILDINGS)),
             aviaryWatcher = get(named(MAP_AVIARY)),
+            forestWatcher = get(named(MAP_FOREST)),
+            waterWatcher = get(named(MAP_WATER)),
             visitedRoadsWatcher = get(named(MAP_VISITED_ROADS)),
+            regionsWatcher = get(named(MAP_REGIONS)),
         )
     }
 

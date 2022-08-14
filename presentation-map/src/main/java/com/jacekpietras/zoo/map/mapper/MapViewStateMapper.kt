@@ -2,7 +2,6 @@ package com.jacekpietras.zoo.map.mapper
 
 import android.graphics.Color
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
@@ -19,6 +18,7 @@ import com.jacekpietras.zoo.core.theme.MapColors
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.feature.animal.model.Division
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapObjectsUseCase
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase.NavigationPlan
@@ -147,28 +147,25 @@ internal class MapViewStateMapper {
 
     fun from(
         mapColors: MapColors,
-        worldBounds: RectD,
-        buildings: List<PolygonEntity>,
-        aviary: List<PolygonEntity>,
-        roads: List<PathEntity>,
-        lines: List<PathEntity>,
-        technicalRoads: List<PathEntity>,
-        rawOldTakenRoute: List<PathEntity>,
-        regionsWithCenters: List<Pair<Region, PointD>>,
+        mapObjects: ObserveMapObjectsUseCase.MapObject,
     ): MapWorldViewState =
-        with(ComposeColors(mapColors)) {
-            MapWorldViewState(
-                worldBounds = worldBounds,
-                mapData = flatListOf(
-                    fromPaths(technicalRoads, technicalPaint),
-                    fromPaths(roads, roadPaint),
-                    fromPaths(lines, linesPaint, ZOOM_CLOSE),
-                    fromPolygons(buildings, buildingPaint),
-                    fromPolygons(aviary, aviaryPaint),
-                    fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
-                    fromRegions(regionsWithCenters),
-                ),
-            )
+        with(mapObjects) {
+            with(ComposeColors(mapColors)) {
+                MapWorldViewState(
+                    worldBounds = worldBounds,
+                    mapData = flatListOf(
+                        fromPaths(technicalRoads, technicalPaint),
+                        fromPaths(roads, roadPaint),
+                        fromPaths(lines, linesPaint, ZOOM_CLOSE),
+                        fromPolygons(buildings, buildingPaint),
+                        fromPolygons(aviary, aviaryPaint),
+                        fromPolygons(water, waterPaint, ZOOM_MEDIUM),
+                        fromPolygons(forest, forestPaint, ZOOM_MEDIUM),
+                        fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
+                        fromRegions(regionsWithCenters),
+                    ),
+                )
+            }
         }
 
     private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =
@@ -313,6 +310,12 @@ internal class MapViewStateMapper {
             fillColor = MapColor.Compose(mapColors.colorMapBuilding),
             borderColor = MapColor.Compose(mapColors.colorMapBuildingBorder),
             borderWidth = MapDimension.Static.Screen(1),
+        )
+        val forestPaint: MapPaint = MapPaint.Fill(
+            fillColor = MapColor.Compose(mapColors.colorMapForest),
+        )
+        val waterPaint: MapPaint = MapPaint.Fill(
+            fillColor = MapColor.Compose(mapColors.colorMapWater),
         )
         val roadPaint: MapPaint = MapPaint.StrokeWithBorder(
             strokeColor = MapColor.Compose(mapColors.colorMapRoad),

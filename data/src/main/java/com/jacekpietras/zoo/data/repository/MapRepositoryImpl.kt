@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
-import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.parser.SvgParser
@@ -18,42 +17,39 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flowOf
-
+import kotlinx.coroutines.flow.first
 
 internal class MapRepositoryImpl(
-    context: Context,
+    private val context: Context,
     private val roadsWatcher: MutableStateFlow<List<PathEntity>?>,
+    private val worldRectWatcher: MutableStateFlow<RectD?>,
     private val technicalWatcher: MutableStateFlow<List<PathEntity>?>,
     private val linesWatcher: MutableStateFlow<List<PathEntity>?>,
+    private val waterWatcher: MutableStateFlow<List<PolygonEntity>?>,
+    private val forestWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val buildingsWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val aviaryWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val visitedRoadsWatcher: MutableStateFlow<List<VisitedRoadEdge>>,
+    private val regionsWatcher: MutableStateFlow<List<Pair<Region, PolygonEntity>>?>,
 ) : MapRepository {
 
-    private val parser by lazy { SvgParser(context, R.xml.map) }
     private var isMapLoaded = false
-
-    private val worldRect: RectD by lazy { parser.worldRect }
-    private val regions: List<Pair<Region, PolygonEntity>> by lazy { parser.regions }
-    private val buildings: List<List<PointD>> by lazy { parser.getPointsByGroup("buildings") }
-    private val aviary: List<List<PointD>> by lazy { parser.getPointsByGroup("aviary") }
-    private val technical: List<List<PointD>> by lazy { parser.getPointsByGroup("technical") }
-    private val lines: List<List<PointD>> by lazy { parser.getPointsByGroup("lines") }
-    private val roads: List<List<PointD>> by lazy { parser.getPointsByGroup("paths") }
-
     private var visitedRoadsCalculated = false
 
     override suspend fun loadMap() {
         coroutineScope {
             isMapLoaded = true
-            parser
+            val parser = SvgParser(context, R.xml.map)
             listOf(
-                async { buildingsWatcher.value = (buildings.map(::PolygonEntity)) },
-                async { aviaryWatcher.value = (aviary.map(::PolygonEntity)) },
-                async { roadsWatcher.value = (roads.map(::PathEntity)) },
-                async { technicalWatcher.value = (technical.map(::PathEntity)) },
-                async { linesWatcher.value = (lines.map(::PathEntity)) },
+                async { regionsWatcher.value = parser.regions },
+                async { worldRectWatcher.value = parser.worldRect },
+                async { buildingsWatcher.value = (parser.getPointsByGroup("buildings").map(::PolygonEntity)) },
+                async { aviaryWatcher.value = (parser.getPointsByGroup("aviary").map(::PolygonEntity)) },
+                async { roadsWatcher.value = (parser.getPointsByGroup("paths").map(::PathEntity)) },
+                async { technicalWatcher.value = (parser.getPointsByGroup("technical").map(::PathEntity)) },
+                async { linesWatcher.value = (parser.getPointsByGroup("lines").map(::PathEntity)) },
+                async { waterWatcher.value = (parser.getPointsByGroup("water").map(::PolygonEntity)) },
+                async { forestWatcher.value = (parser.getPointsByGroup("forest").map(::PolygonEntity)) },
             ).awaitAll()
         }
     }
@@ -67,11 +63,17 @@ internal class MapRepositoryImpl(
     override fun observeAviary(): Flow<List<PolygonEntity>> =
         aviaryWatcher.filterNotNull()
 
+    override fun observeWater(): Flow<List<PolygonEntity>> =
+        waterWatcher.filterNotNull()
+
+    override fun observeForest(): Flow<List<PolygonEntity>> =
+        forestWatcher.filterNotNull()
+
     override fun observeRoads(): Flow<List<PathEntity>> =
         roadsWatcher.filterNotNull()
 
     override suspend fun getRoads(): List<PathEntity> =
-        roads.map(::PathEntity)
+        observeRoads().first()
 
     // todo code those regions in map
     override suspend fun getDarkRegions(): List<Region> =
@@ -97,17 +99,17 @@ internal class MapRepositoryImpl(
         technicalWatcher.filterNotNull()
 
     override suspend fun getTechnicalRoads(): List<PathEntity> =
-        technical.map(::PathEntity)
+        observeTechnicalRoads().first()
 
     override fun observeLines(): Flow<List<PathEntity>> =
         linesWatcher.filterNotNull()
 
     override suspend fun getCurrentRegions(): List<Pair<Region, PolygonEntity>> =
-        regions
+        regionsWatcher.filterNotNull().first()
 
     override fun observeWorldBounds(): Flow<RectD> =
-        flowOf(worldRect)
+        worldRectWatcher.filterNotNull()
 
-    override fun getWorldBounds(): RectD =
-        worldRect
+    override suspend fun getWorldBounds(): RectD =
+        observeWorldBounds().first()
 }

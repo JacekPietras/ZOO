@@ -18,12 +18,7 @@ import com.jacekpietras.zoo.domain.feature.animal.model.AnimalEntity
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveBuildingsUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapLinesUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveRoadsUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTechnicalRoadsUseCase
-import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveWorldBoundsUseCase
+import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapObjectsUseCase
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveArrivalAtRegionEventUseCase
@@ -38,8 +33,6 @@ import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
 import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveOldTakenRouteUseCase
-import com.jacekpietras.zoo.domain.interactor.ObserveRegionCentersUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveSuggestedThemeTypeUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveTakenRouteUseCase
@@ -90,15 +83,8 @@ internal class MapViewModel(
     private val startNavigationUseCase: StartNavigationUseCase,
     private val trackingServiceStarter: TrackingServiceStarter,
 
-    observeWorldBoundsUseCase: ObserveWorldBoundsUseCase,
-    observeBuildingsUseCase: ObserveBuildingsUseCase,
-    observeAviaryUseCase: ObserveAviaryUseCase,
-    observeRoadsUseCase: ObserveRoadsUseCase,
-    observeTechnicalRoadsUseCase: ObserveTechnicalRoadsUseCase,
+    observeMapObjectsUseCase: ObserveMapObjectsUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
-    observeOldTakenRouteUseCase: ObserveOldTakenRouteUseCase,
-    observeRegionCentersUseCase: ObserveRegionCentersUseCase,
-    observeMapLinesUseCase: ObserveMapLinesUseCase,
     observeVisitedRoadsUseCase: ObserveVisitedRoadsUseCase,
     observeAnimalFavoritesUseCase: ObserveAnimalFavoritesUseCase,
 
@@ -174,14 +160,7 @@ internal class MapViewModel(
 
     private val mapWorldViewState: Flow<MapWorldViewState> = combine(
         mapColors,
-        observeWorldBoundsUseCase.run(),
-        observeBuildingsUseCase.run(),
-        observeAviaryUseCase.run(),
-        observeRoadsUseCase.run(),
-        observeMapLinesUseCase.run(),
-        observeTechnicalRoadsUseCase.run(),
-        observeOldTakenRouteUseCase.run(),
-        observeRegionCentersUseCase.run(),
+        observeMapObjectsUseCase.run(),
         mapper::from,
     )
         .flowOnBackground()

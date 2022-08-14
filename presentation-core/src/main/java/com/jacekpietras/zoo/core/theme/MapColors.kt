@@ -14,6 +14,8 @@ class MapColors(
 
     val colorMapBackground = Color(0xFFf8f9fa) onNight Color(0xFF121a26)
     val colorMapBuilding = Color(0xFFf1f3f4) onNight Color(0xFF2f3a47)
+    val colorMapForest = Color(0xFF2E7D32) onNight Color(0xFF2E7D32)
+    val colorMapWater = Color(0xFF2487B9) onNight Color(0xFF2487B9)
     val colorMapBuildingBorder = Color(0xFFD7DBDD) onNight Color(0xFF0E141E)
     val colorMapRoad = Palette.white onNight Color(0xFF4E5C6C)
     val colorMapRoadVisited = Color(0xFFD1FAE1) onNight Color(0xFF447C43)

@@ -15,13 +15,17 @@ interface MapRepository {
 
     fun observeWorldBounds(): Flow<RectD>
 
-    fun getWorldBounds(): RectD
+    suspend fun getWorldBounds(): RectD
 
     suspend fun getCurrentRegions(): List<Pair<Region, PolygonEntity>>
 
     fun observeBuildings(): Flow<List<PolygonEntity>>
 
     fun observeAviary(): Flow<List<PolygonEntity>>
+
+    fun observeWater(): Flow<List<PolygonEntity>>
+
+    fun observeForest(): Flow<List<PolygonEntity>>
 
     fun observeRoads(): Flow<List<PathEntity>>
 

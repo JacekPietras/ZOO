@@ -7,6 +7,6 @@ class GetWorldBoundsUseCase(
     private val mapRepository: MapRepository,
 ) {
 
-    fun run(): RectD =
+    suspend fun run(): RectD =
         mapRepository.getWorldBounds()
 }
