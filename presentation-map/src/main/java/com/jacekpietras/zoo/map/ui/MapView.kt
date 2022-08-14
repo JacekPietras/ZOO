@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,7 +64,9 @@ internal fun MapView(
     onMapActionClicked: (MapAction) -> Unit,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
-    Box {
+    Box(
+        modifier = Modifier.background(ZooTheme.colors.mapColors.colorMapGrass)
+    ) {
         ComposableMapView(
             modifier = Modifier.fillMaxSize(),
             onSizeChanged = onSizeChanged,

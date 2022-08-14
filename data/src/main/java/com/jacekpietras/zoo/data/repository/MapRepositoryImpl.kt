@@ -14,6 +14,7 @@ import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.Region.AnimalRegion
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -49,17 +51,17 @@ internal class MapRepositoryImpl(
             listOf(
                 async { regionsWatcher.value = parser.regions },
                 async { worldRectWatcher.value = parser.worldRect },
-                async { buildingsWatcher.value = (parser.getPointsByGroup("buildings").map(::PolygonEntity)) },
-                async { aviaryWatcher.value = (parser.getPointsByGroup("aviary").map(::PolygonEntity)) },
-                async { roadsWatcher.value = (parser.getPointsByGroup("paths").map(::PathEntity)) },
-                async { technicalWatcher.value = (parser.getPointsByGroup("technical").map(::PathEntity)) },
-                async { linesWatcher.value = (parser.getPointsByGroup("lines").map(::PathEntity)) },
-                async { waterWatcher.value = (parser.getPointsByGroup("water").map(::PolygonEntity)) },
-                async { forestWatcher.value = (parser.getPointsByGroup("forest").map(::PolygonEntity)) },
+                async { buildingsWatcher.value = parser.getPointsByGroup("buildings").map(::PolygonEntity) },
+                async { aviaryWatcher.value = parser.getPointsByGroup("aviary").map(::PolygonEntity) },
+                async { roadsWatcher.value = parser.getPointsByGroup("paths").map(::PathEntity) },
+                async { technicalWatcher.value = parser.getPointsByGroup("technical").map(::PathEntity) },
+                async { linesWatcher.value = parser.getPointsByGroup("lines").map(::PathEntity) },
+                async { waterWatcher.value = parser.getPointsByGroup("water").map(::PolygonEntity) },
+                async { forestWatcher.value = parser.getPointsByGroup("forestland").map(::PolygonEntity) },
                 async { treesWatcher.value = emptyList() },
             ).awaitAll()
 
-            generateTrees()
+            generateTrees(parser.getPointsByGroup("foresttrees").map(::PolygonEntity))
         }
     }
 
@@ -125,8 +127,8 @@ internal class MapRepositoryImpl(
     override suspend fun getWorldBounds(): RectD =
         observeWorldBounds().first()
 
-    private suspend fun generateTrees() {
-        treesWatcher.value = observeForest().first().map { forest ->
+    private fun generateTrees(forestFields: List<PolygonEntity>) {
+        treesWatcher.value = forestFields.map { forest ->
             val left = forest.left()
             val right = forest.right()
             val top = forest.top()
@@ -152,6 +154,6 @@ internal class MapRepositoryImpl(
 
     companion object {
 
-        const val TREE_PER_SQUARE_METER = 0.005
+        const val TREE_PER_SQUARE_METER = 0.002
     }
 }

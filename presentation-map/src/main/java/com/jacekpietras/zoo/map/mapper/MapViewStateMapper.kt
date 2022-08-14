@@ -154,13 +154,13 @@ internal class MapViewStateMapper {
                 MapWorldViewState(
                     worldBounds = worldBounds,
                     mapData = flatListOf(
-                        fromPaths(technicalRoads, technicalPaint),
+                        fromPolygons(water, waterPaint, ZOOM_MEDIUM),
+                        fromPolygons(forest, forestPaint),
+                        fromPaths(technicalRoads, technicalPaint, ZOOM_MEDIUM),
                         fromPaths(roads, roadPaint),
                         fromPaths(lines, linesPaint, ZOOM_CLOSE),
                         fromPolygons(buildings, buildingPaint),
                         fromPolygons(aviary, aviaryPaint),
-                        fromPolygons(water, waterPaint, ZOOM_MEDIUM),
-                        fromPolygons(forest, forestPaint, ZOOM_MEDIUM),
                         fromTrees(trees),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
                         fromRegions(regionsWithCenters),
@@ -392,6 +392,6 @@ internal class MapViewStateMapper {
 
         const val ZOOM_CLOSE = 0.001f
         const val ZOOM_MEDIUM = 0.002f
-        const val ZOOM_FAR = 0.004f
+        const val ZOOM_FAR = 0.003f
     }
 }
