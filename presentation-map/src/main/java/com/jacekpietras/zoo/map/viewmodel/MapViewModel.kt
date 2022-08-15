@@ -55,6 +55,9 @@ import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
 import com.jacekpietras.zoo.map.model.MapState
 import com.jacekpietras.zoo.map.model.MapToolbarMode
+import com.jacekpietras.zoo.map.model.MapToolbarMode.AroundYouMapActionMode
+import com.jacekpietras.zoo.map.model.MapToolbarMode.NavigableMapActionMode
+import com.jacekpietras.zoo.map.model.MapToolbarMode.SelectedAnimalMode
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
@@ -234,7 +237,7 @@ internal class MapViewModel(
 
         state.reduce {
             copy(
-                toolbarMode = MapToolbarMode.SelectedAnimalMode(
+                toolbarMode = SelectedAnimalMode(
                     animal = animal,
                     distance = distance,
                     regionId = regionId,
@@ -342,19 +345,19 @@ internal class MapViewModel(
     fun onMapActionClicked(mapAction: MapAction) {
         centerAtUserPosition()
         val toolbarMode = when (mapAction) {
-            MapAction.AROUND_YOU -> MapToolbarMode.AroundYouMapActionMode(mapAction)
+            MapAction.AROUND_YOU -> AroundYouMapActionMode(mapAction)
             MapAction.UPLOAD -> {
                 onUploadClicked()
                 null
             }
-            else -> MapToolbarMode.NavigableMapActionMode(mapAction)
+            else -> NavigableMapActionMode(mapAction)
         }
-        if (toolbarMode is MapToolbarMode.NavigableMapActionMode) {
+        if (toolbarMode is NavigableMapActionMode) {
             launchInBackground { startNavigationToNearestRegion(mapAction, toolbarMode) }
         }
     }
 
-    private suspend fun startNavigationToNearestRegion(mapAction: MapAction, toolbarMode: MapToolbarMode.NavigableMapActionMode) {
+    private suspend fun startNavigationToNearestRegion(mapAction: MapAction, toolbarMode: NavigableMapActionMode) {
         val nearWithDistance = when (mapAction) {
             MapAction.WC -> findNearRegionWithDistance<Region.WcRegion>()
             MapAction.RESTAURANT -> findNearRegionWithDistance<Region.RestaurantRegion>()
@@ -420,8 +423,8 @@ internal class MapViewModel(
                 with(state.value) {
                     if (isToolbarOpened) {
                         when (toolbarMode) {
-                            is MapToolbarMode.NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction, toolbarMode)
-                            is MapToolbarMode.SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
+                            is NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction, toolbarMode)
+                            is SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
                             else -> Unit
                         }
                     }
@@ -432,6 +435,17 @@ internal class MapViewModel(
     private fun outsideWorldEventObservation() =
         observeOutsideWorldEventUseCase.run()
             .onEach {
+                when (state.value.toolbarMode) {
+                    is NavigableMapActionMode,
+                    is AroundYouMapActionMode,
+                    is SelectedAnimalMode -> state.reduce {
+                        copy(
+                            toolbarMode = null,
+                            isToolbarOpened = false,
+                        )
+                    }
+                    else -> Unit
+                }
                 volatileState.reduce { copy(userPosition = PointD()) }
                 state.reduce { copy(userPosition = PointD()) }
                 sendEffect(ShowToast(RichText(R.string.outside_world_warning)))
