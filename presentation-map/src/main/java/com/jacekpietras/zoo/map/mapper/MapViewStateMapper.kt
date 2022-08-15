@@ -289,7 +289,7 @@ internal class MapViewStateMapper {
                             divisionRightBottom = images.getOrNull(3)?.second?.toViewValue(),
                         )
                     )
-                } else if (animalsInRegion.size == 1) {
+                } else if (animalsInRegion.isNotEmpty()) {
                     animalsInRegion.forEach { animal ->
                         add(
                             MapCarouselItem.Animal(
@@ -358,33 +358,33 @@ internal class MapViewStateMapper {
             width = MapDimension.Dynamic.World(2.0),
         )
         val linesPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Hard(Color.rgb(240, 180, 140)),
+            strokeColor = MapColor.Compose(mapColors.colorMapLines),
             width = MapDimension.Dynamic.World(0.5),
         )
         val turnPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Hard(Color.argb(255, 150, 150, 255)),
+            strokeColor = MapColor.Compose(mapColors.colorMapNavigation),
             width = MapDimension.Dynamic.World(2.0),
         )
         val turnArrowPaint: MapPaint = MapPaint.Fill(
-            fillColor = MapColor.Hard(Color.argb(255, 150, 150, 255)),
+            fillColor = MapColor.Compose(mapColors.colorMapNavigation),
         )
 
         val shortestPathPaint: MapPaint = MapPaint.DashedStroke(
-            strokeColor = MapColor.Hard(Color.argb(50, 0, 0, 255)),
+            strokeColor = MapColor.Compose(mapColors.colorMapNavigation),
             width = MapDimension.Static.Screen(4),
             pattern = MapDimension.Static.Screen(dp = 3),
         )
         val snappedPointPaint: MapPaint = MapPaint.Circle(
-            fillColor = MapColor.Hard(Color.BLUE),
+            fillColor = MapColor.Hard(Color.RED),
             radius = MapDimension.Static.Screen(dp = 4)
         )
         val userPositionPaint: MapPaint = MapPaint.Circle(
-            fillColor = MapColor.Compose(mapColors.colorPrimary),
+            fillColor = MapColor.Compose(mapColors.colorAccent),
             radius = MapDimension.Static.Screen(dp = 8)
         )
 
         val oldTakenRoutePaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Hard(Color.rgb(150, 180, 150)),
+            strokeColor = MapColor.Hard(Color.RED),
             width = MapDimension.Static.Screen(0.5),
         )
         val takenRoutePaint: MapPaint = MapPaint.Stroke(

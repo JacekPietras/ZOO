@@ -64,11 +64,11 @@ internal fun MapView(
     onMapActionClicked: (MapAction) -> Unit,
     mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
 ) {
-    Box(
-        modifier = Modifier.background(ZooTheme.colors.mapColors.colorMapGrass)
-    ) {
+    Box {
         ComposableMapView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ZooTheme.colors.mapColors.colorMapGrass),
             onSizeChanged = onSizeChanged,
             onClick = onClick,
             onTransform = onTransform,
