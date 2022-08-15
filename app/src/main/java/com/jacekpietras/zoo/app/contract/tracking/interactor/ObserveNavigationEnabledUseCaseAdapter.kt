@@ -10,5 +10,4 @@ class ObserveNavigationEnabledUseCaseAdapter(
 
     override fun run(): Flow<Boolean> =
         gpsRepository.observeNavigationEnabled()
-
 }

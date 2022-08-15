@@ -61,7 +61,6 @@ import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.model.PlanState
 import com.jacekpietras.zoo.map.router.MapRouter
-import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -89,7 +88,6 @@ internal class MapViewModel(
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
-    private val trackingServiceStarter: TrackingServiceStarter,
 
     observeMapObjectsUseCase: ObserveMapObjectsUseCase,
     observeTakenRouteUseCase: ObserveTakenRouteUseCase,
@@ -302,20 +300,17 @@ internal class MapViewModel(
     }
 
     fun onLocationButtonClicked(permissionChecker: GpsPermissionRequester) {
-        startNavigationUseCase.run()
         permissionChecker.checkPermissions(
             onDenied = { onLocationDenied() },
             onGranted = {
-                trackingServiceStarter.run()
+                startNavigationUseCase.run()
                 centerAtUserPosition()
             },
         )
     }
 
     private fun onLocationDenied() {
-        if (BuildConfig.DEBUG) {
-            sendEffect(ShowToast(RichText(R.string.location_denied)))
-        }
+        sendEffect(ShowToast(RichText(R.string.location_denied)))
     }
 
     fun onCameraButtonClicked(router: MapRouter) {

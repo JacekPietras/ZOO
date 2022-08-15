@@ -34,6 +34,7 @@ android {
 dependencies {
     implementation project(':geometry')
     implementation project(':domain')
+    implementation project(':tracking')
 
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-runtime:$room_version"

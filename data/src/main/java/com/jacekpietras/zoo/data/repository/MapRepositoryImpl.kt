@@ -14,7 +14,6 @@ import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.Region.AnimalRegion
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.random.Random
 

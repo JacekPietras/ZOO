@@ -2,6 +2,7 @@
 <resources>
     <string name="close">Close</string>
     <string name="back">Back</string>
+    <string name="location_denied">Location denied</string>
 
     <string name="wejscie">wejscie</string>
     <string name="wyjscie">wyjscie</string>

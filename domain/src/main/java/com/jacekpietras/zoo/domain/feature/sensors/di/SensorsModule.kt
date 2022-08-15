@@ -1,6 +1,20 @@
 package com.jacekpietras.zoo.domain.feature.sensors.di
 
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.*
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.GetUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.InsertUserCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.InsertUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.InsertUserPositionUseCaseImpl
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveArrivalAtRegionEventUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveOutsideWorldEventUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartLightSensorUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopLightSensorUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopNavigationUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.UploadHistoryUseCase
 import org.koin.dsl.module
 
 val sensorsModule = module {
@@ -42,6 +56,7 @@ val sensorsModule = module {
     factory {
         StartNavigationUseCase(
             gpsRepository = get(),
+            trackingServiceGateway = get(),
         )
     }
     factory {

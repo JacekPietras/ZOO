@@ -1,9 +1,7 @@
 package com.jacekpietras.zoo.map.di
 
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
-import com.jacekpietras.zoo.map.service.TrackingServiceStarter
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
-import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -12,11 +10,6 @@ val mapModule = module {
 
     factory {
         MapViewStateMapper()
-    }
-    factory {
-        TrackingServiceStarter(
-            context = androidApplication()
-        )
     }
 
     viewModel { params ->
@@ -45,7 +38,6 @@ val mapModule = module {
             loadVisitedRouteUseCase = get(),
             observeSuggestedThemeTypeUseCase = get(),
             observeCurrentPlanPathUseCase = get(),
-            trackingServiceStarter = get(),
             observeArrivalAtRegionEventUseCase = get(),
             observeAnimalFavoritesUseCase = get(),
         )

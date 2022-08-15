@@ -6,19 +6,24 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.MapViewLogic
-import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
-import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
-import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
-import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
+import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.extensions.combine
 import com.jacekpietras.zoo.catalogue.extensions.combineWithIgnoredFlow
 import com.jacekpietras.zoo.catalogue.extensions.reduce
+import com.jacekpietras.zoo.catalogue.feature.animal.mapper.AnimalMapper
+import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalEffect
+import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalEffect.ShowToast
+import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalState
+import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
+import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalRouter
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
+import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.MapColors
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalPositionUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.GetAnimalUseCase
 import com.jacekpietras.zoo.domain.feature.animal.interactor.IsAnimalSeenUseCase
+import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFavoritesUseCase
 import com.jacekpietras.zoo.domain.feature.favorites.interactor.SetAnimalFavoriteUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveAviaryUseCase
@@ -30,10 +35,12 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPath
 import com.jacekpietras.zoo.domain.feature.planner.interactor.AddAnimalToCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.RemoveAnimalFromCurrentPlanUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
-import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -55,6 +62,7 @@ internal class AnimalViewModel(
     observeUserPositionUseCase: ObserveUserPositionUseCase,
     getAnimalPositionUseCase: GetAnimalPositionUseCase,
     private val getShortestPathUseCase: GetShortestPathUseCase,
+    private val startNavigationUseCase: StartNavigationUseCase,
 ) : ViewModel() {
 
     private val paintBaker = ComposablePaintBaker(context)
@@ -72,6 +80,11 @@ internal class AnimalViewModel(
         .onEach { mapLogic.updateMap(it) }
         .combineWithIgnoredFlow(animalFavoritesObservation())
         .flowOnBackground()
+
+    private val _effects = MutableStateFlow<List<AnimalEffect>>(emptyList())
+    val effects: Flow<Unit> = _effects
+        .filter { it.isNotEmpty() }
+        .map { /* Unit */ }
 
     private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
 
@@ -114,8 +127,14 @@ internal class AnimalViewModel(
         router.navigateToWeb(checkNotNull(state.value.animal).web)
     }
 
-    fun onNavClicked(router: AnimalRouter, regionId: RegionId? = null) {
-        router.navigateToMap(checkNotNull(state.value.animal).id, regionId)
+    fun onNavClicked(router: AnimalRouter, regionId: RegionId? = null, permissionChecker: GpsPermissionRequester) {
+        permissionChecker.checkPermissions(
+            onDenied = { onLocationDenied() },
+            onGranted = {
+                startNavigationUseCase.run()
+                router.navigateToMap(checkNotNull(state.value.animal).id, regionId)
+            },
+        )
     }
 
     fun onFavoriteClicked() {
@@ -150,6 +169,20 @@ internal class AnimalViewModel(
 
     fun onSizeChanged(width: Int, height: Int) {
         mapLogic.onSizeChanged(width, height)
+    }
+
+    fun consumeEffect(): AnimalEffect {
+        val removed = _effects.value.first()
+        _effects.value = _effects.value.drop(1)
+        return removed
+    }
+
+    private fun sendEffect(effect: AnimalEffect) {
+        _effects.value = _effects.value + effect
+    }
+
+    private fun onLocationDenied() {
+        sendEffect(ShowToast(RichText(R.string.location_denied)))
     }
 
     private fun makeComposableMapLogic() = MapViewLogic(
