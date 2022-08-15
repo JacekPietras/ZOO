@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -38,7 +39,6 @@ import com.jacekpietras.zoo.planner.reordering.getAdditionalOffset
 
 @Composable
 internal fun PlannerListView(
-    modifier: Modifier = Modifier,
     viewState: PlannerViewState,
     onMove: (from: String, to: String) -> Unit,
     onRemove: (regionId: String) -> Unit,
@@ -46,82 +46,96 @@ internal fun PlannerListView(
     onUnsee: (regionId: String) -> Unit,
     onSuggestedItemClicked: (suggestedItem: SuggestedItem) -> Unit,
 ) {
-    val lazyListState = rememberLazyListState()
-    val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
-    val listData by remember { mutableStateOf(viewState.list) }.also { it.value = viewState.list }
-    val firstRegion = viewState.list.indexOfFirst { it is RegionItem || it is UserPositionItem }
-    val lastRegion = viewState.list.indexOfLast { it is RegionItem || it is UserPositionItem }
+    Column(modifier = Modifier.fillMaxSize()) {
+        val lazyListState = rememberLazyListState()
+        val reorderingData = remember { mutableStateOf<ReorderingData?>(null) }
+        val listData by remember { mutableStateOf(viewState.list) }.also { it.value = viewState.list }
+        val firstRegion = viewState.list.indexOfFirst { it is RegionItem || it is UserPositionItem }
+        val lastRegion = viewState.list.indexOfLast { it is RegionItem || it is UserPositionItem }
+        val lastEnd = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { it.offset + it.size } ?: 0
+        val sparePlace = lazyListState.layoutInfo.viewportEndOffset - lastEnd
+        val fixedFooter = sparePlace > 0
 
-    LaunchedEffect("scroll" + listData.isNotEmpty()) {
-        lazyListState.animateScrollToItem(listData.firstNotSeen())
-    }
+        LaunchedEffect("scroll" + listData.isNotEmpty()) {
+            lazyListState.animateScrollToItem(listData.firstNotSeen())
+        }
 
-    LazyColumn(
-        modifier = modifier,
-        state = lazyListState,
-    ) {
-        items(
-            count = viewState.list.size,
-            key = { viewState.list[it].key },
-        ) { index ->
-            when (val item = viewState.list[index]) {
-                is Header -> {
-                    HeaderView()
-                }
-                is UserPositionItem -> {
-                    UserPositionView()
-                }
-                is RegionItem -> {
-                    val moveFrom = reorderingData.value?.fromIndex
-                    val isDragged = moveFrom == index
-                    val additionalOffset = reorderingData.value?.getAdditionalOffset(index = index, item.isFixed)
+        LazyColumn(
+            modifier = Modifier.weight(1f, true),
+            state = lazyListState,
+        ) {
+            items(
+                count = viewState.list.size,
+                key = { viewState.list[it].key },
+            ) { index ->
+                when (val item = viewState.list[index]) {
+                    is Header -> {
+                        HeaderView()
+                    }
+                    is UserPositionItem -> {
+                        UserPositionView()
+                    }
+                    is RegionItem -> {
+                        val moveFrom = reorderingData.value?.fromIndex
+                        val isDragged = moveFrom == index
+                        val additionalOffset = reorderingData.value?.getAdditionalOffset(index = index, item.isFixed)
 
-                    val moveTo = reorderingData.value?.toIndex
-                    val isFirst = index == firstRegion || if (index < (moveFrom ?: -1)) moveTo == index else moveTo == index - 1
-                    val isLast = index == lastRegion || if (index < (moveFrom ?: -1)) moveTo == index + 1 else moveTo == index
+                        val moveTo = reorderingData.value?.toIndex
+                        val isFirst = index == firstRegion || if (index < (moveFrom ?: -1)) moveTo == index else moveTo == index - 1
+                        val isLast = index == lastRegion || if (index < (moveFrom ?: -1)) moveTo == index + 1 else moveTo == index
 
-                    RegionCardView(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .dragOnLongPressToReorder(
-                                isFixed = item.isFixed,
-                                additionalOffset = additionalOffset,
-                                index = index,
-                                key = item.key,
-                                lazyListState = lazyListState,
-                                onOrderingChange = { reorderingData.value = it },
-                                onDragStop = { fromIndex, toIndex ->
-                                    val from = listData[fromIndex]
-                                    val to = listData[toIndex]
-                                    if (from is RegionItem && to is RegionItem) {
-                                        onMove(
-                                            from.regionId,
-                                            to.regionId,
-                                        )
-                                    }
-                                },
-                            ),
-                        key = item.key,
-                        isFirst = isFirst,
-                        isLast = isLast,
-                        isMutable = item.isMutable,
-                        isSeen = item.isSeen,
-                        isRemovable = item.isRemovable,
-                        isDragged = isDragged,
-                        title = item.title,
-                        info = item.info,
-                        onRemove = { onRemove(item.regionId) },
-                        onUnlock = { onUnlock(item.regionId) },
-                        onUnsee = { onUnsee(item.regionId) },
-                    )
-                }
-                is Footer -> {
-                    FooterView(
-                        viewState.suggestedItems,
-                        onSuggestedItemClicked,
-                    )
+                        RegionCardView(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .dragOnLongPressToReorder(
+                                    isFixed = item.isFixed,
+                                    additionalOffset = additionalOffset,
+                                    index = index,
+                                    key = item.key,
+                                    lazyListState = lazyListState,
+                                    onOrderingChange = { reorderingData.value = it },
+                                    onDragStop = { fromIndex, toIndex ->
+                                        val from = listData[fromIndex]
+                                        val to = listData[toIndex]
+                                        if (from is RegionItem && to is RegionItem) {
+                                            onMove(
+                                                from.regionId,
+                                                to.regionId,
+                                            )
+                                        }
+                                    },
+                                ),
+                            key = item.key,
+                            isFirst = isFirst,
+                            isLast = isLast,
+                            isMutable = item.isMutable,
+                            isSeen = item.isSeen,
+                            isRemovable = item.isRemovable,
+                            isDragged = isDragged,
+                            title = item.title,
+                            info = item.info,
+                            onRemove = { onRemove(item.regionId) },
+                            onUnlock = { onUnlock(item.regionId) },
+                            onUnsee = { onUnsee(item.regionId) },
+                        )
+                    }
+                    is Footer -> {
+                        if (!fixedFooter) {
+                            FooterView(
+                                items = viewState.suggestedItems,
+                                onSuggestedItemClicked = onSuggestedItemClicked,
+                            )
+                        }
+                    }
                 }
             }
+        }
+
+        if (fixedFooter && viewState.list.any { it is Footer }) {
+            FooterView(
+                items = viewState.suggestedItems,
+                onSuggestedItemClicked = onSuggestedItemClicked,
+            )
         }
     }
 }
@@ -151,11 +165,12 @@ private fun HeaderView() {
 
 @Composable
 private fun FooterView(
+    modifier: Modifier = Modifier,
     items: List<SuggestedItem>,
     onSuggestedItemClicked: (suggestedItem: SuggestedItem) -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(ZooTheme.colors.surfaceSecondary)
             .padding(horizontal = 24.dp, vertical = 8.dp),
