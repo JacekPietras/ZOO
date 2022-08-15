@@ -125,7 +125,7 @@ internal class MapViewModel(
 
     private val mapColors = MutableStateFlow(MapColors())
     private val treeBitmap: StateFlow<Bitmap?> = flow {
-        val bitmap = ContextCompat.getDrawable(context, R.drawable.ic_grass_24)?.toBitmap()
+        val bitmap = ContextCompat.getDrawable(context, R.drawable.ic_tree_36)?.toBitmap()
         emit(bitmap)
     }
         .flowOnBackground()

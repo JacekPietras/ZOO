@@ -23,7 +23,7 @@ internal class RenderListMaker<T>(
 
     private val borders = mutableListOf<MapViewLogic.RenderItem<T>>()
     private val insides = mutableListOf<MapViewLogic.RenderItem<T>>()
-    private val icons = mutableListOf<MapViewLogic.RenderItem<T>>()
+    private val icons = mutableListOf<MapViewLogic.RenderItem.PointItem<T>>()
     private val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
     private val dynamicDimensions = mutableMapOf<MapDimension, Float>()
     private val matrix = Matrix()
@@ -89,7 +89,7 @@ internal class RenderListMaker<T>(
             }
         }
 
-        return borders + insides + icons
+        return borders + insides + icons.sortedBy { it.cY }
     }
 
     private fun Float?.isBiggerThanZoom(): Boolean =
@@ -144,7 +144,7 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         insides.add(
-            MapViewLogic.RenderItem.RenderCircleItem(
+            MapViewLogic.RenderItem.PointItem.RenderCircleItem(
                 array[0],
                 array[1],
                 radius.takeDimension(),
@@ -153,7 +153,7 @@ internal class RenderListMaker<T>(
         )
         if (outerPaintHolder != null) {
             borders.add(
-                MapViewLogic.RenderItem.RenderCircleItem(
+                MapViewLogic.RenderItem.PointItem.RenderCircleItem(
                     array[0],
                     array[1],
                     radius.takeDimension(),
@@ -167,7 +167,7 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         icons.add(
-            MapViewLogic.RenderItem.RenderIconItem(
+            MapViewLogic.RenderItem.PointItem.RenderIconItem(
                 array[0],
                 array[1],
                 icon,
@@ -179,7 +179,7 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         icons.add(
-            MapViewLogic.RenderItem.RenderBitmapItem(
+            MapViewLogic.RenderItem.PointItem.RenderBitmapItem(
                 array[0],
                 array[1],
                 bitmap,

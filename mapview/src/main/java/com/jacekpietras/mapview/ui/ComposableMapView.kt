@@ -23,9 +23,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderBitmapItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderIconItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderBitmapItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
 import timber.log.Timber

@@ -4,7 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.*
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderBitmapItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderCircleItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderIconItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
+import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.utils.drawPath
 
 class MapView @JvmOverloads constructor(
