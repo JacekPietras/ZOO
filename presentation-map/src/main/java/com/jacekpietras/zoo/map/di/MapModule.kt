@@ -29,6 +29,7 @@ val mapModule = module {
             getAnimalUseCase = get(),
             findNearRegionWithDistance = get(),
             getRegionsContainingPointUseCase = get(),
+            getRegionUseCase = get(),
             getAnimalsInRegionUseCase = get(),
             stopCompassUseCase = get(),
             startCompassUseCase = get(),

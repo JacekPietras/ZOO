@@ -14,6 +14,7 @@ import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PolygonMapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
 import com.jacekpietras.mapview.model.PolygonD
+import com.jacekpietras.zoo.core.text.Dictionary.findFacilityDrawableRes
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.MapColors
@@ -180,19 +181,13 @@ internal class MapViewStateMapper {
                 bitmap = treeBitmap,
                 minZoom = finalZoom,
             )
-//            IconMapItem(
-//                point = position,
-//                icon = R.drawable.ic_grass_24,
-//                minZoom = finalZoom,
-//            )
         }
 
     private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =
         regions.mapNotNull { (region, position) ->
-            val (icon, minZoom) = when (region) {
-                is Region.WcRegion -> R.drawable.ic_wc_24 to ZOOM_MEDIUM
-                is Region.ExitRegion -> R.drawable.ic_door_24 to ZOOM_MEDIUM
-//                else -> return@mapNotNull null
+            val suggestedIcon = region.id.id.findFacilityDrawableRes()
+            val (icon, minZoom) = when {
+                suggestedIcon != null -> suggestedIcon to ZOOM_MEDIUM
                 else -> {
                     when (region.id.id) {
                         "wielkie-koty-2" -> R.drawable.ic_region_big_cats_24 to null
@@ -294,7 +289,7 @@ internal class MapViewStateMapper {
                             divisionRightBottom = images.getOrNull(3)?.second?.toViewValue(),
                         )
                     )
-                } else {
+                } else if (animalsInRegion.size == 1) {
                     animalsInRegion.forEach { animal ->
                         add(
                             MapCarouselItem.Animal(
@@ -305,10 +300,22 @@ internal class MapViewStateMapper {
                             )
                         )
                     }
+                } else {
+                    val facilityIcon = region.id.id.findFacilityDrawableRes()
+                    if (facilityIcon != null) {
+                        add(
+                            MapCarouselItem.Facility(
+                                id = region.id,
+                                name = region.id.id.findReadableName(),
+                                icon = facilityIcon,
+                            )
+                        )
+                    }
                 }
             }
         }.sortedWith(
             compareBy(
+                { it !is MapCarouselItem.Facility },
                 { it !is MapCarouselItem.Region },
                 { it is MapCarouselItem.Animal && it.id !in animalFavorites },
                 { (it as? MapCarouselItem.Animal)?.photoUrl == null },

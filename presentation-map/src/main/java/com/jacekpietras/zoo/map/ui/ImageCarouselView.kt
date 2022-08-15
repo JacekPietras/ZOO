@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,10 +33,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
+import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.shimmerWhen
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
 import com.jacekpietras.zoo.domain.model.RegionId
@@ -78,6 +80,13 @@ fun ImageCarouselView(
                             onClick = { onRegionClicked(carouselItem.id) },
                         )
                     }
+                    is MapCarouselItem.Facility -> {
+                        FacilityCarouselItem(
+                            item = carouselItem,
+                            carouselItemWidth = itemWidth,
+                            onClick = { onRegionClicked(carouselItem.id) },
+                        )
+                    }
                 }
             }
         }
@@ -113,10 +122,9 @@ private fun RegionCarouselItem(
         }
         Text(
             textAlign = TextAlign.Center,
-            modifier = Modifier,
             text = item.name.toString(LocalContext.current),
-            color = MaterialTheme.colors.onSurface,
-            fontSize = 13.sp,
+            color = ZooTheme.colors.textPrimaryOnSurface,
+            style = MaterialTheme.typography.caption,
         )
     }
 }
@@ -127,6 +135,35 @@ private fun imageRequest(url: String?) =
         .data(data = url)
         .crossfade(true)
         .build()
+
+@Composable
+private fun FacilityCarouselItem(
+    modifier: Modifier = Modifier,
+    item: MapCarouselItem.Facility,
+    carouselItemWidth: Dp,
+    onClick: () -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .width(carouselItemWidth)
+            .clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(carouselItemWidth),
+            painter = painterResource(item.icon),
+            tint = MaterialTheme.colors.onSurface,
+            contentDescription = null,
+        )
+        Text(
+            textAlign = TextAlign.Center,
+            text = item.name.toString(LocalContext.current),
+            color = ZooTheme.colors.textPrimaryOnSurface,
+            style = MaterialTheme.typography.caption,
+        )
+    }
+}
 
 @Composable
 private fun AnimalCarouselItem(
@@ -144,10 +181,9 @@ private fun AnimalCarouselItem(
         AnimalImageView(item.photoUrl, carouselItemWidth, item.division)
         Text(
             textAlign = TextAlign.Center,
-            modifier = Modifier,
             text = item.name.toString(LocalContext.current),
-            color = MaterialTheme.colors.onSurface,
-            fontSize = 13.sp,
+            color = ZooTheme.colors.textPrimaryOnSurface,
+            style = MaterialTheme.typography.caption,
         )
     }
 }
@@ -192,7 +228,7 @@ private fun AnimalDivisionValue?.getIcon(): Int =
 @Composable
 fun Modifier.placeholderBackgroundWhen(condition: () -> Boolean): Modifier =
     if (condition()) {
-        background(color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f))
+        background(color = ZooTheme.colors.onSurface.copy(alpha = 0.1f))
             .alpha(0.1f)
     } else {
         this

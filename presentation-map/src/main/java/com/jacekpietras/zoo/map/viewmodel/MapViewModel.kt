@@ -35,6 +35,7 @@ import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.UploadHistoryUseCase
 import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
+import com.jacekpietras.zoo.domain.interactor.GetRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetRegionsContainingPointUseCase
 import com.jacekpietras.zoo.domain.interactor.LoadVisitedRouteUseCase
 import com.jacekpietras.zoo.domain.interactor.ObserveRegionsWithAnimalsInUserPositionUseCase
@@ -54,10 +55,10 @@ import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
 import com.jacekpietras.zoo.map.model.MapState
-import com.jacekpietras.zoo.map.model.MapToolbarMode
 import com.jacekpietras.zoo.map.model.MapToolbarMode.AroundYouMapActionMode
 import com.jacekpietras.zoo.map.model.MapToolbarMode.NavigableMapActionMode
 import com.jacekpietras.zoo.map.model.MapToolbarMode.SelectedAnimalMode
+import com.jacekpietras.zoo.map.model.MapToolbarMode.SelectedRegionMode
 import com.jacekpietras.zoo.map.model.MapViewState
 import com.jacekpietras.zoo.map.model.MapVolatileState
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
@@ -106,6 +107,7 @@ internal class MapViewModel(
     private val getRegionsContainingPointUseCase: GetRegionsContainingPointUseCase,
     private val getAnimalUseCase: GetAnimalUseCase,
     private val findNearRegionWithDistance: FindNearRegionWithDistanceUseCase,
+    private val getRegionUseCase: GetRegionUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) : ViewModel() {
@@ -276,7 +278,6 @@ internal class MapViewModel(
             val regionsAndAnimals = async {
                 getRegionsContainingPointUseCase.run(point)
                     .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
-                    .filter { (_, animals) -> animals.isNotEmpty() }
             }
             val shortestPath = async { getShortestPathUseCase.run(point) }
 
@@ -293,7 +294,7 @@ internal class MapViewModel(
             } else {
                 state.reduce {
                     copy(
-                        toolbarMode = MapToolbarMode.SelectedRegionMode(regionsAndAnimals.await()),
+                        toolbarMode = SelectedRegionMode(regionsAndAnimals.await()),
                         isToolbarOpened = true,
                     )
                 }
@@ -321,7 +322,14 @@ internal class MapViewModel(
     }
 
     fun onRegionClicked(router: MapRouter, regionId: RegionId) {
-        router.navigateToAnimalList(regionId)
+        launchInBackground {
+            val (region, _) = getRegionUseCase.run(regionId)
+            if (region is Region.AnimalRegion) {
+                router.navigateToAnimalList(regionId)
+            } else {
+                startNavigationToRegion(region)
+            }
+        }
     }
 
     fun onCloseClicked() {
@@ -344,33 +352,56 @@ internal class MapViewModel(
 
     fun onMapActionClicked(mapAction: MapAction) {
         centerAtUserPosition()
-        val toolbarMode = when (mapAction) {
-            MapAction.AROUND_YOU -> AroundYouMapActionMode(mapAction)
+        when (mapAction) {
+            MapAction.AROUND_YOU -> {
+                state.reduce {
+                    copy(
+                        toolbarMode = AroundYouMapActionMode(mapAction),
+                        isToolbarOpened = true,
+                    )
+                }
+            }
             MapAction.UPLOAD -> {
                 onUploadClicked()
-                null
             }
-            else -> NavigableMapActionMode(mapAction)
-        }
-        if (toolbarMode is NavigableMapActionMode) {
-            launchInBackground { startNavigationToNearestRegion(mapAction, toolbarMode) }
+            else -> {
+                launchInBackground { startNavigationToNearestRegion(mapAction) }
+            }
         }
     }
 
-    private suspend fun startNavigationToNearestRegion(mapAction: MapAction, toolbarMode: NavigableMapActionMode) {
+    private suspend fun startNavigationToRegion(region: Region) {
+        val mapAction = when (region) {
+            is Region.RestaurantRegion -> MapAction.RESTAURANT
+            is Region.ExitRegion -> MapAction.EXIT
+            is Region.WcRegion -> MapAction.WC
+            else -> throw IllegalStateException("Don't expect navigation to $region")
+        }
+        val nearWithDistance = findNearRegionWithDistance.run { it == region }
+        startNavigationToActionWithPath(mapAction, nearWithDistance)
+    }
+
+    private suspend fun startNavigationToNearestRegion(mapAction: MapAction) {
         val nearWithDistance = when (mapAction) {
             MapAction.WC -> findNearRegionWithDistance<Region.WcRegion>()
             MapAction.RESTAURANT -> findNearRegionWithDistance<Region.RestaurantRegion>()
             MapAction.EXIT -> findNearRegionWithDistance<Region.ExitRegion>()
             else -> throw IllegalStateException("Don't expect navigation to $mapAction")
         }
+        startNavigationToActionWithPath(mapAction, nearWithDistance)
+    }
+
+    private suspend fun startNavigationToActionWithPath(
+        mapAction: MapAction,
+        nearWithDistance: Pair<List<PointD>, Double>?,
+    ) {
         onMain {
             if (nearWithDistance != null) {
                 val (path, distance) = nearWithDistance
-
                 state.reduce {
                     copy(
-                        toolbarMode = toolbarMode.copy(
+                        toolbarMode = NavigableMapActionMode(
+                            mapAction = mapAction,
                             path = path,
                             distance = distance,
                         ),
@@ -423,7 +454,7 @@ internal class MapViewModel(
                 with(state.value) {
                     if (isToolbarOpened) {
                         when (toolbarMode) {
-                            is NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction, toolbarMode)
+                            is NavigableMapActionMode -> startNavigationToNearestRegion(toolbarMode.mapAction)
                             is SelectedAnimalMode -> navigationToAnimal(toolbarMode.animal, toolbarMode.regionId)
                             else -> Unit
                         }
@@ -457,7 +488,7 @@ internal class MapViewModel(
                 val regionsAndAnimals = listOf(region to getAnimalsInRegionUseCase.run(region.id))
                 state.reduce {
                     copy(
-                        toolbarMode = MapToolbarMode.SelectedRegionMode(regionsAndAnimals),
+                        toolbarMode = SelectedRegionMode(regionsAndAnimals),
                         isToolbarOpened = true,
                     )
                 }

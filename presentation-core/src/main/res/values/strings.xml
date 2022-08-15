@@ -4,8 +4,8 @@
     <string name="back">Back</string>
     <string name="location_denied">Location denied</string>
 
-    <string name="wejscie">wejscie</string>
-    <string name="wyjscie">wyjscie</string>
+    <string name="entry">wejscie</string>
+    <string name="exit">wyjscie</string>
     <string name="bazanty_papugi">Bażanty i papugi</string>
     <string name="pazurzatki">Pazurzatki</string>
     <string name="flamingi">Flamingi</string>

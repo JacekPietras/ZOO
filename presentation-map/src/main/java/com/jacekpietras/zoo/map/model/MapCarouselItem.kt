@@ -8,6 +8,12 @@ sealed class MapCarouselItem(
     open val name: RichText,
 ) {
 
+    data class Facility(
+        val id: RegionId,
+        override val name: RichText,
+        val icon: Int,
+    ) : MapCarouselItem(name)
+
     data class Animal(
         val id: AnimalId,
         val division: AnimalDivisionValue,
