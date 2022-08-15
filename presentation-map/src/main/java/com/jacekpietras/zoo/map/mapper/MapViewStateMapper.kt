@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.map.mapper
 
-import android.graphics.Bitmap
 import android.graphics.Color
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapColor
@@ -30,6 +29,7 @@ import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.AnimalDivisionValue
+import com.jacekpietras.zoo.map.model.BitmapVersions
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapCarouselItem
 import com.jacekpietras.zoo.map.model.MapState
@@ -150,7 +150,7 @@ internal class MapViewStateMapper {
 
     fun from(
         mapColors: MapColors,
-        treeBitmap: Bitmap,
+        treeBitmap: BitmapVersions,
         mapObjects: ObserveMapObjectsUseCase.MapObject,
     ): MapWorldViewState =
         with(mapObjects) {
@@ -165,7 +165,7 @@ internal class MapViewStateMapper {
                         fromPaths(lines, linesPaint, ZOOM_CLOSE),
                         fromPolygons(buildings, buildingPaint),
                         fromPolygons(aviary, aviaryPaint),
-                        fromTrees(trees, treeBitmap),
+                        fromTrees(mapColors.nightTheme, trees, treeBitmap),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
                         fromRegions(regionsWithCenters),
                     ),
@@ -173,15 +173,17 @@ internal class MapViewStateMapper {
             }
         }
 
-    private fun fromTrees(trees: List<Pair<PointD, Float>>, treeBitmap: Bitmap): List<MapItem> =
-        trees.map { (position, zoom) ->
+    private fun fromTrees(nightTheme: Boolean, trees: List<Pair<PointD, Float>>, treeBitmap: BitmapVersions): List<MapItem> {
+        val bitmap = (if (nightTheme) treeBitmap.bitmapNight else treeBitmap.bitmapDay) ?: return emptyList()
+        return trees.map { (position, zoom) ->
             val finalZoom = ZOOM_CLOSE + zoom * (ZOOM_FAR - ZOOM_CLOSE)
             BitmapMapItem(
                 point = position,
-                bitmap = treeBitmap,
+                bitmap = bitmap,
                 minZoom = finalZoom,
             )
         }
+    }
 
     private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =
         regions.mapNotNull { (region, position) ->

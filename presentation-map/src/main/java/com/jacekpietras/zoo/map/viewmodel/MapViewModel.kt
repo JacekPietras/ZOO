@@ -51,6 +51,7 @@ import com.jacekpietras.zoo.map.extensions.combine
 import com.jacekpietras.zoo.map.extensions.combineWithIgnoredFlow
 import com.jacekpietras.zoo.map.extensions.reduce
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
+import com.jacekpietras.zoo.map.model.BitmapVersions
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
@@ -124,9 +125,12 @@ internal class MapViewModel(
     val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
 
     private val mapColors = MutableStateFlow(MapColors())
-    private val treeBitmap: StateFlow<Bitmap?> = flow {
-        val bitmap = ContextCompat.getDrawable(context, R.drawable.ic_tree_36)?.toBitmap()
-        emit(bitmap)
+    private val treeBitmap: StateFlow<BitmapVersions?> = flow {
+        BitmapVersions(
+            context = context,
+            dayRes = R.drawable.ic_tree_36,
+            nightRes = R.drawable.ic_tree_36_night,
+        ).also { emit(it) }
     }
         .flowOnBackground()
         .stateIn(viewModelScope, WhileSubscribed(), null)
