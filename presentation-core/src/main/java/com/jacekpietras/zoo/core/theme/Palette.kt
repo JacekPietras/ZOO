@@ -17,5 +17,5 @@ object Palette {
     val secondaryDark = Color(0xff056b9d)
     val primary = Color(0xff008B39)
     val primaryDark = Color(0xff16753C)
-    val secondarySurface = Color(0xffE2E8DD)
+    val secondarySurface = Color(0xffD2E7D3)
 }

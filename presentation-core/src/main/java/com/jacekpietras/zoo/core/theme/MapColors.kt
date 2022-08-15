@@ -4,6 +4,7 @@ package com.jacekpietras.zoo.core.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import com.jacekpietras.zoo.core.theme.Palette.secondarySurface
 
 @Immutable
 class MapColors(
@@ -13,7 +14,7 @@ class MapColors(
     val colorPrimary = Palette.primary onNight Palette.primaryDark
     val colorAccent = Color(0xFFEF6C00) onNight Color(0xFFD84315)
 
-    val colorMapGrass = Color(0xFFD2E7D3) onNight Color(0xFF2F6832)
+    val colorMapGrass = secondarySurface onNight Color(0xFF2F6832)
     val colorMapForest = Color(0xFF9CC49E) onNight Color(0xFF2D4E2E)
     val colorMapWater = Color(0xFF84cdc9) onNight Color(0xFF215068)
 
