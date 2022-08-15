@@ -178,7 +178,7 @@ private fun FooterView(
         Text(
             modifier = Modifier.padding(bottom = 8.dp),
             text = stringResource(id = R.string.planner_suggestion_title),
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.subtitle1,
             color = ZooTheme.colors.textPrimaryOnSurface,
         )
         items.forEach { item ->
