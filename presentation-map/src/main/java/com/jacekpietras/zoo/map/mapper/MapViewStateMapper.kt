@@ -333,7 +333,7 @@ internal class MapViewStateMapper {
             borderWidth = MapDimension.Static.Screen(1),
         )
         val aviaryPaint: MapPaint = MapPaint.FillWithBorder(
-            fillColor = MapColor.Compose(mapColors.colorMapBuilding),
+            fillColor = MapColor.Compose(mapColors.colorMapAviary),
             borderColor = MapColor.Compose(mapColors.colorMapBuildingBorder),
             borderWidth = MapDimension.Static.Screen(1),
         )
@@ -362,17 +362,21 @@ internal class MapViewStateMapper {
             width = MapDimension.Dynamic.World(0.5),
         )
         val turnPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Compose(mapColors.colorMapNavigation),
+            strokeColor = MapColor.Compose(mapColors.colorMapNavigationArrow),
             width = MapDimension.Dynamic.World(2.0),
+//            borderColor = MapColor.Compose(mapColors.colorMapNavigation),
+//            borderWidth = MapDimension.Static.Screen(2),
         )
         val turnArrowPaint: MapPaint = MapPaint.Fill(
-            fillColor = MapColor.Compose(mapColors.colorMapNavigation),
+            fillColor = MapColor.Compose(mapColors.colorMapNavigationArrow),
+//            borderColor = MapColor.Compose(mapColors.colorMapNavigation),
+//            borderWidth = MapDimension.Static.Screen(2),
         )
 
-        val shortestPathPaint: MapPaint = MapPaint.DashedStroke(
+        val shortestPathPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Compose(mapColors.colorMapNavigation),
             width = MapDimension.Static.Screen(4),
-            pattern = MapDimension.Static.Screen(dp = 3),
+//            pattern = MapDimension.Static.Screen(dp = 3),
         )
         val snappedPointPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Hard(Color.RED),

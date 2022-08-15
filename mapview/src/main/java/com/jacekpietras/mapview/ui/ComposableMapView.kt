@@ -77,7 +77,7 @@ private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
     with(LocalDensity.current) {
         Icon(
             modifier = Modifier
-                .offset(x = item.cX.toDp() - item.iconSize.dp / 2, y = item.cY.toDp() - item.iconSize.dp)
+                .offset(x = item.cX.toDp() - item.iconSize.dp / 2, y = item.cY.toDp() - item.iconSize.dp / 2)
                 .requiredSize(item.iconSize.dp),
             painter = painterResource(item.iconRes),
             contentDescription = null,
