@@ -121,9 +121,6 @@ internal class MapViewStateMapper {
         takenRoute: List<PathEntity> = emptyList(),
         compass: Float = 0f,
     ): MapVolatileViewState {
-        val plannedPath = navigationPlan.points
-        val turnPath = navigationPlan.firstTurn
-        val turnArrowPath = navigationPlan.firstTurnArrow
 
         return with(state) {
             with(ComposeColors(mapColors)) {
@@ -136,9 +133,9 @@ internal class MapViewStateMapper {
                         if (shortestPath.isNotEmpty()) {
                             fromPath(shortestPath, shortestPathPaint)
                         } else {
-                            fromPath(plannedPath, shortestPathPaint) +
-                                    fromPath(turnPath, turnPaint, ZOOM_MEDIUM) +
-                                    fromPolygon(PolygonEntity(turnArrowPath), turnArrowPaint, ZOOM_MEDIUM)
+                            fromPath(navigationPlan.points, shortestPathPaint) +
+                                    fromPolygons(navigationPlan.firstTurnArrowOuter.map(::PolygonEntity), turnArrowOuterPaint, ZOOM_MEDIUM) +
+                                    fromPolygons(navigationPlan.firstTurnArrowInner.map(::PolygonEntity), turnArrowInnerPaint, ZOOM_MEDIUM)
                         },
                         fromPoint(userPosition, userPositionPaint),
                         fromPoint(snappedPoint, snappedPointPaint),
@@ -363,22 +360,17 @@ internal class MapViewStateMapper {
             strokeColor = MapColor.Compose(mapColors.colorMapLines),
             width = MapDimension.Dynamic.World(0.5),
         )
-        val turnPaint: MapPaint = MapPaint.Stroke(
-            strokeColor = MapColor.Compose(mapColors.colorMapNavigationArrow),
-            width = MapDimension.Dynamic.World(2.0),
-//            borderColor = MapColor.Compose(mapColors.colorMapNavigation),
-//            borderWidth = MapDimension.Static.Screen(2),
+
+        val turnArrowOuterPaint: MapPaint = MapPaint.Fill(
+            fillColor = MapColor.Compose(mapColors.colorMapNavigation),
         )
-        val turnArrowPaint: MapPaint = MapPaint.Fill(
+        val turnArrowInnerPaint: MapPaint = MapPaint.Fill(
             fillColor = MapColor.Compose(mapColors.colorMapNavigationArrow),
-//            borderColor = MapColor.Compose(mapColors.colorMapNavigation),
-//            borderWidth = MapDimension.Static.Screen(2),
         )
 
         val shortestPathPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Compose(mapColors.colorMapNavigation),
             width = MapDimension.Static.Screen(4),
-//            pattern = MapDimension.Static.Screen(dp = 3),
         )
         val snappedPointPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Hard(Color.RED),

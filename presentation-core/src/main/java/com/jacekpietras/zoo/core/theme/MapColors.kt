@@ -26,8 +26,8 @@ class MapColors(
     val colorMapRoadBorder = Color(0xFFD7DBDD) onNight Color(0xFF0E141E)
     val colorMapRoadVisited = Color(0xFFD1FAE1) onNight Color(0xFF447C43)
     val colorMapTaken = colorPrimary
-    val colorMapNavigation = colorAccent.copy(alpha = 0.6f)
-    val colorMapNavigationArrow = colorAccent
+    val colorMapNavigation = colorAccent//.copy(alpha = 0.6f)
+    val colorMapNavigationArrow = Palette.white
     val colorMapLines = Color(0xFFAA834F) onNight Color(0xFF584020)
     val colorMapTechnical = Color(0xFFFFF0F0) onNight Color(0xFF221717)
 

@@ -66,11 +66,45 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         turnWithArrow: Int,
     ): NavigationPlan {
         val turnPoints = getTurnPoints(turnWithArrow, points)
+        val arrowInnerPoints = makeArrow(turnPoints, ARROW_INNER_M)
+        val arrowOuterPoints = makeSharpBorder(arrowInnerPoints, ARROW_OUTER_M)
+        val turnInnerPoints = makeLineBorder(turnPoints, ARROW_TAIL_INNER_M)
+        val turnOuterPoints = makeLineBorder(turnPoints.moveFirstForward(ARROW_OUTER_M), ARROW_TAIL_INNER_M + ARROW_OUTER_M)
 
         return copy(
             firstTurn = turnPoints,
-            firstTurnArrow = makeArrow(turnPoints),
+            firstTurnArrowInner = listOf(arrowInnerPoints, turnInnerPoints),
+            firstTurnArrowOuter = listOf(arrowOuterPoints, turnOuterPoints),
         )
+    }
+
+    private fun List<PointD>.moveFirstForward(distance: Int): List<PointD> =
+        listOf(pointInDistance(this[0], this[1], -distance)) + drop(1)
+
+    private fun makeSharpBorder(points: List<PointD>, size: Int): List<PointD> {
+        val edges = (points + points[0]).zipWithNext()
+        val edgesWithBearing = edges.map { (a, b) ->
+            Triple(a, b, bearing(a, b) + 90)
+        }
+        return edgesWithBearing.map { (a, b, bearing) ->
+            listOf(
+                perpendicular(perpendicular(a, size, bearing), size, bearing + 90),
+                perpendicular(perpendicular(b, size, bearing), size, bearing - 90),
+            )
+        }.flatten()
+    }
+
+    private fun makeLineBorder(points: List<PointD>, size: Int): List<PointD> {
+        val edges = points.zipWithNext() + points.reversed().zipWithNext()
+        val edgesWithBearing = edges.map { (a, b) ->
+            Triple(a, b, bearing(a, b) + 90)
+        }
+        return edgesWithBearing.map { (a, b, bearing) ->
+            listOf(
+                perpendicular(a, size, bearing),
+                perpendicular(b, size, bearing),
+            )
+        }.flatten()
     }
 
     private fun getIndexOfTurnWithArrow(
@@ -104,19 +138,20 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         return result
     }
 
-    private fun makeArrow(list: List<PointD>): List<PointD> {
+    private fun makeArrow(list: List<PointD>, size: Int): List<PointD> {
         if (list.size < 2) return emptyList()
 
         val arrowTip = list[list.size - 1]
         val arrowBase = pointInDistance(
             begin = arrowTip,
             end = list[list.size - 2],
-            distance = ARROW_M,
+            distance = size,
         )
 
         return makeArrowHeadPath(
             arrowTip,
             arrowBase,
+            size,
         )
     }
 
@@ -139,16 +174,17 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     private fun makeArrowHeadPath(
         arrowTip: PointD,
         arrowBase: PointD,
+        size: Int
     ): List<PointD> {
         val bearing = bearing(arrowTip, arrowBase)
 
-        val p1 = perpendicular(arrowBase, ARROW_M, bearing + 90)
-        val p2 = perpendicular(arrowBase, ARROW_M, bearing - 90)
+        val p1 = perpendicular(arrowBase, size, bearing + 90)
+        val p2 = perpendicular(arrowBase, size, bearing - 90)
 
         val longerTip = pointInDistance(
             begin = arrowBase,
             end = arrowTip,
-            distance = ARROW_M * 2,
+            distance = size * 2,
         )
 
         return listOf(
@@ -236,7 +272,8 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     data class NavigationPlan(
         val points: List<PointD> = emptyList(),
         val firstTurn: List<PointD> = emptyList(),
-        val firstTurnArrow: List<PointD> = emptyList(),
+        val firstTurnArrowInner: List<List<PointD>> = emptyList(),
+        val firstTurnArrowOuter: List<List<PointD>> = emptyList(),
         val stages: List<Stage> = emptyList(),
         val distanceToNextStage: Double? = null,
         val nextStageRegion: RegionId? = null,
@@ -247,6 +284,8 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         const val EARTH_RADIUS = 6378000.1
         const val MAGIC = 1.6
         const val DISTANCE_M = 10
-        const val ARROW_M = 4
+        const val ARROW_INNER_M = 4
+        const val ARROW_TAIL_INNER_M = 1
+        const val ARROW_OUTER_M = 1
     }
 }
