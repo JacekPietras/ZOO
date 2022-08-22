@@ -29,7 +29,7 @@ class MapColors(
     val colorMapNavigation = colorAccent//.copy(alpha = 0.6f)
     val colorMapNavigationArrow = Palette.white
     val colorMapLines = Color(0xFFAA834F) onNight Color(0xFF584020)
-    val colorMapTechnical = Color(0xFFFFF0F0) onNight Color(0xFF221717)
+    val colorMapTechnical = Color(0xFFFFF0F0) onNight Color(0xFF866666)
 
     val colorSmallMapBackground = colorMapForest
     val colorSmallMapBuilding = colorMapBuilding // Color(0xFF768A7E) onNight Color(0xFF768A7E)

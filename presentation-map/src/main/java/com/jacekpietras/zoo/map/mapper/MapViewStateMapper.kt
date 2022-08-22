@@ -157,7 +157,7 @@ internal class MapViewStateMapper {
                     mapData = flatListOf(
                         fromPolygons(water, waterPaint, ZOOM_MEDIUM),
                         fromPolygons(forest, forestPaint),
-                        fromPaths(technicalRoads, technicalPaint, ZOOM_MEDIUM),
+                        fromPaths(technicalRoads, technicalPaint, ZOOM_CLOSE),
                         fromPaths(roads, roadPaint),
                         fromPaths(lines, linesPaint, ZOOM_CLOSE),
                         fromPolygons(buildings, buildingPaint),
@@ -352,9 +352,10 @@ internal class MapViewStateMapper {
             strokeColor = MapColor.Compose(mapColors.colorMapRoadVisited),
             width = MapDimension.Dynamic.World(2.0),
         )
-        val technicalPaint: MapPaint = MapPaint.Stroke(
+        val technicalPaint: MapPaint = MapPaint.DashedStroke(
             strokeColor = MapColor.Compose(mapColors.colorMapTechnical),
-            width = MapDimension.Dynamic.World(2.0),
+            width = MapDimension.Dynamic.World(1.0),
+            pattern = MapDimension.Static.Screen(8)
         )
         val linesPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Compose(mapColors.colorMapLines),
@@ -403,8 +404,8 @@ internal class MapViewStateMapper {
             MapAction.EXIT,
         )
 
-        const val ZOOM_CLOSE = 0.001f
-        const val ZOOM_MEDIUM = 0.002f
-        const val ZOOM_FAR = 0.003f
+        const val ZOOM_CLOSE = 0.0012f
+        const val ZOOM_MEDIUM = 0.0022f
+        const val ZOOM_FAR = 0.0032f
     }
 }
