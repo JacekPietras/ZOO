@@ -1,5 +1,7 @@
 package com.jacekpietras.zoo.app.ui
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -7,6 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.jacekpietras.zoo.R
 import com.jacekpietras.zoo.app.ui.Screen.Companion.animalIdArg
 import com.jacekpietras.zoo.app.ui.Screen.Companion.regionIdArg
 import com.jacekpietras.zoo.catalogue.feature.animal.ui.AnimalScreen
@@ -50,15 +53,15 @@ private val String.stringType
 private val NavBackStackEntry.regionId get() = arguments?.getString(regionIdArg)
 private val NavBackStackEntry.animalId get() = arguments?.getString(animalIdArg)
 
-sealed class Screen(val route: String, val resource: String) {
+sealed class Screen(val route: String, @StringRes val title: Int, @DrawableRes val iconRes:Int) {
 
-    object Catalogue : Screen("catalogue", "catalogue")
+    object Catalogue : Screen("catalogue", R.string.title_catalogue, R.drawable.ic_elephant_24)
 
-    object Map : Screen("map", "map")
+    object Map : Screen("map", R.string.title_map, R.drawable.ic_map_24)
 
-    object Planner : Screen("planner", "planner")
+    object Planner : Screen("planner", R.string.title_planner, R.drawable.ic_signs_24)
 
-    object Animal : Screen("animal", "animal")
+    object Animal : Screen("animal", R.string.title_animal, R.drawable.ic_elephant_24)
 
     companion object {
 

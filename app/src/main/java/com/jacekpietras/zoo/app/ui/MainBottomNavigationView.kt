@@ -1,14 +1,16 @@
 package com.jacekpietras.zoo.app.ui
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -27,7 +29,7 @@ internal fun MainBottomNavigationView(navController: NavController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         items.forEach { screen ->
-            BottomNavigationItemView(screen.route, screen.resource, currentDestination, navController)
+            BottomNavigationItemView(screen.route, screen.title, screen.iconRes, currentDestination, navController)
         }
     }
 }
@@ -35,13 +37,14 @@ internal fun MainBottomNavigationView(navController: NavController) {
 @Composable
 private fun RowScope.BottomNavigationItemView(
     route: String,
-    name: String,
+    @StringRes titleRes: Int,
+    @DrawableRes iconRes: Int,
     currentDestination: NavDestination?,
     navController: NavController
 ) {
     BottomNavigationItem(
-        icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
-        label = { Text(name) },
+        icon = { Icon(painterResource(iconRes), contentDescription = null) },
+        label = { Text(stringResource(titleRes)) },
         selected = currentDestination?.hierarchy?.any { it.route == route } == true,
         onClick = {
             navController.navigate(route) {
