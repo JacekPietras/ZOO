@@ -1,9 +1,6 @@
 package com.jacekpietras.zoo.map.viewmodel
 
 import android.content.Context
-import android.graphics.Bitmap
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
@@ -329,7 +326,9 @@ internal class MapViewModel(
         launchInBackground {
             val (region, _) = getRegionUseCase.run(regionId)
             if (region is Region.AnimalRegion) {
-                router.navigateToAnimalList(regionId)
+                onMain {
+                    router.navigateToAnimalList(regionId)
+                }
             } else {
                 startNavigationToRegion(region)
             }
