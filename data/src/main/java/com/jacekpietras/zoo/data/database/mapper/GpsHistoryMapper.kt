@@ -9,13 +9,15 @@ internal class GpsHistoryMapper {
         GpsHistoryDto(
             timestamp = entity.timestamp,
             lat = entity.lat,
-            lon = entity.lon
+            lon = entity.lon,
+            accuracy = entity.accuracy,
         )
 
     fun from(dto: GpsHistoryDto): GpsHistoryEntity =
         GpsHistoryEntity(
             timestamp = dto.timestamp,
             lat = dto.lat,
-            lon = dto.lon
+            lon = dto.lon,
+            accuracy = dto.accuracy,
         )
 }

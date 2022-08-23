@@ -4,4 +4,5 @@ data class GpsHistoryEntity(
     val timestamp: Long,
     val lat: Double,
     val lon: Double,
+    val accuracy: Float,
 )

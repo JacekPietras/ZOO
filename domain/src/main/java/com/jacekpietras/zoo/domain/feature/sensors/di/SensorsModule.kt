@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveArrivalAtRe
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveOutsideWorldEventUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionWithAccuracyUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartLightSensorUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
@@ -61,6 +62,11 @@ val sensorsModule = module {
     }
     factory {
         ObserveUserPositionUseCase(
+            observeUserPositionWithAccuracyUseCase = get(),
+        )
+    }
+    factory {
+        ObserveUserPositionWithAccuracyUseCase(
             gpsRepository = get(),
         )
     }

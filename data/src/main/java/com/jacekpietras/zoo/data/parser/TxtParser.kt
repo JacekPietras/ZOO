@@ -3,8 +3,8 @@ package com.jacekpietras.zoo.data.parser
 import android.content.Context
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import androidx.annotation.RawRes
-import com.jacekpietras.zoo.data.utils.cutOut
 import com.jacekpietras.geometry.haversine
+import com.jacekpietras.zoo.data.utils.cutOut
 import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 
 internal class TxtParser(context: Context, @RawRes rawRes: Int) {
@@ -30,6 +30,7 @@ internal class TxtParser(context: Context, @RawRes rawRes: Int) {
                     timestamp = get(0).toLong(),
                     lat = get(1).toDouble(),
                     lon = get(2).toDouble(),
+                    accuracy = 0f,
                 )
             }
 }

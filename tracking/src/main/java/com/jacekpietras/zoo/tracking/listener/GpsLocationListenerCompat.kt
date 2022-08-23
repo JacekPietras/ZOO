@@ -9,18 +9,26 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.location.LocationManager.*
+import android.location.LocationManager.GPS_PROVIDER
+import android.location.LocationManager.NETWORK_PROVIDER
+import android.location.LocationManager.PASSIVE_PROVIDER
 import android.os.Looper
 import androidx.core.content.ContextCompat.checkSelfPermission
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationAvailability
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import timber.log.Timber
 
 
 @SuppressLint("MissingPermission")
 class GpsLocationListenerCompat(
-    private val onLocationChanged: (time: Long, lat: Double, lon: Double) -> Unit,
+    private val onLocationChanged: (time: Long, lat: Double, lon: Double, accuracy: Float) -> Unit,
     private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
 ) {
 
@@ -106,7 +114,7 @@ class GpsLocationListenerCompat(
     }
 
     private class LocationListenerImpl(
-        private val onLocationChanged: (time: Long, lat: Double, lon: Double) -> Unit,
+        private val onLocationChanged: (time: Long, lat: Double, lon: Double, accuracy: Float) -> Unit,
         private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
     ) : LocationListener {
 
@@ -114,7 +122,8 @@ class GpsLocationListenerCompat(
             onLocationChanged(
                 location.time,
                 location.latitude,
-                location.longitude
+                location.longitude,
+                location.accuracy,
             )
         }
 
@@ -170,7 +179,7 @@ class GpsLocationListenerCompat(
     }
 
     private class LocationCallbackImpl(
-        private val onLocationChanged: (time: Long, lat: Double, lon: Double) -> Unit,
+        private val onLocationChanged: (time: Long, lat: Double, lon: Double, accuracy: Float) -> Unit,
         private val onGpsStatusChanged: (enabled: Boolean) -> Unit = {},
     ) : LocationCallback() {
 
@@ -184,6 +193,7 @@ class GpsLocationListenerCompat(
                     location.time,
                     location.latitude,
                     location.longitude,
+                    location.accuracy,
                 )
             }
         }

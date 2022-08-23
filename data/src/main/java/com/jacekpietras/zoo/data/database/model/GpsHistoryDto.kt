@@ -8,4 +8,5 @@ internal data class GpsHistoryDto(
     @PrimaryKey val timestamp: Long,
     val lat: Double,
     val lon: Double,
+    val accuracy: Float,
 )

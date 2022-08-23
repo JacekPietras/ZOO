@@ -139,6 +139,7 @@ internal class MapViewStateMapper {
                                     fromPolygons(navigationPlan.firstTurnArrowOuter.map(::PolygonEntity), turnArrowOuterPaint, ZOOM_MEDIUM) +
                                     fromPolygons(navigationPlan.firstTurnArrowInner.map(::PolygonEntity), turnArrowInnerPaint, ZOOM_MEDIUM)
                         },
+                        fromPoint(userPosition, userPositionRadiusPaint(mapColors, userPositionAccuracy)),
                         fromPoint(userPosition, userPositionPaint),
                     ).toImmutableList(),
                 )
@@ -325,6 +326,12 @@ internal class MapViewStateMapper {
     private fun Division.toViewValue(): AnimalDivisionValue =
         AnimalDivisionValue.valueOf(name)
 
+    private fun userPositionRadiusPaint(mapColors: MapColors, radius: Number): MapPaint =
+        MapPaint.Circle(
+            fillColor = MapColor.Compose(mapColors.colorAccent.copy(alpha = 0.2f)),
+            radius = MapDimension.Dynamic.World(radius.toDouble())
+        )
+
     private class ComposeColors(mapColors: MapColors) {
 
         val buildingPaint: MapPaint = MapPaint.FillWithBorder(
@@ -380,7 +387,7 @@ internal class MapViewStateMapper {
         )
         val userPositionPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Compose(mapColors.colorAccent),
-            radius = MapDimension.Static.Screen(dp = 8)
+            radius = MapDimension.Static.Screen(dp = 6)
         )
 
         val oldTakenRoutePaint: MapPaint = MapPaint.Stroke(

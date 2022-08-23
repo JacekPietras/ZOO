@@ -25,7 +25,7 @@ import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlan
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveArrivalAtRegionEventUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveOutsideWorldEventUseCase
-import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionUseCase
+import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveUserPositionWithAccuracyUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartCompassUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StartNavigationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.StopCompassUseCase
@@ -86,7 +86,7 @@ internal class MapViewModel(
     observeCompassUseCase: ObserveCompassUseCase,
     observeSuggestedThemeTypeUseCase: ObserveSuggestedThemeTypeUseCase,
     observeCurrentPlanPathUseCase: ObserveCurrentPlanPathWithOptimizationUseCase,
-    private val observeUserPositionUseCase: ObserveUserPositionUseCase,
+    private val observeUserPositionWithAccuracyUseCase: ObserveUserPositionWithAccuracyUseCase,
     private val stopCompassUseCase: StopCompassUseCase,
     private val startCompassUseCase: StartCompassUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
@@ -466,10 +466,11 @@ internal class MapViewModel(
     }
 
     private fun userPositionObservation() =
-        observeUserPositionUseCase.run()
+        observeUserPositionWithAccuracyUseCase.run()
             .onEach {
-                volatileState.reduce { copy(userPosition = it) }
-                state.reduce { copy(userPosition = it) }
+                val point = PointD(it.lon, it.lat)
+                volatileState.reduce { copy(userPosition = point, userPositionAccuracy = it.accuracy) }
+                state.reduce { copy(userPosition = point) }
                 with(state.value) {
                     if (isToolbarOpened) {
                         when (toolbarMode) {

@@ -8,12 +8,17 @@ import android.os.Process.killProcess
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
 import com.jacekpietras.zoo.tracking.R
-import com.jacekpietras.zoo.tracking.contract.interactor.*
+import com.jacekpietras.zoo.tracking.contract.interactor.ObserveCompassEnabledUseCase
+import com.jacekpietras.zoo.tracking.contract.interactor.ObserveLightSensorEnabledUseCase
+import com.jacekpietras.zoo.tracking.contract.interactor.ObserveNavigationEnabledUseCase
+import com.jacekpietras.zoo.tracking.contract.interactor.OnCompassUpdateUseCase
+import com.jacekpietras.zoo.tracking.contract.interactor.OnLightSensorUpdateUseCase
+import com.jacekpietras.zoo.tracking.contract.interactor.OnLocationUpdateUseCase
 import com.jacekpietras.zoo.tracking.listener.CompassListenerCompat
 import com.jacekpietras.zoo.tracking.listener.GpsLocationListenerCompat
 import com.jacekpietras.zoo.tracking.listener.GpsStatusListenerCompat
 import com.jacekpietras.zoo.tracking.listener.LightSensorListenerCompat
-import com.jacekpietras.zoo.tracking.utils.*
+import com.jacekpietras.zoo.tracking.utils.observe
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -28,8 +33,8 @@ class TrackingService : LifecycleService() {
     private val observeLightSensorEnabledUseCase: ObserveLightSensorEnabledUseCase by inject()
     private var serviceUtils: ServiceUtils? = null
     private val gpsLocationListener = GpsLocationListenerCompat(
-        onLocationChanged = { time, lat, lon ->
-            onLocationUpdateUseCase(time, lat, lon)
+        onLocationChanged = { time, lat, lon, accuracy ->
+            onLocationUpdateUseCase(time, lat, lon, accuracy)
         },
         onGpsStatusChanged = { enabled ->
             if (enabled) Timber.i("Gps Status Enabled (a)")
