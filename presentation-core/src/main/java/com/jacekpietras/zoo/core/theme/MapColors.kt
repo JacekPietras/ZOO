@@ -13,6 +13,8 @@ class MapColors(
 
     val colorPrimary = Palette.primary onNight Palette.primaryDark
     val colorAccent = Color(0xFFEF6C00) onNight Color(0xFFD84315)
+    val userPositionBorder = Palette.white
+    val userPositionShadow = Palette.black.copy(alpha = 0.07f) onNight Palette.black.copy(alpha = 0.2f)
 
     val colorMapGrass = secondarySurface onNight Color(0xFF152016)
     val colorMapForest = Color(0xFF9CC49E) onNight Color(0xFF1A2E1A)

@@ -140,6 +140,8 @@ internal class MapViewStateMapper {
                                     fromPolygons(navigationPlan.firstTurnArrowInner.map(::PolygonEntity), turnArrowInnerPaint, ZOOM_MEDIUM)
                         },
                         fromPoint(userPosition, userPositionRadiusPaint(mapColors, userPositionAccuracy)),
+                        fromPoint(userPosition, userPositionShadowPaint),
+                        fromPoint(userPosition, userPositionBorderPaint),
                         fromPoint(userPosition, userPositionPaint),
                     ).toImmutableList(),
                 )
@@ -388,6 +390,14 @@ internal class MapViewStateMapper {
         val userPositionPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Compose(mapColors.colorAccent),
             radius = MapDimension.Static.Screen(dp = 6)
+        )
+        val userPositionBorderPaint: MapPaint = MapPaint.Circle(
+            fillColor = MapColor.Compose(mapColors.userPositionBorder),
+            radius = MapDimension.Static.Screen(dp = 8)
+        )
+        val userPositionShadowPaint: MapPaint = MapPaint.Circle(
+            fillColor = MapColor.Compose(mapColors.userPositionShadow),
+            radius = MapDimension.Static.Screen(dp = 9)
         )
 
         val oldTakenRoutePaint: MapPaint = MapPaint.Stroke(
