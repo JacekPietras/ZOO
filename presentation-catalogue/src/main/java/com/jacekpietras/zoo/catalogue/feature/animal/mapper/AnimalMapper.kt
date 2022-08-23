@@ -67,9 +67,9 @@ internal class AnimalMapper {
             with(ComposeColors(mapColors)) {
                 flatListOf(
                     fromPaths(roads, roadPaint),
-                    fromPaths(pathsToAnimal, pathPaint),
                     fromPolygons(buildings, buildingPaint),
                     fromPolygons(aviary, aviaryPaint),
+                    fromPaths(pathsToAnimal, pathPaint),
                     fromPoints(state.animalPositions, positionsPaint),
                 )
             },
@@ -220,10 +220,9 @@ internal class AnimalMapper {
             strokeColor = MapColor.Compose(mapColors.colorSmallMapRoad),
             width = MapDimension.Dynamic.World(2.0),
         )
-        val pathPaint: MapPaint = MapPaint.DashedStroke(
+        val pathPaint: MapPaint = MapPaint.Stroke(
             strokeColor = MapColor.Compose(mapColors.colorSmallMapAnimal),
             width = MapDimension.Dynamic.World(4.0),
-            pattern = MapDimension.Static.Screen(dp = 4),
         )
         val positionsPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Compose(mapColors.colorSmallMapAnimal),

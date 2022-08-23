@@ -131,7 +131,8 @@ internal class MapViewStateMapper {
                         fromPaths(visitedRoads, visitedRoadsPaint),
                         fromPaths(takenRoute, takenRoutePaint),
                         if (shortestPath.isNotEmpty()) {
-                            fromPath(shortestPath, shortestPathPaint)
+                            fromPath(shortestPath, shortestPathPaint) +
+                                    fromPoint(navigationPlan.stops.last(), snappedPointPaint)
                         } else {
                             fromPath(navigationPlan.points, shortestPathPaint) +
                                     fromPoints(navigationPlan.stops, snappedPointPaint) +
@@ -375,8 +376,8 @@ internal class MapViewStateMapper {
             width = MapDimension.Static.Screen(4),
         )
         val snappedPointPaint: MapPaint = MapPaint.Circle(
-            fillColor = MapColor.Hard(Color.RED),
-            radius = MapDimension.Static.Screen(dp = 4)
+            fillColor = MapColor.Compose(mapColors.colorAccent),
+            radius = MapDimension.Static.Screen(dp = 6)
         )
         val userPositionPaint: MapPaint = MapPaint.Circle(
             fillColor = MapColor.Compose(mapColors.colorAccent),
