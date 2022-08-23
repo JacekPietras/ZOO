@@ -348,21 +348,15 @@ internal class MapViewModel(
     }
 
     fun onCloseClicked() {
-        state.reduce {
-            copy(
-                isToolbarOpened = false,
-            )
-        }
-        volatileState.reduce {
-            copy(
-                snappedPoint = null,
-                shortestPath = emptyList(),
-            )
-        }
+        closeToolbar()
     }
 
     fun onBackClicked(router: MapRouter) {
-        router.goBack()
+        if (state.value.isToolbarOpened) {
+            closeToolbar()
+        } else {
+            router.goBack()
+        }
     }
 
     fun onMapActionClicked(mapAction: MapAction) {

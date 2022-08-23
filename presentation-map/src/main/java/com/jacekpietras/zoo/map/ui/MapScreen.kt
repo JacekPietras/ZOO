@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,6 +44,7 @@ fun MapScreen(
     }
 
     OnPauseListener { viewModel.onStopEvent() }
+    BackHandler { viewModel.onBackClicked(router) }
 
     val viewState by viewModel.viewState.collectAsState(null)
     val mapList by viewModel.mapList.collectAsState(initial = emptyList())
