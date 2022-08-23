@@ -276,13 +276,14 @@ internal class MapViewModel(
         volatileState.reduce { copy(snappedPoint = point) }
 
         launchInBackground {
-            val regionsAndAnimals = async {
+            val regionsAndAnimalsJob = async {
                 getRegionsContainingPointUseCase.run(point)
                     .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
             }
             val shortestPath = async { getShortestPathUseCase.run(point) }
 
-            if (regionsAndAnimals.await().isEmpty()) {
+            val regionsAndAnimals = regionsAndAnimalsJob.await()
+            if (regionsAndAnimals.isEmpty() || regionsAndAnimals.none(::canNavigateToIt)) {
                 state.reduce {
                     copy(isToolbarOpened = false)
                 }
@@ -295,7 +296,7 @@ internal class MapViewModel(
             } else {
                 state.reduce {
                     copy(
-                        toolbarMode = SelectedRegionMode(regionsAndAnimals.await()),
+                        toolbarMode = SelectedRegionMode(regionsAndAnimals),
                         isToolbarOpened = true,
                     )
                 }
@@ -525,5 +526,16 @@ internal class MapViewModel(
 
     fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
         mapLogic.onTransform(cX, cY, scale, rotate, vX, vY)
+    }
+
+    private fun canNavigateToIt( regionWithAnimals : Pair<Region, List<AnimalEntity>>): Boolean {
+        val (region, animals) = regionWithAnimals
+
+        return when (region) {
+            is Region.AnimalRegion -> animals.isNotEmpty()
+            is Region.WcRegion -> true
+            is Region.ExitRegion -> true
+            is Region.RestaurantRegion -> true
+        }
     }
 }

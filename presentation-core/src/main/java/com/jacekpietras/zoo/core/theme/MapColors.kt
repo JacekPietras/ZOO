@@ -14,8 +14,8 @@ class MapColors(
     val colorPrimary = Palette.primary onNight Palette.primaryDark
     val colorAccent = Color(0xFFEF6C00) onNight Color(0xFFD84315)
 
-    val colorMapGrass = secondarySurface onNight Color(0xFF1A2E1A)
-    val colorMapForest = Color(0xFF9CC49E) onNight Color(0xFF011F03)
+    val colorMapGrass = secondarySurface onNight Color(0xFF152016)
+    val colorMapForest = Color(0xFF9CC49E) onNight Color(0xFF1A2E1A)
     val colorMapWater = Color(0xFF84cdc9) onNight Color(0xFF114946)
 
     val colorMapBuilding = Color(0xFFCAD4DA) onNight Color(0xFF2f3a47)
