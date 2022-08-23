@@ -280,28 +280,33 @@ internal class MapViewModel(
                 getRegionsContainingPointUseCase.run(point)
                     .map { region -> region to getAnimalsInRegionUseCase.run(region.id) }
             }
-            val shortestPath = async { getShortestPathUseCase.run(point) }
+            val shortestPathJob = async { getShortestPathUseCase.run(point) }
 
             val regionsAndAnimals = regionsAndAnimalsJob.await()
             if (regionsAndAnimals.isEmpty() || regionsAndAnimals.none(::canNavigateToIt)) {
-                state.reduce {
-                    copy(isToolbarOpened = false)
-                }
-                volatileState.reduce {
-                    copy(
-                        snappedPoint = null,
-                        shortestPath = emptyList()
-                    )
-                }
+                closeToolbar()
             } else {
+                val shortestPath = shortestPathJob.await()
                 state.reduce {
                     copy(
                         toolbarMode = SelectedRegionMode(regionsAndAnimals),
                         isToolbarOpened = true,
                     )
                 }
-                volatileState.reduce { copy(shortestPath = shortestPath.await()) }
+                volatileState.reduce { copy(shortestPath = shortestPath) }
             }
+        }
+    }
+
+    private fun closeToolbar() {
+        state.reduce {
+            copy(isToolbarOpened = false)
+        }
+        volatileState.reduce {
+            copy(
+                snappedPoint = null,
+                shortestPath = emptyList()
+            )
         }
     }
 
@@ -402,31 +407,39 @@ internal class MapViewModel(
         onMain {
             if (nearWithDistance != null) {
                 val (path, distance) = nearWithDistance
-                state.reduce {
-                    copy(
-                        toolbarMode = NavigableMapActionMode(
-                            mapAction = mapAction,
-                            path = path,
-                            distance = distance,
-                        ),
-                        isToolbarOpened = true,
-                    )
-                }
-                volatileState.reduce {
-                    copy(
-                        snappedPoint = path.last(),
-                        shortestPath = path,
-                    )
+                if (path.size > 1) {
+                    state.reduce {
+                        copy(
+                            toolbarMode = NavigableMapActionMode(
+                                mapAction = mapAction,
+                                path = path,
+                                distance = distance,
+                            ),
+                            isToolbarOpened = true,
+                        )
+                    }
+                    volatileState.reduce {
+                        copy(
+                            snappedPoint = path.last(),
+                            shortestPath = path,
+                        )
+                    }
+                } else {
+                    closeToolbarOnUnAccessibleMapAction(mapAction)
                 }
             } else {
-                state.reduce {
-                    copy(
-                        isToolbarOpened = false,
-                    )
-                }
-                sendEffect(ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
+                closeToolbarOnUnAccessibleMapAction(mapAction)
             }
         }
+    }
+
+    private fun closeToolbarOnUnAccessibleMapAction(mapAction: MapAction) {
+        state.reduce {
+            copy(
+                isToolbarOpened = false,
+            )
+        }
+        sendEffect(ShowToast(RichText.Res(R.string.cannot_find_near, RichText(mapAction.title))))
     }
 
     private suspend inline fun <reified T> findNearRegionWithDistance(): Pair<List<PointD>, Double>? =
@@ -528,7 +541,7 @@ internal class MapViewModel(
         mapLogic.onTransform(cX, cY, scale, rotate, vX, vY)
     }
 
-    private fun canNavigateToIt( regionWithAnimals : Pair<Region, List<AnimalEntity>>): Boolean {
+    private fun canNavigateToIt(regionWithAnimals: Pair<Region, List<AnimalEntity>>): Boolean {
         val (region, animals) = regionWithAnimals
 
         return when (region) {
