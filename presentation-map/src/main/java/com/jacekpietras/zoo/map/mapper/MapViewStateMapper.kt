@@ -139,7 +139,7 @@ internal class MapViewStateMapper {
                                     fromPolygons(navigationPlan.firstTurnArrowOuter.map(::PolygonEntity), turnArrowOuterPaint, ZOOM_MEDIUM) +
                                     fromPolygons(navigationPlan.firstTurnArrowInner.map(::PolygonEntity), turnArrowInnerPaint, ZOOM_MEDIUM)
                         },
-                        fromPoint(userPosition, userPositionRadiusPaint(mapColors, userPositionAccuracy * 2)),
+                        fromPoint(userPosition, userPositionRadiusPaint(mapColors, userPositionAccuracy)),
                         fromPoint(userPosition, userPositionPaint),
                     ).toImmutableList(),
                 )
