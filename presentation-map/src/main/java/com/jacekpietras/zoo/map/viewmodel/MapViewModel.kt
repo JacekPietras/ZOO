@@ -328,7 +328,7 @@ internal class MapViewModel(
         router.navigateToCamera()
     }
 
-    fun onRegionClicked(router: MapRouter, regionId: RegionId) {
+    fun onRegionClicked(router: MapRouter, permissionChecker: GpsPermissionRequester, regionId: RegionId) {
         launchInBackground {
             val (region, _) = getRegionUseCase.run(regionId)
             if (region is Region.AnimalRegion) {
@@ -336,7 +336,13 @@ internal class MapViewModel(
                     router.navigateToAnimalList(regionId)
                 }
             } else {
-                startNavigationToRegion(region)
+                permissionChecker.checkPermissions(
+                    onDenied = { onLocationDenied() },
+                    onGranted = {
+                        startNavigationUseCase.run()
+                        startNavigationToRegion(region)
+                    },
+                )
             }
         }
     }
@@ -379,15 +385,17 @@ internal class MapViewModel(
         }
     }
 
-    private suspend fun startNavigationToRegion(region: Region) {
-        val mapAction = when (region) {
-            is Region.RestaurantRegion -> MapAction.RESTAURANT
-            is Region.ExitRegion -> MapAction.EXIT
-            is Region.WcRegion -> MapAction.WC
-            else -> throw IllegalStateException("Don't expect navigation to $region")
+    private fun startNavigationToRegion(region: Region) {
+        launchInBackground {
+            val mapAction = when (region) {
+                is Region.RestaurantRegion -> MapAction.RESTAURANT
+                is Region.ExitRegion -> MapAction.EXIT
+                is Region.WcRegion -> MapAction.WC
+                else -> throw IllegalStateException("Don't expect navigation to $region")
+            }
+            val nearWithDistance = findNearRegionWithDistance.run { it == region }
+            startNavigationToActionWithPath(mapAction, nearWithDistance)
         }
-        val nearWithDistance = findNearRegionWithDistance.run { it == region }
-        startNavigationToActionWithPath(mapAction, nearWithDistance)
     }
 
     private suspend fun startNavigationToNearestRegion(mapAction: MapAction) {

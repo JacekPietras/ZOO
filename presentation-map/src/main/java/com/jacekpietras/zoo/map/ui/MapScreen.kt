@@ -54,7 +54,7 @@ fun MapScreen(
         onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },
         onCameraClicked = { viewModel.onCameraButtonClicked(router) },
         onAnimalClicked = { viewModel.onAnimalClicked(router, it) },
-        onRegionClicked = { viewModel.onRegionClicked(router, it) },
+        onRegionClicked = { viewModel.onRegionClicked(router, permissionChecker, it) },
         onSizeChanged = viewModel::onSizeChanged,
         onClick = viewModel::onClick,
         onTransform = viewModel::onTransform,
