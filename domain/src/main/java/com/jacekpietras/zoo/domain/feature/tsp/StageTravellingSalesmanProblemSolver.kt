@@ -19,12 +19,14 @@ internal class StageTravellingSalesmanProblemSolver(
 
     suspend fun findShortPathAndStages(
         stages: List<Stage>,
-    ): Pair<List<Stage>, List<PointD>> {
+    ): Triple<List<Stage>, List<PointD>, List<PointD>> {
         val pointCalculationCache = PointCalculationCache()
 
         val resultStages = findShortStages(stages, pointCalculationCache)
+        val pathParts = resultStages.makePath(pointCalculationCache)
+        val stops = pathParts.map { it.last() }
 
-        return Pair(resultStages, resultStages.makePath(pointCalculationCache))
+        return Triple(resultStages, stops, pathParts.flatten())
     }
 
     private suspend fun findShortStages(
@@ -62,7 +64,7 @@ internal class StageTravellingSalesmanProblemSolver(
 
     private suspend fun List<Stage>.makePath(pointCalculationCache: PointCalculationCache) =
         zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).path }
-            .flatten()
+
 
     suspend fun getDistance(prev: Stage, next: Stage): Double =
         calculate(prev, next, PointCalculationCache()).distance

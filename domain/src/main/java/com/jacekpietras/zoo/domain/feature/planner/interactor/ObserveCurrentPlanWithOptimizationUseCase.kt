@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ObserveCurrentPlanWithOptimizationUseCase {
 
-    fun run(): Flow<Pair<List<Stage>, List<PointD>>>
+    fun run(): Flow<Triple<List<Stage>, List<PointD>, List<PointD>>>
 }

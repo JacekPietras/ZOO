@@ -134,6 +134,7 @@ internal class MapViewStateMapper {
                             fromPath(shortestPath, shortestPathPaint)
                         } else {
                             fromPath(navigationPlan.points, shortestPathPaint) +
+                                    fromPoints(navigationPlan.stops, snappedPointPaint) +
                                     fromPolygons(navigationPlan.firstTurnArrowOuter.map(::PolygonEntity), turnArrowOuterPaint, ZOOM_MEDIUM) +
                                     fromPolygons(navigationPlan.firstTurnArrowInner.map(::PolygonEntity), turnArrowInnerPaint, ZOOM_MEDIUM)
                         },

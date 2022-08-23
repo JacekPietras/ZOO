@@ -27,10 +27,11 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         combine(
             observeCurrentPlanWithOptimizationUseCase.run(),
             observeTerminalNodesUseCase.run()
-        ) { pair, nodes ->
-            val (stages, points) = pair
+        ) { triple, nodes ->
+            val (stages, stops, points) = triple
             var plan = NavigationPlan(
                 points = points,
+                stops = stops,
                 stages = stages,
             )
 
@@ -271,6 +272,7 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
 
     data class NavigationPlan(
         val points: List<PointD> = emptyList(),
+        val stops: List<PointD> = emptyList(),
         val firstTurn: List<PointD> = emptyList(),
         val firstTurnArrowInner: List<List<PointD>> = emptyList(),
         val firstTurnArrowOuter: List<List<PointD>> = emptyList(),

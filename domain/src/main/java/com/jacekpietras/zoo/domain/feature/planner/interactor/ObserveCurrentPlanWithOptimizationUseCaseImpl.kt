@@ -32,7 +32,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
 ) : ObserveCurrentPlanWithOptimizationUseCase {
 
-    override fun run(): Flow<Pair<List<Stage>, List<PointD>>> =
+    override fun run(): Flow<Triple<List<Stage>, List<PointD>, List<PointD>>> =
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
@@ -50,7 +50,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .pushAndDo(
                         fast = { plan, collector ->
                             @Suppress("RemoveExplicitTypeArguments")
-                            collector.emit(plan.stages to emptyList<PointD>())
+                            collector.emit(Triple(plan.stages, emptyList<PointD>(), emptyList<PointD>()))
                         },
                         long = { plan, collector ->
                             measureMap({ Timber.d("Optimization took $it") }) {
@@ -58,7 +58,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                                 coroutineScope {
                                     val findingJob = launch(Dispatchers.Default) {
                                         val result = tspSolver.findShortPathAndStages(notSeen)
-                                            .let { (resultStages, path) -> (seen + resultStages) to path }
+                                            .let { (resultStages, stops, path) -> Triple((seen + resultStages), stops, path) }
                                         val (resultStages, _) = result
                                         job.save(null)
                                         collector.emit(result)
