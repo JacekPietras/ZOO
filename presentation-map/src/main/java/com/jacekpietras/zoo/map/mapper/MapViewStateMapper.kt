@@ -132,7 +132,7 @@ internal class MapViewStateMapper {
                         fromPaths(takenRoute, takenRoutePaint),
                         if (shortestPath.isNotEmpty()) {
                             fromPath(shortestPath, shortestPathPaint) +
-                                    fromPoint(navigationPlan.stops.last(), snappedPointPaint)
+                                    fromPoint(shortestPath.last(), snappedPointPaint)
                         } else {
                             fromPath(navigationPlan.points, shortestPathPaint) +
                                     fromPoints(navigationPlan.stops, snappedPointPaint) +
@@ -140,7 +140,6 @@ internal class MapViewStateMapper {
                                     fromPolygons(navigationPlan.firstTurnArrowInner.map(::PolygonEntity), turnArrowInnerPaint, ZOOM_MEDIUM)
                         },
                         fromPoint(userPosition, userPositionPaint),
-                        fromPoint(snappedPoint, snappedPointPaint),
                     ).toImmutableList(),
                 )
             }
