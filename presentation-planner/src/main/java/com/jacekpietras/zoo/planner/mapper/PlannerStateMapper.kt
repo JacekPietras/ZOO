@@ -58,6 +58,10 @@ internal class PlannerStateMapper {
             ?.addHeader()
             ?.addFooter(suggestedItems.isNotEmpty())
 
+        if (list?.map(PlannerItem::key)?.hasDuplicates() == true) {
+            throw IllegalStateException("Duplicates found in ${list.map(PlannerItem::key)}")
+        }
+
         return PlannerViewState(
             list = list ?: emptyList(),
             suggestedItems = suggestedItems,
@@ -91,4 +95,7 @@ internal class PlannerStateMapper {
                 }
             }
         }
+
+    private fun List<String>.hasDuplicates(): Boolean =
+        size != distinct().count()
 }
