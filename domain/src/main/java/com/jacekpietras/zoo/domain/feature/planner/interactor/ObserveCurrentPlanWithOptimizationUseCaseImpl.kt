@@ -22,7 +22,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
@@ -93,9 +95,12 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         combine(tickerFlow(period)) { it, _ -> it }
 
     private fun tickerFlow(period: Long) = flow {
-        while (true) {
-            emit(Unit)
+        withContext(Dispatchers.Default) {
             delay(period)
+            while (isActive) {
+                emit(Unit)
+                delay(period)
+            }
         }
     }
 

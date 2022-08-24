@@ -34,7 +34,7 @@ class MapColors(
     val colorMapTechnical = Color(0xFFFFF0F0) onNight Color(0xFF866666)
 
     val colorSmallMapBackground = colorMapForest
-    val colorSmallMapBuilding = colorMapBuilding // Color(0xFF768A7E) onNight Color(0xFF768A7E)
+    val colorSmallMapBuilding = colorMapBuilding onNight colorMapAviary // Color(0xFF768A7E) onNight Color(0xFF768A7E)
     val colorSmallMapRoad = colorMapRoad // Palette.white
     val colorSmallMapAnimal = colorMapNavigation // Color(0xFFF44336) onNight Color(0xFFF44336)
 
