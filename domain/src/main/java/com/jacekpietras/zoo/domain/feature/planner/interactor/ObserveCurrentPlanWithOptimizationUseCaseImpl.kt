@@ -13,6 +13,7 @@ import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
@@ -95,12 +95,9 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         combine(tickerFlow(period)) { it, _ -> it }
 
     private fun tickerFlow(period: Long) = flow {
-        withContext(Dispatchers.Default) {
+        while (currentCoroutineContext().isActive) {
+            emit(Unit)
             delay(period)
-            while (isActive) {
-                emit(Unit)
-                delay(period)
-            }
         }
     }
 
