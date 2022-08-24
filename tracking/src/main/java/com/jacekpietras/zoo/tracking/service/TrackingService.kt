@@ -63,7 +63,7 @@ class TrackingService : LifecycleService() {
             channelId = NORMAL_NOTIFICATION_CHANNEL,
             titleRes = R.string.location_service_notification_title,
             descriptionRes = R.string.location_service_notification_description,
-            smallIconRes = R.drawable.ic_my_location_24,
+            smallIconRes = R.drawable.tracking_ic_my_location_24,
             actionRes = R.string.location_service_stop_text,
             actionBroadcast = ACTION_STOP_SERVICE,
         )

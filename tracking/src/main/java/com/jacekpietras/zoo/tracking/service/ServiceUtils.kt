@@ -1,6 +1,11 @@
 package com.jacekpietras.zoo.tracking.service
 
-import android.app.*
+import android.app.ActivityManager
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
