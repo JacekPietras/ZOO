@@ -221,7 +221,7 @@ private fun AnimalDivisionValue?.getIcon(): Int =
         AnimalDivisionValue.REPTILE -> R.drawable.ic_animal_snake_24
         AnimalDivisionValue.FISH -> R.drawable.ic_animal_fish_24
         AnimalDivisionValue.ARTHROPOD -> R.drawable.ic_animal_spider_24
-        AnimalDivisionValue.MOLLUSCA -> R.drawable.ic_animal_snail_24
+        AnimalDivisionValue.MOLLUSK -> R.drawable.ic_animal_snail_24
         null -> R.drawable.ic_close_24
     }
 

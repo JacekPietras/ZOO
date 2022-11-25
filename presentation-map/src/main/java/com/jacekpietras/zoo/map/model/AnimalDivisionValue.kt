@@ -7,5 +7,5 @@ enum class AnimalDivisionValue {
     REPTILE,
     FISH,
     ARTHROPOD,
-    MOLLUSCA,
+    MOLLUSK,
 }
