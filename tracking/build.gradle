@@ -23,4 +23,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_extensions_version"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+
+    // for compose permissions
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
 }

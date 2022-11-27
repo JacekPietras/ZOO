@@ -52,19 +52,46 @@ class GpsPermissionRequesterLogic(
     }
 
     private fun checkPermissionsAgain() {
+        checkForParticularPermissions(
+            permissions = neededPermissions,
+            onGranted = {
+                checkForParticularPermissions(
+                    permissions = bonusPermissions,
+                    onGranted = { enableGPS() },
+                    onDenied = { enableGPS() },
+                )
+            },
+            onDenied = { callbacks.onFailed() },
+        )
+    }
+
+    private fun checkForParticularPermissions(
+        permissions: List<String>,
+        onGranted: () -> Unit,
+        onDenied: () -> Unit,
+    ) {
         when {
-            allPermissionsAreGranted() -> {
-                allPermissions.forEach(::removeAsDeniedForever)
-                enableGPS()
+            permissions.isEmpty() -> {
+                onGranted()
             }
-            notGrantedNeededPermissions.firstOrNull(::shouldShowRationale) != null -> {
-                showRationale()
+            permissionChecker.hasPermissions(permissions) -> {
+                permissions.forEach(::removeAsDeniedForever)
+                onGranted()
             }
-            notGrantedNeededPermissions.firstOrNull(::shouldShowDeniedForever) != null -> {
-                showDenied()
+            permissions.filterNot(::isGranted).firstOrNull(::shouldShowRationale) != null -> {
+                showRationale(
+                    onGranted = { askForPermissions(permissions) },
+                    onDenied = onDenied,
+                )
+            }
+            permissions.filterNot(::isGranted).firstOrNull(::shouldShowDeniedForever) != null -> {
+                showDenied(
+                    onGranted = { checkPermissionsAgain() },
+                    onDenied = onDenied,
+                )
             }
             else -> {
-                askForPermissions()
+                askForPermissions(permissions)
             }
         }
     }
@@ -90,28 +117,28 @@ class GpsPermissionRequesterLogic(
     private fun shouldShowDeniedForever(permission: String): Boolean =
         isDeniedForever(permission)
 
-    private fun askForPermissions() {
+    private fun askForPermissions(permissions: List<String>) {
         timeOfRequest = System.currentTimeMillis()
-        callbacks.permissionRequest(notGrantedAllPermissions)
+        callbacks.permissionRequest(permissions.filterNot(::isGranted))
     }
 
-    private fun showRationale() {
+    private fun showRationale(onGranted: () -> Unit, onDenied: () -> Unit) {
         AlertDialog.Builder(activity)
             .setTitle(activity.getString(R.string.gps_permission_rationale_title))
             .setMessage(activity.getString(R.string.gps_permission_rationale_content))
             .setPositiveButton(activity.getString(android.R.string.ok)) { dialog, _ ->
-                askForPermissions()
+                onGranted()
                 dialog.dismiss()
             }
             .setNegativeButton(activity.getString(android.R.string.cancel)) { dialog, _ ->
-                callbacks.onFailed()
+                onDenied()
                 dialog.dismiss()
             }
             .create()
             .show()
     }
 
-    private fun showDenied() {
+    private fun showDenied(onGranted: () -> Unit, onDenied: () -> Unit) {
         AlertDialog.Builder(activity)
             .setTitle(activity.getString(R.string.gps_permission_denied_title))
             .setMessage(activity.getString(R.string.gps_permission_denied_content))
@@ -119,41 +146,31 @@ class GpsPermissionRequesterLogic(
                 dialog.dismiss()
                 try {
                     activity.startActivity(activity.getApplicationSettingsIntent())
-                    lifecycleOwner.observeReturn { checkPermissionsAgain() }
+                    lifecycleOwner.observeReturn { onGranted() }
                 } catch (e: ActivityNotFoundException) {
                     Timber.w(e, "Asking permissions - Cannot open settings")
-                    showDeniedWithoutCondition()
+                    showDeniedWithoutCondition(onDenied = onDenied)
                 }
             }
             .setNegativeButton(activity.getString(android.R.string.cancel)) { dialog, _ ->
-                callbacks.onFailed()
+                onDenied()
                 dialog.dismiss()
             }
             .create()
             .show()
     }
 
-    private fun showDeniedWithoutCondition() {
+    private fun showDeniedWithoutCondition(onDenied: () -> Unit) {
         AlertDialog.Builder(activity)
             .setTitle(activity.getString(R.string.gps_permission_denied_title))
             .setMessage(activity.getString(R.string.gps_permission_cannot_open_settings_content))
             .setPositiveButton(activity.getString(android.R.string.ok)) { dialog, _ ->
-                callbacks.onFailed()
+                onDenied()
                 dialog.dismiss()
             }
             .create()
             .show()
     }
-
-
-    private fun allPermissionsAreGranted(): Boolean =
-        permissionChecker.hasPermissions(neededPermissions)
-
-    private val notGrantedNeededPermissions: List<String>
-        get() = neededPermissions.filterNot(::isGranted)
-
-    private val notGrantedAllPermissions: List<String>
-        get() = allPermissions.filterNot(::isGranted)
 
     private fun isGranted(permission: String): Boolean =
         permissionChecker.hasPermissions(listOf(permission))
@@ -217,15 +234,12 @@ class GpsPermissionRequesterLogic(
     )
 
     private companion object {
-
-        val allPermissions = listOfNotNull(
-            ACCESS_FINE_LOCATION,
-            ACCESS_COARSE_LOCATION,
-            if (SDK_INT >= VERSION_CODES.Q) ACCESS_BACKGROUND_LOCATION else null
-        )
         val neededPermissions = listOfNotNull(
             ACCESS_FINE_LOCATION,
             ACCESS_COARSE_LOCATION,
+        )
+        val bonusPermissions = listOfNotNull(
+            if (SDK_INT >= VERSION_CODES.Q) ACCESS_BACKGROUND_LOCATION else null
         )
         const val GPS_DENIED_FOREVER_KEY = "GPS_DENIED_FOREVER_KEY"
     }

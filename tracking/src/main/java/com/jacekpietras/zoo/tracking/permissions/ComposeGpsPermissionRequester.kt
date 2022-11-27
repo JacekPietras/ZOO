@@ -2,7 +2,6 @@ package com.jacekpietras.zoo.tracking.permissions
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.compose.runtime.Composable
@@ -22,6 +21,7 @@ fun rememberGpsPermissionRequesterState(): GpsPermissionRequester {
             lifecycleOwner = lifecycleOwner,
         )
     }
+    
     val permissionResult = rememberLauncherForActivityResult(RequestMultiplePermissions(), logic::onPermissionsRequested)
     val enableGpsRequest = rememberLauncherForActivityResult(StartIntentSenderForResult(), logic::onEnablingGpsRequested)
 
