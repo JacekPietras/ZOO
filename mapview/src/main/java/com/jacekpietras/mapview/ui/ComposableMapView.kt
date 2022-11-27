@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.ui
 
+import android.text.format.DateUtils.SECOND_IN_MILLIS
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -9,7 +10,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -22,12 +25,15 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.jacekpietras.mapview.BuildConfig
+import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderBitmapItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderIconItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
+import com.jacekpietras.mapview.ui.LastMapUpdate.lastUpdate
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
+import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
+import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import timber.log.Timber
 
 @Composable
@@ -36,9 +42,10 @@ fun ComposableMapView(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
+    mapList: List<RenderItem<ComposablePaint>>,
 ) {
     val (icons, canvasItems) = mapList.partition { it is RenderIconItem || it is RenderBitmapItem }
+    val before = System.currentTimeMillis()
 
     Box {
         Canvas(
@@ -69,7 +76,21 @@ fun ComposableMapView(
                 else -> Unit
             }
         }
+        val fps = SECOND_IN_MILLIS / (System.currentTimeMillis() - lastUpdate)
+
+        if (fps in (0..200) && BuildConfig.DEBUG) {
+            Text(
+                text = "FPS: $fps",
+                modifier = Modifier.align(Alignment.BottomStart),
+            )
+        }
+        lastUpdate = System.currentTimeMillis()
     }
+    Timber.d("Perf: draw ${System.currentTimeMillis() - before} ms")
+}
+
+object LastMapUpdate {
+    var lastUpdate: Long = 0L
 }
 
 @Composable

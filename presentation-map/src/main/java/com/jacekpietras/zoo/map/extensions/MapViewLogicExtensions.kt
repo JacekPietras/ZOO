@@ -1,19 +1,21 @@
 package com.jacekpietras.zoo.map.extensions
 
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.mapview.logic.MapViewLogic
+import com.jacekpietras.mapview.logic.UserData
+import com.jacekpietras.mapview.logic.WorldData
 import com.jacekpietras.zoo.map.model.MapVolatileViewState
 import com.jacekpietras.zoo.map.model.MapWorldViewState
 
 internal fun MapViewLogic<ComposablePaint>.applyToMap(viewState: MapWorldViewState) {
-    worldData = MapViewLogic.WorldData(
+    worldData = WorldData(
         bounds = viewState.worldBounds,
         objectList = viewState.mapData,
     )
 }
 
 internal fun MapViewLogic<ComposablePaint>.applyToMap(viewState: MapVolatileViewState) {
-    userData = MapViewLogic.UserData(
+    userData = UserData(
         userPosition = viewState.userPosition,
         compass = viewState.compass,
         objectList = viewState.mapData,

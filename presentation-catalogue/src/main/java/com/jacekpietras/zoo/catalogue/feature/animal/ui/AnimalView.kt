@@ -49,7 +49,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposableMapView
-import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
@@ -60,7 +60,7 @@ import com.jacekpietras.zoo.core.ui.shimmerWhen
 @Composable
 internal fun AnimalView(
     viewState: AnimalViewState?,
-    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
+    mapList: List<RenderItem<ComposablePaint>>,
     onWebClicked: () -> Unit,
     onWikiClicked: () -> Unit,
     onNavClicked: () -> Unit,
@@ -146,7 +146,7 @@ private fun NavigationButtons(
 
 @Composable
 private fun MapView(
-    mapList: List<MapViewLogic.RenderItem<ComposablePaint>>,
+    mapList: List<RenderItem<ComposablePaint>>,
     onMapSizeChanged: (Int, Int) -> Unit,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }

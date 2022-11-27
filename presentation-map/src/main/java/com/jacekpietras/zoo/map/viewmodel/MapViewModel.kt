@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
-import com.jacekpietras.mapview.ui.MapViewLogic
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem
+import com.jacekpietras.mapview.logic.MapViewLogic
+import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
@@ -523,9 +523,9 @@ internal class MapViewModel(
     private fun makeComposableMapLogic() = MapViewLogic(
         invalidate = { mapList.value = it },
         paintBaker = paintBaker,
-        setOnPointPlacedListener = { onPointPlaced(it) },
-        onStopCentering = { onStopCentering() },
-        onStartCentering = { onStartCentering() },
+        setOnPointPlacedListener = ::onPointPlaced,
+        onStopCentering = ::onStopCentering,
+        onStartCentering = ::onStartCentering,
     )
 
     private fun centerAtUserPosition() {

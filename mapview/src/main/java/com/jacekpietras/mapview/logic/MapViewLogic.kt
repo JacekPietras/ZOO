@@ -1,26 +1,26 @@
-package com.jacekpietras.mapview.ui
+package com.jacekpietras.mapview.logic
 
-import android.graphics.Bitmap
 import android.graphics.Matrix
-import androidx.annotation.DrawableRes
-import androidx.compose.runtime.Immutable
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
-import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.ViewCoordinates
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPathItem
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
+import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
+import kotlin.system.measureTimeMillis
 
 class MapViewLogic<T>(
     private val doAnimation: ((progress: Float) -> Unit) -> Unit = ::doAnimation,
@@ -41,7 +41,10 @@ class MapViewLogic<T>(
             maxZoom = min(abs(value.bounds.width()), abs(value.bounds.height())) / 1.6
             minZoom = maxZoom / 10
 
-            worldPreparedList = value.objectList.toPreparedItems()
+            val measured = measureTimeMillis {
+                worldPreparedList = value.objectList.toPreparedItems()
+            }
+            Timber.d("Perf: toPreparedItems $measured ms (world)")
 
             cutOutNotVisible()
 
@@ -54,7 +57,10 @@ class MapViewLogic<T>(
         set(value) {
             field = value
 
-            volatilePreparedList = value.objectList.toPreparedItems()
+            val measured = measureTimeMillis {
+                volatilePreparedList = value.objectList.toPreparedItems()
+            }
+            Timber.d("Perf: toPreparedItems $measured ms (user)")
 
             if (centeringAtUser) {
                 centerAtUserPositionAndRotation()
@@ -93,7 +99,7 @@ class MapViewLogic<T>(
         set(value) {
             field = value % 360
         }
-    var renderList: List<RenderItem<T>>? = null
+    var renderList: List<RenderItem<T>> = emptyList()
     private var centeringAtUser = false
         set(value) {
             if (field != value) {
@@ -297,6 +303,12 @@ class MapViewLogic<T>(
         }
     }
 
+    private fun establishViewCoordinates() {
+        do {
+            visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
+        } while (preventedGoingOutsideWorld())
+    }
+
     private fun preventedGoingOutsideWorld(): Boolean {
         val reversedV = worldBounds.top > worldBounds.bottom
         val reversedH = worldBounds.left > worldBounds.right
@@ -378,18 +390,13 @@ class MapViewLogic<T>(
         return result
     }
 
-    private fun cutOutNotVisible(invalidate: Boolean = true) {
+    private fun cutOutNotVisible() {
+        val before = System.currentTimeMillis()
+
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
 
-        visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
-
-        while (preventedGoingOutsideWorld()) {
-            cutOutNotVisible(false)
-        }
-        if (!invalidate) {
-            return
-        }
+        establishViewCoordinates()
 
         renderList = RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
@@ -399,109 +406,10 @@ class MapViewLogic<T>(
             zoom = zoom,
             centerGpsCoordinate = centerGpsCoordinate,
             bakeDimension = paintBaker::bakeDimension,
-        ).translate(worldPreparedList + volatilePreparedList)
+        )
+            .translate(worldPreparedList, volatilePreparedList)
+            .also { invalidate(it) }
 
-        invalidate(renderList!!)
+        Timber.d("Perf: cutOutNotVisible ${System.currentTimeMillis() - before} ms")
     }
-
-    internal sealed class PreparedItem<T>(
-        open val minZoom: Float?,
-    ) {
-
-        internal sealed class PreparedColoredItem<T>(
-            open val paintHolder: PaintHolder<T>,
-            open val outerPaintHolder: PaintHolder<T>?,
-            override val minZoom: Float?,
-        ) : PreparedItem<T>(minZoom) {
-
-            class PreparedPathItem<T>(
-                val shape: DoubleArray,
-                override val paintHolder: PaintHolder<T>,
-                override val outerPaintHolder: PaintHolder<T>? = null,
-                override val minZoom: Float? = null,
-            ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom)
-
-            class PreparedPolygonItem<T>(
-                val shape: DoubleArray,
-                override val paintHolder: PaintHolder<T>,
-                override val outerPaintHolder: PaintHolder<T>? = null,
-                override val minZoom: Float? = null,
-            ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom)
-
-            class PreparedCircleItem<T>(
-                val point: PointD,
-                val radius: MapDimension,
-                override val paintHolder: PaintHolder<T>,
-                override val outerPaintHolder: PaintHolder<T>? = null,
-                override val minZoom: Float? = null,
-            ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom)
-        }
-
-        class PreparedIconItem<T>(
-            val point: PointD,
-            @DrawableRes val icon: Int,
-            override val minZoom: Float? = null,
-        ) : PreparedItem<T>(minZoom)
-
-        class PreparedBitmapItem<T>(
-            val point: PointD,
-            val bitmap: Bitmap,
-            override val minZoom: Float? = null,
-        ) : PreparedItem<T>(minZoom)
-    }
-
-    sealed class RenderItem<T> {
-
-        @Immutable
-        class RenderPathItem<T>(
-            val shape: FloatArray,
-            val paint: T,
-        ) : RenderItem<T>()
-
-        @Immutable
-        class RenderPolygonItem<T>(
-            val shape: FloatArray,
-            val paint: T,
-        ) : RenderItem<T>()
-
-        sealed class PointItem<T>(
-            open val cX: Float,
-            open val cY: Float,
-        ) : RenderItem<T>() {
-
-            @Immutable
-            class RenderCircleItem<T>(
-                override val cX: Float,
-                override val cY: Float,
-                val radius: Float,
-                val paint: T,
-            ) : PointItem<T>(cX, cY)
-
-            @Immutable
-            class RenderIconItem<T>(
-                override val cX: Float,
-                override val cY: Float,
-                @DrawableRes val iconRes: Int,
-                val iconSize: Int = 24,
-            ) : PointItem<T>(cX, cY)
-
-            @Immutable
-            class RenderBitmapItem<T>(
-                override val cX: Float,
-                override val cY: Float,
-                val bitmap: Bitmap,
-            ) : PointItem<T>(cX, cY)
-        }
-    }
-
-    class WorldData(
-        val bounds: RectD = RectD(),
-        val objectList: List<MapItem> = emptyList(),
-    )
-
-    class UserData(
-        var userPosition: PointD? = null,
-        var compass: Float = 0f,
-        var objectList: List<MapItem> = emptyList(),
-    )
 }

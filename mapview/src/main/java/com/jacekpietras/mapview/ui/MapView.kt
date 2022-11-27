@@ -4,11 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderBitmapItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.PointItem.RenderIconItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPathItem
-import com.jacekpietras.mapview.ui.MapViewLogic.RenderItem.RenderPolygonItem
+import com.jacekpietras.mapview.logic.MapViewLogic
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
+import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
+import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.utils.drawPath
 
 class MapView @JvmOverloads constructor(
@@ -52,7 +53,7 @@ class MapView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        logic.renderList?.forEach {
+        logic.renderList.forEach {
             when (it) {
                 is RenderPathItem -> canvas.drawPath(it.shape, it.paint, false)
                 is RenderPolygonItem -> canvas.drawPath(it.shape, it.paint, true)

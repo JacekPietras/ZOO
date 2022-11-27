@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.ComposablePaintBaker
-import com.jacekpietras.mapview.ui.MapViewLogic
+import com.jacekpietras.mapview.logic.MapViewLogic
+import com.jacekpietras.mapview.logic.WorldData
+import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.extensions.combine
 import com.jacekpietras.zoo.catalogue.extensions.combineWithIgnoredFlow
@@ -88,7 +90,7 @@ internal class AnimalViewModel(
 
     private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
 
-    val mapList = MutableStateFlow<List<MapViewLogic.RenderItem<ComposablePaint>>>(emptyList())
+    val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
 
     init {
         launchInBackground {
@@ -193,7 +195,7 @@ internal class AnimalViewModel(
     private fun MapViewLogic<ComposablePaint>.updateMap(viewState: AnimalViewState?) {
         if (viewState == null) return
 
-        worldData = MapViewLogic.WorldData(
+        worldData = WorldData(
             bounds = viewState.worldBounds,
             objectList = viewState.mapData,
         )

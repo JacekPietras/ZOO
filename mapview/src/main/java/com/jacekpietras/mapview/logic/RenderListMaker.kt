@@ -1,15 +1,16 @@
-package com.jacekpietras.mapview.ui
+package com.jacekpietras.mapview.logic
 
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedIconItem
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
+import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedBitmapItem
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedCircleItem
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPathItem
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
-import com.jacekpietras.mapview.ui.MapViewLogic.PreparedItem.PreparedIconItem
 
 internal class RenderListMaker<T>(
     private val visibleGpsCoordinate: ViewCoordinates,
@@ -21,9 +22,9 @@ internal class RenderListMaker<T>(
     private val bakeDimension: (MapDimension) -> ((Double, PointD, Int) -> Float),
 ) {
 
-    private val borders = mutableListOf<MapViewLogic.RenderItem<T>>()
-    private val insides = mutableListOf<MapViewLogic.RenderItem<T>>()
-    private val icons = mutableListOf<MapViewLogic.RenderItem.PointItem<T>>()
+    private val borders = mutableListOf<RenderItem<T>>()
+    private val insides = mutableListOf<RenderItem<T>>()
+    private val icons = mutableListOf<RenderItem.PointItem<T>>()
     private val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
     private val dynamicDimensions = mutableMapOf<MapDimension, Float>()
     private val matrix = Matrix()
@@ -35,11 +36,18 @@ internal class RenderListMaker<T>(
             )
         }
 
-    fun translate(preparedList: List<MapViewLogic.PreparedItem<T>>): List<MapViewLogic.RenderItem<T>> {
+    fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
         borders.clear()
         insides.clear()
         icons.clear()
 
+        preparedLists.forEach(::addToRenderItems)
+        icons.sortBy { it.cY }
+
+        return borders + insides + icons
+    }
+
+    private fun addToRenderItems(preparedList: List<PreparedItem<T>>) {
         preparedList.forEach { item ->
             if (!item.minZoom.isBiggerThanZoom()) {
                 return@forEach
@@ -88,8 +96,6 @@ internal class RenderListMaker<T>(
                 }
             }
         }
-
-        return borders + insides + icons.sortedBy { it.cY }
     }
 
     private fun Float?.isBiggerThanZoom(): Boolean =
@@ -106,14 +112,14 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         insides.add(
-            MapViewLogic.RenderItem.RenderPolygonItem(
+            RenderItem.RenderPolygonItem(
                 array,
                 paintHolder.takePaint(),
             )
         )
         if (outerPaintHolder != null) {
             borders.add(
-                MapViewLogic.RenderItem.RenderPolygonItem(
+                RenderItem.RenderPolygonItem(
                     array,
                     outerPaintHolder.takePaint(),
                 )
@@ -125,14 +131,14 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         insides.add(
-            MapViewLogic.RenderItem.RenderPathItem(
+            RenderItem.RenderPathItem(
                 array,
                 paintHolder.takePaint(),
             )
         )
         if (outerPaintHolder != null) {
             borders.add(
-                MapViewLogic.RenderItem.RenderPathItem(
+                RenderItem.RenderPathItem(
                     array,
                     outerPaintHolder.takePaint(),
                 )
@@ -144,7 +150,7 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         insides.add(
-            MapViewLogic.RenderItem.PointItem.RenderCircleItem(
+            RenderItem.PointItem.RenderCircleItem(
                 array[0],
                 array[1],
                 radius.takeDimension(),
@@ -153,7 +159,7 @@ internal class RenderListMaker<T>(
         )
         if (outerPaintHolder != null) {
             borders.add(
-                MapViewLogic.RenderItem.PointItem.RenderCircleItem(
+                RenderItem.PointItem.RenderCircleItem(
                     array[0],
                     array[1],
                     radius.takeDimension(),
@@ -167,7 +173,7 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         icons.add(
-            MapViewLogic.RenderItem.PointItem.RenderIconItem(
+            RenderItem.PointItem.RenderIconItem(
                 array[0],
                 array[1],
                 icon,
@@ -179,7 +185,7 @@ internal class RenderListMaker<T>(
         array: FloatArray,
     ) {
         icons.add(
-            MapViewLogic.RenderItem.PointItem.RenderBitmapItem(
+            RenderItem.PointItem.RenderBitmapItem(
                 array[0],
                 array[1],
                 bitmap,
