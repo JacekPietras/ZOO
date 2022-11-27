@@ -68,7 +68,7 @@ internal class ServiceUtils(
                 service,
                 0,
                 stopSelfIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT
+                PendingIntent.FLAG_CANCEL_CURRENT.addMutableFlag()
             )
             notificationBuilder.addAction(0, actionText, pendingStopSelfIntent)
         }
@@ -121,6 +121,13 @@ internal class ServiceUtils(
 
     private val notificationManager: NotificationManager?
         get() = service.getSystemService(NOTIFICATION_SERVICE) as? NotificationManager
+
+    private fun Int.addMutableFlag(): Int =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_IMMUTABLE or this
+        } else {
+            this
+        }
 
     companion object {
     }

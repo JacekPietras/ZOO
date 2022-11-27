@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.tracking.permissions
 
 import android.app.Activity
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -21,6 +22,7 @@ import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.Task
 import com.jacekpietras.zoo.tracking.utils.observeReturn
+import timber.log.Timber
 
 internal class EnableGpsUseCase {
 
@@ -80,9 +82,13 @@ internal class EnableGpsUseCase {
         if (locationManager == null || !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             val settingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             settingsIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            activity.startActivity(settingsIntent)
-            lifecycleOwner.observeReturn(onFreshRequestRequired)
-
+            try {
+                activity.startActivity(settingsIntent)
+                lifecycleOwner.observeReturn(onFreshRequestRequired)
+            } catch (e: ActivityNotFoundException) {
+                Timber.w(e, "Asking for GPS in classic way - Cannot open settings")
+                onDenied()
+            }
         } else {
             // playServicesAvailable - there are no play services installed,
             // maybe this is device without possibility of it

@@ -6,6 +6,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
@@ -17,6 +18,7 @@ import com.jacekpietras.zoo.tracking.R
 import com.jacekpietras.zoo.tracking.utils.getApplicationSettingsIntent
 import com.jacekpietras.zoo.tracking.utils.isGpsEnabled
 import com.jacekpietras.zoo.tracking.utils.observeReturn
+import timber.log.Timber
 
 class GpsPermissionRequesterLogic(
     private val activity: Activity,
@@ -114,10 +116,27 @@ class GpsPermissionRequesterLogic(
             .setMessage(activity.getString(R.string.gps_permission_denied_content))
             .setPositiveButton(activity.getString(android.R.string.ok)) { dialog, _ ->
                 dialog.dismiss()
-                activity.startActivity(activity.getApplicationSettingsIntent())
-                lifecycleOwner.observeReturn { checkPermissionsAgain() }
+                try {
+                    activity.startActivity(activity.getApplicationSettingsIntent())
+                    lifecycleOwner.observeReturn { checkPermissionsAgain() }
+                } catch (e: ActivityNotFoundException) {
+                    Timber.w(e, "Asking permissions - Cannot open settings")
+                    showDeniedWithoutCondition()
+                }
             }
             .setNegativeButton(activity.getString(android.R.string.cancel)) { dialog, _ ->
+                callbacks.onFailed()
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showDeniedWithoutCondition() {
+        AlertDialog.Builder(activity)
+            .setTitle(activity.getString(R.string.gps_permission_denied_title))
+            .setMessage(activity.getString(R.string.gps_permission_cannot_open_settings_content))
+            .setPositiveButton(activity.getString(android.R.string.ok)) { dialog, _ ->
                 callbacks.onFailed()
                 dialog.dismiss()
             }

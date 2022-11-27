@@ -9,4 +9,5 @@
     <string name="gps_permission_rationale_content">We will use your current GPS permission to show you journey progress. Application will store only data inside ZOO.</string>
     <string name="gps_permission_denied_title">Tracing Permission</string>
     <string name="gps_permission_denied_content">You Denied Tracking Permission for that app permanently. You can change it in Settings.</string>
+    <string name="gps_permission_cannot_open_settings_content">We cannot open app settings. To change permissions you need to open it from device settings.</string>
 </resources>

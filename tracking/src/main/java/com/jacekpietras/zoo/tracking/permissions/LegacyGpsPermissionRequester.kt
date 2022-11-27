@@ -17,13 +17,19 @@ class LegacyGpsPermissionRequester(fragment: Fragment) : GpsPermissionRequester 
     )
     private val permissionResult =
         fragment.registerForActivityResult(RequestMultiplePermissions()) { isGranted ->
-            if (isGranted.filter { it.value }.isNotEmpty()) logic.checkPermissionsAgain()
-            else logic.notifyFailed()
+            if (isGranted.filter { it.value }.isNotEmpty()) {
+                logic.checkPermissionsAgain()
+            } else {
+                logic.notifyFailed()
+            }
         }
     private val resolutionResult =
         fragment.registerForActivityResult(StartIntentSenderForResult()) { isGranted ->
-            if (isGranted.resultCode == RESULT_OK) logic.checkPermissionsAgain()
-            else logic.notifyFailed()
+            if (isGranted.resultCode == RESULT_OK) {
+                logic.checkPermissionsAgain()
+            } else {
+                logic.notifyFailed()
+            }
         }
 
     override fun checkPermissions(
