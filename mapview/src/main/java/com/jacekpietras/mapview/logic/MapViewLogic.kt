@@ -106,6 +106,7 @@ class MapViewLogic<T>(
             }
             field = value
         }
+    private val cuttingOutNow = AtomicBoolean(false)
 
     fun centerAtPoint(desiredPosition: PointD) {
         centeringAtUser = false
@@ -341,6 +342,9 @@ class MapViewLogic<T>(
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
 
+        if (cuttingOutNow.get()) return
+        cuttingOutNow.set(true)
+
         establishViewCoordinates()
 
         renderList = RenderListMaker<T>(
@@ -356,5 +360,6 @@ class MapViewLogic<T>(
             .also { invalidate(it) }
 
         Timber.d("Perf: cutOutNotVisible ${System.currentTimeMillis() - before} ms")
+        cuttingOutNow.set(false)
     }
 }
