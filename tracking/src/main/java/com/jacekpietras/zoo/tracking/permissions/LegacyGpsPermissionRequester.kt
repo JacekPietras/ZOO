@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.tracking.permissions
 
-import android.app.Activity.RESULT_OK
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
@@ -15,22 +14,8 @@ class LegacyGpsPermissionRequester(fragment: Fragment) : GpsPermissionRequester 
         activity = activity,
         lifecycleOwner = activity,
     )
-    private val permissionResult =
-        fragment.registerForActivityResult(RequestMultiplePermissions()) { isGranted ->
-            if (isGranted.filter { it.value }.isNotEmpty()) {
-                logic.checkPermissionsAgain()
-            } else {
-                logic.notifyFailed()
-            }
-        }
-    private val resolutionResult =
-        fragment.registerForActivityResult(StartIntentSenderForResult()) { isGranted ->
-            if (isGranted.resultCode == RESULT_OK) {
-                logic.checkPermissionsAgain()
-            } else {
-                logic.notifyFailed()
-            }
-        }
+    private val permissionResult = fragment.registerForActivityResult(RequestMultiplePermissions(), logic::onPermissionsRequested)
+    private val enableGpsRequest = fragment.registerForActivityResult(StartIntentSenderForResult(), logic::onEnablingGpsRequested)
 
     override fun checkPermissions(
         onGranted: () -> Unit,
@@ -38,7 +23,7 @@ class LegacyGpsPermissionRequester(fragment: Fragment) : GpsPermissionRequester 
     ) {
         logic.checkPermissions(
             permissionRequest = { permissions -> permissionResult.launch(permissions.toTypedArray()) },
-            resolutionRequest = { intent -> resolutionResult.launch(IntentSenderRequest.Builder(intent).build()) },
+            enableGpsRequest = { intent -> enableGpsRequest.launch(IntentSenderRequest.Builder(intent).build()) },
             onGranted = onGranted,
             onDenied = onDenied,
         )

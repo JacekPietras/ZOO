@@ -8,13 +8,14 @@ import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context.MODE_PRIVATE
-import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
+import androidx.activity.result.ActivityResult
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.jacekpietras.zoo.tracking.R
+import com.jacekpietras.zoo.tracking.permissions.checker.AndroidPermissionChecker
+import com.jacekpietras.zoo.tracking.permissions.checker.PermissionChecker
 import com.jacekpietras.zoo.tracking.utils.getApplicationSettingsIntent
 import com.jacekpietras.zoo.tracking.utils.isGpsEnabled
 import com.jacekpietras.zoo.tracking.utils.observeReturn
@@ -26,72 +27,70 @@ class GpsPermissionRequesterLogic(
 ) {
 
     private lateinit var callbacks: Callback
+    private val permissionChecker: PermissionChecker = AndroidPermissionChecker(
+        context = activity,
+    )
 
     fun checkPermissions(
         permissionRequest: (List<String>) -> Unit,
-        resolutionRequest: (PendingIntent) -> Unit,
+        enableGpsRequest: (PendingIntent) -> Unit,
         onGranted: () -> Unit,
         onDenied: () -> Unit = {},
     ) {
         this.callbacks = Callback(
             permissionRequest = permissionRequest,
-            resolutionRequest = resolutionRequest,
+            resolutionRequest = enableGpsRequest,
             onFailed = onDenied,
             onPermission = onGranted,
         )
         checkPermissionsAgain()
     }
 
-    fun notifyFailed() {
+    private fun notifyFailed() {
         callbacks.onFailed()
     }
 
-    fun checkPermissionsAgain() {
+    private fun checkPermissionsAgain() {
         when {
-            havePermissions() -> {
-                resetFirstTimeAsking()
-
-                if (activity.isGpsEnabled()) {
-                    callbacks.onPermission()
-                } else {
-                    EnableGpsUseCase().run(
-                        activity = activity,
-                        lifecycleOwner = lifecycleOwner,
-                        onRequestSth = { intent -> callbacks.resolutionRequest(intent) },
-                        onFreshRequestRequired = { checkPermissionsAgain() },
-                        onGpsEnabled = { callbacks.onPermission() },
-                        onDenied = { callbacks.onFailed() },
-                    )
-                }
+            allPermissionsAreGranted() -> {
+                allPermissions.forEach(::removeAsDeniedForever)
+                enableGPS()
             }
-            allPermissions.any { shouldDescribe(it) } -> {
-                // do nothing, dialog is shown
+            notGrantedNeededPermissions.firstOrNull(::shouldShowRationale) != null -> {
+                showRationale()
+            }
+            notGrantedNeededPermissions.firstOrNull(::shouldShowDeniedForever) != null -> {
+                showDenied()
             }
             else -> {
-                askedForPermission()
                 askForPermissions()
             }
         }
     }
 
-    private fun shouldDescribe(permission: String): Boolean =
-        when {
-            shouldShowRequestPermissionRationale(activity, permission) -> {
-                showRationale()
-                true
-            }
-            isFirstTimeAskingPermission(permission) -> {
-                firstTimeAskingPermission(permission, false)
-                false
-            }
-            else -> {
-                showDenied()
-                true
-            }
+    private fun enableGPS() {
+        if (activity.isGpsEnabled()) {
+            callbacks.onPermission()
+        } else {
+            EnableGpsUseCase().run(
+                activity = activity,
+                lifecycleOwner = lifecycleOwner,
+                onRequestSth = { intent -> callbacks.resolutionRequest(intent) },
+                onFreshRequestRequired = { checkPermissionsAgain() },
+                onGpsEnabled = { callbacks.onPermission() },
+                onDenied = { callbacks.onFailed() },
+            )
         }
+    }
+
+    private fun shouldShowRationale(permission: String): Boolean =
+        shouldShowRequestPermissionRationale(activity, permission)
+
+    private fun shouldShowDeniedForever(permission: String): Boolean =
+        isDeniedForever(permission)
 
     private fun askForPermissions() {
-        callbacks.permissionRequest(allPermissions)
+        callbacks.permissionRequest(notGrantedAllPermissions)
     }
 
     private fun showRationale() {
@@ -144,30 +143,62 @@ class GpsPermissionRequesterLogic(
             .show()
     }
 
-    private fun havePermissions(): Boolean =
-        neededPermissions.all {
-            ContextCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
-        }
 
-    private fun resetFirstTimeAsking() {
-        allPermissions.forEach {
-            firstTimeAskingPermission(it, false)
+    private fun allPermissionsAreGranted(): Boolean =
+        permissionChecker.hasPermissions(neededPermissions)
+
+    private val notGrantedNeededPermissions: List<String>
+        get() = neededPermissions.filterNot(::isGranted)
+
+    private val notGrantedAllPermissions: List<String>
+        get() = allPermissions.filterNot(::isGranted)
+
+    private fun isGranted(permission: String): Boolean =
+        permissionChecker.hasPermissions(listOf(permission))
+
+    private fun setAsDeniedForever(permission: String) {
+        activity.getSharedPreferences(GPS_DENIED_FOREVER_KEY, MODE_PRIVATE)
+            .edit()
+            .putBoolean(permission, true)
+            .apply()
+    }
+
+    private fun removeAsDeniedForever(permission: String) {
+        activity.getSharedPreferences(GPS_DENIED_FOREVER_KEY, MODE_PRIVATE)
+            .edit()
+            .remove(permission)
+            .apply()
+    }
+
+    private fun isDeniedForever(permission: String) =
+        activity.getSharedPreferences(GPS_DENIED_FOREVER_KEY, MODE_PRIVATE)
+            .getBoolean(permission, false)
+
+    fun onPermissionsRequested(isGranted: Map<String, Boolean>) {
+        isGranted
+            .filter { !it.value && !shouldShowRequestPermissionRationale(activity, it.key) }
+            .keys
+            .forEach(::setAsDeniedForever)
+
+        isGranted
+            .filter { it.value }
+            .keys
+            .forEach(::removeAsDeniedForever)
+
+        if (isGranted.filter { it.value }.isNotEmpty()) {
+            checkPermissionsAgain()
+        } else {
+            notifyFailed()
         }
     }
 
-    private fun askedForPermission() {
-        allPermissions.forEach {
-            firstTimeAskingPermission(it, true)
+    fun onEnablingGpsRequested(isGranted: ActivityResult){
+        if (isGranted.resultCode == Activity.RESULT_OK) {
+            checkPermissionsAgain()
+        } else {
+            notifyFailed()
         }
     }
-
-    private fun firstTimeAskingPermission(permission: String, firstTime: Boolean) {
-        val sharedPreference = activity.getSharedPreferences(GPS_PERMISSIONS, MODE_PRIVATE)
-        sharedPreference.edit().putBoolean(permission, firstTime).apply()
-    }
-
-    private fun isFirstTimeAskingPermission(permission: String) =
-        activity.getSharedPreferences(GPS_PERMISSIONS, MODE_PRIVATE).getBoolean(permission, true)
 
     private class Callback(
         val permissionRequest: (List<String>) -> Unit,
@@ -177,6 +208,7 @@ class GpsPermissionRequesterLogic(
     )
 
     private companion object {
+
         val allPermissions = listOfNotNull(
             ACCESS_FINE_LOCATION,
             ACCESS_COARSE_LOCATION,
@@ -186,6 +218,6 @@ class GpsPermissionRequesterLogic(
             ACCESS_FINE_LOCATION,
             ACCESS_COARSE_LOCATION,
         )
-        const val GPS_PERMISSIONS = "GPS_PERMISSIONS"
+        const val GPS_DENIED_FOREVER_KEY = "GPS_DENIED_FOREVER_KEY"
     }
 }

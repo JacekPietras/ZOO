@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -47,11 +48,11 @@ internal class EnableGpsUseCase {
         onRequestSth: (PendingIntent) -> Unit,
         onDenied: () -> Unit,
     ) {
-        val mLocationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
-            priority = Priority.PRIORITY_HIGH_ACCURACY
-        }
+        val mLocationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+            .setWaitForAccurateLocation(false)
+            .setMinUpdateIntervalMillis(5000)
+            .setMaxUpdateDelayMillis(10000)
+            .build()
         val builder = LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest)
         val client = LocationServices.getSettingsClient(activity)
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
@@ -112,7 +113,7 @@ internal class EnableGpsUseCase {
         activity: Activity,
     ): Boolean =
         try {
-            val googleServicesVersion = activity.packageManager.getPackageInfo("com.google.android.gms", 0).versionCompat
+            val googleServicesVersion = activity.packageManager.getPackageInfoCompat("com.google.android.gms").versionCompat
 
             // it is required version for checking location
             11200000 <= googleServicesVersion
@@ -122,9 +123,17 @@ internal class EnableGpsUseCase {
         }
 
     @Suppress("DEPRECATION")
+    fun PackageManager.getPackageInfoCompat(packageName: String): PackageInfo {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+        } else {
+            getPackageInfo(packageName, 0)
+        }
+    }
+
+    @Suppress("DEPRECATION")
     private val PackageInfo.versionCompat: Long
-        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) longVersionCode
-        else versionCode.toLong()
+        get() = PackageInfoCompat.getLongVersionCode(this)
 
     private fun showErrorDialog(
         activity: Activity,
