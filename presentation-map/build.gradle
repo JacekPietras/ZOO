@@ -4,6 +4,10 @@ apply from: "$rootDir/presentation.gradle"
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'kotlin-kapt'
 
+android {
+    namespace 'com.jacekpietras.zoo.map'
+}
+
 dependencies {
     api project(':presentation-core')
 

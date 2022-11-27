@@ -50,7 +50,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                         job.save(null)
                     }
                     .pushAndDo(
-                        fast = { plan, collector ->
+                        fast = { plan, collector: FlowCollector<Triple<List<Stage>, List<PointD>, List<PointD>>> ->
                             @Suppress("RemoveExplicitTypeArguments")
                             collector.emit(Triple(plan.stages, emptyList<PointD>(), emptyList<PointD>()))
                         },

@@ -39,45 +39,45 @@ abstract class GesturedView @JvmOverloads constructor(
 
     private inner class OnGestureListener : GestureDetector.OnGestureListener {
 
-        override fun onShowPress(e: MotionEvent?) = Unit
+        override fun onShowPress(e: MotionEvent) = Unit
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             onClick(e.x, e.y)
             return false
         }
 
-        override fun onDown(e: MotionEvent?) = false
+        override fun onDown(e: MotionEvent) = false
 
-        override fun onFling(e1: MotionEvent?, e2: MotionEvent?, vX: Float, vY: Float) = false
+        override fun onFling(e1: MotionEvent, e2: MotionEvent, vX: Float, vY: Float) = false
 
-        override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, vX: Float, vY: Float): Boolean {
+        override fun onScroll(e1: MotionEvent, e2: MotionEvent, vX: Float, vY: Float): Boolean {
             onScroll(vX, vY)
             return false
         }
 
-        override fun onLongPress(e: MotionEvent?) = Unit
+        override fun onLongPress(e: MotionEvent) = Unit
     }
 
     private inner class OnScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener {
-        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
             zoomBuffer = 1f
-            zoomX = detector?.focusX ?: 0f
-            zoomY = detector?.focusY ?: 0f
+            zoomX = detector.focusX
+            zoomY = detector.focusY
             return true
         }
 
-        override fun onScaleEnd(detector: ScaleGestureDetector?) = Unit
+        override fun onScaleEnd(detector: ScaleGestureDetector) = Unit
 
-        override fun onScale(detector: ScaleGestureDetector?): Boolean {
-            val zoom = detector?.scaleFactor ?: 1f
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val zoom = detector.scaleFactor
             onScale(zoomX, zoomY, zoomBuffer / zoom)
             zoomBuffer = zoom
             return false
         }
     }
 
-    private inner class OnRotationGestureListener :
-        RotationGestureDetector.OnRotationGestureListener {
+    private inner class OnRotationGestureListener : RotationGestureDetector.OnRotationGestureListener {
 
         override fun onRotation(rotationDetector: RotationGestureDetector?) {
             val rotate = rotationDetector?.angle ?: 0f

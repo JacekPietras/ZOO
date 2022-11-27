@@ -3,6 +3,10 @@ apply from: "$rootDir/common.gradle"
 apply from: "$rootDir/presentation.gradle"
 apply plugin: 'kotlin-kapt'
 
+android {
+    namespace 'com.jacekpietras.zoo.catalogue'
+}
+
 dependencies {
     api project(':presentation-core')
 

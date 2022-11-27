@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,6 +15,7 @@ import java.io.PrintWriter
 import java.util.*
 import java.util.regex.Pattern
 
+@OptIn(ObsoleteCoroutinesApi::class)
 @Suppress("EXPERIMENTAL_API_USAGE", "SameParameterValue", "unused")
 @SuppressLint("LogNotTimber")
 object LogSupport {

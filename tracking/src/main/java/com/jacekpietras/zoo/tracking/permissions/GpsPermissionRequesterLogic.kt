@@ -55,16 +55,10 @@ class GpsPermissionRequesterLogic(
                     EnableGpsUseCase().run(
                         activity = activity,
                         lifecycleOwner = lifecycleOwner,
-                        onRequestSth = { intent ->
-                            callbacks.resolutionRequest(intent)
-                        },
+                        onRequestSth = { intent -> callbacks.resolutionRequest(intent) },
                         onFreshRequestRequired = { checkPermissionsAgain() },
-                        onGpsEnabled = {
-                            callbacks.onPermission()
-                        },
-                        onDenied = {
-                            callbacks.onFailed()
-                        },
+                        onGpsEnabled = { callbacks.onPermission() },
+                        onDenied = { callbacks.onFailed() },
                     )
                 }
             }

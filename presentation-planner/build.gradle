@@ -2,6 +2,10 @@ apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
 apply from: "$rootDir/presentation.gradle"
 
+android {
+    namespace 'com.jacekpietras.zoo.planner'
+}
+
 dependencies {
     api project(':presentation-core')
 

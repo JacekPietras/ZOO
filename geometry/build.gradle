@@ -1,6 +1,10 @@
 apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
 
+android {
+    namespace 'com.jacekpietras.geometry'
+}
+
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"

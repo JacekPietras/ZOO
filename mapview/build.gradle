@@ -3,6 +3,10 @@ apply from: "$rootDir/common.gradle"
 apply from: "$rootDir/presentation.gradle"
 apply plugin: "de.mannodermaus.android-junit5"
 
+android {
+    namespace 'com.jacekpietras.mapview'
+}
+
 dependencies {
     implementation project(':geometry')
     implementation "com.google.android.material:material:$material_version"

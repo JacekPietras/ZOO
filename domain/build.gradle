@@ -2,6 +2,10 @@ apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
 apply plugin: "de.mannodermaus.android-junit5"
 
+android {
+    namespace 'com.jacekpietras.zoo.domain'
+}
+
 dependencies {
     implementation project(':geometry')
 
