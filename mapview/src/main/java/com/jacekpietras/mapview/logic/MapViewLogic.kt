@@ -3,17 +3,10 @@ package com.jacekpietras.mapview.logic
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
-import com.jacekpietras.mapview.model.MapItem
-import com.jacekpietras.mapview.model.MapPaint
-import com.jacekpietras.mapview.model.PaintHolder
-import com.jacekpietras.mapview.model.ViewCoordinates
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
-import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -42,7 +35,7 @@ class MapViewLogic<T>(
             minZoom = maxZoom / 10
 
             val measured = measureTimeMillis {
-                worldPreparedList = value.objectList.toPreparedItems()
+                worldPreparedList = worldPreparedListMaker.toPreparedItems(value.objectList)
             }
             Timber.d("Perf: toPreparedItems $measured ms (world)")
 
@@ -52,13 +45,14 @@ class MapViewLogic<T>(
         }
     private val worldBounds: RectD get() = worldData.bounds
     private var worldPreparedList: List<PreparedItem<T>> = emptyList()
+    private val worldPreparedListMaker = PreparedListMaker(paintBaker)
 
     var userData: UserData = UserData()
         set(value) {
             field = value
 
             val measured = measureTimeMillis {
-                volatilePreparedList = value.objectList.toPreparedItems()
+                volatilePreparedList = volatilePreparedListMaker.toPreparedItems(value.objectList)
             }
             Timber.d("Perf: toPreparedItems $measured ms (user)")
 
@@ -70,6 +64,7 @@ class MapViewLogic<T>(
         }
 
     private var volatilePreparedList: List<PreparedItem<T>> = emptyList()
+    private val volatilePreparedListMaker = PreparedListMaker(paintBaker)
     private val userPosition: PointD? get() = userData.userPosition.takeIf { it != PointD() }
     private val compass: Float get() = userData.compass
 
@@ -251,56 +246,6 @@ class MapViewLogic<T>(
         }
 
         setOnPointPlacedListener?.invoke(visibleGpsCoordinate.deTransformPoint(point[0], point[1]))
-    }
-
-    private fun List<MapItem>.toPreparedItems(): List<PreparedItem<T>> {
-        val innerPaints = mutableMapOf<MapPaint, PaintHolder<T>>()
-        val borderPaints = mutableMapOf<MapPaint, PaintHolder<T>?>()
-
-        return map { item ->
-            when (item) {
-                is MapItem.MapColoredItem -> {
-                    val inner = innerPaints[item.paint]
-                        ?: paintBaker.bakeCanvasPaint(item.paint)
-                            .also { innerPaints[item.paint] = it }
-                    val border = borderPaints[item.paint]
-                        ?: paintBaker.bakeBorderCanvasPaint(item.paint)
-                            .also { borderPaints[item.paint] = it }
-
-                    when (item) {
-                        is MapItem.MapColoredItem.PathMapItem -> PreparedPathItem(
-                            pointsToDoubleArray(item.path.vertices),
-                            inner,
-                            border,
-                            item.minZoom,
-                        )
-                        is MapItem.MapColoredItem.PolygonMapItem -> PreparedPolygonItem(
-                            pointsToDoubleArray(item.polygon.vertices),
-                            inner,
-                            border,
-                            item.minZoom,
-                        )
-                        is MapItem.MapColoredItem.CircleMapItem -> PreparedCircleItem(
-                            item.point,
-                            item.radius,
-                            inner,
-                            border,
-                            item.minZoom,
-                        )
-                    }
-                }
-                is MapItem.IconMapItem -> PreparedItem.PreparedIconItem(
-                    item.point,
-                    item.icon,
-                    item.minZoom,
-                )
-                is MapItem.BitmapMapItem -> PreparedItem.PreparedBitmapItem(
-                    item.point,
-                    item.bitmap,
-                    item.minZoom,
-                )
-            }
-        }
     }
 
     private fun establishViewCoordinates() {
