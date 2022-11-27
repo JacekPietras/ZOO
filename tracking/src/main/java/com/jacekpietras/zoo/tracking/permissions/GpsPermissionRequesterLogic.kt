@@ -30,6 +30,7 @@ class GpsPermissionRequesterLogic(
     private val permissionChecker: PermissionChecker = AndroidPermissionChecker(
         context = activity,
     )
+    private var timeOfRequest: Long = 0L
 
     fun checkPermissions(
         permissionRequest: (List<String>) -> Unit,
@@ -90,6 +91,7 @@ class GpsPermissionRequesterLogic(
         isDeniedForever(permission)
 
     private fun askForPermissions() {
+        timeOfRequest = System.currentTimeMillis()
         callbacks.permissionRequest(notGrantedAllPermissions)
     }
 
@@ -175,10 +177,12 @@ class GpsPermissionRequesterLogic(
             .getBoolean(permission, false)
 
     fun onPermissionsRequested(isGranted: Map<String, Boolean>) {
-        isGranted
-            .filter { !it.value && !shouldShowRequestPermissionRationale(activity, it.key) }
-            .keys
-            .forEach(::setAsDeniedForever)
+        if (wasProcessedLongEnoughForHuman()) {
+            isGranted
+                .filter { !it.value && !shouldShowRequestPermissionRationale(activity, it.key) }
+                .keys
+                .forEach(::setAsDeniedForever)
+        }
 
         isGranted
             .filter { it.value }
@@ -192,12 +196,17 @@ class GpsPermissionRequesterLogic(
         }
     }
 
-    fun onEnablingGpsRequested(isGranted: ActivityResult){
+    fun onEnablingGpsRequested(isGranted: ActivityResult) {
         if (isGranted.resultCode == Activity.RESULT_OK) {
             checkPermissionsAgain()
         } else {
             notifyFailed()
         }
+    }
+
+    private fun wasProcessedLongEnoughForHuman(): Boolean {
+        val requestProcessingTime = System.currentTimeMillis() - timeOfRequest
+        return requestProcessingTime > 300L
     }
 
     private class Callback(
