@@ -37,13 +37,8 @@ internal class RenderListMaker<T>(
         }
 
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
-        borders.clear()
-        insides.clear()
-        icons.clear()
-
         preparedLists.forEach(::addToRenderItems)
         icons.sortBy { it.cY }
-
         return borders + insides + icons
     }
 
@@ -198,14 +193,15 @@ internal class RenderListMaker<T>(
             ?: bakeDimension(this).invoke(zoom, centerGpsCoordinate, currentWidth)
                 .also { dynamicDimensions[this] = it }
 
-    private fun PaintHolder<T>.takePaint(): T {
-        return when (this) {
-            is PaintHolder.Static<T> -> paint
+    private fun PaintHolder<T>.takePaint(): T =
+        when (this) {
+            is PaintHolder.Static<T> -> {
+                paint
+            }
             is PaintHolder.Dynamic<T> -> {
                 dynamicPaints[this]
                     ?: block(zoom, centerGpsCoordinate, currentWidth)
                         .also { dynamicPaints[this] = it }
             }
         }
-    }
 }
