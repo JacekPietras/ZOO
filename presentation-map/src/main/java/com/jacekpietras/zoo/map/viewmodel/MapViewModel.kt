@@ -64,12 +64,14 @@ import com.jacekpietras.zoo.map.model.MapWorldViewState
 import com.jacekpietras.zoo.map.model.PlanState
 import com.jacekpietras.zoo.map.router.MapRouter
 import com.jacekpietras.zoo.tracking.permissions.GpsPermissionRequester
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
@@ -77,6 +79,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 
+@OptIn(FlowPreview::class)
 internal class MapViewModel(
     context: Context,
     animalId: String?,
@@ -172,6 +175,7 @@ internal class MapViewModel(
         observeCompassUseCase.run(),
         mapper::from,
     )
+        .debounce(50L)
         .flowOnBackground()
         .onEach(mapLogic::applyToMap)
         .flowOnMain()
@@ -182,6 +186,7 @@ internal class MapViewModel(
         observeMapObjectsUseCase.run(),
         mapper::from,
     )
+        .debounce(50L)
         .flowOnBackground()
         .onEach(mapLogic::applyToMap)
         .flowOnMain()
