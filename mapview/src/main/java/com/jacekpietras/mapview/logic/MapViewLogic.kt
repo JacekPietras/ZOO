@@ -3,6 +3,11 @@ package com.jacekpietras.mapview.logic
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
+import com.jacekpietras.mapview.logic.PreparedItem.PreparedIconItem
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.PaintBaker
@@ -85,6 +90,8 @@ class MapViewLogic<T>(
             }
         }
     private lateinit var visibleGpsCoordinate: ViewCoordinates
+    private var prevVisibleGpsCoordinate: ViewCoordinates? = null
+    private var prevVisibleGpsCoordinateForBigDiff: ViewCoordinates? = null
     private var centerGpsCoordinate: PointD = PointD()
     private var zoom: Double = 5.0
         set(value) {
@@ -347,6 +354,19 @@ class MapViewLogic<T>(
 
         establishViewCoordinates()
 
+        prevVisibleGpsCoordinate?.printDiff(visibleGpsCoordinate)
+
+        val worldMoved = visibleGpsCoordinate != prevVisibleGpsCoordinate
+        val worldMovedALot = worldMoved && (prevVisibleGpsCoordinateForBigDiff?.printDiff(visibleGpsCoordinate) ?: true)
+        if (worldMovedALot) {
+            Timber.d("Perf: moved a lot")
+            clearHiddenPreparedItems()
+            prevVisibleGpsCoordinateForBigDiff = visibleGpsCoordinate
+        } else if (worldMoved) {
+            clearCachedPreparedItems()
+        }
+        prevVisibleGpsCoordinate = visibleGpsCoordinate
+
         renderList = RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
             worldRotation = worldRotation,
@@ -361,5 +381,56 @@ class MapViewLogic<T>(
 
         Timber.d("Perf: cutOutNotVisible ${System.currentTimeMillis() - before} ms")
         cuttingOutNow.set(false)
+    }
+
+    private fun clearCachedPreparedItems() {
+        listOf(worldPreparedList, volatilePreparedList)
+            .forEach { preparedItems ->
+                preparedItems.forEach { item ->
+                    when (item) {
+                        is PreparedPolygonItem -> {
+                            item.cache = null
+                        }
+                        is PreparedBitmapItem -> {
+                            item.cache = null
+                        }
+                        is PreparedCircleItem -> {
+                            item.cache = null
+                        }
+                        is PreparedPathItem -> {
+                            item.cache = null
+                        }
+                        is PreparedIconItem -> {
+                            item.cache = null
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun clearHiddenPreparedItems() {
+        listOf(worldPreparedList, volatilePreparedList)
+            .forEach { preparedItems ->
+                preparedItems.forEach { item ->
+                    when (item) {
+                        is PreparedPolygonItem -> {
+                            item.cache = null
+                        }
+                        is PreparedBitmapItem -> {
+                            item.cache = null
+                        }
+                        is PreparedCircleItem -> {
+                            item.cache = null
+                        }
+                        is PreparedPathItem -> {
+                            item.cache = null
+                        }
+                        is PreparedIconItem -> {
+                            item.cache = null
+                        }
+                    }
+                    item.isHidden = false
+                }
+            }
     }
 }

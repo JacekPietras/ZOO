@@ -5,6 +5,8 @@ import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.containsLine
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.geometry.polygonContains
+import timber.log.Timber
+import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -157,5 +159,58 @@ internal class ViewCoordinates(
             ) return true
         }
         return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ViewCoordinates
+
+        if (visibleRectRotated != other.visibleRectRotated) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int =
+        visibleRectRotated.hashCode()
+
+    fun printDiff(other: ViewCoordinates): Boolean {
+//        val vert = if (abs(verticalScale) > abs(other.verticalScale)) {
+//            1-abs(other.verticalScale) / abs(verticalScale)
+//        } else {
+//           1- abs(verticalScale) / abs(other.verticalScale)
+//        }
+//        val hori = if (abs(horizontalScale) > abs(other.horizontalScale)) {
+//            1-abs(other.horizontalScale) / abs(horizontalScale)
+//        } else {
+//            1-abs(horizontalScale) / abs(other.horizontalScale)
+//        }
+
+        val left = abs(visibleRectRotated.left - other.visibleRectRotated.left) * abs(horizontalScale)
+        val top = abs(visibleRectRotated.top - other.visibleRectRotated.top)* abs(verticalScale)
+        val right = abs(visibleRectRotated.right - other.visibleRectRotated.right)* abs(horizontalScale)
+        val bottom = abs(visibleRectRotated.bottom - other.visibleRectRotated.bottom)* abs(verticalScale)
+
+        val coordTreshold = 500
+
+        val result =
+//            vert>zoomTreshold ||
+//            hori>zoomTreshold ||
+            left > coordTreshold ||
+                    top > coordTreshold ||
+                    right > coordTreshold ||
+                    bottom > coordTreshold
+
+//        Timber.d(
+//            "Perf: compare\n" +
+//                    if(left>coordTreshold){"!"}else{" "}+  left   + "\n" +
+//                    if(top>coordTreshold){"!"}else{" "}+    top    + "\n" +
+//                    if(right>coordTreshold){"!"}else{" "}+     right   + "\n" +
+//                    if(bottom>coordTreshold){"!"}else{" "}+     bottom  + "\n" //+
+////                    if(hori>zoomTreshold){"!"}else{" "}+      hori  +"\n" +
+////                    if(vert>zoomTreshold){"!"}else{" "}+     vert  + "\n"
+//        )
+        return result
     }
 }
