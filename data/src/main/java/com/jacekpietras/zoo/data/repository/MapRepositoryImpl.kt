@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
+import android.os.Build
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.haversine
@@ -55,11 +56,14 @@ internal class MapRepositoryImpl(
                 async { technicalWatcher.value = parser.getPointsByGroup("technical").map(::PathEntity) },
                 async { linesWatcher.value = parser.getPointsByGroup("lines").map(::PathEntity) },
                 async { waterWatcher.value = parser.getPointsByGroup("water").map(::PolygonEntity) },
-                async { forestWatcher.value = parser.getPointsByGroup("forestland").map(::PolygonEntity) },
+                async { forestWatcher.value = emptyList() },
                 async { treesWatcher.value = emptyList() },
             ).awaitAll()
 
-            generateTrees(parser.getPointsByGroup("foresttrees").map(::PolygonEntity))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                forestWatcher.value = parser.getPointsByGroup("forestland").map(::PolygonEntity)
+                generateTrees(parser.getPointsByGroup("foresttrees").map(::PolygonEntity))
+            }
         }
     }
 
