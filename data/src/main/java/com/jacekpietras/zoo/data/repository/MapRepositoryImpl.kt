@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
-import com.facebook.device.yearclass.YearClass
+import com.facebook.device.yearclass.DeviceInfo
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.haversine
@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import timber.log.Timber
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -42,7 +43,9 @@ internal class MapRepositoryImpl(
 
     private var isMapLoaded = false
     private var visitedRoadsCalculated = false
-    private var year = YearClass.get(context.applicationContext)
+    private var cpuFreq = DeviceInfo.getCPUMaxFreqKHz()
+    private var numberOfCores = DeviceInfo.getNumberOfCPUCores()
+    private var totalMemory = DeviceInfo.getTotalMemory(context).toDouble() / GB
 
     override suspend fun loadMap() {
         isMapLoaded = true
@@ -61,10 +64,13 @@ internal class MapRepositoryImpl(
                 async { treesWatcher.value = emptyList() },
             ).awaitAll()
 
-            if (year > 2020) {
-                forestWatcher.value = parser.getPointsByGroup("forestland").map(::PolygonEntity)
-                generateTrees(parser.getPointsByGroup("foresttrees").map(::PolygonEntity))
-            }
+            Timber.e("dups cpuFreq $cpuFreq")
+            Timber.e("dups numberOfCores $numberOfCores")
+            Timber.e("dups totalMemory $totalMemory")
+//            if (year > 2020) {
+//                forestWatcher.value = parser.getPointsByGroup("forestland").map(::PolygonEntity)
+//                generateTrees(parser.getPointsByGroup("foresttrees").map(::PolygonEntity))
+//            }
         }
     }
 
@@ -158,5 +164,6 @@ internal class MapRepositoryImpl(
     companion object {
 
         const val TREE_PER_SQUARE_METER = 0.0015
+        private const val GB = 1024L * 1024L * 1024L
     }
 }
