@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.data.repository
 
 import android.content.Context
-import android.os.Build
+import com.facebook.device.yearclass.YearClass
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.haversine
@@ -42,6 +42,7 @@ internal class MapRepositoryImpl(
 
     private var isMapLoaded = false
     private var visitedRoadsCalculated = false
+    private var year = YearClass.get(context.applicationContext)
 
     override suspend fun loadMap() {
         isMapLoaded = true
@@ -60,7 +61,7 @@ internal class MapRepositoryImpl(
                 async { treesWatcher.value = emptyList() },
             ).awaitAll()
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (year > 2020) {
                 forestWatcher.value = parser.getPointsByGroup("forestland").map(::PolygonEntity)
                 generateTrees(parser.getPointsByGroup("foresttrees").map(::PolygonEntity))
             }
