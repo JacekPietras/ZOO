@@ -34,6 +34,7 @@ import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
+import com.jacekpietras.mapview.ui.LastMapUpdate.fpsList
 import timber.log.Timber
 
 @Composable
@@ -77,10 +78,15 @@ fun ComposableMapView(
             }
         }
         val fps = SECOND_IN_MILLIS / (System.currentTimeMillis() - lastUpdate)
-
         if (fps in (0..200) && BuildConfig.DEBUG) {
+            fpsList.add(fps)
+            if (fpsList.size > 20) {
+                fpsList.removeAt(0)
+            }
+            val medFps = fpsList.average().toLong()
+
             Text(
-                text = "FPS: $fps",
+                text = "FPS: $medFps",
                 modifier = Modifier.align(Alignment.BottomStart),
             )
         }
@@ -91,6 +97,7 @@ fun ComposableMapView(
 
 object LastMapUpdate {
     var lastUpdate: Long = 0L
+    val fpsList = mutableListOf<Long>()
 }
 
 @Composable
