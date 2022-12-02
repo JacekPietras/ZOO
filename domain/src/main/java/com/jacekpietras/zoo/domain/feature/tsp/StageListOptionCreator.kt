@@ -10,7 +10,7 @@ internal class StageListOptionCreator {
 
     suspend fun run(toCheck: List<Stage>, onResult: suspend (List<Stage>) -> Unit, checked: List<Stage> = emptyList()) {
         onBackground {
-            val problematicIndex = toCheck.indexOfFirstMultiple()
+            val problematicIndex = toCheck.indexOfFirstMultipleOrNull()
             if (problematicIndex != null) {
                 val beforeProblematic = toCheck.subList(0, problematicIndex)
                 val problematicStage = toCheck[problematicIndex] as Stage.Multiple
@@ -42,8 +42,17 @@ internal class StageListOptionCreator {
         }
     }
 
-    private fun List<Stage>.indexOfFirstMultiple(): Int? =
+    private fun List<Stage>.indexOfFirstMultipleOrNull(): Int? =
         indexOfFirstOrNull { it is Stage.Multiple && it.alternatives.size > 1 }
+
+    private inline fun <E> List<E>.indexOfFirstOrNull(function: (E) -> Boolean): Int? =
+        indexOfFirst(function).takeIf { it != -1 }
+
+    private fun List<Stage>.haveSingleRegion(alt: Region): Boolean =
+        any { it is Stage.Single && it.region == alt }
+
+    private fun List<Stage>.haveAnyRegion(alt: Region): Boolean =
+        any { it is Stage.InRegion && it.region == alt }
 
     private suspend inline fun onBackground(crossinline block: suspend () -> Unit) {
         withContext(Dispatchers.Default) {
@@ -52,13 +61,4 @@ internal class StageListOptionCreator {
             }
         }
     }
-
-    private fun List<Stage>.haveSingleRegion(alt: Region): Boolean =
-        any { it is Stage.Single && it.region == alt }
-
-    private fun List<Stage>.haveAnyRegion(alt: Region): Boolean =
-        any { it is Stage.InRegion && it.region == alt }
-
-    private fun <E> List<E>.indexOfFirstOrNull(function: (E) -> Boolean): Int? =
-        indexOfFirst(function).takeIf { it != -1 }
 }
