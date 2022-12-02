@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 
 internal class StageListOptionCreator {
 
-    suspend fun run(toCheck: List<Stage>, onResult: suspend (List<Stage>) -> Unit, checked: List<Stage> = emptyList()) {
+    suspend fun run(toCheck: List<Stage>, onOptionFound: suspend (List<Stage>) -> Unit, checked: List<Stage> = emptyList()) {
         onBackground {
             val problematicIndex = toCheck.indexOfFirstMultipleOrNull()
             if (problematicIndex != null) {
@@ -24,7 +24,7 @@ internal class StageListOptionCreator {
                     run(
                         checked = checked + beforeProblematic + stageVariation,
                         toCheck = afterProblematic,
-                        onResult = onResult,
+                        onOptionFound = onOptionFound,
                     )
                 } else {
                     problematicStage.alternatives.forEach { alternativeRegion ->
@@ -32,12 +32,12 @@ internal class StageListOptionCreator {
                         run(
                             checked = checked + beforeProblematic + stageVariation,
                             toCheck = afterProblematic,
-                            onResult = onResult,
+                            onOptionFound = onOptionFound,
                         )
                     }
                 }
             } else {
-                onResult(checked + toCheck)
+                onOptionFound(checked + toCheck)
             }
         }
     }

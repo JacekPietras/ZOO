@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
+import com.jacekpietras.zoo.domain.feature.tsp.TspResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +35,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
 ) : ObserveCurrentPlanWithOptimizationUseCase {
 
-    override fun run(): Flow<Triple<List<Stage>, List<PointD>, List<PointD>>> =
+    override fun run(): Flow<TspResult> =
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
@@ -50,31 +51,28 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                         job.save(null)
                     }
                     .pushAndDo(
-                        fast = { plan, collector: FlowCollector<Triple<List<Stage>, List<PointD>, List<PointD>>> ->
-                            @Suppress("RemoveExplicitTypeArguments")
-                            collector.emit(Triple(plan.stages, emptyList<PointD>(), emptyList<PointD>()))
+                        fast = { plan, collector: FlowCollector<TspResult> ->
+                            collector.emit(TspResult(plan.stages))
                         },
                         long = { plan, collector ->
                             measureMap({ Timber.d("Optimization took $it") }) {
                                 val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
                                 coroutineScope {
-                                    val findingJob = launch(Dispatchers.Default) {
+                                    launch(Dispatchers.Default) {
                                         val result = tspSolver.findShortPathAndStages(notSeen)
-                                            .let { (resultStages, stops, path) -> Triple((seen + resultStages), stops, path) }
-                                        val (resultStages, _) = result
+                                            .let { it.copy(stages = seen + it.stages) }
                                         job.save(null)
                                         collector.emit(result)
-                                        if (plan.stages != resultStages) {
-                                            saveBetterPlan(plan, result.first)
+                                        if (plan.stages != result.stages) {
+                                            saveBetterPlan(plan, result.stages)
                                         }
-                                    }
-                                    job.save(findingJob)
+                                    }.let(job::save)
                                 }
                             }
                         },
                     )
-                    .onEach { (resultStages, _) ->
-                        calculation.save(resultStages)
+                    .onEach {
+                        calculation.save(it.stages)
                     }
             }
         }

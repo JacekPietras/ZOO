@@ -27,18 +27,17 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         combine(
             observeCurrentPlanWithOptimizationUseCase.run(),
             observeTerminalNodesUseCase.run()
-        ) { triple, nodes ->
-            val (stages, stops, points) = triple
+        ) { result, nodes ->
             var plan = NavigationPlan(
-                points = points,
-                stops = stops,
-                stages = stages,
+                points = result.path,
+                stops = result.stops,
+                stages = result.stages,
             )
 
-            if (stages.any { it is Stage.InUserPosition }) {
+            if (result.stages.any { it is Stage.InUserPosition }) {
                 plan = plan.withNextDestination()
 
-                val turnWithArrow = getIndexOfTurnWithArrow(points, nodes)
+                val turnWithArrow = getIndexOfTurnWithArrow(result.path, nodes)
                 if (turnWithArrow != null) {
                     plan = plan.withArrow(turnWithArrow)
                 }

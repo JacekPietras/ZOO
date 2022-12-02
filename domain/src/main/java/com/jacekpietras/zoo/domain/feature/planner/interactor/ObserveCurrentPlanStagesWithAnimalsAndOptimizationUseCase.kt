@@ -16,8 +16,8 @@ class ObserveCurrentPlanStagesWithAnimalsAndOptimizationUseCase(
 
     fun run(): Flow<List<Pair<Stage, List<AnimalEntity>>>> =
         observeCurrentPlanWithOptimizationUseCase.run()
-            .combine(observeAnimalFavoritesUseCase.run()) { (stages, _), favorites ->
-                stages
+            .combine(observeAnimalFavoritesUseCase.run()) { result, favorites ->
+                result.stages
                     .map { stage ->
                         stage to stage.getAnimals(favorites)
                     }
