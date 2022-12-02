@@ -37,17 +37,20 @@ internal class StageTravellingSalesmanProblemSolver(
         var minDistance = Double.MAX_VALUE
         var resultStages = stages
 
-        optionCreator.run(stages, { stageOption ->
-            val (distance, newStages) = tspAlgorithm.run(
-                points = stageOption,
-                distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
-                immutablePositions = immutablePositions,
-            )
-            if (minDistance > distance) {
-                minDistance = distance
-                resultStages = newStages
+        optionCreator.run(
+            toCheck = stages,
+            onResult = { stageOption ->
+                val (distance, newStages) = tspAlgorithm.run(
+                    points = stageOption,
+                    distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
+                    immutablePositions = immutablePositions,
+                )
+                if (minDistance > distance) {
+                    minDistance = distance
+                    resultStages = newStages
+                }
             }
-        })
+        )
 
         Timber.d("Optimization record ${minDistance.toInt()}m")
 

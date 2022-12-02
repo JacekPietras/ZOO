@@ -12,18 +12,18 @@ import org.mockito.kotlin.whenever
 
 internal class ObserveUserPositionUseCaseTest {
 
-    private val mockGpsRepository = mock<GpsRepository>()
-    private val observeUserPositionUseCase = ObserveUserPositionUseCase(
-        gpsRepository = mockGpsRepository,
-    )
-
-    @Test
-    fun `check with empty position`() = runTest {
-
-        whenever(mockGpsRepository.observeLatestPosition()).doReturn(flow { })
-
-        val result = observeUserPositionUseCase.run().firstOrNull()
-
-        assertNull(result)
-    }
+//    private val mockGpsRepository = mock<GpsRepository>()
+//    private val observeUserPositionUseCase = ObserveUserPositionUseCase(
+//        gpsRepository = mockGpsRepository,
+//    )
+//
+//    @Test
+//    fun `check with empty position`() = runTest {
+//
+//        whenever(mockGpsRepository.observeLatestPosition()).doReturn(flow { })
+//
+//        val result = observeUserPositionUseCase.run().firstOrNull()
+//
+//        assertNull(result)
+//    }
 }

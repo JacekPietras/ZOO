@@ -9,46 +9,55 @@ import kotlinx.coroutines.withContext
 internal class StageListOptionCreator {
 
     suspend fun run(toCheck: List<Stage>, onResult: suspend (List<Stage>) -> Unit, checked: List<Stage> = emptyList()) {
-        withContext(Dispatchers.Default) {
-            if (isActive) {
-                val problematicIndex = toCheck.indexOfFirstOrNull { it is Stage.Multiple && it.alternatives.size > 1 }
-                if (problematicIndex != null) {
-                    val beforeProblematic = toCheck.subList(0, problematicIndex)
-                    val afterProblematic = toCheck.subList(problematicIndex + 1, toCheck.size)
-                    val problematicStage = toCheck[problematicIndex] as Stage.Multiple
+        onBackground {
+            val problematicIndex = toCheck.indexOfFirstMultiple()
+            if (problematicIndex != null) {
+                val beforeProblematic = toCheck.subList(0, problematicIndex)
+                val problematicStage = toCheck[problematicIndex] as Stage.Multiple
+                val afterProblematic = toCheck.subList(problematicIndex + 1, toCheck.size)
 
-                    val foundAlternative = problematicStage.alternatives
-                        .find { alt -> checked.haveSingleRegion(alt) || toCheck.haveSingleRegion(alt) }
-                        ?: problematicStage.alternatives.find { alt -> checked.haveMultipleRegion(alt) }
+                val foundAlternative = problematicStage.alternatives
+                    .find { alt -> checked.haveAnyRegion(alt) || toCheck.haveSingleRegion(alt) }
 
-
-                    if (foundAlternative != null) {
-                        val stageVariation = problematicStage.copy(region = foundAlternative)
+                if (foundAlternative != null) {
+                    val stageVariation = problematicStage.copy(region = foundAlternative)
+                    run(
+                        checked = checked + beforeProblematic + stageVariation,
+                        toCheck = afterProblematic,
+                        onResult = onResult,
+                    )
+                } else {
+                    problematicStage.alternatives.forEach { alternativeRegion ->
+                        val stageVariation = problematicStage.copy(region = alternativeRegion)
                         run(
                             checked = checked + beforeProblematic + stageVariation,
                             toCheck = afterProblematic,
                             onResult = onResult,
                         )
-                    } else {
-                        problematicStage.alternatives.forEach { alternativeRegion ->
-                            val stageVariation = problematicStage.copy(region = alternativeRegion)
-                            run(
-                                checked = checked + beforeProblematic + stageVariation,
-                                toCheck = afterProblematic,
-                                onResult = onResult,
-                            )
-                        }
                     }
-                } else {
-                    onResult(checked + toCheck)
                 }
+            } else {
+                onResult(checked + toCheck)
             }
         }
     }
 
-    private fun List<Stage>.haveSingleRegion(alt: Region): Boolean = any { it is Stage.Single && it.region == alt }
+    private fun List<Stage>.indexOfFirstMultiple(): Int? =
+        indexOfFirstOrNull { it is Stage.Multiple && it.alternatives.size > 1 }
 
-    private fun List<Stage>.haveMultipleRegion(alt: Region): Boolean = any { it is Stage.Multiple && it.region == alt }
+    private suspend inline fun onBackground(crossinline block: suspend () -> Unit) {
+        withContext(Dispatchers.Default) {
+            if (isActive) {
+                block()
+            }
+        }
+    }
+
+    private fun List<Stage>.haveSingleRegion(alt: Region): Boolean =
+        any { it is Stage.Single && it.region == alt }
+
+    private fun List<Stage>.haveAnyRegion(alt: Region): Boolean =
+        any { it is Stage.InRegion && it.region == alt }
 
     private fun <E> List<E>.indexOfFirstOrNull(function: (E) -> Boolean): Int? =
         indexOfFirst(function).takeIf { it != -1 }
