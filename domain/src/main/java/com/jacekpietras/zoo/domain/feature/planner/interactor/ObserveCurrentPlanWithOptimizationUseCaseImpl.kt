@@ -35,6 +35,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
 ) : ObserveCurrentPlanWithOptimizationUseCase {
 
+    // todo write unit tests for it
     override fun run(): Flow<TspResult> =
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
@@ -44,22 +45,20 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .moveExitToEnd()
                     .combineWithUserPosition()
                     .distinctUntilChanged { _, new -> new.stages == calculation.take() }
-                    .refreshPeriodically(MINUTE)
+                    .refreshPeriodically(MINUTE, skipWhen = { job.take() != null })
                     .onEach { job.purge() }
                     .pushAndDo(
                         fast = ::emitPlanWithoutCalculations,
                         long = { plan, collector ->
                             measureMap({ Timber.d("Optimization took $it") }) {
-                                val (seen, notSeen) = plan.stages.partition(::isSeen)
-                                coroutineScope {
-                                    launch(Dispatchers.Default) {
-                                        val result = tspSolver
-                                            .findShortPathAndStages(notSeen)
-                                            .addSeen(seen)
-                                        job.save(null)
-                                        collector.emit(result)
-                                        saveBetterPlan(plan, result.stages)
-                                    }.let(job::save)
+                                launchBackground(job) {
+                                    val (seen, notSeen) = plan.stages.partition(::isSeen)
+                                    val result = tspSolver
+                                        .findShortPathAndStages(notSeen)
+                                        .addSeen(seen)
+                                    job.save(null)
+                                    collector.emit(result)
+                                    saveBetterPlan(plan, result.stages)
                                 }
                             }
                         },
@@ -68,6 +67,17 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .distinctUntilChanged()
             }
         }
+
+    private suspend fun launchBackground(
+        job: Storage<Job?>,
+        block: suspend () -> Unit,
+    ) {
+        coroutineScope {
+            launch(Dispatchers.Default) {
+                block()
+            }.let(job::save)
+        }
+    }
 
     private suspend fun emitPlanWithoutCalculations(
         plan: PlanEntity,
@@ -110,12 +120,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private fun Flow<PlanEntity>.require3Stages(): Flow<PlanEntity> =
         distinctUntilChanged { _, new -> new.stages.size > 2 }
 
-    private fun <T> Flow<T>.refreshPeriodically(period: Long) =
-        combine(tickerFlow(period)) { it, _ -> it }
+    private fun <T> Flow<T>.refreshPeriodically(period: Long, skipWhen: () -> Boolean) =
+        combine(tickerFlow(period, skipWhen)) { it, _ -> it }
 
-    private fun tickerFlow(period: Long) = flow {
+    private fun tickerFlow(period: Long, skipWhen: () -> Boolean) = flow {
         while (currentCoroutineContext().isActive) {
-            emit(Unit)
+            if (!skipWhen()) {
+                emit(Unit)
+            }
             delay(period)
         }
     }
