@@ -47,9 +47,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .refreshPeriodically(MINUTE)
                     .onEach { job.purge() }
                     .pushAndDo(
-                        fast = { plan, collector: FlowCollector<TspResult> ->
-                            collector.emit(TspResult(plan.stages))
-                        },
+                        fast = ::emitPlanWithoutCalculations,
                         long = { plan, collector ->
                             measureMap({ Timber.d("Optimization took $it") }) {
                                 val (seen, notSeen) = plan.stages.partition(::isSeen)
@@ -70,6 +68,13 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .distinctUntilChanged()
             }
         }
+
+    private suspend fun emitPlanWithoutCalculations(
+        plan: PlanEntity,
+        collector: FlowCollector<TspResult>,
+    ) {
+        collector.emit(TspResult(plan.stages))
+    }
 
     private fun isSeen(stage: Stage) =
         stage is Stage.InRegion && stage.seen
