@@ -40,13 +40,20 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
+                    .onEach {
+                        System.out.println("---1 ${it?.stages?.map{(it as Stage.InRegion).region.id.id}?. joinToString()}")
+                    }
                     .requireSomePlan()
-                    .require3Stages()
+                    .distinctUntilChanged { _, new ->
+                        new.stages == calculation.take().filter { it !is Stage.InUserPosition } && new.stages.size > 2
+                    }
                     .moveExitToEnd()
                     .combineWithUserPosition()
-                    .distinctUntilChanged { _, new -> new.stages == calculation.take() }
                     .refreshPeriodically(MINUTE, skipWhen = { job.take() != null })
                     .onEach { job.purge() }
+                    .onEach {
+                        System.out.println("---X ${it?.stages?.map{(it as Stage.InRegion).region.id.id}?. joinToString()}")
+                    }
                     .pushAndDo(
                         fast = ::emitPlanWithoutCalculations,
                         long = { plan, collector ->
