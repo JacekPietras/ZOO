@@ -39,55 +39,71 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
-                    .map { it ?: newEmptyPlan() }
-                    .distinctUntilChanged { _, new ->
-                        new.stages == calculation.take().filter { it !is Stage.InUserPosition } && new.stages.size > 2
-                    }
+                    .requireSomePlan()
+                    .require3Stages()
                     .moveExitToEnd()
                     .combineWithUserPosition()
+                    .distinctUntilChanged { _, new -> new.stages == calculation.take() }
                     .refreshPeriodically(MINUTE)
-                    .onEach {
-                        job.take()?.cancel()
-                        job.save(null)
-                    }
+                    .onEach { job.purge() }
                     .pushAndDo(
                         fast = { plan, collector: FlowCollector<TspResult> ->
                             collector.emit(TspResult(plan.stages))
                         },
                         long = { plan, collector ->
                             measureMap({ Timber.d("Optimization took $it") }) {
-                                val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
+                                val (seen, notSeen) = plan.stages.partition(::isSeen)
                                 coroutineScope {
                                     launch(Dispatchers.Default) {
-                                        val result = tspSolver.findShortPathAndStages(notSeen)
-                                            .let { it.copy(stages = seen + it.stages) }
+                                        val result = tspSolver
+                                            .findShortPathAndStages(notSeen)
+                                            .addSeen(seen)
                                         job.save(null)
                                         collector.emit(result)
-                                        if (plan.stages != result.stages) {
-                                            saveBetterPlan(plan, result.stages)
-                                        }
+                                        saveBetterPlan(plan, result.stages)
                                     }.let(job::save)
                                 }
                             }
                         },
                     )
-                    .onEach {
-                        calculation.save(it.stages)
-                    }
+                    .onEach { calculation.save(it.stages) }
+                    .distinctUntilChanged()
             }
         }
+
+    private fun isSeen(stage: Stage) =
+        stage is Stage.InRegion && stage.seen
+
+    private fun TspResult.addSeen(seen: List<Stage>) = copy(stages = seen + stages)
+
+    private fun Storage<Job?>.purge() {
+        take()?.cancel()
+        save(null)
+    }
 
     private suspend fun saveBetterPlan(
         currentPlan: PlanEntity,
         resultStages: List<Stage>
     ) {
-        if (BuildConfig.DEBUG) {
-            val currentDistance = currentPlan.stages.distance()
-            val resultDistance = resultStages.distance()
-            Timber.d("Found better tsp solution $currentDistance -> $resultDistance")
+        if (currentPlan.stages != resultStages) {
+            if (BuildConfig.DEBUG) {
+                val currentDistance = currentPlan.stages.distance()
+                val resultDistance = resultStages.distance()
+                Timber.d("Found better tsp solution $currentDistance -> $resultDistance")
+            }
+            coroutineScope {
+                launch(Dispatchers.Default) {
+                    planRepository.setPlan(currentPlan.copy(stages = resultStages))
+                }
+            }
         }
-        planRepository.setPlan(currentPlan.copy(stages = resultStages))
     }
+
+    private fun Flow<PlanEntity?>.requireSomePlan(): Flow<PlanEntity> =
+        map { it ?: newEmptyPlan() }
+
+    private fun Flow<PlanEntity>.require3Stages(): Flow<PlanEntity> =
+        distinctUntilChanged { _, new -> new.stages.size > 2 }
 
     private fun <T> Flow<T>.refreshPeriodically(period: Long) =
         combine(tickerFlow(period)) { it, _ -> it }
@@ -113,10 +129,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     private fun Flow<PlanEntity>.combineWithUserPosition(): Flow<PlanEntity> =
         combine(observeUserPosition()) { plan, userPosition ->
-            val userStage = listOfNotNull(userPosition?.let { Stage.InUserPosition(it) })
-            val (seen, notSeen) = plan.stages.partition { it is Stage.InRegion && it.seen }
+            if (userPosition != null) {
+                val userStage = userPosition.let(Stage::InUserPosition)
+                val (seen, notSeen) = plan.stages.partition(::isSeen)
 
-            plan.copy(stages = seen + userStage + notSeen)
+                plan.copy(stages = seen + userStage + notSeen)
+            } else {
+                plan
+            }
         }
 
     @Suppress("USELESS_CAST")
