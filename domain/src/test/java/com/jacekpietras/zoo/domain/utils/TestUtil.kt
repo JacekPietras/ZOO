@@ -17,5 +17,5 @@ fun <T> CoroutineScope.assertFlowEquals(flow: Flow<T>, vararg expected: T) {
             if (index == expected.size - 1) cancel()
         }
     }
-    assertEquals(expected.asList(), collected)
+    assertEquals(ArrayList(expected.asList()), ArrayList(collected))
 }

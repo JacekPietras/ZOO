@@ -14,7 +14,6 @@ import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +33,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val gpsRepository: GpsRepository,
     private val tspSolver: StageTravellingSalesmanProblemSolver,
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
-    private val isDebug :()->Boolean= {BuildConfig.DEBUG},
+    private val isDebug: () -> Boolean = { BuildConfig.DEBUG },
 ) : ObserveCurrentPlanWithOptimizationUseCase {
 
     override fun run(): Flow<TspResult> =
@@ -74,7 +73,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         crossinline block: suspend () -> Unit,
     ) {
         with(CoroutineScope(Dispatchers.Default)) {
-            launch(Dispatchers.Default) {
+            launch {
                 block()
             }.let(job::save)
         }
@@ -90,7 +89,8 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private fun isSeen(stage: Stage) =
         stage is Stage.InRegion && stage.seen
 
-    private fun TspResult.addSeen(seen: List<Stage>) = copy(stages = seen + stages)
+    private fun TspResult.addSeen(seen: List<Stage>) =
+        copy(stages = seen + stages)
 
     private fun Storage<Job?>.purge() {
         take()?.cancel()
@@ -107,8 +107,8 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                 val resultDistance = resultStages.distance()
                 Timber.d("Found better tsp solution $currentDistance -> $resultDistance")
             }
-            coroutineScope {
-                launch(Dispatchers.Default) {
+            with(CoroutineScope(Dispatchers.Default)) {
+                launch {
                     planRepository.setPlan(currentPlan.copy(stages = resultStages))
                 }
             }
