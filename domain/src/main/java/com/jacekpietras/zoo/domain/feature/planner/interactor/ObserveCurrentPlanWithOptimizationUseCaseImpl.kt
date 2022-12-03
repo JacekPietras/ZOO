@@ -11,6 +11,7 @@ import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSol
 import com.jacekpietras.zoo.domain.feature.tsp.TspResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.utils.measureMap
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
@@ -33,9 +34,9 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val gpsRepository: GpsRepository,
     private val tspSolver: StageTravellingSalesmanProblemSolver,
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
+    private val isDebug :()->Boolean= {BuildConfig.DEBUG},
 ) : ObserveCurrentPlanWithOptimizationUseCase {
 
-    // todo write unit tests for it
     override fun run(): Flow<TspResult> =
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
@@ -68,11 +69,11 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             }
         }
 
-    private suspend fun launchBackground(
+    private suspend inline fun launchBackground(
         job: Storage<Job?>,
-        block: suspend () -> Unit,
+        crossinline block: suspend () -> Unit,
     ) {
-        coroutineScope {
+        with(CoroutineScope(Dispatchers.Default)) {
             launch(Dispatchers.Default) {
                 block()
             }.let(job::save)
@@ -101,7 +102,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         resultStages: List<Stage>
     ) {
         if (currentPlan.stages != resultStages) {
-            if (BuildConfig.DEBUG) {
+            if (isDebug()) {
                 val currentDistance = currentPlan.stages.distance()
                 val resultDistance = resultStages.distance()
                 Timber.d("Found better tsp solution $currentDistance -> $resultDistance")
