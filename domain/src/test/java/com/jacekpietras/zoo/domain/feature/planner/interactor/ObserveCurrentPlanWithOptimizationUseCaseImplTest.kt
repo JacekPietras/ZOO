@@ -2,7 +2,6 @@
 
 package com.jacekpietras.zoo.domain.feature.planner.interactor
 
-import android.text.format.DateUtils.HOUR_IN_MILLIS
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
@@ -15,14 +14,11 @@ import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.utils.assertFlowEquals
 import com.jacekpietras.zoo.domain.utils.assertFlowEqualsWithTimeout
-import com.jacekpietras.zoo.domain.utils.testFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
-import org.mockito.kotlin.atLeast
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
@@ -83,17 +79,21 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
         whenever(mockTspSolver.findShortPathAndStages(any())).thenReturn(computedSolution, optimalSolution)
 
         val result = useCase.run()
-        advanceTimeBy(HOUR_IN_MILLIS)
+
+        assertFlowEquals(
+            flow = result,
+            TspResult(initialStages),
+            computedSolution,
+        )
+
+        advanceTimeBy(MINUTE_IN_MILLIS)
 
         assertFlowEqualsWithTimeout(
             flow = result,
-            timeout = HOUR_IN_MILLIS,
-            TspResult(initialStages),
-            computedSolution,
             optimalSolution,
         )
 
-        verify(mockPlanRepository, atLeast(2)).setPlan(any())
+        verify(mockPlanRepository, times(2)).setPlan(any())
     }
 
     private fun newUseCase(
