@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalStdlibApi::class)
+
 package com.jacekpietras.zoo.domain.feature.planner.interactor
 
+import android.text.format.DateUtils.HOUR_IN_MILLIS
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanEntity
 import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
@@ -11,14 +14,18 @@ import com.jacekpietras.zoo.domain.feature.tsp.TspResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.utils.assertFlowEquals
+import com.jacekpietras.zoo.domain.utils.assertFlowEqualsWithTimeout
+import com.jacekpietras.zoo.domain.utils.testFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.atLeast
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
@@ -56,12 +63,12 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
     fun `when tsp solver is producing data, then better solution is returned`() = runTest {
         whenever(mockObserveCurrentPlanUseCase.run()).thenReturn(flowOf(initialPlan))
         whenever(mockGpsRepository.observeLatestPosition()).thenReturn(flowOf())
-        whenever(mockTspSolver.findShortPathAndStages(initialStages)).thenReturn(computedSolution)
+        whenever(mockTspSolver.findShortPathAndStages(initialStages)).doReturn(computedSolution)
 
         val result = useCase.run()
 
-        assertFlowEquals(
-            result,
+        assertFlowEqualsWithTimeout(
+            flow = result,
             TspResult(initialStages),
             computedSolution,
         )
@@ -73,29 +80,27 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
     fun `when time passed, then optimal solution is returned`() = runTest {
         whenever(mockObserveCurrentPlanUseCase.run()).thenReturn(flowOf(initialPlan))
         whenever(mockGpsRepository.observeLatestPosition()).thenReturn(flowOf())
-//        whenever(mockTspSolver.findShortPathAndStages(any())).thenReturn(computedSolution)
-        whenever(mockTspSolver.findShortPathAndStages(initialStages)).thenReturn(computedSolution)
-//            .thenReturn(optimalSolution)
-//        whenever(mockTspSolver.findShortPathAndStages(computedStages)).thenReturn(optimalSolution)
+        whenever(mockTspSolver.findShortPathAndStages(any())).thenReturn(computedSolution, optimalSolution)
 
         val result = useCase.run()
-        advanceTimeBy(2 * MINUTE_IN_MILLIS)
+        advanceTimeBy(HOUR_IN_MILLIS)
 
-        assertFlowEquals(
-            result,
+        assertFlowEqualsWithTimeout(
+            flow = result,
+            timeout = HOUR_IN_MILLIS,
             TspResult(initialStages),
             computedSolution,
-//            optimalSolution,
+            optimalSolution,
         )
 
-        verify(mockPlanRepository).setPlan(any())
+        verify(mockPlanRepository, atLeast(2)).setPlan(any())
     }
 
     private fun newUseCase(
-        planRepository: PlanRepository = mock(),
-        gpsRepository: GpsRepository = mock(),
-        tspSolver: StageTravellingSalesmanProblemSolver = mock(),
-        observeCurrentPlanUseCase: ObserveCurrentPlanUseCase = mock(),
+        planRepository: PlanRepository = mockPlanRepository,
+        gpsRepository: GpsRepository = mockGpsRepository,
+        tspSolver: StageTravellingSalesmanProblemSolver = mockTspSolver,
+        observeCurrentPlanUseCase: ObserveCurrentPlanUseCase = mockObserveCurrentPlanUseCase,
     ) = ObserveCurrentPlanWithOptimizationUseCaseImpl(
         planRepository = planRepository,
         gpsRepository = gpsRepository,
@@ -126,15 +131,15 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
         val computedSolution = TspResult(
             stages = computedStages,
         )
-//        val optimalStages = listOf(
-//            stage1,
-//            stage2,
-//            stage4,
-//            stage3,
-//        )
-//        val optimalSolution = TspResult(
-//            stages = optimalStages,
-//        )
+        val optimalStages = listOf(
+            stage1,
+            stage2,
+            stage3,
+            stage4,
+        )
+        val optimalSolution = TspResult(
+            stages = optimalStages,
+        )
 
         private fun newStage(regionId: String = "region-id"): Stage =
             Stage.InRegion(
