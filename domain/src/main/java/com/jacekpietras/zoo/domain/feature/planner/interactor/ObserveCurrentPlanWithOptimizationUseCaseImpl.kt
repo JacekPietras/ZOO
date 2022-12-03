@@ -40,9 +40,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
-                    .onEach {
-                        System.out.println("---1 ${it?.stages?.map{(it as Stage.InRegion).region.id.id}?. joinToString()}")
-                    }
                     .requireSomePlan()
                     .distinctUntilChanged { _, new ->
                         new.stages == calculation.take().filter { it !is Stage.InUserPosition } && new.stages.size > 2
@@ -51,9 +48,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .combineWithUserPosition()
                     .refreshPeriodically(MINUTE, skipWhen = { job.take() != null })
                     .onEach { job.purge() }
-                    .onEach {
-                        System.out.println("---X ${it?.stages?.map{(it as Stage.InRegion).region.id.id}?. joinToString()}")
-                    }
                     .pushAndDo(
                         fast = ::emitPlanWithoutCalculations,
                         long = { plan, collector ->
@@ -124,9 +118,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     private fun Flow<PlanEntity?>.requireSomePlan(): Flow<PlanEntity> =
         map { it ?: newEmptyPlan() }
-
-    private fun Flow<PlanEntity>.require3Stages(): Flow<PlanEntity> =
-        distinctUntilChanged { _, new -> new.stages.size > 2 }
 
     private fun <T> Flow<T>.refreshPeriodically(period: Long, skipWhen: () -> Boolean) =
         combine(tickerFlow(period, skipWhen)) { it, _ -> it }
