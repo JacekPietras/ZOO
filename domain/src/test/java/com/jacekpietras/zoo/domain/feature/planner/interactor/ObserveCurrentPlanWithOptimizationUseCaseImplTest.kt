@@ -66,7 +66,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
             computedSolution,
         )
 
-//        verify(mockPlanRepository).setPlan(any())
+        verify(mockPlanRepository).setPlan(any())
     }
 
     @Test
