@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.tsp.model
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage

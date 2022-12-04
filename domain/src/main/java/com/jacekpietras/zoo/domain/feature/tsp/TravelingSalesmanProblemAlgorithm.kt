@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.tsp
 
-internal interface TravelingSalesmanProblemAlgorithm<T> {
+internal interface TravelingSalesmanProblemAlgorithm<T:Any> {
 
     suspend fun run(
         points: List<T>,

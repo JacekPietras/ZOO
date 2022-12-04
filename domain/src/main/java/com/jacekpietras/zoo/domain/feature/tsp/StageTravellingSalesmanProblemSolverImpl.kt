@@ -5,6 +5,7 @@ import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
+import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.RegionId
 import timber.log.Timber
 

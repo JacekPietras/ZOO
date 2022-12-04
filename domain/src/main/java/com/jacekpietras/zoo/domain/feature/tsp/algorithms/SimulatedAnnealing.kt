@@ -1,5 +1,6 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
+import com.jacekpietras.zoo.domain.feature.tsp.TravelingSalesmanProblemAlgorithm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
@@ -8,7 +9,7 @@ import java.util.*
 import kotlin.math.exp
 import kotlin.random.Random
 
-internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
+internal class SimulatedAnnealing<T:Any> : TravelingSalesmanProblemAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,

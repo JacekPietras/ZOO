@@ -8,7 +8,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
-import com.jacekpietras.zoo.domain.feature.tsp.TspResult
+import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.CoroutineScope
