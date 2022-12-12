@@ -21,9 +21,10 @@ internal suspend fun doTspTest(
         numberOfCities = numberOfCities,
     )
     val initialDistance = initial.distance()
+    val algorithmWithCounting = CountingTSP(algorithm)
 
-   val (results, durations) = (1..times)
-        .map { doTspTest(initial, algorithm) }
+    val (results, durations) = (1..times)
+        .map { doTspTest(initial, algorithmWithCounting) }
         .unzip()
 
     val result = results.min()
@@ -32,7 +33,7 @@ internal suspend fun doTspTest(
     if (result < bestExpected) {
         println("New record: $result")
     }
-    println("${initialDistance.toInt()} / ${result.toInt()} / ${bestExpected.toInt()} | in $duration")
+    println("${initialDistance.toInt()} / ${result.toInt()} / ${bestExpected.toInt()} | in $duration | ${algorithmWithCounting.calcCount} counts")
 }
 
 private suspend fun doTspTest(
@@ -80,6 +81,25 @@ internal class DivorcedTSP(private val algorithm: TravelingSalesmanProblemAlgori
         val end = tour.subList(indexOfDummy + 1, tour.lastIndex)
         val connected = end + begin
         return connected.distance() to connected
+    }
+}
+
+internal class CountingTSP(private val algorithm: TravelingSalesmanProblemAlgorithm<City>) : TravelingSalesmanProblemAlgorithm<City> {
+
+    var calcCount = 0
+
+    override suspend fun run(
+        points: List<City>,
+        distanceCalculation: suspend (City, City) -> Double,
+        immutablePositions: List<Int>?
+    ): Pair<Double, List<City>> {
+        return algorithm.run(
+            points = points,
+            distanceCalculation = { a, b ->
+                calcCount++
+                a.distanceToCity(b)
+            },
+        )
     }
 }
 
