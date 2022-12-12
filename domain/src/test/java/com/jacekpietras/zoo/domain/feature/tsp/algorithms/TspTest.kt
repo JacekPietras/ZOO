@@ -72,9 +72,10 @@ internal class DivorcedTSP(private val algorithm: TravelingSalesmanProblemAlgori
                     when {
                         a == dummy -> 0.0
                         b == dummy -> 0.0
-                        else -> a.distanceToCity(b)
+                        else -> distanceCalculation(a, b)
                     }
                 },
+                immutablePositions = immutablePositions,
             ).second
         val indexOfDummy = tour.indexOfFirst { it == dummy }
         val begin = tour.subList(0, indexOfDummy)
@@ -97,8 +98,9 @@ internal class CountingTSP(private val algorithm: TravelingSalesmanProblemAlgori
             points = points,
             distanceCalculation = { a, b ->
                 calcCount++
-                a.distanceToCity(b)
+                distanceCalculation(a, b)
             },
+            immutablePositions = immutablePositions,
         )
     }
 }
