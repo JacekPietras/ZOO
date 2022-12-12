@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
 import com.jacekpietras.zoo.domain.feature.tsp.TravelingSalesmanProblemAlgorithm
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -17,10 +18,14 @@ internal fun doTspTest(algorithm: TravelingSalesmanProblemAlgorithm<City>, seed:
     var result: Double
 
     val duration = measureTime {
-        result = algorithm.run(
+        val tour = algorithm.run(
             points = initial,
             distanceCalculation = { a, b -> a.distanceToCity(b) },
-        ).first
+        ).second
+
+        assertEquals(initial.size, tour.size, "Incorrect number in result")
+
+        result = tour.distance()
     }
 
     if (result < bestExpected) {
@@ -28,6 +33,32 @@ internal fun doTspTest(algorithm: TravelingSalesmanProblemAlgorithm<City>, seed:
     }
 
     println("${initialDistance.toInt()} / ${result.toInt()} / ${bestExpected.toInt()} | in $duration")
+}
+
+internal class DivorcedTSP(private val algorithm: TravelingSalesmanProblemAlgorithm<City>) : TravelingSalesmanProblemAlgorithm<City> {
+
+    override suspend fun run(
+        points: List<City>,
+        distanceCalculation: suspend (City, City) -> Double,
+        immutablePositions: List<Int>?
+    ): Pair<Double, List<City>> {
+        val tour =
+            algorithm.run(
+                points = points + Dummy,
+                distanceCalculation = { a, b ->
+                    when {
+                        a is Dummy -> 0.0
+                        b is Dummy -> 0.0
+                        else -> a.distanceToCity(b)
+                    }
+                },
+            ).second
+        val indexOfDummy = tour.indexOfFirst { it is Dummy }
+        val begin = tour.subList(0, indexOfDummy)
+        val end = tour.subList(indexOfDummy + 1, tour.lastIndex)
+        val connected = end + begin
+        return connected.distance() to connected
+    }
 }
 
 private fun generateInitialTravel(
@@ -46,7 +77,7 @@ private fun generateInitialTravel(
 private fun List<City>.distance(): Double =
     zipWithNext { a, b -> a.distanceToCity(b) }.sum()
 
-internal class City(
+internal open class City(
     var x: Int,
     var y: Int,
 ) {
@@ -57,3 +88,5 @@ internal class City(
                     abs(y - city.y).toDouble().pow(2.0)
         )
 }
+
+internal object Dummy : City(0, 0)
