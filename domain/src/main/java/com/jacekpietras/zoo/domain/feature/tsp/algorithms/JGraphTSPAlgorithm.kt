@@ -17,8 +17,6 @@ internal class JGraphTSPAlgorithm<T : Any>(
 
         val tour = algorithm.getTour(graph)
 
-        println(tour.weight)
-
-        return 0.0 to tour.vertexList
+        return tour.weight to tour.vertexList
     }
 }
