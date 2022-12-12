@@ -49,6 +49,7 @@ private suspend fun doTspTest(
         ).second
 
         assertEquals(initial.size, tour.size, "Incorrect number in result")
+        assertEquals(initial.toSet(), tour.toSet(), "Different sets")
 
         result = tour.distance()
     }

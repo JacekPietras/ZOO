@@ -15,7 +15,6 @@ internal suspend fun <T : Any> List<T>.toJGraph(
     this.forEach { from ->
         pointsTo.remove(from)
         pointsTo.forEach { to ->
-//            graph.addEdge(from, to, MyEdge(from, to, distanceCalculation))
             graph.addEdge(from, to)
             graph.setEdgeWeight(from, to, distanceCalculation(from, to) )
         }
