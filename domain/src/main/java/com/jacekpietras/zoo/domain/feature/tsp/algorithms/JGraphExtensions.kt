@@ -22,7 +22,7 @@ internal fun <T : Any> List<T>.toJGraph(
     return g
 }
 
-private class MyEdge<T : Any>(
+private data class MyEdge<T : Any>(
     val from: T,
     val to: T,
     private val distanceCalculation: suspend (T, T) -> Double,
