@@ -5,7 +5,7 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
 import org.jgrapht.graph.DefaultWeightedEdge
 
 internal class JGraphTSPAlgorithm<T : Any>(
-    private val algorithm: HamiltonianCycleAlgorithm<T, DefaultWeightedEdge>
+    private val algorithm: HamiltonianCycleAlgorithm<T,DefaultWeightedEdge>
 ) : TravelingSalesmanProblemAlgorithm<T> {
 
     override suspend fun run(
@@ -15,8 +15,10 @@ internal class JGraphTSPAlgorithm<T : Any>(
     ): Pair<Double, List<T>> {
         val graph = points.toJGraph(distanceCalculation)
 
-        val tour = algorithm.getTour(graph).vertexList
+        val tour = algorithm.getTour(graph)
 
-        return 0.0 to tour
+        println(tour.weight)
+
+        return 0.0 to tour.vertexList
     }
 }
