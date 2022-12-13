@@ -29,7 +29,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 2000,
             numberOfCities = 60,
-            bestExpected = 3081.1033481500526,
+            bestExpected = 3064.144665909665,
         )
     }
 
@@ -41,7 +41,7 @@ internal class JGraphAlgorithmTest {
                 seed = seed,
                 numberOfCities = numberOfCities,
                 bestExpected = bestExpected,
-                times = 10,
+                times = 100,
             )
         }
     }

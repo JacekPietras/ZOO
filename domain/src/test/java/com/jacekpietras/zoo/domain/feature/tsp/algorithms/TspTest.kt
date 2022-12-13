@@ -27,14 +27,15 @@ internal suspend fun doTspTest(
         .map { doTspTest(initial, algorithmWithCounting) }
         .unzip()
 
-    val result = results.min()
+    val resultMin = results.min()
+    val resultMax = results.max()
     val durationMin = durations.min()
     val durationMax = durations.max()
 
-    if (result < bestExpected) {
-        println("New record: $result")
+    if (resultMin < bestExpected) {
+        println("New record: $resultMin")
     }
-    println("${initialDistance.toInt()} / ${result.toInt()} / ${bestExpected.toInt()} | in $durationMin - $durationMax | ${algorithmWithCounting.calcCount} counts")
+    println("${initialDistance.toInt()} / ${resultMin.toInt()}..${resultMax.toInt()} / ${bestExpected.toInt()} | in $durationMin..$durationMax | ${algorithmWithCounting.calcCount} counts")
 }
 
 private suspend fun doTspTest(
