@@ -24,6 +24,14 @@ internal class JGraphAlgorithmTest {
             bestExpected = 2138.93320969663,
         )
     }
+    @Test
+    fun `Annealing test over 60`() {
+        doTest(
+            seed = 2000,
+            numberOfCities = 60,
+            bestExpected = 3081.1033481500526,
+        )
+    }
 
     private fun doTest(seed: Long, numberOfCities: Int, bestExpected: Double = 0.0) = runTest {
         algorithms.forEach { (name, algorithm) ->
@@ -33,7 +41,7 @@ internal class JGraphAlgorithmTest {
                 seed = seed,
                 numberOfCities = numberOfCities,
                 bestExpected = bestExpected,
-                times = 100,
+                times = 10,
             )
         }
     }
@@ -48,7 +56,10 @@ internal class JGraphAlgorithmTest {
             "NearestInsertion" to JGraphTSPAlgorithm<City>(NearestInsertionHeuristicTSP()).let(::DivorcedTSP),
             "NearestNeighbor" to JGraphTSPAlgorithm<City>(NearestNeighborHeuristicTSP()).let(::DivorcedTSP),
             "TwoApprox" to JGraphTSPAlgorithm<City>(TwoApproxMetricTSP()).let(::DivorcedTSP),
-            "TwoOpt" to JGraphTSPAlgorithm<City>(TwoOptHeuristicTSP(200, NearestNeighborHeuristicTSP())).let(::DivorcedTSP),
+            "TwoOpt (1, near)" to JGraphTSPAlgorithm<City>(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())).let(::DivorcedTSP),
+            "TwoOpt (100, near)" to JGraphTSPAlgorithm<City>(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())).let(::DivorcedTSP),
+            "TwoOpt (1, rnd)" to JGraphTSPAlgorithm<City>(TwoOptHeuristicTSP(1)).let(::DivorcedTSP),
+            "TwoOpt (100, rnd)" to JGraphTSPAlgorithm<City>(TwoOptHeuristicTSP(100)).let(::DivorcedTSP),
 
             "SimulatedAnnealing" to SimulatedAnnealing(),
         )
