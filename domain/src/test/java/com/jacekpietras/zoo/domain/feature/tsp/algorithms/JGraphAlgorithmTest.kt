@@ -4,11 +4,7 @@ import com.jacekpietras.zoo.domain.feature.tsp.DivorcedTSPAlgorithm
 import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 import kotlinx.coroutines.test.runTest
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
-import org.jgrapht.alg.tour.GreedyHeuristicTSP
-import org.jgrapht.alg.tour.NearestInsertionHeuristicTSP
-import org.jgrapht.alg.tour.NearestNeighborHeuristicTSP
-import org.jgrapht.alg.tour.TwoApproxMetricTSP
-import org.jgrapht.alg.tour.TwoOptHeuristicTSP
+import org.jgrapht.alg.tour.*
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.junit.jupiter.api.Test
 
@@ -37,7 +33,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 2000,
             numberOfCities = 60,
-            bestExpected = 3064.144665909665,
+            bestExpected = 3062.6420210301117,
         )
     }
 
@@ -46,7 +42,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 1000,
             numberOfCities = 15,
-            bestExpected = 1579.2105821724608,
+            bestExpected = 1719.785146459187,
             immutablePositions = listOf(0, 14),
         )
     }
@@ -56,7 +52,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 1000,
             numberOfCities = 15,
-            bestExpected = 1579.2105821724608,
+            bestExpected = 1685.7027703853232,
             immutablePositions = listOf(0),
         )
     }
@@ -66,7 +62,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 1000,
             numberOfCities = 15,
-            bestExpected = 1579.2105821724608,
+            bestExpected = 1689.001101946651,
             immutablePositions = listOf(14),
         )
     }
@@ -93,17 +89,22 @@ internal class JGraphAlgorithmTest {
     companion object {
 
         val algorithms = listOf<Pair<String, TSPWithFixedStagesAlgorithm<City>>>(
-//                HeldKarpTSP() //requires a lot of memory
-//                ChristofidesThreeHalvesApproxMetricTSP() // no class def found error
+            // requires a lot of memory
+//            "HeldKarp" to divorcedTSP(HeldKarpTSP()),
+
+            // no class def found error
+//            "Christofides" to divorcedTSP(ChristofidesThreeHalvesApproxMetricTSP()),
+
+            // don't work with immutable and results are random
+//            "TwoApprox" to divorcedTSP(TwoApproxMetricTSP()),
 
             "Greedy" to divorcedTSP(GreedyHeuristicTSP()),
             "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
             "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
-            "TwoApprox" to divorcedTSP(TwoApproxMetricTSP()),
             "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-            "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
-//            "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
-//            "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(100)),
+            "TwoOpt (10, near)" to divorcedTSP(TwoOptHeuristicTSP(10, NearestNeighborHeuristicTSP())),
+            "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
+            "TwoOpt (10, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
 
             "SimulatedAnnealing" to SimulatedAnnealing(),
         )

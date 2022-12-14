@@ -36,10 +36,10 @@ internal class DivorcedTSPAlgorithm<T : Any>(
                 a === dummy && b === last -> 0.0
                 a === first && b === dummy -> 0.0
                 a === last && b === dummy -> 0.0
-                a === first && b === last -> Double.MAX_VALUE
-                a === last && b === first -> Double.MAX_VALUE
-                a === dummy -> Double.MAX_VALUE
-                b === dummy -> Double.MAX_VALUE
+                a === first && b === last -> MAX
+                a === last && b === first -> MAX
+                a === dummy -> MAX
+                b === dummy -> MAX
                 else -> distanceCalculation(a, b)
             }
         }
@@ -90,4 +90,8 @@ internal class DivorcedTSPAlgorithm<T : Any>(
 
     override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): Pair<Double, List<T>> =
         run(points, distanceCalculation, null)
+
+    private companion object{
+        const val MAX = 10000.0//Double.MAX_VALUE/2
+    }
 }
