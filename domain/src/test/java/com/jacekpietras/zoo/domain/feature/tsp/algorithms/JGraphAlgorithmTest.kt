@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
 import com.jacekpietras.zoo.domain.feature.tsp.DivorcedTSPAlgorithm
 import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
+import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 import kotlinx.coroutines.test.runTest
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
 import org.jgrapht.alg.tour.*
@@ -52,7 +53,7 @@ internal class JGraphAlgorithmTest {
 
     companion object {
 
-        val algorithms = listOf<Pair<String, TSPAlgorithm<City>>>(
+        val algorithms = listOf<Pair<String, TSPWithFixedStagesAlgorithm<City>>>(
 //                HeldKarpTSP() //requires a lot of memory
 //                ChristofidesThreeHalvesApproxMetricTSP() // no class def found error
 

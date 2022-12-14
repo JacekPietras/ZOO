@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
+import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.math.abs
 import kotlin.math.pow
@@ -10,11 +10,12 @@ import kotlin.time.Duration
 import kotlin.time.measureTime
 
 internal suspend fun doTspTest(
-    algorithm: TSPAlgorithm<City>,
+    algorithm: TSPWithFixedStagesAlgorithm<City>,
     seed: Long,
     numberOfCities: Int,
     bestExpected: Double = 0.0,
     times: Int = 1,
+    immutablePositions: List<Int>? = null,
 ) {
     val initial = generateInitialTravel(
         seed = seed,
@@ -23,8 +24,9 @@ internal suspend fun doTspTest(
     val initialDistance = initial.distance()
 
     val (results, durations) = (1..times)
-        .map { doTspTest(initial, algorithm) }
+        .map { doTspTest(initial, algorithm, immutablePositions) }
         .unzip()
+
 
     val resultMin = results.min()
     val resultMax = results.max()
@@ -39,18 +41,23 @@ internal suspend fun doTspTest(
 
 private suspend fun doTspTest(
     initial: List<City>,
-    algorithm: TSPAlgorithm<City>,
+    algorithm: TSPWithFixedStagesAlgorithm<City>,
+    immutablePositions: List<Int>? = null,
 ): Pair<Double, Duration> {
     var result: Double
+    val fixedPointsBefore = immutablePositions?.map { initial[it] }
 
     val duration = measureTime {
         val (distance, tour) = algorithm.run(
             points = initial,
             distanceCalculation = { a, b -> a.distanceToCity(b) },
+            immutablePositions = immutablePositions,
         )
+        val fixedPointsAfter = immutablePositions?.map { tour[it] }
 
         assertEquals(initial.size, tour.size, "Incorrect number in result")
         assertEquals(initial.toSet(), tour.toSet(), "Different sets")
+        assertEquals(fixedPointsBefore, fixedPointsAfter, "Different fixed points")
 
         result = distance
     }
