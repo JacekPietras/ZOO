@@ -10,7 +10,7 @@ internal class DivorcedTSPAlgorithm<T : Any>(
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?
     ): Pair<Double, List<T>> {
-        immutablePositions?.verifyMutablePositionsInMiddle()
+        immutablePositions?.verifyMutablePositionsInMiddle(points.size)
 
         val firstIsFixed = immutablePositions?.contains(0) == true
         val lastIsFixed = immutablePositions?.contains(points.lastIndex) == true
@@ -81,8 +81,8 @@ internal class DivorcedTSPAlgorithm<T : Any>(
         return end + begin
     }
 
-    private fun List<Int>.verifyMutablePositionsInMiddle() {
-        val immutablePointsInMiddle = any { it != 0 && it != lastIndex }
+    private fun List<Int>.verifyMutablePositionsInMiddle(listSize: Int) {
+        val immutablePointsInMiddle = any { it != 0 && it != listSize - 1 }
         if (immutablePointsInMiddle) {
             throw IllegalArgumentException("Supported only immutable positions on begin and end of list")
         }

@@ -22,21 +22,23 @@ internal suspend fun doTspTest(
         numberOfCities = numberOfCities,
     )
     val initialDistance = initial.distance()
+    try {
+        val (results, durations) = (1..times)
+            .map { doTspTest(initial, algorithm, immutablePositions) }
+            .unzip()
 
-    val (results, durations) = (1..times)
-        .map { doTspTest(initial, algorithm, immutablePositions) }
-        .unzip()
+        val resultMin = results.min()
+        val resultMax = results.max()
+        val durationMin = durations.min()
+        val durationMax = durations.max()
 
-
-    val resultMin = results.min()
-    val resultMax = results.max()
-    val durationMin = durations.min()
-    val durationMax = durations.max()
-
-    if (resultMin < bestExpected) {
-        println("New record: $resultMin")
+        if (resultMin < bestExpected) {
+            println("New record: $resultMin")
+        }
+        println("${initialDistance.toInt()} / ${resultMin.toInt()}..${resultMax.toInt()} / ${bestExpected.toInt()} | in $durationMin..$durationMax")
+    } catch (e: Exception) {
+        println("crashed: " + e.message)
     }
-    println("${initialDistance.toInt()} / ${resultMin.toInt()}..${resultMax.toInt()} / ${bestExpected.toInt()} | in $durationMin..$durationMax")
 }
 
 private suspend fun doTspTest(
