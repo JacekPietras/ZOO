@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TravelingSalesmanProblemAlgorithm
+import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.math.abs
 import kotlin.math.pow
@@ -10,7 +10,7 @@ import kotlin.time.Duration
 import kotlin.time.measureTime
 
 internal suspend fun doTspTest(
-    algorithm: TravelingSalesmanProblemAlgorithm<City>,
+    algorithm: TSPAlgorithm<City>,
     seed: Long,
     numberOfCities: Int,
     bestExpected: Double = 0.0,
@@ -21,10 +21,9 @@ internal suspend fun doTspTest(
         numberOfCities = numberOfCities,
     )
     val initialDistance = initial.distance()
-    val algorithmWithCounting = CountingTSP(algorithm)
 
     val (results, durations) = (1..times)
-        .map { doTspTest(initial, algorithmWithCounting) }
+        .map { doTspTest(initial, algorithm) }
         .unzip()
 
     val resultMin = results.min()
@@ -35,77 +34,28 @@ internal suspend fun doTspTest(
     if (resultMin < bestExpected) {
         println("New record: $resultMin")
     }
-    println("${initialDistance.toInt()} / ${resultMin.toInt()}..${resultMax.toInt()} / ${bestExpected.toInt()} | in $durationMin..$durationMax | ${algorithmWithCounting.calcCount} counts")
+    println("${initialDistance.toInt()} / ${resultMin.toInt()}..${resultMax.toInt()} / ${bestExpected.toInt()} | in $durationMin..$durationMax")
 }
 
 private suspend fun doTspTest(
     initial: List<City>,
-    algorithm: TravelingSalesmanProblemAlgorithm<City>,
+    algorithm: TSPAlgorithm<City>,
 ): Pair<Double, Duration> {
     var result: Double
 
     val duration = measureTime {
-        val tour = algorithm.run(
+        val (distance, tour) = algorithm.run(
             points = initial,
             distanceCalculation = { a, b -> a.distanceToCity(b) },
-        ).second
+        )
 
         assertEquals(initial.size, tour.size, "Incorrect number in result")
         assertEquals(initial.toSet(), tour.toSet(), "Different sets")
 
-        result = tour.distance()
+        result = distance
     }
 
     return result to duration
-}
-
-internal class DivorcedTSP(private val algorithm: TravelingSalesmanProblemAlgorithm<City>) : TravelingSalesmanProblemAlgorithm<City> {
-
-    override suspend fun run(
-        points: List<City>,
-        distanceCalculation: suspend (City, City) -> Double,
-        immutablePositions: List<Int>?
-    ): Pair<Double, List<City>> {
-        val dummy = City(-1, -1)
-
-        val tour =
-            algorithm.run(
-                points = points + dummy,
-                distanceCalculation = { a, b ->
-                    when {
-                        a == dummy -> 0.0
-                        b == dummy -> 0.0
-                        else -> distanceCalculation(a, b)
-                    }
-                },
-                immutablePositions = immutablePositions,
-            ).second
-        val indexOfDummy = tour.indexOfFirst { it == dummy }
-        val begin = tour.subList(0, indexOfDummy)
-        val end = tour.subList(indexOfDummy + 1, tour.lastIndex)
-        val connected = end + begin
-        return connected.distance() to connected
-    }
-}
-
-internal class CountingTSP(private val algorithm: TravelingSalesmanProblemAlgorithm<City>) : TravelingSalesmanProblemAlgorithm<City> {
-
-    var calcCount = 0
-
-    override suspend fun run(
-        points: List<City>,
-        distanceCalculation: suspend (City, City) -> Double,
-        immutablePositions: List<Int>?
-    ): Pair<Double, List<City>> {
-        return algorithm.run(
-            points = points,
-            distanceCalculation = { a, b ->
-                calcCount++
-                distanceCalculation(a, b)
-            },
-            immutablePositions = immutablePositions,
-        )
-    }
 }
 
 private fun generateInitialTravel(
@@ -121,7 +71,7 @@ private fun generateInitialTravel(
     }
 }
 
-private fun List<City>.distance(): Double =
+internal fun List<City>.distance(): Double =
     zipWithNext { a, b -> a.distanceToCity(b) }.sum()
 
 internal data class City(

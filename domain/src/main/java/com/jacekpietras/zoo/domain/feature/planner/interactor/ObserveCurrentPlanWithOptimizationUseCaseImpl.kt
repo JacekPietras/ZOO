@@ -7,7 +7,7 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
-import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
+import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
 import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.utils.measureMap
@@ -31,7 +31,7 @@ import timber.log.Timber
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
     private val gpsRepository: GpsRepository,
-    private val tspSolver: StageTravellingSalesmanProblemSolver,
+    private val tspSolver: StageTSPSolver,
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
     private val isDebug: () -> Boolean = { BuildConfig.DEBUG },
 ) : ObserveCurrentPlanWithOptimizationUseCase {

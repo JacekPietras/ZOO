@@ -9,11 +9,11 @@ import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.RegionId
 import timber.log.Timber
 
-internal class StageTravellingSalesmanProblemSolverImpl(
+internal class StageTSPSolverImpl(
     private val graphAnalyzer: GraphAnalyzer,
     private val mapRepository: MapRepository,
-    private val tspAlgorithm: TravelingSalesmanProblemAlgorithm<Stage>,
-) : StageTravellingSalesmanProblemSolver {
+    private val tspAlgorithm: TSPWithFixedStagesAlgorithm<Stage>,
+) : StageTSPSolver {
 
     private var regionCalculationCache = emptyList<RegionCalculation>()
     private val optionCreator = StageListOptionCreator()

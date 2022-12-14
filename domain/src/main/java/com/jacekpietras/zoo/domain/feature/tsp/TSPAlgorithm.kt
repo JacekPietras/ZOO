@@ -1,10 +1,9 @@
 package com.jacekpietras.zoo.domain.feature.tsp
 
-internal interface TravelingSalesmanProblemAlgorithm<T:Any> {
+internal interface TSPAlgorithm<T:Any> {
 
     suspend fun run(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
-        immutablePositions: List<Int>? = null,
     ):  Pair<Double, List<T>>
 }
