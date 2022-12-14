@@ -113,9 +113,9 @@ internal class JGraphAlgorithmTest {
 
             // Optimization runs
             "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-            "TwoOpt (10, near)" to divorcedTSP(TwoOptHeuristicTSP(10, NearestNeighborHeuristicTSP())),
+//            "TwoOpt (10, near)" to divorcedTSP(TwoOptHeuristicTSP(10, NearestNeighborHeuristicTSP())),
             "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
-            "TwoOpt (10, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
+//            "TwoOpt (10, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
 
             // Genetic
             "SimulatedAnnealing" to SimulatedAnnealing(),

@@ -21,21 +21,31 @@ internal suspend fun doTspTest(
         seed = seed,
         numberOfCities = numberOfCities,
     )
-    val initialDistance = initial.distance()
+    val initialDistance = initial.distance().toInt()
     try {
         val (results, durations) = (1..times)
             .map { doTspTest(initial, algorithm, immutablePositions) }
             .unzip()
 
-        val resultMin = results.min()
-        val resultMax = results.max()
-        val durationMin = durations.min()
-        val durationMax = durations.max()
+        val resultMin = results.min().toInt()
+        val resultMax = results.max().toInt()
+        val errorMin = ((resultMin - bestExpected) / (initialDistance - bestExpected.toInt()) * 100).toInt()
+        val errorMax = ((resultMax - bestExpected) / (initialDistance - bestExpected.toInt()) * 100).toInt()
+        val durationMin = durations.min().inWholeMicroseconds
+        val durationAvg = durations.map { it.inWholeMicroseconds }.average().toInt()
+        val durationMax = durations.max().inWholeMicroseconds
 
-        if (resultMin < bestExpected) {
+        if (results.min() < bestExpected) {
             println("New record: $resultMin")
         }
-        println("${initialDistance.toInt()} / ${resultMin.toInt()}..${resultMax.toInt()} / ${bestExpected.toInt()} | in $durationMin..$durationMax")
+//        println("$initialDistance / $resultMin..$resultMax / ${bestExpected.toInt()} | in $durationMin..$durationAvg..$durationMax μs")
+        val errorString = if (errorMin != errorMax) {
+            "$errorMin..$errorMax%"
+        } else {
+            "$errorMin%"
+        }.padStart(7)
+        println("err: $errorString in $durationAvg μs")
+
     } catch (e: Exception) {
         println("crashed: " + e.message)
     }
