@@ -90,22 +90,34 @@ internal class JGraphAlgorithmTest {
 
         val algorithms = listOf<Pair<String, TSPWithFixedStagesAlgorithm<City>>>(
             // requires a lot of memory
-//            "HeldKarp" to divorcedTSP(HeldKarpTSP()),
+            // O(2^V * V^2)
+            // "HeldKarp" to divorcedTSP(HeldKarpTSP()),
 
-            // no class def found error
-//            "Christofides" to divorcedTSP(ChristofidesThreeHalvesApproxMetricTSP()),
+            // requires Triangle inequality (cannot hack with ZERO/MAX weights)
+            // O(V^3 * E)
+            // "Christofides" to divorcedTSP(ChristofidesThreeHalvesApproxMetricTSP()),
 
             // don't work with immutable and results are random
-//            "TwoApprox" to divorcedTSP(TwoApproxMetricTSP()),
+            // requires Triangle inequality (cannot hack with ZERO/MAX weights)
+            // O(V^2 * log(V))
+            // "TwoApprox" to divorcedTSP(TwoApproxMetricTSP()),
 
+            // O(V^2 * log(V))
             "Greedy" to divorcedTSP(GreedyHeuristicTSP()),
+
+            // O(V^2) (runtime)
             "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
+
+            // O(V^2) (runtime)
             "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
+
+            // Optimization runs
             "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
             "TwoOpt (10, near)" to divorcedTSP(TwoOptHeuristicTSP(10, NearestNeighborHeuristicTSP())),
             "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
             "TwoOpt (10, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
 
+            // Genetic
             "SimulatedAnnealing" to SimulatedAnnealing(),
         )
 
