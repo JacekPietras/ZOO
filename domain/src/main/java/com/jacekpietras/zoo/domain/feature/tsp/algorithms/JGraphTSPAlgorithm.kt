@@ -15,10 +15,7 @@ internal class JGraphTSPAlgorithm<T : Any>(
         distanceCalculation: suspend (T, T) -> Double,
     ): List<T> {
         val graph = points.toJGraph(distanceCalculation)
-
-        val tour = algorithm.getTour(graph)
-
-        return tour.vertexList
+        return algorithm.getTour(graph).vertexList
     }
 
     private suspend fun <T : Any> List<T>.toJGraph(

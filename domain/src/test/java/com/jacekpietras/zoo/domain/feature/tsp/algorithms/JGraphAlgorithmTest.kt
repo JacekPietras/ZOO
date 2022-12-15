@@ -204,7 +204,7 @@ internal class JGraphAlgorithmTest {
 
             // Optimization runs
             "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-            "TwoOpt (1, near) (my)" to DivorcedTSPAlgorithm(MyTwoOptHeuristicTSP(), City(-1, -1)),
+            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
             // "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
             // "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
             // "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),

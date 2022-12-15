@@ -1,24 +1,24 @@
 package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
+import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 
-class MyTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
+class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
-        distanceCalculation: suspend (T, T) -> Double
+        distanceCalculation: suspend (T, T) -> Double,
+        immutablePositions: List<Int>?
     ): List<T> {
         val n = points.size
         val dist = createWeightArray(points, distanceCalculation)
-        val tour = (0..n).toList().toIntArray()
-        tour[n] = 0
+        val tour = IntArray(n) { it }
 
         while (true) {
             var minChange = -minCostImprovement
             var mini = -1
             var minj = -1
-            for (i in 0 until n - 2) {
-                for (j in i + 2 until n) {
+            for (i in 0 until n - 3) {
+                for (j in i + 2 until n - 1) {
                     val ci = tour[i]
                     val ci1 = tour[i + 1]
                     val cj = tour[j]
@@ -37,6 +37,9 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
             reverse(tour, mini + 1, minj)
         }
     }
+
+    override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): List<T> =
+        run(points, distanceCalculation, null)
 
     private inline fun List<T>.forEachPair(block: (Int, T, Int, T) -> Unit) {
         val pointsTo = mapIndexed { index, it -> index to it }.toMutableList()
