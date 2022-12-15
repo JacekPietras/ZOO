@@ -31,14 +31,11 @@ internal suspend fun doTspTest(
         val resultMax = results.max().toInt()
         val errorMin = ((resultMin - bestExpected) / (initialDistance - bestExpected.toInt()) * 100).toInt()
         val errorMax = ((resultMax - bestExpected) / (initialDistance - bestExpected.toInt()) * 100).toInt()
-        val durationMin = durations.min().inWholeMicroseconds
-        val durationAvg = durations.map { it.inWholeMicroseconds }.average().toInt()
-        val durationMax = durations.max().inWholeMicroseconds
+        val durationAvg = durations.map { it.inWholeMicroseconds }.sorted().dropBorder().average()
 
         if (results.min() < bestExpected) {
             println("New record: ${results.min()}")
         }
-//        println("$initialDistance / $resultMin..$resultMax / ${bestExpected.toInt()} | in $durationMin..$durationAvg..$durationMax μs")
         val errorString = if (errorMin != errorMax) {
             "$errorMin..$errorMax%"
         } else {
@@ -50,6 +47,13 @@ internal suspend fun doTspTest(
         println("crashed: " + e.message)
     }
 }
+
+private fun <T> List<T>.dropBorder(): List<T> =
+    if (size > 2) {
+        drop(1).dropLast(1)
+    } else {
+        this
+    }
 
 private suspend fun doTspTest(
     initial: List<City>,
