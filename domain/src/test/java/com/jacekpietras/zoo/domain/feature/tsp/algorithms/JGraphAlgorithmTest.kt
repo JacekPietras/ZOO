@@ -128,12 +128,22 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test with fixed positions on edges`() {
+    fun `Annealing test with fixed positions on both ends`() {
         doTest(
             seed = 1000,
             numberOfCities = 15,
             bestExpected = 1719.785146459187,
             immutablePositions = listOf(0, 14),
+        )
+    }
+
+    @Test
+    fun `Annealing test with fixed positions on both ends 60`() {
+        doTest(
+            seed = 7990,
+            numberOfCities = 60,
+            bestExpected = 3504.5567154824994,
+//            immutablePositions = listOf(0, 59),
         )
     }
 
@@ -170,7 +180,7 @@ internal class JGraphAlgorithmTest {
                 seed = seed,
                 numberOfCities = numberOfCities,
                 bestExpected = bestExpected,
-                times = 100,
+                times = 1,
                 immutablePositions = immutablePositions,
             )
         }
@@ -203,14 +213,15 @@ internal class JGraphAlgorithmTest {
             // "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
 
             // Optimization runs
-            "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
+//            "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
             "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
+            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
             // "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
             // "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
             // "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
 
             // Genetic
-            "SimulatedAnnealing" to SimulatedAnnealing(),
+//            "SimulatedAnnealing" to SimulatedAnnealing(),
         )
 
         private fun divorcedTSP(algorithm: HamiltonianCycleAlgorithm<City, DefaultWeightedEdge>) =

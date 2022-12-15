@@ -1,25 +1,22 @@
 package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
+import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
 import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 
-class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
+class MyOldTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
-        distanceCalculation: suspend (T, T) -> Double,
-        immutablePositions: List<Int>?
+        distanceCalculation: suspend (T, T) -> Double
     ): List<T> {
         val n = points.size
         val dist = createWeightArray(points, distanceCalculation)
+        val minCostImprovement = 1.0E-8
         val tour = IntArray(n + 1) { it }
         tour[n] = 0
-//        val immutableBegin = immutablePositions?.countImmutableBegin() ?: 0
-//        val immutableEnd = immutablePositions?.countImmutableEnd(n) ?: 0
 
-        // [ ][ ][ ][ ][ ][ ][ ][ ][x][x][!]
-        // [x][x][ ][ ][ ][ ][ ][ ][ ][ ][!]
         while (true) {
-            var minChange = -minCostImprovement
+            var minChange: Double = -minCostImprovement
             var mini = -1
             var minj = -1
             for (i in 0 until n - 2) {
@@ -37,14 +34,11 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
                 }
             }
             if (mini == -1 || minj == -1) {
-                return toPointList(tour, points)
+                return tour.toPointList(points)
             }
             reverse(tour, mini + 1, minj)
         }
     }
-
-    override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): List<T> =
-        run(points, distanceCalculation, null)
 
     private inline fun List<T>.forEachPair(block: (Int, T, Int, T) -> Unit) {
         val pointsTo = mapIndexed { index, it -> index to it }.toMutableList()
@@ -83,33 +77,6 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         }
     }
 
-    private fun <T> toPointList(arr: IntArray, points: List<T>): List<T> =
-        List(arr.size - 1) { points[arr[it]] }
-
-    private companion object {
-
-        const val minCostImprovement = 1.0E-8
-    }
-
-    private fun List<Int>.countImmutableBegin(): Int {
-        var result = 0
-        forEachIndexed { index, i ->
-            if (index == i) {
-                result = i + 1
-            } else {
-                return result
-            }
-        }
-        return result
-    }
-
-    private fun List<Int>.countImmutableEnd(n: Int): Int {
-        var result = 0
-        (n - 1 downTo 0).forEach {
-            if (contains(it)) result++
-            else return result
-        }
-        return result
-    }
+    private fun <T> IntArray.toPointList(points: List<T>): List<T> =
+        map { points[it] }
 }
-
