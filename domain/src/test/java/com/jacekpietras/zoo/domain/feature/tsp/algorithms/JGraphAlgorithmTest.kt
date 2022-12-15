@@ -60,7 +60,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 52,
             numberOfCities = 52,
-            bestExpected = 2694.918918278649,
+            bestExpected = 2641.6033459501105,
         )
     }
 
@@ -69,7 +69,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 53,
             numberOfCities = 53,
-            bestExpected = 2890.001966059909,
+            bestExpected = 2884.381227406432,
         )
     }
 
@@ -78,7 +78,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 54,
             numberOfCities = 54,
-            bestExpected = 2757.184939302054,
+            bestExpected = 2743.4029487090984,
         )
     }
 
@@ -87,7 +87,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 55,
             numberOfCities = 55,
-            bestExpected = 2424.142877163852,
+            bestExpected = 2406.8188761285646,
         )
     }
 
@@ -96,7 +96,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 56,
             numberOfCities = 56,
-            bestExpected = 3016.8900674689276,
+            bestExpected = 2977.1672645374324,
         )
     }
 
@@ -105,7 +105,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 57,
             numberOfCities = 57,
-            bestExpected = 2648.174311519809,
+            bestExpected = 2611.979827420503,
         )
     }
 
@@ -114,7 +114,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 58,
             numberOfCities = 58,
-            bestExpected = 3060.0382982869596,
+            bestExpected = 3026.339204016642,
         )
     }
 
@@ -123,7 +123,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 59,
             numberOfCities = 59,
-            bestExpected = 2883.11226513947,
+            bestExpected = 2831.21536867656,
         )
     }
 
@@ -196,7 +196,8 @@ internal class JGraphAlgorithmTest {
             "Greedy" to divorcedTSP(GreedyHeuristicTSP()),
 
             // O(V^2) (runtime)
-            "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
+            // Weak
+            // "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
 
             // O(V^2) (runtime)
             "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
