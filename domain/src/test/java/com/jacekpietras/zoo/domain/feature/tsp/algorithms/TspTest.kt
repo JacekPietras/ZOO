@@ -22,7 +22,7 @@ internal suspend fun doTspTest(
         numberOfCities = numberOfCities,
     )
     val initialDistance = initial.distance().toInt()
-    try {
+//    try {
         val (results, durations) = (1..times)
             .map { doTspTest(initial, algorithm, immutablePositions) }
             .unzip()
@@ -43,9 +43,9 @@ internal suspend fun doTspTest(
         }.padStart(7)
         println("err: $errorString in $durationAvg μs")
 
-    } catch (e: Exception) {
-        println("crashed: " + e.message)
-    }
+//    } catch (e: Exception) {
+//        println("crashed: " + e.message)
+//    }
 }
 
 private fun <T> List<T>.dropBorder(): List<T> =

@@ -11,19 +11,17 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
     ): List<T> {
         val n = points.size
         val dist = createWeightArray(points, distanceCalculation)
-        val tour = IntArray(n + 1) { it }
-        tour[n] = 0
+        val tour = IntArray(n + 2) { it }
+        tour[n + 1] = 0
 //        val immutableBegin = immutablePositions?.countImmutableBegin() ?: 0
 //        val immutableEnd = immutablePositions?.countImmutableEnd(n) ?: 0
 
-        // [ ][ ][ ][ ][ ][ ][ ][ ][x][x][!]
-        // [x][x][ ][ ][ ][ ][ ][ ][ ][ ][!]
         while (true) {
             var minChange = -minCostImprovement
             var mini = -1
             var minj = -1
-            for (i in 0 until n - 2) {
-                for (j in i + 2 until n) {
+            for (i in 0 until n - 1) {
+                for (j in i + 2 until n + 1) {
                     val ci = tour[i]
                     val ci1 = tour[i + 1]
                     val cj = tour[j]
@@ -61,7 +59,7 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         distanceCalculation: suspend (T, T) -> Double
     ): Array<DoubleArray> {
         val n = points.size
-        val dist = Array(n) { DoubleArray(n) }
+        val dist = Array(n + 1) { DoubleArray(n + 1) { 0.0 } }
 
         points.forEachPair { si, s, ti, t ->
             val weight = distanceCalculation(s, t)
@@ -83,8 +81,11 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         }
     }
 
-    private fun <T> toPointList(arr: IntArray, points: List<T>): List<T> =
-        List(arr.size - 1) { points[arr[it]] }
+    private fun <T> toPointList(arr: IntArray, points: List<T>): List<T> {
+        val n = arr.size - 2
+        val shift = arr.indexOf(n)
+        return List(n) { points[arr[(it + shift + 1) % (n + 1)]] }
+    }
 
     private companion object {
 
