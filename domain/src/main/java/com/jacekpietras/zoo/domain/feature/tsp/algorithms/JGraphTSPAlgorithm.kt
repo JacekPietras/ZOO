@@ -13,12 +13,12 @@ internal class JGraphTSPAlgorithm<T : Any>(
     override suspend fun run(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
-    ): Pair<Double, List<T>> {
+    ): List<T> {
         val graph = points.toJGraph(distanceCalculation)
 
         val tour = algorithm.getTour(graph)
 
-        return tour.weight to tour.vertexList
+        return tour.vertexList
     }
 
     private suspend fun <T : Any> List<T>.toJGraph(

@@ -9,7 +9,7 @@ internal class DivorcedTSPAlgorithm<T : Any>(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?
-    ): Pair<Double, List<T>> {
+    ): List<T> {
         immutablePositions?.verifyMutablePositionsInMiddle(points.size)
 
         val firstIsFixed = immutablePositions?.contains(0) == true
@@ -55,7 +55,6 @@ internal class DivorcedTSPAlgorithm<T : Any>(
                 points = points + dummy,
                 distanceCalculation = composedDistanceCalculation,
             )
-            .second
 
         var connected = tour.shiftStartTo()
         if (connected.first() === last || connected.last() === first) {
@@ -68,9 +67,7 @@ internal class DivorcedTSPAlgorithm<T : Any>(
             throw IllegalStateException("Fixed last element is not at the end")
         }
 
-        val distance = connected.zipWithNext { a, b -> distanceCalculation(a, b) }.sum()
-
-        return distance to connected
+        return connected
     }
 
 
@@ -88,10 +85,10 @@ internal class DivorcedTSPAlgorithm<T : Any>(
         }
     }
 
-    override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): Pair<Double, List<T>> =
+    override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): List<T> =
         run(points, distanceCalculation, null)
 
-    private companion object{
+    private companion object {
         const val MAX = 10000.0//Double.MAX_VALUE/2
     }
 }

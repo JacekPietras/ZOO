@@ -15,14 +15,14 @@ internal class SimulatedAnnealing<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?,
-    ): Pair<Double, List<T>> {
+    ): List<T> {
         if (points.size <= 2) {
             Timber.d("Optimization cannot be done, not enough points ${points.size}")
-            return points.distance(distanceCalculation) to points
+            return points
         }
         if (points.size - (immutablePositions?.size ?: 0) <= 2) {
             Timber.d("Optimization cannot be done, not enough points ${points.size} (${immutablePositions?.size} is blocked)")
-            return points.distance(distanceCalculation) to points
+            return points
         }
         return withContext(Dispatchers.Default) {
             var t = startingTemperature
@@ -47,7 +47,7 @@ internal class SimulatedAnnealing<T : Any> : TSPWithFixedStagesAlgorithm<T> {
                 i++
             }
 
-            bestDistance to bestTravel
+            bestTravel
         }
     }
 
@@ -82,6 +82,6 @@ internal class SimulatedAnnealing<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         const val coolingRate = 0.99
     }
 
-    override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): Pair<Double, List<T>> =
+    override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): List<T> =
         run(points, distanceCalculation, null)
 }

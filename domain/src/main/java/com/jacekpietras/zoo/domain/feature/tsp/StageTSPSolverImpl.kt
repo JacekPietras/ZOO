@@ -41,11 +41,12 @@ internal class StageTSPSolverImpl(
         optionCreator.run(
             toCheck = stages,
             onOptionFound = { stageOption ->
-                val (distance, newStages) = tspAlgorithm.run(
+                val newStages = tspAlgorithm.run(
                     points = stageOption,
                     distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
                     immutablePositions = immutablePositions,
                 )
+                val distance = newStages.zipWithNext { a, b -> calculate(a, b, pointCalculationCache).distance }.sum()
                 if (minDistance > distance) {
                     minDistance = distance
                     resultStages = newStages

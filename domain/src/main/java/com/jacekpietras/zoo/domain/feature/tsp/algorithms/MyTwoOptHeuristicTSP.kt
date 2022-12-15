@@ -7,15 +7,14 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
     override suspend fun run(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double
-    ): Pair<Double, List<T>> {
+    ): List<T> {
         val n = points.size
         val dist = createWeightArray(points, distanceCalculation)
-        val minCostImprovement = 1.0E-8
-        val tour = (0 .. n).toList().toIntArray()
+        val tour = (0..n).toList().toIntArray()
         tour[n] = 0
 
         while (true) {
-            var minChange: Double = -minCostImprovement
+            var minChange = -minCostImprovement
             var mini = -1
             var minj = -1
             for (i in 0 until n - 2) {
@@ -33,7 +32,7 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
                 }
             }
             if (mini == -1 || minj == -1) {
-                return 0.0 to tour.toPointList(points)
+                return tour.toPointList(points)
             }
             reverse(tour, mini + 1, minj)
         }
@@ -78,4 +77,9 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
 
     private fun <T> IntArray.toPointList(points: List<T>): List<T> =
         map { points[it] }
+
+    private companion object {
+
+        const val minCostImprovement = 1.0E-8
+    }
 }

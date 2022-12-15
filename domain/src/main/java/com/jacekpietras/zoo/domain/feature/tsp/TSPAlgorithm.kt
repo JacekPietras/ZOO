@@ -5,5 +5,5 @@ internal interface TSPAlgorithm<T:Any> {
     suspend fun run(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
-    ):  Pair<Double, List<T>>
+    ):  List<T>
 }

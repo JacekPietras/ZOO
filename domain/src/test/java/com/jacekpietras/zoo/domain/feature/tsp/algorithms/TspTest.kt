@@ -60,25 +60,25 @@ private suspend fun doTspTest(
     algorithm: TSPWithFixedStagesAlgorithm<City>,
     immutablePositions: List<Int>? = null,
 ): Pair<Double, Duration> {
-    var result: Double
+    var tour: List<City>
     val fixedPointsBefore = immutablePositions?.map { initial[it] }
 
     val duration = measureTime {
-        val (distance, tour) = algorithm.run(
+        tour = algorithm.run(
             points = initial,
             distanceCalculation = { a, b -> a.distanceToCity(b) },
             immutablePositions = immutablePositions,
         )
-        val fixedPointsAfter = immutablePositions?.map { tour[it] }
-
-        assertEquals(initial.size, tour.size, "Incorrect number in result")
-        assertEquals(initial.toSet(), tour.toSet(), "Different sets")
-        assertEquals(fixedPointsBefore, fixedPointsAfter, "Different fixed points")
-
-        result = distance
     }
 
-    return result to duration
+    val fixedPointsAfter = immutablePositions?.map { tour[it] }
+    val distance = tour.zipWithNext { a, b -> a.distanceToCity(b) }.sum()
+
+    assertEquals(initial.size, tour.size, "Incorrect number in result")
+    assertEquals(initial.toSet(), tour.toSet(), "Different sets")
+    assertEquals(fixedPointsBefore, fixedPointsAfter, "Different fixed points")
+
+    return distance to duration
 }
 
 private fun generateInitialTravel(

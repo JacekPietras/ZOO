@@ -6,5 +6,5 @@ internal interface TSPWithFixedStagesAlgorithm<T : Any> : TSPAlgorithm<T> {
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>? = null,
-    ): Pair<Double, List<T>>
+    ): List<T>
 }
