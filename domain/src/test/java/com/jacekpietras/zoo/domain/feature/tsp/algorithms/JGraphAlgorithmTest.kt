@@ -69,7 +69,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 53,
             numberOfCities = 53,
-            bestExpected = 2884.381227406432,
+            bestExpected = 2880.401282678936,
         )
     }
 
@@ -114,7 +114,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 58,
             numberOfCities = 58,
-            bestExpected = 3024.839181108502,
+            bestExpected = 3018.5138332809465,
         )
     }
 
@@ -193,20 +193,20 @@ internal class JGraphAlgorithmTest {
             // "TwoApprox" to divorcedTSP(TwoApproxMetricTSP()),
 
             // O(V^2 * log(V))
-            "Greedy" to divorcedTSP(GreedyHeuristicTSP()),
+            // "Greedy" to divorcedTSP(GreedyHeuristicTSP()),
 
             // O(V^2) (runtime)
             // Weak
             // "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
 
             // O(V^2) (runtime)
-            "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
+            // "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
 
             // Optimization runs
             "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-//            "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
-            "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
-//            "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
+            // "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
+            // "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
+            // "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
 
             // Genetic
             "SimulatedAnnealing" to SimulatedAnnealing(),
