@@ -36,7 +36,7 @@ internal suspend fun doTspTest(
         val durationMax = durations.max().inWholeMicroseconds
 
         if (results.min() < bestExpected) {
-            println("New record: $resultMin")
+            println("New record: ${results.min()}")
         }
 //        println("$initialDistance / $resultMin..$resultMax / ${bestExpected.toInt()} | in $durationMin..$durationAvg..$durationMax μs")
         val errorString = if (errorMin != errorMax) {

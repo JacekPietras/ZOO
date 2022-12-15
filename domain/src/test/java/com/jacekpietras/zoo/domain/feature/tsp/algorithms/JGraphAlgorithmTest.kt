@@ -38,6 +38,96 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
+    fun `Annealing test over 50`() {
+        doTest(
+            seed = 3000,
+            numberOfCities = 50,
+            bestExpected = 2838.4030950314805,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 51`() {
+        doTest(
+            seed = 51,
+            numberOfCities = 51,
+            bestExpected = 2662.8134265520603,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 52`() {
+        doTest(
+            seed = 52,
+            numberOfCities = 52,
+            bestExpected = 2694.918918278649,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 53`() {
+        doTest(
+            seed = 53,
+            numberOfCities = 53,
+            bestExpected = 2890.001966059909,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 54`() {
+        doTest(
+            seed = 54,
+            numberOfCities = 54,
+            bestExpected = 2757.184939302054,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 55`() {
+        doTest(
+            seed = 55,
+            numberOfCities = 55,
+            bestExpected = 2424.142877163852,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 56`() {
+        doTest(
+            seed = 56,
+            numberOfCities = 56,
+            bestExpected = 3016.8900674689276,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 57`() {
+        doTest(
+            seed = 57,
+            numberOfCities = 57,
+            bestExpected = 2648.174311519809,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 58`() {
+        doTest(
+            seed = 58,
+            numberOfCities = 58,
+            bestExpected = 3060.0382982869596,
+        )
+    }
+
+    @Test
+    fun `Annealing test over 59`() {
+        doTest(
+            seed = 59,
+            numberOfCities = 59,
+            bestExpected = 2883.11226513947,
+        )
+    }
+
+    @Test
     fun `Annealing test with fixed positions on edges`() {
         doTest(
             seed = 1000,
@@ -113,9 +203,9 @@ internal class JGraphAlgorithmTest {
 
             // Optimization runs
             "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-//            "TwoOpt (10, near)" to divorcedTSP(TwoOptHeuristicTSP(10, NearestNeighborHeuristicTSP())),
+//            "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
             "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
-//            "TwoOpt (10, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
+//            "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
 
             // Genetic
             "SimulatedAnnealing" to SimulatedAnnealing(),
