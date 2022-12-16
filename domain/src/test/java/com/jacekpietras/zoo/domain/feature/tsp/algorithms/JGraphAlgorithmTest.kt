@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 internal class JGraphAlgorithmTest {
 
     @Test
-    fun `Annealing test over 15`() {
+    fun `optimization test over 15`() {
         doTest(
             seed = 1000,
             numberOfCities = 15,
@@ -20,7 +20,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 30`() {
+    fun `optimization test over 30`() {
         doTest(
             seed = 2000,
             numberOfCities = 30,
@@ -29,7 +29,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 60`() {
+    fun `optimization test over 60`() {
         doTest(
             seed = 2000,
             numberOfCities = 60,
@@ -38,7 +38,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 50`() {
+    fun `optimization test over 50`() {
         doTest(
             seed = 3000,
             numberOfCities = 50,
@@ -47,7 +47,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 51`() {
+    fun `optimization test over 51`() {
         doTest(
             seed = 51,
             numberOfCities = 51,
@@ -56,7 +56,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 52`() {
+    fun `optimization test over 52`() {
         doTest(
             seed = 52,
             numberOfCities = 52,
@@ -65,7 +65,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 53`() {
+    fun `optimization test over 53`() {
         doTest(
             seed = 53,
             numberOfCities = 53,
@@ -74,7 +74,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 54`() {
+    fun `optimization test over 54`() {
         doTest(
             seed = 54,
             numberOfCities = 54,
@@ -83,7 +83,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 55`() {
+    fun `optimization test over 55`() {
         doTest(
             seed = 55,
             numberOfCities = 55,
@@ -92,7 +92,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 56`() {
+    fun `optimization test over 56`() {
         doTest(
             seed = 56,
             numberOfCities = 56,
@@ -101,7 +101,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 57`() {
+    fun `optimization test over 57`() {
         doTest(
             seed = 57,
             numberOfCities = 57,
@@ -110,7 +110,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 58`() {
+    fun `optimization test over 58`() {
         doTest(
             seed = 58,
             numberOfCities = 58,
@@ -119,7 +119,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test over 59`() {
+    fun `optimization test over 59`() {
         doTest(
             seed = 59,
             numberOfCities = 59,
@@ -128,7 +128,7 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test with fixed positions on both ends`() {
+    fun `optimization test with fixed positions on both ends`() {
         doTest(
             seed = 1000,
             numberOfCities = 15,
@@ -138,17 +138,17 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test with fixed positions on both ends 60`() {
+    fun `optimization test with fixed positions on both ends 60`() {
         doTest(
             seed = 7990,
             numberOfCities = 60,
-            bestExpected = 3504.5567154824994,
-//            immutablePositions = listOf(0, 59),
+            bestExpected = 3156.8089128986776,
+            immutablePositions = listOf(0, 59),
         )
     }
 
     @Test
-    fun `Annealing test with fixed positions on begin`() {
+    fun `optimization test with fixed positions on begin`() {
         doTest(
             seed = 1000,
             numberOfCities = 15,
@@ -158,12 +158,22 @@ internal class JGraphAlgorithmTest {
     }
 
     @Test
-    fun `Annealing test with fixed positions on end`() {
+    fun `optimization test with fixed positions on end`() {
         doTest(
             seed = 1000,
             numberOfCities = 15,
             bestExpected = 1689.001101946651,
             immutablePositions = listOf(14),
+        )
+    }
+
+    @Test
+    fun `optimization test with fixed positions on in the middle`() {
+        doTest(
+            seed = 1000,
+            numberOfCities = 15,
+            bestExpected = 2050.1058800251108,
+            immutablePositions = listOf(7),
         )
     }
 
@@ -180,7 +190,7 @@ internal class JGraphAlgorithmTest {
                 seed = seed,
                 numberOfCities = numberOfCities,
                 bestExpected = bestExpected,
-                times = 1,
+                times = 100000,
                 immutablePositions = immutablePositions,
             )
         }
@@ -213,15 +223,15 @@ internal class JGraphAlgorithmTest {
             // "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
 
             // Optimization runs
-//            "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
             "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
+            "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
             "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
             // "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
             // "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
             // "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
 
             // Genetic
-//            "SimulatedAnnealing" to SimulatedAnnealing(),
+            "SimulatedAnnealing" to SimulatedAnnealing(),
         )
 
         private fun divorcedTSP(algorithm: HamiltonianCycleAlgorithm<City, DefaultWeightedEdge>) =

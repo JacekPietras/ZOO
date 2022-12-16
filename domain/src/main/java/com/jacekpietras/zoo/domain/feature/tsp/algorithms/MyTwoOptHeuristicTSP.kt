@@ -28,9 +28,11 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
                     val cj1 = tour[j + 1]
                     val change = dist[ci][cj] + dist[ci1][cj1] - dist[ci][ci1] - dist[cj][cj1]
                     if (change < minChange) {
-                        minChange = change
-                        mini = i
-                        minj = j
+                        if (immutablePositions == null || immutablePositions.allows(i + 1, j, n)) {
+                            minChange = change
+                            mini = i
+                            minj = j
+                        }
                     }
                 }
             }
@@ -43,6 +45,19 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): List<T> =
         run(points, distanceCalculation, null)
+
+    private fun List<Int>.allows(i: Int, j: Int, n: Int): Boolean {
+        var x = (i..j).toList()
+        val isOdd = x.size % 2 != 0
+        if (isOdd) {
+            x = x - x[x.size / 2]
+        }
+        forEach {
+            if (x.contains(it)) return false
+        }
+        if (x.contains(n)) return false
+        return true
+    }
 
     private inline fun List<T>.forEachPair(block: (Int, T, Int, T) -> Unit) {
         val pointsTo = mapIndexed { index, it -> index to it }.toMutableList()
@@ -70,6 +85,10 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
     }
 
     private fun reverse(arr: IntArray, from: Int, to: Int) {
+//        println()
+//        println(shifted(arr))
+//        println("$from..$to")
+//        println("${arr[from]}..${arr[to]}")
         var i = from
         var j = to
         while (i < j) {
@@ -79,12 +98,19 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
             ++i
             --j
         }
+//        println(shifted(arr))
     }
 
     private fun <T> toPointList(arr: IntArray, points: List<T>): List<T> {
         val n = arr.size - 2
         val shift = arr.indexOf(n)
         return List(n) { points[arr[(it + shift + 1) % (n + 1)]] }
+    }
+
+    private fun shifted(arr: IntArray): List<Int> {
+        val n = arr.size - 2
+        val shift = arr.indexOf(n)
+        return List(n) { arr[(it + shift + 1) % (n + 1)] }
     }
 
     private companion object {
@@ -113,4 +139,3 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         return result
     }
 }
-
