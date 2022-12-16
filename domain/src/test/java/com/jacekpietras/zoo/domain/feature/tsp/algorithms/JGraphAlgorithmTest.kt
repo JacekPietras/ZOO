@@ -2,9 +2,11 @@ package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
 import com.jacekpietras.zoo.domain.feature.tsp.DivorcedTSPAlgorithm
 import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.feature.tsp.plus
 import kotlinx.coroutines.test.runTest
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
-import org.jgrapht.alg.tour.*
+import org.jgrapht.alg.tour.NearestNeighborHeuristicTSP
+import org.jgrapht.alg.tour.TwoOptHeuristicTSP
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.junit.jupiter.api.Test
 
@@ -172,7 +174,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 1000,
             numberOfCities = 15,
-            bestExpected = 2050.1058800251108,
+            bestExpected = 1918.4662028025448,
             immutablePositions = listOf(7),
         )
     }
@@ -190,7 +192,7 @@ internal class JGraphAlgorithmTest {
                 seed = seed,
                 numberOfCities = numberOfCities,
                 bestExpected = bestExpected,
-                times = 100000,
+                times = 100,
                 immutablePositions = immutablePositions,
             )
         }
@@ -232,6 +234,7 @@ internal class JGraphAlgorithmTest {
 
             // Genetic
             "SimulatedAnnealing" to SimulatedAnnealing(),
+            "sum" to MyTwoOptHeuristicTSP<City>() + SimulatedAnnealing(),
         )
 
         private fun divorcedTSP(algorithm: HamiltonianCycleAlgorithm<City, DefaultWeightedEdge>) =
