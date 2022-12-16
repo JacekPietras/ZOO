@@ -1,8 +1,11 @@
 package com.jacekpietras.zoo.domain.feature.tsp.di
 
+import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.tsp.algorithms.SimulatedAnnealing
 import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
 import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolverImpl
+import com.jacekpietras.zoo.domain.feature.tsp.algorithms.MyTwoOptHeuristicTSP
+import com.jacekpietras.zoo.domain.feature.tsp.plus
 import org.koin.dsl.module
 
 val tspModule = module {
@@ -10,7 +13,7 @@ val tspModule = module {
         StageTSPSolverImpl(
             mapRepository = get(),
             graphAnalyzer = get(),
-            tspAlgorithm = SimulatedAnnealing(),
+            tspAlgorithm = MyTwoOptHeuristicTSP<Stage>() + SimulatedAnnealing(),
         )
     }
 }
