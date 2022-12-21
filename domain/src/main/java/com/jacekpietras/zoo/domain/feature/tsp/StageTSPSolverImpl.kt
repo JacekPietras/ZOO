@@ -2,12 +2,13 @@ package com.jacekpietras.zoo.domain.feature.tsp
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
+import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
-import com.jacekpietras.zoo.domain.utils.forEachPair
 import timber.log.Timber
 
 internal class StageTSPSolverImpl(
@@ -18,13 +19,16 @@ internal class StageTSPSolverImpl(
 
     private var regionCalculationCache = emptyList<RegionCalculation>()
     private val optionCreator = StageListOptionCreator()
+    private lateinit var currentRegions: List<Pair<Region, MapItemEntity.PolygonEntity>>
 
     override suspend fun findShortPathAndStages(
         stages: List<Stage>,
     ): TspResult {
         val pointCalculationCache = PointCalculationCache()
+        currentRegions = mapRepository.getCurrentRegions()
 
         val resultStages = findShortestStagesOption(stages, pointCalculationCache)
+
         val pathParts = resultStages.makePath(pointCalculationCache)
         return TspResult(
             stages = resultStages,
@@ -129,26 +133,28 @@ internal class StageTSPSolverImpl(
         nextPoint: PointD,
         pointCalculationCache: PointCalculationCache
     ): Calculation {
-        val path = graphAnalyzer.getShortestPath(
-            prevPoint,
-            nextPoint,
-            technicalAllowedAtStart = false,
-            technicalAllowedAtEnd = false,
-        ).reversed()
+        val path = graphAnalyzer
+            .getShortestPath(
+                prevPoint,
+                nextPoint,
+                technicalAllowedAtStart = false,
+                technicalAllowedAtEnd = false,
+            )
+            .reversed()
         return Calculation(
             distance = path.toLengthInMeters(),
             path = path,
         ).also { pointCalculationCache[prevPoint to nextPoint] = it }
     }
 
-    private suspend fun Stage.getCenter(): PointD =
+    private fun Stage.getCenter(): PointD =
         when (this) {
             is Stage.InRegion -> this.region.id.getCenter()
             is Stage.InUserPosition -> this.point
         }
 
-    private suspend fun RegionId.getCenter(): PointD =
-        mapRepository.getCurrentRegions().firstOrNull { it.first.id == this }?.second?.findCenter()
+    private fun RegionId.getCenter(): PointD =
+        currentRegions.firstOrNull { it.first.id == this }?.second?.findCenter()
             ?: throw IllegalStateException("No region with id $this")
 
     private fun List<PointD>.toLengthInMeters(): Double =
