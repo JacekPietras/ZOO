@@ -2,12 +2,29 @@ package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
 import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
 import com.jacekpietras.zoo.domain.utils.forEachPairIndexed
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 
 class MyOldTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double
+    ): List<T> {
+        return withContext(Dispatchers.Default) {
+            runInner(
+                points,
+                distanceCalculation,
+                stopCondition = { !isActive },
+            )
+        }
+    }
+
+    private suspend fun runInner(
+        points: List<T>,
+        distanceCalculation: suspend (T, T) -> Double,
+        stopCondition: () -> Boolean,
     ): List<T> {
         val n = points.size
         val dist = createWeightArray(points, distanceCalculation)
@@ -33,7 +50,7 @@ class MyOldTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
                     }
                 }
             }
-            if (mini == -1 || minj == -1) {
+            if (mini == -1 || minj == -1 || stopCondition()) {
                 return tour.toPointList(points)
             }
             reverse(tour, mini + 1, minj)
