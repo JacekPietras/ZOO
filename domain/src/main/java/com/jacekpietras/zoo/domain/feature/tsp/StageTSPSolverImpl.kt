@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.domain.feature.tsp
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
+import com.jacekpietras.zoo.domain.BuildConfig
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
@@ -9,7 +10,9 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.domain.utils.forEachPair
 import timber.log.Timber
+import kotlin.time.measureTime
 
 internal class StageTSPSolverImpl(
     private val graphAnalyzer: GraphAnalyzer,
@@ -26,6 +29,15 @@ internal class StageTSPSolverImpl(
     ): TspResult {
         val pointCalculationCache = PointCalculationCache()
         currentRegions = mapRepository.getCurrentRegions()
+
+        if (BuildConfig.DEBUG) {
+            val measure = measureTime {
+                stages.forEachPair { a, b ->
+                    calculate(a, b, pointCalculationCache)
+                }
+            }
+            Timber.d("Optimization dijkstra took $measure")
+        }
 
         val resultStages = findShortestStagesOption(stages, pointCalculationCache)
 
@@ -45,25 +57,25 @@ internal class StageTSPSolverImpl(
         var minDistance = Double.MAX_VALUE
         var resultStages = stages
 
-        Timber.d("Optimization calc...")
-
-        optionCreator.run(
-            toCheck = stages,
-            onOptionFound = { stageOption ->
-                val newStages = tspAlgorithm.run(
-                    points = stageOption,
-                    distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
-                    immutablePositions = immutablePositions,
-                )
-                val distance = newStages.calcDistance(pointCalculationCache)
-                if (minDistance > distance) {
-                    minDistance = distance
-                    resultStages = newStages
+        val measure = measureTime {
+            optionCreator.run(
+                toCheck = stages,
+                onOptionFound = { stageOption ->
+                    val newStages = tspAlgorithm.run(
+                        points = stageOption,
+                        distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
+                        immutablePositions = immutablePositions,
+                    )
+                    val distance = newStages.calcDistance(pointCalculationCache)
+                    if (minDistance > distance) {
+                        minDistance = distance
+                        resultStages = newStages
+                    }
                 }
-            }
-        )
+            )
+        }
 
-        Timber.d("Optimization record ${minDistance.toInt()}m")
+        Timber.d("Optimization record ${minDistance.toInt()}m, took $measure")
 
         return resultStages
     }

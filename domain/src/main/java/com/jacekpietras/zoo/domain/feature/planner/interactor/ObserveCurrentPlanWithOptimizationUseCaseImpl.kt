@@ -71,7 +71,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     private inline fun printMeasure(block: () -> Unit) {
         val measure = measureTime(block)
-        Timber.d("Optimization took $measure")
+        Timber.d("Optimization step took $measure")
     }
 
     private suspend fun launchBackground(
