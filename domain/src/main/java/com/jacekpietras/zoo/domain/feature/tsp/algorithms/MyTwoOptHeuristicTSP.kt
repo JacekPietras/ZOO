@@ -2,6 +2,9 @@ package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
 import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 import com.jacekpietras.zoo.domain.utils.forEachPairIndexed
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 
 class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
 
@@ -9,6 +12,22 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?
+    ): List<T> {
+        return withContext(Dispatchers.Default) {
+            runInner(
+                points,
+                distanceCalculation,
+                immutablePositions,
+                stopCondition = { !isActive },
+            )
+        }
+    }
+
+    private suspend fun runInner(
+        points: List<T>,
+        distanceCalculation: suspend (T, T) -> Double,
+        immutablePositions: List<Int>?,
+        stopCondition: () -> Boolean,
     ): List<T> {
         val n = points.size
         val dist = createWeightArray(points, distanceCalculation)
@@ -35,7 +54,7 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
                     }
                 }
             }
-            if (mini == -1 || minj == -1) {
+            if (mini == -1 || minj == -1 || stopCondition()) {
                 return toPointList(tour, points)
             }
             reverse(tour, mini + 1, minj)
