@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
 import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
-import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.utils.forEachPairIndexed
 
 class MyOldTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
 
@@ -40,16 +40,6 @@ class MyOldTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
         }
     }
 
-    private inline fun List<T>.forEachPair(block: (Int, T, Int, T) -> Unit) {
-        val pointsTo = mapIndexed { index, it -> index to it }.toMutableList()
-        forEachIndexed { fromIndex, from ->
-            pointsTo.remove(fromIndex to from)
-            pointsTo.forEach { (toIndex, to) ->
-                block(fromIndex, from, toIndex, to)
-            }
-        }
-    }
-
     private suspend fun createWeightArray(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double
@@ -57,7 +47,7 @@ class MyOldTwoOptHeuristicTSP<T : Any> : TSPAlgorithm<T> {
         val n = points.size
         val dist = Array(n) { DoubleArray(n) }
 
-        points.forEachPair { si, s, ti, t ->
+        points.forEachPairIndexed { si, s, ti, t ->
             val weight = distanceCalculation(s, t)
             dist[si][ti] = weight
             dist[ti][si] = weight

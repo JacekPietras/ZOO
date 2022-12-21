@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
 import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.utils.forEachPairIndexed
 
 class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
 
@@ -13,8 +14,6 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         val dist = createWeightArray(points, distanceCalculation)
         val tour = IntArray(n + 2) { it }
         tour[n + 1] = 0
-//        val immutableBegin = immutablePositions?.countImmutableBegin() ?: 0
-//        val immutableEnd = immutablePositions?.countImmutableEnd(n) ?: 0
 
         while (true) {
             var minChange = -minCostImprovement
@@ -59,16 +58,6 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         return true
     }
 
-    private inline fun List<T>.forEachPair(block: (Int, T, Int, T) -> Unit) {
-        val pointsTo = mapIndexed { index, it -> index to it }.toMutableList()
-        forEachIndexed { fromIndex, from ->
-            pointsTo.remove(fromIndex to from)
-            pointsTo.forEach { (toIndex, to) ->
-                block(fromIndex, from, toIndex, to)
-            }
-        }
-    }
-
     private suspend fun createWeightArray(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double
@@ -76,7 +65,7 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         val n = points.size
         val dist = Array(n + 1) { DoubleArray(n + 1) { 0.0 } }
 
-        points.forEachPair { si, s, ti, t ->
+        points.forEachPairIndexed { si, s, ti, t ->
             val weight = distanceCalculation(s, t)
             dist[si][ti] = weight
             dist[ti][si] = weight
@@ -85,10 +74,6 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
     }
 
     private fun reverse(arr: IntArray, from: Int, to: Int) {
-//        println()
-//        println(shifted(arr))
-//        println("$from..$to")
-//        println("${arr[from]}..${arr[to]}")
         var i = from
         var j = to
         while (i < j) {
@@ -98,7 +83,6 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
             ++i
             --j
         }
-//        println(shifted(arr))
     }
 
     private fun <T> toPointList(arr: IntArray, points: List<T>): List<T> {
@@ -107,35 +91,8 @@ class MyTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
         return List(n) { points[arr[(it + shift + 1) % (n + 1)]] }
     }
 
-    private fun shifted(arr: IntArray): List<Int> {
-        val n = arr.size - 2
-        val shift = arr.indexOf(n)
-        return List(n) { arr[(it + shift + 1) % (n + 1)] }
-    }
-
     private companion object {
 
         const val minCostImprovement = 1.0E-8
-    }
-
-    private fun List<Int>.countImmutableBegin(): Int {
-        var result = 0
-        forEachIndexed { index, i ->
-            if (index == i) {
-                result = i + 1
-            } else {
-                return result
-            }
-        }
-        return result
-    }
-
-    private fun List<Int>.countImmutableEnd(n: Int): Int {
-        var result = 0
-        (n - 1 downTo 0).forEach {
-            if (contains(it)) result++
-            else return result
-        }
-        return result
     }
 }

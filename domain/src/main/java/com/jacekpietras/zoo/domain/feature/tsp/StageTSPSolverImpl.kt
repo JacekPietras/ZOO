@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.domain.utils.forEachPair
 import timber.log.Timber
 
 internal class StageTSPSolverImpl(
@@ -23,14 +24,16 @@ internal class StageTSPSolverImpl(
     ): TspResult {
         val pointCalculationCache = PointCalculationCache()
 
-        val resultStages = findShortStages(stages, pointCalculationCache)
+        val resultStages = findShortestStagesOption(stages, pointCalculationCache)
         val pathParts = resultStages.makePath(pointCalculationCache)
-        val stops = pathParts.map { it.last() }
-
-        return TspResult(resultStages, stops, pathParts.flatten())
+        return TspResult(
+            stages = resultStages,
+            stops = pathParts.map { it.last() },
+            path = pathParts.flatten(),
+        )
     }
 
-    private suspend fun findShortStages(
+    private suspend fun findShortestStagesOption(
         stages: List<Stage>,
         pointCalculationCache: PointCalculationCache,
     ): List<Stage> {
@@ -46,7 +49,7 @@ internal class StageTSPSolverImpl(
                     distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
                     immutablePositions = immutablePositions,
                 )
-                val distance = newStages.zipWithNext { a, b -> calculate(a, b, pointCalculationCache).distance }.sum()
+                val distance = newStages.calcDistance(pointCalculationCache)
                 if (minDistance > distance) {
                     minDistance = distance
                     resultStages = newStages
@@ -69,6 +72,9 @@ internal class StageTSPSolverImpl(
 
     private suspend fun List<Stage>.makePath(pointCalculationCache: PointCalculationCache) =
         zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).path }
+
+    private suspend fun List<Stage>.calcDistance(pointCalculationCache: PointCalculationCache) =
+        zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).distance }.sum()
 
     override suspend fun getDistance(prev: Stage, next: Stage): Double =
         calculate(prev, next, PointCalculationCache()).distance
