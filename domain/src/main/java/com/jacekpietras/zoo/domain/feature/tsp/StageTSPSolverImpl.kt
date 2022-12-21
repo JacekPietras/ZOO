@@ -2,7 +2,6 @@ package com.jacekpietras.zoo.domain.feature.tsp
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
-import com.jacekpietras.zoo.domain.BuildConfig
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
@@ -30,14 +29,12 @@ internal class StageTSPSolverImpl(
         val pointCalculationCache = PointCalculationCache()
         currentRegions = mapRepository.getCurrentRegions()
 
-        if (BuildConfig.DEBUG) {
-            val measure = measureTime {
-                stages.forEachPair { a, b ->
-                    calculate(a, b, pointCalculationCache)
-                }
+        val measure = measureTime {
+            stages.forEachPair { a, b ->
+                calculate(a, b, pointCalculationCache)
             }
-            Timber.d("Optimization dijkstra took $measure")
         }
+        Timber.d("Optimization dijkstra took $measure")
 
         val resultStages = findShortestStagesOption(stages, pointCalculationCache)
 
@@ -63,7 +60,7 @@ internal class StageTSPSolverImpl(
                 onOptionFound = { stageOption ->
                     val newStages = tspAlgorithm.run(
                         points = stageOption,
-                        distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
+                        distanceCalculation = { a, b -> getCalculation(a, b, pointCalculationCache).distance },
                         immutablePositions = immutablePositions,
                     )
                     val distance = newStages.calcDistance(pointCalculationCache)
@@ -88,14 +85,14 @@ internal class StageTSPSolverImpl(
             }
         }.filterNotNull()
 
-    private suspend fun List<Stage>.makePath(pointCalculationCache: PointCalculationCache) =
-        zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).path }
+    private fun List<Stage>.makePath(pointCalculationCache: PointCalculationCache) =
+        zipWithNext { prev, next -> getCalculation(prev, next, pointCalculationCache).path }
 
-    private suspend fun List<Stage>.calcDistance(pointCalculationCache: PointCalculationCache) =
-        zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).distance }.sum()
+    private fun List<Stage>.calcDistance(pointCalculationCache: PointCalculationCache) =
+        zipWithNext { prev, next -> getCalculation(prev, next, pointCalculationCache).distance }.sum()
 
     override suspend fun getDistance(prev: Stage, next: Stage): Double =
-        calculate(prev, next, PointCalculationCache()).distance
+        getCalculation(prev, next, PointCalculationCache()).distance
 
     private suspend fun calculate(prev: Stage, next: Stage, pointCalculationCache: PointCalculationCache): Calculation =
         if (prev is Stage.InRegion && next is Stage.InRegion) {
@@ -107,6 +104,15 @@ internal class StageTSPSolverImpl(
             pointCalculationCache[prevPoint to nextPoint]
                 ?: calculatePoint(prevPoint, nextPoint, pointCalculationCache)
         }
+
+    private fun getCalculation(prev: Stage, next: Stage, pointCalculationCache: PointCalculationCache): Calculation =
+        if (prev is Stage.InRegion && next is Stage.InRegion) {
+            findRegionCalculation(makeKey(prev.region.id, next.region.id))
+        } else {
+            val prevPoint = prev.getCenter()
+            val nextPoint = next.getCenter()
+            pointCalculationCache[prevPoint to nextPoint]
+        } ?: throw IllegalStateException("Weight from $prev to $next was not calculated")
 
     private fun findRegionCalculation(key: String) =
         regionCalculationCache.binarySearchBy(key, selector = RegionCalculation::key)
