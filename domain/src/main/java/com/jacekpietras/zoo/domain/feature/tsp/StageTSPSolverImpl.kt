@@ -32,7 +32,7 @@ internal class StageTSPSolverImpl(
         val pathParts = resultStages.makePath(pointCalculationCache)
         return TspResult(
             stages = resultStages,
-            stops = pathParts.map { it.last() },
+            stops = pathParts.map(List<PointD>::last),
             path = pathParts.flatten(),
         )
     }
@@ -44,6 +44,8 @@ internal class StageTSPSolverImpl(
         val immutablePositions = stages.immutablePositions()
         var minDistance = Double.MAX_VALUE
         var resultStages = stages
+
+        Timber.d("Optimization calc...")
 
         optionCreator.run(
             toCheck = stages,

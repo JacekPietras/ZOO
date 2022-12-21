@@ -10,7 +10,6 @@ import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
 import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
 import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,6 +26,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.measureTime
 
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
@@ -51,8 +51,8 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .pushAndDo(
                         fast = ::emitPlanWithoutCalculations,
                         long = { plan, collector ->
-                            measureMap({ Timber.d("Optimization took $it") }) {
-                                launchBackground(job) {
+                            launchBackground(job) {
+                                printMeasure {
                                     val (seen, notSeen) = plan.stages.partition(::isSeen)
                                     val result = tspSolver
                                         .findShortPathAndStages(notSeen)
@@ -69,9 +69,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             }
         }
 
-    private suspend inline fun launchBackground(
+    private inline fun printMeasure(block: () -> Unit) {
+        val measure = measureTime(block)
+        Timber.d("Optimization took $measure")
+    }
+
+    private suspend fun launchBackground(
         job: Storage<Job?>,
-        crossinline block: suspend () -> Unit,
+        block: suspend () -> Unit,
     ) {
         with(CoroutineScope(Dispatchers.Default)) {
             launch {
