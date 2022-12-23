@@ -13,8 +13,7 @@ internal class Dijkstra(
 
     init {
         // shortest distances
-        val delta = vertices.associateWith { Double.MAX_VALUE }.toMutableMap()
-        delta[start] = 0.0
+        val delta = mutableMapOf(start to 0.0)
 
         // subset of vertices, for which we know true distance
         val s = mutableSetOf<Node>()
@@ -39,7 +38,7 @@ internal class Dijkstra(
 
                     val newPath = distanceToV + neighbor.weight
 
-                    if (newPath < delta.getValue(neighbor.node)) {
+                    if (newPath < (delta[neighbor.node] ?: Double.MAX_VALUE)) {
                         delta[neighbor.node] = newPath
                         previous[neighbor.node] = v
                     }
