@@ -23,14 +23,11 @@ internal class Dijkstra(
 
         while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
-            val v: Node = delta
+            val (v: Node, distanceToV) = delta
                 .asSequence()
                 .filter { !s.contains(it.key) }
                 .minByOrNull(Map.Entry<Node, Double>::value)
                 .let(::checkNotNull)
-                .key
-
-            val distanceToV = delta.getValue(v)
 
             v.edges.forEach { neighbor ->
                 if (neighbor.node !in s &&
