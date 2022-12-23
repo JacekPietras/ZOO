@@ -9,7 +9,7 @@ internal class Dijkstra(
     technicalAllowed: Boolean = false,
 ) {
 
-    private val previous: MutableMap<Node, Node?> = vertices.map { it to null }.toMutableMap()
+    private val previous: MutableMap<Node, Node?> = vertices.associateWith { null }.toMutableMap()
 
     init {
         // shortest distances
@@ -17,27 +17,30 @@ internal class Dijkstra(
         delta[start] = 0.0
 
         // subset of vertices, for which we know true distance
-        val s: MutableSet<Node> = mutableSetOf()
+        val s = mutableSetOf<Node>()
 
         var outsideTechnical = technicalAllowed
 
-        while (s != vertices) {
+        while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
-            val v: Node? = delta
+            val v: Node = delta
                 .asSequence()
                 .filter { !s.contains(it.key) }
-                .minByOrNull { it.value }
-                ?.key
+                .minByOrNull(Map.Entry<Node, Double>::value)
+                .let(::checkNotNull)
+                .key
 
-            v?.edges?.forEach { neighbor ->
+            val distanceToV = delta.getValue(v)
+
+            v.edges.forEach { neighbor ->
                 if (neighbor.node !in s &&
                     (technicalAllowed || !outsideTechnical || !neighbor.technical)
                 ) {
-                    val newPath = delta.getValue(v) + neighbor.length
-
                     if (!neighbor.technical) {
                         outsideTechnical = true
                     }
+
+                    val newPath = distanceToV + neighbor.weight
 
                     if (newPath < delta.getValue(neighbor.node)) {
                         delta[neighbor.node] = newPath
@@ -48,19 +51,16 @@ internal class Dijkstra(
 
             if (v == end) break
 
-            v?.let { s.add(it) }
+            v.let(s::add)
         }
-    }
-
-    private fun pathTo(start: Node, end: Node): List<Node> {
-        val path = previous[end] ?: return listOf(end)
-        return pathTo(start, path) + end
     }
 
     fun getPath(): List<Node> =
         pathTo(start, end)
 
-    private fun <T, R> List<Pair<T, R>>.toMutableMap(): MutableMap<T, R> =
-        this.toMap().toMutableMap()
+    private fun pathTo(start: Node, end: Node): List<Node> {
+        val path = previous[end] ?: return listOf(end)
+        return pathTo(start, path) + end
+    }
 }
 

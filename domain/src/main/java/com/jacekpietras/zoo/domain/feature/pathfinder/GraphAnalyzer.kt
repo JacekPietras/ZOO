@@ -25,7 +25,7 @@ internal class GraphAnalyzer {
             waitForNodes()
                 .asSequence()
                 .filter { it.edges.size > 2 }
-                .map { it.point }
+                .map(Node::point)
                 .toList()
         }
 
@@ -94,7 +94,7 @@ internal class GraphAnalyzer {
     private suspend fun revertConnections(vararg nodes: SnappedNode) {
         nodes
             .filterIsInstance<NewSnappedNode>()
-            .map { it.node }
+            .map(NewSnappedNode::node)
             .run { revertConnections(this) }
     }
 

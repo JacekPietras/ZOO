@@ -85,7 +85,7 @@ internal class NodeSetFactory(
     private fun calcDistances() {
         nodes.forEach { node ->
             node.edges.forEach { edge ->
-                edge.length = haversine(node.x, node.y, edge.x, edge.y)
+                edge.weight = haversine(node.x, node.y, edge.x, edge.y)
             }
         }
     }

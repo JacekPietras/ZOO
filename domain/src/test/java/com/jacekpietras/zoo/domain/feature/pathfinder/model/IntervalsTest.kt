@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.feature.pathfinder
+package com.jacekpietras.zoo.domain.feature.pathfinder.model
 
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Intervals
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.minus
