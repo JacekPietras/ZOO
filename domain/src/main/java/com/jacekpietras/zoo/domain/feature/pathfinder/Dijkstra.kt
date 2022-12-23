@@ -60,4 +60,3 @@ internal class Dijkstra(
         return pathTo(start, path) + end
     }
 }
-
