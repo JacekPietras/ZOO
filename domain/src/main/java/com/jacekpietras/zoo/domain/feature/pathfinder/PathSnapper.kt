@@ -1,5 +1,3 @@
-@file:Suppress("ComplexRedundantLet")
-
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
@@ -61,7 +59,7 @@ internal class PathSnapper(
                         }
                 }
             }
-        }.filterNotNull().filter { it.isNotEmpty() }
+        }.filterNotNull().filter(List<SnappedOnEdge>::isNotEmpty)
 
     private fun List<Node>.filterOutNotFoundRoutes(): List<Node>? =
         takeIf { it.size != 1 }
