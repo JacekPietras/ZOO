@@ -9,7 +9,7 @@ internal class Dijkstra(
     technicalAllowed: Boolean = false,
 ) {
 
-    private val previous: MutableMap<Node, Node?> = vertices.associateWith { null }.toMutableMap()
+    private val previous = mutableMapOf<Node, Node?>()
 
     init {
         // shortest distances
