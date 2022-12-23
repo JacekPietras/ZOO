@@ -6,6 +6,7 @@ import com.jacekpietras.zoo.domain.feature.tsp.algorithms.City
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import kotlin.math.abs
 import kotlin.math.pow
@@ -93,7 +94,7 @@ internal class ShortestPathInGeneratedGraphTest {
                     PointD(closest.x, closest.y),
                 ),
             )
-        }
+        }.toSet().toList()
         graphAnalyzer.initialize(roads, emptyList())
 
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
@@ -103,12 +104,15 @@ internal class ShortestPathInGeneratedGraphTest {
             graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
+                technicalAllowedAtStart = true,
+                technicalAllowedAtEnd = true,
             )
         }
         val distance = result.distance()
 
         assertEquals(start, result.first())
         assertEquals(end, result.last())
+        result.assertExistingRoute(roads)
         println("Path length: ${result.size}")
 
         if (distance < bestExpected) {
@@ -120,6 +124,18 @@ internal class ShortestPathInGeneratedGraphTest {
 
     private fun List<PointD>.distance(): Double =
         zipWithNext { a, b -> a.distanceToCity(b) }.sum()
+
+    private fun List<PointD>.assertExistingRoute(roads: List<MapItemEntity.PathEntity>) {
+        zipWithNext { a, b ->
+            val foundConnection = roads.find {
+                val v1 = it.vertices[0]
+                val v2 = it.vertices[1]
+
+                a == v1 && b == v2 || a == v2 && b == v1
+            }
+            assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+        }
+    }
 
     private fun List<City>.getRandom(random: Random = Random(100)) =
         this[random.nextInt(lastIndex)]
