@@ -9,8 +9,8 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
-import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
-import com.jacekpietras.zoo.domain.feature.tsp.TspResult
+import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
+import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.utils.assertFlowEquals
@@ -33,7 +33,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
 
     private val mockPlanRepository = mock<PlanRepository>()
     private val mockGpsRepository = mock<GpsRepository>()
-    private val mockTspSolver = mock<StageTravellingSalesmanProblemSolver>()
+    private val mockTspSolver = mock<StageTSPSolver>()
     private val mockObserveCurrentPlanUseCase = mock<ObserveCurrentPlanUseCase>()
 
     private val useCase = newUseCase(
@@ -115,7 +115,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
     private fun newUseCase(
         planRepository: PlanRepository = mockPlanRepository,
         gpsRepository: GpsRepository = mockGpsRepository,
-        tspSolver: StageTravellingSalesmanProblemSolver = mockTspSolver,
+        tspSolver: StageTSPSolver = mockTspSolver,
         observeCurrentPlanUseCase: ObserveCurrentPlanUseCase = mockObserveCurrentPlanUseCase,
     ) = ObserveCurrentPlanWithOptimizationUseCaseImpl(
         planRepository = planRepository,

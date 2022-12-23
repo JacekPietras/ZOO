@@ -2,34 +2,59 @@ package com.jacekpietras.zoo.domain.feature.tsp
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
+import com.jacekpietras.zoo.domain.BuildConfig
+import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
+import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
+import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
+import com.jacekpietras.zoo.domain.utils.forEachPair
 import timber.log.Timber
+import kotlin.time.measureTime
 
-internal class StageTravellingSalesmanProblemSolverImpl(
+internal class StageTSPSolverImpl(
     private val graphAnalyzer: GraphAnalyzer,
     private val mapRepository: MapRepository,
-    private val tspAlgorithm: TravelingSalesmanProblemAlgorithm<Stage>,
-) : StageTravellingSalesmanProblemSolver {
+    private val tspAlgorithm: TSPWithFixedStagesAlgorithm<Stage>,
+) : StageTSPSolver {
 
     private var regionCalculationCache = emptyList<RegionCalculation>()
     private val optionCreator = StageListOptionCreator()
+    private lateinit var currentRegions: List<Pair<Region, MapItemEntity.PolygonEntity>>
 
     override suspend fun findShortPathAndStages(
         stages: List<Stage>,
     ): TspResult {
         val pointCalculationCache = PointCalculationCache()
+        currentRegions = mapRepository.getCurrentRegions()
 
-        val resultStages = findShortStages(stages, pointCalculationCache)
+        if (BuildConfig.DEBUG) {
+            val measureCenter = measureTime {
+                stages.forEach { it.getCenter() }
+            }
+            Timber.d("Optimization center took $measureCenter")
+
+            val measureDijkstra = measureTime {
+                stages.forEachPair { a, b ->
+                    calculate(a, b, pointCalculationCache)
+                }
+            }
+            Timber.d("Optimization dijkstra took $measureDijkstra")
+        }
+
+        val resultStages = findShortestStagesOption(stages, pointCalculationCache)
+
         val pathParts = resultStages.makePath(pointCalculationCache)
-        val stops = pathParts.map { it.last() }
-
-        return TspResult(resultStages, stops, pathParts.flatten())
+        return TspResult(
+            stages = resultStages,
+            stops = pathParts.map(List<PointD>::last),
+            path = pathParts.flatten(),
+        )
     }
 
-    private suspend fun findShortStages(
+    private suspend fun findShortestStagesOption(
         stages: List<Stage>,
         pointCalculationCache: PointCalculationCache,
     ): List<Stage> {
@@ -37,22 +62,25 @@ internal class StageTravellingSalesmanProblemSolverImpl(
         var minDistance = Double.MAX_VALUE
         var resultStages = stages
 
-        optionCreator.run(
-            toCheck = stages,
-            onOptionFound = { stageOption ->
-                val (distance, newStages) = tspAlgorithm.run(
-                    points = stageOption,
-                    distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
-                    immutablePositions = immutablePositions,
-                )
-                if (minDistance > distance) {
-                    minDistance = distance
-                    resultStages = newStages
+        val measure = measureTime {
+            optionCreator.run(
+                toCheck = stages,
+                onOptionFound = { stageOption ->
+                    val newStages = tspAlgorithm.run(
+                        points = stageOption,
+                        distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
+                        immutablePositions = immutablePositions,
+                    )
+                    val distance = newStages.calcDistance(pointCalculationCache)
+                    if (minDistance > distance) {
+                        minDistance = distance
+                        resultStages = newStages
+                    }
                 }
-            }
-        )
+            )
+        }
 
-        Timber.d("Optimization record ${minDistance.toInt()}m")
+        Timber.d("Optimization record ${minDistance.toInt()}m, took $measure")
 
         return resultStages
     }
@@ -67,6 +95,9 @@ internal class StageTravellingSalesmanProblemSolverImpl(
 
     private suspend fun List<Stage>.makePath(pointCalculationCache: PointCalculationCache) =
         zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).path }
+
+    private suspend fun List<Stage>.calcDistance(pointCalculationCache: PointCalculationCache) =
+        zipWithNext { prev, next -> calculate(prev, next, pointCalculationCache).distance }.sum()
 
     override suspend fun getDistance(prev: Stage, next: Stage): Double =
         calculate(prev, next, PointCalculationCache()).distance
@@ -121,26 +152,28 @@ internal class StageTravellingSalesmanProblemSolverImpl(
         nextPoint: PointD,
         pointCalculationCache: PointCalculationCache
     ): Calculation {
-        val path = graphAnalyzer.getShortestPath(
-            prevPoint,
-            nextPoint,
-            technicalAllowedAtStart = false,
-            technicalAllowedAtEnd = false,
-        ).reversed()
+        val path = graphAnalyzer
+            .getShortestPath(
+                prevPoint,
+                nextPoint,
+                technicalAllowedAtStart = false,
+                technicalAllowedAtEnd = false,
+            )
+            .reversed()
         return Calculation(
             distance = path.toLengthInMeters(),
             path = path,
         ).also { pointCalculationCache[prevPoint to nextPoint] = it }
     }
 
-    private suspend fun Stage.getCenter(): PointD =
+    private fun Stage.getCenter(): PointD =
         when (this) {
             is Stage.InRegion -> this.region.id.getCenter()
             is Stage.InUserPosition -> this.point
         }
 
-    private suspend fun RegionId.getCenter(): PointD =
-        mapRepository.getCurrentRegions().firstOrNull { it.first.id == this }?.second?.findCenter()
+    private fun RegionId.getCenter(): PointD =
+        currentRegions.firstOrNull { it.first.id == this }?.second?.findCenter()
             ?: throw IllegalStateException("No region with id $this")
 
     private fun List<PointD>.toLengthInMeters(): Double =

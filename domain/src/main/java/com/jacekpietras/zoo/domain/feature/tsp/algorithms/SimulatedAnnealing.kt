@@ -1,27 +1,28 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 
+import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
+import java.util.Collections
 import kotlin.math.exp
 import kotlin.random.Random
 
-internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
+internal class SimulatedAnnealing<T : Any> : TSPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?,
-    ): Pair<Double, List<T>> {
+    ): List<T> {
         if (points.size <= 2) {
             Timber.d("Optimization cannot be done, not enough points ${points.size}")
-            return points.distance(distanceCalculation) to points
+            return points
         }
         if (points.size - (immutablePositions?.size ?: 0) <= 2) {
             Timber.d("Optimization cannot be done, not enough points ${points.size} (${immutablePositions?.size} is blocked)")
-            return points.distance(distanceCalculation) to points
+            return points
         }
         return withContext(Dispatchers.Default) {
             var t = startingTemperature
@@ -46,7 +47,7 @@ internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
                 i++
             }
 
-            bestDistance to bestTravel
+            bestTravel
         }
     }
 
@@ -80,4 +81,7 @@ internal class SimulatedAnnealing<T> : TravelingSalesmanProblemAlgorithm<T> {
         const val numberOfIterations = 100000
         const val coolingRate = 0.99
     }
+
+    override suspend fun run(points: List<T>, distanceCalculation: suspend (T, T) -> Double): List<T> =
+        run(points, distanceCalculation, null)
 }

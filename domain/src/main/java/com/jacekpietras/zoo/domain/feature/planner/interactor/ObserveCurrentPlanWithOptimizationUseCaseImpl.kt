@@ -7,10 +7,9 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
-import com.jacekpietras.zoo.domain.feature.tsp.StageTravellingSalesmanProblemSolver
-import com.jacekpietras.zoo.domain.feature.tsp.TspResult
+import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
+import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
 import com.jacekpietras.zoo.domain.model.Region
-import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,11 +26,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.measureTime
 
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
     private val gpsRepository: GpsRepository,
-    private val tspSolver: StageTravellingSalesmanProblemSolver,
+    private val tspSolver: StageTSPSolver,
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
     private val isDebug: () -> Boolean = { BuildConfig.DEBUG },
 ) : ObserveCurrentPlanWithOptimizationUseCase {
@@ -51,8 +51,8 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .pushAndDo(
                         fast = ::emitPlanWithoutCalculations,
                         long = { plan, collector ->
-                            measureMap({ Timber.d("Optimization took $it") }) {
-                                launchBackground(job) {
+                            launchBackground(job) {
+                                printMeasure {
                                     val (seen, notSeen) = plan.stages.partition(::isSeen)
                                     val result = tspSolver
                                         .findShortPathAndStages(notSeen)
@@ -69,9 +69,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             }
         }
 
-    private suspend inline fun launchBackground(
+    private inline fun printMeasure(block: () -> Unit) {
+        val measure = measureTime(block)
+        Timber.d("Optimization step took $measure")
+    }
+
+    private suspend fun launchBackground(
         job: Storage<Job?>,
-        crossinline block: suspend () -> Unit,
+        block: suspend () -> Unit,
     ) {
         with(CoroutineScope(Dispatchers.Default)) {
             launch {
