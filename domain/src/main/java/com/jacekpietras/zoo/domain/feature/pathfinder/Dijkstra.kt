@@ -24,7 +24,7 @@ internal class Dijkstra(
         // shortest distances
         val delta = mutableMapOf(start to 0.0)
 
-        val q = PriorityQueue(vertices.size / 2, comparator)
+        val q = PriorityQueue(10, comparator)
         q.add(start to 0.0)
 
         // subset of vertices, for which we know true distance
@@ -56,7 +56,7 @@ internal class Dijkstra(
         // shortest distances
         val delta = mutableMapOf(start to 0.0)
 
-        val q = PriorityQueue(vertices.size / 2, comparator)
+        val q = PriorityQueue(10, comparator)
         q.add(start to 0.0)
 
         // subset of vertices, for which we know true distance
