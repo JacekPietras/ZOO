@@ -72,31 +72,12 @@ internal class ShortestPathInGeneratedGraphTest {
         bestExpected: Double = 0.0,
     ) = runTest {
         val random = Random(seed)
-        val graphAnalyzer = GraphAnalyzer()
-
-        val points = MutableList(numberOfCities) {
-            City(
-                x = (random.nextDouble() * 500).toInt(),
-                y = (random.nextDouble() * 500).toInt(),
-            )
-        }.toSet().toList()
-        val c = points.associateWith { mutableListOf<City>() }
-
-        val roads = (0 until connections).map {
-            val next = points.getRandom(random)
-            val closest = points.filter { it != next && c[next]?.contains(it) == false }.minByOrNull { it.distanceToCity(next) }!!
-            c[next]!!.add(closest)
-            c[closest]!!.add(next)
-
-            MapItemEntity.PathEntity(
-                listOf(
-                    PointD(next.x, next.y),
-                    PointD(closest.x, closest.y),
-                ),
-            )
-        }.toSet().toList()
-        graphAnalyzer.initialize(roads, emptyList())
-
+        val (points, roads) = generateGraph(
+            random,
+            numberOfCities,
+            connections,
+        )
+        val graphAnalyzer = roads.toGraph()
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
 
@@ -122,24 +103,54 @@ internal class ShortestPathInGeneratedGraphTest {
         }
     }
 
-    private fun List<PointD>.distance(): Double =
-        zipWithNext { a, b -> a.distanceToCity(b) }.sum()
+    companion object {
 
-    private fun List<PointD>.assertExistingRoute(roads: List<MapItemEntity.PathEntity>) {
-        zipWithNext { a, b ->
-            val foundConnection = roads.find {
-                val v1 = it.vertices[0]
-                val v2 = it.vertices[1]
+        internal fun generateGraph(
+            random: Random,
+            numberOfCities: Int,
+            connections: Int,
+        ): Pair<List<City>, List<List<PointD>>> {
+            val points = MutableList(numberOfCities) {
+                City(
+                    x = (random.nextDouble() * 500).toInt(),
+                    y = (random.nextDouble() * 500).toInt(),
+                )
+            }.toSet().toList()
+            val c = points.associateWith { mutableListOf<City>() }
 
-                a == v1 && b == v2 || a == v2 && b == v1
-            }
-            assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+            val roads = (0 until connections).map {
+                val next = points.getRandom(random)
+                val closest = points.filter { it != next && c[next]?.contains(it) == false }.minByOrNull { it.distanceToCity(next) }!!
+                c[next]!!.add(closest)
+                c[closest]!!.add(next)
+
+                listOf(
+                    PointD(next.x, next.y),
+                    PointD(closest.x, closest.y),
+                )
+            }.toSet().toList()
+            return points to roads
         }
+
+        internal fun List<City>.getRandom(random: Random = Random(100)) =
+            this[random.nextInt(lastIndex)]
+
+        internal fun List<List<PointD>>.toGraph(): GraphAnalyzer =
+            GraphAnalyzer().also { it.initialize(map(MapItemEntity::PathEntity), emptyList()) }
+
+        internal fun List<PointD>.assertExistingRoute(roads: List<List<PointD>>) {
+            zipWithNext { a, b ->
+                val foundConnection = roads.find {
+                    val v1 = it[0]
+                    val v2 = it[1]
+
+                    a == v1 && b == v2 || a == v2 && b == v1
+                }
+                assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+            }
+        }
+
+        internal fun List<PointD>.distance(): Double =
+            zipWithNext { a, b -> cartesian(a, b) }.sum()
     }
-
-    private fun List<City>.getRandom(random: Random = Random(100)) =
-        this[random.nextInt(lastIndex)]
-
-    private fun PointD.distanceToCity(city: PointD): Double =
-        sqrt(abs(x - city.x).pow(2.0) + abs(y - city.y).pow(2.0))
 }

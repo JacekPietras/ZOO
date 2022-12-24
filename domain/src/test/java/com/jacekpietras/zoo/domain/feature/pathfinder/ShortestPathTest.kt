@@ -1,7 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
+import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -11,25 +11,19 @@ import org.junit.jupiter.api.Test
 
 internal class ShortestPathTest {
 
-    private val snapshot: MutableSet<Node>
-    private val graphAnalyzer: GraphAnalyzer = GraphAnalyzer()
-
-    init {
-        //      [3]
-        //       |
-        // [1]--[2]
-        val roads = listOf(
-            MapItemEntity.PathEntity(
-                listOf(
-                    PointD(1, 1),
-                    PointD(2, 1),
-                    PointD(2, 2),
-                ),
-            )
-        )
-        graphAnalyzer.initialize(roads, emptyList())
-        snapshot = runBlocking { graphAnalyzer.waitForNodes() }
-    }
+    //      [3]
+    //       |
+    // [1]--[2]
+    private val graphAnalyzer: GraphAnalyzer =
+        listOf(
+            listOf(
+                PointD(1, 1),
+                PointD(2, 1),
+                PointD(2, 2),
+            ),
+        ).toGraph()
+    private val snapshot: MutableSet<Node> =
+        runBlocking { graphAnalyzer.waitForNodes() }
 
     @Test
     fun `find shortest path from ends of graph`() = runTest {

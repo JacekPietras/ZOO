@@ -15,6 +15,16 @@ internal fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean) -> Unit) {
     }
 }
 
+internal fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean, Double) -> Unit) {
+    forEach { node ->
+        node.edges.forEach { edge ->
+            if (!edge.backward) {
+                block(node, edge.node, edge.technical, edge.weight)
+            }
+        }
+    }
+}
+
 internal fun cartesian(a: Node, b: Node): Double =
     sqrt((a.x - b.x).pow2 + (a.y - b.y).pow2)
 
