@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder.model
 
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.geometry.haversine
 
 internal class MinNode(
     val point: PointD,
@@ -15,7 +14,7 @@ internal class MinNode(
         get() = point.y
 
     fun connect(node: MinNode, technical: Boolean, weight: Double) {
-        edges.add(MinEdge(node, technical, weight))
+        edges.add(MinEdge(node, this, technical, weight, emptyList()))
     }
 
     override fun hashCode(): Int =

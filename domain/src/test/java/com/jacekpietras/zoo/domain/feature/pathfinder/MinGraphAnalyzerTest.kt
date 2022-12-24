@@ -5,6 +5,8 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGra
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.distance
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.getRandom
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toGraph
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinEdge
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -15,7 +17,7 @@ import kotlin.random.Random
 internal class MinGraphAnalyzerTest {
 
     @Test
-    fun `map to min graph`() = runTest{
+    fun `map to min graph`() = runTest {
         val roads = listOf(
             listOf(
                 PointD(1, 1),
@@ -27,11 +29,37 @@ internal class MinGraphAnalyzerTest {
                 PointD(2, 2),
                 PointD(3, 2),
             ),
+            listOf(
+                PointD(3, 2),
+                PointD(4, 2),
+                PointD(5, 2),
+                PointD(6, 2),
+                PointD(7, 2),
+            ),
         )
 
         val minGraph = roads.toGraph().toMinGraph()
-
         val resultNodes = minGraph.waitForNodes()
+
+        val expectedTerminalNodes =
+            setOf(
+                PointD(1, 1),
+                PointD(2, 2),
+                PointD(3, 3),
+                PointD(7, 2),
+            )
+        assertEquals(expectedTerminalNodes, resultNodes.map(MinNode::point).toSet())
+        val expectedMidPointNodes =
+            setOf(
+                PointD(2, 1),
+                PointD(3, 2),
+                PointD(4, 2),
+                PointD(5, 2),
+                PointD(6, 2),
+            )
+        val resultMidPointNodes = resultNodes.map { it.edges.map(MinEdge::midPoints) }.flatten().flatten().toSet()
+        assertEquals(expectedMidPointNodes, resultMidPointNodes)
+        assertEquals(4, resultNodes.size)
     }
 
     @Test

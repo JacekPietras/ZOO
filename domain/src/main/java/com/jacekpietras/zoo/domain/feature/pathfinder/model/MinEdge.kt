@@ -4,9 +4,10 @@ import com.jacekpietras.geometry.PointD
 
 internal class MinEdge(
     val node: MinNode,
+    val from: MinNode,
     val technical: Boolean,
-    var weight: Double = 0.0,
-    var midPoints: List<PointD> = mutableListOf(),
+    val weight: Double,
+    val midPoints: List<PointD>,
 ){
 
     override fun toString() = "edge to (${node.x}, ${node.y}) | mid $midPoints,"
