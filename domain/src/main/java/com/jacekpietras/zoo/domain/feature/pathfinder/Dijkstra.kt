@@ -91,11 +91,11 @@ internal class Dijkstra(
     }
 
     fun getPath(): List<Node> =
-        pathTo(start, end)
+        pathTo(end)
 
-    private fun pathTo(start: Node, end: Node): List<Node> {
+    private fun pathTo(end: Node): List<Node> {
         val path = previous[end] ?: return listOf(end)
-        return pathTo(start, path) + end
+        return pathTo(path) + end
     }
 
     private companion object {

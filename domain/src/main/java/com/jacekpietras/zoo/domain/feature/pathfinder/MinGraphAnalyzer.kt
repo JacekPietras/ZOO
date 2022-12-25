@@ -4,6 +4,7 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinEdge
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.SnappedOnMinNode
 import kotlinx.coroutines.delay
 
 internal class MinGraphAnalyzer {
@@ -57,10 +58,11 @@ internal class MinGraphAnalyzer {
     ): List<MinNode> =
         MinDijkstra(
             vertices = waitForNodes(),
-            start = start,
+            technicalAllowed = technicalAllowed,
+        ).calculate(
+            start = SnappedOnMinNode(start),
             end = end,
-            technicalAllowed = technicalAllowed
-        ).getPath()
+        )
 
     internal suspend fun waitForNodes(): Collection<MinNode> {
         while (nodes == null) {

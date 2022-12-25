@@ -1,46 +1,78 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
-import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.SnappedOnMinEdge
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.SnappedOnMinNode
 import java.util.PriorityQueue
 
 internal class MinDijkstra(
     private val vertices: Collection<MinNode>,
-    private val start: MinNode,
-    private val end: MinNode,
-    technicalAllowed: Boolean = false,
+    private val technicalAllowed: Boolean = false,
 ) {
 
+    private val q: PriorityQueue<Pair<MinNode, Double>> = PriorityQueue(10, comparator)
+    private lateinit var costs: MutableMap<MinNode, Double>
     private val previous = mutableMapOf<MinNode, MinNode?>()
 
-    init {
-        if (technicalAllowed) {
-            withTechnical()
-        } else {
-            withoutTechnical()
+    fun calculate(
+        start: SnappedOnMin,
+        end: MinNode,
+    ): List<MinNode> {
+        when (start) {
+            is SnappedOnMinEdge -> {
+                val costToStart1 = start.ratio * start.edge.weight
+                val costToStart2 = (1 - start.ratio) * start.edge.weight
+                val startNode = MinNode(start.point)
+
+                costs = mutableMapOf(
+                    start.edge.from to costToStart1,
+                    start.edge.node to costToStart2,
+                )
+
+                q.add(start.edge.from to costToStart1)
+                q.add(start.edge.node to costToStart2)
+
+                previous[start.edge.from] = startNode
+                previous[start.edge.node] = startNode
+            }
+            is SnappedOnMinNode -> {
+                costs = mutableMapOf(start.node to 0.0)
+
+                q.add(start.node to 0.0)
+            }
         }
+
+        return runAlgorithm(end)
     }
 
-    private fun withTechnical() {
-        // shortest distances
-        val delta = mutableMapOf(start to 0.0)
+    private fun runAlgorithm(
+        end: MinNode,
+    ): List<MinNode> {
+        if (technicalAllowed) {
+            withTechnical(end)
+        } else {
+            withoutTechnical(end)
+        }
+        return pathTo(end)
+    }
 
-        val q = PriorityQueue(10, comparator)
-        q.add(start to 0.0)
-
+    private fun withTechnical(
+        end: MinNode,
+    ) {
         // subset of vertices, for which we know true distance
         val s = mutableSetOf<MinNode>()
 
         while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
-            val (v: MinNode, distanceToV) = q.remove()
+            val (v, distanceToV) = q.remove()
 
             v.edges.forEach { neighbor ->
                 if (neighbor.node !in s) {
                     val newCost = distanceToV + neighbor.weight
 
-                    if (newCost < (delta[neighbor.node] ?: Double.MAX_VALUE)) {
-                        delta[neighbor.node] = newCost
+                    if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
+                        costs[neighbor.node] = newCost
                         previous[neighbor.node] = v
                         q.add(neighbor.node to newCost)
                     }
@@ -53,13 +85,9 @@ internal class MinDijkstra(
         }
     }
 
-    private fun withoutTechnical() {
-        // shortest distances
-        val delta = mutableMapOf(start to 0.0)
-
-        val q = PriorityQueue(10, comparator)
-        q.add(start to 0.0)
-
+    private fun withoutTechnical(
+        end: MinNode,
+    ) {
         // subset of vertices, for which we know true distance
         val s = mutableSetOf<MinNode>()
 
@@ -67,7 +95,7 @@ internal class MinDijkstra(
 
         while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
-            val (v: MinNode, distanceToV) = q.remove()
+            val (v, distanceToV) = q.remove()
 
             v.edges.forEach { neighbor ->
                 if (neighbor.node !in s && (!outsideTechnical || !neighbor.technical)) {
@@ -77,8 +105,8 @@ internal class MinDijkstra(
 
                     val newCost = distanceToV + neighbor.weight
 
-                    if (newCost < (delta[neighbor.node] ?: Double.MAX_VALUE)) {
-                        delta[neighbor.node] = newCost
+                    if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
+                        costs[neighbor.node] = newCost
                         previous[neighbor.node] = v
                         q.add(neighbor.node to newCost)
                     }
@@ -91,12 +119,9 @@ internal class MinDijkstra(
         }
     }
 
-    fun getPath(): List<MinNode> =
-        pathTo(start, end)
-
-    private fun pathTo(start: MinNode, end: MinNode): List<MinNode> {
+    private fun pathTo(end: MinNode): List<MinNode> {
         val path = previous[end] ?: return listOf(end)
-        return pathTo(start, path) + end
+        return pathTo(path) + end
     }
 
     private companion object {
