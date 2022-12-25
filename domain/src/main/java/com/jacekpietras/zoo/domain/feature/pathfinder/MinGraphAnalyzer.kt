@@ -95,6 +95,9 @@ internal class MinGraphAnalyzer {
 
     private fun List<MinNode>.pointPath() =
         zipWithNext { a, b ->
-            listOf(a.point) + a.edges.first { it.node == b }.corners.map(Pair<PointD, Double>::first)
+            listOf(a.point) + a.edges.find { it.node == b }.cornerPoints()
         }.flatten() + last().point
+
+    private fun MinEdge?.cornerPoints() =
+        this?.corners?.map(Pair<PointD, Double>::first) ?: emptyList()
 }
