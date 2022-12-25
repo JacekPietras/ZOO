@@ -120,6 +120,7 @@ internal class MinGraphAnalyzerTest {
     fun `start outside graph`() = runTest {
         val roads = listOf(
             listOf(
+                PointD(-1, -1),
                 PointD(0, 0),
                 PointD(0, 10),
             ),
@@ -129,8 +130,10 @@ internal class MinGraphAnalyzerTest {
                 PointD(10, 10),
             ),
             listOf(
+                PointD(0, 11),
                 PointD(0, 10),
                 PointD(10, 10),
+                PointD(11, 11),
             ),
             listOf(
                 PointD(5, 5),
