@@ -49,7 +49,7 @@ internal class MinGraphAnalyzerTest {
                 PointD(7, 2),
             )
         assertEquals(expectedTerminalNodes, resultNodes.map(MinNode::point).toSet())
-        val expectedMidPointNodes =
+        val expectedCornerNodes =
             setOf(
                 PointD(2, 1),
                 PointD(3, 2),
@@ -57,8 +57,8 @@ internal class MinGraphAnalyzerTest {
                 PointD(5, 2),
                 PointD(6, 2),
             )
-        val resultMidPointNodes = resultNodes.map { it.edges.map(MinEdge::midPoints) }.flatten().flatten().toSet()
-        assertEquals(expectedMidPointNodes, resultMidPointNodes)
+        val resultCornerNodes = resultNodes.map { it.edges.map(MinEdge::corners) }.flatten().flatten().toSet()
+        assertEquals(expectedCornerNodes, resultCornerNodes)
         assertEquals(4, resultNodes.size)
     }
 

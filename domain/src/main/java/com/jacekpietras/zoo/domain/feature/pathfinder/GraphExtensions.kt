@@ -2,6 +2,8 @@ package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.pow2
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinEdge
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import kotlin.math.sqrt
 
@@ -20,6 +22,16 @@ internal fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean, Double) -> 
         node.edges.forEach { edge ->
             if (!edge.backward) {
                 block(node, edge.node, edge.technical, edge.weight)
+            }
+        }
+    }
+}
+
+internal fun Iterable<MinNode>.forAllMinEdges(block: (MinEdge) -> Unit) {
+    forEach { node ->
+        node.edges.forEach { edge ->
+            if (!edge.backward) {
+                block(edge)
             }
         }
     }

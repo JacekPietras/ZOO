@@ -13,8 +13,8 @@ internal class MinNode(
     val y: Double
         get() = point.y
 
-    fun connect(node: MinNode, technical: Boolean, weight: Double) {
-        edges.add(MinEdge(node, this, technical, weight, emptyList()))
+    fun connect(node: MinNode, technical: Boolean, weight: Double, backward: Boolean) {
+        edges.add(MinEdge(node, this, technical, weight, backward, emptyList()))
     }
 
     override fun hashCode(): Int =

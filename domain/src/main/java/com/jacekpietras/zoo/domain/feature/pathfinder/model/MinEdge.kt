@@ -7,8 +7,9 @@ internal class MinEdge(
     val from: MinNode,
     val technical: Boolean,
     val weight: Double,
-    val midPoints: List<PointD>,
+    val backward: Boolean,
+    val corners: List<Pair<PointD, Double>>,
 ){
 
-    override fun toString() = "edge to (${node.x}, ${node.y}) | mid $midPoints,"
+    override fun toString() = "edge to (${node.x}, ${node.y}) | mid ${corners.map(Pair<PointD, Double>::first)},"
 }
