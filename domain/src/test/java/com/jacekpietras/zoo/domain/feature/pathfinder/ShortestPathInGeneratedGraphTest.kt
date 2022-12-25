@@ -8,9 +8,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
 import kotlin.random.Random
 
 internal class ShortestPathInGeneratedGraphTest {

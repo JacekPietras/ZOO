@@ -62,7 +62,7 @@ internal class PointSnapper {
                         result = SnappedOnMinEdge(
                             point = found,
                             edge = edge,
-                            ratio = (weightBefore + weightToP1) / edge.weight,
+                            weightFromStart = weightBefore + weightToP1,
                         )
                     }
                 }

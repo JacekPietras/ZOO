@@ -144,16 +144,18 @@ internal class MinGraphAnalyzerTest {
             )
         }
         println("Path length: ${result.size}")
-        val distance = result.distance()
+
+        assertEquals(fullResult, result) {
+            "Result from Full Graph is different\n" +
+                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
+                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+        }
 
         assertEquals(start, result.first())
         assertEquals(end, result.last())
-        assertEquals(fullResult, result) { "Result from Full Graph is different\n" +
-                "Full distance:${fullResult.distance()}, Min distance $distance\n" +
-                "Full length: ${fullResult.size}, Min length: ${result.size}\n"}
-
         result.assertExistingRoute(roads)
 
+        val distance = result.distance()
         if (distance < bestExpected) {
             println("New record: $distance")
         } else {

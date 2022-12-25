@@ -7,7 +7,7 @@ internal sealed class SnappedOnMin {
     internal class SnappedOnMinEdge(
         val point: PointD,
         val edge: MinEdge,
-        val ratio: Double,
+        val weightFromStart: Double,
     ) : SnappedOnMin()
 
     internal class SnappedOnMinNode(

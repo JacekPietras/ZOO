@@ -21,9 +21,8 @@ internal class MinDijkstra(
     ): List<MinNode> {
         when (start) {
             is SnappedOnMinEdge -> {
-                val costToStart1 = start.ratio * start.edge.weight
-                val costToStart2 = (1 - start.ratio) * start.edge.weight
-                val startNode = MinNode(start.point)
+                val costToStart1 = start.weightFromStart
+                val costToStart2 = (start.edge.weight - start.weightFromStart)
 
                 costs = mutableMapOf(
                     start.edge.from to costToStart1,
@@ -33,8 +32,17 @@ internal class MinDijkstra(
                 q.add(start.edge.from to costToStart1)
                 q.add(start.edge.node to costToStart2)
 
-                previous[start.edge.from] = startNode
-                previous[start.edge.node] = startNode
+                val pointsBeforeSnapped = listOf(start.edge.from) +
+                        start.edge.corners
+                            .filter { (_, weight) -> weight <= start.weightFromStart }
+                            .map { (p, _) -> MinNode(p) }
+                val pointsAfterSnapped = start.edge.corners
+                    .filter { (_, weight) -> weight >= start.weightFromStart }
+                    .map { (p, _) -> MinNode(p) } +
+                        start.edge.node
+
+                pointsBeforeSnapped.zipWithNext { a, b -> previous[a] = b }
+                pointsAfterSnapped.zipWithNext { a, b -> previous[b] = a }
             }
             is SnappedOnMinNode -> {
                 costs = mutableMapOf(start.node to 0.0)
