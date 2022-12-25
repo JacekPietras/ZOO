@@ -57,10 +57,13 @@ internal class MinGraphAnalyzerTest {
                 PointD(5, 2),
                 PointD(6, 2),
             )
-        val resultCornerNodes = resultNodes.map { it.edges.map(MinEdge::corners) }.flatten().flatten().toSet()
+        val resultCornerNodes = resultNodes.map { it.edges.cornerPoints() }.flatten().flatten().toSet()
         assertEquals(expectedCornerNodes, resultCornerNodes)
         assertEquals(4, resultNodes.size)
     }
+
+    private fun Collection<MinEdge>.cornerPoints() =
+        map { it.corners.map(Pair<PointD, Double>::first) }
 
     @Test
     fun `find shortest path 1`() = runTest {
