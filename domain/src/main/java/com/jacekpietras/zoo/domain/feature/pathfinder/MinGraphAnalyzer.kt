@@ -40,11 +40,14 @@ internal class MinGraphAnalyzer {
         val snapStart = nodes.first { it.point == startPoint }
         val snapEnd = nodes.first { it.point == endPoint }
 
-        return getShortestPathJob(
+        val result = getShortestPathJob(
             start = snapStart,
             end = snapEnd,
             technicalAllowed = technicalAllowedAtEnd,
-        ).map { PointD(it.x, it.y) }
+        )
+        return result.zipWithNext { a, b ->
+            listOf(a.point) + a.edges.first { it.node == b }.midPoints
+        }.flatten() + result.last().point
     }
 
     private suspend fun getShortestPathJob(
