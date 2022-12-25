@@ -82,12 +82,13 @@ internal class MinGraphAnalyzer {
         val from = e1.node
         val to = e2.node
         val weight = e1.weight + e2.weight
-        val corners = e1.corners.reversed().map { (p, weight) -> p to e1.weight - weight } +
+        val corners = e1.corners.reversed().map { (p, pWeight) -> p to e1.weight - pWeight } +
                 (point to e1.weight) +
-                e2.corners.map { (p, weight) -> p to e1.weight + weight }
+                e2.corners.map { (p, pWeight) -> p to e1.weight + pWeight }
+        val cornersReversed = corners.reversed().map { (p, pWeight) -> p to weight - pWeight }
 
         from.edges.add(MinEdge(to, from, e1.technical, weight, true, corners))
-        to.edges.add(MinEdge(from, to, e1.technical, weight, false, corners.reversed()))
+        to.edges.add(MinEdge(from, to, e1.technical, weight, false, cornersReversed))
 
         from.edges.remove(from.edges.first { it.node == this })
         to.edges.remove(to.edges.first { it.node == this })

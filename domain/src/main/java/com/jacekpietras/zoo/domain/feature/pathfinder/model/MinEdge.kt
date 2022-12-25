@@ -11,5 +11,5 @@ internal class MinEdge(
     val corners: List<Pair<PointD, Double>>,
 ){
 
-    override fun toString() = "edge to (${node.x}, ${node.y}) | mid ${corners.map(Pair<PointD, Double>::first)},"
+    override fun toString() = "(${from.x}, ${from.y}) -> ${corners.map(Pair<PointD, Double>::first)} -> (${node.x}, ${node.y}),"
 }

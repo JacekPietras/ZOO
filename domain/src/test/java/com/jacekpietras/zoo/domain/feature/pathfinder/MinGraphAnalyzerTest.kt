@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.feature.pathfinder
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.assertExistingRoute
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.distance
+import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.generateGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.getRandom
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinEdge
@@ -122,7 +123,7 @@ internal class MinGraphAnalyzerTest {
         bestExpected: Double = 0.0,
     ) = runTest {
         val random = Random(seed)
-        val (points, roads) = ShortestPathInGeneratedGraphTest.generateGraph(
+        val (points, roads) = generateGraph(
             random,
             numberOfCities,
             connections,
@@ -142,14 +143,16 @@ internal class MinGraphAnalyzerTest {
                 startPoint = start,
             )
         }
+        println("Path length: ${result.size}")
         val distance = result.distance()
 
         assertEquals(start, result.first())
         assertEquals(end, result.last())
-        result.assertExistingRoute(roads)
-        println("Path length: ${result.size}")
+        assertEquals(fullResult, result) { "Result from Full Graph is different\n" +
+                "Full distance:${fullResult.distance()}, Min distance $distance\n" +
+                "Full length: ${fullResult.size}, Min length: ${result.size}\n"}
 
-        assertEquals(fullResult, result) { "Result from Full Graph is different" }
+        result.assertExistingRoute(roads)
 
         if (distance < bestExpected) {
             println("New record: $distance")
