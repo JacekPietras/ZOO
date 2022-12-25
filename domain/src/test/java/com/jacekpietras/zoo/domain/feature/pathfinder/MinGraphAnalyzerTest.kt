@@ -124,10 +124,15 @@ internal class MinGraphAnalyzerTest {
             numberOfCities,
             connections,
         )
-        val minGraphAnalyzer = roads.toGraph().toMinGraph()
+        val fullGraphAnalyzer = roads.toGraph()
+        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
 
+        val fullResult = fullGraphAnalyzer.getShortestPath(
+            endPoint = end,
+            startPoint = start,
+        )
         val result = measureMap({ println("Calculated in $it") }) {
             minGraphAnalyzer.getShortestPath(
                 endPoint = end,
@@ -140,6 +145,8 @@ internal class MinGraphAnalyzerTest {
         assertEquals(end, result.last())
         result.assertExistingRoute(roads)
         println("Path length: ${result.size}")
+
+        assertEquals(fullResult, result) { "Result from Full Graph is different" }
 
         if (distance < bestExpected) {
             println("New record: $distance")
