@@ -43,6 +43,11 @@ internal class MinDijkstra(
 
                 pointsBeforeSnapped.zipWithNext { a, b -> previous[a] = b }
                 pointsAfterSnapped.zipWithNext { a, b -> previous[b] = a }
+
+                if (start.point != pointsBeforeSnapped.last().point)
+                    previous[pointsBeforeSnapped.last()] = MinNode(start.point)
+                if (start.point != pointsAfterSnapped.first().point)
+                    previous[pointsAfterSnapped.first()] = MinNode(start.point)
             }
             is SnappedOnMinNode -> {
                 costs = mutableMapOf(start.node to 0.0)
