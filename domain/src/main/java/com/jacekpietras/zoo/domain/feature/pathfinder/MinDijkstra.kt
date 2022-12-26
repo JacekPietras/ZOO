@@ -17,7 +17,7 @@ internal class MinDijkstra(
 
     fun calculate(
         start: SnappedOnMin,
-        end: MinNode,
+        end: SnappedOnMin,
     ): List<MinNode> {
         when (start) {
             is SnappedOnMinEdge -> {
@@ -56,7 +56,14 @@ internal class MinDijkstra(
             }
         }
 
-        return runAlgorithm(end)
+        return when (end) {
+            is SnappedOnMinEdge -> {
+                TODO("Not implemented snapped end")
+            }
+            is SnappedOnMinNode -> {
+                runAlgorithm(end.node)
+            }
+        }
     }
 
     private fun runAlgorithm(

@@ -40,7 +40,7 @@ internal class MinGraphAnalyzer {
         if (nodes.isEmpty()) return listOf(endPoint)
 
         val snapStart = snapper.getSnappedOnMinEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
-        val snapEnd = nodes.first { it.point == endPoint }
+        val snapEnd = snapper.getSnappedOnMinEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
 
         val result = getShortestPathJob(
             start = snapStart,
@@ -52,7 +52,7 @@ internal class MinGraphAnalyzer {
 
     private suspend fun getShortestPathJob(
         start: SnappedOnMin,
-        end: MinNode,
+        end: SnappedOnMin,
         technicalAllowed: Boolean = false,
     ): List<MinNode> =
         MinDijkstra(
