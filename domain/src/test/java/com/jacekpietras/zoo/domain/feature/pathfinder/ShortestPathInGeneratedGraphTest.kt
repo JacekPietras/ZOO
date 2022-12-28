@@ -138,6 +138,43 @@ internal class ShortestPathInGeneratedGraphTest {
         assertEquals(expected, result)
     }
 
+    @Test
+    fun `end outside graph 2`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 10),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val result = roads.toGraph().getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(1, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        val expected = listOf(
+            PointD(0, 0),
+            PointD(0, 10),
+            PointD(1, 10),
+        )
+        assertEquals(expected, result)
+    }
+
     private fun doTest(
         seed: Long,
         numberOfCities: Int,

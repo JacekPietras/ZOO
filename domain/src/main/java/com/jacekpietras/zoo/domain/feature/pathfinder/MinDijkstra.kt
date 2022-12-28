@@ -1,5 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinEdge
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.SnappedOnMinEdge
@@ -14,6 +15,10 @@ internal class MinDijkstra(
     private val q: PriorityQueue<Pair<MinNode, Double>> = PriorityQueue(10, comparator)
     private lateinit var costs: MutableMap<MinNode, Double>
     private val previous = mutableMapOf<MinNode, MinNode?>()
+    private var outsideTechnical = false
+
+    // subset of vertices, for which we know true distance
+    private val s = mutableSetOf<MinNode>()
 
     fun calculate(
         start: SnappedOnMin,
@@ -58,7 +63,28 @@ internal class MinDijkstra(
 
         return when (end) {
             is SnappedOnMinEdge -> {
-                TODO("Not implemented snapped end")
+                val endNode = MinNode(end.point)
+                val endingEdge1 = MinEdge(
+                    from = end.edge.from,
+                    node = endNode,
+                    technical = end.edge.technical,
+                    weight = end.weightFromStart,
+                    backward = false,
+                    corners = emptyList(), //fixme give there midpoints from that side only
+                )
+                val endingEdge2 = MinEdge(
+                    from = end.edge.node,
+                    node = endNode,
+                    technical = end.edge.technical,
+                    weight = end.edge.weight - end.weightFromStart,
+                    backward = false,
+                    corners = emptyList(), //fixme give there midpoints from that side only
+                )
+                runAlgorithm(
+                    endNode,
+                    endingEdge1,
+                    endingEdge2,
+                )
             }
             is SnappedOnMinNode -> {
                 runAlgorithm(end.node)
@@ -68,34 +94,37 @@ internal class MinDijkstra(
 
     private fun runAlgorithm(
         end: MinNode,
+        endingEdge1: MinEdge? = null,
+        endingEdge2: MinEdge? = null,
     ): List<MinNode> {
         if (technicalAllowed) {
-            withTechnical(end)
+            searchForEndingWithTechnical(end, endingEdge1, endingEdge2)
         } else {
-            withoutTechnical(end)
+            searchForEndingWithoutTechnical(end, endingEdge1, endingEdge2)
         }
         return pathTo(end)
     }
 
-    private fun withTechnical(
+    private fun searchForEndingWithTechnical(
         end: MinNode,
+        endingEdge1: MinEdge? = null,
+        endingEdge2: MinEdge? = null,
     ) {
-        // subset of vertices, for which we know true distance
-        val s = mutableSetOf<MinNode>()
-
         while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
             val (v, distanceToV) = q.remove()
 
             v.edges.forEach { neighbor ->
-                if (neighbor.node !in s) {
-                    val newCost = distanceToV + neighbor.weight
-
-                    if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
-                        costs[neighbor.node] = newCost
-                        previous[neighbor.node] = v
-                        q.add(neighbor.node to newCost)
-                    }
+                runForEdgeWithTechnical(neighbor, distanceToV)
+            }
+            endingEdge1?.run {
+                if (this.from == v) {
+                    runForEdgeWithTechnical(this, distanceToV)
+                }
+            }
+            endingEdge2?.run {
+                if (this.from == v) {
+                    runForEdgeWithTechnical(this, distanceToV)
                 }
             }
 
@@ -105,37 +134,66 @@ internal class MinDijkstra(
         }
     }
 
-    private fun withoutTechnical(
+    private fun searchForEndingWithoutTechnical(
         end: MinNode,
+        endingEdge1: MinEdge? = null,
+        endingEdge2: MinEdge? = null,
     ) {
-        // subset of vertices, for which we know true distance
-        val s = mutableSetOf<MinNode>()
-
-        var outsideTechnical = false
-
         while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
             val (v, distanceToV) = q.remove()
 
             v.edges.forEach { neighbor ->
-                if (neighbor.node !in s && (!outsideTechnical || !neighbor.technical)) {
-                    if (!neighbor.technical) {
-                        outsideTechnical = true
-                    }
-
-                    val newCost = distanceToV + neighbor.weight
-
-                    if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
-                        costs[neighbor.node] = newCost
-                        previous[neighbor.node] = v
-                        q.add(neighbor.node to newCost)
-                    }
+                runForEdgeWithoutTechnical(neighbor, distanceToV)
+            }
+            endingEdge1?.run {
+                if (this.from == v) {
+                    runForEdgeWithoutTechnical(this, distanceToV)
+                }
+            }
+            endingEdge2?.run {
+                if (this.from == v) {
+                    runForEdgeWithoutTechnical(this, distanceToV)
                 }
             }
 
             if (v == end) break
 
             s.add(v)
+        }
+    }
+
+    private fun runForEdgeWithTechnical(
+        neighbor: MinEdge,
+        distanceToV: Double,
+    ) {
+        if (neighbor.node !in s) {
+            val newCost = distanceToV + neighbor.weight
+
+            if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
+                costs[neighbor.node] = newCost
+                previous[neighbor.node] = neighbor.from
+                q.add(neighbor.node to newCost)
+            }
+        }
+    }
+
+    private fun runForEdgeWithoutTechnical(
+        neighbor: MinEdge,
+        distanceToV: Double,
+    ) {
+        if (neighbor.node !in s && (!outsideTechnical || !neighbor.technical)) {
+            if (!neighbor.technical) {
+                outsideTechnical = true
+            }
+
+            val newCost = distanceToV + neighbor.weight
+
+            if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
+                costs[neighbor.node] = newCost
+                previous[neighbor.node] = neighbor.from
+                q.add(neighbor.node to newCost)
+            }
         }
     }
 

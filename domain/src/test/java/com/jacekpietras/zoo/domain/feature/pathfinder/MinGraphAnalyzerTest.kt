@@ -120,6 +120,58 @@ internal class MinGraphAnalyzerTest {
     fun `start outside graph`() = runTest {
         val roads = listOf(
             listOf(
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 10),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val fullGraphAnalyzer = roads.toGraph()
+        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
+        val fullResult = fullGraphAnalyzer.getShortestPath(
+            startPoint = PointD(9, 11),
+            endPoint = PointD(0, 0),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+        val result = minGraphAnalyzer.getShortestPath(
+            startPoint = PointD(9, 11),
+            endPoint = PointD(0, 0),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        assertEquals(fullResult, result) {
+            "Result from Full Graph is different\n" +
+                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
+                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+        }
+
+        val expected = listOf(
+            PointD(9, 10),
+            PointD(10, 10),
+            PointD(5, 5),
+            PointD(0, 0),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `start outside graph 2`() = runTest {
+        val roads = listOf(
+            listOf(
                 PointD(-1, -1),
                 PointD(0, 0),
                 PointD(0, 10),
@@ -219,6 +271,166 @@ internal class MinGraphAnalyzerTest {
             PointD(5, 5),
             PointD(10, 10),
             PointD(9, 10),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `end outside graph 2`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 10),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val fullGraphAnalyzer = roads.toGraph()
+        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
+        val fullResult = fullGraphAnalyzer.getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(9, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+        val result = minGraphAnalyzer.getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(1, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        assertEquals(fullResult, result) {
+            "Result from Full Graph is different\n" +
+                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
+                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+        }
+
+        val expected = listOf(
+            PointD(0, 0),
+            PointD(0, 10),
+            PointD(1, 10),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `end outside graph 3`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(-1, -1),
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 11),
+                PointD(0, 10),
+                PointD(10, 10),
+                PointD(11, 11),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val fullGraphAnalyzer = roads.toGraph()
+        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
+        val fullResult = fullGraphAnalyzer.getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(9, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+        val result = minGraphAnalyzer.getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(9, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        assertEquals(fullResult, result) {
+            "Result from Full Graph is different\n" +
+                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
+                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+        }
+
+        val expected = listOf(
+            PointD(0, 0),
+            PointD(5, 5),
+            PointD(10, 10),
+            PointD(9, 10),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `end outside graph 4`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(-1, -1),
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 11),
+                PointD(0, 10),
+                PointD(10, 10),
+                PointD(11, 11),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val fullGraphAnalyzer = roads.toGraph()
+        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
+        val fullResult = fullGraphAnalyzer.getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(9, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+        val result = minGraphAnalyzer.getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(1, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        assertEquals(fullResult, result) {
+            "Result from Full Graph is different\n" +
+                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
+                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+        }
+
+        val expected = listOf(
+            PointD(0, 0),
+            PointD(0, 10),
+            PointD(1, 10),
         )
         assertEquals(expected, result)
     }
