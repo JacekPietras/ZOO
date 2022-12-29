@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
+import kotlin.time.Duration
 
 internal class MinGraphAnalyzerTest {
 
@@ -137,18 +138,20 @@ internal class MinGraphAnalyzerTest {
                 PointD(5, 6),
             ),
         )
+        val startPoint = PointD(9, 11)
+        val endPoint = PointD(0, 0)
 
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = PointD(9, 11),
-            endPoint = PointD(0, 0),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
         val result = minGraphAnalyzer.getShortestPath(
-            startPoint = PointD(9, 11),
-            endPoint = PointD(0, 0),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
@@ -182,28 +185,30 @@ internal class MinGraphAnalyzerTest {
                 PointD(10, 10),
             ),
             listOf(
-                PointD(0, 11),
+                PointD(-1, 10),
                 PointD(0, 10),
                 PointD(10, 10),
-                PointD(11, 11),
+                PointD(11, 10),
             ),
             listOf(
                 PointD(5, 5),
                 PointD(5, 6),
             ),
         )
+        val startPoint = PointD(9, 11)
+        val endPoint = PointD(0, 0)
 
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = PointD(9, 11),
-            endPoint = PointD(0, 0),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
         val result = minGraphAnalyzer.getShortestPath(
-            startPoint = PointD(9, 11),
-            endPoint = PointD(0, 0),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
@@ -244,18 +249,20 @@ internal class MinGraphAnalyzerTest {
                 PointD(5, 6),
             ),
         )
+        val startPoint = PointD(0, 0)
+        val endPoint = PointD(9, 11)
 
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(9, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
         val result = minGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(9, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
@@ -296,18 +303,20 @@ internal class MinGraphAnalyzerTest {
                 PointD(5, 6),
             ),
         )
+        val startPoint = PointD(0, 0)
+        val endPoint = PointD(1, 10)
 
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(9, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
         val result = minGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(1, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
@@ -340,28 +349,30 @@ internal class MinGraphAnalyzerTest {
                 PointD(10, 10),
             ),
             listOf(
-                PointD(0, 11),
+                PointD(-1, 10),
                 PointD(0, 10),
                 PointD(10, 10),
-                PointD(11, 11),
+                PointD(11, 10),
             ),
             listOf(
                 PointD(5, 5),
                 PointD(5, 6),
             ),
         )
+        val startPoint = PointD(0, 0)
+        val endPoint = PointD(9, 11)
 
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(9, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
         val result = minGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(9, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
@@ -395,28 +406,30 @@ internal class MinGraphAnalyzerTest {
                 PointD(10, 10),
             ),
             listOf(
-                PointD(0, 11),
+                PointD(-1, 10),
                 PointD(0, 10),
                 PointD(10, 10),
-                PointD(11, 11),
+                PointD(11, 10),
             ),
             listOf(
                 PointD(5, 5),
                 PointD(5, 6),
             ),
         )
+        val startPoint = PointD(0, 0)
+        val endPoint = PointD(1, 11)
 
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(9, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
         val result = minGraphAnalyzer.getShortestPath(
-            startPoint = PointD(0, 0),
-            endPoint = PointD(1, 11),
+            startPoint = startPoint,
+            endPoint = endPoint,
             technicalAllowedAtStart = true,
             technicalAllowedAtEnd = true,
         )
@@ -452,11 +465,14 @@ internal class MinGraphAnalyzerTest {
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
 
-        val fullResult = fullGraphAnalyzer.getShortestPath(
-            endPoint = end,
-            startPoint = start,
-        )
-        val result = measureMap({ println("Calculated in $it") }) {
+        var fullResultTime = Duration.ZERO
+        val fullResult = measureMap({ fullResultTime = it }) {
+            fullGraphAnalyzer.getShortestPath(
+                endPoint = end,
+                startPoint = start,
+            )
+        }
+        val result = measureMap({ println("Calculated in $it, (${fullResultTime - it} faster)") }) {
             minGraphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
