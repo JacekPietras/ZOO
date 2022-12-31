@@ -43,13 +43,13 @@ internal class MinGraphAnalyzer {
         if (startPoint == null) return listOf(endPoint)
         if (nodes.isEmpty()) return listOf(endPoint)
 
-        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
+//        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
 
         val snapStart = snapper.getSnappedOnMinEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
         val snapEnd = snapper.getSnappedOnMinEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
 
         return if (onSameEdge(snapStart, snapEnd)) {
-            println("Start and End on the same edge!") // fixme remove
+//            println("Start and End on the same edge!") // fixme remove
             val corners = if (snapStart.weightFromStart < snapEnd.weightFromStart) {
                 snapStart.edge.corners
                     .filter { (_, weight) -> snapStart.weightFromStart < weight && weight < snapEnd.weightFromStart }
@@ -67,7 +67,7 @@ internal class MinGraphAnalyzer {
                 end = snapEnd,
                 technicalAllowed = technicalAllowedAtEnd,
             )
-            println("result before filling gaps: ${result.map { "(" + it.point.x + ", " + it.point.y + ")" }}") // fixme remove
+//            println("result before filling gaps: ${result.map { "(" + it.point.x + ", " + it.point.y + ")" }}") // fixme remove
             result.pointPath(snapEnd)
         }
     }

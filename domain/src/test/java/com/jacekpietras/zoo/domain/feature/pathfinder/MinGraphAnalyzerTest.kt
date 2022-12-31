@@ -118,6 +118,16 @@ internal class MinGraphAnalyzerTest {
     }
 
     @Test
+    fun `find shortest path (multiple)`() = runTest {
+        doTests(
+            times = 1000,
+            seed = 6000,
+            numberOfCities = 1000,
+            connections = 2000,
+        )
+    }
+
+    @Test
     fun `start outside graph`() = runTest {
         val roads = listOf(
             listOf(
@@ -385,14 +395,19 @@ internal class MinGraphAnalyzerTest {
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         var fullResultTime = Duration.ZERO
-        val fullResult = measureMap({ fullResultTime = it }) {
-            fullGraphAnalyzer.getShortestPath(
-                startPoint = startPoint,
-                endPoint = endPoint,
-                technicalAllowedAtStart = true,
-                technicalAllowedAtEnd = true,
-            )
+        val fullResult = try {
+            measureMap({ fullResultTime = it }) {
+                fullGraphAnalyzer.getShortestPath(
+                    startPoint = startPoint,
+                    endPoint = endPoint,
+                    technicalAllowedAtStart = true,
+                    technicalAllowedAtEnd = true,
+                )
+            }
+        } catch (ignored: Throwable) {
+            throw FailedOnFullGraph()
         }
+
         var resultTime = Duration.ZERO
         val result = measureMap({ resultTime = it }) {
             minGraphAnalyzer.getShortestPath(
@@ -416,12 +431,12 @@ internal class MinGraphAnalyzerTest {
         return result
     }
 
-    private fun doTest(
+    private suspend fun doTest(
         seed: Long,
         numberOfCities: Int,
         connections: Int,
-        bestExpected: Double = 0.0,
-    ) = runTest {
+        bestExpected: Double,
+    ) {
         val random = Random(seed)
         val (points, roads) = generateGraph(
             random,
@@ -430,9 +445,12 @@ internal class MinGraphAnalyzerTest {
         )
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
-
-        val result = runShortestPath(roads, start, end)
-
+        val result =  try {
+            runShortestPath(roads, start, end)
+        } catch (onFull: FailedOnFullGraph) {
+            println("Failed on FullGraph")
+            return
+        }
         println("Path length: ${result.size}")
 
         assertEquals(start, result.first())
@@ -440,10 +458,29 @@ internal class MinGraphAnalyzerTest {
         result.assertExistingRoute(roads)
 
         val distance = result.distance()
-        if (distance < bestExpected) {
-            println("New record: $distance")
-        } else {
-            assertEquals(bestExpected, distance)
+        if (bestExpected >= 0) {
+            if (distance < bestExpected) {
+                println("New record: $distance")
+            } else {
+                assertEquals(bestExpected, distance)
+            }
+        }
+    }
+
+    private suspend fun doTests(
+        seed: Long,
+        numberOfCities: Int,
+        connections: Int,
+        times: Int = 1,
+    ) {
+        (0 until times).forEach { i ->
+            println("For seed ${seed + i}")
+            doTest(
+                seed = seed + i,
+                numberOfCities = numberOfCities,
+                connections = connections,
+                bestExpected = -1.0,
+            )
         }
     }
 
@@ -451,3 +488,5 @@ internal class MinGraphAnalyzerTest {
         MinGraphAnalyzer().also { it.initialize(waitForNodes()) }
     }
 }
+
+class FailedOnFullGraph : Throwable()
