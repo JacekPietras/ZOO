@@ -141,26 +141,7 @@ internal class MinGraphAnalyzerTest {
         val startPoint = PointD(9, 11)
         val endPoint = PointD(0, 0)
 
-        val fullGraphAnalyzer = roads.toGraph()
-        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
-        val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-        val result = minGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-
-        assertEquals(fullResult, result) {
-            "Result from Full Graph is different\n" +
-                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
-                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
-        }
+        val result = runShortestPath(roads, startPoint, endPoint)
 
         val expected = listOf(
             PointD(9, 10),
@@ -198,26 +179,7 @@ internal class MinGraphAnalyzerTest {
         val startPoint = PointD(9, 11)
         val endPoint = PointD(0, 0)
 
-        val fullGraphAnalyzer = roads.toGraph()
-        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
-        val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-        val result = minGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-
-        assertEquals(fullResult, result) {
-            "Result from Full Graph is different\n" +
-                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
-                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
-        }
+        val result = runShortestPath(roads, startPoint, endPoint)
 
         val expected = listOf(
             PointD(9, 10),
@@ -252,26 +214,7 @@ internal class MinGraphAnalyzerTest {
         val startPoint = PointD(0, 0)
         val endPoint = PointD(9, 11)
 
-        val fullGraphAnalyzer = roads.toGraph()
-        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
-        val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-        val result = minGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-
-        assertEquals(fullResult, result) {
-            "Result from Full Graph is different\n" +
-                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
-                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
-        }
+        val result = runShortestPath(roads, startPoint, endPoint)
 
         val expected = listOf(
             PointD(0, 0),
@@ -306,26 +249,7 @@ internal class MinGraphAnalyzerTest {
         val startPoint = PointD(0, 0)
         val endPoint = PointD(1, 10)
 
-        val fullGraphAnalyzer = roads.toGraph()
-        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
-        val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-        val result = minGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-
-        assertEquals(fullResult, result) {
-            "Result from Full Graph is different\n" +
-                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
-                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
-        }
+        val result = runShortestPath(roads, startPoint, endPoint)
 
         val expected = listOf(
             PointD(0, 0),
@@ -362,26 +286,7 @@ internal class MinGraphAnalyzerTest {
         val startPoint = PointD(0, 0)
         val endPoint = PointD(9, 11)
 
-        val fullGraphAnalyzer = roads.toGraph()
-        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
-        val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-        val result = minGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-
-        assertEquals(fullResult, result) {
-            "Result from Full Graph is different\n" +
-                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
-                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
-        }
+        val result = runShortestPath(roads, startPoint, endPoint)
 
         val expected = listOf(
             PointD(0, 0),
@@ -419,6 +324,64 @@ internal class MinGraphAnalyzerTest {
         val startPoint = PointD(0, 0)
         val endPoint = PointD(1, 11)
 
+        val result = runShortestPath(roads, startPoint, endPoint)
+
+        val expected = listOf(
+            PointD(0, 0),
+            PointD(0, 10),
+            PointD(1, 10),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `on straight line`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(0, 0),
+                PointD(0, 5),
+                PointD(0, 10),
+            ),
+        )
+        val startPoint = PointD(1, 2)
+        val endPoint = PointD(1, 8)
+
+        val result = runShortestPath(roads, startPoint, endPoint)
+
+        val expected = listOf(
+            PointD(0, 2),
+            PointD(0, 5),
+            PointD(0, 8),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `on straight line, close`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(0, 0),
+                PointD(0, 5),
+                PointD(0, 10),
+            ),
+        )
+        val startPoint = PointD(1, 2)
+        val endPoint = PointD(1, 3)
+
+        val result = runShortestPath(roads, startPoint, endPoint)
+
+        val expected = listOf(
+            PointD(0, 2),
+            PointD(0, 3),
+        )
+        assertEquals(expected, result)
+    }
+
+    private suspend fun runShortestPath(
+        roads: List<List<PointD>>,
+        startPoint: PointD,
+        endPoint: PointD
+    ): List<PointD> {
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResult = fullGraphAnalyzer.getShortestPath(
@@ -439,13 +402,7 @@ internal class MinGraphAnalyzerTest {
                     "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
                     "Full length: ${fullResult.size}, Min length: ${result.size}\n"
         }
-
-        val expected = listOf(
-            PointD(0, 0),
-            PointD(0, 10),
-            PointD(1, 10),
-        )
-        assertEquals(expected, result)
+        return result
     }
 
     private fun doTest(
@@ -472,11 +429,17 @@ internal class MinGraphAnalyzerTest {
                 startPoint = start,
             )
         }
-        val result = measureMap({ println("Calculated in $it, (${fullResultTime - it} faster)") }) {
+        var resultTime = Duration.ZERO
+        val result = measureMap({ resultTime = it }) {
             minGraphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
             )
+        }
+        if (resultTime < fullResultTime) {
+            println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
+        } else {
+            println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
         }
         println("Path length: ${result.size}")
 

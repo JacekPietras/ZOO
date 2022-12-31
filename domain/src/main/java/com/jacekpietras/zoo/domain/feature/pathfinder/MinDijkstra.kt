@@ -70,7 +70,7 @@ internal class MinDijkstra(
                     technical = end.edge.technical,
                     weight = end.weightFromStart,
                     backward = false,
-                    corners = emptyList(), //fixme give there midpoints from that side only
+                    corners = emptyList(),
                 )
                 val endingEdge2 = MinEdge(
                     from = end.edge.node,
@@ -78,7 +78,7 @@ internal class MinDijkstra(
                     technical = end.edge.technical,
                     weight = end.edge.weight - end.weightFromStart,
                     backward = false,
-                    corners = emptyList(), //fixme give there midpoints from that side only
+                    corners = emptyList(),
                 )
                 runAlgorithm(
                     endNode,
