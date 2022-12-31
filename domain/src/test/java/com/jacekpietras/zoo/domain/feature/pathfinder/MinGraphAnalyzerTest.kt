@@ -384,18 +384,29 @@ internal class MinGraphAnalyzerTest {
     ): List<PointD> {
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
-        val fullResult = fullGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
-        val result = minGraphAnalyzer.getShortestPath(
-            startPoint = startPoint,
-            endPoint = endPoint,
-            technicalAllowedAtStart = true,
-            technicalAllowedAtEnd = true,
-        )
+        var fullResultTime = Duration.ZERO
+        val fullResult = measureMap({ fullResultTime = it }) {
+            fullGraphAnalyzer.getShortestPath(
+                startPoint = startPoint,
+                endPoint = endPoint,
+                technicalAllowedAtStart = true,
+                technicalAllowedAtEnd = true,
+            )
+        }
+        var resultTime = Duration.ZERO
+        val result = measureMap({ resultTime = it }) {
+            minGraphAnalyzer.getShortestPath(
+                startPoint = startPoint,
+                endPoint = endPoint,
+                technicalAllowedAtStart = true,
+                technicalAllowedAtEnd = true,
+            )
+        }
+        if (resultTime < fullResultTime) {
+            println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
+        } else {
+            println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
+        }
 
         assertEquals(fullResult, result) {
             "Result from Full Graph is different\n" +
@@ -417,37 +428,12 @@ internal class MinGraphAnalyzerTest {
             numberOfCities,
             connections,
         )
-        val fullGraphAnalyzer = roads.toGraph()
-        val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
 
-        var fullResultTime = Duration.ZERO
-        val fullResult = measureMap({ fullResultTime = it }) {
-            fullGraphAnalyzer.getShortestPath(
-                endPoint = end,
-                startPoint = start,
-            )
-        }
-        var resultTime = Duration.ZERO
-        val result = measureMap({ resultTime = it }) {
-            minGraphAnalyzer.getShortestPath(
-                endPoint = end,
-                startPoint = start,
-            )
-        }
-        if (resultTime < fullResultTime) {
-            println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
-        } else {
-            println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
-        }
-        println("Path length: ${result.size}")
+        val result = runShortestPath(roads, start, end)
 
-        assertEquals(fullResult, result) {
-            "Result from Full Graph is different\n" +
-                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
-                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
-        }
+        println("Path length: ${result.size}")
 
         assertEquals(start, result.first())
         assertEquals(end, result.last())
