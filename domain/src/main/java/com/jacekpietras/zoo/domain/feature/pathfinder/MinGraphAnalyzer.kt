@@ -58,25 +58,10 @@ internal class MinGraphAnalyzer {
             end = snapEnd,
             technicalAllowed = technicalAllowedAtEnd,
         )
-//        println("result before filling gaps: ${result.map { "(" + it.point.x + ", " + it.point.y + ")" }}") // fixme remove
-        return result.pointPath(snapEnd)
+        println("result before filling gaps: ${result.map { "(" + it.point.x + ", " + it.point.y + ")" }}") // fixme remove
+        return result.pointPath(snapStart, snapEnd)
 //        }
     }
-
-//    private fun resultFromTheSameEdge(
-//        snapStart: SnappedOnMinEdge,
-//        snapEnd: SnappedOnMinEdge
-//    ): List<PointD> {
-//        val corners = if (snapStart.weightFromStart < snapEnd.weightFromStart) {
-//            snapStart.edge.corners
-//                .filter { (_, weight) -> snapStart.weightFromStart < weight && weight < snapEnd.weightFromStart }
-//        } else {
-//            snapStart.edge.corners
-//                .filter { (_, weight) -> snapEnd.weightFromStart < weight && weight < snapStart.weightFromStart }
-//                .reversed()
-//        }
-//        return listOf(snapStart.point) + corners.map { (p, _) -> p } + snapEnd.point
-//    }
 //
 //    private fun onSameEdge(
 //        snapStart: SnappedOnMin,
@@ -150,37 +135,60 @@ internal class MinGraphAnalyzer {
         to.edges.remove(to.edges.first { it.node == this })
     }
 
-    private fun List<MinNode>.pointPath(snapEnd: SnappedOnMin): List<PointD> =
+    private fun List<MinNode>.pointPath(snapStart:SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
         zipWithNext { a, b ->
             listOf(a.point) + a.edges.find { it.node == b }.cornerPoints()
-        }.flatten() +
+        }.flatten() + if (snapEnd is SnappedOnMinEdge && size > 1) {
+            val nodeBeforeEnd = this[this.lastIndex - 1]
+            when {
+                nodeBeforeEnd == snapEnd.edge.from && nodeBeforeEnd == snapEnd.edge.node -> {
+                    if (snapEnd.weightFromStart < snapEnd.edge.weight - snapEnd.weightFromStart) {
+                        (cornersBeforeSnapped(snapEnd) + last().point).distinct()
+                    } else {
+                        (cornersAfterSnapped(snapEnd) + last().point).distinct()
+                    }
+                }
+                nodeBeforeEnd == snapEnd.edge.from -> {
+                    (cornersBeforeSnapped(snapEnd) + last().point).distinct()
+                }
+                nodeBeforeEnd == snapEnd.edge.node -> {
+                    (cornersAfterSnapped(snapEnd) + last().point).distinct()
+                }
+                snapStart is SnappedOnMinEdge && nodeBeforeEnd.point == snapStart.point ->{
+                    cornersBetweenSnaps(snapStart, snapEnd) + last().point
+                }
+                else -> {
+                    throw IllegalStateException("point before ending should be on end of ending edge")
+                }
+            }
+        } else {
+            listOf(last().point)
+        }
 
-                last().point
+    private fun cornersAfterSnapped(snapEnd: SnappedOnMinEdge) = snapEnd.edge.corners
+        .filter { (_, weight) -> weight > snapEnd.weightFromStart }
+        .map { (point, _) -> point }
+        .reversed()
 
-//                when (snapEnd) {
-//            is SnappedOnMin.SnappedOnMinNode -> {
-//                listOf(last().point)
-//            }
-//            is SnappedOnMinEdge -> {
-//                when (this[this.lastIndex - 1]) {
-//                    snapEnd.edge.from -> {
-//                        val cornersBeforeSnapped = snapEnd.edge.corners
-//                            .filter { (_, weight) -> weight < snapEnd.weightFromStart }
-//                            .map { (point, _) -> point }
-//                        (cornersBeforeSnapped + last().point).distinct()
-//                    }
-//                    snapEnd.edge.node -> {
-//                        val cornersAfterSnapped = snapEnd.edge.corners
-//                            .filter { (_, weight) -> weight > snapEnd.weightFromStart }
-//                            .map { (point, _) -> point }
-//                            .reversed()
-//                        (cornersAfterSnapped + last().point).distinct()
-//                    }
-//                    else -> throw IllegalStateException("point before ending should be on end of ending edge")
-//                }
-//            }
-//        }
+    private fun cornersBeforeSnapped(snapEnd: SnappedOnMinEdge) = snapEnd.edge.corners
+        .filter { (_, weight) -> weight < snapEnd.weightFromStart }
+        .map { (point, _) -> point }
 
     private fun MinEdge?.cornerPoints() =
         this?.corners?.map(Pair<PointD, Double>::first) ?: emptyList()
+
+    private fun cornersBetweenSnaps(
+        snapStart: SnappedOnMinEdge,
+        snapEnd: SnappedOnMinEdge
+    ): List<PointD> {
+        val corners = if (snapStart.weightFromStart < snapEnd.weightFromStart) {
+            snapStart.edge.corners
+                .filter { (_, weight) -> snapStart.weightFromStart < weight && weight < snapEnd.weightFromStart }
+        } else {
+            snapStart.edge.corners
+                .filter { (_, weight) -> snapEnd.weightFromStart < weight && weight < snapStart.weightFromStart }
+                .reversed()
+        }
+        return corners.map { (p, _) -> p }
+    }
 }
