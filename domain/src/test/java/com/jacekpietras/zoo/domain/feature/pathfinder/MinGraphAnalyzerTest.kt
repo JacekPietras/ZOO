@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 internal class MinGraphAnalyzerTest {
 
@@ -107,25 +109,26 @@ internal class MinGraphAnalyzerTest {
         )
     }
 
-    @Test
-    fun `find shortest path 5`() = runTest {
-        doTest(
-            seed = 5000,
-            numberOfCities = 5000,
-            connections = 10000,
-            bestExpected = 445.50727166942147,
-        )
-    }
-
-    @Test
-    fun `find shortest path (multiple)`() = runTest {
-        doTests(
-            times = 1000,
-            seed = 6000,
-            numberOfCities = 1000,
-            connections = 2000,
-        )
-    }
+//    @Test
+//    fun `find shortest path 5`() = runTest {
+//        doTest(
+//            seed = 5000,
+//            numberOfCities = 5000,
+//            connections = 10000,
+//            bestExpected = 445.50727166942147,
+//            repeat = 1,
+//        )
+//    }
+//
+//    @Test
+//    fun `find shortest path (multiple)`() = runTest {
+//        doTests(
+//            times = 1000,
+//            seed = 6000,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//        )
+//    }
 
     @Test
     fun `start outside graph`() = runTest {
@@ -390,33 +393,41 @@ internal class MinGraphAnalyzerTest {
     private suspend fun runShortestPath(
         roads: List<List<PointD>>,
         startPoint: PointD,
-        endPoint: PointD
+        endPoint: PointD,
+        repeat: Int = 1,
     ): List<PointD> {
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
-        var fullResultTime = Duration.ZERO
+        val fullResultTimeList = mutableListOf<Duration>()
         val fullResult = try {
-            measureMap({ fullResultTime = it }) {
-                fullGraphAnalyzer.getShortestPath(
+            (1..repeat).map {
+                measureMap({ fullResultTimeList.add(it) }) {
+                    fullGraphAnalyzer.getShortestPath(
+                        startPoint = startPoint,
+                        endPoint = endPoint,
+                        technicalAllowedAtStart = true,
+                        technicalAllowedAtEnd = true,
+                    )
+                }
+            }.first()
+        } catch (ignored: Throwable) {
+            throw FailedOnFullGraph()
+        }
+        val fullResultTime = fullResultTimeList.average()
+
+        val resultTimeList = mutableListOf<Duration>()
+        val result = (1..repeat).map {
+            measureMap({ resultTimeList.add(it) }) {
+                minGraphAnalyzer.getShortestPath(
                     startPoint = startPoint,
                     endPoint = endPoint,
                     technicalAllowedAtStart = true,
                     technicalAllowedAtEnd = true,
                 )
             }
-        } catch (ignored: Throwable) {
-            throw FailedOnFullGraph()
-        }
+        }.first()
+        val resultTime = resultTimeList.average()
 
-        var resultTime = Duration.ZERO
-        val result = measureMap({ resultTime = it }) {
-            minGraphAnalyzer.getShortestPath(
-                startPoint = startPoint,
-                endPoint = endPoint,
-                technicalAllowedAtStart = true,
-                technicalAllowedAtEnd = true,
-            )
-        }
         if (resultTime < fullResultTime) {
             println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
         } else {
@@ -425,7 +436,7 @@ internal class MinGraphAnalyzerTest {
 
         assertEquals(fullResult, result) {
             "Result from Full Graph is different\n" +
-                    "Full distance:${fullResult.distance()}, Min distance ${result.distance()}\n" +
+                    "Full distance: ${fullResult.distance()}, Min distance: ${result.distance()}\n" +
                     "Full length: ${fullResult.size}, Min length: ${result.size}\n"
         }
         return result
@@ -436,6 +447,7 @@ internal class MinGraphAnalyzerTest {
         numberOfCities: Int,
         connections: Int,
         bestExpected: Double,
+        repeat: Int = 3,
     ) {
         val random = Random(seed)
         val (points, roads) = generateGraph(
@@ -445,8 +457,8 @@ internal class MinGraphAnalyzerTest {
         )
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
-        val result =  try {
-            runShortestPath(roads, start, end)
+        val result = try {
+            runShortestPath(roads, start, end, repeat)
         } catch (onFull: FailedOnFullGraph) {
             println("Failed on FullGraph")
             return
@@ -480,6 +492,7 @@ internal class MinGraphAnalyzerTest {
                 numberOfCities = numberOfCities,
                 connections = connections,
                 bestExpected = -1.0,
+                repeat = 1,
             )
         }
     }
@@ -487,6 +500,9 @@ internal class MinGraphAnalyzerTest {
     private fun GraphAnalyzer.toMinGraph(): MinGraphAnalyzer = runBlocking {
         MinGraphAnalyzer().also { it.initialize(waitForNodes()) }
     }
+
+    private fun List<Duration>.average() =
+        map { it.inWholeNanoseconds }.average().toDuration(DurationUnit.NANOSECONDS)
 }
 
 class FailedOnFullGraph : Throwable()

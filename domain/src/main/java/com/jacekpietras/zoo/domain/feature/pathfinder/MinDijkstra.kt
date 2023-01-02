@@ -1,11 +1,14 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinEdge
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.SnappedOnMinEdge
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.SnappedOnMinNode
 import java.util.PriorityQueue
+import kotlin.contracts.contract
+import kotlin.math.abs
 
 internal class MinDijkstra(
     private val vertices: Collection<MinNode>,
@@ -37,22 +40,33 @@ internal class MinDijkstra(
                 q.add(start.edge.from to costToStart1)
                 q.add(start.edge.node to costToStart2)
 
-                val pointsBeforeSnapped = listOf(start.edge.from) +
-                        start.edge.corners
-                            .filter { (_, weight) -> weight <= start.weightFromStart }
-                            .map { (p, _) -> MinNode(p) }
-                val pointsAfterSnapped = start.edge.corners
-                    .filter { (_, weight) -> weight >= start.weightFromStart }
-                    .map { (p, _) -> MinNode(p) } +
-                        start.edge.node
+                if (onSameEdge(start, end)) {
+                    val costToEndOnSameEdge = abs(start.weightFromStart - end.weightFromStart)
+                    val startNode = MinNode(start.point)
+                    val endNode = MinNode(end.point)
+                    costs[endNode] = costToEndOnSameEdge
+                    q.add(endNode to costToEndOnSameEdge)
+                    previous[endNode] = startNode
+                } else if (onReversedEdge(start, end)) {
+                    throw IllegalStateException("With current implementation of snapping, shouldn't happen, might implement in future")
+                }
 
-                pointsBeforeSnapped.zipWithNext { a, b -> previous[a] = b }
-                pointsAfterSnapped.zipWithNext { a, b -> previous[b] = a }
+//                val pointsBeforeSnapped = listOf(start.edge.from) +
+//                        start.edge.corners
+//                            .filter { (_, weight) -> weight <= start.weightFromStart }
+//                            .map { (p, _) -> MinNode(p) }
+//                val pointsAfterSnapped = start.edge.corners
+//                    .filter { (_, weight) -> weight >= start.weightFromStart }
+//                    .map { (p, _) -> MinNode(p) } +
+//                        start.edge.node
+//
+//                pointsBeforeSnapped.zipWithNext { a, b -> previous[a] = b }
+//                pointsAfterSnapped.zipWithNext { a, b -> previous[b] = a }
 
-                if (start.point != pointsBeforeSnapped.last().point)
-                    previous[pointsBeforeSnapped.last()] = MinNode(start.point)
-                if (start.point != pointsAfterSnapped.first().point)
-                    previous[pointsAfterSnapped.first()] = MinNode(start.point)
+//                if (start.point != pointsBeforeSnapped.last().point)
+//                    previous[pointsBeforeSnapped.last()] = MinNode(start.point)
+//                if (start.point != pointsAfterSnapped.first().point)
+//                    previous[pointsAfterSnapped.first()] = MinNode(start.point)
             }
             is SnappedOnMinNode -> {
                 costs = mutableMapOf(start.node to 0.0)
@@ -91,6 +105,45 @@ internal class MinDijkstra(
             }
         }
     }
+
+//    private fun cornersBetweenSnaps(
+//        snapStart: SnappedOnMinEdge,
+//        snapEnd: SnappedOnMinEdge
+//    ): List<PointD>  =
+//        if (snapStart.weightFromStart < snapEnd.weightFromStart) {
+//            snapStart.edge.corners
+//                .filter { (_, weight) -> snapStart.weightFromStart < weight && weight < snapEnd.weightFromStart }
+//        } else {
+//            snapStart.edge.corners
+//                .filter { (_, weight) -> snapEnd.weightFromStart < weight && weight < snapStart.weightFromStart }
+//                .reversed()
+//        }
+//            .map { (p, _) -> p }
+
+    private fun onSameEdge(
+        snapStart: SnappedOnMinEdge,
+        snapEnd: SnappedOnMin
+    ): Boolean {
+        contract {
+            returns(true) implies (snapEnd is SnappedOnMinEdge)
+        }
+        return snapEnd is SnappedOnMinEdge && snapStart.edge == snapEnd.edge
+    }
+
+    private fun onReversedEdge(
+        snapStart: SnappedOnMinEdge,
+        snapEnd: SnappedOnMin
+    ): Boolean {
+        contract {
+            returns(true) implies (snapEnd is SnappedOnMinEdge)
+        }
+        return snapEnd is SnappedOnMinEdge &&
+                snapStart.edge.from == snapEnd.edge.node && snapStart.edge.node == snapEnd.edge.from &&
+                snapStart.cornerPoints == snapEnd.cornerPoints.reversed()
+    }
+
+    private val SnappedOnMinEdge.cornerPoints
+        get() = edge.corners.map(Pair<PointD, Double>::first)
 
     private fun runAlgorithm(
         end: MinNode,
