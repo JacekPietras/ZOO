@@ -135,11 +135,38 @@ internal class MinGraphAnalyzer {
         to.edges.remove(to.edges.first { it.node == this })
     }
 
-    private fun List<MinNode>.pointPath(snapStart:SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
-        zipWithNext { a, b ->
-            listOf(a.point) + a.edges.find { it.node == b }.cornerPoints()
-        }.flatten() + if (snapEnd is SnappedOnMinEdge && size > 1) {
-            val nodeBeforeEnd = this[this.lastIndex - 1]
+    private fun List<MinNode>.pointPath(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
+        pointPathBegin(snapStart, snapEnd) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)
+
+    private fun List<MinNode>.pointPathBegin(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> {
+        val firstFromResult = first()
+        return if (snapStart is SnappedOnMinEdge && firstFromResult.point != snapStart.point) {
+            listOf(snapStart.point) +
+                    when {
+//                        onSameEdge(snapStart, snapEnd) -> emptyList()
+                        snapStart.edge.from == snapStart.edge.node -> {
+                            if (snapStart.weightFromStart < snapStart.edge.weight - snapStart.weightFromStart) {
+                                cornersBeforeSnapped(snapStart)
+                            } else {
+                                cornersAfterSnapped(snapStart)
+                            }
+                        }
+                        snapStart.edge.from == firstFromResult -> cornersBeforeSnapped(snapStart)
+                        snapStart.edge.node == firstFromResult -> cornersAfterSnapped(snapStart)
+                        else -> throw IllegalStateException("first point of result is not part of starting edge")
+                    }
+        } else {
+            emptyList()
+        }
+    }
+
+    private fun List<MinNode>.pointPathMiddle() =
+        zipWithNext { a, b -> listOf(a.point) + a.edges.find { it.node == b }.cornerPoints() }
+            .flatten()
+
+    private fun List<MinNode>.pointPathEnd(snapEnd: SnappedOnMin, snapStart: SnappedOnMin) =
+        if (snapEnd is SnappedOnMinEdge && size > 1) {
+            val nodeBeforeEnd = this[lastIndex - 1]
             when {
                 nodeBeforeEnd == snapEnd.edge.from && nodeBeforeEnd == snapEnd.edge.node -> {
                     if (snapEnd.weightFromStart < snapEnd.edge.weight - snapEnd.weightFromStart) {
@@ -154,7 +181,7 @@ internal class MinGraphAnalyzer {
                 nodeBeforeEnd == snapEnd.edge.node -> {
                     (cornersAfterSnapped(snapEnd) + last().point).distinct()
                 }
-                snapStart is SnappedOnMinEdge && nodeBeforeEnd.point == snapStart.point ->{
+                snapStart is SnappedOnMinEdge && nodeBeforeEnd.point == snapStart.point -> {
                     cornersBetweenSnaps(snapStart, snapEnd) + last().point
                 }
                 else -> {
@@ -165,13 +192,13 @@ internal class MinGraphAnalyzer {
             listOf(last().point)
         }
 
-    private fun cornersAfterSnapped(snapEnd: SnappedOnMinEdge) = snapEnd.edge.corners
-        .filter { (_, weight) -> weight > snapEnd.weightFromStart }
+    private fun cornersAfterSnapped(snap: SnappedOnMinEdge) = snap.edge.corners
+        .filter { (_, weight) -> weight > snap.weightFromStart }
         .map { (point, _) -> point }
         .reversed()
 
-    private fun cornersBeforeSnapped(snapEnd: SnappedOnMinEdge) = snapEnd.edge.corners
-        .filter { (_, weight) -> weight < snapEnd.weightFromStart }
+    private fun cornersBeforeSnapped(snap: SnappedOnMinEdge) = snap.edge.corners
+        .filter { (_, weight) -> weight < snap.weightFromStart }
         .map { (point, _) -> point }
 
     private fun MinEdge?.cornerPoints() =
@@ -190,5 +217,16 @@ internal class MinGraphAnalyzer {
                 .reversed()
         }
         return corners.map { (p, _) -> p }
+    }
+
+    private fun onSameEdge(
+        snapStart: SnappedOnMin,
+        snapEnd: SnappedOnMin
+    ): Boolean {
+        contract {
+            returns(true) implies (snapStart is SnappedOnMinEdge)
+            returns(true) implies (snapEnd is SnappedOnMinEdge)
+        }
+        return snapStart is SnappedOnMinEdge && snapEnd is SnappedOnMinEdge && snapStart.edge == snapEnd.edge
     }
 }

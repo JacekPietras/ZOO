@@ -50,23 +50,6 @@ internal class MinDijkstra(
                 } else if (onReversedEdge(start, end)) {
                     throw IllegalStateException("With current implementation of snapping, shouldn't happen, might implement in future")
                 }
-
-//                val pointsBeforeSnapped = listOf(start.edge.from) +
-//                        start.edge.corners
-//                            .filter { (_, weight) -> weight <= start.weightFromStart }
-//                            .map { (p, _) -> MinNode(p) }
-//                val pointsAfterSnapped = start.edge.corners
-//                    .filter { (_, weight) -> weight >= start.weightFromStart }
-//                    .map { (p, _) -> MinNode(p) } +
-//                        start.edge.node
-//
-//                pointsBeforeSnapped.zipWithNext { a, b -> previous[a] = b }
-//                pointsAfterSnapped.zipWithNext { a, b -> previous[b] = a }
-
-//                if (start.point != pointsBeforeSnapped.last().point)
-//                    previous[pointsBeforeSnapped.last()] = MinNode(start.point)
-//                if (start.point != pointsAfterSnapped.first().point)
-//                    previous[pointsAfterSnapped.first()] = MinNode(start.point)
             }
             is SnappedOnMinNode -> {
                 costs = mutableMapOf(start.node to 0.0)
@@ -105,20 +88,6 @@ internal class MinDijkstra(
             }
         }
     }
-
-//    private fun cornersBetweenSnaps(
-//        snapStart: SnappedOnMinEdge,
-//        snapEnd: SnappedOnMinEdge
-//    ): List<PointD>  =
-//        if (snapStart.weightFromStart < snapEnd.weightFromStart) {
-//            snapStart.edge.corners
-//                .filter { (_, weight) -> snapStart.weightFromStart < weight && weight < snapEnd.weightFromStart }
-//        } else {
-//            snapStart.edge.corners
-//                .filter { (_, weight) -> snapEnd.weightFromStart < weight && weight < snapStart.weightFromStart }
-//                .reversed()
-//        }
-//            .map { (p, _) -> p }
 
     private fun onSameEdge(
         snapStart: SnappedOnMinEdge,
