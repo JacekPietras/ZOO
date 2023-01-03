@@ -165,7 +165,7 @@ internal class MinGraphAnalyzerTest {
                 seed = 6102,
                 numberOfCities = 1000,
                 connections = 2000,
-                bestExpected = 9999999999.0,
+                bestExpected = 262.71010868175847,
                 repeat = 1,
             )
         }
