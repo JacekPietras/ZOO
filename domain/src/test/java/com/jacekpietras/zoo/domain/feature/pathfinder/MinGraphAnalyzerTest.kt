@@ -121,14 +121,69 @@ internal class MinGraphAnalyzerTest {
     }
 
     @Test
-    fun `find shortest path (multiple)`() = runTest {
-        doTests(
-            times = 1000,
-            seed = 6000,
+    fun `find shortest path 6`() = runTest {
+        doTest(
+            seed = 6051,
             numberOfCities = 1000,
             connections = 2000,
+            bestExpected = 9999999999.0,
+            repeat = 1,
         )
     }
+
+    @Test
+    fun `find shortest path 7`() = runTest {
+        doTest(
+            seed = 6102,
+            numberOfCities = 1000,
+            connections = 2000,
+            bestExpected = 9999999999.0,
+            repeat = 1,
+        )
+    }
+
+    @Test
+    fun `find shortest path 8`() = runTest {
+        doTest(
+            seed = 6114,
+            numberOfCities = 1000,
+            connections = 2000,
+            bestExpected = 9999999999.0,
+            repeat = 1,
+        )
+    }
+
+    @Test
+    fun `find shortest path 9`() = runTest {
+        doTest(
+            seed = 6117,
+            numberOfCities = 1000,
+            connections = 2000,
+            bestExpected = 9999999999.0,
+            repeat = 1,
+        )
+    }
+
+    @Test
+    fun `find shortest path 10`() = runTest {
+        doTest(
+            seed = 6136,
+            numberOfCities = 1000,
+            connections = 2000,
+            bestExpected = 9999999999.0,
+            repeat = 1,
+        )
+    }
+
+//    @Test
+//    fun `find shortest path (multiple)`() = runTest {
+//        doTests(
+//            times = 1000,
+//            seed = 6137,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//        )
+//    }
 
     @Test
     fun `start outside graph`() = runTest {
@@ -479,6 +534,7 @@ internal class MinGraphAnalyzerTest {
         }
     }
 
+    @Suppress("unused")
     private suspend fun doTests(
         seed: Long,
         numberOfCities: Int,

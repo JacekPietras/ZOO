@@ -15,13 +15,13 @@ internal class MinDijkstra(
     private val technicalAllowed: Boolean = false,
 ) {
 
-    private val q: PriorityQueue<Pair<MinNode, Double>> = PriorityQueue(10, comparator)
+    private val queue: PriorityQueue<Pair<MinNode, Double>> = PriorityQueue(10, comparator)
     private lateinit var costs: MutableMap<MinNode, Double>
     private val previous = mutableMapOf<MinNode, MinNode?>()
     private var outsideTechnical = false
 
     // subset of vertices, for which we know true distance
-    private val s = mutableSetOf<MinNode>()
+    private val visited = mutableSetOf<MinNode>()
 
     fun calculate(
         start: SnappedOnMin,
@@ -29,32 +29,17 @@ internal class MinDijkstra(
     ): List<MinNode> {
         when (start) {
             is SnappedOnMinEdge -> {
-                val costToStart1 = start.weightFromStart
-                val costToStart2 = (start.edge.weight - start.weightFromStart)
-
-                costs = mutableMapOf(
-                    start.edge.from to costToStart1,
-                    start.edge.node to costToStart2,
-                )
-
-                q.add(start.edge.from to costToStart1)
-                q.add(start.edge.node to costToStart2)
+                initQueueWithEndsOfStartingEdge(start)
 
                 if (onSameEdge(start, end)) {
-                    val costToEndOnSameEdge = abs(start.weightFromStart - end.weightFromStart)
-                    val startNode = MinNode(start.point)
-                    val endNode = MinNode(end.point)
-                    costs[endNode] = costToEndOnSameEdge
-                    q.add(endNode to costToEndOnSameEdge)
-                    previous[endNode] = startNode
+                    addsToQueueConnectionOnSameEdge(start, end)
                 } else if (onReversedEdge(start, end)) {
                     throw IllegalStateException("With current implementation of snapping, shouldn't happen, might implement in future")
                 }
             }
             is SnappedOnMinNode -> {
                 costs = mutableMapOf(start.node to 0.0)
-
-                q.add(start.node to 0.0)
+                queue.add(start.node to 0.0)
             }
         }
 
@@ -87,6 +72,31 @@ internal class MinDijkstra(
                 runAlgorithm(end.node)
             }
         }
+    }
+
+    private fun addsToQueueConnectionOnSameEdge(
+        start: SnappedOnMinEdge,
+        end: SnappedOnMinEdge
+    ) {
+        val costToEndOnSameEdge = abs(start.weightFromStart - end.weightFromStart)
+        val startNode = MinNode(start.point)
+        val endNode = MinNode(end.point)
+        costs[endNode] = costToEndOnSameEdge
+        queue.add(endNode to costToEndOnSameEdge)
+        previous[endNode] = startNode
+    }
+
+    private fun initQueueWithEndsOfStartingEdge(start: SnappedOnMinEdge) {
+        val costToStart1 = start.weightFromStart
+        val costToStart2 = (start.edge.weight - start.weightFromStart)
+
+        costs = mutableMapOf(
+            start.edge.from to costToStart1,
+            start.edge.node to costToStart2,
+        )
+
+        queue.add(start.edge.from to costToStart1)
+        queue.add(start.edge.node to costToStart2)
     }
 
     private fun onSameEdge(
@@ -132,9 +142,9 @@ internal class MinDijkstra(
         endingEdge1: MinEdge? = null,
         endingEdge2: MinEdge? = null,
     ) {
-        while (s.size != vertices.size) {
+        while (visited.size != vertices.size) {
             // closest vertex that has not yet been visited
-            val (v, distanceToV) = q.remove()
+            val (v, distanceToV) = queue.remove()
 
             v.edges.forEach { neighbor ->
                 runForEdgeWithTechnical(neighbor, distanceToV)
@@ -152,7 +162,7 @@ internal class MinDijkstra(
 
             if (v == end) break
 
-            s.add(v)
+            visited.add(v)
         }
     }
 
@@ -161,9 +171,9 @@ internal class MinDijkstra(
         endingEdge1: MinEdge? = null,
         endingEdge2: MinEdge? = null,
     ) {
-        while (s.size != vertices.size) {
+        while (visited.size != vertices.size) {
             // closest vertex that has not yet been visited
-            val (v, distanceToV) = q.remove()
+            val (v, distanceToV) = queue.remove()
 
             v.edges.forEach { neighbor ->
                 runForEdgeWithoutTechnical(neighbor, distanceToV)
@@ -181,7 +191,7 @@ internal class MinDijkstra(
 
             if (v == end) break
 
-            s.add(v)
+            visited.add(v)
         }
     }
 
@@ -189,13 +199,13 @@ internal class MinDijkstra(
         neighbor: MinEdge,
         distanceToV: Double,
     ) {
-        if (neighbor.node !in s) {
+        if (neighbor.node !in visited) {
             val newCost = distanceToV + neighbor.weight
 
             if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
                 costs[neighbor.node] = newCost
                 previous[neighbor.node] = neighbor.from
-                q.add(neighbor.node to newCost)
+                queue.add(neighbor.node to newCost)
             }
         }
     }
@@ -204,7 +214,7 @@ internal class MinDijkstra(
         neighbor: MinEdge,
         distanceToV: Double,
     ) {
-        if (neighbor.node !in s && (!outsideTechnical || !neighbor.technical)) {
+        if (neighbor.node !in visited && (!outsideTechnical || !neighbor.technical)) {
             if (!neighbor.technical) {
                 outsideTechnical = true
             }
@@ -214,7 +224,7 @@ internal class MinDijkstra(
             if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
                 costs[neighbor.node] = newCost
                 previous[neighbor.node] = neighbor.from
-                q.add(neighbor.node to newCost)
+                queue.add(neighbor.node to newCost)
             }
         }
     }

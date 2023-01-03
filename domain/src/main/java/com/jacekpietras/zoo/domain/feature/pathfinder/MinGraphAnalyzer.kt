@@ -7,7 +7,6 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.SnappedOnMinEdge
 import kotlinx.coroutines.delay
-import kotlin.contracts.contract
 
 internal class MinGraphAnalyzer {
 
@@ -101,9 +100,9 @@ internal class MinGraphAnalyzer {
     }
 
     private fun List<MinNode>.pointPath(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
-        pointPathBegin(snapStart, snapEnd) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)
+        pointPathBegin(snapStart) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)
 
-    private fun List<MinNode>.pointPathBegin(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> {
+    private fun List<MinNode>.pointPathBegin(snapStart: SnappedOnMin): List<PointD> {
         val firstFromResult = first()
         return if (snapStart is SnappedOnMinEdge && firstFromResult.point != snapStart.point) {
             (listOf(snapStart.point) +
@@ -181,16 +180,5 @@ internal class MinGraphAnalyzer {
                 .reversed()
         }
         return corners.map { (p, _) -> p }
-    }
-
-    private fun onSameEdge(
-        snapStart: SnappedOnMin,
-        snapEnd: SnappedOnMin
-    ): Boolean {
-        contract {
-            returns(true) implies (snapStart is SnappedOnMinEdge)
-            returns(true) implies (snapEnd is SnappedOnMinEdge)
-        }
-        return snapStart is SnappedOnMinEdge && snapEnd is SnappedOnMinEdge && snapStart.edge == snapEnd.edge
     }
 }
