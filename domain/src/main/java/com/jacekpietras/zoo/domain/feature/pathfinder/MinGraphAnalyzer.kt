@@ -40,7 +40,7 @@ internal class MinGraphAnalyzer {
         if (startPoint == null) return listOf(endPoint)
         if (nodes.isEmpty()) return listOf(endPoint)
 
-        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
+//        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
 
         val snapStart = snapper.getSnappedOnMinEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
         val snapEnd = snapper.getSnappedOnMinEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
@@ -131,16 +131,16 @@ internal class MinGraphAnalyzer {
             when {
                 nodeBeforeEnd == snapEnd.edge.from && nodeBeforeEnd == snapEnd.edge.node -> {
                     if (snapEnd.weightFromStart < snapEnd.edge.weight - snapEnd.weightFromStart) {
-                        (cornersBeforeSnapped(snapEnd) + last().point).distinct()
+                        cornersBeforeSnapped(snapEnd) + last().point
                     } else {
-                        (cornersAfterSnapped(snapEnd) + last().point).distinct()
+                        cornersAfterSnapped(snapEnd) + last().point
                     }
                 }
                 nodeBeforeEnd == snapEnd.edge.from -> {
-                    (cornersBeforeSnapped(snapEnd) + last().point).distinct()
+                    cornersBeforeSnapped(snapEnd) + last().point
                 }
                 nodeBeforeEnd == snapEnd.edge.node -> {
-                    (cornersAfterSnapped(snapEnd) + last().point).distinct()
+                    cornersAfterSnapped(snapEnd) + last().point
                 }
                 snapStart is SnappedOnMinEdge && nodeBeforeEnd.point == snapStart.point -> {
                     cornersBetweenSnaps(snapStart, snapEnd) + last().point
@@ -148,7 +148,7 @@ internal class MinGraphAnalyzer {
                 else -> {
                     throw IllegalStateException("point before ending should be on end of ending edge")
                 }
-            }
+            }.distinct()
         } else {
             listOf(last().point)
         }
