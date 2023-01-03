@@ -228,16 +228,20 @@ internal class ShortestPathInGeneratedGraphTest {
             }.toSet().toList()
             val c = points.associateWith { mutableListOf<City>() }
 
-            val roads = (0 until connections).map {
+            val roads = (0 until connections).mapNotNull {
                 val next = points.getRandom(random)
-                val closest = points.filter { it != next && c[next]?.contains(it) == false }.minByOrNull { it.distanceToCity(next) }!!
-                c[next]!!.add(closest)
-                c[closest]!!.add(next)
+                points
+                    .filter { it != next && c[next]?.contains(it) == false }
+                    .minByOrNull { it.distanceToCity(next) }
+                    ?.let { closest ->
+                        c[next]!!.add(closest)
+                        c[closest]!!.add(next)
 
-                listOf(
-                    PointD(next.x, next.y),
-                    PointD(closest.x, closest.y),
-                )
+                        listOf(
+                            PointD(next.x, next.y),
+                            PointD(closest.x, closest.y),
+                        )
+                    }
             }.toSet().toList()
             return points to roads
         }

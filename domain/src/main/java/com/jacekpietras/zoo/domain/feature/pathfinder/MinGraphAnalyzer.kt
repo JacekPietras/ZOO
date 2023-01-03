@@ -35,8 +35,6 @@ internal class MinGraphAnalyzer {
         technicalAllowedAtStart: Boolean = true,
         technicalAllowedAtEnd: Boolean = false,
     ): List<PointD> {
-        // fixme calculate in min and full graph and store calculation times. print current + avg
-
         val nodes = waitForNodes()
 
         if (startPoint == null) return listOf(endPoint)
