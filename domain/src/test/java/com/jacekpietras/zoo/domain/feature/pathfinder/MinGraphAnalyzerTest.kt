@@ -12,6 +12,8 @@ import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 import kotlin.time.Duration
@@ -69,114 +71,119 @@ internal class MinGraphAnalyzerTest {
     private fun Collection<MinEdge>.cornerPoints() =
         map { it.corners.map(Pair<PointD, Double>::first) }
 
-    @Test
-    fun `find shortest path 1`() = runTest {
-        doTest(
-            seed = 1000,
-            numberOfCities = 100,
-            connections = 500,
-            bestExpected = 536.0218658192133,
-        )
-    }
+    @Nested
+    @DisplayName("Problematic Generated tests")
+    inner class ProblematicGeneratedTests {
 
-    @Test
-    fun `find shortest path 2`() = runTest {
-        doTest(
-            seed = 2001,
-            numberOfCities = 1000,
-            connections = 2000,
-            bestExpected = 517.6658074221267,
-        )
-    }
+        @Test
+        fun `find shortest path 1`() = runTest {
+            doTest(
+                seed = 1000,
+                numberOfCities = 100,
+                connections = 500,
+                bestExpected = 536.0218658192133,
+            )
+        }
 
-    @Test
-    fun `find shortest path 3`() = runTest {
-        doTest(
-            seed = 3000,
-            numberOfCities = 1000,
-            connections = 2000,
-            bestExpected = 551.1973440977065,
-        )
-    }
+        @Test
+        fun `find shortest path 2`() = runTest {
+            doTest(
+                seed = 2001,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 517.6658074221267,
+            )
+        }
 
-    @Test
-    fun `find shortest path 4`() = runTest {
-        doTest(
-            seed = 4002,
-            numberOfCities = 1000,
-            connections = 3000,
-            bestExpected = 279.78271215563814,
-        )
-    }
+        @Test
+        fun `find shortest path 3`() = runTest {
+            doTest(
+                seed = 3000,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 551.1973440977065,
+            )
+        }
 
-    @Test
-    fun `find shortest path 5`() = runTest {
-        doTest(
-            seed = 5000,
-            numberOfCities = 5000,
-            connections = 10000,
-            bestExpected = 445.50727166942147,
-            repeat = 1,
-        )
-    }
+        @Test
+        fun `find shortest path 4`() = runTest {
+            doTest(
+                seed = 4002,
+                numberOfCities = 1000,
+                connections = 3000,
+                bestExpected = 279.78271215563814,
+            )
+        }
 
-    @Test
-    fun `find shortest path 6`() = runTest {
-        doTest(
-            seed = 6051,
-            numberOfCities = 1000,
-            connections = 2000,
-            bestExpected = 9999999999.0,
-            repeat = 1,
-        )
-    }
+        @Test
+        fun `find shortest path 5`() = runTest {
+            doTest(
+                seed = 5000,
+                numberOfCities = 5000,
+                connections = 10000,
+                bestExpected = 445.50727166942147,
+                repeat = 1,
+            )
+        }
 
-    @Test
-    fun `find shortest path 7`() = runTest {
-        doTest(
-            seed = 6102,
-            numberOfCities = 1000,
-            connections = 2000,
-            bestExpected = 9999999999.0,
-            repeat = 1,
-        )
-    }
+        @Test
+        fun `find shortest path 6`() = runTest {
+            doTest(
+                seed = 6051,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
 
-    @Test
-    fun `find shortest path 8`() = runTest {
-        doTest(
-            seed = 6114,
-            numberOfCities = 1000,
-            connections = 2000,
-            bestExpected = 9999999999.0,
-            repeat = 1,
-        )
-    }
+        @Test
+        fun `find shortest path 7`() = runTest {
+            doTest(
+                seed = 6114,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
 
-    @Test
-    fun `find shortest path 9`() = runTest {
-        doTest(
-            seed = 6117,
-            numberOfCities = 1000,
-            connections = 2000,
-            bestExpected = 9999999999.0,
-            repeat = 1,
-        )
-    }
+        @Test
+        fun `find shortest path 8`() = runTest {
+            doTest(
+                seed = 6117,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
 
-    @Test
-    fun `find shortest path 10`() = runTest {
-        doTest(
-            seed = 6136,
-            numberOfCities = 1000,
-            connections = 2000,
-            bestExpected = 9999999999.0,
-            repeat = 1,
-        )
+        @Test
+        fun `find shortest path 9`() = runTest {
+            doTest(
+                seed = 6102,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 10`() = runTest {
+            doTest(
+                seed = 6136,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
     }
 
 //    @Test
-//    fun `find shortest path (multiple)`() = runTest {
+//    fun `test generation (multiple)`() = runTest {
 //        doTests(
 //            times = 1000,
 //            seed = 6137,
@@ -185,264 +192,269 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `start outside graph`() = runTest {
-        val roads = listOf(
-            listOf(
+    @Nested
+    @DisplayName("Simplified edge cases")
+    inner class SimplifiedEdgeCases {
+
+        @Test
+        fun `start outside graph`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(0, 0),
+                    PointD(0, 10),
+                ),
+                listOf(
+                    PointD(0, 0),
+                    PointD(5, 5),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(0, 10),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(5, 5),
+                    PointD(5, 6),
+                ),
+            )
+            val startPoint = PointD(9, 11)
+            val endPoint = PointD(0, 0)
+
+            val result = runShortestPath(roads, startPoint, endPoint)
+
+            val expected = listOf(
+                PointD(9, 10),
+                PointD(10, 10),
+                PointD(5, 5),
                 PointD(0, 0),
-                PointD(0, 10),
-            ),
-            listOf(
+            )
+            assertEquals(expected, result)
+        }
+
+        @Test
+        fun `start outside graph 2`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(-1, -1),
+                    PointD(0, 0),
+                    PointD(0, 10),
+                ),
+                listOf(
+                    PointD(0, 0),
+                    PointD(5, 5),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(-1, 10),
+                    PointD(0, 10),
+                    PointD(10, 10),
+                    PointD(11, 10),
+                ),
+                listOf(
+                    PointD(5, 5),
+                    PointD(5, 6),
+                ),
+            )
+            val startPoint = PointD(9, 11)
+            val endPoint = PointD(0, 0)
+
+            val result = runShortestPath(roads, startPoint, endPoint)
+
+            val expected = listOf(
+                PointD(9, 10),
+                PointD(10, 10),
+                PointD(5, 5),
+                PointD(0, 0),
+            )
+            assertEquals(expected, result)
+        }
+
+        @Test
+        fun `end outside graph`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(0, 0),
+                    PointD(0, 10),
+                ),
+                listOf(
+                    PointD(0, 0),
+                    PointD(5, 5),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(0, 10),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(5, 5),
+                    PointD(5, 6),
+                ),
+            )
+            val startPoint = PointD(0, 0)
+            val endPoint = PointD(9, 11)
+
+            val result = runShortestPath(roads, startPoint, endPoint)
+
+            val expected = listOf(
                 PointD(0, 0),
                 PointD(5, 5),
                 PointD(10, 10),
-            ),
-            listOf(
-                PointD(0, 10),
-                PointD(10, 10),
-            ),
-            listOf(
-                PointD(5, 5),
-                PointD(5, 6),
-            ),
-        )
-        val startPoint = PointD(9, 11)
-        val endPoint = PointD(0, 0)
+                PointD(9, 10),
+            )
+            assertEquals(expected, result)
+        }
 
-        val result = runShortestPath(roads, startPoint, endPoint)
+        @Test
+        fun `end outside graph 2`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(0, 0),
+                    PointD(0, 10),
+                ),
+                listOf(
+                    PointD(0, 0),
+                    PointD(5, 5),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(0, 10),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(5, 5),
+                    PointD(5, 6),
+                ),
+            )
+            val startPoint = PointD(0, 0)
+            val endPoint = PointD(1, 10)
 
-        val expected = listOf(
-            PointD(9, 10),
-            PointD(10, 10),
-            PointD(5, 5),
-            PointD(0, 0),
-        )
-        assertEquals(expected, result)
-    }
+            val result = runShortestPath(roads, startPoint, endPoint)
 
-    @Test
-    fun `start outside graph 2`() = runTest {
-        val roads = listOf(
-            listOf(
-                PointD(-1, -1),
+            val expected = listOf(
                 PointD(0, 0),
                 PointD(0, 10),
-            ),
-            listOf(
-                PointD(0, 0),
-                PointD(5, 5),
-                PointD(10, 10),
-            ),
-            listOf(
-                PointD(-1, 10),
-                PointD(0, 10),
-                PointD(10, 10),
-                PointD(11, 10),
-            ),
-            listOf(
-                PointD(5, 5),
-                PointD(5, 6),
-            ),
-        )
-        val startPoint = PointD(9, 11)
-        val endPoint = PointD(0, 0)
+                PointD(1, 10),
+            )
+            assertEquals(expected, result)
+        }
 
-        val result = runShortestPath(roads, startPoint, endPoint)
+        @Test
+        fun `end outside graph 3`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(-1, -1),
+                    PointD(0, 0),
+                    PointD(0, 10),
+                ),
+                listOf(
+                    PointD(0, 0),
+                    PointD(5, 5),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(-1, 10),
+                    PointD(0, 10),
+                    PointD(10, 10),
+                    PointD(11, 10),
+                ),
+                listOf(
+                    PointD(5, 5),
+                    PointD(5, 6),
+                ),
+            )
+            val startPoint = PointD(0, 0)
+            val endPoint = PointD(9, 11)
 
-        val expected = listOf(
-            PointD(9, 10),
-            PointD(10, 10),
-            PointD(5, 5),
-            PointD(0, 0),
-        )
-        assertEquals(expected, result)
-    }
+            val result = runShortestPath(roads, startPoint, endPoint)
 
-    @Test
-    fun `end outside graph`() = runTest {
-        val roads = listOf(
-            listOf(
-                PointD(0, 0),
-                PointD(0, 10),
-            ),
-            listOf(
-                PointD(0, 0),
-                PointD(5, 5),
-                PointD(10, 10),
-            ),
-            listOf(
-                PointD(0, 10),
-                PointD(10, 10),
-            ),
-            listOf(
-                PointD(5, 5),
-                PointD(5, 6),
-            ),
-        )
-        val startPoint = PointD(0, 0)
-        val endPoint = PointD(9, 11)
-
-        val result = runShortestPath(roads, startPoint, endPoint)
-
-        val expected = listOf(
-            PointD(0, 0),
-            PointD(5, 5),
-            PointD(10, 10),
-            PointD(9, 10),
-        )
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `end outside graph 2`() = runTest {
-        val roads = listOf(
-            listOf(
-                PointD(0, 0),
-                PointD(0, 10),
-            ),
-            listOf(
+            val expected = listOf(
                 PointD(0, 0),
                 PointD(5, 5),
                 PointD(10, 10),
-            ),
-            listOf(
-                PointD(0, 10),
-                PointD(10, 10),
-            ),
-            listOf(
-                PointD(5, 5),
-                PointD(5, 6),
-            ),
-        )
-        val startPoint = PointD(0, 0)
-        val endPoint = PointD(1, 10)
+                PointD(9, 10),
+            )
+            assertEquals(expected, result)
+        }
 
-        val result = runShortestPath(roads, startPoint, endPoint)
+        @Test
+        fun `end outside graph 4`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(-1, -1),
+                    PointD(0, 0),
+                    PointD(0, 10),
+                ),
+                listOf(
+                    PointD(0, 0),
+                    PointD(5, 5),
+                    PointD(10, 10),
+                ),
+                listOf(
+                    PointD(-1, 10),
+                    PointD(0, 10),
+                    PointD(10, 10),
+                    PointD(11, 10),
+                ),
+                listOf(
+                    PointD(5, 5),
+                    PointD(5, 6),
+                ),
+            )
+            val startPoint = PointD(0, 0)
+            val endPoint = PointD(1, 11)
 
-        val expected = listOf(
-            PointD(0, 0),
-            PointD(0, 10),
-            PointD(1, 10),
-        )
-        assertEquals(expected, result)
-    }
+            val result = runShortestPath(roads, startPoint, endPoint)
 
-    @Test
-    fun `end outside graph 3`() = runTest {
-        val roads = listOf(
-            listOf(
-                PointD(-1, -1),
+            val expected = listOf(
                 PointD(0, 0),
                 PointD(0, 10),
-            ),
-            listOf(
-                PointD(0, 0),
-                PointD(5, 5),
-                PointD(10, 10),
-            ),
-            listOf(
-                PointD(-1, 10),
-                PointD(0, 10),
-                PointD(10, 10),
-                PointD(11, 10),
-            ),
-            listOf(
-                PointD(5, 5),
-                PointD(5, 6),
-            ),
-        )
-        val startPoint = PointD(0, 0)
-        val endPoint = PointD(9, 11)
+                PointD(1, 10),
+            )
+            assertEquals(expected, result)
+        }
 
-        val result = runShortestPath(roads, startPoint, endPoint)
+        @Test
+        fun `on straight line`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(0, 0),
+                    PointD(0, 5),
+                    PointD(0, 10),
+                ),
+            )
+            val startPoint = PointD(1, 2)
+            val endPoint = PointD(1, 8)
 
-        val expected = listOf(
-            PointD(0, 0),
-            PointD(5, 5),
-            PointD(10, 10),
-            PointD(9, 10),
-        )
-        assertEquals(expected, result)
-    }
+            val result = runShortestPath(roads, startPoint, endPoint)
 
-    @Test
-    fun `end outside graph 4`() = runTest {
-        val roads = listOf(
-            listOf(
-                PointD(-1, -1),
-                PointD(0, 0),
-                PointD(0, 10),
-            ),
-            listOf(
-                PointD(0, 0),
-                PointD(5, 5),
-                PointD(10, 10),
-            ),
-            listOf(
-                PointD(-1, 10),
-                PointD(0, 10),
-                PointD(10, 10),
-                PointD(11, 10),
-            ),
-            listOf(
-                PointD(5, 5),
-                PointD(5, 6),
-            ),
-        )
-        val startPoint = PointD(0, 0)
-        val endPoint = PointD(1, 11)
-
-        val result = runShortestPath(roads, startPoint, endPoint)
-
-        val expected = listOf(
-            PointD(0, 0),
-            PointD(0, 10),
-            PointD(1, 10),
-        )
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `on straight line`() = runTest {
-        val roads = listOf(
-            listOf(
-                PointD(0, 0),
+            val expected = listOf(
+                PointD(0, 2),
                 PointD(0, 5),
-                PointD(0, 10),
-            ),
-        )
-        val startPoint = PointD(1, 2)
-        val endPoint = PointD(1, 8)
+                PointD(0, 8),
+            )
+            assertEquals(expected, result)
+        }
 
-        val result = runShortestPath(roads, startPoint, endPoint)
+        @Test
+        fun `on straight line, close`() = runTest {
+            val roads = listOf(
+                listOf(
+                    PointD(0, 0),
+                    PointD(0, 5),
+                    PointD(0, 10),
+                ),
+            )
+            val startPoint = PointD(1, 2)
+            val endPoint = PointD(1, 3)
 
-        val expected = listOf(
-            PointD(0, 2),
-            PointD(0, 5),
-            PointD(0, 8),
-        )
-        assertEquals(expected, result)
-    }
+            val result = runShortestPath(roads, startPoint, endPoint)
 
-    @Test
-    fun `on straight line, close`() = runTest {
-        val roads = listOf(
-            listOf(
-                PointD(0, 0),
-                PointD(0, 5),
-                PointD(0, 10),
-            ),
-        )
-        val startPoint = PointD(1, 2)
-        val endPoint = PointD(1, 3)
-
-        val result = runShortestPath(roads, startPoint, endPoint)
-
-        val expected = listOf(
-            PointD(0, 2),
-            PointD(0, 3),
-        )
-        assertEquals(expected, result)
+            val expected = listOf(
+                PointD(0, 2),
+                PointD(0, 3),
+            )
+            assertEquals(expected, result)
+        }
     }
 
     private suspend fun runShortestPath(
