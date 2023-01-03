@@ -48,22 +48,29 @@ internal class PointSnapper {
                 if (edge.node.point == source) {
                     shortest = 0.0
                     result = SnappedOnMinNode(edge.node)
-                }
-                if (edge.from.point == source) {
+                } else if (edge.from.point == source) {
                     shortest = 0.0
                     result = SnappedOnMinNode(edge.from)
-                }
-                edge.forEdgeParts { p1, p2, weightBefore ->
-                    val found = getSnappedToEdge(source, p1, p2)
-                    val foundToSource = haversine(source.x, source.y, found.x, found.y)
-                    if (foundToSource < shortest) {
-                        val weightToP1 = haversine(p1.x, p1.y, found.x, found.y)
-                        shortest = foundToSource
-                        result = SnappedOnMinEdge(
-                            point = found,
-                            edge = edge,
-                            weightFromStart = weightBefore + weightToP1,
-                        )
+                } else {
+                    edge.forEdgeParts { p1, p2, weightBefore ->
+                        val found = getSnappedToEdge(source, p1, p2)
+                        val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                        if (foundToSource < shortest) {
+                            val weightToP1 = haversine(p1.x, p1.y, found.x, found.y)
+                            shortest = foundToSource
+
+                            if (edge.node.point == found) {
+                                result = SnappedOnMinNode(edge.node)
+                            } else if (edge.from.point == found) {
+                                result = SnappedOnMinNode(edge.from)
+                            } else {
+                                result = SnappedOnMinEdge(
+                                    point = found,
+                                    edge = edge,
+                                    weightFromStart = weightBefore + weightToP1,
+                                )
+                            }
+                        }
                     }
                 }
             }
