@@ -169,10 +169,21 @@ internal class MinGraphAnalyzerTest {
                 repeat = 1,
             )
         }
+
+        @Test
+        fun `find shortest path 10`() = runTest {
+            doTest(
+                seed = 1207,
+                numberOfCities = 10,
+                connections = 20,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
     }
 
 //    @Test
-//    fun `test generation (multiple)`() = runTest {
+//    fun `test generation (multiple) with big graphs`() = runTest {
 //        doTests(
 //            times = 1000,
 //            seed = 6137,
@@ -180,6 +191,16 @@ internal class MinGraphAnalyzerTest {
 //            connections = 2000,
 //        )
 //    }
+
+    @Test
+    fun `test generation (multiple) with small graphs`() = runTest {
+        doTests(
+            times = 1000,
+            seed = 1208,
+            numberOfCities = 10,
+            connections = 20,
+        )
+    }
 
     @Nested
     @DisplayName("Simplified edge cases")
