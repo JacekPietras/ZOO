@@ -234,6 +234,7 @@ internal class MinDijkstra(
 
     private fun pathTo(end: MinNode): List<MinNode> {
         val path = previous[end] ?: return listOf(end)
+        if (path === end) return listOf(end)
         return pathTo(path) + end
     }
 
