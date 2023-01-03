@@ -27,6 +27,9 @@ internal class MinDijkstra(
         start: SnappedOnMin,
         end: SnappedOnMin,
     ): List<MinNode> {
+        if (start == end) {
+            return listOf(start.asNode())
+        }
         when (start) {
             is SnappedOnMinEdge -> {
                 initQueueWithEndsOfStartingEdge(start)
@@ -233,6 +236,12 @@ internal class MinDijkstra(
         val path = previous[end] ?: return listOf(end)
         return pathTo(path) + end
     }
+
+    private fun SnappedOnMin.asNode(): MinNode =
+        when (this) {
+            is SnappedOnMinEdge -> MinNode(point)
+            is SnappedOnMinNode -> node
+        }
 
     private companion object {
 

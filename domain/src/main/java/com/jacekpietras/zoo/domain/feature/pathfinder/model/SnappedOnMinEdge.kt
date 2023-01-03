@@ -4,13 +4,13 @@ import com.jacekpietras.geometry.PointD
 
 internal sealed class SnappedOnMin {
 
-    internal class SnappedOnMinEdge(
+    internal data class SnappedOnMinEdge(
         val point: PointD,
         val edge: MinEdge,
         val weightFromStart: Double,
     ) : SnappedOnMin()
 
-    internal class SnappedOnMinNode(
+    internal data class SnappedOnMinNode(
         val node: MinNode,
     ) : SnappedOnMin()
 }
