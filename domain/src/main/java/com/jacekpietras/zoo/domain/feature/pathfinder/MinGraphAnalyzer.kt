@@ -98,12 +98,12 @@ internal class MinGraphAnalyzer {
     }
 
     private fun List<MinNode>.pointPath(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
-        pointPathBegin(snapStart) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)
+        (pointPathBegin(snapStart) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)).distinct()
 
     private fun List<MinNode>.pointPathBegin(snapStart: SnappedOnMin): List<PointD> {
         val firstFromResult = first()
         return if (snapStart is SnappedOnMinEdge && firstFromResult.point != snapStart.point) {
-            (listOf(snapStart.point) +
+            listOf(snapStart.point) +
                     when {
                         snapStart.edge.from == snapStart.edge.node -> {
                             if (snapStart.weightFromStart < snapStart.edge.weight - snapStart.weightFromStart) {
@@ -115,7 +115,7 @@ internal class MinGraphAnalyzer {
                         snapStart.edge.from == firstFromResult -> cornersBeforeSnapped(snapStart)
                         snapStart.edge.node == firstFromResult -> cornersAfterSnapped(snapStart)
                         else -> throw IllegalStateException("first point of result is not part of starting edge")
-                    }).distinct()
+                    }
         } else {
             emptyList()
         }
@@ -148,7 +148,7 @@ internal class MinGraphAnalyzer {
                 else -> {
                     throw IllegalStateException("point before ending should be on end of ending edge")
                 }
-            }.distinct()
+            }
         } else {
             listOf(last().point)
         }
