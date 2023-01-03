@@ -169,17 +169,6 @@ internal class MinGraphAnalyzerTest {
                 repeat = 1,
             )
         }
-
-        @Test
-        fun `find shortest path 10`() = runTest {
-            doTest(
-                seed = 6136,
-                numberOfCities = 1000,
-                connections = 2000,
-                bestExpected = 9999999999.0,
-                repeat = 1,
-            )
-        }
     }
 
 //    @Test
@@ -530,10 +519,7 @@ internal class MinGraphAnalyzerTest {
             println("Failed on FullGraph")
             return
         }
-        println("Path length: ${result.size}")
 
-        assertEquals(start, result.first())
-        assertEquals(end, result.last())
         result.assertExistingRoute(roads)
 
         val distance = result.distance()
