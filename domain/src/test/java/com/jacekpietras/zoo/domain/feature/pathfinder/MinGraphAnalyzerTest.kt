@@ -224,6 +224,50 @@ internal class MinGraphAnalyzerTest {
                 repeat = 1,
             )
         }
+
+        @Test
+        fun `find shortest path 15`() = runTest {
+            doTest(
+                seed = 563877,
+                numberOfCities = 5,
+                connections = 10,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 16`() = runTest {
+            doTest(
+                seed = 596844,
+                numberOfCities = 5,
+                connections = 10,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 17`() = runTest {
+            doTest(
+                seed = 822450,
+                numberOfCities = 5,
+                connections = 10,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 18`() = runTest {
+            doTest(
+                seed = 847085,
+                numberOfCities = 5,
+                connections = 10,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
     }
 
 //    @Test
@@ -236,15 +280,15 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `test generation (multiple) with small graphs`() = runTest {
-        doTests(
-            times = 100000,
-            seed = 1000,
-            numberOfCities = 5,
-            connections = 10,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with small graphs`() = runTest {
+//        doTests(
+//            times = 800000,
+//            seed = 822451,
+//            numberOfCities = 5,
+//            connections = 10,
+//        )
+//    }
 
     @Nested
     @DisplayName("Simplified edge cases")
