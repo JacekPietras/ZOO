@@ -43,53 +43,18 @@ internal class MinGraphAnalyzer {
         if (startPoint == null) return listOf(endPoint)
         if (nodes.isEmpty()) return listOf(endPoint)
 
-        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
+//        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
 
         val snapStart = snapper.getSnappedOnMinEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
         val snapEnd = snapper.getSnappedOnMinEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
 
-//        if (onSameEdge(snapStart, snapEnd)) {
-//            return resultFromTheSameEdge(snapStart, snapEnd)
-//        } else if (onReversedEdge(snapStart, snapEnd)) {
-//            throw IllegalStateException("With current implementation of snapping, shouldn't happen, might implement in future")
-//        } else {
         val result = getShortestPathJob(
             start = snapStart,
             end = snapEnd,
             technicalAllowed = technicalAllowedAtEnd,
         )
-        println("result before filling gaps: ${result.map { "(" + it.point.x + ", " + it.point.y + ")" }}") // fixme remove
         return result.pointPath(snapStart, snapEnd)
-//        }
     }
-//
-//    private fun onSameEdge(
-//        snapStart: SnappedOnMin,
-//        snapEnd: SnappedOnMin
-//    ): Boolean {
-//        contract {
-//            returns(true) implies (snapStart is SnappedOnMinEdge)
-//            returns(true) implies (snapEnd is SnappedOnMinEdge)
-//        }
-//        return snapStart is SnappedOnMinEdge && snapEnd is SnappedOnMinEdge &&
-//                snapStart.edge == snapEnd.edge
-//    }
-//
-//    private fun onReversedEdge(
-//        snapStart: SnappedOnMin,
-//        snapEnd: SnappedOnMin
-//    ): Boolean {
-//        contract {
-//            returns(true) implies (snapStart is SnappedOnMinEdge)
-//            returns(true) implies (snapEnd is SnappedOnMinEdge)
-//        }
-//        return snapStart is SnappedOnMinEdge && snapEnd is SnappedOnMinEdge &&
-//                (snapStart.edge.from == snapEnd.edge.node && snapStart.edge.node == snapEnd.edge.from &&
-//                        snapStart.cornerPoints == snapEnd.cornerPoints.reversed())
-//    }
-//
-//    private val SnappedOnMinEdge.cornerPoints
-//        get() = edge.corners.map(Pair<PointD, Double>::first)
 
     private suspend fun getShortestPathJob(
         start: SnappedOnMin,
@@ -141,9 +106,8 @@ internal class MinGraphAnalyzer {
     private fun List<MinNode>.pointPathBegin(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> {
         val firstFromResult = first()
         return if (snapStart is SnappedOnMinEdge && firstFromResult.point != snapStart.point) {
-            listOf(snapStart.point) +
+            (listOf(snapStart.point) +
                     when {
-//                        onSameEdge(snapStart, snapEnd) -> emptyList()
                         snapStart.edge.from == snapStart.edge.node -> {
                             if (snapStart.weightFromStart < snapStart.edge.weight - snapStart.weightFromStart) {
                                 cornersBeforeSnapped(snapStart)
@@ -154,7 +118,7 @@ internal class MinGraphAnalyzer {
                         snapStart.edge.from == firstFromResult -> cornersBeforeSnapped(snapStart)
                         snapStart.edge.node == firstFromResult -> cornersAfterSnapped(snapStart)
                         else -> throw IllegalStateException("first point of result is not part of starting edge")
-                    }
+                    }).distinct()
         } else {
             emptyList()
         }
