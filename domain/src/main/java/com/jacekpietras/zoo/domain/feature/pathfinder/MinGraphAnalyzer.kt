@@ -40,7 +40,7 @@ internal class MinGraphAnalyzer {
         if (startPoint == null) return listOf(endPoint)
         if (nodes.isEmpty()) return listOf(endPoint)
 
-//        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
+        println(nodes.joinToString("\n") { "[" + it.point.x + ", " + it.point.y + "]" + "\nedges:\n" + it.edges.joinToString("\n") + "\n" })
 
         val snapStart = snapper.getSnappedOnMinEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
         val snapEnd = snapper.getSnappedOnMinEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
