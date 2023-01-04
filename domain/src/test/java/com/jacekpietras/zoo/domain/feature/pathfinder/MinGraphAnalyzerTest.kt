@@ -579,7 +579,8 @@ internal class MinGraphAnalyzerTest {
             throw FailedOnFullGraph()
         }
         val fullResultTime = fullResultTimeList.average()
-        println("Expected: $fullResult\n")
+        fullResult.assertExistingRoute(roads)
+//        println("Expected: $fullResult\n")
 
         val resultTimeList = mutableListOf<Duration>()
         val result = (1..repeat).map {
