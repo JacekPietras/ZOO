@@ -268,33 +268,44 @@ internal class MinGraphAnalyzerTest {
                 repeat = 1,
             )
         }
+
+        @Test
+        fun `find shortest path 19`() = runTest {
+            doTest(
+                seed = 69078,
+                numberOfCities = 5,
+                connections = 10,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
     }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs`() = runTest {
 //        doTests(
-//            times = 1000,
-//            seed = 6137,
+//            times = 100000,
+//            seed = 0,
 //            numberOfCities = 1000,
 //            connections = 2000,
 //        )
 //    }
 
-//    @Test
-//    fun `test generation (multiple) with small graphs`() = runTest {
-//        doTests(
-//            times = 800000,
-//            seed = 822451,
-//            numberOfCities = 5,
-//            connections = 10,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with small graphs`() = runTest {
+        doTests(
+            times = 10000000,
+            seed = 0,
+            numberOfCities = 5,
+            connections = 10,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
 //        doTests(
-//            times = 1000,
-//            seed = 6137,
+//            times = 100000,
+//            seed = 0,
 //            numberOfCities = 1000,
 //            connections = 2000,
 //            startOnGraph = false,
@@ -305,8 +316,8 @@ internal class MinGraphAnalyzerTest {
 //    @Test
 //    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
 //        doTests(
-//            times = 800000,
-//            seed = 822451,
+//            times = 10000000,
+//            seed = 0,
 //            numberOfCities = 5,
 //            connections = 10,
 //            startOnGraph = false,
@@ -584,6 +595,7 @@ internal class MinGraphAnalyzerTest {
         startPoint: PointD,
         endPoint: PointD,
         repeat: Int = 1,
+        print: Boolean = true,
     ): List<PointD> {
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
@@ -604,11 +616,13 @@ internal class MinGraphAnalyzerTest {
         }
         val fullResultTime = fullResultTimeList.average()
 
-        val map = mutableMapOf<PointD, Char>()
-        printFullGraph(map, fullGraphAnalyzer.waitForNodes())
-        println("Expected: ${fullResult.joinToString { "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
-        println("\n-------------\n")
-        printMinGraph(map, minGraphAnalyzer.waitForNodes())
+        if (print) {
+            val map = mutableMapOf<PointD, Char>()
+            printFullGraph(map, fullGraphAnalyzer.waitForNodes())
+            println("Expected: ${fullResult.joinToString { "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
+            println("\n-------------\n")
+            printMinGraph(map, minGraphAnalyzer.waitForNodes())
+        }
 
         val resultTimeList = mutableListOf<Duration>()
         val result = (1..repeat).map {
@@ -623,10 +637,12 @@ internal class MinGraphAnalyzerTest {
         }.first()
         val resultTime = resultTimeList.average()
 
-        if (resultTime < fullResultTime) {
-            println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
-        } else {
-            println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
+        if (print) {
+            if (resultTime < fullResultTime) {
+                println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
+            } else {
+                println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
+            }
         }
 
         assertEquals(fullResult, result) {
@@ -645,6 +661,7 @@ internal class MinGraphAnalyzerTest {
         repeat: Int = 3,
         startOnGraph: Boolean = true,
         endOnGraph: Boolean = true,
+        print: Boolean = true,
     ) {
         val random = Random(seed)
         val (points, roads) = generateGraph(
@@ -663,7 +680,7 @@ internal class MinGraphAnalyzerTest {
             y = (random.nextDouble() * 500).toInt().toDouble(),
         )
         val result = try {
-            runShortestPath(roads, start, end, repeat)
+            runShortestPath(roads, start, end, repeat, print)
         } catch (onFull: FailedOnFullGraph) {
             println("Failed on FullGraph")
             return
@@ -687,6 +704,7 @@ internal class MinGraphAnalyzerTest {
         times: Int = 1,
         startOnGraph: Boolean = true,
         endOnGraph: Boolean = true,
+        print: Boolean = false,
     ) {
         (0 until times).forEach { i ->
             println("For seed ${seed + i}")
@@ -698,6 +716,7 @@ internal class MinGraphAnalyzerTest {
                 repeat = 1,
                 startOnGraph = startOnGraph,
                 endOnGraph = endOnGraph,
+                print = print,
             )
         }
     }
