@@ -130,6 +130,7 @@ internal class MinGraphAnalyzer {
     }
 
     private fun List<PointD>.pointPath(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
+//        (pointPathBegin(snapStart) + pointPathMiddle() ).distinct()
         (pointPathBegin(snapStart) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)).distinct()
 
     private fun List<PointD>.pointPathBegin(snapStart: SnappedOnMin): List<PointD> {
@@ -156,7 +157,7 @@ internal class MinGraphAnalyzer {
     private fun List<PointD>.pointPathMiddle() =
 //        zipWithNext { a, b -> listOf(a) + a.edges.find { it.node == b }.cornerPoints() }
 //            .flatten()
-        this//.dropLast(1).drop(1)
+        this.dropLast(1)//.drop(1)
 
     private fun List<PointD>.pointPathEnd(snapEnd: SnappedOnMin, snapStart: SnappedOnMin) =
         if (snapEnd is SnappedOnMinEdge && size > 1) {
@@ -179,7 +180,7 @@ internal class MinGraphAnalyzer {
                     cornersBetweenSnaps(snapStart, snapEnd) + last()
                 }
                 else -> {
-                    throw IllegalStateException("point before ending should be on end of ending edge")
+                    listOf(last())
                 }
             }
         } else {

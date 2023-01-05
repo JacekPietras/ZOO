@@ -90,9 +90,15 @@ internal class MinDijkstra(
             technical = end.edge.technical,
             weight = costToEndOnSameEdge,
             backward = false,
-            corners = start.edge.corners
-                .filter { (_, weight) -> start.weightFromStart < weight && weight < end.weightFromStart }
-                .map { (point, weight) -> point to (weight - start.weightFromStart) },
+            corners = if (start.weightFromStart < end.weightFromStart) {
+                start.edge.corners
+                    .filter { (_, weight) -> start.weightFromStart < weight && weight < end.weightFromStart }
+                    .map { (point, weight) -> point to (weight - start.weightFromStart) }
+            } else {
+                start.edge.corners
+                    .filter { (_, weight) -> end.weightFromStart < weight && weight < start.weightFromStart }
+                    .map { (point, weight) -> point to (weight - end.weightFromStart) }
+            },
         )
 
         costs[endNode] = costToEndOnSameEdge
