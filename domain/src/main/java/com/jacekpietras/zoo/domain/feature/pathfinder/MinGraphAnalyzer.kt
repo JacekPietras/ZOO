@@ -89,7 +89,7 @@ internal class MinGraphAnalyzer {
         start: SnappedOnMin,
         end: SnappedOnMin,
         technicalAllowed: Boolean = false,
-    ): List<MinNode> =
+    ): List<PointD> =
         MinDijkstra(
             vertices = waitForNodes(),
             technicalAllowed = technicalAllowed,
@@ -129,12 +129,12 @@ internal class MinGraphAnalyzer {
         to.edges.remove(to.edges.first { it.node == this })
     }
 
-    private fun List<MinNode>.pointPath(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
+    private fun List<PointD>.pointPath(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
         (pointPathBegin(snapStart) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)).distinct()
 
-    private fun List<MinNode>.pointPathBegin(snapStart: SnappedOnMin): List<PointD> {
+    private fun List<PointD>.pointPathBegin(snapStart: SnappedOnMin): List<PointD> {
         val firstFromResult = first()
-        return if (snapStart is SnappedOnMinEdge && firstFromResult.point != snapStart.point) {
+        return if (snapStart is SnappedOnMinEdge && firstFromResult != snapStart.point) {
             listOf(snapStart.point) +
                     when {
                         snapStart.edge.from == snapStart.edge.node -> {
@@ -144,8 +144,8 @@ internal class MinGraphAnalyzer {
                                 cornersAfterSnapped(snapStart)
                             }
                         }
-                        snapStart.edge.from == firstFromResult -> cornersBeforeSnapped(snapStart)
-                        snapStart.edge.node == firstFromResult -> cornersAfterSnapped(snapStart)
+                        snapStart.edge.from.point == firstFromResult -> cornersBeforeSnapped(snapStart)
+                        snapStart.edge.node.point == firstFromResult -> cornersAfterSnapped(snapStart)
                         else -> throw IllegalStateException("first point of result is not part of starting edge")
                     }
         } else {
@@ -153,36 +153,37 @@ internal class MinGraphAnalyzer {
         }
     }
 
-    private fun List<MinNode>.pointPathMiddle() =
-        zipWithNext { a, b -> listOf(a.point) + a.edges.find { it.node == b }.cornerPoints() }
-            .flatten()
+    private fun List<PointD>.pointPathMiddle() =
+//        zipWithNext { a, b -> listOf(a) + a.edges.find { it.node == b }.cornerPoints() }
+//            .flatten()
+        this//.dropLast(1).drop(1)
 
-    private fun List<MinNode>.pointPathEnd(snapEnd: SnappedOnMin, snapStart: SnappedOnMin) =
+    private fun List<PointD>.pointPathEnd(snapEnd: SnappedOnMin, snapStart: SnappedOnMin) =
         if (snapEnd is SnappedOnMinEdge && size > 1) {
             val nodeBeforeEnd = this[lastIndex - 1]
             when {
-                nodeBeforeEnd == snapEnd.edge.from && nodeBeforeEnd == snapEnd.edge.node -> {
+                nodeBeforeEnd == snapEnd.edge.from.point && nodeBeforeEnd == snapEnd.edge.node.point -> {
                     if (snapEnd.weightFromStart < snapEnd.edge.weight - snapEnd.weightFromStart) {
-                        cornersBeforeSnapped(snapEnd) + last().point
+                        cornersBeforeSnapped(snapEnd) + last()
                     } else {
-                        cornersAfterSnapped(snapEnd) + last().point
+                        cornersAfterSnapped(snapEnd) + last()
                     }
                 }
-                nodeBeforeEnd == snapEnd.edge.from -> {
-                    cornersBeforeSnapped(snapEnd) + last().point
+                nodeBeforeEnd == snapEnd.edge.from.point -> {
+                    cornersBeforeSnapped(snapEnd) + last()
                 }
-                nodeBeforeEnd == snapEnd.edge.node -> {
-                    cornersAfterSnapped(snapEnd) + last().point
+                nodeBeforeEnd == snapEnd.edge.node.point -> {
+                    cornersAfterSnapped(snapEnd) + last()
                 }
-                snapStart is SnappedOnMinEdge && nodeBeforeEnd.point == snapStart.point -> {
-                    cornersBetweenSnaps(snapStart, snapEnd) + last().point
+                snapStart is SnappedOnMinEdge && nodeBeforeEnd == snapStart.point -> {
+                    cornersBetweenSnaps(snapStart, snapEnd) + last()
                 }
                 else -> {
                     throw IllegalStateException("point before ending should be on end of ending edge")
                 }
             }
         } else {
-            listOf(last().point)
+            listOf(last())
         }
 
     private fun cornersAfterSnapped(snap: SnappedOnMinEdge) = snap.edge.corners
@@ -193,9 +194,6 @@ internal class MinGraphAnalyzer {
     private fun cornersBeforeSnapped(snap: SnappedOnMinEdge) = snap.edge.corners
         .filter { (_, weight) -> weight < snap.weightFromStart }
         .map { (point, _) -> point }
-
-    private fun MinEdge?.cornerPoints() =
-        this?.corners?.map(Pair<PointD, Double>::first) ?: emptyList()
 
     private fun cornersBetweenSnaps(
         snapStart: SnappedOnMinEdge,

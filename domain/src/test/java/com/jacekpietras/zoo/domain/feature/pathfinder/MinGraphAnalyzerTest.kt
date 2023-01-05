@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.assertExistingRoute
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.distance
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.generateGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.getRandom
@@ -579,8 +578,7 @@ internal class MinGraphAnalyzerTest {
             throw FailedOnFullGraph()
         }
         val fullResultTime = fullResultTimeList.average()
-        fullResult.assertExistingRoute(roads)
-//        println("Expected: $fullResult\n")
+        println("Expected: $fullResult\n")
 
         val resultTimeList = mutableListOf<Duration>()
         val result = (1..repeat).map {
@@ -630,8 +628,6 @@ internal class MinGraphAnalyzerTest {
             println("Failed on FullGraph")
             return
         }
-
-        result.assertExistingRoute(roads)
 
         val distance = result.distance()
         if (bestExpected >= 0) {

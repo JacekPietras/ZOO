@@ -26,9 +26,9 @@ internal class MinDijkstra(
     fun calculate(
         start: SnappedOnMin,
         end: SnappedOnMin,
-    ): List<MinNode> {
+    ): List<PointD> {
         if (start == end) {
-            return listOf(start.asNode())
+            return listOf(start.asNode().point)
         }
         when (start) {
             is SnappedOnMinEdge -> {
@@ -142,7 +142,7 @@ internal class MinDijkstra(
         end: MinNode,
         endingEdge1: MinEdge? = null,
         endingEdge2: MinEdge? = null,
-    ): List<MinNode> {
+    ): List<PointD> {
         if (technicalAllowed) {
             searchForEndingWithTechnical(end, endingEdge1, endingEdge2)
         } else {
@@ -243,17 +243,16 @@ internal class MinDijkstra(
         }
     }
 
-    private fun pathTo(end: MinNode): List<MinNode> {
-//        var current = end
-//        val result = mutableListOf(end)
-//        while (true) {
-//            val edgeToCurrent = previous[current]?.from ?: return result.reversed()
-//            result.add(edgeToCurrent)
-//            current = edgeToCurrent
-//        }
-        val path = previous[end]?.from ?: return listOf(end)
-        if (path === end) return listOf(end)
-        return pathTo(path) + end
+    private fun pathTo(end: MinNode): List<PointD> {
+        var current = end
+        val result = mutableListOf(end.point)
+        while (true) {
+            val edgeToCurrent = previous[current] ?: return result.reversed()
+            if (edgeToCurrent.from === current) return result.reversed()
+            result.addAll(edgeToCurrent.corners.map(Pair<PointD, Double>::first).reversed())
+            result.add(edgeToCurrent.from.point)
+            current = edgeToCurrent.from
+        }
     }
 
     private fun SnappedOnMin.asNode(): MinNode =
