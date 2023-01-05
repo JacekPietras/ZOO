@@ -8,7 +8,15 @@ internal sealed class SnappedOnMin {
         val point: PointD,
         val edge: MinEdge,
         val weightFromStart: Double,
-    ) : SnappedOnMin()
+    ) : SnappedOnMin() {
+
+        fun reversed() =
+            SnappedOnMinEdge(
+                point = point,
+                edge = edge.reversed(),
+                weightFromStart = edge.weight - weightFromStart,
+            )
+    }
 
     internal data class SnappedOnMinNode(
         val node: MinNode,

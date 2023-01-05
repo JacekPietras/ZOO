@@ -9,6 +9,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnMin.Snapped
 import java.util.PriorityQueue
 import kotlin.contracts.contract
 import kotlin.math.abs
+import kotlin.math.min
 
 internal class MinDijkstra(
     private val vertices: Collection<MinNode>,
@@ -91,9 +92,32 @@ internal class MinDijkstra(
         endSnap: SnappedOnMin,
         edgeSnap: MinEdge,
     ) {
-        val start: SnappedOnMinEdge = snapper.getSnappedOnMinEdgeOnly(edgeSnap, startSnap.asNode().point)
-        val end: SnappedOnMinEdge = snapper.getSnappedOnMinEdgeOnly(edgeSnap, endSnap.asNode().point)
-        val costToEndOnSameEdge = abs(start.weightFromStart - end.weightFromStart)
+        var start: SnappedOnMinEdge = snapper.getSnappedOnMinEdgeOnly(edgeSnap, startSnap.asNode().point)
+        var end: SnappedOnMinEdge = snapper.getSnappedOnMinEdgeOnly(edgeSnap, endSnap.asNode().point)
+        var costToEndOnSameEdge = abs(start.weightFromStart - end.weightFromStart)
+        if (edgeSnap.node == edgeSnap.from) {
+            if (endSnap is SnappedOnMinNode && endSnap.node.point == edgeSnap.from.point) {
+                val start2: SnappedOnMinEdge = start.reversed()
+                val end2: SnappedOnMinEdge = end.reversed().copy(weightFromStart = end.weightFromStart)
+                val costToEndOnSameEdge2 = abs(start2.weightFromStart - end2.weightFromStart)
+                if (costToEndOnSameEdge2 < costToEndOnSameEdge) {
+                    start = start2
+                    end = end2
+                    costToEndOnSameEdge = costToEndOnSameEdge2
+                }
+            }
+            if (startSnap is SnappedOnMinNode && startSnap.node.point == edgeSnap.from.point) {
+                val start2: SnappedOnMinEdge = start.reversed().copy(weightFromStart = start.weightFromStart)
+                val end2: SnappedOnMinEdge = end.reversed()
+                val costToEndOnSameEdge2 = abs(start2.weightFromStart - end2.weightFromStart)
+                if (costToEndOnSameEdge2 < costToEndOnSameEdge) {
+                    start = start2
+                    end = end2
+                    costToEndOnSameEdge = costToEndOnSameEdge2
+                }
+            }
+        }
+
         val startNode = MinNode(start.point)
         val endNode = MinNode(end.point)
         val edge = MinEdge(
@@ -122,13 +146,20 @@ internal class MinDijkstra(
         val costToStart1 = start.weightFromStart
         val costToStart2 = (start.edge.weight - start.weightFromStart)
 
-        costs = mutableMapOf(
-            start.edge.from to costToStart1,
-            start.edge.node to costToStart2,
-        )
+        if (start.edge.from == start.edge.node) {
+            costs = mutableMapOf(
+                start.edge.from to min(costToStart1, costToStart2)
+            )
+            queue.add(start.edge.from to min(costToStart1, costToStart2))
+        } else {
+            costs = mutableMapOf(
+                start.edge.from to costToStart1,
+                start.edge.node to costToStart2,
+            )
 
-        queue.add(start.edge.from to costToStart1)
-        queue.add(start.edge.node to costToStart2)
+            queue.add(start.edge.from to costToStart1)
+            queue.add(start.edge.node to costToStart2)
+        }
     }
 
     private fun findCommonEdge(
