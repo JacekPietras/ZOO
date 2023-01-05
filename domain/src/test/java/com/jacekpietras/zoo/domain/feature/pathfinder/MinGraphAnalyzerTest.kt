@@ -297,8 +297,8 @@ internal class MinGraphAnalyzerTest {
 //            seed = 6137,
 //            numberOfCities = 1000,
 //            connections = 2000,
-//            startOnGraph = startOnGraph,
-//            endOnGraph = endOnGraph,
+//            startOnGraph = false,
+//            endOnGraph = false,
 //        )
 //    }
 
@@ -309,8 +309,8 @@ internal class MinGraphAnalyzerTest {
 //            seed = 822451,
 //            numberOfCities = 5,
 //            connections = 10,
-//            startOnGraph = startOnGraph,
-//            endOnGraph = endOnGraph,
+//            startOnGraph = false,
+//            endOnGraph = false,
 //        )
 //    }
 
