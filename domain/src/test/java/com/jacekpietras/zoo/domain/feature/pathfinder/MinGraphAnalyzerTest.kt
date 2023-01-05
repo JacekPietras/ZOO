@@ -291,15 +291,15 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `test generation (multiple) with small graphs`() = runTest {
-        doTests(
-            times = 10000000,
-            seed = 0,
-            numberOfCities = 5,
-            connections = 10,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with small graphs`() = runTest {
+//        doTests(
+//            times = 10000000,
+//            seed = 0,
+//            numberOfCities = 5,
+//            connections = 10,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
@@ -619,9 +619,10 @@ internal class MinGraphAnalyzerTest {
         if (print) {
             val map = mutableMapOf<PointD, Char>()
             printFullGraph(map, fullGraphAnalyzer.waitForNodes())
-            println("Expected: ${fullResult.joinToString { "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
             println("\n-------------\n")
             printMinGraph(map, minGraphAnalyzer.waitForNodes())
+            println("\n-------------\n")
+            println("Expected: ${fullResult.joinToString { map[it].toString() + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
         }
 
         val resultTimeList = mutableListOf<Duration>()

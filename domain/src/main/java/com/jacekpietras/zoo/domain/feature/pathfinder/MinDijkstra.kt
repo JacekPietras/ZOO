@@ -19,6 +19,7 @@ internal class MinDijkstra(
     private lateinit var costs: MutableMap<MinNode, Double>
     private val previous = mutableMapOf<MinNode, MinEdge?>()
     private var outsideTechnical = false
+    private val snapper = PointSnapper()
 
     // subset of vertices, for which we know true distance
     private val visited = mutableSetOf<MinNode>()
@@ -33,9 +34,9 @@ internal class MinDijkstra(
         when (start) {
             is SnappedOnMinEdge -> {
                 initQueueWithEndsOfStartingEdge(start)
-
-                if (onSameEdge(start, end)) {
-                    addsToQueueConnectionOnSameEdge(start, end)
+                val commonEdge = findCommonEdge(start, end)
+                if (commonEdge != null) {
+                    addsToQueueConnectionOnSameEdge(start, end, commonEdge)
                 } else if (onReversedEdge(start, end)) {
                     throw IllegalStateException("With current implementation of snapping, shouldn't happen, might implement in future")
                 }
@@ -43,6 +44,14 @@ internal class MinDijkstra(
             is SnappedOnMinNode -> {
                 costs = mutableMapOf(start.node to 0.0)
                 queue.add(start.node to 0.0)
+            }
+        }
+        if (end is SnappedOnMinEdge) {
+            val commonEdge = findCommonEdge(end, start)
+            if (commonEdge != null) {
+                addsToQueueConnectionOnSameEdge(start, end, commonEdge)
+            } else if (onReversedEdge(end, start)) {
+                throw IllegalStateException("With current implementation of snapping, shouldn't happen, might implement in future")
             }
         }
 
@@ -78,9 +87,12 @@ internal class MinDijkstra(
     }
 
     private fun addsToQueueConnectionOnSameEdge(
-        start: SnappedOnMinEdge,
-        end: SnappedOnMinEdge
+        startSnap: SnappedOnMin,
+        endSnap: SnappedOnMin,
+        edgeSnap: MinEdge,
     ) {
+        val start: SnappedOnMinEdge = snapper.getSnappedOnMinEdgeOnly(edgeSnap, startSnap.asNode().point)
+        val end: SnappedOnMinEdge = snapper.getSnappedOnMinEdgeOnly(edgeSnap, endSnap.asNode().point)
         val costToEndOnSameEdge = abs(start.weightFromStart - end.weightFromStart)
         val startNode = MinNode(start.point)
         val endNode = MinNode(end.point)
@@ -119,14 +131,14 @@ internal class MinDijkstra(
         queue.add(start.edge.node to costToStart2)
     }
 
-    private fun onSameEdge(
+    private fun findCommonEdge(
         snapStart: SnappedOnMinEdge,
         snapEnd: SnappedOnMin
-    ): Boolean {
-        contract {
-            returns(true) implies (snapEnd is SnappedOnMinEdge)
+    ): MinEdge? {
+        return when (snapEnd) {
+            is SnappedOnMinEdge -> if (snapStart.edge == snapEnd.edge) snapStart.edge else null
+            is SnappedOnMinNode -> snapEnd.node.edges.find { edge -> edge.node.point == snapStart.point || edge.corners.any { it.first == snapStart.point } }
         }
-        return snapEnd is SnappedOnMinEdge && snapStart.edge == snapEnd.edge
     }
 
     private fun onReversedEdge(

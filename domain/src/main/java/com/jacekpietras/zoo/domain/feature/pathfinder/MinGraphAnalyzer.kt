@@ -41,8 +41,8 @@ internal class MinGraphAnalyzer {
         if (nodes.isEmpty()) return listOf(endPoint)
 
 
-        val snapStart = snapper.getSnappedOnMinEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
-        val snapEnd = snapper.getSnappedOnMinEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
+        val snapStart = snapper.getSnappedOnMinEdges(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
+        val snapEnd = snapper.getSnappedOnMinEdges(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
 
 //        println("Start: (" + snapStart.asNode().point.x.toInt() + "," + snapStart.asNode().point.y.toInt() + ")")
 //        println("End  : (" + snapEnd.asNode().point.x.toInt() + "," + snapEnd.asNode().point.y.toInt() + ")\n\n")
@@ -106,7 +106,6 @@ internal class MinGraphAnalyzer {
     }
 
     private fun List<PointD>.pointPath(snapStart: SnappedOnMin, snapEnd: SnappedOnMin): List<PointD> =
-//        (pointPathBegin(snapStart) + pointPathMiddle() ).distinct()
         (pointPathBegin(snapStart) + pointPathMiddle() + pointPathEnd(snapEnd, snapStart)).distinct()
 
     private fun List<PointD>.pointPathBegin(snapStart: SnappedOnMin): List<PointD> {
