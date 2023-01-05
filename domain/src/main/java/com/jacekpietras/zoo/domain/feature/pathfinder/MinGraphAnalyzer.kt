@@ -44,9 +44,8 @@ internal class MinGraphAnalyzer {
         val snapStart = snapper.getSnappedOnMinEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
         val snapEnd = snapper.getSnappedOnMinEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
 
-        println("Start: (" + snapStart.asNode().point.x.toInt() + "," + snapStart.asNode().point.y.toInt() + ")")
-        println("End  : (" + snapEnd.asNode().point.x.toInt() + "," + snapEnd.asNode().point.y.toInt() + ")\n\n")
-        printGraph(nodes)
+//        println("Start: (" + snapStart.asNode().point.x.toInt() + "," + snapStart.asNode().point.y.toInt() + ")")
+//        println("End  : (" + snapEnd.asNode().point.x.toInt() + "," + snapEnd.asNode().point.y.toInt() + ")\n\n")
 
         val result = getShortestPathJob(
             start = snapStart,
@@ -61,29 +60,6 @@ internal class MinGraphAnalyzer {
             is SnappedOnMinEdge -> MinNode(point)
             is SnappedOnMin.SnappedOnMinNode -> node
         }
-
-    private fun printGraph(nodes: Collection<MinNode>) {
-        var letter = 'A' - 1
-        val map = mutableMapOf<PointD, Char>()
-        fun toLetter(point: PointD) =
-            if (map[point] != null) {
-                map[point]
-            } else {
-                letter += 1
-                map[point] = letter
-                letter
-            }.toString() + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
-
-        println(nodes.joinToString("\n") { node ->
-            toLetter(node.point) + "\nedges:\n" + node.edges.joinToString("\n") { edge ->
-                " -> " +
-                        edge.corners.joinToString(", ") { toLetter(it.first) } +
-                        " -> " +
-                        toLetter(edge.node.point)
-            } + "\n"
-        })
-
-    }
 
     private suspend fun getShortestPathJob(
         start: SnappedOnMin,

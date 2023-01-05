@@ -7,6 +7,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGra
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinEdge
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -286,6 +287,30 @@ internal class MinGraphAnalyzerTest {
 //            seed = 822451,
 //            numberOfCities = 5,
 //            connections = 10,
+//        )
+//    }
+
+//    @Test
+//    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
+//        doTests(
+//            times = 1000,
+//            seed = 6137,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//            startOnGraph = startOnGraph,
+//            endOnGraph = endOnGraph,
+//        )
+//    }
+
+//    @Test
+//    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+//        doTests(
+//            times = 800000,
+//            seed = 822451,
+//            numberOfCities = 5,
+//            connections = 10,
+//            startOnGraph = startOnGraph,
+//            endOnGraph = endOnGraph,
 //        )
 //    }
 
@@ -578,7 +603,12 @@ internal class MinGraphAnalyzerTest {
             throw FailedOnFullGraph()
         }
         val fullResultTime = fullResultTimeList.average()
-        println("Expected: $fullResult\n")
+
+        val map = mutableMapOf<PointD, Char>()
+        printFullGraph(map, fullGraphAnalyzer.waitForNodes())
+        println("Expected: ${fullResult.joinToString { "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
+        println("\n-------------\n")
+        printMinGraph(map, minGraphAnalyzer.waitForNodes())
 
         val resultTimeList = mutableListOf<Duration>()
         val result = (1..repeat).map {
@@ -613,6 +643,8 @@ internal class MinGraphAnalyzerTest {
         connections: Int,
         bestExpected: Double,
         repeat: Int = 3,
+        startOnGraph: Boolean = true,
+        endOnGraph: Boolean = true,
     ) {
         val random = Random(seed)
         val (points, roads) = generateGraph(
@@ -620,8 +652,16 @@ internal class MinGraphAnalyzerTest {
             numberOfCities,
             connections,
         )
-        val start = points.getRandom(random).let { PointD(it.x, it.y) }
-        val end = points.getRandom(random).let { PointD(it.x, it.y) }
+        val start = if (startOnGraph) points.getRandom(random).let { PointD(it.x, it.y) }
+        else PointD(
+            x = (random.nextDouble() * 500).toInt().toDouble(),
+            y = (random.nextDouble() * 500).toInt().toDouble(),
+        )
+        val end = if (endOnGraph) points.getRandom(random).let { PointD(it.x, it.y) }
+        else PointD(
+            x = (random.nextDouble() * 500).toInt().toDouble(),
+            y = (random.nextDouble() * 500).toInt().toDouble(),
+        )
         val result = try {
             runShortestPath(roads, start, end, repeat)
         } catch (onFull: FailedOnFullGraph) {
@@ -645,6 +685,8 @@ internal class MinGraphAnalyzerTest {
         numberOfCities: Int,
         connections: Int,
         times: Int = 1,
+        startOnGraph: Boolean = true,
+        endOnGraph: Boolean = true,
     ) {
         (0 until times).forEach { i ->
             println("For seed ${seed + i}")
@@ -654,6 +696,8 @@ internal class MinGraphAnalyzerTest {
                 connections = connections,
                 bestExpected = -1.0,
                 repeat = 1,
+                startOnGraph = startOnGraph,
+                endOnGraph = endOnGraph,
             )
         }
     }
@@ -664,6 +708,47 @@ internal class MinGraphAnalyzerTest {
 
     private fun List<Duration>.average() =
         map { it.inWholeNanoseconds }.average().toDuration(DurationUnit.NANOSECONDS)
+
+
+    private fun printMinGraph(map: MutableMap<PointD, Char>, nodes: Collection<MinNode>) {
+        var letter = 'A' - 1
+        fun toLetter(point: PointD) =
+            if (map[point] != null) {
+                map[point]
+            } else {
+                letter += 1
+                map[point] = letter
+                letter
+            }.toString() + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
+
+        println(nodes.joinToString("\n") { node ->
+            toLetter(node.point) + "\nedges:\n" + node.edges.joinToString("\n") { edge ->
+                " -> " +
+                        edge.corners.joinToString(", ") { toLetter(it.first) } +
+                        " -> " +
+                        toLetter(edge.node.point)
+            } + "\n"
+        })
+    }
+
+    private fun printFullGraph(map: MutableMap<PointD, Char>, nodes: Collection<Node>) {
+        var letter = 'A' - 1
+        fun toLetter(point: PointD) =
+            if (map[point] != null) {
+                map[point]
+            } else {
+                letter += 1
+                map[point] = letter
+                letter
+            }.toString() + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
+
+        println(nodes.joinToString("\n") { node ->
+            toLetter(node.point) + "\nedges:\n" + node.edges.joinToString("\n") { edge ->
+                " -> " +
+                        toLetter(edge.node.point)
+            } + "\n"
+        })
+    }
 }
 
 class FailedOnFullGraph : Throwable()
