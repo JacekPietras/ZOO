@@ -53,7 +53,7 @@ internal class NodeSetFactory(
                 secnd.edges.forEach { twoToThird ->
                     val third = twoToThird.node
                     if (third != first) {
-                        if (isOnEdge(first, secnd, third)) {
+                        if (isOnEdge(first, secnd, third) && notConnected(first, secnd) && notConnected(first, third)) {
                             first.connect(secnd, twoToThird.technical, backward = false)
                             secnd.connect(first, twoToThird.technical, backward = true)
                             first.connect(third, twoToThird.technical, backward = false)
@@ -77,6 +77,11 @@ internal class NodeSetFactory(
         val newNode = Node(point)
         nodes.add(newNode)
         return newNode
+    }
+
+    private fun notConnected(p1: Node, p2: Node): Boolean {
+        p1.edges.forEach { if (it.node.point == p2.point) return false }
+        return true
     }
 
     private fun isOnEdge(point: Node, edge1: Node, edge2: Node): Boolean =
