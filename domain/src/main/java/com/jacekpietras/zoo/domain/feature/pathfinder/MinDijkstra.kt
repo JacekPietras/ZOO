@@ -17,7 +17,7 @@ internal class MinDijkstra(
 
     private val queue: PriorityQueue<Pair<MinNode, Double>> = PriorityQueue(10, comparator)
     private lateinit var costs: MutableMap<MinNode, Double>
-    private val previous = mutableMapOf<MinNode, MinNode?>()
+    private val previous = mutableMapOf<MinNode, MinEdge?>()
     private var outsideTechnical = false
 
     // subset of vertices, for which we know true distance
@@ -84,9 +84,20 @@ internal class MinDijkstra(
         val costToEndOnSameEdge = abs(start.weightFromStart - end.weightFromStart)
         val startNode = MinNode(start.point)
         val endNode = MinNode(end.point)
+        val edge = MinEdge(
+            from = startNode,
+            node = endNode,
+            technical = end.edge.technical,
+            weight = costToEndOnSameEdge,
+            backward = false,
+            corners = start.edge.corners
+                .filter { (_, weight) -> start.weightFromStart < weight && weight < end.weightFromStart }
+                .map { (point, weight) -> point to (weight - start.weightFromStart) },
+        )
+
         costs[endNode] = costToEndOnSameEdge
         queue.add(endNode to costToEndOnSameEdge)
-        previous[endNode] = startNode
+        previous[endNode] = edge
     }
 
     private fun initQueueWithEndsOfStartingEdge(start: SnappedOnMinEdge) {
@@ -207,7 +218,7 @@ internal class MinDijkstra(
 
             if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
                 costs[neighbor.node] = newCost
-                previous[neighbor.node] = neighbor.from
+                previous[neighbor.node] = neighbor
                 queue.add(neighbor.node to newCost)
             }
         }
@@ -226,14 +237,21 @@ internal class MinDijkstra(
 
             if (newCost < (costs[neighbor.node] ?: Double.MAX_VALUE)) {
                 costs[neighbor.node] = newCost
-                previous[neighbor.node] = neighbor.from
+                previous[neighbor.node] = neighbor
                 queue.add(neighbor.node to newCost)
             }
         }
     }
 
     private fun pathTo(end: MinNode): List<MinNode> {
-        val path = previous[end] ?: return listOf(end)
+//        var current = end
+//        val result = mutableListOf(end)
+//        while (true) {
+//            val edgeToCurrent = previous[current]?.from ?: return result.reversed()
+//            result.add(edgeToCurrent)
+//            current = edgeToCurrent
+//        }
+        val path = previous[end]?.from ?: return listOf(end)
         if (path === end) return listOf(end)
         return pathTo(path) + end
     }
