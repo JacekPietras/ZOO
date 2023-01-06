@@ -55,12 +55,6 @@ internal class MinGraphAnalyzer {
         return result.pointPath(snapStart, snapEnd)
     }
 
-    private fun SnappedOnMin.asNode(): MinNode =
-        when (this) {
-            is SnappedOnMinEdge -> MinNode(point)
-            is SnappedOnMin.SnappedOnMinNode -> node
-        }
-
     private suspend fun getShortestPathJob(
         start: SnappedOnMin,
         end: SnappedOnMin,
@@ -115,7 +109,7 @@ internal class MinGraphAnalyzer {
                     when {
                         snapStart.edge.from == snapStart.edge.node -> {
                             if (snapStart.weightFromStart < snapStart.edge.weight - snapStart.weightFromStart) {
-                                cornersBeforeSnapped(snapStart)
+                                cornersBeforeSnapped(snapStart).reversed()
                             } else {
                                 cornersAfterSnapped(snapStart)
                             }
@@ -141,7 +135,7 @@ internal class MinGraphAnalyzer {
                     if (snapEnd.weightFromStart < snapEnd.edge.weight - snapEnd.weightFromStart) {
                         cornersBeforeSnapped(snapEnd)
                     } else {
-                        cornersAfterSnapped(snapEnd)
+                        cornersAfterSnapped(snapEnd).reversed()
                     }
                 }
                 nodeBeforeEnd == snapEnd.edge.from.point -> {

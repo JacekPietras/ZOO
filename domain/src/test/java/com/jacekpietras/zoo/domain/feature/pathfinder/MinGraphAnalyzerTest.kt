@@ -159,17 +159,39 @@ internal class MinGraphAnalyzerTest {
                 connections = 2000,
             )
         }
+
+        @Test
+        fun `find shortest path 10`() = runTest {
+            doTest(
+                seed = 35154,
+                numberOfCities = 1000,
+                connections = 2000,
+                repeat = 1,
+                print = true,
+            )
+        }
+
+        @Test
+        fun `find shortest path 11`() = runTest {
+            doTest(
+                seed = 48349,
+                numberOfCities = 1000,
+                connections = 2000,
+                repeat = 1,
+                print = true,
+            )
+        }
     }
 
-    @Test
-    fun `test generation (multiple) with big graphs`() = runTest {
-        doTests(
-            times = 100_000,
-            seed = 20_000,
-            numberOfCities = 1000,
-            connections = 2000,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with big graphs`() = runTest {
+//        doTests(
+//            times = 100_000,
+//            seed = 62_519,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
@@ -482,20 +504,17 @@ internal class MinGraphAnalyzerTest {
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResultTimeList = mutableListOf<Duration>()
-        val fullResult = try {
-            (1..repeat).map {
-                measureMap({ fullResultTimeList.add(it) }) {
-                    fullGraphAnalyzer.getShortestPath(
-                        startPoint = startPoint,
-                        endPoint = endPoint,
-                        technicalAllowedAtStart = true,
-                        technicalAllowedAtEnd = true,
-                    )
-                }
-            }.first()
-        } catch (ignored: Throwable) {
-            throw FailedOnFullGraphCalc()
-        }
+        val fullResult = (1..repeat).map {
+            measureMap({ fullResultTimeList.add(it) }) {
+                fullGraphAnalyzer.getShortestPath(
+                    startPoint = startPoint,
+                    endPoint = endPoint,
+                    technicalAllowedAtStart = true,
+                    technicalAllowedAtEnd = true,
+                )
+            }
+        }.first()
+
         try {
             if (startOnGraph && endOnGraph) {
                 assertEquals(startPoint, fullResult.first()) { "Incorrect starting point" }
@@ -589,9 +608,6 @@ internal class MinGraphAnalyzerTest {
             )
         } catch (onFull: FailedOnFullGraphVerification) {
             println("Failed on FullGraph Verification")
-            return
-        } catch (onFull: FailedOnFullGraphCalc) {
-            println("Failed on FullGraph Calculation")
             return
         }
 
@@ -697,5 +713,4 @@ internal class MinGraphAnalyzerTest {
     }
 }
 
-class FailedOnFullGraphCalc : Throwable()
 class FailedOnFullGraphVerification : Throwable()

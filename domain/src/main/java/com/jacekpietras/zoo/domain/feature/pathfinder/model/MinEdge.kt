@@ -9,16 +9,16 @@ internal class MinEdge(
     val weight: Double,
     val backward: Boolean,
     val corners: List<Pair<PointD, Double>>,
-){
+) {
 
     override fun toString() = "(${from.x}, ${from.y}) -> ${corners.map(Pair<PointD, Double>::first)} -> (${node.x}, ${node.y}),"
 
-    fun reversed() =        MinEdge(
-             node = from,
-     from = node,
-     technical=technical,
-     weight=weight,
-     backward = !backward,
-     corners = corners.reversed().map { (p,w) -> p to weight - w },
+    fun reversed() = MinEdge(
+        node = from,
+        from = node,
+        technical = technical,
+        weight = weight,
+        backward = !backward,
+        corners = corners.reversed().map { (p, w) -> p to weight - w },
     )
 }
