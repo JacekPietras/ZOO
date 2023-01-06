@@ -120,30 +120,23 @@ internal class MinDijkstra(
 
         val startNode = MinNode(start.point)
         val endNode = MinNode(end.point)
-        val edge = if (start.weightFromStart < end.weightFromStart) {
-            MinEdge(
-                from = startNode,
-                node = endNode,
-                technical = end.edge.technical,
-                weight = costToEndOnSameEdge,
-                backward = false,
-                corners = start.edge.corners
+        val edge = MinEdge(
+            from = startNode,
+            node = endNode,
+            technical = end.edge.technical,
+            weight = costToEndOnSameEdge,
+            backward = false,
+            corners = if (start.weightFromStart < end.weightFromStart) {
+                start.edge.corners
                     .filter { (_, weight) -> start.weightFromStart < weight && weight < end.weightFromStart }
-                    .map { (point, weight) -> point to (weight - start.weightFromStart) },
-            )
-        } else {
-            MinEdge(
-                from = startNode,
-                node = endNode,
-                technical = end.edge.technical,
-                weight = costToEndOnSameEdge,
-                backward = false,
-                corners = start.edge.corners
+                    .map { (point, weight) -> point to (weight - start.weightFromStart) }
+            } else {
+                start.edge.corners
                     .filter { (_, weight) -> end.weightFromStart < weight && weight < start.weightFromStart }
                     .map { (point, weight) -> point to (costToEndOnSameEdge - (weight - end.weightFromStart)) }
-                    .reversed(),
-            )
-        }
+                    .reversed()
+            },
+        )
 
         costs[endNode] = costToEndOnSameEdge
         queue.add(endNode to costToEndOnSameEdge)
