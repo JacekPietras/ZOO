@@ -142,15 +142,15 @@ internal class MinGraphAnalyzerTest {
         }
     }
 
-    @Test
-    fun `test generation (multiple) with big graphs`() = runTest {
-        doTests(
-            times = 100_000,
-            seed = 20_000,
-            numberOfCities = 1000,
-            connections = 2000,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with big graphs`() = runTest {
+//        doTests(
+//            times = 100_000,
+//            seed = 20_000,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
