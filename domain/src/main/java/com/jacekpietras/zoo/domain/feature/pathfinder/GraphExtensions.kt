@@ -7,7 +7,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import kotlin.math.sqrt
 
-internal fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean) -> Unit) {
+internal inline fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean) -> Unit) {
     forEach { node ->
         node.edges.forEach { edge ->
             if (!edge.backward) {

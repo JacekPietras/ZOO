@@ -31,7 +31,7 @@ internal class NodeSetFactory(
             path.vertices
                 .forEach { point ->
                     val nextNode = addToGraph(point)
-                    if (prevNode != null) {
+                    if (prevNode != null && nextNode.edges.none { edge -> edge.node == prevNode }) {
                         nextNode.connect(prevNode!!, technical, backward = false)
                         prevNode!!.connect(nextNode, technical, backward = true)
                     }
@@ -42,31 +42,46 @@ internal class NodeSetFactory(
     }
 
     private fun checkNodesOnEdges() {
-        nodes.forEach { first ->
-            checkNodesOnEdges(first)
+        nodes.forEach { node ->
+            checkNodesOnEdges(node)
         }
     }
 
     private fun checkNodesOnEdges(first: Node) {
-        nodes.forEach { secnd ->
-            if (secnd != first) {
-                secnd.edges.forEach { twoToThird ->
-                    val third = twoToThird.node
-                    if (third != first) {
-                        if (isOnEdge(first, secnd, third) && notConnected(first, secnd) && notConnected(first, third)) {
-                            first.connect(secnd, twoToThird.technical, backward = false)
-                            secnd.connect(first, twoToThird.technical, backward = true)
-                            first.connect(third, twoToThird.technical, backward = false)
-                            third.connect(first, twoToThird.technical, backward = true)
-                            secnd.disconnect(third)
-                            third.disconnect(secnd)
-                            return
-                        }
-                    }
-                }
+        nodes.forAllEdges { secnd, third, technical ->
+            if (secnd != first && third != first && isOnEdge(first, secnd, third)) {
+                first.connect(secnd, technical, backward = false)
+                secnd.connect(first, technical, backward = true)
+                first.connect(third, technical, backward = false)
+                third.connect(first, technical, backward = true)
+                secnd.disconnect(third)
+                third.disconnect(secnd)
+                return
             }
         }
     }
+
+//    private fun checkNodesOnEdges(first: Node) {
+//        nodes.forEach { secnd ->
+//            if (secnd != first) {
+//                secnd.edges.forEach { secondToThird ->
+//                    val third = secondToThird.node
+//                    if (third != first) {
+//                        if (isOnEdge(first, secnd, third)) {
+////                        if (isOnEdge(first, secnd, third) && notConnected(first, secnd) && notConnected(first, third)) {
+//                            first.connect(secnd, secondToThird.technical, backward = false)
+//                            secnd.connect(first, secondToThird.technical, backward = true)
+//                            first.connect(third, secondToThird.technical, backward = false)
+//                            third.connect(first, secondToThird.technical, backward = true)
+//                            secnd.disconnect(third)
+//                            third.disconnect(secnd)
+//                            return
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private fun addToGraph(point: PointD): Node {
         nodes.forEach { node ->

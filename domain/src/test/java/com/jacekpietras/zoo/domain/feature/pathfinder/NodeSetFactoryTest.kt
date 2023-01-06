@@ -127,6 +127,38 @@ internal class NodeSetFactoryTest {
     }
 
     @Test
+    fun `just overlaping line with single line`() {
+        val roads = listOf(
+            listOf(
+                0 to 0,
+                10 to 0,
+            ),
+            listOf(
+                5 to 10,
+                5 to 0,
+            ),
+        )
+
+        val nodes = roads.toNodes()
+
+        val expected = listOf(
+            0 to 0,
+            5 to 0,
+            5 to 10,
+            10 to 0,
+        )
+        assertEquals(expected.toExpectedNodes(), nodes)
+
+        nodes[0] oneEdgeExist (5 to 0)
+        nodes[1] oneEdgeExist (0 to 0)
+        nodes[1] oneEdgeExist (5 to 10)
+        nodes[1] oneEdgeExist (10 to 0)
+        nodes[2] oneEdgeExist (5 to 0)
+        nodes[3] oneEdgeExist (5 to 0)
+        nodes[3] noEdgeExist (0 to 0)
+    }
+
+    @Test
     fun `just overlaping line with double line`() {
         val roads = listOf(
             listOf(
