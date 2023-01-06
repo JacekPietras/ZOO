@@ -91,10 +91,7 @@ internal class Dijkstra(
         }
     }
 
-    fun getPath(): List<Node> =
-        pathTo(end)
-
-    private fun pathTo(end: Node): List<Node> {
+    fun getPath(): List<Node> {
         var current = end
         val result = mutableListOf(end)
         while (true) {
