@@ -120,8 +120,12 @@ internal class MinGraphAnalyzer {
                                 cornersAfterSnapped(snapStart)
                             }
                         }
-                        snapStart.edge.from.point == firstFromResult -> cornersBeforeSnapped(snapStart)
-                        snapStart.edge.node.point == firstFromResult -> cornersAfterSnapped(snapStart)
+                        snapStart.edge.from.point == firstFromResult -> {
+                            cornersBeforeSnapped(snapStart).reversed()
+                        }
+                        snapStart.edge.node.point == firstFromResult -> {
+                            cornersAfterSnapped(snapStart)
+                        }
                         else -> throw IllegalStateException("first point of result is not part of starting edge")
                     }
         } else {

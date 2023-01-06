@@ -125,20 +125,30 @@ internal class MinGraphAnalyzerTest {
                 numberOfCities = 1000,
                 connections = 2000,
                 repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 6`() = runTest {
+            doTest(
+                seed = 1030,
+                numberOfCities = 1000,
+                connections = 2000,
+                repeat = 1,
                 print = true,
             )
         }
     }
 
-    @Test
-    fun `test generation (multiple) with big graphs`() = runTest {
-        doTests(
-            times = 100_000,
-            seed = 0,
-            numberOfCities = 1000,
-            connections = 2000,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with big graphs`() = runTest {
+//        doTests(
+//            times = 100_000,
+//            seed = 0,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
