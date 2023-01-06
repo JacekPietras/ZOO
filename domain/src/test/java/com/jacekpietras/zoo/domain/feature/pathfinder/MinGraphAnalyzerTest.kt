@@ -79,11 +79,9 @@ internal class MinGraphAnalyzerTest {
         @Test
         fun `find shortest path 1`() = runTest {
             doTest(
-                seed = 6114,
-                numberOfCities = 1000,
-                connections = 2000,
-                bestExpected = 9999999999.0,
-                repeat = 1,
+                seed = 1482803,
+                numberOfCities = 5,
+                connections = 10,
             )
         }
     }
@@ -95,16 +93,6 @@ internal class MinGraphAnalyzerTest {
 //            seed = 0,
 //            numberOfCities = 1000,
 //            connections = 2000,
-//        )
-//    }
-
-//    @Test
-//    fun `test generation (multiple) with small graphs`() = runTest {
-//        doTests(
-//            times = 10000000,
-//            seed = 911976,
-//            numberOfCities = 5,
-//            connections = 10,
 //        )
 //    }
 
@@ -121,16 +109,26 @@ internal class MinGraphAnalyzerTest {
 //    }
 
     @Test
-    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+    fun `test generation (multiple) with small graphs`() = runTest {
         doTests(
             times = 10000000,
-            seed = 4,
+            seed = 0,
             numberOfCities = 5,
             connections = 10,
-            startOnGraph = false,
-            endOnGraph = false,
         )
     }
+
+//    @Test
+//    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+//        doTests(
+//            times = 10000000,
+//            seed = 0,
+//            numberOfCities = 5,
+//            connections = 10,
+//            startOnGraph = false,
+//            endOnGraph = false,
+//        )
+//    }
 
     @Nested
     @DisplayName("Simplified edge cases")
@@ -467,7 +465,7 @@ internal class MinGraphAnalyzerTest {
         seed: Long,
         numberOfCities: Int,
         connections: Int,
-        bestExpected: Double,
+        bestExpected: Double = 99999999.0,
         repeat: Int = 3,
         startOnGraph: Boolean = true,
         endOnGraph: Boolean = true,

@@ -44,8 +44,8 @@ internal class MinGraphAnalyzer {
         val snapStart = snapper.getSnappedOnMinEdges(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
         val snapEnd = snapper.getSnappedOnMinEdges(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
 
-        println("Start: (" + snapStart.asNode().point.x.toInt() + "," + snapStart.asNode().point.y.toInt() + ")")
-        println("End  : (" + snapEnd.asNode().point.x.toInt() + "," + snapEnd.asNode().point.y.toInt() + ")\n\n")
+//        println("Start: (" + snapStart.asNode().point.x.toInt() + "," + snapStart.asNode().point.y.toInt() + ")")
+//        println("End  : (" + snapEnd.asNode().point.x.toInt() + "," + snapEnd.asNode().point.y.toInt() + ")\n\n")
 
         val result = getShortestPathJob(
             start = snapStart,
