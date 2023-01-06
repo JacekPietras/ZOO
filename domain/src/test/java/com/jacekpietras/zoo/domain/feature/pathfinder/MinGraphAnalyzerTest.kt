@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import kotlin.math.abs
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -489,7 +490,7 @@ internal class MinGraphAnalyzerTest {
                 println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
             }
         }
-        if (fullResult.distance() != result.distance()) {
+        if (different(fullResult.distance(), result.distance())) {
             assertEquals(
                 fullResult.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) },
                 result.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) }) {
@@ -621,6 +622,9 @@ internal class MinGraphAnalyzerTest {
             } + "\n"
         })
     }
+
+    private fun different(a: Double, b: Double): Boolean =
+        abs(a - b) > (a / 100_000_000)
 }
 
 class FailedOnFullGraph : Throwable()
