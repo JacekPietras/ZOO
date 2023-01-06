@@ -323,6 +323,52 @@ internal class MinGraphAnalyzerTest {
                 repeat = 1,
             )
         }
+
+        @Test
+        fun `find shortest path 24`() = runTest {
+            doTest(
+                seed = 911975,
+                numberOfCities = 5,
+                connections = 10,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 25`() = runTest {
+            doTest(
+                seed = 1209988,
+                numberOfCities = 5,
+                connections = 10,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 26`() = runTest {
+            doTest(
+                seed = 555,
+                numberOfCities = 1000,
+                connections = 2000,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 27`() = runTest {
+            doTest(
+                seed = 3,
+                numberOfCities = 5,
+                connections = 10,
+                startOnGraph = false,
+                endOnGraph = false,
+                bestExpected = 9999999999.0,
+                repeat = 1,
+            )
+        }
     }
 
 //    @Test
@@ -339,7 +385,7 @@ internal class MinGraphAnalyzerTest {
 //    fun `test generation (multiple) with small graphs`() = runTest {
 //        doTests(
 //            times = 10000000,
-//            seed = 382531,
+//            seed = 911976,
 //            numberOfCities = 5,
 //            connections = 10,
 //        )
@@ -357,17 +403,17 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-//    @Test
-//    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
-//        doTests(
-//            times = 10000000,
-//            seed = 1,
-//            numberOfCities = 5,
-//            connections = 10,
-//            startOnGraph = false,
-//            endOnGraph = false,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+        doTests(
+            times = 10000000,
+            seed = 1,
+            numberOfCities = 5,
+            connections = 10,
+            startOnGraph = false,
+            endOnGraph = false,
+        )
+    }
 
     @Nested
     @DisplayName("Simplified edge cases")
@@ -660,13 +706,13 @@ internal class MinGraphAnalyzerTest {
         }
         val fullResultTime = fullResultTimeList.average()
 
+        val map = mutableMapOf<PointD, Char>()
         if (print) {
-            val map = mutableMapOf<PointD, Char>()
-            printFullGraph(map, fullGraphAnalyzer.waitForNodes())
+            printFullGraph(roads, map, fullGraphAnalyzer.waitForNodes())
             println("\n-------------\n")
-            printMinGraph(map, minGraphAnalyzer.waitForNodes())
+            printMinGraph(roads, map, minGraphAnalyzer.waitForNodes())
             println("\n-------------\n")
-            println("Expected: ${fullResult.joinToString { map[it].toString() + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
+            println("Expected: ${fullResult.joinToString { (map[it]?.toString() ?: "") + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
         }
 
         val resultTimeList = mutableListOf<Duration>()
@@ -690,7 +736,9 @@ internal class MinGraphAnalyzerTest {
             }
         }
 
-        assertEquals(fullResult, result) {
+        assertEquals(
+            fullResult.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) },
+            result.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) }) {
             "Result from Full Graph is different\n" +
                     "Full distance: ${fullResult.distance()}, Min distance: ${result.distance()}\n" +
                     "Full length: ${fullResult.size}, Min length: ${result.size}\n"
@@ -774,10 +822,12 @@ internal class MinGraphAnalyzerTest {
         map { it.inWholeNanoseconds }.average().toDuration(DurationUnit.NANOSECONDS)
 
 
-    private fun printMinGraph(map: MutableMap<PointD, Char>, nodes: Collection<MinNode>) {
+    private fun printMinGraph(roads: List<List<PointD>>, map: MutableMap<PointD, Char>, nodes: Collection<MinNode>) {
         var letter = 'A' - 1
         fun toLetter(point: PointD) =
-            if (map[point] != null) {
+            if (roads.size > 50) {
+                ""
+            } else if (map[point] != null) {
                 map[point]
             } else {
                 letter += 1
@@ -795,10 +845,12 @@ internal class MinGraphAnalyzerTest {
         })
     }
 
-    private fun printFullGraph(map: MutableMap<PointD, Char>, nodes: Collection<Node>) {
+    private fun printFullGraph(roads: List<List<PointD>>, map: MutableMap<PointD, Char>, nodes: Collection<Node>) {
         var letter = 'A' - 1
         fun toLetter(point: PointD) =
-            if (map[point] != null) {
+            if (roads.size > 50) {
+                ""
+            } else if (map[point] != null) {
                 map[point]
             } else {
                 letter += 1
