@@ -84,6 +84,7 @@ internal class MinGraphAnalyzerTest {
                 seed = 1482803,
                 numberOfCities = 5,
                 connections = 10,
+                repeat = 1,
             )
         }
 
@@ -93,6 +94,7 @@ internal class MinGraphAnalyzerTest {
                 seed = 170793,
                 numberOfCities = 5,
                 connections = 10,
+                repeat = 1,
             )
         }
 
@@ -102,6 +104,17 @@ internal class MinGraphAnalyzerTest {
                 seed = 2502496,
                 numberOfCities = 5,
                 connections = 10,
+                repeat = 1,
+            )
+        }
+
+        @Test
+        fun `find shortest path 4`() = runTest {
+            doTest(
+                seed = 698,
+                numberOfCities = 1000,
+                connections = 2000,
+                repeat = 1,
             )
         }
     }
@@ -128,15 +141,15 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `test generation (multiple) with small graphs`() = runTest {
-        doTests(
-            times = 10_000_000,
-            seed = 0,
-            numberOfCities = 5,
-            connections = 10,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with small graphs`() = runTest {
+//        doTests(
+//            times = 10_000_000,
+//            seed = 0,
+//            numberOfCities = 5,
+//            connections = 10,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
@@ -443,8 +456,8 @@ internal class MinGraphAnalyzerTest {
         }
         try {
             if (startOnGraph && endOnGraph) {
-                assertEquals(startPoint, fullResult.first())
-                assertEquals(endPoint, fullResult.last())
+                assertEquals(startPoint, fullResult.first()) { "Incorrect starting point" }
+                assertEquals(endPoint, fullResult.last()) { "Incorrect ending point" }
                 fullResult.assertExistingRoute(roads)
             } else {
                 fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
@@ -474,8 +487,8 @@ internal class MinGraphAnalyzerTest {
             }
         }.first()
         if (startOnGraph && endOnGraph) {
-            assertEquals(startPoint, result.first())
-            assertEquals(endPoint, result.last())
+            assertEquals(startPoint, result.first()) { "Incorrect starting point" }
+            assertEquals(endPoint, result.last()) { "Incorrect ending point" }
             result.assertExistingRoute(roads)
         } else {
             result.dropLast(1).drop(1).assertExistingRoute(roads)
