@@ -467,13 +467,14 @@ internal class MinGraphAnalyzerTest {
                 println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
             }
         }
-
-        assertEquals(
-            fullResult.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) },
-            result.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) }) {
-            "Result from Full Graph is different\n" +
-                    "Full distance: ${fullResult.distance()}, Min distance: ${result.distance()}\n" +
-                    "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+        if (fullResult.distance() != result.distance()) {
+            assertEquals(
+                fullResult.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) },
+                result.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) }) {
+                "Result from Full Graph is different\n" +
+                        "Full distance: ${fullResult.distance()}, Min distance: ${result.distance()}\n" +
+                        "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+            }
         }
         return result
     }

@@ -277,6 +277,6 @@ internal class ShortestPathInGeneratedGraphTest {
         }
 
         internal fun List<PointD>.distance(): Double =
-            zipWithNext { a, b -> cartesian(a, b) }.sum()
+            zipWithNext { a, b -> haversine(a, b) }.sum()
     }
 }
