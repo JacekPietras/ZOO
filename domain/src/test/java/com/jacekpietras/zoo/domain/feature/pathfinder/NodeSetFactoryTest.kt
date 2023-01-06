@@ -20,7 +20,7 @@ internal class NodeSetFactoryTest {
 
         val nodes = roads.toNodes()
 
-        val expected = setOf(
+        val expected = listOf(
             0 to 0,
             5 to 0,
             10 to 0,
@@ -44,7 +44,7 @@ internal class NodeSetFactoryTest {
 
         val nodes = roads.toNodes()
 
-        val expected = setOf(
+        val expected = listOf(
             0 to 0,
             5 to 0,
             5 to 10,
@@ -77,7 +77,7 @@ internal class NodeSetFactoryTest {
 
         val nodes = roads.toNodes()
 
-        val expected = setOf(
+        val expected = listOf(
             0 to 0,
             5 to 0,
             5 to 10,
@@ -110,7 +110,7 @@ internal class NodeSetFactoryTest {
 
         val nodes = roads.toNodes()
 
-        val expected = setOf(
+        val expected = listOf(
             0 to 0,
             5 to 0,
             5 to 10,
@@ -146,7 +146,7 @@ internal class NodeSetFactoryTest {
 
         val nodes = roads.toNodes()
 
-        val expected = setOf(
+        val expected = listOf(
             0 to 0,
             5 to 0,
             5 to 10,
