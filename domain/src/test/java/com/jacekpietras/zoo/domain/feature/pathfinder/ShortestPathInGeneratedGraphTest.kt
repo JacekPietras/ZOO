@@ -268,10 +268,9 @@ internal class ShortestPathInGeneratedGraphTest {
         internal fun List<PointD>.assertExistingRoute(roads: List<List<PointD>>) {
             zipWithNext { a, b ->
                 val foundConnection = roads.find {
-                    val v1 = it[0]
-                    val v2 = it[1]
-
-                    a == v1 && b == v2 || a == v2 && b == v1
+                    it.zipWithNext().any { (v1, v2) ->
+                        a == v1 && b == v2 || a == v2 && b == v1
+                    }
                 }
                 assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
             }

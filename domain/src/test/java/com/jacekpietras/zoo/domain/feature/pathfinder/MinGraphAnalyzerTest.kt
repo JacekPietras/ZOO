@@ -422,10 +422,12 @@ internal class MinGraphAnalyzerTest {
         } catch (ignored: Throwable) {
             throw FailedOnFullGraph()
         }
-        if(startOnGraph && endOnGraph){
+        if (startOnGraph && endOnGraph) {
             assertEquals(startPoint, fullResult.first())
             assertEquals(endPoint, fullResult.last())
             fullResult.assertExistingRoute(roads)
+        } else {
+            fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
         }
 
         val map = mutableMapOf<PointD, Char>()
@@ -448,10 +450,12 @@ internal class MinGraphAnalyzerTest {
                 )
             }
         }.first()
-        if(startOnGraph && endOnGraph){
+        if (startOnGraph && endOnGraph) {
             assertEquals(startPoint, result.first())
             assertEquals(endPoint, result.last())
             result.assertExistingRoute(roads)
+        } else {
+            result.dropLast(1).drop(1).assertExistingRoute(roads)
         }
 
         val fullResultTime = fullResultTimeList.average()
