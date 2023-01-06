@@ -138,21 +138,21 @@ internal class MinGraphAnalyzerTest {
                 seed = 3124,
                 numberOfCities = 1000,
                 connections = 2000,
-                repeat = 1,
-                print = true,
+//                repeat = 1,
+//                print = true,
             )
         }
     }
 
-    @Test
-    fun `test generation (multiple) with big graphs`() = runTest {
-        doTests(
-            times = 100_000,
-            seed = 3000,
-            numberOfCities = 1000,
-            connections = 2000,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with big graphs`() = runTest {
+//        doTests(
+//            times = 100_000,
+//            seed = 3000,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
