@@ -138,21 +138,19 @@ internal class MinGraphAnalyzerTest {
                 seed = 3124,
                 numberOfCities = 1000,
                 connections = 2000,
-//                repeat = 1,
-//                print = true,
             )
         }
     }
 
-//    @Test
-//    fun `test generation (multiple) with big graphs`() = runTest {
-//        doTests(
-//            times = 100_000,
-//            seed = 3000,
-//            numberOfCities = 1000,
-//            connections = 2000,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with big graphs`() = runTest {
+        doTests(
+            times = 100_000,
+            seed = 20_000,
+            numberOfCities = 1000,
+            connections = 2000,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
@@ -465,6 +463,7 @@ internal class MinGraphAnalyzerTest {
         val fullGraphAnalyzer = roads.toGraph()
         val minGraphAnalyzer = fullGraphAnalyzer.toMinGraph()
         val fullResultTimeList = mutableListOf<Duration>()
+        var fullGraphFailed = false
         val fullResult = try {
             (1..repeat).map {
                 measureMap({ fullResultTimeList.add(it) }) {
@@ -477,7 +476,8 @@ internal class MinGraphAnalyzerTest {
                 }
             }.first()
         } catch (ignored: Throwable) {
-            throw FailedOnFullGraph()
+            fullGraphFailed = true
+            emptyList()
         }
         try {
             if (startOnGraph && endOnGraph) {
@@ -488,7 +488,7 @@ internal class MinGraphAnalyzerTest {
                 fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
             }
         } catch (ignored: Throwable) {
-            throw FailedOnFullGraph()
+            fullGraphFailed = true
         }
 
         val map = mutableMapOf<PointD, Char>()
@@ -521,14 +521,14 @@ internal class MinGraphAnalyzerTest {
 
         val fullResultTime = fullResultTimeList.average()
         val resultTime = resultTimeList.average()
-        if (print) {
+        if (print && !fullGraphFailed) {
             if (resultTime < fullResultTime) {
                 println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
             } else {
                 println("Calculated in $resultTime, (${resultTime - fullResultTime} slower!)")
             }
         }
-        if (different(fullResult.distance(), result.distance())) {
+        if (!fullGraphFailed && different(fullResult.distance(), result.distance())) {
             assertEquals(
                 fullResult.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) },
                 result.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) }) {
@@ -536,6 +536,9 @@ internal class MinGraphAnalyzerTest {
                         "Full distance: ${fullResult.distance()}, Min distance: ${result.distance()}\n" +
                         "Full length: ${fullResult.size}, Min length: ${result.size}\n"
             }
+        }
+        if (fullGraphFailed) {
+            println("Failed on FullGraph, but succeeded on MinGraph")
         }
         return result
     }
@@ -560,20 +563,15 @@ internal class MinGraphAnalyzerTest {
         else generatePoint(random)
         val end = if (endOnGraph) points.getRandom(random).let { PointD(it.x, it.y) }
         else generatePoint(random)
-        val result = try {
-            runShortestPath(
-                roads,
-                start,
-                end,
-                repeat,
-                startOnGraph,
-                endOnGraph,
-                print,
-            )
-        } catch (onFull: FailedOnFullGraph) {
-            println("Failed on FullGraph")
-            return
-        }
+        val result = runShortestPath(
+            roads,
+            start,
+            end,
+            repeat,
+            startOnGraph,
+            endOnGraph,
+            print,
+        )
 
         val distance = result.distance()
         if (bestExpected >= 0) {
@@ -664,5 +662,3 @@ internal class MinGraphAnalyzerTest {
     private fun different(a: Double, b: Double): Boolean =
         abs(a - b) > (a / 1_000_000)
 }
-
-class FailedOnFullGraph : Throwable()
