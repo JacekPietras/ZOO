@@ -117,17 +117,28 @@ internal class MinGraphAnalyzerTest {
                 repeat = 1,
             )
         }
+
+        @Test
+        fun `find shortest path 5`() = runTest {
+            doTest(
+                seed = 306,
+                numberOfCities = 1000,
+                connections = 2000,
+                repeat = 1,
+                print = true,
+            )
+        }
     }
 
-//    @Test
-//    fun `test generation (multiple) with big graphs`() = runTest {
-//        doTests(
-//            times = 100_000,
-//            seed = 0,
-//            numberOfCities = 1000,
-//            connections = 2000,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with big graphs`() = runTest {
+        doTests(
+            times = 100_000,
+            seed = 0,
+            numberOfCities = 1000,
+            connections = 2000,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
@@ -595,7 +606,7 @@ internal class MinGraphAnalyzerTest {
     private fun printMinGraph(roads: List<List<PointD>>, map: MutableMap<PointD, Char>, nodes: Collection<MinNode>) {
         var letter = 'A' - 1
         fun toLetter(point: PointD) =
-            if (roads.size > 50) {
+            (if (roads.size > 50) {
                 ""
             } else if (map[point] != null) {
                 map[point]
@@ -603,7 +614,7 @@ internal class MinGraphAnalyzerTest {
                 letter += 1
                 map[point] = letter
                 letter
-            }.toString() + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
+            }.toString()) + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
 
         println(nodes.joinToString("\n") { node ->
             toLetter(node.point) + "\nedges:\n" + node.edges.joinToString("\n") { edge ->
@@ -618,7 +629,7 @@ internal class MinGraphAnalyzerTest {
     private fun printFullGraph(roads: List<List<PointD>>, map: MutableMap<PointD, Char>, nodes: Collection<Node>) {
         var letter = 'A' - 1
         fun toLetter(point: PointD) =
-            if (roads.size > 50) {
+            (if (roads.size > 50) {
                 ""
             } else if (map[point] != null) {
                 map[point]
@@ -626,7 +637,7 @@ internal class MinGraphAnalyzerTest {
                 letter += 1
                 map[point] = letter
                 letter
-            }.toString() + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
+            }.toString()) + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
 
         println(nodes.joinToString("\n") { node ->
             toLetter(node.point) + "\nedges:\n" + node.edges.joinToString("\n") { edge ->
