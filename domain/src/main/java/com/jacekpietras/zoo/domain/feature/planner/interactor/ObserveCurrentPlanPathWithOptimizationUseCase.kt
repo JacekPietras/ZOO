@@ -27,7 +27,7 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         combine(
             observeCurrentPlanWithOptimizationUseCase.run(),
             observeTerminalNodesUseCase.run()
-        ) { result, nodes ->
+        ) { result, terminalNodes ->
             var plan = NavigationPlan(
                 points = result.path,
                 stops = result.stops,
@@ -37,7 +37,7 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             if (result.stages.any { it is Stage.InUserPosition }) {
                 plan = plan.withNextDestination()
 
-                val turnWithArrow = getIndexOfTurnWithArrow(result.path, nodes)
+                val turnWithArrow = getIndexOfTurnWithArrow(result.path, terminalNodes)
                 if (turnWithArrow != null) {
                     plan = plan.withArrow(turnWithArrow)
                 }
@@ -109,10 +109,10 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
 
     private fun getIndexOfTurnWithArrow(
         points: List<PointD>,
-        nodes: List<PointD>
+        terminalNodes: List<PointD>
     ): Int? {
         points
-            .indexOfFirstTurns(nodes)
+            .indexOfFirstTurns(terminalNodes)
             .forEach { turnPointIndex ->
                 val turnPoint = points[turnPointIndex]
                 val countOfCrossingsOnTurn = points.count { it == turnPoint }
@@ -124,8 +124,8 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         return null
     }
 
-    private fun List<PointD>.indexOfFirstTurns(nodes: List<PointD>): List<Int> =
-        indexOfFirst(predicate = { it in nodes }, amount = 2)
+    private fun List<PointD>.indexOfFirstTurns(terminalNodes: List<PointD>): List<Int> =
+        indexOfFirst(predicate = { it in terminalNodes }, amount = 2)
 
     private inline fun <T> List<T>.indexOfFirst(predicate: (T) -> Boolean, amount: Int): List<Int> {
         val result = mutableListOf<Int>()

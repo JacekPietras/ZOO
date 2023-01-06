@@ -2,7 +2,7 @@ package com.jacekpietras.zoo.domain.feature.tsp
 
 internal class DivorcedTSPAlgorithm<T : Any>(
     private val algorithm: TSPAlgorithm<T>,
-    private val dummy: T, // todo think how to create new dummy inside
+    private val dummy: T,
 ) : TSPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(

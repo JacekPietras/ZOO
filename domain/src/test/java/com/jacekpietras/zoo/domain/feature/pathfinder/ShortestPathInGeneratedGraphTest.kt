@@ -8,9 +8,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
 import kotlin.random.Random
 
 internal class ShortestPathInGeneratedGraphTest {
@@ -65,6 +62,119 @@ internal class ShortestPathInGeneratedGraphTest {
         )
     }
 
+    @Test
+    fun `start outside graph`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 10),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val result = roads.toGraph().getShortestPath(
+            startPoint = PointD(9, 11),
+            endPoint = PointD(0, 0),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        val expected = listOf(
+            PointD(9, 10),
+            PointD(10, 10),
+            PointD(5, 5),
+            PointD(0, 0),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `end outside graph`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 10),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val result = roads.toGraph().getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(9, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        val expected = listOf(
+            PointD(0, 0),
+            PointD(5, 5),
+            PointD(10, 10),
+            PointD(9, 10),
+        )
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `end outside graph 2`() = runTest {
+        val roads = listOf(
+            listOf(
+                PointD(0, 0),
+                PointD(0, 10),
+            ),
+            listOf(
+                PointD(0, 0),
+                PointD(5, 5),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(0, 10),
+                PointD(10, 10),
+            ),
+            listOf(
+                PointD(5, 5),
+                PointD(5, 6),
+            ),
+        )
+
+        val result = roads.toGraph().getShortestPath(
+            startPoint = PointD(0, 0),
+            endPoint = PointD(1, 11),
+            technicalAllowedAtStart = true,
+            technicalAllowedAtEnd = true,
+        )
+
+        val expected = listOf(
+            PointD(0, 0),
+            PointD(0, 10),
+            PointD(1, 10),
+        )
+        assertEquals(expected, result)
+    }
+
     private fun doTest(
         seed: Long,
         numberOfCities: Int,
@@ -72,31 +182,12 @@ internal class ShortestPathInGeneratedGraphTest {
         bestExpected: Double = 0.0,
     ) = runTest {
         val random = Random(seed)
-        val graphAnalyzer = GraphAnalyzer()
-
-        val points = MutableList(numberOfCities) {
-            City(
-                x = (random.nextDouble() * 500).toInt(),
-                y = (random.nextDouble() * 500).toInt(),
-            )
-        }.toSet().toList()
-        val c = points.associateWith { mutableListOf<City>() }
-
-        val roads = (0 until connections).map {
-            val next = points.getRandom(random)
-            val closest = points.filter { it != next && c[next]?.contains(it) == false }.minByOrNull { it.distanceToCity(next) }!!
-            c[next]!!.add(closest)
-            c[closest]!!.add(next)
-
-            MapItemEntity.PathEntity(
-                listOf(
-                    PointD(next.x, next.y),
-                    PointD(closest.x, closest.y),
-                ),
-            )
-        }.toSet().toList()
-        graphAnalyzer.initialize(roads, emptyList())
-
+        val (points, roads) = generateGraph(
+            random,
+            numberOfCities,
+            connections,
+        )
+        val graphAnalyzer = roads.toGraph()
         val start = points.getRandom(random).let { PointD(it.x, it.y) }
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
 
@@ -122,24 +213,70 @@ internal class ShortestPathInGeneratedGraphTest {
         }
     }
 
-    private fun List<PointD>.distance(): Double =
-        zipWithNext { a, b -> a.distanceToCity(b) }.sum()
+    companion object {
 
-    private fun List<PointD>.assertExistingRoute(roads: List<MapItemEntity.PathEntity>) {
-        zipWithNext { a, b ->
-            val foundConnection = roads.find {
-                val v1 = it.vertices[0]
-                val v2 = it.vertices[1]
+        private fun generateCity(
+            random: Random,
+        ): City =
+            City(
+                x = (random.nextDouble() * 360).toInt() - 180,
+                y = (random.nextDouble() * 180).toInt() - 90,
+            )
 
-                a == v1 && b == v2 || a == v2 && b == v1
+        internal fun generatePoint(
+            random: Random,
+        ): PointD =
+            generateCity(random).let {
+                PointD(
+                    x = it.x.toDouble(),
+                    y = it.y.toDouble(),
+                )
             }
-            assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+
+        internal fun generateGraph(
+            random: Random,
+            numberOfCities: Int,
+            connections: Int,
+        ): Pair<List<City>, List<List<PointD>>> {
+            val points = MutableList(numberOfCities) { generateCity(random) }.toSet().toList()
+            val c = points.associateWith { mutableListOf<City>() }
+
+            val roads = (0 until connections).mapNotNull {
+                val next = points.getRandom(random)
+                points
+                    .filter { it != next && c[next]?.contains(it) == false }
+                    .minByOrNull { it.distanceToCity(next) }
+                    ?.let { closest ->
+                        c[next]!!.add(closest)
+                        c[closest]!!.add(next)
+
+                        listOf(
+                            PointD(next.x, next.y),
+                            PointD(closest.x, closest.y),
+                        )
+                    }
+            }.toSet().toList()
+            return points to roads
         }
+
+        internal fun List<City>.getRandom(random: Random = Random(100)) =
+            this[random.nextInt(lastIndex)]
+
+        internal suspend fun List<List<PointD>>.toGraph(): GraphAnalyzer =
+            GraphAnalyzer().also { it.initialize(map(MapItemEntity::PathEntity), emptyList()) }
+
+        internal fun List<PointD>.assertExistingRoute(roads: List<List<PointD>>) {
+            zipWithNext { a, b ->
+                val foundConnection = roads.find {
+                    it.zipWithNext().any { (v1, v2) ->
+                        a == v1 && b == v2 || a == v2 && b == v1
+                    }
+                }
+                assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+            }
+        }
+
+        internal fun List<PointD>.distance(): Double =
+            zipWithNext { a, b -> haversine(a, b) }.sum()
     }
-
-    private fun List<City>.getRandom(random: Random = Random(100)) =
-        this[random.nextInt(lastIndex)]
-
-    private fun PointD.distanceToCity(city: PointD): Double =
-        sqrt(abs(x - city.x).pow(2.0) + abs(y - city.y).pow(2.0))
 }

@@ -54,7 +54,7 @@ internal class GraphAnalyzer {
             )
         }
 
-    suspend fun getShortestPath(
+    internal suspend fun getShortestPath(
         endPoint: PointD,
         startPoint: PointD?,
         technicalAllowedAtStart: Boolean = true,
@@ -64,6 +64,7 @@ internal class GraphAnalyzer {
             val nodes = waitForNodes()
 
             if (startPoint == null) return listOf(endPoint)
+            if (startPoint == endPoint) return listOf(endPoint)
             if (nodes.isEmpty()) return listOf(endPoint)
 
             val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart).makeNode()

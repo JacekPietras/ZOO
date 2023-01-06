@@ -24,7 +24,7 @@ internal class Dijkstra(
         // shortest distances
         val delta = mutableMapOf(start to 0.0)
 
-        val q = PriorityQueue(vertices.size / 2, comparator)
+        val q = PriorityQueue(10, comparator)
         q.add(start to 0.0)
 
         // subset of vertices, for which we know true distance
@@ -32,6 +32,7 @@ internal class Dijkstra(
 
         while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
+            if (q.isEmpty()) return
             val (v: Node, distanceToV) = q.remove()
 
             v.edges.forEach { neighbor ->
@@ -56,7 +57,7 @@ internal class Dijkstra(
         // shortest distances
         val delta = mutableMapOf(start to 0.0)
 
-        val q = PriorityQueue(vertices.size / 2, comparator)
+        val q = PriorityQueue(10, comparator)
         q.add(start to 0.0)
 
         // subset of vertices, for which we know true distance
@@ -90,12 +91,15 @@ internal class Dijkstra(
         }
     }
 
-    fun getPath(): List<Node> =
-        pathTo(start, end)
-
-    private fun pathTo(start: Node, end: Node): List<Node> {
-        val path = previous[end] ?: return listOf(end)
-        return pathTo(start, path) + end
+    fun getPath(): List<Node> {
+        var current = end
+        val result = mutableListOf(end)
+        while (true) {
+            val path = previous[current] ?: return result.reversed()
+            if (path === current) return result.reversed()
+            result.add(path)
+            current = path
+        }
     }
 
     private companion object {

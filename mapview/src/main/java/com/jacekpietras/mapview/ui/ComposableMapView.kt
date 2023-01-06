@@ -77,18 +77,21 @@ fun ComposableMapView(
                 else -> Unit
             }
         }
-        val fps = SECOND_IN_MILLIS / (System.currentTimeMillis() - lastUpdate)
-        if (fps in (0..200) && BuildConfig.DEBUG) {
-            fpsList.add(fps)
-            if (fpsList.size > 20) {
-                fpsList.removeAt(0)
-            }
-            val medFps = fpsList.average().toLong()
+        val timeFromLast = (System.currentTimeMillis() - lastUpdate)
+        if (timeFromLast > 0) {
+            val fps = SECOND_IN_MILLIS / timeFromLast
+            if (fps in (0..200) && BuildConfig.DEBUG) {
+                fpsList.add(fps)
+                if (fpsList.size > 20) {
+                    fpsList.removeAt(0)
+                }
+                val medFps = fpsList.average().toLong()
 
-            Text(
-                text = "FPS: $medFps",
-                modifier = Modifier.align(Alignment.BottomStart),
-            )
+                Text(
+                    text = "FPS: $medFps",
+                    modifier = Modifier.align(Alignment.BottomStart),
+                )
+            }
         }
         lastUpdate = System.currentTimeMillis()
     }
