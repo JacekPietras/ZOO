@@ -165,7 +165,7 @@ internal class MinGraphAnalyzerTest {
     fun `test generation (multiple) with big graphs`() = runTest {
         doTests(
             times = 100_000,
-            seed = 0,
+            seed = 20_000,
             numberOfCities = 1000,
             connections = 2000,
         )
@@ -494,7 +494,7 @@ internal class MinGraphAnalyzerTest {
                 }
             }.first()
         } catch (ignored: Throwable) {
-            throw FailedOnFullGraph()
+            throw FailedOnFullGraphCalc()
         }
         try {
             if (startOnGraph && endOnGraph) {
@@ -505,7 +505,7 @@ internal class MinGraphAnalyzerTest {
                 fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
             }
         } catch (ignored: Throwable) {
-            throw FailedOnFullGraph()
+            throw FailedOnFullGraphVerification()
         }
 
         val map = mutableMapOf<PointD, Char>()
@@ -587,8 +587,11 @@ internal class MinGraphAnalyzerTest {
                 endOnGraph,
                 print,
             )
-        } catch (onFull: FailedOnFullGraph) {
-            println("Failed on FullGraph")
+        } catch (onFull: FailedOnFullGraphVerification) {
+            println("Failed on FullGraph Verification")
+            return
+        } catch (onFull: FailedOnFullGraphCalc) {
+            println("Failed on FullGraph Calculation")
             return
         }
 
@@ -694,4 +697,5 @@ internal class MinGraphAnalyzerTest {
     }
 }
 
-class FailedOnFullGraph : Throwable()
+class FailedOnFullGraphCalc : Throwable()
+class FailedOnFullGraphVerification : Throwable()
