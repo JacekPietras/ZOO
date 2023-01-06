@@ -50,10 +50,14 @@ internal class NodeSetFactory(
     private fun checkNodesOnEdges(first: Node) {
         nodes.forAllEdges { secnd, third, technical ->
             if (secnd != first && third != first && isOnEdge(first, secnd, third)) {
-                first.connect(secnd, technical, backward = false)
-                secnd.connect(first, technical, backward = true)
-                first.connect(third, technical, backward = false)
-                third.connect(first, technical, backward = true)
+                if (first.edges.none { edge -> edge.node == secnd }) {
+                    first.connect(secnd, technical, backward = false)
+                    secnd.connect(first, technical, backward = true)
+                }
+                if (first.edges.none { edge -> edge.node == third }) {
+                    first.connect(third, technical, backward = false)
+                    third.connect(first, technical, backward = true)
+                }
                 secnd.disconnect(third)
                 third.disconnect(secnd)
                 return
