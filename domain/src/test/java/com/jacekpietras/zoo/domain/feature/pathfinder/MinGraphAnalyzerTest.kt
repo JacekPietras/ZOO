@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.assertExistingRoute
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.distance
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.generateGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.generatePoint
@@ -400,6 +401,8 @@ internal class MinGraphAnalyzerTest {
         startPoint: PointD,
         endPoint: PointD,
         repeat: Int = 1,
+        startOnGraph: Boolean = true,
+        endOnGraph: Boolean = true,
         print: Boolean = true,
     ): List<PointD> {
         val fullGraphAnalyzer = roads.toGraph()
@@ -419,7 +422,11 @@ internal class MinGraphAnalyzerTest {
         } catch (ignored: Throwable) {
             throw FailedOnFullGraph()
         }
-        val fullResultTime = fullResultTimeList.average()
+        if(startOnGraph && endOnGraph){
+            assertEquals(startPoint, fullResult.first())
+            assertEquals(endPoint, fullResult.last())
+            fullResult.assertExistingRoute(roads)
+        }
 
         val map = mutableMapOf<PointD, Char>()
         if (print) {
@@ -441,8 +448,14 @@ internal class MinGraphAnalyzerTest {
                 )
             }
         }.first()
-        val resultTime = resultTimeList.average()
+        if(startOnGraph && endOnGraph){
+            assertEquals(startPoint, result.first())
+            assertEquals(endPoint, result.last())
+            result.assertExistingRoute(roads)
+        }
 
+        val fullResultTime = fullResultTimeList.average()
+        val resultTime = resultTimeList.average()
         if (print) {
             if (resultTime < fullResultTime) {
                 println("Calculated in $resultTime, (${fullResultTime - resultTime} faster)")
@@ -482,7 +495,15 @@ internal class MinGraphAnalyzerTest {
         val end = if (endOnGraph) points.getRandom(random).let { PointD(it.x, it.y) }
         else generatePoint(random)
         val result = try {
-            runShortestPath(roads, start, end, repeat, print)
+            runShortestPath(
+                roads,
+                start,
+                end,
+                repeat,
+                startOnGraph,
+                endOnGraph,
+                print,
+            )
         } catch (onFull: FailedOnFullGraph) {
             println("Failed on FullGraph")
             return
@@ -529,7 +550,6 @@ internal class MinGraphAnalyzerTest {
 
     private fun List<Duration>.average() =
         map { it.inWholeNanoseconds }.average().toDuration(DurationUnit.NANOSECONDS)
-
 
     private fun printMinGraph(roads: List<List<PointD>>, map: MutableMap<PointD, Char>, nodes: Collection<MinNode>) {
         var letter = 'A' - 1
