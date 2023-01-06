@@ -44,7 +44,7 @@ internal class PointSnapper {
         var shortest = Double.MAX_VALUE
 
         nodes.forAllMinEdges { edge ->
-            if ((technicalAllowed || !edge.technical) && shortest > 0.0 && edgesAreConnected(edge.from, edge.node)) {
+            if ((technicalAllowed || !edge.technical) && shortest > 0.0) {
                 getSnappedOnMinEdge(edge, source)?.let { (snapped, foundToSource) ->
                     if (foundToSource < shortest) {
                         result = snapped
@@ -132,10 +132,6 @@ internal class PointSnapper {
     }
 
     private fun edgesAreConnected(p1: Node, p2: Node) =
-        p1.edges.any { it.node == p2 } && p2.edges.any { it.node == p1 }
-
-    // todo check if necessary with extensive unit tests
-    private fun edgesAreConnected(p1: MinNode, p2: MinNode) =
         p1.edges.any { it.node == p2 } && p2.edges.any { it.node == p1 }
 
     private fun getSnappedToEdge(source: PointD, p1: PointD, p2: PointD): PointD {
