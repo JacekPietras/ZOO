@@ -357,17 +357,17 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-//    @Test
-//    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
-//        doTests(
-//            times = 10000000,
-//            seed = 0,
-//            numberOfCities = 5,
-//            connections = 10,
-//            startOnGraph = false,
-//            endOnGraph = false,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+        doTests(
+            times = 10000000,
+            seed = 1,
+            numberOfCities = 5,
+            connections = 10,
+            startOnGraph = false,
+            endOnGraph = false,
+        )
+    }
 
     @Nested
     @DisplayName("Simplified edge cases")
