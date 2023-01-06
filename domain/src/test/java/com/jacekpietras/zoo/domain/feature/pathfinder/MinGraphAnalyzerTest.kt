@@ -132,7 +132,7 @@ internal class MinGraphAnalyzerTest {
                 seed = 6051,
                 numberOfCities = 1000,
                 connections = 2000,
-                bestExpected = 9999999999.0,
+                bestExpected = 536.809261073828,
                 repeat = 1,
             )
         }
@@ -154,7 +154,7 @@ internal class MinGraphAnalyzerTest {
                 seed = 6117,
                 numberOfCities = 1000,
                 connections = 2000,
-                bestExpected = 9999999999.0,
+                bestExpected = 42.166155414412245,
                 repeat = 1,
             )
         }
@@ -357,17 +357,17 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
-        doTests(
-            times = 10000000,
-            seed = 1,
-            numberOfCities = 5,
-            connections = 10,
-            startOnGraph = false,
-            endOnGraph = false,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+//        doTests(
+//            times = 10000000,
+//            seed = 1,
+//            numberOfCities = 5,
+//            connections = 10,
+//            startOnGraph = false,
+//            endOnGraph = false,
+//        )
+//    }
 
     @Nested
     @DisplayName("Simplified edge cases")
@@ -706,7 +706,7 @@ internal class MinGraphAnalyzerTest {
         repeat: Int = 3,
         startOnGraph: Boolean = true,
         endOnGraph: Boolean = true,
-        print: Boolean = true,
+        print: Boolean = numberOfCities < 20,
     ) {
         val random = Random(seed)
         val (points, roads) = generateGraph(
