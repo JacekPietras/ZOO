@@ -95,8 +95,14 @@ internal class Dijkstra(
         pathTo(end)
 
     private fun pathTo(end: Node): List<Node> {
-        val path = previous[end] ?: return listOf(end)
-        return pathTo(path) + end
+        var current = end
+        val result = mutableListOf(end)
+        while (true) {
+            val path = previous[current] ?: return result.reversed()
+            if (path === current) return result.reversed()
+            result.add(path)
+            current = path
+        }
     }
 
     private companion object {

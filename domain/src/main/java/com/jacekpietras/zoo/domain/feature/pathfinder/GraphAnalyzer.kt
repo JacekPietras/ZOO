@@ -15,11 +15,13 @@ internal class GraphAnalyzer {
     private val minGraphAnalyzer = MinGraphAnalyzer()
     private val mutex = Mutex()
 
-    fun initialize(roads: List<PathEntity>, technical: List<PathEntity>) {
+    suspend fun initialize(roads: List<PathEntity>, technical: List<PathEntity>) {
         NodeSetFactory(roads, technical).create()
             .also {
                 nodes = it
-                minGraphAnalyzer.initialize(it)
+                mutex.withLock {
+                    minGraphAnalyzer.initialize(it)
+                }
             }
     }
 
@@ -46,7 +48,6 @@ internal class GraphAnalyzer {
             )
         }
 
-    //TODO think how to migrate it to fast approach
     suspend fun getShortestPathWithContext(
         endPoint: SnappedOnEdge,
         startPoint: SnappedOnEdge,
@@ -60,7 +61,8 @@ internal class GraphAnalyzer {
             )
         }
 
-    suspend fun getShortestPathFast(
+    @Deprecated("Found out it is slower")
+    suspend fun getShortestPathOnMinimizedGraph(
         endPoint: PointD,
         startPoint: PointD?,
         technicalAllowedAtStart: Boolean = true,
@@ -73,7 +75,6 @@ internal class GraphAnalyzer {
             technicalAllowedAtEnd = technicalAllowedAtEnd,
         )
 
-    @Deprecated("Only for use of comparing with new approach")
     internal suspend fun getShortestPath(
         endPoint: PointD,
         startPoint: PointD?,

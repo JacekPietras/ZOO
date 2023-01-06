@@ -262,7 +262,7 @@ internal class ShortestPathInGeneratedGraphTest {
         internal fun List<City>.getRandom(random: Random = Random(100)) =
             this[random.nextInt(lastIndex)]
 
-        internal fun List<List<PointD>>.toGraph(): GraphAnalyzer =
+        internal suspend fun List<List<PointD>>.toGraph(): GraphAnalyzer =
             GraphAnalyzer().also { it.initialize(map(MapItemEntity::PathEntity), emptyList()) }
 
         internal fun List<PointD>.assertExistingRoute(roads: List<List<PointD>>) {
