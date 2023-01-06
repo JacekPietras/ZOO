@@ -8,7 +8,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.model.MinNode
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import kotlin.math.sqrt
 
-internal inline fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean) -> Unit) {
+internal inline fun Iterable<Node>.forAllEdges(block: (p1: Node, p2: Node, technical: Boolean) -> Unit) {
     forEach { node ->
         node.edges.forEach { edge ->
             if (!edge.backward) {
@@ -16,6 +16,12 @@ internal inline fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean) -> U
             }
         }
     }
+}
+
+internal fun Iterable<Node>.allEdges(): List<Triple<Node, Node, Boolean>> {
+    val result = mutableListOf<Triple<Node, Node, Boolean>>()
+    forAllEdges { node, node2, technical -> result.add(Triple(node, node2, technical)) }
+    return result
 }
 
 internal fun Iterable<Node>.forAllEdges(block: (Node, Node, Boolean, Double) -> Unit) {

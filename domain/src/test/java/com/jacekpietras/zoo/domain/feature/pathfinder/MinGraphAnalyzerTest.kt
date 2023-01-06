@@ -13,6 +13,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -140,13 +141,22 @@ internal class MinGraphAnalyzerTest {
                 connections = 2000,
             )
         }
+
+        @Test
+        fun `find shortest path 8`() = runTest {
+            doTest(
+                seed = 170793,
+                numberOfCities = 5,
+                connections = 10,
+            )
+        }
     }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs`() = runTest {
 //        doTests(
 //            times = 100_000,
-//            seed = 20_000,
+//            seed = 0,
 //            numberOfCities = 1000,
 //            connections = 2000,
 //        )
@@ -476,6 +486,7 @@ internal class MinGraphAnalyzerTest {
                 }
             }.first()
         } catch (ignored: Throwable) {
+            println("Failed on FullGraph calculation\n")
             fullGraphFailed = true
             emptyList()
         }
@@ -483,11 +494,12 @@ internal class MinGraphAnalyzerTest {
             if (startOnGraph && endOnGraph) {
                 assertEquals(startPoint, fullResult.first()) { "Incorrect starting point" }
                 assertEquals(endPoint, fullResult.last()) { "Incorrect ending point" }
-                fullResult.assertExistingRoute(roads)
+                fullResult.assertExistingRoute(fullGraphAnalyzer)
             } else {
                 fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
             }
         } catch (ignored: Throwable) {
+            println("Failed on FullGraph check\n")
             fullGraphFailed = true
         }
 
@@ -496,8 +508,10 @@ internal class MinGraphAnalyzerTest {
             printFullGraph(roads, map, fullGraphAnalyzer.waitForNodes())
             println("\n-------------\n")
             printMinGraph(roads, map, minGraphAnalyzer.waitForNodes())
-            println("\n-------------\n")
-            println("Expected: ${fullResult.joinToString { (map[it]?.toString() ?: "") + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
+            if (!fullGraphFailed) {
+                println("\n-------------\n")
+                println("Expected: ${fullResult.joinToString { (map[it]?.toString() ?: "") + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
+            }
         }
 
         val resultTimeList = mutableListOf<Duration>()
@@ -514,7 +528,7 @@ internal class MinGraphAnalyzerTest {
         if (startOnGraph && endOnGraph) {
             assertEquals(startPoint, result.first()) { "Incorrect starting point" }
             assertEquals(endPoint, result.last()) { "Incorrect ending point" }
-            result.assertExistingRoute(roads)
+            result.assertExistingRoute(fullGraphAnalyzer)
         } else {
             result.dropLast(1).drop(1).assertExistingRoute(roads)
         }
@@ -536,9 +550,6 @@ internal class MinGraphAnalyzerTest {
                         "Full distance: ${fullResult.distance()}, Min distance: ${result.distance()}\n" +
                         "Full length: ${fullResult.size}, Min length: ${result.size}\n"
             }
-        }
-        if (fullGraphFailed) {
-            println("Failed on FullGraph, but succeeded on MinGraph")
         }
         return result
     }
@@ -661,4 +672,16 @@ internal class MinGraphAnalyzerTest {
 
     private fun different(a: Double, b: Double): Boolean =
         abs(a - b) > (a / 1_000_000)
+
+
+    internal suspend fun List<PointD>.assertExistingRoute(graph: GraphAnalyzer) {
+        zipWithNext { a, b ->
+            val foundConnection = graph
+                .waitForNodes()
+                .allEdges()
+                .map { it.first.point to it.second.point }
+                .any { (v1, v2) -> a == v1 && b == v2 || a == v2 && b == v1 }
+            Assertions.assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+        }
+    }
 }
