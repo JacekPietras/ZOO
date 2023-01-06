@@ -65,28 +65,6 @@ internal class NodeSetFactory(
         }
     }
 
-//    private fun checkNodesOnEdges(first: Node) {
-//        nodes.forEach { secnd ->
-//            if (secnd != first) {
-//                secnd.edges.forEach { secondToThird ->
-//                    val third = secondToThird.node
-//                    if (third != first) {
-//                        if (isOnEdge(first, secnd, third)) {
-////                        if (isOnEdge(first, secnd, third) && notConnected(first, secnd) && notConnected(first, third)) {
-//                            first.connect(secnd, secondToThird.technical, backward = false)
-//                            secnd.connect(first, secondToThird.technical, backward = true)
-//                            first.connect(third, secondToThird.technical, backward = false)
-//                            third.connect(first, secondToThird.technical, backward = true)
-//                            secnd.disconnect(third)
-//                            third.disconnect(secnd)
-//                            return
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     private fun addToGraph(point: PointD): Node {
         nodes.forEach { node ->
             if (node.point == point) {

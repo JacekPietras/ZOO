@@ -215,17 +215,30 @@ internal class ShortestPathInGeneratedGraphTest {
 
     companion object {
 
+        private fun generateCity(
+            random: Random,
+        ): City =
+            City(
+                x = (random.nextDouble() * 360).toInt() - 180,
+                y = (random.nextDouble() * 180).toInt() - 90,
+            )
+
+        internal fun generatePoint(
+            random: Random,
+        ): PointD =
+            generateCity(random).let {
+                PointD(
+                    x = it.x.toDouble(),
+                    y = it.y.toDouble(),
+                )
+            }
+
         internal fun generateGraph(
             random: Random,
             numberOfCities: Int,
             connections: Int,
         ): Pair<List<City>, List<List<PointD>>> {
-            val points = MutableList(numberOfCities) {
-                City(
-                    x = (random.nextDouble() * 500).toInt(),
-                    y = (random.nextDouble() * 500).toInt(),
-                )
-            }.toSet().toList()
+            val points = MutableList(numberOfCities) { generateCity(random) }.toSet().toList()
             val c = points.associateWith { mutableListOf<City>() }
 
             val roads = (0 until connections).mapNotNull {
