@@ -32,6 +32,7 @@ internal class Dijkstra(
 
         while (s.size != vertices.size) {
             // closest vertex that has not yet been visited
+            if (q.isEmpty()) return
             val (v: Node, distanceToV) = q.remove()
 
             v.edges.forEach { neighbor ->
