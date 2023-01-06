@@ -85,12 +85,30 @@ internal class MinGraphAnalyzerTest {
                 connections = 10,
             )
         }
+
+        @Test
+        fun `find shortest path 2`() = runTest {
+            doTest(
+                seed = 170793,
+                numberOfCities = 5,
+                connections = 10,
+            )
+        }
+
+        @Test
+        fun `find shortest path 3`() = runTest {
+            doTest(
+                seed = 2502496,
+                numberOfCities = 5,
+                connections = 10,
+            )
+        }
     }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs`() = runTest {
 //        doTests(
-//            times = 100000,
+//            times = 100_000,
 //            seed = 0,
 //            numberOfCities = 1000,
 //            connections = 2000,
@@ -100,7 +118,7 @@ internal class MinGraphAnalyzerTest {
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
 //        doTests(
-//            times = 100000,
+//            times = 100_000,
 //            seed = 0,
 //            numberOfCities = 1000,
 //            connections = 2000,
@@ -109,20 +127,20 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-//    @Test
-//    fun `test generation (multiple) with small graphs`() = runTest {
-//        doTests(
-//            times = 10000000,
-//            seed = 0,
-//            numberOfCities = 5,
-//            connections = 10,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with small graphs`() = runTest {
+        doTests(
+            times = 10_000_000,
+            seed = 0,
+            numberOfCities = 5,
+            connections = 10,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
 //        doTests(
-//            times = 10000000,
+//            times = 10_000_000,
 //            seed = 0,
 //            numberOfCities = 5,
 //            connections = 10,
@@ -422,12 +440,16 @@ internal class MinGraphAnalyzerTest {
         } catch (ignored: Throwable) {
             throw FailedOnFullGraph()
         }
-        if (startOnGraph && endOnGraph) {
-            assertEquals(startPoint, fullResult.first())
-            assertEquals(endPoint, fullResult.last())
-            fullResult.assertExistingRoute(roads)
-        } else {
-            fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
+        try {
+            if (startOnGraph && endOnGraph) {
+                assertEquals(startPoint, fullResult.first())
+                assertEquals(endPoint, fullResult.last())
+                fullResult.assertExistingRoute(roads)
+            } else {
+                fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
+            }
+        } catch (ignored: Throwable) {
+            throw FailedOnFullGraph()
         }
 
         val map = mutableMapOf<PointD, Char>()
