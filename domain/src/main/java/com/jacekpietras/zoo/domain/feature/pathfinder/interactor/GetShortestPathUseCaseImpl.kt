@@ -10,7 +10,7 @@ internal class GetShortestPathUseCaseImpl(
 
     override suspend fun run(start: PointD, end: PointD): List<PointD> {
         initializeGraphAnalyzerIfNeededUseCase.run()
-        return graphAnalyzer.getShortestPath(
+        return graphAnalyzer.getShortestPathFast(
             endPoint = end,
             startPoint = start,
         )
