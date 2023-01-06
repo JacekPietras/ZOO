@@ -144,7 +144,7 @@ internal class MinGraphAnalyzer {
                     cornersBeforeSnapped(snapEnd) + last()
                 }
                 nodeBeforeEnd == snapEnd.edge.node.point -> {
-                    cornersAfterSnapped(snapEnd) + last()
+                    cornersAfterSnapped(snapEnd).reversed() + last()
                 }
                 snapStart is SnappedOnMinEdge && nodeBeforeEnd == snapStart.point -> {
                     cornersBetweenSnaps(snapStart, snapEnd) + last()
@@ -160,7 +160,6 @@ internal class MinGraphAnalyzer {
     private fun cornersAfterSnapped(snap: SnappedOnMinEdge) = snap.edge.corners
         .filter { (_, weight) -> weight > snap.weightFromStart }
         .map { (point, _) -> point }
-        .reversed()
 
     private fun cornersBeforeSnapped(snap: SnappedOnMinEdge) = snap.edge.corners
         .filter { (_, weight) -> weight < snap.weightFromStart }
