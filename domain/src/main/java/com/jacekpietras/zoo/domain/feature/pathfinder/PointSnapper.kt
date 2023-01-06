@@ -40,52 +40,61 @@ internal class PointSnapper {
         source: PointD,
         technicalAllowed: Boolean,
     ): SnappedOnMin {
-        var result: Pair<SnappedOnMin, Double>? = null
+        var result: SnappedOnMin? = null
+        var shortest = Double.MAX_VALUE
 
         nodes.forAllMinEdges { edge ->
-            if ((technicalAllowed || !edge.technical) && (result?.second ?: Double.MAX_VALUE) > 0.0 && edgesAreConnected(edge.from, edge.node)) {
-                val snappedOnEdge = getSnappedOnMinEdge(edge, source)
-                if ((snappedOnEdge?.second ?: Double.MAX_VALUE) < (result?.second ?: Double.MAX_VALUE)) {
-                    result = snappedOnEdge
-                }
-            }
-        }
-
-        return checkNotNull(result?.first)
-    }
-
-    fun getSnappedOnMinEdge(
-        edge: MinEdge,
-        source: PointD,
-    ): Pair<SnappedOnMin, Double>? {
-        var result: Pair<SnappedOnMin, Double>? = null
-
-        if (edge.node.point == source) {
-            result = SnappedOnMinNode(edge.node) to 0.0
-        } else if (edge.from.point == source) {
-            result = SnappedOnMinNode(edge.from) to 0.0
-        } else {
-            edge.forEdgeParts { p1, p2, weightBefore ->
-                val found = getSnappedToEdge(source, p1, p2)
-                val foundToSource = haversine(source.x, source.y, found.x, found.y)
-                if (foundToSource < (result?.second ?: Double.MAX_VALUE)) {
-                    val weightToP1 = haversine(p1.x, p1.y, found.x, found.y)
-                    result = if (edge.node.point == found) {
-                        SnappedOnMinNode(edge.node) to foundToSource
-                    } else if (edge.from.point == found) {
-                        SnappedOnMinNode(edge.from) to foundToSource
-                    } else {
-                        SnappedOnMinEdge(
-                            point = found,
-                            edge = edge,
-                            weightFromStart = weightBefore + weightToP1,
-                        ) to foundToSource
+            if ((technicalAllowed || !edge.technical) && shortest > 0.0 && edgesAreConnected(edge.from, edge.node)) {
+                getSnappedOnMinEdge(edge, source)?.let { (snapped, foundToSource) ->
+                    if (foundToSource < shortest) {
+                        result = snapped
+                        shortest = foundToSource
                     }
                 }
             }
         }
 
-        return result
+        return checkNotNull(result)
+    }
+
+    private fun getSnappedOnMinEdge(
+        edge: MinEdge,
+        source: PointD,
+    ): Pair<SnappedOnMin, Double>? {
+        var result: SnappedOnMin? = null
+        var shortest: Double = Double.MAX_VALUE
+
+        if (edge.node.point == source) {
+            result = SnappedOnMinNode(edge.node)
+            shortest = 0.0
+        } else if (edge.from.point == source) {
+            result = SnappedOnMinNode(edge.from)
+            shortest = 0.0
+        } else {
+            edge.forEdgeParts { p1, p2, weightBefore ->
+                val found = getSnappedToEdge(source, p1, p2)
+                val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                if (foundToSource < shortest) {
+                    val weightToP1 = haversine(p1.x, p1.y, found.x, found.y)
+                    if (edge.node.point == found) {
+                        result = SnappedOnMinNode(edge.node)
+                        shortest = foundToSource
+                    } else if (edge.from.point == found) {
+                        result = SnappedOnMinNode(edge.from)
+                        shortest = foundToSource
+                    } else {
+                        result = SnappedOnMinEdge(
+                            point = found,
+                            edge = edge,
+                            weightFromStart = weightBefore + weightToP1,
+                        )
+                        shortest = foundToSource
+                    }
+                }
+            }
+        }
+
+        return result?.let { it to shortest }
     }
 
     fun getSnappedOnMinEdgeOnly(
