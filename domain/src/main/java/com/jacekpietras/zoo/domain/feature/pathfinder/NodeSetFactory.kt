@@ -60,6 +60,8 @@ internal class NodeSetFactory(
                 }
                 secnd.disconnect(third)
                 third.disconnect(secnd)
+
+                checkNodesOnEdges(first)
                 return
             }
         }

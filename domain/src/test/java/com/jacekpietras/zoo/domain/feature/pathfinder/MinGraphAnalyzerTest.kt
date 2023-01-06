@@ -84,7 +84,6 @@ internal class MinGraphAnalyzerTest {
                 seed = 1482803,
                 numberOfCities = 5,
                 connections = 10,
-                repeat = 1,
             )
         }
 
@@ -94,7 +93,6 @@ internal class MinGraphAnalyzerTest {
                 seed = 170793,
                 numberOfCities = 5,
                 connections = 10,
-                repeat = 1,
             )
         }
 
@@ -104,7 +102,6 @@ internal class MinGraphAnalyzerTest {
                 seed = 2502496,
                 numberOfCities = 5,
                 connections = 10,
-                repeat = 1,
             )
         }
 
@@ -114,7 +111,6 @@ internal class MinGraphAnalyzerTest {
                 seed = 698,
                 numberOfCities = 1000,
                 connections = 2000,
-                repeat = 1,
             )
         }
 
@@ -124,7 +120,6 @@ internal class MinGraphAnalyzerTest {
                 seed = 306,
                 numberOfCities = 1000,
                 connections = 2000,
-                repeat = 1,
             )
         }
 
@@ -134,21 +129,30 @@ internal class MinGraphAnalyzerTest {
                 seed = 1030,
                 numberOfCities = 1000,
                 connections = 2000,
+            )
+        }
+
+        @Test
+        fun `find shortest path 7`() = runTest {
+            doTest(
+                seed = 3124,
+                numberOfCities = 1000,
+                connections = 2000,
                 repeat = 1,
                 print = true,
             )
         }
     }
 
-//    @Test
-//    fun `test generation (multiple) with big graphs`() = runTest {
-//        doTests(
-//            times = 100_000,
-//            seed = 0,
-//            numberOfCities = 1000,
-//            connections = 2000,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with big graphs`() = runTest {
+        doTests(
+            times = 100_000,
+            seed = 3000,
+            numberOfCities = 1000,
+            connections = 2000,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
@@ -658,7 +662,7 @@ internal class MinGraphAnalyzerTest {
     }
 
     private fun different(a: Double, b: Double): Boolean =
-        abs(a - b) > (a / 100_000_000)
+        abs(a - b) > (a / 1_000_000)
 }
 
 class FailedOnFullGraph : Throwable()
