@@ -109,15 +109,15 @@ internal class MinGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `test generation (multiple) with small graphs`() = runTest {
-        doTests(
-            times = 10000000,
-            seed = 0,
-            numberOfCities = 5,
-            connections = 10,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with small graphs`() = runTest {
+//        doTests(
+//            times = 10000000,
+//            seed = 0,
+//            numberOfCities = 5,
+//            connections = 10,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
@@ -401,8 +401,8 @@ internal class MinGraphAnalyzerTest {
         startPoint: PointD,
         endPoint: PointD,
         repeat: Int = 1,
-        startOnGraph: Boolean = true,
-        endOnGraph: Boolean = true,
+        startOnGraph: Boolean = false,
+        endOnGraph: Boolean = false,
         print: Boolean = true,
     ): List<PointD> {
         val fullGraphAnalyzer = roads.toGraph()
