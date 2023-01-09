@@ -119,6 +119,7 @@ internal class ParallelDijkstra(
     private fun initQueueWithEndsOfStartingEdge(start: SnappedOnEdge) {
         val costToStart1 = haversine(start.point, start.near1.point)
         val costToStart2 = haversine(start.point, start.near2.point)
+        val startNode = start.toNode()
 
         costs = mutableMapOf(
             start.near1 to costToStart1,
@@ -127,6 +128,8 @@ internal class ParallelDijkstra(
 
         queue.add(start.near1 to costToStart1)
         queue.add(start.near2 to costToStart2)
+        previous[start.near1] = startNode
+        previous[start.near2] = startNode
     }
 
     private fun runAlgorithm(
