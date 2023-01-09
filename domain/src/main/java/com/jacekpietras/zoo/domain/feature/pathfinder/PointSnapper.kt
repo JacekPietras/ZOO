@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.geometry.haversine
 import com.jacekpietras.geometry.pow2
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn
@@ -27,7 +26,7 @@ internal class PointSnapper {
                     return SnappedOnNode(p2)
                 }
                 val found = getSnappedToEdge(source, p1.point, p2.point)
-                val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                val foundToSource = haversine(source, found)
                 if (foundToSource < shortest) {
                     if (p1.point == found) {
                         result = SnappedOnNode(p1)
@@ -60,7 +59,7 @@ internal class PointSnapper {
         nodes.forAllEdges { p1, p2, technical ->
             if (technicalAllowed || !technical) {
                 val found = getSnappedToEdge(source, p1.point, p2.point)
-                val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                val foundToSource = haversine(source, found)
                 if (foundToSource < shortest) {
                     shortest = foundToSource
                     result = SnappedOnEdge(found, p1, p2)

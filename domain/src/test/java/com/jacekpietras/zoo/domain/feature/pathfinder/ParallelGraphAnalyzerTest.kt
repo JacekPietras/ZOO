@@ -125,6 +125,19 @@ internal class ParallelGraphAnalyzerTest {
                 connections = 2000,
             )
         }
+
+        @Test
+        fun `find shortest path 12`() = runTest {
+            doTest(
+                seed = 117,
+                numberOfCities = 5,
+                connections = 10,
+                startOnGraph = false,
+                endOnGraph = false,
+                repeat = 1,
+                print = true,
+            )
+        }
     }
 
 //    @Test
@@ -159,17 +172,17 @@ internal class ParallelGraphAnalyzerTest {
 //        )
 //    }
 
-//    @Test
-//    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
-//        doTests(
-//            times = 10_000_000,
-//            seed = 0,
-//            numberOfCities = 5,
-//            connections = 10,
-//            startOnGraph = false,
-//            endOnGraph = false,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+        doTests(
+            times = 10_000_000,
+            seed = 0,
+            numberOfCities = 5,
+            connections = 10,
+            startOnGraph = false,
+            endOnGraph = false,
+        )
+    }
 
     @Nested
     @DisplayName("Simplified edge cases")
@@ -464,7 +477,9 @@ internal class ParallelGraphAnalyzerTest {
                 assertEquals(endPoint, fullResult.last()) { "Incorrect ending point" }
                 fullResult.assertExistingRoute(fullGraphAnalyzer)
             } else {
-                fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
+                if (fullResult.size > 2) {
+                    fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
+                }
             }
         } catch (ignored: Throwable) {
             throw FailedOnFullGraphVerification()
@@ -493,7 +508,9 @@ internal class ParallelGraphAnalyzerTest {
             assertEquals(endPoint, result.last()) { "Incorrect ending point" }
             result.assertExistingRoute(fullGraphAnalyzer)
         } else {
-            result.dropLast(1).drop(1).assertExistingRoute(roads)
+            if (fullResult.size > 2) {
+                result.dropLast(1).drop(1).assertExistingRoute(roads)
+            }
         }
 
         val fullResultTime = fullResultTimeList.average()

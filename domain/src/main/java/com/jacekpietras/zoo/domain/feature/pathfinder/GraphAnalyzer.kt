@@ -152,8 +152,8 @@ internal class GraphAnalyzer {
                 edge1.node.disconnect(fake)
                 edge2.node.disconnect(fake)
 
-                edge1.node.connectAndCalc(edge2.node, technical, backward = edge1.backward)
-                edge2.node.connectAndCalc(edge1.node, technical, backward = edge2.backward)
+                edge1.node.connectAndCalc(edge2.node, technical, backward = edge2.backward)
+                edge2.node.connectAndCalc(edge1.node, technical, backward = edge1.backward)
 
                 val removed = waitForNodes().remove(fake)
                 if (!removed) {
