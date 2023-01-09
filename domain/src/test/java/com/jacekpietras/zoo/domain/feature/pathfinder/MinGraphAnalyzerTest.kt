@@ -183,15 +183,15 @@ internal class MinGraphAnalyzerTest {
         }
     }
 
-//    @Test
-//    fun `test generation (multiple) with big graphs`() = runTest {
-//        doTests(
-//            times = 100_000,
-//            seed = 62_519,
-//            numberOfCities = 1000,
-//            connections = 2000,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with big graphs`() = runTest {
+        doTests(
+            times = 20_000,
+            seed = 82_519,
+            numberOfCities = 1000,
+            connections = 2000,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
@@ -701,7 +701,7 @@ internal class MinGraphAnalyzerTest {
         abs(a - b) > (a / 1_000_000)
 
 
-    internal suspend fun List<PointD>.assertExistingRoute(graph: GraphAnalyzer) {
+    private suspend fun List<PointD>.assertExistingRoute(graph: GraphAnalyzer) {
         zipWithNext { a, b ->
             val foundConnection = graph
                 .waitForNodes()

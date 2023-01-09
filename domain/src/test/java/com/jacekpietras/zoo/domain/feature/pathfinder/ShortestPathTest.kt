@@ -15,13 +15,15 @@ internal class ShortestPathTest {
     //       |
     // [1]--[2]
     private val graphAnalyzer: GraphAnalyzer =
-        listOf(
+        runBlocking {
             listOf(
-                PointD(1, 1),
-                PointD(2, 1),
-                PointD(2, 2),
-            ),
-        ).toGraph()
+                listOf(
+                    PointD(1, 1),
+                    PointD(2, 1),
+                    PointD(2, 2),
+                ),
+            ).toGraph()
+        }
     private val snapshot: MutableSet<Node> =
         runBlocking { graphAnalyzer.waitForNodes() }
 
