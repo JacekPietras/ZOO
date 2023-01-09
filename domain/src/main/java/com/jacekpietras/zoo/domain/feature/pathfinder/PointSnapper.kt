@@ -4,9 +4,50 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.geometry.pow2
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
-import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnEdge
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn.SnappedOnEdge
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn.SnappedOnNode
 
 internal class PointSnapper {
+
+    fun getSnappedOn(
+        nodes: Iterable<Node>,
+        source: PointD,
+        technicalAllowed: Boolean,
+    ): SnappedOn {
+        var result: SnappedOn? = null
+        var shortest: Double = Double.MAX_VALUE
+
+        nodes.forAllEdges { p1, p2, technical ->
+            if (technicalAllowed || !technical) {
+                if (p1.point == source) {
+                    return SnappedOnNode(p1)
+                }
+                if (p2.point == source) {
+                    return SnappedOnNode(p2)
+                }
+                val found = getSnappedToEdge(source, p1.point, p2.point)
+                val foundToSource = haversine(source.x, source.y, found.x, found.y)
+                if (foundToSource < shortest) {
+                    if (p1.point == found) {
+                        result = SnappedOnNode(p1)
+                        shortest = foundToSource
+                    } else if (p2.point == found) {
+                        result = SnappedOnNode(p2)
+                        shortest = foundToSource
+                    } else {
+                        result = SnappedOnEdge(found, p1, p2)
+                        shortest = foundToSource
+                    }
+                    if (shortest == 0.0) {
+                        return checkNotNull(result)
+                    }
+                }
+            }
+        }
+
+        return checkNotNull(result)
+    }
 
     fun getSnappedOnEdge(
         nodes: Iterable<Node>,
@@ -20,18 +61,18 @@ internal class PointSnapper {
             if (technicalAllowed || !technical) {
                 val found = getSnappedToEdge(source, p1.point, p2.point)
                 val foundToSource = haversine(source.x, source.y, found.x, found.y)
-                if (foundToSource < shortest && edgesAreConnected(p1, p2)) {
+                if (foundToSource < shortest) {
                     shortest = foundToSource
                     result = SnappedOnEdge(found, p1, p2)
+                    if (shortest == 0.0) {
+                        return checkNotNull(result)
+                    }
                 }
             }
         }
 
-        return requireNotNull(result)
+        return checkNotNull(result)
     }
-
-    private fun edgesAreConnected(p1: Node, p2: Node) =
-        p1.edges.any { it.node == p2 } && p2.edges.any { it.node == p1 }
 
     private fun getSnappedToEdge(source: PointD, p1: PointD, p2: PointD): PointD {
         val u = ((source.x - p1.x) * (p2.x - p1.x) + (source.y - p1.y) * (p2.y - p1.y)) /

@@ -3,7 +3,8 @@ package com.jacekpietras.zoo.domain.feature.pathfinder
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
-import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnEdge
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn.SnappedOnEdge
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -78,6 +79,31 @@ internal class GraphAnalyzer {
         }
     }
 
+    internal suspend fun getShortestPathParallel(
+        endPoint: PointD,
+        startPoint: PointD?,
+        technicalAllowedAtStart: Boolean = true,
+        technicalAllowedAtEnd: Boolean = false,
+    ): List<PointD> {
+        mutex.withLock {
+            val nodes = waitForNodes()
+
+            if (startPoint == null) return listOf(endPoint)
+            if (nodes.isEmpty()) return listOf(endPoint)
+
+            val snapStart = snapper.getSnappedOn(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
+            val snapEnd = snapper.getSnappedOn(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
+
+            if (snapStart == snapEnd) return listOf(snapEnd.point)
+
+            return getShortestPathJobParallel(
+                start = snapStart,
+                end = snapEnd,
+                technicalAllowed = technicalAllowedAtEnd,
+            ).map(Node::point)
+        }
+    }
+
     private suspend fun getShortestPathJob(
         start: SnappedNode,
         end: SnappedNode,
@@ -91,6 +117,19 @@ internal class GraphAnalyzer {
         )
             .getPath()
             .also { revertConnections(start, end) }
+
+    private suspend fun getShortestPathJobParallel(
+        start: SnappedOn,
+        end: SnappedOn,
+        technicalAllowed: Boolean = false,
+    ): List<Node> =
+        ParallelDijkstra(
+            vertices = waitForNodes(),
+            technicalAllowed = technicalAllowed,
+        ).calculate(
+            start = start,
+            end = end,
+        )
 
     private suspend fun revertConnections(vararg nodes: SnappedNode) {
         nodes
