@@ -614,7 +614,6 @@ internal class ParallelGraphAnalyzerTest {
     private fun different(a: Double, b: Double): Boolean =
         abs(a - b) > (a / 1_000_000)
 
-
     private suspend fun List<PointD>.assertExistingRoute(graph: GraphAnalyzer) {
         zipWithNext { a, b ->
             val foundConnection = graph

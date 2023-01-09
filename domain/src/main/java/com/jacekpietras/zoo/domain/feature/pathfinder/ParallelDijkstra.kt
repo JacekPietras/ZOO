@@ -44,11 +44,22 @@ internal class ParallelDijkstra(
                 }
 
                 val endNode = end.toNode()
+                val technical = endNode.edges.first().technical
+                val endingEdge1 = Edge(
+                    node = endNode,
+                    technical = technical,
+                    weight = haversine(end.point, end.near1.point),
+                )
+                val endingEdge2 = Edge(
+                    node = endNode,
+                    technical = technical,
+                    weight = haversine(end.point, end.near2.point),
+                )
 
                 runAlgorithm(
                     endNode,
-                    endNode.edges.elementAt(0),
-                    endNode.edges.elementAt(1),
+                    EndingEdge(end.near1, endingEdge1),
+                    EndingEdge(end.near2, endingEdge2),
                 )
             }
             is SnappedOnNode -> {
@@ -120,8 +131,8 @@ internal class ParallelDijkstra(
 
     private fun runAlgorithm(
         end: Node,
-        endingEdge1: Edge? = null,
-        endingEdge2: Edge? = null,
+        endingEdge1: EndingEdge? = null,
+        endingEdge2: EndingEdge? = null,
     ): List<Node> {
         if (technicalAllowed) {
             withTechnical(end, endingEdge1, endingEdge2)
@@ -133,8 +144,8 @@ internal class ParallelDijkstra(
 
     private fun withTechnical(
         end: Node,
-        endingEdge1: Edge?,
-        endingEdge2: Edge?,
+        endingEdge1: EndingEdge?,
+        endingEdge2: EndingEdge?,
     ) {
         while (visited.size != vertices.size) {
             // closest vertex that has not yet been visited
@@ -145,13 +156,13 @@ internal class ParallelDijkstra(
                 runForEdgeWithTechnical(v, neighbor, distanceToV)
             }
             endingEdge1?.run {
-                if (node == v) {
-                    runForEdgeWithTechnical(v, this, distanceToV)
+                if (from == v) {
+                    runForEdgeWithTechnical(v, edge, distanceToV)
                 }
             }
             endingEdge2?.run {
-                if (node == v) {
-                    runForEdgeWithTechnical(v, this, distanceToV)
+                if (from == v) {
+                    runForEdgeWithTechnical(v, edge, distanceToV)
                 }
             }
 
@@ -163,8 +174,8 @@ internal class ParallelDijkstra(
 
     private fun withoutTechnical(
         end: Node,
-        endingEdge1: Edge?,
-        endingEdge2: Edge?,
+        endingEdge1: EndingEdge?,
+        endingEdge2: EndingEdge?,
     ) {
         while (visited.size != vertices.size) {
             // closest vertex that has not yet been visited
@@ -174,13 +185,13 @@ internal class ParallelDijkstra(
                 runForEdgeWithoutTechnical(v, neighbor, distanceToV)
             }
             endingEdge1?.run {
-                if (node == v) {
-                    runForEdgeWithTechnical(v, this, distanceToV)
+                if (from == v) {
+                    runForEdgeWithTechnical(v, edge, distanceToV)
                 }
             }
             endingEdge2?.run {
-                if (node == v) {
-                    runForEdgeWithTechnical(v, this, distanceToV)
+                if (from == v) {
+                    runForEdgeWithTechnical(v, edge, distanceToV)
                 }
             }
 
@@ -246,3 +257,8 @@ internal class ParallelDijkstra(
         }
     }
 }
+
+internal class EndingEdge(
+    val from: Node,
+    val edge: Edge,
+)
