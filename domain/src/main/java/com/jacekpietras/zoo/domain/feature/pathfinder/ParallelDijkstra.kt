@@ -182,6 +182,7 @@ internal class ParallelDijkstra(
     ) {
         while (visited.size != vertices.size) {
             // closest vertex that has not yet been visited
+            if (queue.isEmpty()) return
             val (v: Node, distanceToV) = queue.remove()
 
             v.edges.forEach { neighbor ->
