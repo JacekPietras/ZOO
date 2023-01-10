@@ -134,6 +134,43 @@ internal class ParallelGraphAnalyzerTest {
                 connections = 10,
                 startOnGraph = false,
                 endOnGraph = false,
+            )
+        }
+
+        @Test
+        fun `find shortest path 13`() = runTest {
+            doTest(
+                seed = 238,
+                numberOfCities = 5,
+                connections = 10,
+                startOnGraph = false,
+                endOnGraph = false,
+                repeat = 1,
+                print = true,
+            )
+        }
+
+        @Test
+        fun `find shortest path 14`() = runTest {
+            doTest(
+                seed = 187099,
+                numberOfCities = 5,
+                connections = 10,
+                startOnGraph = false,
+                endOnGraph = false,
+                repeat = 1,
+                print = true,
+            )
+        }
+
+        @Test
+        fun `find shortest path 15`() = runTest {
+            doTest(
+                seed = 60766,
+                numberOfCities = 5,
+                connections = 10,
+                startOnGraph = false,
+                endOnGraph = false,
                 repeat = 1,
                 print = true,
             )
@@ -176,7 +213,7 @@ internal class ParallelGraphAnalyzerTest {
     fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
         doTests(
             times = 10_000_000,
-            seed = 0,
+            seed = 239,
             numberOfCities = 5,
             connections = 10,
             startOnGraph = false,
@@ -462,7 +499,7 @@ internal class ParallelGraphAnalyzerTest {
         val fullResultTimeList = mutableListOf<Duration>()
         val fullResult = (1..repeat).map {
             measureMap({ fullResultTimeList.add(it) }) {
-                fullGraphAnalyzer.getShortestPath(
+                fullGraphAnalyzer.getShortestPathForTest(
                     startPoint = startPoint,
                     endPoint = endPoint,
                     technicalAllowedAtStart = true,

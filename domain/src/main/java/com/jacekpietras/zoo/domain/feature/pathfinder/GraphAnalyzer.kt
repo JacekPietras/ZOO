@@ -79,6 +79,38 @@ internal class GraphAnalyzer {
         }
     }
 
+    internal suspend fun getShortestPathForTest(
+        endPoint: PointD,
+        startPoint: PointD?,
+        technicalAllowedAtStart: Boolean = true,
+        technicalAllowedAtEnd: Boolean = false,
+    ): List<PointD> {
+        mutex.withLock {
+            val nodes = waitForNodes()
+
+            if (startPoint == null) return listOf(endPoint)
+            if (startPoint == endPoint) return listOf(endPoint)
+            if (nodes.isEmpty()) return listOf(endPoint)
+
+            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
+            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
+
+            // guarantee good stable result in tests
+            val snapStart2 = snapper.getSnappedOnEdge(nodes, snapStart.point, technicalAllowed = technicalAllowedAtStart)
+                .copy(point = snapStart.point)
+                .makeNode()
+            val snapEnd2 = snapper.getSnappedOnEdge(nodes, snapEnd.point, technicalAllowed = technicalAllowedAtEnd)
+                .copy(point = snapEnd.point)
+                .makeNode()
+
+            return getShortestPathJob(
+                start = snapStart2,
+                end = snapEnd2,
+                technicalAllowed = technicalAllowedAtEnd,
+            ).map { PointD(it.x, it.y) }
+        }
+    }
+
     internal suspend fun getShortestPathParallel(
         endPoint: PointD,
         startPoint: PointD?,
