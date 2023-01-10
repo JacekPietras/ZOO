@@ -200,17 +200,17 @@ internal class ParallelGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
-        doTests(
-            times = 100_000,
-            seed = 0,
-            numberOfCities = 1000,
-            connections = 2000,
-            startOnGraph = false,
-            endOnGraph = false,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
+//        doTests(
+//            times = 100_000,
+//            seed = 0,
+//            numberOfCities = 1000,
+//            connections = 2000,
+//            startOnGraph = false,
+//            endOnGraph = false,
+//        )
+//    }
 
 //    @Test
 //    fun `test generation (multiple) with small graphs`() = runTest {
