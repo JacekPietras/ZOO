@@ -175,6 +175,19 @@ internal class ParallelGraphAnalyzerTest {
                 print = true,
             )
         }
+
+        @Test
+        fun `find shortest path 16`() = runTest {
+            doTest(
+                seed = 2341,
+                numberOfCities = 1000,
+                connections = 2000,
+                startOnGraph = false,
+                endOnGraph = false,
+                repeat = 1,
+                print = true,
+            )
+        }
     }
 
 //    @Test
@@ -187,17 +200,17 @@ internal class ParallelGraphAnalyzerTest {
 //        )
 //    }
 
-//    @Test
-//    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
-//        doTests(
-//            times = 100_000,
-//            seed = 0,
-//            numberOfCities = 1000,
-//            connections = 2000,
-//            startOnGraph = false,
-//            endOnGraph = false,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
+        doTests(
+            times = 100_000,
+            seed = 0,
+            numberOfCities = 1000,
+            connections = 2000,
+            startOnGraph = false,
+            endOnGraph = false,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with small graphs`() = runTest {
@@ -560,12 +573,17 @@ internal class ParallelGraphAnalyzerTest {
             }
         }
         if (different(fullResult.distance(), result.distance())) {
+            val diffSign = when {
+                fullResult.distance() < result.distance() -> " < "
+                fullResult.distance() > result.distance() -> " > "
+                else -> ", "
+            }
             assertEquals(
                 fullResult.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) },
                 result.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) }) {
                 "Result from Full Graph is different\n" +
-                        "Full distance: ${fullResult.distance()}, Min distance: ${result.distance()}\n" +
-                        "Full length: ${fullResult.size}, Min length: ${result.size}\n"
+                        "Full distance: ${fullResult.distance()}${diffSign}Parallel distance: ${result.distance()}\n" +
+                        "Full length: ${fullResult.size}, Parallel length: ${result.size}\n"
             }
         }
         return result
