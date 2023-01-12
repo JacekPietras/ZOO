@@ -151,17 +151,12 @@ internal class ParallelGraphAnalyzerTest {
 
         @Test
         fun `find shortest path 14`() = runTest {
-            // (-166, -67) -> (-102, -90) (raw)
-            // (-159, -88) -> (-102, -88) (snapped1)
-            // (-159, -88) -> (-86, -88) (snapped2)
             doTest(
                 seed = 187099,
                 numberOfCities = 5,
                 connections = 10,
                 startOnGraph = false,
                 endOnGraph = false,
-                repeat = 1,
-                print = true,
             )
         }
 
@@ -173,8 +168,6 @@ internal class ParallelGraphAnalyzerTest {
                 connections = 10,
                 startOnGraph = false,
                 endOnGraph = false,
-                repeat = 1,
-                print = true,
             )
         }
 
@@ -186,8 +179,6 @@ internal class ParallelGraphAnalyzerTest {
                 connections = 2000,
                 startOnGraph = false,
                 endOnGraph = false,
-                repeat = 1,
-                print = true,
             )
         }
     }
