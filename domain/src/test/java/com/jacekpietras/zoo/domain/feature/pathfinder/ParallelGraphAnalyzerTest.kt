@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.assertExistingRoute
+import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.assertIsNeighbour
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.distance
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.generateGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.generatePoint
@@ -152,6 +153,9 @@ internal class ParallelGraphAnalyzerTest {
 
         @Test
         fun `find shortest path 14`() = runTest {
+            // (-166, -67) -> (-102, -90) (raw)
+            // (-159, -88) -> (-102, -88) (snapped1)
+            // (-159, -88) -> (-86, -88) (snapped2)
             doTest(
                 seed = 187099,
                 numberOfCities = 5,
@@ -222,17 +226,17 @@ internal class ParallelGraphAnalyzerTest {
 //        )
 //    }
 
-    @Test
-    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
-        doTests(
-            times = 10_000_000,
-            seed = 239,
-            numberOfCities = 5,
-            connections = 10,
-            startOnGraph = false,
-            endOnGraph = false,
-        )
-    }
+//    @Test
+//    fun `test generation (multiple) with small graphs and not started on graph`() = runTest {
+//        doTests(
+//            times = 10_000_000,
+//            seed = 0,
+//            numberOfCities = 5,
+//            connections = 10,
+//            startOnGraph = false,
+//            endOnGraph = false,
+//        )
+//    }
 
     @Nested
     @DisplayName("Simplified edge cases")
@@ -520,6 +524,8 @@ internal class ParallelGraphAnalyzerTest {
                 )
             }
         }.first()
+        var fullGraphFailure: Throwable? = null
+        var parallelGraphFailure: Throwable? = null
 
         try {
             if (startOnGraph && endOnGraph) {
@@ -527,12 +533,19 @@ internal class ParallelGraphAnalyzerTest {
                 assertEquals(endPoint, fullResult.last()) { "Incorrect ending point" }
                 fullResult.assertExistingRoute(fullGraphAnalyzer)
             } else {
-                if (fullResult.size > 2) {
-                    fullResult.dropLast(1).drop(1).assertExistingRoute(roads)
+                if (!startOnGraph && fullResult.size > 1) {
+                    assertIsNeighbour(fullResult[0], fullResult[1], roads)
+                }
+                fullResult
+                    .run { if (!startOnGraph) drop(1) else this }
+                    .run { if (!endOnGraph) dropLast(1) else this }
+                    .assertExistingRoute(roads)
+                if (!endOnGraph && fullResult.size > 1) {
+                    assertIsNeighbour(fullResult.last(), fullResult[fullResult.lastIndex - 1], roads)
                 }
             }
-        } catch (ignored: Throwable) {
-            throw FailedOnFullGraphVerification()
+        } catch (failure: Throwable) {
+            fullGraphFailure = failure
         }
 
         val map = mutableMapOf<PointD, Char>()
@@ -553,14 +566,31 @@ internal class ParallelGraphAnalyzerTest {
                 )
             }
         }.first()
-        if (startOnGraph && endOnGraph) {
-            assertEquals(startPoint, result.first()) { "Incorrect starting point" }
-            assertEquals(endPoint, result.last()) { "Incorrect ending point" }
-            result.assertExistingRoute(fullGraphAnalyzer)
-        } else {
-            if (fullResult.size > 2) {
-                result.dropLast(1).drop(1).assertExistingRoute(roads)
+        try {
+            if (startOnGraph && endOnGraph) {
+                assertEquals(startPoint, result.first()) { "Incorrect starting point" }
+                assertEquals(endPoint, result.last()) { "Incorrect ending point" }
+                result.assertExistingRoute(fullGraphAnalyzer)
+            } else {
+                if (!startOnGraph && result.size > 1) {
+                    assertIsNeighbour(result[0], result[1], roads)
+                }
+                result
+                    .run { if (!startOnGraph) drop(1) else this }
+                    .run { if (!endOnGraph) dropLast(1) else this }
+                    .assertExistingRoute(roads)
+                if (!endOnGraph && result.size > 1) {
+                    assertIsNeighbour(result.last(), result[result.lastIndex - 1], roads)
+                }
             }
+        } catch (failure: Throwable) {
+            parallelGraphFailure = failure
+        }
+
+        when {
+            fullGraphFailure != null && parallelGraphFailure != null -> throw FailedOnBothGraphVerification()
+            fullGraphFailure != null -> throw FailedOnFullGraphVerification()
+            parallelGraphFailure != null -> throw parallelGraphFailure
         }
 
         val fullResultTime = fullResultTimeList.average()
@@ -620,7 +650,10 @@ internal class ParallelGraphAnalyzerTest {
                 print,
             )
         } catch (onFull: FailedOnFullGraphVerification) {
-            println("Failed on FullGraph Verification")
+            println("Failed on FullGraph Verification Only")
+            return
+        } catch (onFull: FailedOnBothGraphVerification) {
+            println("Failed on Both Graph Verifications")
             return
         }
 

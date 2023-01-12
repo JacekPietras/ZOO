@@ -5,6 +5,7 @@ import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.tsp.algorithms.City
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AssertionFailureBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -262,7 +263,7 @@ internal class ShortestPathInGeneratedGraphTest {
         internal fun List<City>.getRandom(random: Random = Random(100)) =
             this[random.nextInt(lastIndex)]
 
-        internal suspend fun List<List<PointD>>.toGraph(): GraphAnalyzer =
+        internal fun List<List<PointD>>.toGraph(): GraphAnalyzer =
             GraphAnalyzer().also { it.initialize(map(MapItemEntity::PathEntity), emptyList()) }
 
         internal fun List<PointD>.assertExistingRoute(roads: List<List<PointD>>) {
@@ -272,9 +273,32 @@ internal class ShortestPathInGeneratedGraphTest {
                         a == v1 && b == v2 || a == v2 && b == v1
                     }
                 }
-                assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+                if (foundConnection == null) {
+                    AssertionFailureBuilder.assertionFailure()
+                        .message("Found path is not possible in graph")
+                        .reason("Not found connection $a <-> $b")
+                        .buildAndThrow()
+                }
+//                assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
             }
         }
+
+        internal fun assertIsNeighbour(point: PointD, node: PointD, roads: List<List<PointD>>) {
+            roads.forEach {
+                it.zipWithNext().forEach { (v1, v2) ->
+                    if ((v1 == node || v2 == node) && isOnEdge(point, v1, v2)) {
+                        return
+                    }
+                }
+            }
+            AssertionFailureBuilder.assertionFailure()
+                .message("Found path is not possible in graph")
+                .reason("Point (${point.x}, ${point.y}) is not in edge connected to (${node.x}, ${node.y})")
+                .buildAndThrow()
+        }
+
+        private fun isOnEdge(point: PointD, edge1: PointD, edge2: PointD): Boolean =
+            cartesian(edge1, point) + cartesian(edge2, point) - cartesian(edge1, edge2) < 0.000000001
 
         internal fun List<PointD>.distance(): Double =
             zipWithNext { a, b -> haversine(a, b) }.sum()

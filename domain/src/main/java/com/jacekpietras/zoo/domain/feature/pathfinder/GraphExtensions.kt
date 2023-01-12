@@ -25,5 +25,8 @@ internal fun Iterable<Node>.allEdges(): List<Triple<Node, Node, Boolean>> {
 internal fun cartesian(a: Node, b: Node): Double =
     sqrt((a.x - b.x).pow2 + (a.y - b.y).pow2)
 
+internal fun cartesian(a: PointD, b: PointD): Double =
+    sqrt((a.x - b.x).pow2 + (a.y - b.y).pow2)
+
 internal fun haversine(a: PointD, b: PointD): Double =
     haversine(a.x, a.y, b.x, b.y)
