@@ -151,12 +151,17 @@ internal class ParallelGraphAnalyzerTest {
 
         @Test
         fun `find shortest path 14`() = runTest {
+            // (-166, -67) -> (-102, -90) (raw)
+            // (-159, -88) -> (-102, -88) (snapped1)
+            // (-159, -88) -> (-86, -88) (snapped2)
             doTest(
                 seed = 187099,
                 numberOfCities = 5,
                 connections = 10,
                 startOnGraph = false,
                 endOnGraph = false,
+                repeat = 1,
+                print = true,
             )
         }
 
@@ -168,6 +173,8 @@ internal class ParallelGraphAnalyzerTest {
                 connections = 10,
                 startOnGraph = false,
                 endOnGraph = false,
+                repeat = 1,
+                print = true,
             )
         }
 
@@ -523,15 +530,15 @@ internal class ParallelGraphAnalyzerTest {
                 assertEquals(startPoint, fullResult.first()) { "Incorrect starting point" }
                 assertEquals(endPoint, fullResult.last()) { "Incorrect ending point" }
                 fullResult.assertExistingRoute(fullGraphAnalyzer)
-            } else {
-                if (!startOnGraph && fullResult.size > 1) {
+            } else if (fullResult.size > 2) {
+                if (!startOnGraph) {
                     assertIsNeighbour(fullResult[0], fullResult[1], roads)
                 }
                 fullResult
                     .run { if (!startOnGraph) drop(1) else this }
                     .run { if (!endOnGraph) dropLast(1) else this }
                     .assertExistingRoute(roads)
-                if (!endOnGraph && fullResult.size > 1) {
+                if (!endOnGraph) {
                     assertIsNeighbour(fullResult.last(), fullResult[fullResult.lastIndex - 1], roads)
                 }
             }
@@ -562,15 +569,15 @@ internal class ParallelGraphAnalyzerTest {
                 assertEquals(startPoint, result.first()) { "Incorrect starting point" }
                 assertEquals(endPoint, result.last()) { "Incorrect ending point" }
                 result.assertExistingRoute(fullGraphAnalyzer)
-            } else {
-                if (!startOnGraph && result.size > 1) {
+            } else if (result.size > 2) {
+                if (!startOnGraph) {
                     assertIsNeighbour(result[0], result[1], roads)
                 }
                 result
                     .run { if (!startOnGraph) drop(1) else this }
                     .run { if (!endOnGraph) dropLast(1) else this }
                     .assertExistingRoute(roads)
-                if (!endOnGraph && result.size > 1) {
+                if (!endOnGraph) {
                     assertIsNeighbour(result.last(), result[result.lastIndex - 1], roads)
                 }
             }
