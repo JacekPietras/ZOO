@@ -511,6 +511,10 @@ internal class ParallelGraphAnalyzerTest {
         print: Boolean = true,
     ): List<PointD> {
         val fullGraphAnalyzer = roads.toGraph()
+        val parallelGraphAnalyzer = roads.toGraph()
+        var fullGraphFailure: Throwable? = null
+        var parallelGraphFailure: Throwable? = null
+
         val fullResultTimeList = mutableListOf<Duration>()
         val fullResult = (1..repeat).map {
             measureMap({ fullResultTimeList.add(it) }) {
@@ -522,8 +526,6 @@ internal class ParallelGraphAnalyzerTest {
                 )
             }
         }.first()
-        var fullGraphFailure: Throwable? = null
-        var parallelGraphFailure: Throwable? = null
 
         try {
             if (startOnGraph && endOnGraph) {
@@ -548,7 +550,7 @@ internal class ParallelGraphAnalyzerTest {
 
         val map = mutableMapOf<PointD, Char>()
         if (print) {
-            printFullGraph(roads, map, fullGraphAnalyzer.waitForNodes())
+            printFullGraph(roads, map, parallelGraphAnalyzer.waitForNodes())
             println("\n-------------\n")
             println("Expected: ${fullResult.joinToString { (map[it]?.toString() ?: "") + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
         }
@@ -556,7 +558,7 @@ internal class ParallelGraphAnalyzerTest {
         val resultTimeList = mutableListOf<Duration>()
         val result = (1..repeat).map {
             measureMap({ resultTimeList.add(it) }) {
-                fullGraphAnalyzer.getShortestPathParallel(
+                parallelGraphAnalyzer.getShortestPathParallel(
                     startPoint = startPoint,
                     endPoint = endPoint,
                     technicalAllowedAtStart = true,
@@ -564,11 +566,12 @@ internal class ParallelGraphAnalyzerTest {
                 )
             }
         }.first()
+
         try {
             if (startOnGraph && endOnGraph) {
                 assertEquals(startPoint, result.first()) { "Incorrect starting point" }
                 assertEquals(endPoint, result.last()) { "Incorrect ending point" }
-                result.assertExistingRoute(fullGraphAnalyzer)
+                result.assertExistingRoute(parallelGraphAnalyzer)
             } else if (result.size > 2) {
                 if (!startOnGraph) {
                     assertIsNeighbour(result[0], result[1], roads)
