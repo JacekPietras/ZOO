@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal class GraphAnalyzer {
+internal class ObsoleteGraphAnalyzer {
 
     private var nodes: MutableSet<Node>? = null
     private val snapper = PointSnapper()
@@ -54,6 +54,30 @@ internal class GraphAnalyzer {
                 technicalAllowed = technicalAllowed,
             )
         }
+
+    internal suspend fun getShortestPath(
+        endPoint: PointD,
+        startPoint: PointD?,
+        technicalAllowedAtStart: Boolean = true,
+        technicalAllowedAtEnd: Boolean = false,
+    ): List<PointD> {
+        mutex.withLock {
+            val nodes = waitForNodes()
+
+            if (startPoint == null) return listOf(endPoint)
+            if (startPoint == endPoint) return listOf(endPoint)
+            if (nodes.isEmpty()) return listOf(endPoint)
+
+            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart).let { makeNode(it) }
+            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd).let { makeNode(it) }
+
+            return getShortestPathJob(
+                start = snapStart,
+                end = snapEnd,
+                technicalAllowed = technicalAllowedAtEnd,
+            ).map { PointD(it.x, it.y) }
+        }
+    }
 
     internal suspend fun getShortestPathParallel(
         endPoint: PointD,
@@ -107,7 +131,7 @@ internal class GraphAnalyzer {
             end = end,
         )
 
-    private suspend fun revertConnections(vararg nodes: SnappedNode) {
+    internal suspend fun revertConnections(vararg nodes: SnappedNode) {
         nodes
             .filterIsInstance<NewSnappedNode>()
             .map(NewSnappedNode::node)
@@ -145,7 +169,7 @@ internal class GraphAnalyzer {
         return checkNotNull(nodes)
     }
 
-    private suspend fun makeNode(snap: SnappedOnEdge): SnappedNode =
+    internal suspend fun makeNode(snap: SnappedOnEdge): SnappedNode =
         when (snap.point) {
             snap.near1.point -> SnappedNode(snap.near1)
             snap.near2.point -> SnappedNode(snap.near2)

@@ -7,7 +7,6 @@ import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AssertionFailureBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 
@@ -85,7 +84,7 @@ internal class ShortestPathInGeneratedGraphTest {
             ),
         )
 
-        val result = roads.toGraph().getShortestPath(
+        val result = roads.toGraph().getShortestPathParallel(
             startPoint = PointD(9, 11),
             endPoint = PointD(0, 0),
             technicalAllowedAtStart = true,
@@ -123,7 +122,7 @@ internal class ShortestPathInGeneratedGraphTest {
             ),
         )
 
-        val result = roads.toGraph().getShortestPath(
+        val result = roads.toGraph().getShortestPathParallel(
             startPoint = PointD(0, 0),
             endPoint = PointD(9, 11),
             technicalAllowedAtStart = true,
@@ -161,7 +160,7 @@ internal class ShortestPathInGeneratedGraphTest {
             ),
         )
 
-        val result = roads.toGraph().getShortestPath(
+        val result = roads.toGraph().getShortestPathParallel(
             startPoint = PointD(0, 0),
             endPoint = PointD(1, 11),
             technicalAllowedAtStart = true,
@@ -193,7 +192,7 @@ internal class ShortestPathInGeneratedGraphTest {
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
 
         val result = measureMap({ println("Calculated in $it") }) {
-            graphAnalyzer.getShortestPath(
+            graphAnalyzer.getShortestPathParallel(
                 endPoint = end,
                 startPoint = start,
                 technicalAllowedAtStart = true,
@@ -265,6 +264,9 @@ internal class ShortestPathInGeneratedGraphTest {
 
         internal fun List<List<PointD>>.toGraph(): GraphAnalyzer =
             GraphAnalyzer().also { it.initialize(map(MapItemEntity::PathEntity), emptyList()) }
+
+        internal fun List<List<PointD>>.toObsoleteGraph(): ObsoleteGraphAnalyzer =
+            ObsoleteGraphAnalyzer().also { it.initialize(map(MapItemEntity::PathEntity), emptyList()) }
 
         internal fun List<PointD>.assertExistingRoute(roads: List<List<PointD>>) {
             zipWithNext { a, b ->

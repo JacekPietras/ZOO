@@ -8,6 +8,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGra
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.generatePoint
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.getRandom
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toGraph
+import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toObsoleteGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
@@ -190,8 +191,6 @@ internal class ParallelGraphAnalyzerTest {
                 connections = 2000,
                 startOnGraph = false,
                 endOnGraph = false,
-                repeat = 1,
-                print = true,
             )
         }
     }
@@ -206,17 +205,17 @@ internal class ParallelGraphAnalyzerTest {
 //        )
 //    }
 
-//    @Test
-//    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
-//        doTests(
-//            times = 1_000_000,
-//            seed = 5468,
-//            numberOfCities = 1000,
-//            connections = 2000,
-//            startOnGraph = false,
-//            endOnGraph = false,
-//        )
-//    }
+    @Test
+    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
+        doTests(
+            times = 1_000_000,
+            seed = 0,
+            numberOfCities = 1000,
+            connections = 2000,
+            startOnGraph = false,
+            endOnGraph = false,
+        )
+    }
 
 //    @Test
 //    fun `test generation (multiple) with small graphs`() = runTest {
@@ -514,7 +513,7 @@ internal class ParallelGraphAnalyzerTest {
         endOnGraph: Boolean = false,
         print: Boolean = true,
     ): List<PointD> {
-        val fullGraphAnalyzer = roads.toGraph()
+        val fullGraphAnalyzer = roads.toObsoleteGraph()
         val parallelGraphAnalyzer = roads.toGraph()
         var fullGraphFailure: Throwable? = null
         var parallelGraphFailure: Throwable? = null
@@ -736,6 +735,17 @@ internal class ParallelGraphAnalyzerTest {
         }
     }
 
+    private suspend fun List<PointD>.assertExistingRoute(graph: ObsoleteGraphAnalyzer) {
+        zipWithNext { a, b ->
+            val foundConnection = graph
+                .waitForNodes()
+                .allEdges()
+                .map { it.first.point to it.second.point }
+                .any { (v1, v2) -> a == v1 && b == v2 || a == v2 && b == v1 }
+            Assertions.assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+        }
+    }
+
     private fun String.next(): String {
         var carry = true
         val result = this.reversed().asIterable().map {
@@ -757,9 +767,8 @@ internal class ParallelGraphAnalyzerTest {
         }
     }
 
-
-    internal suspend fun getShortestPathForTest(
-        graphAnalyzer: GraphAnalyzer,
+    private suspend fun getShortestPathForTest(
+        graphAnalyzer: ObsoleteGraphAnalyzer,
         endPoint: PointD,
         startPoint: PointD?,
         technicalAllowedAtStart: Boolean = true,
