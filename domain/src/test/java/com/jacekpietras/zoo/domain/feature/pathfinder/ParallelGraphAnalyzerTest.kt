@@ -16,6 +16,7 @@ import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -733,7 +734,7 @@ internal class ParallelGraphAnalyzerTest {
                 .allEdges()
                 .map { it.first.point to it.second.point }
                 .any { (v1, v2) -> a == v1 && b == v2 || a == v2 && b == v1 }
-            Assertions.assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+            assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
         }
     }
 
@@ -744,7 +745,7 @@ internal class ParallelGraphAnalyzerTest {
                 .allEdges()
                 .map { it.first.point to it.second.point }
                 .any { (v1, v2) -> a == v1 && b == v2 || a == v2 && b == v1 }
-            Assertions.assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
+            assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
         }
     }
 

@@ -282,7 +282,6 @@ internal class ShortestPathInGeneratedGraphTest {
                         .reason("Not found connection $a <-> $b")
                         .buildAndThrow()
                 }
-//                assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
             }
         }
 
