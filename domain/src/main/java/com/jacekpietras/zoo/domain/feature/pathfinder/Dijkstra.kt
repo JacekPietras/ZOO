@@ -7,7 +7,7 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn.SnappedOnE
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn.SnappedOnNode
 import java.util.PriorityQueue
 
-internal class ParallelDijkstra(
+internal class Dijkstra(
     private val vertices: Set<Node>,
     private val technicalAllowed: Boolean = false,
 ) {

@@ -74,7 +74,7 @@ internal class GraphAnalyzer {
         end: SnappedOn,
         technicalAllowed: Boolean = false,
     ): List<Node> =
-        ParallelDijkstra(
+        Dijkstra(
             vertices = waitForNodes(),
             technicalAllowed = technicalAllowed,
         ).calculate(
