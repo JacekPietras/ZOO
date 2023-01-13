@@ -181,13 +181,26 @@ internal class ParallelGraphAnalyzerTest {
                 endOnGraph = false,
             )
         }
+
+        @Test
+        fun `find shortest path 17`() = runTest {
+            doTest(
+                seed = 5467,
+                numberOfCities = 1000,
+                connections = 2000,
+                startOnGraph = false,
+                endOnGraph = false,
+                repeat = 1,
+                print = true,
+            )
+        }
     }
 
 //    @Test
 //    fun `test generation (multiple) with big graphs`() = runTest {
 //        doTests(
 //            times = 20_000,
-//            seed = 82_519,
+//            seed = 0,
 //            numberOfCities = 1000,
 //            connections = 2000,
 //        )
@@ -196,8 +209,8 @@ internal class ParallelGraphAnalyzerTest {
 //    @Test
 //    fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
 //        doTests(
-//            times = 100_000,
-//            seed = 0,
+//            times = 1_000_000,
+//            seed = 5468,
 //            numberOfCities = 1000,
 //            connections = 2000,
 //            startOnGraph = false,
