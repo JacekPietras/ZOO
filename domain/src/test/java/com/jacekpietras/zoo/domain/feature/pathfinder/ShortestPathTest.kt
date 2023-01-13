@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.domain.feature.pathfinder
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toObsoleteGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
+import com.jacekpietras.zoo.domain.feature.pathfinder.obsolete.ObsoleteGraphAnalyzer
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach

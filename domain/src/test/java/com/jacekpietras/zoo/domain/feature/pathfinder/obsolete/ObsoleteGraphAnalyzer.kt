@@ -1,9 +1,11 @@
 @file:Suppress("unused")
 
-package com.jacekpietras.zoo.domain.feature.pathfinder
+package com.jacekpietras.zoo.domain.feature.pathfinder.obsolete
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
+import com.jacekpietras.zoo.domain.feature.pathfinder.NodeSetFactory
+import com.jacekpietras.zoo.domain.feature.pathfinder.PointSnapper
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn.SnappedOnEdge
 import kotlinx.coroutines.delay
@@ -85,7 +87,7 @@ internal class ObsoleteGraphAnalyzer {
         end: SnappedNode,
         technicalAllowed: Boolean = false,
     ): List<Node> =
-        Dijkstra(
+        ObsoleteDijkstra(
             vertices = waitForNodes(),
             start = start.node,
             end = end.node,

@@ -10,6 +10,8 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGra
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.ShortestPathInGeneratedGraphTest.Companion.toObsoleteGraph
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
+import com.jacekpietras.zoo.domain.feature.pathfinder.obsolete.ObsoleteDijkstra
+import com.jacekpietras.zoo.domain.feature.pathfinder.obsolete.ObsoleteGraphAnalyzer
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
@@ -796,7 +798,7 @@ internal class ParallelGraphAnalyzerTest {
             throw IllegalStateException("Should not happen")
         }
 
-        return Dijkstra(
+        return ObsoleteDijkstra(
             vertices = nodes,
             start = snapStart2.node,
             end = snapEnd2.node,

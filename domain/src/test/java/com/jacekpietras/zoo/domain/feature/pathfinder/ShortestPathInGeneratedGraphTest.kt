@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.domain.feature.pathfinder
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
+import com.jacekpietras.zoo.domain.feature.pathfinder.obsolete.ObsoleteGraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.tsp.algorithms.City
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
