@@ -29,7 +29,19 @@ internal class StageTSPSolverImpl(
     ): TspResult {
         val pointCalculationCache = PointCalculationCache()
         currentRegions = mapRepository.getCurrentRegions()
+        preCalculateCache(stages, pointCalculationCache)
 
+        val resultStages = findShortestStagesOption(stages, pointCalculationCache)
+
+        val pathParts = resultStages.makePath(pointCalculationCache)
+        return TspResult(
+            stages = resultStages,
+            stops = pathParts.map(List<PointD>::last),
+            path = pathParts.flatten(),
+        )
+    }
+
+    private suspend fun preCalculateCache(stages: List<Stage>, pointCalculationCache: PointCalculationCache) {
         if (BuildConfig.DEBUG) {
             val measureCenter = measureTime {
                 stages.forEach { it.getCenter() }
@@ -43,15 +55,6 @@ internal class StageTSPSolverImpl(
             }
             Timber.d("Optimization dijkstra took $measureDijkstra")
         }
-
-        val resultStages = findShortestStagesOption(stages, pointCalculationCache)
-
-        val pathParts = resultStages.makePath(pointCalculationCache)
-        return TspResult(
-            stages = resultStages,
-            stops = pathParts.map(List<PointD>::last),
-            path = pathParts.flatten(),
-        )
     }
 
     private suspend fun findShortestStagesOption(
