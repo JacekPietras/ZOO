@@ -53,8 +53,4 @@ data class PointD(
             x - second.x,
             y - second.y
         )
-
-    fun toShortString(): String = "[${x.form()},${y.form()}]"
-
-    private fun Double.form() = "%.6f".format(this)
 }

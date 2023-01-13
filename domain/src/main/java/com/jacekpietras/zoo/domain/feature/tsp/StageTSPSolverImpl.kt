@@ -123,7 +123,7 @@ internal class StageTSPSolverImpl(
     private suspend fun calculateRegion(prev: RegionId, next: RegionId): Calculation {
         val prevPoint = prev.getCenter()
         val nextPoint = next.getCenter()
-        val list = graphAnalyzer.getShortestPathParallel(
+        val list = graphAnalyzer.getShortestPath(
             prevPoint,
             nextPoint,
             technicalAllowedAtStart = false,
@@ -153,7 +153,7 @@ internal class StageTSPSolverImpl(
         pointCalculationCache: PointCalculationCache
     ): Calculation {
         val path = graphAnalyzer
-            .getShortestPathParallel(
+            .getShortestPath(
                 prevPoint,
                 nextPoint,
                 technicalAllowedAtStart = false,

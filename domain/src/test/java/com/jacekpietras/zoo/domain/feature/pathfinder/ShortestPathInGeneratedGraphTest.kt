@@ -85,7 +85,7 @@ internal class ShortestPathInGeneratedGraphTest {
             ),
         )
 
-        val result = roads.toGraph().getShortestPathParallel(
+        val result = roads.toGraph().getShortestPath(
             startPoint = PointD(9, 11),
             endPoint = PointD(0, 0),
             technicalAllowedAtStart = true,
@@ -123,7 +123,7 @@ internal class ShortestPathInGeneratedGraphTest {
             ),
         )
 
-        val result = roads.toGraph().getShortestPathParallel(
+        val result = roads.toGraph().getShortestPath(
             startPoint = PointD(0, 0),
             endPoint = PointD(9, 11),
             technicalAllowedAtStart = true,
@@ -161,7 +161,7 @@ internal class ShortestPathInGeneratedGraphTest {
             ),
         )
 
-        val result = roads.toGraph().getShortestPathParallel(
+        val result = roads.toGraph().getShortestPath(
             startPoint = PointD(0, 0),
             endPoint = PointD(1, 11),
             technicalAllowedAtStart = true,
@@ -193,7 +193,7 @@ internal class ShortestPathInGeneratedGraphTest {
         val end = points.getRandom(random).let { PointD(it.x, it.y) }
 
         val result = measureMap({ println("Calculated in $it") }) {
-            graphAnalyzer.getShortestPathParallel(
+            graphAnalyzer.getShortestPath(
                 endPoint = end,
                 startPoint = start,
                 technicalAllowedAtStart = true,

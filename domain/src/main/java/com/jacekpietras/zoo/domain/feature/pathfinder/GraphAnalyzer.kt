@@ -40,13 +40,13 @@ internal class GraphAnalyzer {
         startPoint: SnappedOnEdge,
         technicalAllowed: Boolean = false,
     ): List<Node> =
-        getShortestPathJobParallel(
+        getShortestPathJob(
             start = startPoint,
             end = endPoint,
             technicalAllowed = technicalAllowed,
         )
 
-    internal suspend fun getShortestPathParallel(
+    internal suspend fun getShortestPath(
         endPoint: PointD,
         startPoint: PointD?,
         technicalAllowedAtStart: Boolean = true,
@@ -62,14 +62,14 @@ internal class GraphAnalyzer {
 
         if (snapStart == snapEnd) return listOf(snapEnd.point)
 
-        return getShortestPathJobParallel(
+        return getShortestPathJob(
             start = snapStart,
             end = snapEnd,
             technicalAllowed = technicalAllowedAtEnd,
         ).map(Node::point)
     }
 
-    private suspend fun getShortestPathJobParallel(
+    private suspend fun getShortestPathJob(
         start: SnappedOn,
         end: SnappedOn,
         technicalAllowed: Boolean = false,
