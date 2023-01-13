@@ -51,16 +51,19 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .pushAndDo(
                         fast = ::emitPlanWithoutCalculations,
                         long = { plan, collector ->
-                            launchBackground(job) {
-                                printMeasure {
-                                    val (seen, notSeen) = plan.stages.partition(::isSeen)
-                                    val result = tspSolver
-                                        .findShortPathAndStages(notSeen)
-                                        .addSeen(seen)
-                                    job.save(null)
-                                    collector.emit(result)
-                                    saveBetterPlan(plan, result.stages)
-                                }
+                            with(CoroutineScope(Dispatchers.Default)) {
+                                launch {
+                                    printMeasure {
+                                        val (seen, notSeen) = plan.stages.partition(::isSeen)
+                                        val result = tspSolver
+                                            .findShortPathAndStages(notSeen)
+                                            .addSeen(seen)
+                                        job.save(null)
+                                        if (!isActive) return@launch
+                                        collector.emit(result)
+                                        saveBetterPlan(plan, result.stages)
+                                    }
+                                }.let(job::save)
                             }
                         },
                     )
@@ -72,17 +75,6 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private inline fun printMeasure(block: () -> Unit) {
         val measure = measureTime(block)
         Timber.d("Optimization step took $measure")
-    }
-
-    private suspend fun launchBackground(
-        job: Storage<Job?>,
-        block: suspend () -> Unit,
-    ) {
-        with(CoroutineScope(Dispatchers.Default)) {
-            launch {
-                block()
-            }.let(job::save)
-        }
     }
 
     private suspend fun emitPlanWithoutCalculations(
