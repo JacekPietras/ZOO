@@ -5,7 +5,7 @@ import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Intervals
 import com.jacekpietras.zoo.domain.feature.pathfinder.model.Node
-import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOnEdge
+import com.jacekpietras.zoo.domain.feature.pathfinder.model.SnappedOn.SnappedOnEdge
 import com.jacekpietras.zoo.domain.model.VisitedRoadEdge
 import kotlin.math.max
 import kotlin.math.min

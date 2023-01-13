@@ -16,7 +16,16 @@ internal inline fun Iterable<Node>.forAllEdges(block: (p1: Node, p2: Node, techn
     }
 }
 
+internal fun Iterable<Node>.allEdges(): List<Triple<Node, Node, Boolean>> {
+    val result = mutableListOf<Triple<Node, Node, Boolean>>()
+    forAllEdges { node, node2, technical -> result.add(Triple(node, node2, technical)) }
+    return result
+}
+
 internal fun cartesian(a: Node, b: Node): Double =
+    sqrt((a.x - b.x).pow2 + (a.y - b.y).pow2)
+
+internal fun cartesian(a: PointD, b: PointD): Double =
     sqrt((a.x - b.x).pow2 + (a.y - b.y).pow2)
 
 internal fun haversine(a: PointD, b: PointD): Double =
