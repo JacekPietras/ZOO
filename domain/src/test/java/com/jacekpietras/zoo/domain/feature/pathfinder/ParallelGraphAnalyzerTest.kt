@@ -776,12 +776,17 @@ internal class ParallelGraphAnalyzerTest {
         val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
 
         // guarantee good stable result in tests
-        val snapStart2 = snapper.getSnappedOnEdge(nodes, snapStart.point, technicalAllowed = technicalAllowedAtStart)
-            .copy(point = snapStart.point)
-            .let { graphAnalyzer.makeNode(it) }
-        val snapEnd2 = snapper.getSnappedOnEdge(nodes, snapEnd.point, technicalAllowed = technicalAllowedAtEnd)
-            .copy(point = snapEnd.point)
-            .let { graphAnalyzer.makeNode(it) }
+        val snapStart2 = snapStart.let { graphAnalyzer.makeNode(it) }
+        val snapEnd2 = if (isCommonEdge(snapEnd.near1, snapEnd.near2)) {
+            snapEnd.let { graphAnalyzer.makeNode(it) }
+        } else if (isCommonEdge(snapEnd.near1, snapStart2.node)) {
+            snapEnd.copy(near2 = snapStart2.node).let { graphAnalyzer.makeNode(it) }
+        } else if (isCommonEdge(snapEnd.near2, snapStart2.node)) {
+            snapEnd.copy(near1 = snapStart2.node).let { graphAnalyzer.makeNode(it) }
+        } else {
+            throw IllegalStateException("Should not happen")
+        }
+
         return Dijkstra(
             vertices = nodes,
             start = snapStart2.node,
@@ -792,4 +797,10 @@ internal class ParallelGraphAnalyzerTest {
             .also { graphAnalyzer.revertConnections(snapStart2, snapEnd2) }
             .map { PointD(it.x, it.y) }
     }
+
+    private fun isCommonEdge(
+        n1: Node,
+        n2: Node
+    ): Boolean =
+        n1.edges.any { it.node == n2 }
 }
