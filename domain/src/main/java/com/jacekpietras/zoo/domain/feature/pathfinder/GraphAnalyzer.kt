@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 
 internal class GraphAnalyzer {
 
-    private var nodes: MutableSet<Node>? = null
+    private var nodes: Set<Node>? = null
     private val snapper = PointSnapper()
 
     fun initialize(roads: List<PathEntity>, technical: List<PathEntity>) {
@@ -82,7 +82,7 @@ internal class GraphAnalyzer {
             end = end,
         )
 
-    internal suspend fun waitForNodes(): MutableSet<Node> {
+    internal suspend fun waitForNodes(): Set<Node> {
         while (nodes == null) {
             delay(100)
         }

@@ -14,7 +14,6 @@ import com.jacekpietras.zoo.domain.feature.pathfinder.obsolete.ObsoleteDijkstra
 import com.jacekpietras.zoo.domain.feature.pathfinder.obsolete.ObsoleteGraphAnalyzer
 import com.jacekpietras.zoo.domain.utils.measureMap
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
@@ -212,7 +211,7 @@ internal class ParallelGraphAnalyzerTest {
     fun `test generation (multiple) with big graphs and not started on graph`() = runTest {
         doTests(
             times = 1_000_000,
-            seed = 25309,
+            seed = 37935,
             numberOfCities = 1000,
             connections = 2000,
             startOnGraph = false,
