@@ -522,7 +522,8 @@ internal class ParallelGraphAnalyzerTest {
         val fullResultTimeList = mutableListOf<Duration>()
         val fullResult = (1..repeat).map {
             measureMap({ fullResultTimeList.add(it) }) {
-                fullGraphAnalyzer.getShortestPathForTest(
+                getShortestPathForTest(
+                    graphAnalyzer = fullGraphAnalyzer,
                     startPoint = startPoint,
                     endPoint = endPoint,
                     technicalAllowedAtStart = true,
@@ -552,11 +553,11 @@ internal class ParallelGraphAnalyzerTest {
             fullGraphFailure = failure
         }
 
-        val map = mutableMapOf<PointD, Char>()
+        val map = mutableMapOf<PointD, String>()
         if (print) {
-            printFullGraph(roads, map, parallelGraphAnalyzer.waitForNodes())
+            printFullGraph(map, parallelGraphAnalyzer.waitForNodes())
             println("\n-------------\n")
-            println("Expected: ${fullResult.joinToString { (map[it]?.toString() ?: "") + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
+            println("Expected: ${fullResult.joinToString { (map[it] ?: "") + "(" + it.x.toInt() + "," + it.y.toInt() + ")" }}\n")
         }
 
         val resultTimeList = mutableListOf<Duration>()
@@ -614,8 +615,8 @@ internal class ParallelGraphAnalyzerTest {
                 else -> ", "
             }
             assertEquals(
-                fullResult.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) },
-                result.map { (map[it]?.toString() ?: "") + (it.x.toInt() to it.y.toInt()) }) {
+                fullResult.map { (map[it] ?: "") + (it.x.toInt() to it.y.toInt()) },
+                result.map { (map[it] ?: "") + (it.x.toInt() to it.y.toInt()) }) {
                 "Result from Full Graph is different\n" +
                         "Full distance: ${fullResult.distance()}${diffSign}Parallel distance: ${result.distance()}\n" +
                         "Full length: ${fullResult.size}, Parallel length: ${result.size}\n"
@@ -700,18 +701,18 @@ internal class ParallelGraphAnalyzerTest {
     private fun List<Duration>.average() =
         map { it.inWholeNanoseconds }.average().toDuration(DurationUnit.NANOSECONDS)
 
-    private fun printFullGraph(roads: List<List<PointD>>, map: MutableMap<PointD, Char>, nodes: Collection<Node>) {
-        var letter = 'A' - 1
+    private fun printFullGraph(map: MutableMap<PointD, String>, nodes: Collection<Node>) {
+        var letter: String? = null
         fun toLetter(point: PointD) =
-            (if (roads.size > 50) {
-                ""
-            } else if (map[point] != null) {
-                map[point]
+            (if (map[point] != null) {
+                map[point]!!
             } else {
-                letter += 1
-                map[point] = letter
-                letter
-            }.toString()) + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
+                (letter?.next() ?: "A")
+                    .also {
+                        letter = it
+                        map[point] = it
+                    }
+            }) + "(" + point.x.toInt() + "," + point.y.toInt() + ")"
 
         println(nodes.joinToString("\n") { node ->
             toLetter(node.point) + "\nedges:\n" + node.edges.joinToString("\n") { edge ->
@@ -733,5 +734,62 @@ internal class ParallelGraphAnalyzerTest {
                 .any { (v1, v2) -> a == v1 && b == v2 || a == v2 && b == v1 }
             Assertions.assertNotNull(foundConnection) { "Not found connection $a <-> $b" }
         }
+    }
+
+    private fun String.next(): String {
+        var carry = true
+        val result = this.reversed().asIterable().map {
+            if (carry) {
+                if (it == 'Z') {
+                    'A'
+                } else {
+                    carry = false
+                    it + 1
+                }
+            } else {
+                it
+            }
+        }.reversed()
+        return if (carry) {
+            "A" + result.map { 'A' }.joinToString("")
+        } else {
+            result.joinToString("")
+        }
+    }
+
+
+    internal suspend fun getShortestPathForTest(
+        graphAnalyzer: GraphAnalyzer,
+        endPoint: PointD,
+        startPoint: PointD?,
+        technicalAllowedAtStart: Boolean = true,
+        technicalAllowedAtEnd: Boolean = false,
+    ): List<PointD> {
+        val snapper = PointSnapper()
+        val nodes = graphAnalyzer.waitForNodes()
+
+        if (startPoint == null) return listOf(endPoint)
+        if (startPoint == endPoint) return listOf(endPoint)
+        if (nodes.isEmpty()) return listOf(endPoint)
+
+        val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
+        val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
+
+        // guarantee good stable result in tests
+        val snapStart2 = snapper.getSnappedOnEdge(nodes, snapStart.point, technicalAllowed = technicalAllowedAtStart)
+            .copy(point = snapStart.point)
+            .let { graphAnalyzer.makeNode(it) }
+        val snapEnd2 = snapper.getSnappedOnEdge(nodes, snapEnd.point, technicalAllowed = technicalAllowedAtEnd)
+            .copy(point = snapEnd.point)
+            .let { graphAnalyzer.makeNode(it) }
+        return Dijkstra(
+            vertices = nodes,
+            start = snapStart2.node,
+            end = snapEnd2.node,
+            technicalAllowed = technicalAllowedAtEnd
+        )
+            .getPath()
+            .also { graphAnalyzer.revertConnections(snapStart2, snapEnd2) }
+            .map { PointD(it.x, it.y) }
     }
 }

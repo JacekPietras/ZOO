@@ -49,8 +49,8 @@ internal class GraphAnalyzer {
     ): List<Node> =
         mutex.withLock {
             getShortestPathJob(
-                start = startPoint.makeNode(),
-                end = endPoint.makeNode(),
+                start = makeNode(startPoint),
+                end = makeNode(endPoint),
                 technicalAllowed = technicalAllowed,
             )
         }
@@ -68,44 +68,12 @@ internal class GraphAnalyzer {
             if (startPoint == endPoint) return listOf(endPoint)
             if (nodes.isEmpty()) return listOf(endPoint)
 
-            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart).makeNode()
-            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd).makeNode()
+            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart).let { makeNode(it) }
+            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd).let { makeNode(it) }
 
             return getShortestPathJob(
                 start = snapStart,
                 end = snapEnd,
-                technicalAllowed = technicalAllowedAtEnd,
-            ).map { PointD(it.x, it.y) }
-        }
-    }
-
-    internal suspend fun getShortestPathForTest(
-        endPoint: PointD,
-        startPoint: PointD?,
-        technicalAllowedAtStart: Boolean = true,
-        technicalAllowedAtEnd: Boolean = false,
-    ): List<PointD> {
-        mutex.withLock {
-            val nodes = waitForNodes()
-
-            if (startPoint == null) return listOf(endPoint)
-            if (startPoint == endPoint) return listOf(endPoint)
-            if (nodes.isEmpty()) return listOf(endPoint)
-
-            val snapStart = snapper.getSnappedOnEdge(nodes, startPoint, technicalAllowed = technicalAllowedAtStart)
-            val snapEnd = snapper.getSnappedOnEdge(nodes, endPoint, technicalAllowed = technicalAllowedAtEnd)
-
-            // guarantee good stable result in tests
-            val snapStart2 = snapper.getSnappedOnEdge(nodes, snapStart.point, technicalAllowed = technicalAllowedAtStart)
-                .copy(point = snapStart.point)
-                .makeNode()
-            val snapEnd2 = snapper.getSnappedOnEdge(nodes, snapEnd.point, technicalAllowed = technicalAllowedAtEnd)
-                .copy(point = snapEnd.point)
-                .makeNode()
-
-            return getShortestPathJob(
-                start = snapStart2,
-                end = snapEnd2,
                 technicalAllowed = technicalAllowedAtEnd,
             ).map { PointD(it.x, it.y) }
         }
@@ -163,7 +131,7 @@ internal class GraphAnalyzer {
             end = end,
         )
 
-    private suspend fun revertConnections(vararg nodes: SnappedNode) {
+    internal suspend fun revertConnections(vararg nodes: SnappedNode) {
         nodes
             .filterIsInstance<NewSnappedNode>()
             .map(NewSnappedNode::node)
@@ -201,11 +169,11 @@ internal class GraphAnalyzer {
         return checkNotNull(nodes)
     }
 
-    private suspend fun SnappedOnEdge.makeNode(): SnappedNode =
-        when (point) {
-            near1.point -> SnappedNode(near1)
-            near2.point -> SnappedNode(near2)
-            else -> createAndConnect(this)
+    internal suspend fun makeNode(snap: SnappedOnEdge): SnappedNode =
+        when (snap.point) {
+            snap.near1.point -> SnappedNode(snap.near1)
+            snap.near2.point -> SnappedNode(snap.near2)
+            else -> createAndConnect(snap)
         }
 
     private suspend fun createAndConnect(
@@ -228,11 +196,11 @@ internal class GraphAnalyzer {
         return NewSnappedNode(node)
     }
 
-    private open class SnappedNode(
+    internal open class SnappedNode(
         val node: Node,
     )
 
-    private class NewSnappedNode(
+    internal class NewSnappedNode(
         node: Node,
     ) : SnappedNode(node)
 }
