@@ -43,7 +43,7 @@ internal suspend fun doVrpTest(
         }.padStart(7)
         println("err: $errorString in $durationAvg μs")
 
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         println("crashed: " + e.message)
     }
 }

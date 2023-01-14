@@ -70,7 +70,6 @@ internal class DivorcedVRPAlgorithm<T : Any>(
         return connected
     }
 
-
     private fun List<T>.shiftStartTo(): List<T> {
         val indexOfDummy = indexOfFirst { it == dummy }
         val begin = subList(0, indexOfDummy)
@@ -93,6 +92,7 @@ internal class DivorcedVRPAlgorithm<T : Any>(
         run(points, distanceCalculation, null)
 
     private companion object {
+
         const val MAX = 10000.0//Double.MAX_VALUE/2
     }
 }
