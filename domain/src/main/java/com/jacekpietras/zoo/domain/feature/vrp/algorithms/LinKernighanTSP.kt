@@ -96,7 +96,6 @@ class LinKernighanTSP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
                 break
             }
 
-
             // Step 4.f from the paper
             gi += getDistance(tIndex[tIndex.size - 2], newT)
             if (gi - getDistance(newT, t1) > gStar) {
