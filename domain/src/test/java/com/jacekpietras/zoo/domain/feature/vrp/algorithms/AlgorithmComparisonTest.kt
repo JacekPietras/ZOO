@@ -232,8 +232,9 @@ internal class AlgorithmComparisonTest {
 //            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
             "TwoOpt (my new)" to TwoOptHeuristicVRP(),
 
-            "Lin-Kernighan (divorced)" to DivorcedVRPAlgorithm(LinKernighanFromLibAdapter(), City(-1, -1)),
-            "Lin-Kernighan (lib)" to LinKernighanFromLibAdapter(),
+            // Lin-Kernighan, slow but should often give optimal solution (in theory :( )
+//            "Lin-Kernighan (divorced)" to DivorcedVRPAlgorithm(LinKernighanFromLibAdapter(), City(-1, -1)),
+//            "Lin-Kernighan (lib)" to LinKernighanFromLibAdapter(),
 
             // Genetic
 //            "SimulatedAnnealing" to SimulatedAnnealing(),
