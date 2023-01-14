@@ -74,7 +74,7 @@ val plannerModule = module {
     factory<ObserveCurrentPlanWithOptimizationUseCase> {
         ObserveCurrentPlanWithOptimizationUseCaseImpl(
             planRepository = get(),
-            tspSolver = get(),
+            vrpSolver = get(),
             gpsRepository = get(),
             observeCurrentPlanUseCase = get(),
         )

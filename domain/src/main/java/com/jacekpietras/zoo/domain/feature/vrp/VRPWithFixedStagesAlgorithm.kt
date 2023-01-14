@@ -1,6 +1,6 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.vrp
 
-internal interface TSPWithFixedStagesAlgorithm<T : Any> : TSPAlgorithm<T> {
+internal interface VRPWithFixedStagesAlgorithm<T : Any> : VRPAlgorithm<T> {
 
     suspend fun run(
         points: List<T>,

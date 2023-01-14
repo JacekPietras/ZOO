@@ -1,10 +1,10 @@
-package com.jacekpietras.zoo.domain.feature.tsp.algorithms
+package com.jacekpietras.zoo.domain.feature.vrp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.feature.vrp.VRPWithFixedStagesAlgorithm
 import timber.log.Timber
 import kotlin.random.Random
 
-internal class NearestNeighbor<T : Any> : TSPWithFixedStagesAlgorithm<T> {
+internal class NearestNeighborVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,

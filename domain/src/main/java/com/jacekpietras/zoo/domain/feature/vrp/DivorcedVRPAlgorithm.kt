@@ -1,9 +1,9 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.vrp
 
-internal class DivorcedTSPAlgorithm<T : Any>(
-    private val algorithm: TSPAlgorithm<T>,
+internal class DivorcedVRPAlgorithm<T : Any>(
+    private val algorithm: VRPAlgorithm<T>,
     private val dummy: T,
-) : TSPWithFixedStagesAlgorithm<T> {
+) : VRPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,

@@ -7,8 +7,8 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
-import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
-import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
+import com.jacekpietras.zoo.domain.feature.vrp.StageVRPSolver
+import com.jacekpietras.zoo.domain.feature.vrp.model.VrpResult
 import com.jacekpietras.zoo.domain.model.Region
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,12 +31,12 @@ import kotlin.time.measureTime
 internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     private val planRepository: PlanRepository,
     private val gpsRepository: GpsRepository,
-    private val tspSolver: StageTSPSolver,
+    private val vrpSolver: StageVRPSolver,
     private val observeCurrentPlanUseCase: ObserveCurrentPlanUseCase,
     private val isDebug: () -> Boolean = { BuildConfig.DEBUG },
 ) : ObserveCurrentPlanWithOptimizationUseCase {
 
-    override fun run(): Flow<TspResult> =
+    override fun run(): Flow<VrpResult> =
         Storage<List<Stage>>(emptyList()).let { calculation ->
             Storage<Job?>(null).let { job ->
                 observeCurrentPlanUseCase.run()
@@ -55,7 +55,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                                 launch {
                                     printMeasure {
                                         val (seen, notSeen) = plan.stages.partition(::isSeen)
-                                        val result = tspSolver
+                                        val result = vrpSolver
                                             .findShortPathAndStages(notSeen)
                                             .addSeen(seen)
                                         job.save(null)
@@ -79,15 +79,15 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
 
     private suspend fun emitPlanWithoutCalculations(
         plan: PlanEntity,
-        collector: FlowCollector<TspResult>,
+        collector: FlowCollector<VrpResult>,
     ) {
-        collector.emit(TspResult(plan.stages))
+        collector.emit(VrpResult(plan.stages))
     }
 
     private fun isSeen(stage: Stage) =
         stage is Stage.InRegion && stage.seen
 
-    private fun TspResult.addSeen(seen: List<Stage>) =
+    private fun VrpResult.addSeen(seen: List<Stage>) =
         copy(stages = seen + stages)
 
     private fun Storage<Job?>.purge() {
@@ -103,7 +103,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             if (isDebug()) {
                 val currentDistance = currentPlan.stages.distance()
                 val resultDistance = resultStages.distance()
-                Timber.d("Found better tsp solution $currentDistance -> $resultDistance")
+                Timber.d("Found better vrp solution $currentDistance -> $resultDistance")
             }
             with(CoroutineScope(Dispatchers.Default)) {
                 launch {
@@ -165,7 +165,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
     }
 
     private suspend fun List<Stage>.distance(): Double =
-        zipWithNext { a, b -> tspSolver.getDistance(a, b) }.sum()
+        zipWithNext { a, b -> vrpSolver.getDistance(a, b) }.sum()
 
     private fun <Y, T> Flow<Y>.pushAndDo(
         fast: suspend (Y, FlowCollector<T>) -> Unit,

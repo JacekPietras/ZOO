@@ -1,13 +1,13 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.vrp
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
-internal class MultiplyTSPAlgorithm<T : Any>(
-    private val algorithm1: TSPWithFixedStagesAlgorithm<T>,
-    private val algorithm2: TSPWithFixedStagesAlgorithm<T>,
-) : TSPWithFixedStagesAlgorithm<T> {
+internal class MultiplyVRPAlgorithm<T : Any>(
+    private val algorithm1: VRPWithFixedStagesAlgorithm<T>,
+    private val algorithm2: VRPWithFixedStagesAlgorithm<T>,
+) : VRPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
@@ -48,6 +48,6 @@ internal class MultiplyTSPAlgorithm<T : Any>(
         points.zipWithNext { prev, next -> distanceCalculation(prev, next) }.sum()
 }
 
-internal operator fun <T : Any> TSPWithFixedStagesAlgorithm<T>.times(second: TSPWithFixedStagesAlgorithm<T>): TSPWithFixedStagesAlgorithm<T> {
-    return MultiplyTSPAlgorithm(this, second)
+internal operator fun <T : Any> VRPWithFixedStagesAlgorithm<T>.times(second: VRPWithFixedStagesAlgorithm<T>): VRPWithFixedStagesAlgorithm<T> {
+    return MultiplyVRPAlgorithm(this, second)
 }

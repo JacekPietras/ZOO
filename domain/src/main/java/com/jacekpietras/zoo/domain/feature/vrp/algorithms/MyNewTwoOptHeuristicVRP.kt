@@ -1,12 +1,12 @@
-package com.jacekpietras.zoo.domain.feature.tsp.algorithms
+package com.jacekpietras.zoo.domain.feature.vrp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.feature.vrp.VRPWithFixedStagesAlgorithm
 import com.jacekpietras.zoo.domain.utils.forEachPairIndexed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 
-class MyNewTwoOptHeuristicTSP<T : Any> : TSPWithFixedStagesAlgorithm<T> {
+class MyNewTwoOptHeuristicVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,

@@ -6,7 +6,7 @@ import com.jacekpietras.zoo.domain.feature.map.di.mapModule
 import com.jacekpietras.zoo.domain.feature.pathfinder.di.pathFinderModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.feature.sensors.di.sensorsModule
-import com.jacekpietras.zoo.domain.feature.tsp.di.tspModule
+import com.jacekpietras.zoo.domain.feature.vrp.di.vrpModule
 import com.jacekpietras.zoo.domain.interactor.FindNearRegionWithDistanceUseCase
 import com.jacekpietras.zoo.domain.interactor.FindRegionUseCase
 import com.jacekpietras.zoo.domain.interactor.GetAnimalsInRegionUseCase
@@ -127,4 +127,4 @@ val domainModule = module {
             mapRepository = get(),
         )
     }
-} + favoritesModule + plannerModule + tspModule + pathFinderModule + sensorsModule + mapModule + animalModule
+} + favoritesModule + plannerModule + vrpModule + pathFinderModule + sensorsModule + mapModule + animalModule

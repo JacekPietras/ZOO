@@ -1,6 +1,6 @@
-package com.jacekpietras.zoo.domain.feature.tsp.algorithms
+package com.jacekpietras.zoo.domain.feature.vrp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.feature.vrp.VRPWithFixedStagesAlgorithm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
@@ -9,7 +9,7 @@ import java.util.Collections
 import kotlin.math.exp
 import kotlin.random.Random
 
-internal class SimulatedAnnealing<T : Any> : TSPWithFixedStagesAlgorithm<T> {
+internal class SimulatedAnnealing<T : Any> : VRPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,

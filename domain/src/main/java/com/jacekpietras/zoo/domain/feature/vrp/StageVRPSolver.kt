@@ -1,13 +1,13 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.vrp
 
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
-import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
+import com.jacekpietras.zoo.domain.feature.vrp.model.VrpResult
 
-internal interface StageTSPSolver {
+internal interface StageVRPSolver {
 
     suspend fun findShortPathAndStages(
         stages: List<Stage>,
-    ): TspResult
+    ): VrpResult
 
     suspend fun getDistance(prev: Stage, next: Stage): Double
 }

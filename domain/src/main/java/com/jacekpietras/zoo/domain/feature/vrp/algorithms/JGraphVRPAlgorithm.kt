@@ -1,14 +1,14 @@
-package com.jacekpietras.zoo.domain.feature.tsp.algorithms
+package com.jacekpietras.zoo.domain.feature.vrp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TSPAlgorithm
+import com.jacekpietras.zoo.domain.feature.vrp.VRPAlgorithm
 import org.jgrapht.Graph
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.jgrapht.graph.WeightedMultigraph
 
-internal class JGraphTSPAlgorithm<T : Any>(
+internal class JGraphVRPAlgorithm<T : Any>(
     private val algorithm: HamiltonianCycleAlgorithm<T, DefaultWeightedEdge>
-) : TSPAlgorithm<T> {
+) : VRPAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,

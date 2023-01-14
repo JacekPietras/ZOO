@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.vrp
 
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.haversine
@@ -7,18 +7,18 @@ import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
 import com.jacekpietras.zoo.domain.feature.pathfinder.GraphAnalyzer
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
-import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
+import com.jacekpietras.zoo.domain.feature.vrp.model.VrpResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.utils.forEachPair
 import timber.log.Timber
 import kotlin.time.measureTime
 
-internal class StageTSPSolverImpl(
+internal class StageVRPSolverImpl(
     private val graphAnalyzer: GraphAnalyzer,
     private val mapRepository: MapRepository,
-    private val tspAlgorithm: TSPWithFixedStagesAlgorithm<Stage>,
-) : StageTSPSolver {
+    private val vrpAlgorithm: VRPWithFixedStagesAlgorithm<Stage>,
+) : StageVRPSolver {
 
     private var regionCalculationCache = emptyList<RegionCalculation>()
     private val optionCreator = StageListOptionCreator()
@@ -26,7 +26,7 @@ internal class StageTSPSolverImpl(
 
     override suspend fun findShortPathAndStages(
         stages: List<Stage>,
-    ): TspResult {
+    ): VrpResult {
         val pointCalculationCache = PointCalculationCache()
         currentRegions = mapRepository.getCurrentRegions()
         preCalculateCache(stages, pointCalculationCache)
@@ -34,7 +34,7 @@ internal class StageTSPSolverImpl(
         val resultStages = findShortestStagesOption(stages, pointCalculationCache)
 
         val pathParts = resultStages.makePath(pointCalculationCache)
-        return TspResult(
+        return VrpResult(
             stages = resultStages,
             stops = pathParts.map(List<PointD>::last),
             path = pathParts.flatten(),
@@ -69,7 +69,7 @@ internal class StageTSPSolverImpl(
             optionCreator.run(
                 toCheck = stages,
                 onOptionFound = { stageOption ->
-                    val newStages = tspAlgorithm.run(
+                    val newStages = vrpAlgorithm.run(
                         points = stageOption,
                         distanceCalculation = { a, b -> calculate(a, b, pointCalculationCache).distance },
                         immutablePositions = immutablePositions,

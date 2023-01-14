@@ -1,9 +1,9 @@
-package com.jacekpietras.zoo.domain.feature.tsp
+package com.jacekpietras.zoo.domain.feature.vrp
 
-internal class SumTSPAlgorithm<T : Any>(
-    private val algorithm1: TSPWithFixedStagesAlgorithm<T>,
-    private val algorithm2: TSPWithFixedStagesAlgorithm<T>,
-) : TSPWithFixedStagesAlgorithm<T> {
+internal class SumVRPAlgorithm<T : Any>(
+    private val algorithm1: VRPWithFixedStagesAlgorithm<T>,
+    private val algorithm2: VRPWithFixedStagesAlgorithm<T>,
+) : VRPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
@@ -28,6 +28,6 @@ internal class SumTSPAlgorithm<T : Any>(
         run(points, distanceCalculation, null)
 }
 
-internal operator fun <T : Any> TSPWithFixedStagesAlgorithm<T>.plus(second: TSPWithFixedStagesAlgorithm<T>): TSPWithFixedStagesAlgorithm<T> {
-    return SumTSPAlgorithm(this, second)
+internal operator fun <T : Any> VRPWithFixedStagesAlgorithm<T>.plus(second: VRPWithFixedStagesAlgorithm<T>): VRPWithFixedStagesAlgorithm<T> {
+    return SumVRPAlgorithm(this, second)
 }

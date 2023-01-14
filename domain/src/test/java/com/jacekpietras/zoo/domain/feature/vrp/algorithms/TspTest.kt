@@ -1,6 +1,6 @@
-package com.jacekpietras.zoo.domain.feature.tsp.algorithms
+package com.jacekpietras.zoo.domain.feature.vrp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.feature.vrp.VRPWithFixedStagesAlgorithm
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.math.abs
 import kotlin.math.pow
@@ -9,8 +9,8 @@ import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.measureTime
 
-internal suspend fun doTspTest(
-    algorithm: TSPWithFixedStagesAlgorithm<City>,
+internal suspend fun doVrpTest(
+    algorithm: VRPWithFixedStagesAlgorithm<City>,
     seed: Long,
     numberOfCities: Int,
     bestExpected: Double = 0.0,
@@ -24,7 +24,7 @@ internal suspend fun doTspTest(
     val initialDistance = initial.distance().toInt()
     try {
         val (results, durations) = (1..times)
-            .map { doTspTest(initial, algorithm, immutablePositions) }
+            .map { doVrpTest(initial, algorithm, immutablePositions) }
             .unzip()
 
         val resultMin = results.min().toInt()
@@ -55,9 +55,9 @@ private fun <T> List<T>.dropBorder(): List<T> =
         this
     }
 
-private suspend fun doTspTest(
+private suspend fun doVrpTest(
     initial: List<City>,
-    algorithm: TSPWithFixedStagesAlgorithm<City>,
+    algorithm: VRPWithFixedStagesAlgorithm<City>,
     immutablePositions: List<Int>? = null,
 ): Pair<Double, Duration> {
     var tour: List<City>

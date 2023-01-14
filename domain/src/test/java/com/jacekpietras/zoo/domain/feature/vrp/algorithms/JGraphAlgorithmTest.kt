@@ -1,9 +1,9 @@
-package com.jacekpietras.zoo.domain.feature.tsp.algorithms
+package com.jacekpietras.zoo.domain.feature.vrp.algorithms
 
-import com.jacekpietras.zoo.domain.feature.tsp.DivorcedTSPAlgorithm
-import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
-import com.jacekpietras.zoo.domain.feature.tsp.plus
-import com.jacekpietras.zoo.domain.feature.tsp.times
+import com.jacekpietras.zoo.domain.feature.vrp.DivorcedVRPAlgorithm
+import com.jacekpietras.zoo.domain.feature.vrp.VRPWithFixedStagesAlgorithm
+import com.jacekpietras.zoo.domain.feature.vrp.plus
+import com.jacekpietras.zoo.domain.feature.vrp.times
 import kotlinx.coroutines.test.runTest
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
 import org.jgrapht.graph.DefaultWeightedEdge
@@ -186,7 +186,7 @@ internal class JGraphAlgorithmTest {
     ) = runTest {
         algorithms.forEach { (name, algorithm) ->
             println("\n--- $name ---")
-            doTspTest(
+            doVrpTest(
                 algorithm = algorithm,
                 seed = seed,
                 numberOfCities = numberOfCities,
@@ -199,50 +199,50 @@ internal class JGraphAlgorithmTest {
 
     companion object {
 
-        val algorithms = listOf<Pair<String, TSPWithFixedStagesAlgorithm<City>>>(
+        val algorithms = listOf<Pair<String, VRPWithFixedStagesAlgorithm<City>>>(
             // requires a lot of memory
             // O(2^V * V^2)
-            // "HeldKarp" to divorcedTSP(HeldKarpTSP()),
+            // "HeldKarp" to divorcedVRP(HeldKarpTSP()),
 
             // requires Triangle inequality (cannot hack with ZERO/MAX weights)
             // O(V^3 * E)
-            // "Christofides" to divorcedTSP(ChristofidesThreeHalvesApproxMetricTSP()),
+            // "Christofides" to divorcedVRP(ChristofidesThreeHalvesApproxMetricTSP()),
 
             // don't work with immutable and results are random
             // requires Triangle inequality (cannot hack with ZERO/MAX weights)
             // O(V^2 * log(V))
-            // "TwoApprox" to divorcedTSP(TwoApproxMetricTSP()),
+            // "TwoApprox" to divorcedVRP(TwoApproxMetricTSP()),
 
             // O(V^2 * log(V))
-            // "Greedy" to divorcedTSP(GreedyHeuristicTSP()),
+            // "Greedy" to divorcedVRP(GreedyHeuristicTSP()),
 
             // O(V^2) (runtime)
             // Weak
-            // "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
+            // "NearestInsertion" to divorcedVRP(NearestInsertionHeuristicTSP()),
 
             // O(V^2) (runtime)
-//            "NearestNeighbor (lib)" to divorcedTSP(NearestNeighborHeuristicTSP()),
+//            "NearestNeighbor (lib)" to divorcedVRP(NearestNeighborHeuristicTSP()),
 //            "NearestNeighbor (my)" to NearestNeighbor(),
 
-//            "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-//            "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
-//            "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
-//            "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
+//            "TwoOpt (1, near)" to divorcedVRP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
+//            "TwoOpt (100, near)" to divorcedVRP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
+//            "TwoOpt (1, rnd)" to divorcedVRP(TwoOptHeuristicTSP(1)),
+//            "TwoOpt (100, rnd)" to divorcedVRP(TwoOptHeuristicTSP(10)),
 //            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
 //            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
-            "TwoOpt (my new)" to MyNewTwoOptHeuristicTSP(),
+            "TwoOpt (my new)" to MyNewTwoOptHeuristicVRP(),
 
             // Genetic
 //            "SimulatedAnnealing" to SimulatedAnnealing(),
 
             // combinations
-            "2opt + anne" to MyNewTwoOptHeuristicTSP<City>() + SimulatedAnnealing(),
-            "nn + 2opt" to NearestNeighbor<City>() + MyNewTwoOptHeuristicTSP(),
-            "2opt * (nn + 2opt)" to MyNewTwoOptHeuristicTSP<City>() * (NearestNeighbor<City>() + MyNewTwoOptHeuristicTSP()),
+            "2opt + anne" to MyNewTwoOptHeuristicVRP<City>() + SimulatedAnnealing(),
+            "nn + 2opt" to NearestNeighborVRP<City>() + MyNewTwoOptHeuristicVRP(),
+            "2opt * (nn + 2opt)" to MyNewTwoOptHeuristicVRP<City>() * (NearestNeighborVRP<City>() + MyNewTwoOptHeuristicVRP()),
         )
 
         @Suppress("unused")
-        private fun divorcedTSP(algorithm: HamiltonianCycleAlgorithm<City, DefaultWeightedEdge>) =
-            DivorcedTSPAlgorithm(JGraphTSPAlgorithm(algorithm), City(-1, -1))
+        private fun divorcedVRP(algorithm: HamiltonianCycleAlgorithm<City, DefaultWeightedEdge>) =
+            DivorcedVRPAlgorithm(JGraphVRPAlgorithm(algorithm), City(-1, -1))
     }
 }

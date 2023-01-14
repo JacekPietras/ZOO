@@ -9,8 +9,8 @@ import com.jacekpietras.zoo.domain.feature.planner.model.PlanId
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
-import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
-import com.jacekpietras.zoo.domain.feature.tsp.model.TspResult
+import com.jacekpietras.zoo.domain.feature.vrp.StageVRPSolver
+import com.jacekpietras.zoo.domain.feature.vrp.model.VrpResult
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.domain.utils.assertFlowEquals
@@ -33,18 +33,18 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
 
     private val mockPlanRepository = mock<PlanRepository>()
     private val mockGpsRepository = mock<GpsRepository>()
-    private val mockTspSolver = mock<StageTSPSolver>()
+    private val mockVrpSolver = mock<StageVRPSolver>()
     private val mockObserveCurrentPlanUseCase = mock<ObserveCurrentPlanUseCase>()
 
     private val useCase = newUseCase(
         planRepository = mockPlanRepository,
         gpsRepository = mockGpsRepository,
-        tspSolver = mockTspSolver,
+        vrpSolver = mockVrpSolver,
         observeCurrentPlanUseCase = mockObserveCurrentPlanUseCase,
     )
 
     @Test
-    fun `when tsp solver is not producing data, then quick solution is returned`() = runTest {
+    fun `when vrp solver is not producing data, then quick solution is returned`() = runTest {
         whenever(mockObserveCurrentPlanUseCase.run()).thenReturn(flowOf(initialPlanFor4))
         whenever(mockGpsRepository.observeLatestPosition()).thenReturn(flowOf())
 
@@ -52,23 +52,23 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
 
         assertFlowEquals(
             result,
-            TspResult(initialStagesFor4),
+            VrpResult(initialStagesFor4),
         )
 
         verifyNoInteractions(mockPlanRepository)
     }
 
     @Test
-    fun `when tsp solver is producing data, then better solution is returned`() = runTest {
+    fun `when vrp solver is producing data, then better solution is returned`() = runTest {
         whenever(mockObserveCurrentPlanUseCase.run()).thenReturn(flowOf(initialPlanFor4))
         whenever(mockGpsRepository.observeLatestPosition()).thenReturn(flowOf())
-        whenever(mockTspSolver.findShortPathAndStages(initialStagesFor4)).doReturn(computedSolutionFor4)
+        whenever(mockVrpSolver.findShortPathAndStages(initialStagesFor4)).doReturn(computedSolutionFor4)
 
         val result = useCase.run()
 
         assertFlowEqualsWithTimeout(
             flow = result,
-            TspResult(initialStagesFor4),
+            VrpResult(initialStagesFor4),
             computedSolutionFor4,
         )
 
@@ -85,14 +85,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
 
         whenever(mockObserveCurrentPlanUseCase.run()).thenReturn(planFlow)
         whenever(mockGpsRepository.observeLatestPosition()).thenReturn(flowOf())
-        whenever(mockTspSolver.findShortPathAndStages(initialStagesFor4)).thenReturn(computedSolutionFor4, optimalSolutionFor4)
-        whenever(mockTspSolver.findShortPathAndStages(initialStagesFor5)).thenReturn(computedSolutionFor5)
+        whenever(mockVrpSolver.findShortPathAndStages(initialStagesFor4)).thenReturn(computedSolutionFor4, optimalSolutionFor4)
+        whenever(mockVrpSolver.findShortPathAndStages(initialStagesFor5)).thenReturn(computedSolutionFor5)
 
         val result = useCase.run()
 
         assertFlowEquals(
             flow = result,
-            TspResult(initialStagesFor4),
+            VrpResult(initialStagesFor4),
             computedSolutionFor4,
         )
 
@@ -115,12 +115,12 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
     private fun newUseCase(
         planRepository: PlanRepository = mockPlanRepository,
         gpsRepository: GpsRepository = mockGpsRepository,
-        tspSolver: StageTSPSolver = mockTspSolver,
+        vrpSolver: StageVRPSolver = mockVrpSolver,
         observeCurrentPlanUseCase: ObserveCurrentPlanUseCase = mockObserveCurrentPlanUseCase,
     ) = ObserveCurrentPlanWithOptimizationUseCaseImpl(
         planRepository = planRepository,
         gpsRepository = gpsRepository,
-        tspSolver = tspSolver,
+        vrpSolver = vrpSolver,
         observeCurrentPlanUseCase = observeCurrentPlanUseCase,
         isDebug = { false },
     )
@@ -146,7 +146,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
             stage4,
             stage3,
         )
-        val computedSolutionFor4 = TspResult(
+        val computedSolutionFor4 = VrpResult(
             stages = computedStagesFor4,
         )
         val optimalStagesFor4 = listOf(
@@ -155,7 +155,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
             stage3,
             stage4,
         )
-        val optimalSolutionFor4 = TspResult(
+        val optimalSolutionFor4 = VrpResult(
             stages = optimalStagesFor4,
         )
 
@@ -174,7 +174,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImplTest {
             stage5,
             stage3,
         )
-        val computedSolutionFor5 = TspResult(
+        val computedSolutionFor5 = VrpResult(
             stages = computedStagesFor5,
         )
 
