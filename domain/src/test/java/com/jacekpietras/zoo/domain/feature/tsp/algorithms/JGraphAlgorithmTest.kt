@@ -174,7 +174,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 1000,
             numberOfCities = 15,
-            bestExpected = 1918.4662028025448,
+            bestExpected = 1793.7921255545457,
             immutablePositions = listOf(7),
         )
     }
@@ -222,20 +222,21 @@ internal class JGraphAlgorithmTest {
             // "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
 
             // O(V^2) (runtime)
-            // "NearestNeighbor" to divorcedTSP(NearestNeighborHeuristicTSP()),
+            "NearestNeighbor (lib)" to divorcedTSP(NearestNeighborHeuristicTSP()),
+            "NearestNeighbor (my)" to NearestNeighbor(),
 
-            // Optimization runs
             "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
             // "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
             // "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
             // "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
-
+            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
             "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
             "TwoOpt (my new)" to MyNewTwoOptHeuristicTSP(),
-            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
 
             // Genetic
             "SimulatedAnnealing" to SimulatedAnnealing(),
+
+            // combinations
             "sum" to MyTwoOptHeuristicTSP<City>() + SimulatedAnnealing(),
         )
 
