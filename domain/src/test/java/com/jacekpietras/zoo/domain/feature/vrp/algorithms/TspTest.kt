@@ -45,6 +45,7 @@ internal suspend fun doVrpTest(
 
     } catch (e: Exception) {
         println("crashed: " + e.message)
+        throw e
     }
 }
 

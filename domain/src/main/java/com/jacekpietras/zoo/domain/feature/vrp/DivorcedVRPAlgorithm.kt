@@ -74,7 +74,11 @@ internal class DivorcedVRPAlgorithm<T : Any>(
     private fun List<T>.shiftStartTo(): List<T> {
         val indexOfDummy = indexOfFirst { it == dummy }
         val begin = subList(0, indexOfDummy)
-        val end = subList(indexOfDummy + 1, lastIndex)
+        val end = if (indexOfDummy < lastIndex) {
+            subList(indexOfDummy + 1, lastIndex)
+        } else {
+            emptyList()
+        }
         return end + begin
     }
 
