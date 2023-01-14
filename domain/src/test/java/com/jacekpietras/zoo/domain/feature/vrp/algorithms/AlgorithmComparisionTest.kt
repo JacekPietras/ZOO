@@ -9,7 +9,7 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.junit.jupiter.api.Test
 
-internal class JGraphAlgorithmTest {
+internal class AlgorithmComparisionTest {
 
     @Test
     fun `optimization test over 15`() {
@@ -230,15 +230,17 @@ internal class JGraphAlgorithmTest {
 //            "TwoOpt (100, rnd)" to divorcedVRP(TwoOptHeuristicTSP(10)),
 //            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
 //            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
-            "TwoOpt (my new)" to MyNewTwoOptHeuristicVRP(),
+            "TwoOpt (my new)" to TwoOptHeuristicVRP(),
+
+            "Lin-Kernighan" to MyLinKernighanVRP(),
 
             // Genetic
 //            "SimulatedAnnealing" to SimulatedAnnealing(),
 
             // combinations
-            "2opt + anne" to MyNewTwoOptHeuristicVRP<City>() + SimulatedAnnealing(),
-            "nn + 2opt" to NearestNeighborVRP<City>() + MyNewTwoOptHeuristicVRP(),
-            "2opt * (nn + 2opt)" to MyNewTwoOptHeuristicVRP<City>() * (NearestNeighborVRP<City>() + MyNewTwoOptHeuristicVRP()),
+            "2opt + anne" to TwoOptHeuristicVRP<City>() + SimulatedAnnealing(),
+            "nn + 2opt" to NearestNeighborVRP<City>() + TwoOptHeuristicVRP(),
+            "2opt * (nn + 2opt)" to TwoOptHeuristicVRP<City>() * (NearestNeighborVRP<City>() + TwoOptHeuristicVRP()),
         )
 
         @Suppress("unused")
