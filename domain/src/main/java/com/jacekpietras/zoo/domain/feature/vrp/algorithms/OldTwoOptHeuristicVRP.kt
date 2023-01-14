@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 
-class MyOldTwoOptHeuristicVRP<T : Any> : VRPAlgorithm<T> {
+class OldTwoOptHeuristicVRP<T : Any> : VRPAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
