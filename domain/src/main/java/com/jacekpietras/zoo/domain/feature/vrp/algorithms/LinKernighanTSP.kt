@@ -3,7 +3,10 @@ package com.jacekpietras.zoo.domain.feature.vrp.algorithms
 import com.jacekpietras.zoo.domain.feature.vrp.VRPWithFixedStagesAlgorithm
 import com.jacekpietras.zoo.domain.utils.forEachPairIndexed
 
-class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
+/*
+Ported from https://github.com/RodolfoPichardo/LinKernighanTSP
+ */
+class LinKernighanTSP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
 
     override suspend fun run(
         points: List<T>,
@@ -55,10 +58,10 @@ class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
     private fun Cache<T>.getNearestNeighbor(index: Int): Int {
         var minDistance = Double.MAX_VALUE
         var nearestNode = -1
-        val actualNode: Int = tour.get(index)
+        val actualNode = tour[index]
         for (i in 0 until size) {
             if (i != actualNode) {
-                val distance: Double = this.distanceTable.get(i).get(actualNode)
+                val distance = distanceTable[i][actualNode]
                 if (distance < minDistance) {
                     nearestNode = getIndex(i)
                     minDistance = distance
@@ -78,33 +81,33 @@ class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
         tIndex.add(2, t2)
         tIndex.add(3, t3)
         val initialGain: Double = getDistance(t2, t1) - getDistance(t3, t2) // |x1| - |y1|
-        var GStar = 0.0
-        var Gi = initialGain
+        var gStar = 0.0
+        var gi = initialGain
         var k = 3
         var i = 4
         while (true) {
-            val newT: Int = selectNewT(tIndex)
+            val newT = selectNewT(tIndex)
             if (newT == -1) {
                 break // This should not happen according to the paper
             }
             tIndex.add(i, newT)
-            val tiplus1: Int = getNextPossibleY(tIndex)
+            val tiplus1 = getNextPossibleY(tIndex)
             if (tiplus1 == -1) {
                 break
             }
 
 
             // Step 4.f from the paper
-            Gi += getDistance(tIndex[tIndex.size - 2], newT)
-            if (Gi - getDistance(newT, t1) > GStar) {
-                GStar = Gi - getDistance(newT, t1)
+            gi += getDistance(tIndex[tIndex.size - 2], newT)
+            if (gi - getDistance(newT, t1) > gStar) {
+                gStar = gi - getDistance(newT, t1)
                 k = i
             }
             tIndex.add(tiplus1)
-            Gi -= getDistance(newT, tiplus1)
+            gi -= getDistance(newT, tiplus1)
             i += 2
         }
-        if (GStar > 0) {
+        if (gStar > 0) {
             tIndex[k + 1] = tIndex[1]
             tour = getTPrime(tIndex, k) // Update the tour
         }
@@ -207,15 +210,15 @@ class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
 
     private fun Cache<T>.constructNewTour(tour: IntArray, changes: ArrayList<Int>): IntArray {
         val currentEdges = deriveEdgesFromTour(tour)
-        val X: ArrayList<Edge> = deriveX(changes)
-        val Y: ArrayList<Edge> = deriveY(changes)
+        val x = deriveX(changes)
+        val y = deriveY(changes)
         var s = currentEdges.size
 
         // Remove Xs
-        for (e in X) {
+        for (e in x) {
             for (j in currentEdges.indices) {
                 val m: Edge? = currentEdges[j]
-                if (e.equals(m)) {
+                if (e == m) {
                     s--
                     currentEdges[j] = null
                     break
@@ -224,7 +227,7 @@ class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
         }
 
         // Add Ys
-        for (e in Y) {
+        for (e in y) {
             s++
             currentEdges.add(e)
         }
@@ -274,7 +277,7 @@ class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
     }
 
     private fun Cache<T>.deriveX(changes: ArrayList<Int>): ArrayList<Edge> {
-        val es: ArrayList<Edge> = ArrayList<Edge>()
+        val es = ArrayList<Edge>()
         var i = 1
         while (i < changes.size - 2) {
             val e = Edge(tour[changes[i]], tour[changes[i + 1]])
@@ -313,15 +316,6 @@ class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
         return true
     }
 
-    private fun Cache<T>.getIndex(node: Int): Int {
-        for ((i, t) in tour.withIndex()) {
-            if (node == t) {
-                return i
-            }
-        }
-        return -1
-    }
-
     private class Cache<T>(
         val points: List<T>,
         val distanceCalculation: suspend (T, T) -> Double,
@@ -337,6 +331,15 @@ class MyLinKernighanVRP<T : Any> : VRPWithFixedStagesAlgorithm<T> {
             val n = tour.size - 2
             val shift = tour.indexOf(n)
             return List(n) { points[tour[(it + shift + 1) % (n + 1)]] }
+        }
+
+        fun getIndex(node: Int): Int {
+            for ((i, t) in tour.withIndex()) {
+                if (node == t) {
+                    return i
+                }
+            }
+            return -1
         }
     }
 

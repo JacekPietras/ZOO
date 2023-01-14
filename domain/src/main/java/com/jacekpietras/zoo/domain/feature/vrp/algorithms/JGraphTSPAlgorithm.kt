@@ -6,7 +6,7 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.jgrapht.graph.WeightedMultigraph
 
-internal class JGraphVRPAlgorithm<T : Any>(
+internal class JGraphTSPAlgorithm<T : Any>(
     private val algorithm: HamiltonianCycleAlgorithm<T, DefaultWeightedEdge>
 ) : VRPAlgorithm<T> {
 

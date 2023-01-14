@@ -9,7 +9,7 @@ import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.junit.jupiter.api.Test
 
-internal class AlgorithmComparisionTest {
+internal class AlgorithmComparisonTest {
 
     @Test
     fun `optimization test over 15`() {
@@ -232,7 +232,7 @@ internal class AlgorithmComparisionTest {
 //            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
             "TwoOpt (my new)" to TwoOptHeuristicVRP(),
 
-            "Lin-Kernighan" to MyLinKernighanVRP(),
+            "Lin-Kernighan" to DivorcedVRPAlgorithm(LinKernighanTSP(), City(-1, -1)),
 
             // Genetic
 //            "SimulatedAnnealing" to SimulatedAnnealing(),
@@ -245,6 +245,6 @@ internal class AlgorithmComparisionTest {
 
         @Suppress("unused")
         private fun divorcedVRP(algorithm: HamiltonianCycleAlgorithm<City, DefaultWeightedEdge>) =
-            DivorcedVRPAlgorithm(JGraphVRPAlgorithm(algorithm), City(-1, -1))
+            DivorcedVRPAlgorithm(JGraphTSPAlgorithm(algorithm), City(-1, -1))
     }
 }
