@@ -4,8 +4,9 @@ import com.jacekpietras.zoo.domain.feature.planner.model.Stage
 import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolver
 import com.jacekpietras.zoo.domain.feature.tsp.StageTSPSolverImpl
 import com.jacekpietras.zoo.domain.feature.tsp.algorithms.MyNewTwoOptHeuristicTSP
-import com.jacekpietras.zoo.domain.feature.tsp.algorithms.SimulatedAnnealing
+import com.jacekpietras.zoo.domain.feature.tsp.algorithms.NearestNeighbor
 import com.jacekpietras.zoo.domain.feature.tsp.plus
+import com.jacekpietras.zoo.domain.feature.tsp.times
 import org.koin.dsl.module
 
 val tspModule = module {
@@ -13,7 +14,7 @@ val tspModule = module {
         StageTSPSolverImpl(
             mapRepository = get(),
             graphAnalyzer = get(),
-            tspAlgorithm = MyNewTwoOptHeuristicTSP<Stage>() + SimulatedAnnealing(),
+            tspAlgorithm = MyNewTwoOptHeuristicTSP<Stage>() * (NearestNeighbor<Stage>() + MyNewTwoOptHeuristicTSP()),
         )
     }
 }

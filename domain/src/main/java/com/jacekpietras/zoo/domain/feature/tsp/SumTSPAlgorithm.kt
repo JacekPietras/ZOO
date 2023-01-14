@@ -10,7 +10,6 @@ internal class SumTSPAlgorithm<T : Any>(
         distanceCalculation: suspend (T, T) -> Double,
         immutablePositions: List<Int>?,
     ): List<T> {
-
         val tour = algorithm1
             .run(
                 points = points,

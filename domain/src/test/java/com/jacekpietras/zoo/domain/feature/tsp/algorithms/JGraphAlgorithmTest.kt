@@ -3,10 +3,9 @@ package com.jacekpietras.zoo.domain.feature.tsp.algorithms
 import com.jacekpietras.zoo.domain.feature.tsp.DivorcedTSPAlgorithm
 import com.jacekpietras.zoo.domain.feature.tsp.TSPWithFixedStagesAlgorithm
 import com.jacekpietras.zoo.domain.feature.tsp.plus
+import com.jacekpietras.zoo.domain.feature.tsp.times
 import kotlinx.coroutines.test.runTest
 import org.jgrapht.alg.interfaces.HamiltonianCycleAlgorithm
-import org.jgrapht.alg.tour.NearestNeighborHeuristicTSP
-import org.jgrapht.alg.tour.TwoOptHeuristicTSP
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.junit.jupiter.api.Test
 
@@ -44,7 +43,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 3000,
             numberOfCities = 50,
-            bestExpected = 2838.4030950314805,
+            bestExpected = 2833.6142142712047,
         )
     }
 
@@ -144,7 +143,7 @@ internal class JGraphAlgorithmTest {
         doTest(
             seed = 7990,
             numberOfCities = 60,
-            bestExpected = 3156.8089128986776,
+            bestExpected = 3090.897146641641,
             immutablePositions = listOf(0, 59),
         )
     }
@@ -222,24 +221,27 @@ internal class JGraphAlgorithmTest {
             // "NearestInsertion" to divorcedTSP(NearestInsertionHeuristicTSP()),
 
             // O(V^2) (runtime)
-            "NearestNeighbor (lib)" to divorcedTSP(NearestNeighborHeuristicTSP()),
-            "NearestNeighbor (my)" to NearestNeighbor(),
+//            "NearestNeighbor (lib)" to divorcedTSP(NearestNeighborHeuristicTSP()),
+//            "NearestNeighbor (my)" to NearestNeighbor(),
 
-            "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-            // "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
-            // "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
-            // "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
-            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
-            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
+//            "TwoOpt (1, near)" to divorcedTSP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
+//            "TwoOpt (100, near)" to divorcedTSP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
+//            "TwoOpt (1, rnd)" to divorcedTSP(TwoOptHeuristicTSP(1)),
+//            "TwoOpt (100, rnd)" to divorcedTSP(TwoOptHeuristicTSP(10)),
+//            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
+//            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
             "TwoOpt (my new)" to MyNewTwoOptHeuristicTSP(),
 
             // Genetic
-            "SimulatedAnnealing" to SimulatedAnnealing(),
+//            "SimulatedAnnealing" to SimulatedAnnealing(),
 
             // combinations
-            "sum" to MyTwoOptHeuristicTSP<City>() + SimulatedAnnealing(),
+            "2opt + anne" to MyNewTwoOptHeuristicTSP<City>() + SimulatedAnnealing(),
+            "nn + 2opt" to NearestNeighbor<City>() + MyNewTwoOptHeuristicTSP(),
+            "2opt * (nn + 2opt)" to MyNewTwoOptHeuristicTSP<City>() * (NearestNeighbor<City>() + MyNewTwoOptHeuristicTSP()),
         )
 
+        @Suppress("unused")
         private fun divorcedTSP(algorithm: HamiltonianCycleAlgorithm<City, DefaultWeightedEdge>) =
             DivorcedTSPAlgorithm(JGraphTSPAlgorithm(algorithm), City(-1, -1))
     }
