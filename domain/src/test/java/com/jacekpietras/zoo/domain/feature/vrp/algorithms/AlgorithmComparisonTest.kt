@@ -221,23 +221,24 @@ internal class AlgorithmComparisonTest {
             // "NearestInsertion" to divorcedVRP(NearestInsertionHeuristicTSP()),
 
             // O(V^2) (runtime)
-//            "NearestNeighbor (lib)" to divorcedVRP(NearestNeighborHeuristicTSP()),
-//            "NearestNeighbor (my)" to NearestNeighbor(),
+            // "NearestNeighbor (lib)" to divorcedVRP(NearestNeighborHeuristicTSP()),
+            // "NearestNeighbor (my)" to NearestNeighbor(),
 
-//            "TwoOpt (1, near)" to divorcedVRP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
-//            "TwoOpt (100, near)" to divorcedVRP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
-//            "TwoOpt (1, rnd)" to divorcedVRP(TwoOptHeuristicTSP(1)),
-//            "TwoOpt (100, rnd)" to divorcedVRP(TwoOptHeuristicTSP(10)),
-//            "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
-//            "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
+            // "TwoOpt (1, near)" to divorcedVRP(TwoOptHeuristicTSP(1, NearestNeighborHeuristicTSP())),
+            // "TwoOpt (100, near)" to divorcedVRP(TwoOptHeuristicTSP(100, NearestNeighborHeuristicTSP())),
+            // "TwoOpt (1, rnd)" to divorcedVRP(TwoOptHeuristicTSP(1)),
+            // "TwoOpt (100, rnd)" to divorcedVRP(TwoOptHeuristicTSP(10)),
+            // "TwoOpt (old)" to DivorcedTSPAlgorithm(MyOldTwoOptHeuristicTSP(), City(-1, -1)),
+            // "TwoOpt (my)" to MyTwoOptHeuristicTSP(),
             "TwoOpt (my new)" to TwoOptHeuristicVRP(),
 
-            // Lin-Kernighan, slow but should often give optimal solution (in theory :( )
-//            "Lin-Kernighan (divorced)" to DivorcedVRPAlgorithm(LinKernighanFromLibAdapter(), City(-1, -1)),
-//            "Lin-Kernighan (lib)" to LinKernighanFromLibAdapter(),
+            // Lin-Kernighan, should often give optimal solution
+            // ...in theory :( looks like that algorithm is incorrect
+            // Probably better port from ANSI C - http://akira.ruc.dk/~keld/research/
+            "Lin-Kernighan (lib)" to LinKernighanFromLibAdapter(),
 
             // Genetic
-//            "SimulatedAnnealing" to SimulatedAnnealing(),
+            // "SimulatedAnnealing" to SimulatedAnnealing(),
 
             // combinations
             "2opt + anne" to TwoOptHeuristicVRP<City>() + SimulatedAnnealing(),

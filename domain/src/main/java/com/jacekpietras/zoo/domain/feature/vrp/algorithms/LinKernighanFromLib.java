@@ -476,7 +476,6 @@ public class LinKernighanFromLib {
             } else {
                 return 1;
             }
-
         }
 
         public boolean equals(Edge e2) {
