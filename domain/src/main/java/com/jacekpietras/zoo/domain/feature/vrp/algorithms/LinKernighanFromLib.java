@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.domain.feature.vrp.algorithms;
 
 import java.util.ArrayList;
+
 /*
 Ported from https://github.com/RodolfoPichardo/LinKernighanTSP
  */
@@ -80,14 +81,10 @@ public class LinKernighanFromLib {
         int actualNode = tour[index];
         for (int i = 0; i < size; ++i) {
             if (i != actualNode) {
-                try {
-                    double distance = this.distanceTable[i][actualNode];
-                    if (distance < minDistance) {
-                        nearestNode = getIndex(i);
-                        minDistance = distance;
-                    }
-                } catch (Exception e) {
-                    throw e;
+                double distance = this.distanceTable[i][actualNode];
+                if (distance < minDistance) {
+                    nearestNode = getIndex(i);
+                    minDistance = distance;
                 }
             }
         }
