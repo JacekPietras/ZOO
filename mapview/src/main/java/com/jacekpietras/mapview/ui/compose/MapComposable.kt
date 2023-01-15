@@ -37,7 +37,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
 import timber.log.Timber
 
 @Composable
-fun ComposableMapView(
+fun MapComposable(
     modifier: Modifier = Modifier,
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,

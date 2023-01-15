@@ -12,7 +12,7 @@ import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.view.MapSurfaceView
 
 @Composable
-fun ComposableMapSurfaceView(
+fun MapSurfaceViewComposable(
     modifier: Modifier = Modifier,
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
