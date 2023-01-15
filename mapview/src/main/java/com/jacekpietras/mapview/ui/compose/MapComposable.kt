@@ -2,6 +2,7 @@ package com.jacekpietras.mapview.ui.compose
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import timber.log.Timber
 @Composable
 fun MapComposable(
     modifier: Modifier = Modifier,
+    backgroundColor: Color,
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
@@ -49,6 +51,7 @@ fun MapComposable(
     Box {
         Canvas(
             modifier = modifier
+                .background(backgroundColor)
                 .clipToBounds()
                 .addOnTransform(onTransform)
                 .addOnClick(onClick)

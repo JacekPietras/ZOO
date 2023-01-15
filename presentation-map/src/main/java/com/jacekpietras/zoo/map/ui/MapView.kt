@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -41,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.compose.MapCustomViewComposable
-import com.jacekpietras.mapview.ui.compose.MapSurfaceViewComposable
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
@@ -67,11 +64,9 @@ internal fun MapView(
     mapList: List<RenderItem<Paint>>,
 ) {
     Box {
-        MapSurfaceViewComposable(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(ZooTheme.colors.mapColors.colorMapGrass),
-            backgroundColor = ZooTheme.colors.mapColors.colorMapGrass.toArgb(),
+        MapCustomViewComposable(
+            modifier = Modifier.fillMaxSize(),
+            backgroundColor = ZooTheme.colors.mapColors.colorMapGrass,
             onSizeChanged = onSizeChanged,
             onClick = onClick,
             onTransform = onTransform,
