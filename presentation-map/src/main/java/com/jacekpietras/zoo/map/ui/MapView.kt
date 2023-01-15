@@ -66,7 +66,7 @@ internal fun MapView(
     mapList: List<RenderItem<Paint>>,
 ) {
     Box {
-        MapSurfaceViewComposable(
+        MapCustomViewComposable(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = ZooTheme.colors.mapColors.colorMapGrass,
             onSizeChanged = onSizeChanged,
