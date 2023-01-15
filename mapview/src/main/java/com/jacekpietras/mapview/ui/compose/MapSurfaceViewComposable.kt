@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.ui.compose
 
+import android.graphics.Color
 import android.graphics.Paint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,6 +15,7 @@ import com.jacekpietras.mapview.ui.view.MapSurfaceView
 @Composable
 fun MapSurfaceViewComposable(
     modifier: Modifier = Modifier,
+    backgroundColor:Int = Color.MAGENTA,
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
@@ -30,6 +32,7 @@ fun MapSurfaceViewComposable(
                 this.onClick = onClick
                 this.onTransform = onTransform
                 this.mapList = mapList
+                this.setBackgroundColor(backgroundColor)
                 mapView = this
             }
         },
