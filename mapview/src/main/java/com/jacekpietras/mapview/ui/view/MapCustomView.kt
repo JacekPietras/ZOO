@@ -19,6 +19,10 @@ class MapCustomView @JvmOverloads constructor(
     var onClick: ((Float, Float) -> Unit)? = null
     var onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null
     var mapList: List<RenderItem<Paint>> = emptyList()
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     private val viewGestures = object : ViewGestures(context) {
 

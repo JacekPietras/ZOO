@@ -1,6 +1,5 @@
 package com.jacekpietras.mapview.ui.compose
 
-import android.text.format.DateUtils.SECOND_IN_MILLIS
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -26,15 +25,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.BuildConfig
-import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.LastMapUpdate.lastUpdate
+import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
-import com.jacekpietras.mapview.ui.LastMapUpdate.fpsList
+import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
 import timber.log.Timber
 
 @Composable
@@ -46,7 +45,6 @@ fun ComposableMapView(
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
     val (icons, canvasItems) = mapList.partition { it is RenderIconItem || it is RenderBitmapItem }
-    val before = System.currentTimeMillis()
 
     Box {
         Canvas(
@@ -77,25 +75,15 @@ fun ComposableMapView(
                 else -> Unit
             }
         }
-        val timeFromLast = (System.currentTimeMillis() - lastUpdate)
-        if (timeFromLast > 0) {
-            val fps = SECOND_IN_MILLIS / timeFromLast
-            if (fps in (0..200) && BuildConfig.DEBUG) {
-                fpsList.add(fps)
-                if (fpsList.size > 20) {
-                    fpsList.removeAt(0)
-                }
-                val medFps = fpsList.average().toLong()
 
-                Text(
-                    text = "FPS: $medFps",
-                    modifier = Modifier.align(Alignment.BottomStart),
-                )
-            }
+        if (BuildConfig.DEBUG) {
+            LastMapUpdate.update()
+            Text(
+                text = "FPS: $medFps",
+                modifier = Modifier.align(Alignment.BottomStart),
+            )
         }
-        lastUpdate = System.currentTimeMillis()
     }
-    Timber.d("Perf: draw ${System.currentTimeMillis() - before} ms")
 }
 
 @Composable
