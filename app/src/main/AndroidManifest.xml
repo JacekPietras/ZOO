@@ -5,6 +5,9 @@
         android:name="android.hardware.sensor.compass"
         android:required="false" />
 
+    <!--  Keep only when using OpenGL  -->
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+
     <application
         android:name=".app.ZooApplication"
         android:allowBackup="true"
