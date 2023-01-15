@@ -1,3 +1,4 @@
+rootProject.name = "ZOO"
 include ':mapview'
 include ':geometry'
 include ':tracking'
@@ -9,4 +10,4 @@ include ':domain'
 include ':presentation-catalogue'
 include ':data'
 include ':app'
-rootProject.name = "ZOO"
+include ':scrapper'

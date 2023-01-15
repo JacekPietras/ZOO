@@ -4,6 +4,8 @@ apply from: "$rootDir/presentation.gradle"
 apply plugin: 'kotlin-kapt'
 
 android {
+    namespace 'com.jacekpietras.zoo'
+
     defaultConfig {
         applicationId "com.jacekpietras.zoo"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -31,7 +33,6 @@ android {
             applicationIdSuffix ".zabiniec"
         }
     }
-    namespace 'com.jacekpietras.zoo'
 }
 
 dependencies {

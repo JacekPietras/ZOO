@@ -1,0 +1,32 @@
+apply plugin: "com.android.application"
+apply from: "$rootDir/common.gradle"
+apply from: "$rootDir/presentation.gradle"
+apply plugin: 'kotlin-kapt'
+
+android {
+    namespace 'com.jacekpietras.zoo.scrapper'
+
+    defaultConfig {
+        applicationId "com.jacekpietras.zoo.scrapper"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+//    implementation project(':geometry')
+//    implementation project(':presentation-core')
+//    implementation project(':domain')
+//    implementation project(':data')
+//    implementation project(':presentation-catalogue')
+//    implementation project(':presentation-map')
+//    implementation project(':presentation-planner')
+//    implementation project(':logger')
+//    implementation project(':tracking')
+}
