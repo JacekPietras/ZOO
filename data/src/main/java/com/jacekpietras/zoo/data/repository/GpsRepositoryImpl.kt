@@ -45,7 +45,7 @@ internal class GpsRepositoryImpl(
 //            val ola6 = TxtParser(context, R.raw.jacek_26_11_22)
 //            val jack6 = TxtParser(context, R.raw.jacek_26_11_22)
 //
-//            val sum = listOf(
+//            listOf(
 //                ola1,
 //                jack1,
 //                ola2,
@@ -58,7 +58,7 @@ internal class GpsRepositoryImpl(
 //                jack5,
 //                ola6,
 //                jack6,
-//            )
+//            ).map { it.result }.flatten()
 
             emptyList()
         } else {
