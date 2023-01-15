@@ -48,7 +48,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.ComposableMapView
+import com.jacekpietras.mapview.ui.compose.MapComposable
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
@@ -154,7 +154,7 @@ private fun MapView(
         size.width.toDp()
     }
 
-    ComposableMapView(
+    MapComposable(
         Modifier
             .fillMaxWidth()
             .height(parentWidth * 0.6f)
@@ -165,6 +165,7 @@ private fun MapView(
                 color = ZooTheme.colors.mapColors.colorSmallMapBackground,
                 shape = RoundedCornerShape(8.dp)
             ),
+        backgroundColor = Color.Transparent,
         onSizeChanged = onMapSizeChanged,
         mapList = mapList,
     )

@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.jacekpietras.zoo.catalogue.feature.animal.extensions.getActivity
-import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalEffect
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalEffect.ShowToast
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
 import com.jacekpietras.zoo.catalogue.feature.animal.viewmodel.AnimalViewModel

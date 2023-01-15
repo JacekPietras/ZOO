@@ -1,4 +1,4 @@
-package com.jacekpietras.mapview.ui
+package com.jacekpietras.mapview.ui.compose
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color
@@ -9,6 +9,7 @@ import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
+import com.jacekpietras.mapview.ui.PaintBaker
 
 class ComposablePaintBaker(
     private val context: Context,

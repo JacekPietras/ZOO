@@ -1,4 +1,4 @@
-package com.jacekpietras.mapview.ui
+package com.jacekpietras.mapview.ui.view
 
 import android.content.Context
 import android.graphics.DashPathEffect
@@ -7,8 +7,9 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
+import com.jacekpietras.mapview.ui.PaintBaker
 
-internal class ViewPaintBaker(
+class ViewPaintBaker(
     private val context: Context,
 ) : PaintBaker<Paint> {
 

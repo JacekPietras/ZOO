@@ -1,17 +1,13 @@
-package com.jacekpietras.mapview.ui
+package com.jacekpietras.mapview.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.View
-import com.jacekpietras.mapview.utils.RotationGestureDetector
 
-abstract class GesturedView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+abstract class ViewGestures(
+    context: Context,
+) {
 
     private var swipeDetector = GestureDetector(context, OnGestureListener())
     private var pinchDetector = ScaleGestureDetector(context, OnScaleGestureListener())
@@ -21,21 +17,27 @@ abstract class GesturedView @JvmOverloads constructor(
     private var zoomX = 1f
     private var zoomY = 1f
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    fun onTouchEvent(event: MotionEvent) {
         pinchDetector.onTouchEvent(event)
         swipeDetector.onTouchEvent(event)
         rotateDetector.onTouchEvent(event)
-        return true
     }
 
-    abstract fun onScale(cX: Float, cY: Float, scale: Float)
-
-    abstract fun onRotate(rotate: Float)
-
-    abstract fun onScroll(vX: Float, vY: Float)
+    abstract fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float)
 
     abstract fun onClick(x: Float, y: Float)
+
+    fun onScale(cX: Float, cY: Float, scale: Float) {
+        onTransform(cX, cY, scale, 0f, 0f, 0f)
+    }
+
+    fun onRotate(rotate: Float) {
+        onTransform(0f, 0f, 1f, rotate, 0f, 0f)
+    }
+
+    fun onScroll(vX: Float, vY: Float) {
+        onTransform(0f, 0f, 1f, 0f, vX, vY)
+    }
 
     private inner class OnGestureListener : GestureDetector.OnGestureListener {
 
