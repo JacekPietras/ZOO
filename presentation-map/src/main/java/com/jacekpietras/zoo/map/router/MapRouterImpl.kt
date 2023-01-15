@@ -13,7 +13,7 @@ internal class MapRouterImpl(
 ) : MapRouter {
 
     override fun navigateToCamera() {
-        activityProvider().startActivity(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        activityProvider().startActivity(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
     }
 
     override fun navigateToAnimal(animalId: AnimalId) {
