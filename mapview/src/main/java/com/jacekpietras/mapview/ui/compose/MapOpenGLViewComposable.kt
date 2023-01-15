@@ -34,7 +34,7 @@ fun MapOpenGLViewComposable(
                 this.onClick = onClick
                 this.onTransform = onTransform
                 this.mapList = mapList
-                this.setBackgroundColor(backgroundColor.toArgb())
+                this.openGLBackground = backgroundColor.toArgb()
                 mapView = this
             }
         },
