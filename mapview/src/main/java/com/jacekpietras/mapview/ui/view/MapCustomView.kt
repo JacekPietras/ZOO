@@ -26,16 +26,8 @@ class MapCustomView @JvmOverloads constructor(
 
     private val viewGestures = object : ViewGestures(context) {
 
-        override fun onScale(cX: Float, cY: Float, scale: Float) {
-            onTransform?.invoke(cX, cY, scale, 0f, 0f, 0f)
-        }
-
-        override fun onRotate(rotate: Float) {
-            onTransform?.invoke(0f, 0f, 1f, rotate, 0f, 0f)
-        }
-
-        override fun onScroll(vX: Float, vY: Float) {
-            onTransform?.invoke(0f, 0f, 1f, 0f, vX, vY)
+        override fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
+            onTransform?.invoke(cX, cY, scale, rotate, vX, vY)
         }
 
         override fun onClick(x: Float, y: Float) {

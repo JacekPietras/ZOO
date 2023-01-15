@@ -23,13 +23,21 @@ abstract class ViewGestures(
         rotateDetector.onTouchEvent(event)
     }
 
-    abstract fun onScale(cX: Float, cY: Float, scale: Float)
-
-    abstract fun onRotate(rotate: Float)
-
-    abstract fun onScroll(vX: Float, vY: Float)
+    abstract fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float)
 
     abstract fun onClick(x: Float, y: Float)
+
+    fun onScale(cX: Float, cY: Float, scale: Float) {
+        onTransform(cX, cY, scale, 0f, 0f, 0f)
+    }
+
+    fun onRotate(rotate: Float) {
+        onTransform(0f, 0f, 1f, rotate, 0f, 0f)
+    }
+
+    fun onScroll(vX: Float, vY: Float) {
+        onTransform(0f, 0f, 1f, 0f, vX, vY)
+    }
 
     private inner class OnGestureListener : GestureDetector.OnGestureListener {
 
