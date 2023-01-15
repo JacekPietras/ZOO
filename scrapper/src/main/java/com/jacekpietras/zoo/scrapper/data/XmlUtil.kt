@@ -1,7 +1,8 @@
-package com.jacekpietras.zoo.data.parser
+@file:Suppress("RegExpUnnecessaryNonCapturingGroup")
+
+package com.jacekpietras.zoo.scrapper.data
 
 import android.content.Context
-import android.content.res.XmlResourceParser
 import androidx.annotation.RawRes
 import org.xmlpull.v1.XmlPullParser
 import timber.log.Timber
@@ -11,17 +12,8 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-internal fun XmlResourceParser.attr(name: String): String =
-    getAttributeValue(null, name) ?: ""
-
-internal fun XmlResourceParser.attrD(name: String): Double =
-    getAttributeValue(null, name).toDouble()
-
 internal fun XmlPullParser.attr(name: String): String =
     getAttributeValue(null, name) ?: ""
-
-internal fun XmlPullParser.attrD(name: String): Double =
-    getAttributeValue(null, name).toDouble()
 
 internal fun countMatches(text: String, template: String): Int {
     var cnt = 0
@@ -184,26 +176,6 @@ fun makeStreamFromUrl(url: String, print: Boolean = false) =
         }
         .inputStream
         .cleanupHtml(print)
-
-fun difference(str1: String, str2: String): String {
-    val at = indexOfDifference(str1, str2)
-    return if (at == -1) ""
-    else str2.substring(at)
-}
-
-private fun indexOfDifference(str1: String, str2: String): Int {
-    if (str1 === str2) return -1
-
-    var i = 0
-    while (i < str1.length && i < str2.length) {
-        if (str1[i] != str2[i]) {
-            break
-        }
-        ++i
-    }
-    return if (i < str2.length || i < str1.length) i
-    else -1
-}
 
 fun diffCount(a: String, b: String) =
     diff(a, b).run { (first + second).length }

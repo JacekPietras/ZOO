@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.data.parser
 
 import android.content.Context
+import android.content.res.XmlResourceParser
 import android.graphics.Matrix
 import androidx.annotation.XmlRes
 import com.jacekpietras.geometry.PointD
@@ -191,6 +192,12 @@ internal class SvgParser(context: Context, @XmlRes xmlRes: Int) {
         forEach { destination.add(transform(it.first, it.second)) }
         return destination
     }
+
+    private fun XmlResourceParser.attr(name: String): String =
+        getAttributeValue(null, name) ?: ""
+
+    private fun XmlResourceParser.attrD(name: String): Double =
+        getAttributeValue(null, name).toDouble()
 
     private companion object {
         const val GROUP_TAG = "g"

@@ -4,10 +4,8 @@ import android.content.Context
 import android.text.format.DateUtils
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.data.BuildConfig
-import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.database.dao.GpsDao
 import com.jacekpietras.zoo.data.database.mapper.GpsHistoryMapper
-import com.jacekpietras.zoo.data.parser.TxtParser
 import com.jacekpietras.zoo.data.utils.cutOut
 import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
@@ -34,21 +32,35 @@ internal class GpsRepositoryImpl(
 
     private val debugHistory: List<List<GpsHistoryEntity>> by lazy {
         if (BuildConfig.DEBUG) {
-            val ola1 = TxtParser(context, R.raw.ola_14_02_21)
-            val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
-            val ola2 = TxtParser(context, R.raw.ola_28_02_21)
-            val jack2 = TxtParser(context, R.raw.jacek_28_02_21)
-            val ola3 = TxtParser(context, R.raw.ola_08_05_21)
-            val jack3 = TxtParser(context, R.raw.jacek_08_05_21)
-            val jack4 = TxtParser(context, R.raw.jacek_18_03_22)
-            val eliza3 = TxtParser(context, R.raw.eliza_08_05_21)
+//            val ola1 = TxtParser(context, R.raw.ola_14_02_21)
+//            val jack1 = TxtParser(context, R.raw.jacek_14_02_21)
+//            val ola2 = TxtParser(context, R.raw.ola_28_02_21)
+//            val jack2 = TxtParser(context, R.raw.jacek_28_02_21)
+//            val ola3 = TxtParser(context, R.raw.ola_08_05_21)
+//            val jack3 = TxtParser(context, R.raw.jacek_08_05_21)
+//            val eliza3 = TxtParser(context, R.raw.eliza_08_05_21)
+//            val jack4 = TxtParser(context, R.raw.jacek_18_03_22)
+//            val ola5 = TxtParser(context, R.raw.ola_17_07_22)
+//            val jack5 = TxtParser(context, R.raw.jacek_17_07_22)
+//            val ola6 = TxtParser(context, R.raw.jacek_26_11_22)
+//            val jack6 = TxtParser(context, R.raw.jacek_26_11_22)
+//
+//            val sum = listOf(
+//                ola1,
+//                jack1,
+//                ola2,
+//                jack2,
+//                ola3,
+//                jack3,
+//                eliza3,
+//                jack4,
+//                ola5,
+//                jack5,
+//                ola6,
+//                jack6,
+//            )
 
             emptyList()
-//             jack4.result
-//            + ola1.result
-//                        + jack1.result
-//                        + jack2.result + ola2.result
-//                        + jack3.result + ola3.result + eliza3.result
         } else {
             emptyList()
         }

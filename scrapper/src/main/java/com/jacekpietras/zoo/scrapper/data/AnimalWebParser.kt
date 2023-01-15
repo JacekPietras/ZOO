@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.data.parser
+package com.jacekpietras.zoo.scrapper.data
 
 import android.util.Xml
 import org.xmlpull.v1.XmlPullParser
@@ -14,9 +14,6 @@ internal class AnimalWebParser(inputStream: InputStream) {
             .apply { setInput(inputStream, null) }
             .parseAll()
     }
-
-    fun getContent(): List<WebContent> =
-        result
 
     fun getFirstParagraph(): WebContent.Paragraph =
         result
@@ -70,13 +67,19 @@ internal class AnimalWebParser(inputStream: InputStream) {
                             "col-sm-3 border-right top-margin",
                             "col-sm-8 top-margin last-foot",
                             " col-md-9"
-                        ) -> skip()
-                        attr("class") == "slides" -> parsePictures()
+                        ) -> {
+                            skip()
+                        }
+                        attr("class") == "slides" -> {
+                            parsePictures()
+                        }
                         name in listOf("h1", "h2", "h3") -> {
                             nextTitle = true
                             deep++
                         }
-                        else -> deep++
+                        else -> {
+                            deep++
+                        }
                     }
                 }
                 TEXT -> {
@@ -108,7 +111,9 @@ internal class AnimalWebParser(inputStream: InputStream) {
                     }
                     deep++
                 }
-                END_TAG -> deep--
+                END_TAG -> {
+                    deep--
+                }
             }
             if (deep == 0) return
             next()

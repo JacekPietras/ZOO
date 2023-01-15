@@ -1,8 +1,11 @@
-package com.jacekpietras.zoo.data.parser
+package com.jacekpietras.zoo.scrapper.data
 
 import android.util.Xml
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParser.*
+import org.xmlpull.v1.XmlPullParser.END_DOCUMENT
+import org.xmlpull.v1.XmlPullParser.END_TAG
+import org.xmlpull.v1.XmlPullParser.START_TAG
+import org.xmlpull.v1.XmlPullParser.TEXT
 import java.io.InputStream
 
 internal class AnimalListWebParser(inputStream: InputStream) {
@@ -16,7 +19,8 @@ internal class AnimalListWebParser(inputStream: InputStream) {
             .parseAll()
     }
 
-    fun getContent(): List<Animal> = result
+    fun getContent(): List<Animal> =
+        result
 
     private fun XmlPullParser.parseAll() {
         while (eventType != END_DOCUMENT) {
@@ -46,8 +50,12 @@ internal class AnimalListWebParser(inputStream: InputStream) {
                         ?.also { dataFilter = it.replace(".", "") }
                     deep++
                 }
-                END_TAG -> deep--
-                TEXT -> if (text.isNotBlank()) filters.add(Filter(text.trim(), dataFilter))
+                END_TAG -> {
+                    deep--
+                }
+                TEXT -> {
+                    if (text.isNotBlank()) filters.add(Filter(text.trim(), dataFilter))
+                }
             }
             if (deep == 0) return
             next()
@@ -69,8 +77,12 @@ internal class AnimalListWebParser(inputStream: InputStream) {
                                 result.add(lastAnimal)
                             }
                         }
-                        name == "a" && attr("target") == "_blank" -> lastAnimal?.www = attr("href")
-                        name == "img" -> lastAnimal?.photo = attr("src")
+                        name == "a" && attr("target") == "_blank" -> {
+                            lastAnimal?.www = attr("href")
+                        }
+                        name == "img" -> {
+                            lastAnimal?.photo = attr("src")
+                        }
                     }
                     deep++
                 }
