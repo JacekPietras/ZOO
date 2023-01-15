@@ -50,8 +50,9 @@ fun MapComposable(
 
     Box {
         Canvas(
-            modifier = modifier
+            modifier = Modifier
                 .background(backgroundColor)
+                .then(modifier)
                 .clipToBounds()
                 .addOnTransform(onTransform)
                 .addOnClick(onClick)

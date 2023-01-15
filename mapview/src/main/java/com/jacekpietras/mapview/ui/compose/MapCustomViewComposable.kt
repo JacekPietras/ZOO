@@ -26,7 +26,9 @@ fun MapCustomViewComposable(
     mapView?.mapList = mapList
 
     AndroidView(
-        modifier = modifier.background(backgroundColor),
+        modifier = Modifier
+            .background(backgroundColor)
+            .then(modifier),
         factory = { context ->
             MapCustomView(context).apply {
                 this.onSizeChanged = onSizeChanged

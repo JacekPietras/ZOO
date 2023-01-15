@@ -165,6 +165,7 @@ private fun MapView(
                 color = ZooTheme.colors.mapColors.colorSmallMapBackground,
                 shape = RoundedCornerShape(8.dp)
             ),
+        backgroundColor = Color.Transparent,
         onSizeChanged = onMapSizeChanged,
         mapList = mapList,
     )
