@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.compose.MapComposable
 import com.jacekpietras.mapview.ui.compose.MapCustomViewComposable
@@ -63,10 +64,10 @@ internal fun MapView(
     onClick: (Float, Float) -> Unit,
     onTransform: (Float, Float, Float, Float, Float, Float) -> Unit,
     onMapActionClicked: (MapAction) -> Unit,
-    mapList: List<RenderItem<Paint>>,
+    mapList: List<RenderItem<ComposablePaint>>,
 ) {
     Box {
-        MapSurfaceViewComposable(
+        MapComposable(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = ZooTheme.colors.mapColors.colorMapGrass,
             onSizeChanged = onSizeChanged,

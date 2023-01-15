@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
+import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
@@ -113,16 +115,16 @@ internal class MapViewModel(
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) : ViewModel() {
 
-    private val paintBaker = ViewPaintBaker(context)
+    private val paintBaker = ComposablePaintBaker(context)
 
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
     val effects: Flow<Unit> = _effects
         .filter { it.isNotEmpty() }
         .map { /* Unit */ }
 
-    private val mapLogic: MapViewLogic<Paint> = makeComposableMapLogic()
+    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
 
-    val mapList = MutableStateFlow<List<RenderItem<Paint>>>(emptyList())
+    val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
 
     private val mapColors = MutableStateFlow(MapColors())
     private val treeBitmap: StateFlow<BitmapVersions?> = flow {
