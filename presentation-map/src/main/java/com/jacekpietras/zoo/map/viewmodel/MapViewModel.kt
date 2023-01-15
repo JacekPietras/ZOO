@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground

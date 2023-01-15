@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.logic.WorldData
 import com.jacekpietras.mapview.model.RenderItem

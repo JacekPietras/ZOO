@@ -1,4 +1,4 @@
-package com.jacekpietras.mapview.ui
+package com.jacekpietras.mapview.ui.compose
 
 import android.text.format.DateUtils.SECOND_IN_MILLIS
 import androidx.compose.foundation.Canvas
@@ -96,11 +96,6 @@ fun ComposableMapView(
         lastUpdate = System.currentTimeMillis()
     }
     Timber.d("Perf: draw ${System.currentTimeMillis() - before} ms")
-}
-
-object LastMapUpdate {
-    var lastUpdate: Long = 0L
-    val fpsList = mutableListOf<Long>()
 }
 
 @Composable

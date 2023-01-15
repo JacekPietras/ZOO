@@ -1,0 +1,66 @@
+package com.jacekpietras.mapview.ui.view
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.SurfaceView
+import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.utils.ViewGestures
+import com.jacekpietras.mapview.utils.drawMapObjects
+
+class MapSurfaceView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : SurfaceView(context, attrs, defStyleAttr) {
+
+    var onSizeChanged: ((width: Int, height: Int) -> Unit)? = null
+    var onClick: ((Float, Float) -> Unit)? = null
+    var onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null
+    var mapList: List<RenderItem<Paint>> = emptyList()
+
+    private val viewGestures = object : ViewGestures(context) {
+
+        override fun onScale(cX: Float, cY: Float, scale: Float) {
+            onTransform?.invoke(cX, cY, scale, 0f, 0f, 0f)
+        }
+
+        override fun onRotate(rotate: Float) {
+            onTransform?.invoke(0f, 0f, 1f, rotate, 0f, 0f)
+        }
+
+        override fun onScroll(vX: Float, vY: Float) {
+            onTransform?.invoke(0f, 0f, 1f, 0f, vX, vY)
+        }
+
+        override fun onClick(x: Float, y: Float) {
+            onClick?.invoke(x, y)
+        }
+    }
+
+    init {
+        onSizeChanged?.invoke(width, height)
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        onSizeChanged?.invoke(width, height)
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        onSizeChanged?.invoke(width, height)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        viewGestures.onTouchEvent(event)
+        return true
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        canvas.drawMapObjects(mapList)
+    }
+}
