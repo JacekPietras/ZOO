@@ -46,7 +46,7 @@ fun MapComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
-    val (icons, canvasItems) = mapList.partition { it is RenderIconItem || it is RenderBitmapItem }
+    val canvasItems = mapList.filterNot { it is RenderIconItem || it is RenderBitmapItem }
 
     Box {
         Canvas(
