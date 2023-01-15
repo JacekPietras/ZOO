@@ -38,7 +38,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.compose.MapComposable
 import com.jacekpietras.mapview.ui.compose.MapCustomViewComposable
+import com.jacekpietras.mapview.ui.compose.MapSurfaceViewComposable
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
@@ -64,7 +66,7 @@ internal fun MapView(
     mapList: List<RenderItem<Paint>>,
 ) {
     Box {
-        MapCustomViewComposable(
+        MapSurfaceViewComposable(
             modifier = Modifier.fillMaxSize(),
             backgroundColor = ZooTheme.colors.mapColors.colorMapGrass,
             onSizeChanged = onSizeChanged,
