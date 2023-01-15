@@ -9,6 +9,7 @@ import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 
 internal class TxtParser(context: Context, @RawRes rawRes: Int) {
 
+    @Suppress("MemberVisibilityCanBePrivate")
     val result: List<List<GpsHistoryEntity>>
 
     init {

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".ScrapperApplication"
         android:allowBackup="true"
         android:label="Scrapper"
         android:supportsRtl="true"

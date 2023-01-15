@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimalRepository {
 
-    suspend fun scrapAllAnimals()
-
     suspend fun loadAnimals()
+
+    fun getAnimals(): List<AnimalEntity>
 
     fun getAnimals(regionId: RegionId): List<AnimalEntity>
 

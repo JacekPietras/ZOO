@@ -1,4 +1,4 @@
-package com.jacekpietras.zoo.data.parser
+package com.jacekpietras.zoo.scrapper.data
 
 import android.util.Xml
 import org.xmlpull.v1.XmlPullParser
