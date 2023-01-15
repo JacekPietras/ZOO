@@ -14,16 +14,20 @@ internal class WebScrapper(
     private val animalRepository: AnimalRepository,
 ) {
 
-    suspend fun scrapAllAnimals() =
-        withContext(Dispatchers.Default) {
-            val jsonAdapter = moshi.adapter(AnimalEntity::class.java)
+    suspend fun scrapAllAnimals(): List<String> {
+        val notKnownAnimals = mutableListOf<String>()
+        val jsonAdapter = moshi.adapter(AnimalEntity::class.java)
 
-            val webs = animalRepository.getAnimals().map(AnimalEntity::web)
+        withContext(Dispatchers.Default) {
+            animalRepository.loadAnimals()
+            val storedWebs = animalRepository.getAnimals().map(AnimalEntity::web)
 
             AnimalListWebParser(makeStreamFromUrl("https://zoo-krakow.pl/zwierzeta/"))
                 .getContent()
-                .filterNot { webs.contains(it.www) }
+                .filterNot { storedWebs.contains(it.www) }
                 .forEach { basic ->
+                    notKnownAnimals.add(basic.name)
+
                     try {
                         val parser = AnimalWebParser(makeStreamFromUrl(basic.www, print = false))
 
@@ -45,9 +49,15 @@ internal class WebScrapper(
                         val json = jsonAdapter.toJson(animal)
                         Timber.i("Scrapper $json")
                     } catch (e: Throwable) {
-                        Timber.e(e, "Scrapper failed for ${basic.name}")
-                        return@withContext
+                        Timber.e(e, "Scrapper failed for ${basic.name} (${basic.www})")
                     }
                 }
         }
+
+        if (notKnownAnimals.isEmpty()) {
+            notKnownAnimals.add("All Animals are known")
+        }
+
+        return notKnownAnimals
+    }
 }

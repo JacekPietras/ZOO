@@ -7,6 +7,7 @@ import com.jacekpietras.geometry.haversine
 import com.jacekpietras.zoo.data.utils.cutOut
 import com.jacekpietras.zoo.domain.feature.sensors.model.GpsHistoryEntity
 
+@Suppress("unused")
 internal class TxtParser(context: Context, @RawRes rawRes: Int) {
 
     @Suppress("MemberVisibilityCanBePrivate")
