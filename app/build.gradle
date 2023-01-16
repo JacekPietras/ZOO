@@ -7,7 +7,7 @@ android {
     namespace 'com.jacekpietras.zoo'
 
     defaultConfig {
-        applicationId "com.jacekpietras.zoo"
+        applicationId "com.jacekpietras.zoo.surface"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
