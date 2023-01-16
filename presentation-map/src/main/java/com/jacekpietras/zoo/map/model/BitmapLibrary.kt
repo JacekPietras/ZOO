@@ -11,20 +11,22 @@ class BitmapLibrary(
         mapOf(
             "tree" to BitmapVersions(
                 context = context,
-                res = R.drawable.ic_tree_36,
-                nightRes = R.drawable.ic_tree_36_night,
+                res = R.drawable.ic_map_tree_36,
+                nightRes = R.drawable.ic_map_tree_36_night,
             ),
             "slonie" to BitmapVersions(
                 context = context,
-                res = R.drawable.ic_elephant_48,
+                res = R.drawable.ic_map_elephant_48,
             ),
             "wc-" to BitmapVersions(
                 context = context,
-                res = R.drawable.ic_wc_24,
+                res = R.drawable.ic_map_wc_24,
+                nightRes = R.drawable.ic_map_wc_24_night,
             ),
             "wyjscie" to BitmapVersions(
                 context = context,
-                res = R.drawable.ic_door_24,
+                res = R.drawable.ic_map_door_24,
+                nightRes = R.drawable.ic_map_door_24_night,
             ),
         )
 
