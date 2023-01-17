@@ -11,6 +11,7 @@ import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
+import com.jacekpietras.mapview.ui.LastMapUpdate
 import timber.log.Timber
 
 internal class RenderListMaker<T>(
@@ -44,7 +45,9 @@ internal class RenderListMaker<T>(
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
         preparedLists.forEach(::addToRenderItems)
         Timber.d("Perf: skipped: $skipped, hidden: $hidden, calculated $calculated")
+        LastMapUpdate.sortS = System.nanoTime()
         icons.sortBy { it.cY }
+        LastMapUpdate.sortE = System.nanoTime()
         return borders + insides + icons
     }
 

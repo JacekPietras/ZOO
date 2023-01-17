@@ -36,12 +36,15 @@ import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
-import com.jacekpietras.mapview.ui.LastMapUpdate.cutoEnd
-import com.jacekpietras.mapview.ui.LastMapUpdate.cutoStart
-import com.jacekpietras.mapview.ui.LastMapUpdate.lastTransform
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
+import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
-import com.jacekpietras.mapview.ui.LastMapUpdate.moveEnd
-import com.jacekpietras.mapview.ui.LastMapUpdate.renderStart
+import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendE
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
+import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
+import com.jacekpietras.mapview.ui.LastMapUpdate.sortS
 import timber.log.Timber
 
 @Composable
@@ -53,7 +56,7 @@ fun MapComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
-    renderStart = System.nanoTime()
+    rendS = System.nanoTime()
 
     Box {
         Canvas(
@@ -94,20 +97,24 @@ fun MapComposable(
             )
         }
 
-        if (lastTransform > 0) {
-            val now = System.nanoTime()
+        val prevRendE = rendE
+        rendE = System.nanoTime()
+        if (trans > 0) {
 
             Timber.d(
-                "Perf: Render: Full: ${(now - lastTransform) / 1_000 / 1_000.0} ms\n" +
-                        "    [pass to vm] ${(cutoStart - lastTransform) / 1_000 / 1_000.0} ms\n" +
-                        "    [coord prep] ${(moveEnd - cutoStart) / 1_000 / 1_000.0} ms\n" +
-                        "    [ translate] ${(cutoEnd - moveEnd) / 1_000 / 1_000.0} ms\n" +
-                        "    [invalidate] ${(renderStart - cutoEnd) / 1_000 / 1_000.0} ms\n" +
-                        "    [    render] ${(now - renderStart) / 1_000 / 1_000.0} ms"
+                "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
+                        "    [pass to vm] ${trans toMs cutoS}\n" +
+                        "    [coord prep] ${cutoS toMs moveE}\n" +
+                        "    [ translate] ${moveE toMs cutoE}    =[${moveE toMs sortS}]+[sort ${sortS toMs sortE}]+[${sortE toMs cutoE}]\n" +
+                        "    [invalidate] ${cutoE toMs rendS}\n" +
+                        "    [    render] ${rendS toMs rendE}"
             )
         }
     }
 }
+
+private infix fun Long.toMs(right:Long)=
+    "${(right - this) / 1_000 / 1_000.0} ms"
 
 @Composable
 private fun MapIcon(item: RenderIconItem<ComposablePaint>) {

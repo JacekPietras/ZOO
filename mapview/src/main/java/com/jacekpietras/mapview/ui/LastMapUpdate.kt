@@ -6,11 +6,15 @@ import com.jacekpietras.mapview.BuildConfig
 object LastMapUpdate {
 
     // fixme remove them
-    var lastTransform: Long = 0L
-    var cutoStart: Long = 0L
-    var moveEnd: Long = 0L
-    var cutoEnd: Long = 0L
-    var renderStart: Long = 0L
+    var trans: Long = 0L
+    var cutoS: Long = 0L
+    var moveE: Long = 0L
+    var cutoE: Long = 0L
+    var rendS: Long = 0L
+    var rendE: Long = 0L
+
+    var sortS: Long = 0L
+    var sortE: Long = 0L
 
     var lastUpdate: Long = 0L
     val fpsList = mutableListOf<Long>()

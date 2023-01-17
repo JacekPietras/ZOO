@@ -10,9 +10,9 @@ import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedP
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedIconItem
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
-import com.jacekpietras.mapview.ui.LastMapUpdate.cutoEnd
-import com.jacekpietras.mapview.ui.LastMapUpdate.cutoStart
-import com.jacekpietras.mapview.ui.LastMapUpdate.moveEnd
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
+import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
 import timber.log.Timber
@@ -332,7 +332,7 @@ class MapViewLogic<T>(
 
     private fun cutOutNotVisible() {
         val before = System.currentTimeMillis()
-        cutoStart = System.nanoTime()
+        cutoS = System.nanoTime()
 
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
@@ -355,7 +355,7 @@ class MapViewLogic<T>(
         }
         prevVisibleGpsCoordinate = visibleGpsCoordinate
 
-        moveEnd = System.nanoTime()
+        moveE = System.nanoTime()
 
         RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
@@ -370,7 +370,7 @@ class MapViewLogic<T>(
             .also { invalidate(it) }
 
         Timber.d("Perf: cutOutNotVisible ${System.currentTimeMillis() - before} ms")
-        cutoEnd = System.nanoTime()
+        cutoE = System.nanoTime()
 
         cuttingOutNow.set(false)
     }
