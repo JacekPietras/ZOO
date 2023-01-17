@@ -36,7 +36,11 @@ import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoEnd
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoStart
+import com.jacekpietras.mapview.ui.LastMapUpdate.lastTransform
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
+import com.jacekpietras.mapview.ui.LastMapUpdate.renderStart
 import timber.log.Timber
 
 @Composable
@@ -48,6 +52,8 @@ fun MapComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
+    renderStart = System.currentTimeMillis()
+
     Box {
         Canvas(
             modifier = Modifier
@@ -84,6 +90,18 @@ fun MapComposable(
             Text(
                 text = "FPS: $medFps",
                 modifier = Modifier.align(Alignment.BottomStart),
+            )
+        }
+
+        if (lastTransform > 0) {
+            val now = System.currentTimeMillis()
+
+            Timber.d(
+                "Perf: Render: Full: ${now - lastTransform} ms\n" +
+                        "    [tran->cutS] ${cutoStart - lastTransform} ms\n"+
+                        "    [cutS->cutE] ${cutoEnd - cutoStart} ms\n"+
+                        "    [cutE->renS] ${renderStart - cutoEnd} ms\n"+
+                        "    [renE->renS] ${now - renderStart} ms"
             )
         }
     }

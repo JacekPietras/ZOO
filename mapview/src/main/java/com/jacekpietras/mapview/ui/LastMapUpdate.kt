@@ -5,6 +5,11 @@ import com.jacekpietras.mapview.BuildConfig
 
 object LastMapUpdate {
 
+    var lastTransform: Long = 0L
+    var cutoStart: Long = 0L
+    var cutoEnd: Long = 0L
+    var renderStart: Long = 0L
+
     var lastUpdate: Long = 0L
     val fpsList = mutableListOf<Long>()
     val medFps get() = fpsList.average().toLong()
