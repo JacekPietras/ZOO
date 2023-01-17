@@ -48,8 +48,6 @@ fun MapComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
-    val (icons, canvasItems) = mapList.partition { it is RenderIconItem || it is RenderBitmapItem }
-
     Box {
         Canvas(
             modifier = Modifier
@@ -64,17 +62,16 @@ fun MapComposable(
                 onSizeChanged(width, height)
             }
 
-            canvasItems.forEach {
+            mapList.forEach {
                 when (it) {
                     is RenderPathItem -> drawPath(it.shape, it.paint, false)
                     is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
                     is RenderCircleItem -> drawCircleSafe(it.paint.color, it.radius, Offset(it.cX, it.cY))
-                    is RenderBitmapItem -> Unit
-                    is RenderIconItem -> Unit
+                    else -> Unit
                 }
             }
         }
-        icons.forEach {
+        mapList.forEach {
             when (it) {
                 is RenderBitmapItem -> MapBitmap(it)
                 is RenderIconItem -> MapIcon(it)

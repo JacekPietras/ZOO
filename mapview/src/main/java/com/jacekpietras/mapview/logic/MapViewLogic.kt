@@ -101,7 +101,6 @@ class MapViewLogic<T>(
         set(value) {
             field = value % 360
         }
-    var renderList: List<RenderItem<T>> = emptyList()
     private var centeringAtUser = false
         set(value) {
             if (field != value) {
@@ -207,24 +206,9 @@ class MapViewLogic<T>(
         }
     }
 
-    fun onRotate(rotate: Float) {
-        if (rotate != 0f) {
-            worldRotation += rotate
-            cutOutNotVisible()
-        }
-    }
-
     fun setRotate(rotate: Float) {
         if (rotate != worldRotation) {
             worldRotation = rotate
-            cutOutNotVisible()
-        }
-    }
-
-    fun onScroll(vX: Float, vY: Float) {
-        if (vX != 0f || vY != 0f) {
-            centeringAtUser = false
-            centerGpsCoordinate += toMovementInWorld(vX, vY)
             cutOutNotVisible()
         }
     }
@@ -367,7 +351,7 @@ class MapViewLogic<T>(
         }
         prevVisibleGpsCoordinate = visibleGpsCoordinate
 
-        renderList = RenderListMaker<T>(
+        RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
             worldRotation = worldRotation,
             currentWidth = currentWidth,
