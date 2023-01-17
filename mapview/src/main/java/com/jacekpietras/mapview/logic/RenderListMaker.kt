@@ -11,6 +11,7 @@ import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
+import com.jacekpietras.mapview.ui.LastMapUpdate
 import timber.log.Timber
 
 internal class RenderListMaker<T>(
@@ -44,7 +45,9 @@ internal class RenderListMaker<T>(
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
         preparedLists.forEach(::addToRenderItems)
         Timber.d("Perf: skipped: $skipped, hidden: $hidden, calculated $calculated")
+        LastMapUpdate.sortS = System.nanoTime()
         icons.sortBy { it.cY }
+        LastMapUpdate.sortE = System.nanoTime()
         return borders + insides + icons
     }
 
@@ -66,8 +69,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPolygon(item.shape)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { polygon ->
+                                        calculated++
                                         item.addToRender(polygon)
                                         item.cache = polygon
                                     }
@@ -83,19 +86,13 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPath(item.shape)
-                                    .also {
-                                        if (it.isEmpty()) {
-                                            item.isHidden = true
-                                        }
-                                    }
-                                    .map { path ->
+                                    ?.map { path ->
                                         calculated++
                                         path.withMatrix(matrix, worldRotation)
+                                            .also { item.addToRender(it) }
                                     }
-                                    .also { item.cache = it }
-                                    .forEach { path ->
-                                        item.addToRender(path)
-                                    }
+                                    ?.also { item.cache = it }
+                                    ?: run { item.isHidden = true }
                             }
                     }
                     is PreparedCircleItem -> {
@@ -108,8 +105,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
@@ -126,8 +123,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
@@ -144,8 +141,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }

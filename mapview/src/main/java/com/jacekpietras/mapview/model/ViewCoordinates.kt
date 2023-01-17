@@ -5,7 +5,6 @@ import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.containsLine
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.geometry.polygonContains
-import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -54,40 +53,49 @@ internal class ViewCoordinates(
         verticalScale = viewHeight / visibleRect.height()
     }
 
-    fun transformPath(array: DoubleArray): List<FloatArray> {
+    fun transformPath(array: DoubleArray): List<FloatArray>? {
         val rectF = visibleRectRotated
         val result = mutableListOf<FloatArray>()
-        var part: FloatArray? = null
         var pos = 0
+        var skip = 0
+
+        if (part.size < array.size) {
+            part = FloatArray(array.size + 16)
+        }
 
         for (i in 0 until (array.size - 2) step 2) {
-            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
-                if (part != null) {
-                    part[pos] = array[i + 2].transformX()
-                    part[pos + 1] = array[i + 3].transformY()
-                    pos += 2
-                } else {
-                    part = FloatArray(array.size)
-
+            if (skip > 0 || rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
+                if (pos == 0) {
                     part[0] = array[i].transformX()
                     part[1] = array[i + 1].transformY()
                     part[2] = array[i + 2].transformX()
                     part[3] = array[i + 3].transformY()
                     pos = 4
+                } else {
+                    part[pos] = array[i + 2].transformX()
+                    part[pos + 1] = array[i + 3].transformY()
+                    pos += 2
+                }
+                if (skip == 0) {
+                    // takes next few segments even if they are not in the screen,
+                    // optimization trick to not check if rect contains line
+                    skip = 10
+                } else {
+                    skip--
                 }
             } else {
-                if (part != null) {
+                if (pos != 0) {
                     result.add(part.copyOfRange(0, pos))
                 }
-                part = null
+                pos = 0
             }
         }
 
-        if (part != null) {
+        if (pos != 0) {
             result.add(part.copyOfRange(0, pos))
         }
 
-        return result
+        return result.takeIf(MutableList<FloatArray>::isNotEmpty)
     }
 
     fun transformPolygon(array: DoubleArray): FloatArray? =
@@ -188,9 +196,9 @@ internal class ViewCoordinates(
 //        }
 
         val left = abs(visibleRectRotated.left - other.visibleRectRotated.left) * abs(horizontalScale)
-        val top = abs(visibleRectRotated.top - other.visibleRectRotated.top)* abs(verticalScale)
-        val right = abs(visibleRectRotated.right - other.visibleRectRotated.right)* abs(horizontalScale)
-        val bottom = abs(visibleRectRotated.bottom - other.visibleRectRotated.bottom)* abs(verticalScale)
+        val top = abs(visibleRectRotated.top - other.visibleRectRotated.top) * abs(verticalScale)
+        val right = abs(visibleRectRotated.right - other.visibleRectRotated.right) * abs(horizontalScale)
+        val bottom = abs(visibleRectRotated.bottom - other.visibleRectRotated.bottom) * abs(verticalScale)
 
         val coordTreshold = 500
 
@@ -212,5 +220,10 @@ internal class ViewCoordinates(
 ////                    if(vert>zoomTreshold){"!"}else{" "}+     vert  + "\n"
 //        )
         return result
+    }
+
+    private companion object {
+
+        var part: FloatArray = FloatArray(512)
     }
 }

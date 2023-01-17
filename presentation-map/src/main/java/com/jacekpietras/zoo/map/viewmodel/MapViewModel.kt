@@ -6,6 +6,7 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
@@ -535,6 +536,8 @@ internal class MapViewModel(
     }
 
     fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
+        trans = System.nanoTime()
+
         mapLogic.onTransform(cX, cY, scale, rotate, vX, vY)
     }
 

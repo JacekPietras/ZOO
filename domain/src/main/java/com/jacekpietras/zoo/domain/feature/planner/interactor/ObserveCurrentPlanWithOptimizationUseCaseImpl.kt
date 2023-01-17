@@ -13,6 +13,7 @@ import com.jacekpietras.zoo.domain.model.Region
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.ClosedSendChannelException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -59,8 +60,7 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                                             .findShortPathAndStages(notSeen)
                                             .addSeen(seen)
                                         job.save(null)
-                                        if (!isActive) return@launch
-                                        collector.emit(result)
+                                        collector.emitOrNothing(result)
                                         saveBetterPlan(plan, result.stages)
                                     }
                                 }.let(job::save)
@@ -71,6 +71,14 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
                     .distinctUntilChanged()
             }
         }
+
+    private suspend fun <T> FlowCollector<T>.emitOrNothing(e: T) {
+        try {
+            emit(e)
+        } catch (closedException: ClosedSendChannelException) {
+            // ignore
+        }
+    }
 
     private inline fun printMeasure(block: () -> Unit) {
         val measure = measureTime(block)

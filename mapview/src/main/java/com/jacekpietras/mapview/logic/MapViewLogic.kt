@@ -10,6 +10,9 @@ import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedP
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedIconItem
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
+import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
 import timber.log.Timber
@@ -101,7 +104,6 @@ class MapViewLogic<T>(
         set(value) {
             field = value % 360
         }
-    var renderList: List<RenderItem<T>> = emptyList()
     private var centeringAtUser = false
         set(value) {
             if (field != value) {
@@ -207,24 +209,9 @@ class MapViewLogic<T>(
         }
     }
 
-    fun onRotate(rotate: Float) {
-        if (rotate != 0f) {
-            worldRotation += rotate
-            cutOutNotVisible()
-        }
-    }
-
     fun setRotate(rotate: Float) {
         if (rotate != worldRotation) {
             worldRotation = rotate
-            cutOutNotVisible()
-        }
-    }
-
-    fun onScroll(vX: Float, vY: Float) {
-        if (vX != 0f || vY != 0f) {
-            centeringAtUser = false
-            centerGpsCoordinate += toMovementInWorld(vX, vY)
             cutOutNotVisible()
         }
     }
@@ -345,6 +332,7 @@ class MapViewLogic<T>(
 
     private fun cutOutNotVisible() {
         val before = System.currentTimeMillis()
+        cutoS = System.nanoTime()
 
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
@@ -367,7 +355,9 @@ class MapViewLogic<T>(
         }
         prevVisibleGpsCoordinate = visibleGpsCoordinate
 
-        renderList = RenderListMaker<T>(
+        moveE = System.nanoTime()
+
+        RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
             worldRotation = worldRotation,
             currentWidth = currentWidth,
@@ -380,6 +370,8 @@ class MapViewLogic<T>(
             .also { invalidate(it) }
 
         Timber.d("Perf: cutOutNotVisible ${System.currentTimeMillis() - before} ms")
+        cutoE = System.nanoTime()
+
         cuttingOutNow.set(false)
     }
 
