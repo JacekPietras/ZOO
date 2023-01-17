@@ -17,6 +17,13 @@ data class PointD(
     fun toFloat(): PointF =
         PointF(x.toFloat(), y.toFloat())
 
+    fun toFloatArray(): FloatArray {
+        val result = FloatArray(2)
+        result[0] = x.toFloat()
+        result[1] = y.toFloat()
+        return result
+    }
+
     fun toInt(): Point =
         Point(x.toInt(), y.toInt())
 

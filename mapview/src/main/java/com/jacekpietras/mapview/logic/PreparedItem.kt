@@ -39,7 +39,7 @@ internal sealed class PreparedItem<T>(
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, isHidden)
 
         class PreparedCircleItem<T>(
-            val point: PointF,
+            val point: FloatArray,
             val radius: MapDimension,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
@@ -50,7 +50,7 @@ internal sealed class PreparedItem<T>(
     }
 
     class PreparedIconItem<T>(
-        val point: PointF,
+        val point: FloatArray,
         @DrawableRes val icon: Int,
         override val minZoom: Float? = null,
         var cache: FloatArray? = null,
@@ -59,7 +59,7 @@ internal sealed class PreparedItem<T>(
     ) : PreparedItem<T>(minZoom, isHidden)
 
     class PreparedBitmapItem<T>(
-        val point: PointF,
+        val point: FloatArray,
         val bitmap: Bitmap,
         override val minZoom: Float? = null,
         var cache: FloatArray? = null,

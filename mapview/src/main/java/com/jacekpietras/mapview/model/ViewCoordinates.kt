@@ -1,6 +1,5 @@
 package com.jacekpietras.mapview.model
 
-import android.graphics.PointF
 import android.graphics.RectF
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
@@ -104,23 +103,14 @@ internal class ViewCoordinates(
 
     fun transformPolygon(array: FloatArray): FloatArray? =
         if (intersectsPolygon(array)) {
-            val result = FloatArray(array.size)
-
-            for (i in array.indices step 2) {
-                result[i] = array[i]
-                result[i + 1] = array[i + 1]
-            }
-            result
+            array.clone()
         } else {
             null
         }
 
-    fun transformPoint(p: PointF): FloatArray? =
-        if (visibleRectRotated.contains(p)) {
-            val result = FloatArray(2)
-            result[0] = p.x
-            result[1] = p.y
-            result
+    fun transformPoint(p: FloatArray): FloatArray? =
+        if (visibleRectRotated.contains(p[0], p[1])) {
+            p.clone()
         } else {
             null
         }

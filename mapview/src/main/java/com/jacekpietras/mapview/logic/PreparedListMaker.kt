@@ -38,7 +38,7 @@ internal class PreparedListMaker<T>(
                             item.minZoom,
                         )
                         is MapItem.MapColoredItem.CircleMapItem -> PreparedItem.PreparedColoredItem.PreparedCircleItem(
-                            item.point.toFloat(),
+                            item.point.toFloatArray(),
                             item.radius,
                             inner,
                             border,
@@ -47,13 +47,13 @@ internal class PreparedListMaker<T>(
                     }
                 }
                 is MapItem.IconMapItem -> PreparedItem.PreparedIconItem(
-                    item.point.toFloat(),
+                    item.point.toFloatArray(),
                     item.icon,
                     item.minZoom,
                     pivot = item.pivot,
                 )
                 is MapItem.BitmapMapItem -> PreparedItem.PreparedBitmapItem(
-                    item.point.toFloat(),
+                    item.point.toFloatArray(),
                     item.bitmap,
                     item.minZoom,
                     pivot = item.pivot,
