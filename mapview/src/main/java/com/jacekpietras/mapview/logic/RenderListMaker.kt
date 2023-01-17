@@ -29,9 +29,24 @@ internal class RenderListMaker<T>(
     private val icons = mutableListOf<RenderItem.PointItem<T>>()
     private val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
     private val dynamicDimensions = mutableMapOf<MapDimension, Float>()
-    private val matrix = Matrix()
+    private val matrix1 = Matrix()
         .apply {
-            setRotate(
+            setTranslate(
+                -visibleGpsCoordinate.visibleRect.left.toFloat(),
+                -visibleGpsCoordinate.visibleRect.top.toFloat(),
+            )
+        }
+    private val matrix2 = Matrix()
+        .apply {
+//            preTranslate(
+//                -visibleGpsCoordinate.visibleRect.left.toFloat(),
+//                -visibleGpsCoordinate.visibleRect.top.toFloat(),
+//            )
+            setScale(
+                visibleGpsCoordinate.horizontalScale.toFloat(),
+                visibleGpsCoordinate.verticalScale.toFloat(),
+            )
+            postRotate(
                 -worldRotation,
                 currentWidth / 2.toFloat(),
                 currentHeight / 2.toFloat(),
@@ -68,7 +83,8 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPolygon(item.shape)
-                                    ?.withMatrix(matrix, worldRotation)
+                                    ?.also(matrix1::mapPoints)
+                                    ?.also(matrix2::mapPoints)
                                     ?.let { polygon ->
                                         calculated++
                                         item.addToRender(polygon)
@@ -88,8 +104,10 @@ internal class RenderListMaker<T>(
                                     .transformPath(item.shape)
                                     ?.map { path ->
                                         calculated++
-                                        path.withMatrix(matrix, worldRotation)
-                                            .also { item.addToRender(it) }
+                                        matrix1.mapPoints(path)
+                                        matrix2.mapPoints(path)
+                                        item.addToRender(path)
+                                        path
                                     }
                                     ?.also { item.cache = it }
                                     ?: run { item.isHidden = true }
@@ -104,7 +122,8 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
-                                    ?.withMatrix(matrix, worldRotation)
+                                    ?.also(matrix1::mapPoints)
+                                    ?.also(matrix2::mapPoints)
                                     ?.let { point ->
                                         calculated++
                                         item.addToRender(point)
@@ -122,7 +141,8 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
-                                    ?.withMatrix(matrix, worldRotation)
+                                    ?.also(matrix1::mapPoints)
+                                    ?.also(matrix2::mapPoints)
                                     ?.let { point ->
                                         calculated++
                                         item.addToRender(point)
@@ -140,7 +160,8 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
-                                    ?.withMatrix(matrix, worldRotation)
+                                    ?.also(matrix1::mapPoints)
+                                    ?.also(matrix2::mapPoints)
                                     ?.let { point ->
                                         calculated++
                                         item.addToRender(point)
@@ -158,13 +179,6 @@ internal class RenderListMaker<T>(
 
     private fun Float?.isBiggerThanZoom(): Boolean =
         this == null || this > zoom
-
-    private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {
-        if (worldRotation != 0f) {
-            matrix.mapPoints(this)
-        }
-        return this
-    }
 
     private fun PreparedPolygonItem<T>.addToRender(
         array: FloatArray,

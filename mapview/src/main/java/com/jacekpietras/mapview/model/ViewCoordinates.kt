@@ -127,20 +127,11 @@ internal class ViewCoordinates(
             y = y.deTransformY(),
         )
 
-    fun transformPoints(list: List<PointD>): FloatArray {
-        val result = FloatArray(list.size * 2)
-        list.forEachIndexed { i, p ->
-            result[i * 2] = p.x.transformX()
-            result[i * 2 + 1] = p.y.transformY()
-        }
-        return result
-    }
-
     private fun Double.transformX(): Float =
-        ((this - visibleRect.left) * horizontalScale).toFloat()
+        this.toFloat()
 
     private fun Double.transformY(): Float =
-        ((this - visibleRect.top) * verticalScale).toFloat()
+        this.toFloat()
 
     private fun Float.deTransformX(): Double =
         (this / horizontalScale) + visibleRect.left
