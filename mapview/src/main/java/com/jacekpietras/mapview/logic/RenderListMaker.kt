@@ -238,6 +238,7 @@ internal class RenderListMaker<T>(
                 array[0],
                 array[1],
                 icon,
+                pivot,
             )
         )
     }
@@ -250,6 +251,7 @@ internal class RenderListMaker<T>(
                 array[0],
                 array[1],
                 bitmap,
+                pivot,
             )
         )
     }

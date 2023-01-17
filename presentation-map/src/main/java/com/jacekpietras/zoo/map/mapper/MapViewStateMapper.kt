@@ -11,6 +11,7 @@ import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PathMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PolygonMapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
+import com.jacekpietras.mapview.model.Pivot
 import com.jacekpietras.mapview.model.PolygonD
 import com.jacekpietras.zoo.core.text.Dictionary.findFacilityDrawableRes
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
@@ -217,6 +218,7 @@ internal class MapViewStateMapper {
                     point = position,
                     bitmap = bitmap,
                     minZoom = ZOOM_MEDIUM,
+                    pivot = Pivot.CENTER,
                 )
             }
         }

@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
+import com.jacekpietras.mapview.model.Pivot
 
 internal sealed class PreparedItem<T>(
     open val minZoom: Float?,
@@ -53,6 +54,7 @@ internal sealed class PreparedItem<T>(
         override val minZoom: Float? = null,
         var cache: FloatArray? = null,
         override var isHidden: Boolean = false,
+        val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, isHidden)
 
     class PreparedBitmapItem<T>(
@@ -61,5 +63,6 @@ internal sealed class PreparedItem<T>(
         override val minZoom: Float? = null,
         var cache: FloatArray? = null,
         override var isHidden: Boolean = false,
+        val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, isHidden)
 }

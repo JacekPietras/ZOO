@@ -36,14 +36,23 @@ sealed class RenderItem<T> {
             override val cX: Float,
             override val cY: Float,
             @DrawableRes val iconRes: Int,
-            val iconSize: Int = 24,
-        ) : PointItem<T>(cX, cY)
+            val pivot: Pivot,
+        ) : PointItem<T>(cX, cY) {
+
+            val width: Int get() = 24
+            val height: Int get() = 24
+        }
 
         @Immutable
         class RenderBitmapItem<T>(
             override val cX: Float,
             override val cY: Float,
             val bitmap: Bitmap,
-        ) : PointItem<T>(cX, cY)
+            val pivot: Pivot,
+        ) : PointItem<T>(cX, cY) {
+
+            val width: Int get() = bitmap.width
+            val height: Int get() = bitmap.height
+        }
     }
 }

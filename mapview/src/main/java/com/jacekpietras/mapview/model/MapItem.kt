@@ -37,11 +37,13 @@ sealed class MapItem(
         val point: PointD,
         @DrawableRes val icon: Int,
         override val minZoom: Float? = null,
+        val pivot: Pivot = Pivot.CENTER,
     ) : MapItem(minZoom)
 
     class BitmapMapItem(
         val point: PointD,
         val bitmap: Bitmap,
         override val minZoom: Float? = null,
+        val pivot: Pivot = Pivot.BOTTOM,
     ) : MapItem(minZoom)
 }
