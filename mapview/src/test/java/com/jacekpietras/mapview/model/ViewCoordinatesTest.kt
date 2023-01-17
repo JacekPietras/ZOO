@@ -28,7 +28,7 @@ class ViewCoordinatesTest {
 
     @Test
     fun `mapped center is in center of screen`() {
-        val mapped = tested.transformPoint(center).toList()
+        val mapped = tested.transformPoint(center.toFloatArray())?.toList()
 
         val expected = listOf(viewWidth / 2.0f, viewHeight / 2.0f)
         assertEquals(expected, mapped)

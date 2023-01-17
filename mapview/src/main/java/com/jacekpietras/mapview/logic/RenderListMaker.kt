@@ -29,29 +29,28 @@ internal class RenderListMaker<T>(
     private val icons = mutableListOf<RenderItem.PointItem<T>>()
     private val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
     private val dynamicDimensions = mutableMapOf<MapDimension, Float>()
-    private val matrix1 = Matrix()
-        .apply {
-            setTranslate(
-                -visibleGpsCoordinate.visibleRect.left.toFloat(),
-                -visibleGpsCoordinate.visibleRect.top.toFloat(),
-            )
-        }
-    private val matrix2 = Matrix()
-        .apply {
-//            preTranslate(
-//                -visibleGpsCoordinate.visibleRect.left.toFloat(),
-//                -visibleGpsCoordinate.visibleRect.top.toFloat(),
-//            )
-            setScale(
-                visibleGpsCoordinate.horizontalScale.toFloat(),
-                visibleGpsCoordinate.verticalScale.toFloat(),
-            )
-            postRotate(
-                -worldRotation,
-                currentWidth / 2.toFloat(),
-                currentHeight / 2.toFloat(),
-            )
-        }
+    private val matrix = Matrix().also {
+        val matrix1 = Matrix()
+            .apply {
+                setTranslate(
+                    -visibleGpsCoordinate.visibleRect.left.toFloat(),
+                    -visibleGpsCoordinate.visibleRect.top.toFloat(),
+                )
+            }
+        val matrix2 = Matrix()
+            .apply {
+                setScale(
+                    visibleGpsCoordinate.horizontalScale.toFloat(),
+                    visibleGpsCoordinate.verticalScale.toFloat(),
+                )
+                postRotate(
+                    -worldRotation,
+                    currentWidth / 2.toFloat(),
+                    currentHeight / 2.toFloat(),
+                )
+            }
+        it.setConcat(matrix2, matrix1)
+    }
 
     private var calculated: Int = 0
     private var skipped: Int = 0
@@ -83,8 +82,7 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPolygon(item.shape)
-                                    ?.also(matrix1::mapPoints)
-                                    ?.also(matrix2::mapPoints)
+                                    ?.also(matrix::mapPoints)
                                     ?.let { polygon ->
                                         calculated++
                                         item.addToRender(polygon)
@@ -104,8 +102,7 @@ internal class RenderListMaker<T>(
                                     .transformPath(item.shape)
                                     ?.map { path ->
                                         calculated++
-                                        matrix1.mapPoints(path)
-                                        matrix2.mapPoints(path)
+                                        matrix.mapPoints(path)
                                         item.addToRender(path)
                                         path
                                     }
@@ -122,8 +119,7 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
-                                    ?.also(matrix1::mapPoints)
-                                    ?.also(matrix2::mapPoints)
+                                    ?.also(matrix::mapPoints)
                                     ?.let { point ->
                                         calculated++
                                         item.addToRender(point)
@@ -141,8 +137,7 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
-                                    ?.also(matrix1::mapPoints)
-                                    ?.also(matrix2::mapPoints)
+                                    ?.also(matrix::mapPoints)
                                     ?.let { point ->
                                         calculated++
                                         item.addToRender(point)
@@ -160,8 +155,7 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
-                                    ?.also(matrix1::mapPoints)
-                                    ?.also(matrix2::mapPoints)
+                                    ?.also(matrix::mapPoints)
                                     ?.let { point ->
                                         calculated++
                                         item.addToRender(point)
