@@ -1,6 +1,7 @@
 package com.jacekpietras.mapview.logic
 
 import android.graphics.Bitmap
+import android.graphics.PointF
 import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapDimension
@@ -20,7 +21,7 @@ internal sealed class PreparedItem<T>(
     ) : PreparedItem<T>(minZoom, isHidden) {
 
         class PreparedPathItem<T>(
-            val shape: DoubleArray,
+            val shape: FloatArray,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
@@ -29,7 +30,7 @@ internal sealed class PreparedItem<T>(
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, isHidden)
 
         class PreparedPolygonItem<T>(
-            val shape: DoubleArray,
+            val shape: FloatArray,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
@@ -38,7 +39,7 @@ internal sealed class PreparedItem<T>(
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, isHidden)
 
         class PreparedCircleItem<T>(
-            val point: PointD,
+            val point: PointF,
             val radius: MapDimension,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
@@ -49,7 +50,7 @@ internal sealed class PreparedItem<T>(
     }
 
     class PreparedIconItem<T>(
-        val point: PointD,
+        val point: PointF,
         @DrawableRes val icon: Int,
         override val minZoom: Float? = null,
         var cache: FloatArray? = null,
@@ -58,7 +59,7 @@ internal sealed class PreparedItem<T>(
     ) : PreparedItem<T>(minZoom, isHidden)
 
     class PreparedBitmapItem<T>(
-        val point: PointD,
+        val point: PointF,
         val bitmap: Bitmap,
         override val minZoom: Float? = null,
         var cache: FloatArray? = null,

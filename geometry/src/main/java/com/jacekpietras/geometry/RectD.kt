@@ -1,5 +1,6 @@
 package com.jacekpietras.geometry
 
+import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 
@@ -34,7 +35,24 @@ data class RectD(
             }
         }
 
+    fun contains(x: Float, y: Float): Boolean =
+        if (top < bottom) {
+            if (left < right) {
+                x >= left && x < right && y >= top && y < bottom
+            } else {
+                x >= right && x < left && y >= top && y < bottom
+            }
+        } else {
+            if (left < right) {
+                x >= left && x < right && y >= bottom && y < top
+            } else {
+                x >= right && x < left && y >= bottom && y < top
+            }
+        }
+
     fun contains(point: PointD): Boolean = contains(point.x, point.y)
+
+    fun contains(point: PointF): Boolean = contains(point.x, point.y)
 
     fun toFloat(): RectF =
         RectF(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())

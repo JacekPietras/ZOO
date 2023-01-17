@@ -4,7 +4,7 @@ import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.ui.PaintBaker
-import com.jacekpietras.mapview.utils.pointsToDoubleArray
+import com.jacekpietras.mapview.utils.pointsToFloatArray
 
 internal class PreparedListMaker<T>(
     private val paintBaker: PaintBaker<T>,
@@ -26,19 +26,19 @@ internal class PreparedListMaker<T>(
 
                     when (item) {
                         is MapItem.MapColoredItem.PathMapItem -> PreparedItem.PreparedColoredItem.PreparedPathItem(
-                            pointsToDoubleArray(item.path.vertices),
+                            pointsToFloatArray(item.path.vertices),
                             inner,
                             border,
                             item.minZoom,
                         )
                         is MapItem.MapColoredItem.PolygonMapItem -> PreparedItem.PreparedColoredItem.PreparedPolygonItem(
-                            pointsToDoubleArray(item.polygon.vertices),
+                            pointsToFloatArray(item.polygon.vertices),
                             inner,
                             border,
                             item.minZoom,
                         )
                         is MapItem.MapColoredItem.CircleMapItem -> PreparedItem.PreparedColoredItem.PreparedCircleItem(
-                            item.point,
+                            item.point.toFloat(),
                             item.radius,
                             inner,
                             border,
@@ -47,13 +47,13 @@ internal class PreparedListMaker<T>(
                     }
                 }
                 is MapItem.IconMapItem -> PreparedItem.PreparedIconItem(
-                    item.point,
+                    item.point.toFloat(),
                     item.icon,
                     item.minZoom,
                     pivot = item.pivot,
                 )
                 is MapItem.BitmapMapItem -> PreparedItem.PreparedBitmapItem(
-                    item.point,
+                    item.point.toFloat(),
                     item.bitmap,
                     item.minZoom,
                     pivot = item.pivot,

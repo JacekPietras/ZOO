@@ -4,11 +4,11 @@ import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.jacekpietras.geometry.PointD
 
-fun pointsToDoubleArray(list: List<PointD>): DoubleArray {
-    val result = DoubleArray(list.size * 2)
+fun pointsToFloatArray(list: List<PointD>): FloatArray {
+    val result = FloatArray(list.size * 2)
     for (i in list.indices) {
-        result[i shl 1] = list[i].x
-        result[(i shl 1) + 1] = list[i].y
+        result[i shl 1] = list[i].x.toFloat()
+        result[(i shl 1) + 1] = list[i].y.toFloat()
     }
     return result
 }
