@@ -5,8 +5,10 @@ import com.jacekpietras.mapview.BuildConfig
 
 object LastMapUpdate {
 
+    // fixme remove them
     var lastTransform: Long = 0L
     var cutoStart: Long = 0L
+    var moveEnd: Long = 0L
     var cutoEnd: Long = 0L
     var renderStart: Long = 0L
 

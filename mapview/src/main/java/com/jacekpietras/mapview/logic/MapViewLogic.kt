@@ -12,6 +12,7 @@ import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoEnd
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoStart
+import com.jacekpietras.mapview.ui.LastMapUpdate.moveEnd
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
 import timber.log.Timber
@@ -331,7 +332,7 @@ class MapViewLogic<T>(
 
     private fun cutOutNotVisible() {
         val before = System.currentTimeMillis()
-        cutoStart = System.currentTimeMillis()
+        cutoStart = System.nanoTime()
 
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
@@ -354,6 +355,8 @@ class MapViewLogic<T>(
         }
         prevVisibleGpsCoordinate = visibleGpsCoordinate
 
+        moveEnd = System.nanoTime()
+
         RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
             worldRotation = worldRotation,
@@ -367,7 +370,7 @@ class MapViewLogic<T>(
             .also { invalidate(it) }
 
         Timber.d("Perf: cutOutNotVisible ${System.currentTimeMillis() - before} ms")
-        cutoEnd = System.currentTimeMillis()
+        cutoEnd = System.nanoTime()
 
         cuttingOutNow.set(false)
     }

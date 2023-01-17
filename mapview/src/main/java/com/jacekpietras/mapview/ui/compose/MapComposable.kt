@@ -40,6 +40,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cutoEnd
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoStart
 import com.jacekpietras.mapview.ui.LastMapUpdate.lastTransform
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
+import com.jacekpietras.mapview.ui.LastMapUpdate.moveEnd
 import com.jacekpietras.mapview.ui.LastMapUpdate.renderStart
 import timber.log.Timber
 
@@ -52,7 +53,7 @@ fun MapComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
-    renderStart = System.currentTimeMillis()
+    renderStart = System.nanoTime()
 
     Box {
         Canvas(
@@ -94,14 +95,15 @@ fun MapComposable(
         }
 
         if (lastTransform > 0) {
-            val now = System.currentTimeMillis()
+            val now = System.nanoTime()
 
             Timber.d(
-                "Perf: Render: Full: ${now - lastTransform} ms\n" +
-                        "    [tran->cutS] ${cutoStart - lastTransform} ms\n"+
-                        "    [cutS->cutE] ${cutoEnd - cutoStart} ms\n"+
-                        "    [cutE->renS] ${renderStart - cutoEnd} ms\n"+
-                        "    [renE->renS] ${now - renderStart} ms"
+                "Perf: Render: Full: ${(now - lastTransform) / 1_000 / 1_000.0} ms\n" +
+                        "    [pass to vm] ${(cutoStart - lastTransform) / 1_000 / 1_000.0} ms\n" +
+                        "    [coord prep] ${(moveEnd - cutoStart) / 1_000 / 1_000.0} ms\n" +
+                        "    [ translate] ${(cutoEnd - moveEnd) / 1_000 / 1_000.0} ms\n" +
+                        "    [invalidate] ${(renderStart - cutoEnd) / 1_000 / 1_000.0} ms\n" +
+                        "    [    render] ${(now - renderStart) / 1_000 / 1_000.0} ms"
             )
         }
     }

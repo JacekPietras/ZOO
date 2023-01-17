@@ -536,7 +536,7 @@ internal class MapViewModel(
     }
 
     fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
-        lastTransform = System.currentTimeMillis()
+        lastTransform = System.nanoTime()
 
         mapLogic.onTransform(cX, cY, scale, rotate, vX, vY)
     }
