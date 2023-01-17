@@ -16,7 +16,11 @@ class BitmapLibrary(
             ),
             "slonie" to BitmapVersions(
                 context = context,
-                res = R.drawable.ic_map_elephant_48,
+                res = R.drawable.ic_map_elephant_64,
+            ),
+            "wielkie-koty-2" to BitmapVersions(
+                context = context,
+                res = R.drawable.ic_map_lion_64,
             ),
             "wc-" to BitmapVersions(
                 context = context,
