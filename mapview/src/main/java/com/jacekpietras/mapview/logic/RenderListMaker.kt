@@ -69,8 +69,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPolygon(item.shape)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { polygon ->
+                                        calculated++
                                         item.addToRender(polygon)
                                         item.cache = polygon
                                     }
@@ -86,19 +86,13 @@ internal class RenderListMaker<T>(
                             ?: run {
                                 visibleGpsCoordinate
                                     .transformPath(item.shape)
-                                    .also {
-                                        if (it.isEmpty()) {
-                                            item.isHidden = true
-                                        }
-                                    }
-                                    .map { path ->
+                                    ?.map { path ->
                                         calculated++
                                         path.withMatrix(matrix, worldRotation)
+                                            .also { item.addToRender(it) }
                                     }
-                                    .also { item.cache = it }
-                                    .forEach { path ->
-                                        item.addToRender(path)
-                                    }
+                                    ?.also { item.cache = it }
+                                    ?: run { item.isHidden = true }
                             }
                     }
                     is PreparedCircleItem -> {
@@ -111,8 +105,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
@@ -129,8 +123,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
@@ -147,8 +141,8 @@ internal class RenderListMaker<T>(
                                 visibleGpsCoordinate
                                     .transformPoint(item.point)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
