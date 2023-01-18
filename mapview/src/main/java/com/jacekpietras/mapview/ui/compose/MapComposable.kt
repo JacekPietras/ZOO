@@ -40,6 +40,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
 import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
+import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.LastMapUpdate.rendE
 import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
@@ -105,7 +106,10 @@ fun MapComposable(
                 "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
                         "    [pass to vm] ${trans toMs cutoS}\n" +
                         "    [coord prep] ${cutoS toMs moveE}\n" +
-                        "    [ translate] ${moveE toMs cutoE}    =[${moveE toMs sortS}]+[sort ${sortS toMs sortE}]+[${sortE toMs cutoE}]\n" +
+                        "    [ translate] ${moveE toMs sortS}\n" +
+                        "    [      sort] ${sortS toMs sortE}\n" +
+                        "    [       sum] ${sortE toMs mergE}\n" +
+                        "    [invali req] ${mergE toMs cutoE}\n" +
                         "    [invalidate] ${cutoE toMs rendS}\n" +
                         "    [    render] ${rendS toMs rendE}"
             )
@@ -114,7 +118,7 @@ fun MapComposable(
 }
 
 private infix fun Long.toMs(right:Long)=
-    "${(right - this) / 1_000 / 1_000.0} ms"
+    "${(right - this) / 10_000 / 1_00.0} ms"
 
 @Composable
 private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
