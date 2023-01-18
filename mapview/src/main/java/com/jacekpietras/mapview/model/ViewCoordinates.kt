@@ -107,24 +107,22 @@ internal class ViewCoordinates(
     fun transformPath(list: List<DoubleArray>): List<FloatArray> =
         list.map(::transformPolygon)
 
-    fun transformPolygon(array: DoubleArray): FloatArray {
-        val result = FloatArray(array.size)
-
-        for (i in array.indices step 2) {
-            result[i] = array[i].transformX()
-            result[i + 1] = array[i + 1].transformY()
+    fun transformPolygon(array: DoubleArray): FloatArray =
+        FloatArray(array.size) { i ->
+            if (i % 2 == 0) {
+                array[i].transformX()
+            } else {
+                array[i].transformY()
+            }
         }
-        return result
-    }
 
-    fun transformPoint(p: PointD): FloatArray? =
-        if (isPointVisible(p)) {
-            val result = FloatArray(2)
-            result[0] = p.x.transformX()
-            result[1] = p.y.transformY()
-            result
-        } else {
-            null
+    fun transformPoint(p: PointD): FloatArray =
+        FloatArray(2) { i ->
+            if (i == 0) {
+                p.x.transformX()
+            } else {
+                p.y.transformY()
+            }
         }
 
     fun deTransformPoint(x: Float, y: Float): PointD =
