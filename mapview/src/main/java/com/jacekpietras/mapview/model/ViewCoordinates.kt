@@ -79,7 +79,7 @@ internal class ViewCoordinates(
                 if (skip == 0) {
                     // takes next few segments even if they are not in the screen,
                     // optimization trick to not check if rect contains line
-                    skip = 10
+                    skip = 5
                 } else {
                     skip--
                 }
