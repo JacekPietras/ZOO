@@ -89,13 +89,12 @@ internal class RenderListMaker<T>(
                                 skipped++
                             }
                             ?: run {
-                                item.shape
-                                    .let {
-                                        if (item.visibility == TO_CHECK) {
-                                            item.cacheRaw = visibleGpsCoordinate.getVisiblePath(it)
-                                        }
-                                        item.cacheRaw
-                                    }
+                                if (item.visibility == TO_CHECK) {
+                                    visibleGpsCoordinate.getVisiblePath(item.shape)
+                                        .also { item.cacheRaw = it }
+                                } else {
+                                    item.cacheRaw
+                                }
                                     ?.let(visibleGpsCoordinate::transformPath)
                                     ?.map { path ->
                                         item.visibility = VISIBLE
