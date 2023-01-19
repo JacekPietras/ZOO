@@ -145,11 +145,11 @@ fun RectD.containsLine(
 
     // Find the intersection of the segment's and rectangle's y-projections
     if (bottom > top) {
-        if (maxY > bottom) maxY = bottom
-        if (minY < top) minY = top
+        if (maxY > bottom) return minY <= bottom
+        if (minY < top) return top <= maxY
     } else {
-        if (maxY > top) maxY = top
-        if (minY < bottom) minY = bottom
+        if (maxY > top) return minY <= top
+        if (minY < bottom) return bottom <= maxY
     }
 
     return minY <= maxY
