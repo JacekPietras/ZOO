@@ -3,12 +3,9 @@ package com.jacekpietras.mapview.logic
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
+import com.jacekpietras.mapview.logic.ItemVisibility.CACHED
 import com.jacekpietras.mapview.logic.ItemVisibility.TO_CHECK
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedIconItem
+import com.jacekpietras.mapview.logic.ItemVisibility.VISIBLE
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.LastMapUpdate
@@ -382,22 +379,8 @@ class MapViewLogic<T>(
         listOf(worldPreparedList, volatilePreparedList)
             .forEach { preparedItems ->
                 preparedItems.forEach { item ->
-                    when (item) {
-                        is PreparedPolygonItem -> {
-                            item.cache = null
-                        }
-                        is PreparedBitmapItem -> {
-                            item.cache = null
-                        }
-                        is PreparedCircleItem -> {
-                            item.cache = null
-                        }
-                        is PreparedPathItem -> {
-                            item.cache = null
-                        }
-                        is PreparedIconItem -> {
-                            item.cache = null
-                        }
+                    if (item.visibility == CACHED) {
+                        item.visibility = VISIBLE
                     }
                 }
             }
@@ -407,23 +390,6 @@ class MapViewLogic<T>(
         listOf(worldPreparedList, volatilePreparedList)
             .forEach { preparedItems ->
                 preparedItems.forEach { item ->
-                    when (item) {
-                        is PreparedPolygonItem -> {
-                            item.cache = null
-                        }
-                        is PreparedBitmapItem -> {
-                            item.cache = null
-                        }
-                        is PreparedCircleItem -> {
-                            item.cache = null
-                        }
-                        is PreparedPathItem -> {
-                            item.cache = null
-                        }
-                        is PreparedIconItem -> {
-                            item.cache = null
-                        }
-                    }
                     item.visibility = TO_CHECK
                 }
             }

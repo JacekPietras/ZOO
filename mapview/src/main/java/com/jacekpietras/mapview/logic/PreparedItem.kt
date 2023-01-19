@@ -25,7 +25,7 @@ internal sealed class PreparedItem<T>(
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
-            var cache: List<FloatArray>? = null,
+            var cacheTranslated: List<FloatArray>? = null,
             var cacheRaw: List<DoubleArray>? = null,
             override var visibility: ItemVisibility = TO_CHECK,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
@@ -35,7 +35,7 @@ internal sealed class PreparedItem<T>(
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
-            var cache: FloatArray? = null,
+            var cacheTranslated: FloatArray? = null,
             override var visibility: ItemVisibility = TO_CHECK,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
 
@@ -45,7 +45,7 @@ internal sealed class PreparedItem<T>(
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
-            var cache: FloatArray? = null,
+            var cacheTranslated: FloatArray? = null,
             override var visibility: ItemVisibility = TO_CHECK,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
     }
@@ -54,7 +54,7 @@ internal sealed class PreparedItem<T>(
         val point: PointD,
         @DrawableRes val icon: Int,
         override val minZoom: Float? = null,
-        var cache: FloatArray? = null,
+        var cacheTranslated: FloatArray? = null,
         override var visibility: ItemVisibility = TO_CHECK,
         val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, visibility)
@@ -63,14 +63,15 @@ internal sealed class PreparedItem<T>(
         val point: PointD,
         val bitmap: Bitmap,
         override val minZoom: Float? = null,
-        var cache: FloatArray? = null,
+        var cacheTranslated: FloatArray? = null,
         override var visibility: ItemVisibility = TO_CHECK,
         val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, visibility)
 }
 
-enum class ItemVisibility{
+enum class ItemVisibility {
     TO_CHECK,
+    CACHED,
     VISIBLE,
     HIDDEN,
 }

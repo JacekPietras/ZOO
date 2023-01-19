@@ -2,6 +2,7 @@ package com.jacekpietras.mapview.logic
 
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.mapview.logic.ItemVisibility.CACHED
 import com.jacekpietras.mapview.logic.ItemVisibility.HIDDEN
 import com.jacekpietras.mapview.logic.ItemVisibility.TO_CHECK
 import com.jacekpietras.mapview.logic.ItemVisibility.VISIBLE
@@ -63,108 +64,99 @@ internal class RenderListMaker<T>(
             if (item.visibility != HIDDEN) {
                 when (item) {
                     is PreparedPolygonItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                item.shape
-                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPolygonVisible(it) }
-                                    ?.let(visibleGpsCoordinate::transformPolygon)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.let { polygon ->
-                                        item.visibility = VISIBLE
-                                        calculated++
-                                        item.addToRender(polygon)
-                                        item.cache = polygon
-                                    }
-                                    ?: run { item.visibility = HIDDEN }
-                            }
+                        item.cacheTranslated
+                        if (item.visibility == CACHED) {
+                            item.addToRender(item.cacheTranslated!!)
+                            skipped++
+                        } else {
+                            item.shape
+                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPolygonVisible(it) }
+                                ?.let(visibleGpsCoordinate::transformPolygon)
+                                ?.withMatrix(matrix, worldRotation)
+                                ?.let { polygon ->
+                                    item.cacheTranslated = polygon
+                                    item.visibility = CACHED
+                                    item.addToRender(polygon)
+                                    calculated++
+                                }
+                                ?: run { item.visibility = HIDDEN }
+                        }
                     }
                     is PreparedPathItem -> {
-                        item.cache
-                            ?.forEach {
-                                item.addToRender(it)
-                                skipped++
+                        if (item.visibility == CACHED) {
+                            item.cacheTranslated!!.forEach { item.addToRender(it) }
+                            skipped++
+                        } else {
+                            if (item.visibility == TO_CHECK) {
+                                visibleGpsCoordinate.getVisiblePath(item.shape)
+                                    .also { item.cacheRaw = it }
+                            } else {
+                                item.cacheRaw
                             }
-                            ?: run {
-                                if (item.visibility == TO_CHECK) {
-                                    visibleGpsCoordinate.getVisiblePath(item.shape)
-                                        .also { item.cacheRaw = it }
-                                } else {
-                                    item.cacheRaw
+                                ?.let(visibleGpsCoordinate::transformPath)
+                                ?.map { path ->
+                                    item.visibility = CACHED
+                                    calculated++
+                                    path.withMatrix(matrix, worldRotation)
+                                        .also { item.addToRender(it) }
                                 }
-                                    ?.let(visibleGpsCoordinate::transformPath)
-                                    ?.map { path ->
-                                        item.visibility = VISIBLE
-                                        calculated++
-                                        path.withMatrix(matrix, worldRotation)
-                                            .also { item.addToRender(it) }
-                                    }
-                                    ?.also { item.cache = it }
-                                    ?: run { item.visibility = HIDDEN }
-                            }
+                                ?.also { item.cacheTranslated = it }
+                                ?: run { item.visibility = HIDDEN }
+                        }
                     }
                     is PreparedCircleItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                item.point
-                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
-                                    ?.let(visibleGpsCoordinate::transformPoint)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.let { point ->
-                                        item.visibility = VISIBLE
-                                        calculated++
-                                        item.addToRender(point)
-                                        item.cache = point
-                                    }
-                                    ?: run { item.visibility = HIDDEN }
-                            }
+                        if (item.visibility == CACHED) {
+                            item.addToRender(item.cacheTranslated!!)
+                            skipped++
+                        } else {
+                            item.point
+                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
+                                ?.let(visibleGpsCoordinate::transformPoint)
+                                ?.withMatrix(matrix, worldRotation)
+                                ?.let { point ->
+                                    item.visibility = CACHED
+                                    calculated++
+                                    item.addToRender(point)
+                                    item.cacheTranslated = point
+                                }
+                                ?: run { item.visibility = HIDDEN }
+                        }
                     }
                     is PreparedIconItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                item.point
-                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
-                                    ?.let(visibleGpsCoordinate::transformPoint)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.let { point ->
-                                        item.visibility = VISIBLE
-                                        calculated++
-                                        item.addToRender(point)
-                                        item.cache = point
-                                    }
-                                    ?: run { item.visibility = HIDDEN }
-                            }
+                        if (item.visibility == CACHED) {
+                            item.addToRender(item.cacheTranslated!!)
+                            skipped++
+                        } else {
+                            item.point
+                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
+                                ?.let(visibleGpsCoordinate::transformPoint)
+                                ?.withMatrix(matrix, worldRotation)
+                                ?.let { point ->
+                                    item.visibility = CACHED
+                                    calculated++
+                                    item.addToRender(point)
+                                    item.cacheTranslated = point
+                                }
+                                ?: run { item.visibility = HIDDEN }
+                        }
                     }
                     is PreparedBitmapItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                item.point
-                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
-                                    ?.let(visibleGpsCoordinate::transformPoint)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.let { point ->
-                                        item.visibility = VISIBLE
-                                        calculated++
-                                        item.addToRender(point)
-                                        item.cache = point
-                                    }
-                                    ?: run { item.visibility = HIDDEN }
-                            }
+                        if (item.visibility == CACHED) {
+                            item.addToRender(item.cacheTranslated!!)
+                            skipped++
+                        } else {
+                            item.point
+                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
+                                ?.let(visibleGpsCoordinate::transformPoint)
+                                ?.withMatrix(matrix, worldRotation)
+                                ?.let { point ->
+                                    item.visibility = CACHED
+                                    calculated++
+                                    item.addToRender(point)
+                                    item.cacheTranslated = point
+                                }
+                                ?: run { item.visibility = HIDDEN }
+                        }
                     }
                 }
             } else {
