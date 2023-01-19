@@ -4,8 +4,6 @@ import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.ItemVisibility.CACHED
 import com.jacekpietras.mapview.logic.ItemVisibility.HIDDEN
-import com.jacekpietras.mapview.logic.ItemVisibility.TO_CHECK
-import com.jacekpietras.mapview.logic.ItemVisibility.VISIBLE
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
@@ -57,105 +55,86 @@ internal class RenderListMaker<T>(
 
     private fun addToRenderItems(preparedList: List<PreparedItem<T>>) {
         preparedList.forEach { item ->
-            if (!item.minZoom.isBiggerThanZoom()) {
-                return@forEach
-            }
-
             if (item.visibility != HIDDEN) {
                 when (item) {
                     is PreparedPolygonItem -> {
-                        item.cacheTranslated
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
                             skipped++
-                        } else {
+                        } else if (item.minZoom.isBiggerThanZoom()) {
                             item.shape
-                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPolygonVisible(it) }
-                                ?.let(visibleGpsCoordinate::transformPolygon)
-                                ?.withMatrix(matrix, worldRotation)
-                                ?.let { polygon ->
+                                .let(visibleGpsCoordinate::transformPolygon)
+                                .withMatrix(matrix, worldRotation)
+                                .let { polygon ->
                                     item.cacheTranslated = polygon
                                     item.visibility = CACHED
                                     item.addToRender(polygon)
                                     calculated++
                                 }
-                                ?: run { item.visibility = HIDDEN }
                         }
                     }
                     is PreparedPathItem -> {
                         if (item.visibility == CACHED) {
                             item.cacheTranslated!!.forEach { item.addToRender(it) }
                             skipped++
-                        } else {
-                            if (item.visibility == TO_CHECK) {
-                                visibleGpsCoordinate.getVisiblePath(item.shape)
-                                    .also { item.cacheRaw = it }
-                            } else {
-                                item.cacheRaw
-                            }
-                                ?.let(visibleGpsCoordinate::transformPath)
-                                ?.map { path ->
+                        } else if (item.minZoom.isBiggerThanZoom()) {
+                            item.cacheRaw!!
+                                .let(visibleGpsCoordinate::transformPath)
+                                .map { path ->
                                     item.visibility = CACHED
                                     calculated++
                                     path.withMatrix(matrix, worldRotation)
                                         .also { item.addToRender(it) }
                                 }
-                                ?.also { item.cacheTranslated = it }
-                                ?: run { item.visibility = HIDDEN }
+                                .also { item.cacheTranslated = it }
                         }
                     }
                     is PreparedCircleItem -> {
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
                             skipped++
-                        } else {
+                        } else if (item.minZoom.isBiggerThanZoom()) {
                             item.point
-                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
-                                ?.let(visibleGpsCoordinate::transformPoint)
-                                ?.withMatrix(matrix, worldRotation)
-                                ?.let { point ->
+                                .let(visibleGpsCoordinate::transformPoint)
+                                .withMatrix(matrix, worldRotation)
+                                .let { point ->
                                     item.visibility = CACHED
                                     calculated++
                                     item.addToRender(point)
                                     item.cacheTranslated = point
                                 }
-                                ?: run { item.visibility = HIDDEN }
                         }
                     }
                     is PreparedIconItem -> {
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
                             skipped++
-                        } else {
+                        } else if (item.minZoom.isBiggerThanZoom()) {
                             item.point
-                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
-                                ?.let(visibleGpsCoordinate::transformPoint)
-                                ?.withMatrix(matrix, worldRotation)
-                                ?.let { point ->
+                                .let(visibleGpsCoordinate::transformPoint)
+                                .withMatrix(matrix, worldRotation)
+                                .let { point ->
                                     item.visibility = CACHED
                                     calculated++
                                     item.addToRender(point)
                                     item.cacheTranslated = point
                                 }
-                                ?: run { item.visibility = HIDDEN }
                         }
                     }
                     is PreparedBitmapItem -> {
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
                             skipped++
-                        } else {
+                        } else if (item.minZoom.isBiggerThanZoom()) {
                             item.point
-                                .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
-                                ?.let(visibleGpsCoordinate::transformPoint)
-                                ?.withMatrix(matrix, worldRotation)
-                                ?.let { point ->
+                                .let(visibleGpsCoordinate::transformPoint)
+                                .withMatrix(matrix, worldRotation)
+                                .let { point ->
                                     item.visibility = CACHED
                                     calculated++
                                     item.addToRender(point)
                                     item.cacheTranslated = point
                                 }
-                                ?: run { item.visibility = HIDDEN }
                         }
                     }
                 }

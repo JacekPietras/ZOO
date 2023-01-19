@@ -4,7 +4,7 @@ import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.logic.ItemVisibility.CACHED
-import com.jacekpietras.mapview.logic.ItemVisibility.TO_CHECK
+import com.jacekpietras.mapview.logic.ItemVisibility.HIDDEN
 import com.jacekpietras.mapview.logic.ItemVisibility.VISIBLE
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
@@ -14,6 +14,9 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -29,6 +32,7 @@ class MapViewLogic<T>(
     private var onStopCentering: (() -> Unit)? = null,
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
+    val coroutineScope: CoroutineScope,
 ) {
 
     var worldData: WorldData = WorldData()
@@ -116,6 +120,7 @@ class MapViewLogic<T>(
         }
     private val cuttingOutNow = AtomicBoolean(false)
 
+    @Suppress("unused")
     fun centerAtPoint(desiredPosition: PointD) {
         centeringAtUser = false
         animateCentering(desiredPosition)
@@ -339,22 +344,18 @@ class MapViewLogic<T>(
         cuttingOutNow.set(true)
 
         establishViewCoordinates()
-
-        prevVisibleGpsCoordinate?.printDiff(visibleGpsCoordinate)
-
-        val worldMoved = visibleGpsCoordinate != prevVisibleGpsCoordinate
-        val worldMovedALot = worldMoved && (prevVisibleGpsCoordinateForBigDiff?.printDiff(visibleGpsCoordinate) ?: true)
-        if (worldMovedALot) {
-            Timber.d("Perf: moved a lot")
-            clearHiddenPreparedItems()
-            prevVisibleGpsCoordinateForBigDiff = visibleGpsCoordinate
-        } else if (worldMoved) {
-            clearCachedPreparedItems()
-        }
-        prevVisibleGpsCoordinate = visibleGpsCoordinate
+        checkMovementOfScene()
 
         moveE = System.nanoTime()
 
+        makeNewRenderList()
+
+        cutoE = System.nanoTime()
+
+        cuttingOutNow.set(false)
+    }
+
+    private fun makeNewRenderList() {
         RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
             worldRotation = worldRotation,
@@ -369,13 +370,29 @@ class MapViewLogic<T>(
                 LastMapUpdate.mergE = System.nanoTime()
                 invalidate(it)
             }
-
-        cutoE = System.nanoTime()
-
-        cuttingOutNow.set(false)
     }
 
-    private fun clearCachedPreparedItems() {
+    private fun checkMovementOfScene() {
+        val worldMoved = visibleGpsCoordinate != prevVisibleGpsCoordinate
+        val worldMovedALot = worldMoved && (prevVisibleGpsCoordinateForBigDiff?.printDiff(visibleGpsCoordinate) ?: true)
+        if (worldMovedALot) {
+            Timber.d("Perf: moved a lot")
+            coroutineScope.launch(Dispatchers.Default) {
+                worldPreparedList.checkVisibilityOfAllItems()
+                volatilePreparedList.checkVisibilityOfAllItems()
+
+                if (!cuttingOutNow.get()) {
+                    makeNewRenderList()
+                }
+            }
+            prevVisibleGpsCoordinateForBigDiff = visibleGpsCoordinate
+        } else if (worldMoved) {
+            clearTranslatedCache()
+        }
+        prevVisibleGpsCoordinate = visibleGpsCoordinate
+    }
+
+    private fun clearTranslatedCache() {
         listOf(worldPreparedList, volatilePreparedList)
             .forEach { preparedItems ->
                 preparedItems.forEach { item ->
@@ -386,12 +403,47 @@ class MapViewLogic<T>(
             }
     }
 
-    private fun clearHiddenPreparedItems() {
-        listOf(worldPreparedList, volatilePreparedList)
-            .forEach { preparedItems ->
-                preparedItems.forEach { item ->
-                    item.visibility = TO_CHECK
+    private fun <T> List<PreparedItem<T>>.checkVisibilityOfAllItems() {
+        forEach { item ->
+            when (item) {
+                is PreparedItem.PreparedColoredItem.PreparedPolygonItem -> {
+                    item.visibility = if (visibleGpsCoordinate.isPolygonVisible(item.shape)) {
+                        VISIBLE
+                    } else {
+                        HIDDEN
+                    }
+                }
+                is PreparedItem.PreparedColoredItem.PreparedPathItem -> {
+                    val visiblePath = visibleGpsCoordinate.getVisiblePath(item.shape)
+                    if (visiblePath != null) {
+                        item.visibility = VISIBLE
+                        item.cacheRaw = visiblePath
+                    } else {
+                        item.visibility = HIDDEN
+                    }
+                }
+                is PreparedItem.PreparedColoredItem.PreparedCircleItem -> {
+                    item.visibility = if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                        VISIBLE
+                    } else {
+                        HIDDEN
+                    }
+                }
+                is PreparedItem.PreparedIconItem -> {
+                    item.visibility = if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                        VISIBLE
+                    } else {
+                        HIDDEN
+                    }
+                }
+                is PreparedItem.PreparedBitmapItem -> {
+                    item.visibility = if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                        VISIBLE
+                    } else {
+                        HIDDEN
+                    }
                 }
             }
+        }
     }
 }
