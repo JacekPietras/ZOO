@@ -2,6 +2,9 @@ package com.jacekpietras.mapview.logic
 
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.mapview.logic.ItemVisibility.HIDDEN
+import com.jacekpietras.mapview.logic.ItemVisibility.TO_CHECK
+import com.jacekpietras.mapview.logic.ItemVisibility.VISIBLE
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
@@ -11,6 +14,7 @@ import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
+import com.jacekpietras.mapview.ui.LastMapUpdate
 import timber.log.Timber
 
 internal class RenderListMaker<T>(
@@ -44,7 +48,9 @@ internal class RenderListMaker<T>(
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
         preparedLists.forEach(::addToRenderItems)
         Timber.d("Perf: skipped: $skipped, hidden: $hidden, calculated $calculated")
+        LastMapUpdate.sortS = System.nanoTime()
         icons.sortBy { it.cY }
+        LastMapUpdate.sortE = System.nanoTime()
         return borders + insides + icons
     }
 
@@ -54,7 +60,7 @@ internal class RenderListMaker<T>(
                 return@forEach
             }
 
-            if (!item.isHidden) {
+            if (item.visibility != HIDDEN) {
                 when (item) {
                     is PreparedPolygonItem -> {
                         item.cache
@@ -63,15 +69,17 @@ internal class RenderListMaker<T>(
                                 skipped++
                             }
                             ?: run {
-                                visibleGpsCoordinate
-                                    .transformPolygon(item.shape)
+                                item.shape
+                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPolygonVisible(it) }
+                                    ?.let(visibleGpsCoordinate::transformPolygon)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { polygon ->
+                                        item.visibility = VISIBLE
+                                        calculated++
                                         item.addToRender(polygon)
                                         item.cache = polygon
                                     }
-                                    ?: run { item.isHidden = true }
+                                    ?: run { item.visibility = HIDDEN }
                             }
                     }
                     is PreparedPathItem -> {
@@ -81,21 +89,21 @@ internal class RenderListMaker<T>(
                                 skipped++
                             }
                             ?: run {
-                                visibleGpsCoordinate
-                                    .transformPath(item.shape)
-                                    .also {
-                                        if (it.isEmpty()) {
-                                            item.isHidden = true
-                                        }
-                                    }
-                                    .map { path ->
+                                if (item.visibility == TO_CHECK) {
+                                    visibleGpsCoordinate.getVisiblePath(item.shape)
+                                        .also { item.cacheRaw = it }
+                                } else {
+                                    item.cacheRaw
+                                }
+                                    ?.let(visibleGpsCoordinate::transformPath)
+                                    ?.map { path ->
+                                        item.visibility = VISIBLE
                                         calculated++
                                         path.withMatrix(matrix, worldRotation)
+                                            .also { item.addToRender(it) }
                                     }
-                                    .also { item.cache = it }
-                                    .forEach { path ->
-                                        item.addToRender(path)
-                                    }
+                                    ?.also { item.cache = it }
+                                    ?: run { item.visibility = HIDDEN }
                             }
                     }
                     is PreparedCircleItem -> {
@@ -105,15 +113,17 @@ internal class RenderListMaker<T>(
                                 skipped++
                             }
                             ?: run {
-                                visibleGpsCoordinate
-                                    .transformPoint(item.point)
+                                item.point
+                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
+                                    ?.let(visibleGpsCoordinate::transformPoint)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        item.visibility = VISIBLE
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
-                                    ?: run { item.isHidden = true }
+                                    ?: run { item.visibility = HIDDEN }
                             }
                     }
                     is PreparedIconItem -> {
@@ -123,15 +133,17 @@ internal class RenderListMaker<T>(
                                 skipped++
                             }
                             ?: run {
-                                visibleGpsCoordinate
-                                    .transformPoint(item.point)
+                                item.point
+                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
+                                    ?.let(visibleGpsCoordinate::transformPoint)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        item.visibility = VISIBLE
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
-                                    ?: run { item.isHidden = true }
+                                    ?: run { item.visibility = HIDDEN }
                             }
                     }
                     is PreparedBitmapItem -> {
@@ -141,15 +153,17 @@ internal class RenderListMaker<T>(
                                 skipped++
                             }
                             ?: run {
-                                visibleGpsCoordinate
-                                    .transformPoint(item.point)
+                                item.point
+                                    .takeIf { item.visibility == VISIBLE || visibleGpsCoordinate.isPointVisible(it) }
+                                    ?.let(visibleGpsCoordinate::transformPoint)
                                     ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
                                     ?.let { point ->
+                                        item.visibility = VISIBLE
+                                        calculated++
                                         item.addToRender(point)
                                         item.cache = point
                                     }
-                                    ?: run { item.isHidden = true }
+                                    ?: run { item.visibility = HIDDEN }
                             }
                     }
                 }
@@ -238,6 +252,7 @@ internal class RenderListMaker<T>(
                 array[0],
                 array[1],
                 icon,
+                pivot,
             )
         )
     }
@@ -250,6 +265,7 @@ internal class RenderListMaker<T>(
                 array[0],
                 array[1],
                 bitmap,
+                pivot,
             )
         )
     }

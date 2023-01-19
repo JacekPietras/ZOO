@@ -3,12 +3,10 @@ package com.jacekpietras.zoo.map.viewmodel
 import android.content.Context
 import android.graphics.Paint
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
-import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
-import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
@@ -46,11 +44,11 @@ import com.jacekpietras.zoo.domain.model.RegionId
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.extensions.applyToMap
-import com.jacekpietras.zoo.map.extensions.combine
 import com.jacekpietras.zoo.map.extensions.combineWithIgnoredFlow
 import com.jacekpietras.zoo.map.extensions.reduce
+import com.jacekpietras.zoo.map.extensions.stateFlowOf
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
-import com.jacekpietras.zoo.map.model.BitmapVersions
+import com.jacekpietras.zoo.map.model.BitmapLibrary
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapEffect
 import com.jacekpietras.zoo.map.model.MapEffect.ShowToast
@@ -70,8 +68,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
@@ -79,7 +75,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 
 @OptIn(FlowPreview::class)
 internal class MapViewModel(
@@ -119,7 +114,7 @@ internal class MapViewModel(
 
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
     val effects: Flow<Unit> = _effects
-        .filter { it.isNotEmpty() }
+        .filter(List<MapEffect>::isNotEmpty)
         .map { /* Unit */ }
 
     private val mapLogic: MapViewLogic<Paint> = makeComposableMapLogic()
@@ -127,15 +122,7 @@ internal class MapViewModel(
     val mapList = MutableStateFlow<List<RenderItem<Paint>>>(emptyList())
 
     private val mapColors = MutableStateFlow(MapColors())
-    private val treeBitmap: StateFlow<BitmapVersions?> = flow {
-        BitmapVersions(
-            context = context,
-            dayRes = R.drawable.ic_tree_36,
-            nightRes = R.drawable.ic_tree_36_night,
-        ).also { emit(it) }
-    }
-        .flowOnBackground()
-        .stateIn(viewModelScope, WhileSubscribed(), null)
+    private val bitmapLibrary = stateFlowOf { BitmapLibrary(context) }
 
     private val observeTakenRoute = if (BuildConfig.DEBUG) {
         observeTakenRouteUseCase.run()
@@ -184,7 +171,7 @@ internal class MapViewModel(
 
     private val mapWorldViewState: Flow<MapWorldViewState> = combine(
         mapColors,
-        treeBitmap.filterNotNull(),
+        bitmapLibrary.filterNotNull(),
         observeMapObjectsUseCase.run(),
         mapper::from,
     )
@@ -223,7 +210,7 @@ internal class MapViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        treeBitmap.value?.recycle()
+        bitmapLibrary.value?.recycle()
     }
 
     private fun String?.toAnimalId(): AnimalId? =
@@ -548,6 +535,8 @@ internal class MapViewModel(
     }
 
     fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
+        trans = System.nanoTime()
+
         mapLogic.onTransform(cX, cY, scale, rotate, vX, vY)
     }
 

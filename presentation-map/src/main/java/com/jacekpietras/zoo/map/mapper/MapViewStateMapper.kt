@@ -6,12 +6,12 @@ import com.jacekpietras.mapview.model.MapColor
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapItem.BitmapMapItem
-import com.jacekpietras.mapview.model.MapItem.IconMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.CircleMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PathMapItem
 import com.jacekpietras.mapview.model.MapItem.MapColoredItem.PolygonMapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PathD
+import com.jacekpietras.mapview.model.Pivot
 import com.jacekpietras.mapview.model.PolygonD
 import com.jacekpietras.zoo.core.text.Dictionary.findFacilityDrawableRes
 import com.jacekpietras.zoo.core.text.Dictionary.findReadableName
@@ -29,6 +29,7 @@ import com.jacekpietras.zoo.domain.model.ThemeType
 import com.jacekpietras.zoo.map.BuildConfig
 import com.jacekpietras.zoo.map.R
 import com.jacekpietras.zoo.map.model.AnimalDivisionValue
+import com.jacekpietras.zoo.map.model.BitmapLibrary
 import com.jacekpietras.zoo.map.model.BitmapVersions
 import com.jacekpietras.zoo.map.model.MapAction
 import com.jacekpietras.zoo.map.model.MapCarouselItem
@@ -151,7 +152,7 @@ internal class MapViewStateMapper {
 
     fun from(
         mapColors: MapColors,
-        treeBitmap: BitmapVersions,
+        bitmapLibrary: BitmapLibrary,
         mapObjects: ObserveMapObjectsUseCase.MapObject,
     ): MapWorldViewState =
         with(mapObjects) {
@@ -166,16 +167,18 @@ internal class MapViewStateMapper {
                         fromPaths(lines, linesPaint, ZOOM_CLOSE),
                         fromPolygons(buildings, buildingPaint),
                         fromPolygons(aviary, aviaryPaint),
-                        fromTrees(mapColors.nightTheme, trees, treeBitmap),
+                        fromTrees(mapColors.nightTheme, trees, bitmapLibrary.data["tree"]),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
-                        fromRegions(regionsWithCenters),
+                        fromRegions(mapColors.nightTheme, regionsWithCenters, bitmapLibrary),
                     ),
                 )
             }
         }
 
-    private fun fromTrees(nightTheme: Boolean, trees: List<Pair<PointD, Float>>, treeBitmap: BitmapVersions): List<MapItem> {
-        val bitmap = (if (nightTheme) treeBitmap.bitmapNight else treeBitmap.bitmapDay) ?: return emptyList()
+    private fun fromTrees(nightTheme: Boolean, trees: List<Pair<PointD, Float>>, bitmapVersions: BitmapVersions?): List<MapItem> {
+        val bitmap = bitmapVersions?.get(nightTheme)
+            ?: return emptyList()
+
         return trees.map { (position, zoom) ->
             val finalZoom = ZOOM_CLOSE + zoom * (ZOOM_FAR - ZOOM_CLOSE)
             BitmapMapItem(
@@ -186,24 +189,41 @@ internal class MapViewStateMapper {
         }
     }
 
-    private fun fromRegions(regions: List<Pair<Region, PointD>>): List<MapItem> =
+    private fun fromRegions(
+        nightTheme: Boolean,
+        regions: List<Pair<Region, PointD>>,
+        bitmapLibrary: BitmapLibrary,
+    ): List<MapItem> =
         regions.mapNotNull { (region, position) ->
-            val suggestedIcon = region.id.id.findFacilityDrawableRes()
-            val (icon, minZoom) = when {
-                suggestedIcon != null -> suggestedIcon to ZOOM_MEDIUM
-                else -> {
-                    when (region.id.id) {
-                        "wielkie-koty-2" -> R.drawable.ic_region_big_cats_24 to null
-                        else -> return@mapNotNull null
-                    }
-                }
-            }
-            IconMapItem(
-                point = position,
-                icon = icon,
-                minZoom = minZoom,
+            fromRegion(
+                nightTheme = nightTheme,
+                region = region,
+                position = position,
+                bitmapLibrary = bitmapLibrary,
             )
         }
+
+    private fun fromRegion(
+        nightTheme: Boolean,
+        region: Region,
+        position: PointD,
+        bitmapLibrary: BitmapLibrary,
+    ): MapItem? {
+        bitmapLibrary.data.entries.forEach { (key, bitmapVersions) ->
+            if (region.id.id.startsWith(key)) {
+                val bitmap = bitmapVersions.get(nightTheme)
+                    ?: return null
+
+                return BitmapMapItem(
+                    point = position,
+                    bitmap = bitmap,
+                    minZoom = ZOOM_MEDIUM,
+                    pivot = Pivot.CENTER,
+                )
+            }
+        }
+        return null
+    }
 
     private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
 
