@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.Pivot
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
@@ -39,7 +38,6 @@ import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
-import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
 import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
@@ -47,6 +45,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.rendE
 import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortS
+import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import timber.log.Timber
 
 @Composable
@@ -115,12 +114,10 @@ fun MapComposable(
                         "    [    render] ${rendS toMs rendE}"
             )
         }
-        lastUpdate = System.currentTimeMillis()
     }
-    Timber.d("Perf: draw ${System.currentTimeMillis() - before} ms")
 }
 
-private infix fun Long.toMs(right:Long)=
+private infix fun Long.toMs(right: Long) =
     "${(right - this) / 10_000 / 1_00.0} ms"
 
 @Composable
