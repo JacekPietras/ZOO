@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.model.Pivot
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
@@ -34,7 +36,16 @@ import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
+import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
+import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
+import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
+import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendE
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
+import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
+import com.jacekpietras.mapview.ui.LastMapUpdate.sortS
 import timber.log.Timber
 
 @Composable
@@ -46,7 +57,7 @@ fun MapComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
-    val canvasItems = mapList.filterNot { it is RenderIconItem || it is RenderBitmapItem }
+    rendS = System.nanoTime()
 
     Box {
         Canvas(
@@ -62,20 +73,19 @@ fun MapComposable(
                 onSizeChanged(width, height)
             }
 
-            canvasItems.forEach {
+            mapList.forEach {
                 when (it) {
                     is RenderPathItem -> drawPath(it.shape, it.paint, false)
                     is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
                     is RenderCircleItem -> drawCircleSafe(it.paint.color, it.radius, Offset(it.cX, it.cY))
-                    is RenderBitmapItem -> Unit
-                    is RenderIconItem -> Unit
+                    else -> Unit
                 }
             }
         }
-//        icons.forEach {
+//        mapList.forEach {
 //            when (it) {
-////                is RenderBitmapItem -> MapBitmap(it)
-////                is RenderIconItem -> MapIcon(it)
+//                is RenderBitmapItem -> MapBitmap(it)
+//                is RenderIconItem -> MapIcon(it)
 //                else -> Unit
 //            }
 //        }
@@ -87,34 +97,110 @@ fun MapComposable(
                 modifier = Modifier.align(Alignment.BottomStart),
             )
         }
+
+        val prevRendE = rendE
+        rendE = System.nanoTime()
+        if (trans > 0) {
+
+            Timber.d(
+                "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
+                        "    [pass to vm] ${trans toMs cutoS}\n" +
+                        "    [coord prep] ${cutoS toMs moveE}\n" +
+                        "    [ translate] ${moveE toMs sortS}\n" +
+                        "    [      sort] ${sortS toMs sortE}\n" +
+                        "    [       sum] ${sortE toMs mergE}\n" +
+                        "    [invali req] ${mergE toMs cutoE}\n" +
+                        "    [invalidate] ${cutoE toMs rendS}\n" +
+                        "    [    render] ${rendS toMs rendE}"
+            )
+        }
     }
 }
 
+private infix fun Long.toMs(right:Long)=
+    "${(right - this) / 10_000 / 1_00.0} ms"
+
 @Composable
 private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
-    with(LocalDensity.current) {
-        Icon(
-            modifier = Modifier
-                .offset(x = item.cX.toDp() - item.iconSize.dp / 2, y = item.cY.toDp() - item.iconSize.dp / 2)
-                .requiredSize(item.iconSize.dp),
-            painter = painterResource(item.iconRes),
-            contentDescription = null,
-            tint = colors.onSurface,
-        )
-    }
+    Icon(
+        modifier = Modifier
+            .offset(item)
+            .requiredSize(item.height.dp),
+        painter = painterResource(item.iconRes),
+        contentDescription = null,
+        tint = colors.onSurface,
+    )
 }
 
 @Composable
 private fun MapBitmap(item: RenderBitmapItem<ComposablePaint>) {
-    with(LocalDensity.current) {
-        Image(
-            modifier = Modifier
-                .offset(x = (item.cX - item.bitmap.width / 2).toDp(), y = (item.cY - item.bitmap.height).toDp()),
-            bitmap = item.bitmap.asImageBitmap(),
-            contentDescription = null,
-        )
-    }
+    Image(
+        modifier = Modifier
+            .offset(item),
+        bitmap = item.bitmap.asImageBitmap(),
+        contentDescription = null,
+    )
 }
+
+private fun <T> Modifier.offset(item: RenderIconItem<T>): Modifier =
+    composed {
+        with(LocalDensity.current) {
+            with(item) {
+                when (pivot) {
+                    Pivot.TOP -> offset(
+                        x = cX.toDp() - width.dp / 2,
+                        y = cY.toDp(),
+                    )
+                    Pivot.BOTTOM -> offset(
+                        x = cX.toDp() - width.dp / 2,
+                        y = cY.toDp() - height.dp,
+                    )
+                    Pivot.LEFT -> offset(
+                        x = cX.toDp(),
+                        y = cY.toDp() - height.dp / 2,
+                    )
+                    Pivot.RIGHT -> offset(
+                        x = cX.toDp() - width.dp,
+                        y = cY.toDp() - height.dp / 2,
+                    )
+                    Pivot.CENTER -> offset(
+                        x = cX.toDp() - width.dp / 2,
+                        y = cY.toDp() - height.dp / 2,
+                    )
+                }
+            }
+        }
+    }
+
+private fun <T> Modifier.offset(item: RenderBitmapItem<T>): Modifier =
+    composed {
+        with(LocalDensity.current) {
+            with(item) {
+                when (pivot) {
+                    Pivot.TOP -> offset(
+                        x = (cX - width / 2).toDp(),
+                        y = cY.toDp(),
+                    )
+                    Pivot.BOTTOM -> offset(
+                        x = (cX - width / 2).toDp(),
+                        y = (cY - height).toDp(),
+                    )
+                    Pivot.LEFT -> offset(
+                        x = cX.toDp(),
+                        y = (cY - height / 2).toDp(),
+                    )
+                    Pivot.RIGHT -> offset(
+                        x = (cX - width).toDp(),
+                        y = (cY - height / 2).toDp(),
+                    )
+                    Pivot.CENTER -> offset(
+                        x = (cX - width / 2).toDp(),
+                        y = (cY - height / 2).toDp(),
+                    )
+                }
+            }
+        }
+    }
 
 private fun DrawScope.drawCircleSafe(
     color: Color,
