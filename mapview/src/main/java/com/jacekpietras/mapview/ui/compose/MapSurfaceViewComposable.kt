@@ -48,24 +48,4 @@ fun MapSurfaceViewComposable(
             }
         },
     )
-
-    val prevRendE = rendE
-    rendE = System.nanoTime()
-    if (trans > 0) {
-
-        Timber.d(
-            "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
-                    "    [pass to vm] ${trans toMs cutoS}\n" +
-                    "    [coord prep] ${cutoS toMs moveE}\n" +
-                    "    [ translate] ${moveE toMs sortS}\n" +
-                    "    [      sort] ${sortS toMs sortE}\n" +
-                    "    [       sum] ${sortE toMs mergE}\n" +
-                    "    [invali req] ${mergE toMs cutoE}\n" +
-                    "    [invalidate] ${cutoE toMs rendS}\n" +
-                    "    [    render] ${rendS toMs rendE}"
-        )
-    }
 }
-
-private infix fun Long.toMs(right: Long) =
-    "${(right - this) / 10_000 / 1_00.0} ms"
