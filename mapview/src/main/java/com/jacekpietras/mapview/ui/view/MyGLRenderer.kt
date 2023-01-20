@@ -7,7 +7,7 @@ import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
-import com.jacekpietras.mapview.utils.setOpenGlClearColor
+import com.jacekpietras.mapview.utils.setOpenGLClearColor
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -26,7 +26,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
     private val viewMatrix = FloatArray(16)
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
-        setOpenGlClearColor(openGLBackground)
+        setOpenGLClearColor(openGLBackground)
 
         mTriangle = Triangle()
     }
