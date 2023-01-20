@@ -54,7 +54,7 @@ internal class RenderListMaker<T>(
             if (item.visibility == CACHED) {
                 when (item) {
                     is PreparedPolygonItem -> {
-                        item.addToRender(item.cacheTranslated!!)
+                        item.addToRender(item.cacheTranslated)
                     }
                     is PreparedPathItem -> {
                         item.cacheTranslated!!.forEach { item.addToRender(it) }
@@ -78,13 +78,9 @@ internal class RenderListMaker<T>(
             when (item) {
                 is PreparedPolygonItem -> {
                     if (item.visibility != CACHED) {
-                        item.shape
-                            .let(visibleGpsCoordinate::transformPolygon)
-                            .withMatrix(matrix, worldRotation)
-                            .let { polygon ->
-                                item.visibility = CACHED
-                                item.cacheTranslated = polygon
-                            }
+                        visibleGpsCoordinate.transformPolygon(item.shape, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
                     }
                 }
                 is PreparedPathItem -> {

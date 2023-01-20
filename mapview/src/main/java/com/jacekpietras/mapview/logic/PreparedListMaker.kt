@@ -36,6 +36,7 @@ internal class PreparedListMaker<T>(
                             inner,
                             border,
                             item.minZoom,
+                            FloatArray(item.polygon.vertices.size * 2)
                         )
                         is MapItem.MapColoredItem.CircleMapItem -> PreparedItem.PreparedColoredItem.PreparedCircleItem(
                             item.point,

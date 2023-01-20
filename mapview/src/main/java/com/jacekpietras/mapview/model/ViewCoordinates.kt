@@ -116,7 +116,14 @@ internal class ViewCoordinates(
             }
         }
 
-    fun transformPoint(p: PointD, array: FloatArray){
+    fun transformPolygon(input: DoubleArray, output: FloatArray) {
+        for (i in input.indices step 2) {
+            output[i] = input[i].transformX()
+            output[i + 1] = input[i + 1].transformY()
+        }
+    }
+
+    fun transformPoint(p: PointD, array: FloatArray) {
         array[0] = p.x.transformX()
         array[1] = p.y.transformY()
     }
