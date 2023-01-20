@@ -3,7 +3,6 @@ package com.jacekpietras.mapview.ui
 import android.annotation.SuppressLint
 import android.text.format.DateUtils
 import android.util.Log
-import com.jacekpietras.mapview.BuildConfig
 
 object LastMapUpdate {
 
@@ -22,32 +21,33 @@ object LastMapUpdate {
 
     var lastUpdate: Long = 0L
     val fpsList = mutableListOf<Long>()
-    val medFps get() = fpsList.average().toLong()
+    val medFps get() = fpsList.average().toInt()
 
-    fun update() {
-        if (BuildConfig.DEBUG) {
-            val timeFromLast = (System.currentTimeMillis() - lastUpdate)
-            if (timeFromLast > 0) {
-                val fps = DateUtils.SECOND_IN_MILLIS / timeFromLast
-                if (fps in (0..200)) {
-                    fpsList.add(fps)
-                    if (fpsList.size > 20) {
-                        fpsList.removeAt(0)
-                    }
+    private fun updateFps() {
+        val now = System.currentTimeMillis()
+        val timeFromLast = now - lastUpdate
+        lastUpdate = now
+        if (timeFromLast > 0) {
+            val fps = DateUtils.SECOND_IN_MILLIS / timeFromLast
+            if (fps in (0..200)) {
+                fpsList.add(fps)
+                if (fpsList.size > 20) {
+                    fpsList.removeAt(0)
                 }
             }
-            lastUpdate = System.currentTimeMillis()
         }
     }
 
     @SuppressLint("LogNotTimber")
     fun log() {
+        updateFps()
+
         val prevRendE = rendE
         rendE = System.nanoTime()
         if (trans > 0) {
             Log.d(
                 "D:",
-                "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
+                "Perf: Render: [FPS:$medFps] ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
                         "    [pass to vm] ${trans toMs cutoS}\n" +
                         "    [coord prep] ${cutoS toMs moveE}\n" +
                         "    [rend creat] ${moveE toMs tranS}\n" +
