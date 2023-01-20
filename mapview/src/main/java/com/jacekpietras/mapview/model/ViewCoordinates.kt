@@ -104,26 +104,21 @@ internal class ViewCoordinates(
     fun isPointVisible(p: PointD): Boolean =
         visibleRectRotated.contains(p)
 
-    fun transformPath(list: List<DoubleArray>): List<FloatArray> =
-        list.map(::transformPolygon)
+    fun transformPath(raw: List<DoubleArray>, translated: List<FloatArray>) {
+        raw.mapIndexed { i, double -> transformPolygon(double, translated[i]) }
+    }
 
-    fun transformPolygon(array: DoubleArray): FloatArray =
-        FloatArray(array.size) { i ->
-            if (i % 2 == 0) {
-                array[i].transformX()
-            } else {
-                array[i].transformY()
-            }
+    fun transformPolygon(input: DoubleArray, output: FloatArray) {
+        for (i in input.indices step 2) {
+            output[i] = input[i].transformX()
+            output[i + 1] = input[i + 1].transformY()
         }
+    }
 
-    fun transformPoint(p: PointD): FloatArray =
-        FloatArray(2) { i ->
-            if (i == 0) {
-                p.x.transformX()
-            } else {
-                p.y.transformY()
-            }
-        }
+    fun transformPoint(p: PointD, array: FloatArray) {
+        array[0] = p.x.transformX()
+        array[1] = p.y.transformY()
+    }
 
     fun deTransformPoint(x: Float, y: Float): PointD =
         PointD(
@@ -179,46 +174,21 @@ internal class ViewCoordinates(
         visibleRectRotated.hashCode()
 
     fun printDiff(other: ViewCoordinates): Boolean {
-//        val vert = if (abs(verticalScale) > abs(other.verticalScale)) {
-//            1-abs(other.verticalScale) / abs(verticalScale)
-//        } else {
-//           1- abs(verticalScale) / abs(other.verticalScale)
-//        }
-//        val hori = if (abs(horizontalScale) > abs(other.horizontalScale)) {
-//            1-abs(other.horizontalScale) / abs(horizontalScale)
-//        } else {
-//            1-abs(horizontalScale) / abs(other.horizontalScale)
-//        }
-
         val left = abs(visibleRectRotated.left - other.visibleRectRotated.left) * abs(horizontalScale)
         val top = abs(visibleRectRotated.top - other.visibleRectRotated.top) * abs(verticalScale)
         val right = abs(visibleRectRotated.right - other.visibleRectRotated.right) * abs(horizontalScale)
         val bottom = abs(visibleRectRotated.bottom - other.visibleRectRotated.bottom) * abs(verticalScale)
 
-        val coordTreshold = 500
-
-        val result =
-//            vert>zoomTreshold ||
-//            hori>zoomTreshold ||
-            left > coordTreshold ||
-                    top > coordTreshold ||
-                    right > coordTreshold ||
-                    bottom > coordTreshold
-
-//        Timber.d(
-//            "Perf: compare\n" +
-//                    if(left>coordTreshold){"!"}else{" "}+  left   + "\n" +
-//                    if(top>coordTreshold){"!"}else{" "}+    top    + "\n" +
-//                    if(right>coordTreshold){"!"}else{" "}+     right   + "\n" +
-//                    if(bottom>coordTreshold){"!"}else{" "}+     bottom  + "\n" //+
-////                    if(hori>zoomTreshold){"!"}else{" "}+      hori  +"\n" +
-////                    if(vert>zoomTreshold){"!"}else{" "}+     vert  + "\n"
-//        )
-        return result
+        return left > COORDINATE_THRESHOLD ||
+                top > COORDINATE_THRESHOLD ||
+                right > COORDINATE_THRESHOLD ||
+                bottom > COORDINATE_THRESHOLD
     }
 
     private companion object {
 
-        var part: DoubleArray = DoubleArray(512)
+        var part = DoubleArray(512)
+
+        const val COORDINATE_THRESHOLD = 500
     }
 }

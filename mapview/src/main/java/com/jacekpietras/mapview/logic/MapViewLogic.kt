@@ -3,12 +3,7 @@ package com.jacekpietras.mapview.logic
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
-import com.jacekpietras.mapview.logic.ItemVisibility.TO_CHECK
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedIconItem
+import com.jacekpietras.mapview.logic.ItemVisibility.MOVED
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.LastMapUpdate
@@ -17,6 +12,9 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -32,6 +30,7 @@ class MapViewLogic<T>(
     private var onStopCentering: (() -> Unit)? = null,
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
+    val coroutineScope: CoroutineScope,
 ) {
 
     var worldData: WorldData = WorldData()
@@ -55,6 +54,7 @@ class MapViewLogic<T>(
         }
     private val worldBounds: RectD get() = worldData.bounds
     private var worldPreparedList: List<PreparedItem<T>> = emptyList()
+    private var worldPreparedListOfVisible: List<PreparedItem<T>> = emptyList()
     private val worldPreparedListMaker = PreparedListMaker(paintBaker)
 
     var userData: UserData = UserData()
@@ -74,6 +74,7 @@ class MapViewLogic<T>(
         }
 
     private var volatilePreparedList: List<PreparedItem<T>> = emptyList()
+    private var volatilePreparedListOfVisible: List<PreparedItem<T>> = emptyList()
     private val volatilePreparedListMaker = PreparedListMaker(paintBaker)
     private val userPosition: PointD? get() = userData.userPosition.takeIf { it != PointD() }
     private val compass: Float get() = userData.compass
@@ -119,6 +120,7 @@ class MapViewLogic<T>(
         }
     private val cuttingOutNow = AtomicBoolean(false)
 
+    @Suppress("unused")
     fun centerAtPoint(desiredPosition: PointD) {
         centeringAtUser = false
         animateCentering(desiredPosition)
@@ -342,22 +344,18 @@ class MapViewLogic<T>(
         cuttingOutNow.set(true)
 
         establishViewCoordinates()
-
-        prevVisibleGpsCoordinate?.printDiff(visibleGpsCoordinate)
-
-        val worldMoved = visibleGpsCoordinate != prevVisibleGpsCoordinate
-        val worldMovedALot = worldMoved && (prevVisibleGpsCoordinateForBigDiff?.printDiff(visibleGpsCoordinate) ?: true)
-        if (worldMovedALot) {
-            Timber.d("Perf: moved a lot")
-            clearHiddenPreparedItems()
-            prevVisibleGpsCoordinateForBigDiff = visibleGpsCoordinate
-        } else if (worldMoved) {
-            clearCachedPreparedItems()
-        }
-        prevVisibleGpsCoordinate = visibleGpsCoordinate
+        checkMovementOfScene()
 
         moveE = System.nanoTime()
 
+        makeNewRenderList()
+
+        cutoE = System.nanoTime()
+
+        cuttingOutNow.set(false)
+    }
+
+    private fun makeNewRenderList() {
         RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
             worldRotation = worldRotation,
@@ -367,65 +365,91 @@ class MapViewLogic<T>(
             centerGpsCoordinate = centerGpsCoordinate,
             bakeDimension = paintBaker::bakeDimension,
         )
-            .translate(worldPreparedList, volatilePreparedList)
+            .translate(worldPreparedListOfVisible, volatilePreparedListOfVisible)
             .also {
                 LastMapUpdate.mergE = System.nanoTime()
                 invalidate(it)
             }
-
-        cutoE = System.nanoTime()
-
-        cuttingOutNow.set(false)
     }
 
-    private fun clearCachedPreparedItems() {
-        listOf(worldPreparedList, volatilePreparedList)
+    private fun checkMovementOfScene() {
+        val worldMoved = visibleGpsCoordinate != prevVisibleGpsCoordinate
+        val worldMovedALot = worldMoved && (prevVisibleGpsCoordinateForBigDiff?.printDiff(visibleGpsCoordinate) ?: true)
+        if (worldMovedALot) {
+            Timber.d("Perf: moved a lot")
+            coroutineScope.launch(Dispatchers.Default) {
+                worldPreparedListOfVisible = worldPreparedList.checkVisibilityOfAllItems()
+                volatilePreparedListOfVisible = volatilePreparedList.checkVisibilityOfAllItems()
+
+                if (!cuttingOutNow.get()) {
+                    makeNewRenderList()
+                }
+            }
+            prevVisibleGpsCoordinateForBigDiff = visibleGpsCoordinate
+        } else if (worldMoved) {
+            clearTranslatedCache()
+        }
+        prevVisibleGpsCoordinate = visibleGpsCoordinate
+    }
+
+    private fun clearTranslatedCache() {
+        listOf(worldPreparedListOfVisible, volatilePreparedListOfVisible)
             .forEach { preparedItems ->
                 preparedItems.forEach { item ->
-                    when (item) {
-                        is PreparedPolygonItem -> {
-                            item.cache = null
-                        }
-                        is PreparedBitmapItem -> {
-                            item.cache = null
-                        }
-                        is PreparedCircleItem -> {
-                            item.cache = null
-                        }
-                        is PreparedPathItem -> {
-                            item.cache = null
-                        }
-                        is PreparedIconItem -> {
-                            item.cache = null
-                        }
-                    }
+                    item.visibility = MOVED
                 }
             }
     }
 
-    private fun clearHiddenPreparedItems() {
-        listOf(worldPreparedList, volatilePreparedList)
-            .forEach { preparedItems ->
-                preparedItems.forEach { item ->
-                    when (item) {
-                        is PreparedPolygonItem -> {
-                            item.cache = null
-                        }
-                        is PreparedBitmapItem -> {
-                            item.cache = null
-                        }
-                        is PreparedCircleItem -> {
-                            item.cache = null
-                        }
-                        is PreparedPathItem -> {
-                            item.cache = null
-                        }
-                        is PreparedIconItem -> {
-                            item.cache = null
-                        }
+    private fun <T> List<PreparedItem<T>>.checkVisibilityOfAllItems() =
+        mapNotNull { item ->
+            when (item) {
+                is PreparedItem.PreparedColoredItem.PreparedPolygonItem -> {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPolygonVisible(item.shape)) {
+                        item.visibility = MOVED
+                        item
+                    } else {
+                        null
                     }
-                    item.visibility = TO_CHECK
+                }
+                is PreparedItem.PreparedColoredItem.PreparedPathItem -> {
+                    val visiblePath = visibleGpsCoordinate.getVisiblePath(item.shape)
+                    if (item.minZoom.isBiggerThanZoom() && visiblePath != null) {
+                        item.visibility = MOVED
+                        item.cacheRaw = visiblePath
+                        item.cacheTranslated = visiblePath.map { FloatArray(it.size) }
+                        item
+                    } else {
+                        null
+                    }
+                }
+                is PreparedItem.PreparedColoredItem.PreparedCircleItem -> {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
+                        item.visibility = MOVED
+                        item
+                    } else {
+                        null
+                    }
+                }
+                is PreparedItem.PreparedIconItem -> {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
+                        item.visibility = MOVED
+                        item
+                    } else {
+                        null
+                    }
+                }
+                is PreparedItem.PreparedBitmapItem -> {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
+                        item.visibility = MOVED
+                        item
+                    } else {
+                        null
+                    }
                 }
             }
-    }
+        }
+
+    private fun Float?.isBiggerThanZoom(): Boolean =
+        this == null || this > zoom
 }

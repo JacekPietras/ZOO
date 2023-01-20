@@ -1,7 +1,8 @@
 package com.jacekpietras.mapview.ui
 
+import android.annotation.SuppressLint
 import android.text.format.DateUtils
-import com.jacekpietras.mapview.BuildConfig
+import android.util.Log
 
 object LastMapUpdate {
 
@@ -9,6 +10,8 @@ object LastMapUpdate {
     var trans: Long = 0L
     var cutoS: Long = 0L
     var moveE: Long = 0L
+    var tranS: Long = 0L
+    var cachE: Long = 0L
     var cutoE: Long = 0L
     var rendS: Long = 0L
     var rendE: Long = 0L
@@ -18,21 +21,49 @@ object LastMapUpdate {
 
     var lastUpdate: Long = 0L
     val fpsList = mutableListOf<Long>()
-    val medFps get() = fpsList.average().toLong()
+    val medFps get() = fpsList.average().toInt()
 
-    fun update() {
-        if (BuildConfig.DEBUG) {
-            val timeFromLast = (System.currentTimeMillis() - lastUpdate)
-            if (timeFromLast > 0) {
-                val fps = DateUtils.SECOND_IN_MILLIS / timeFromLast
-                if (fps in (0..200)) {
-                    fpsList.add(fps)
-                    if (fpsList.size > 20) {
-                        fpsList.removeAt(0)
-                    }
+    private fun updateFps() {
+        val now = System.currentTimeMillis()
+        val timeFromLast = now - lastUpdate
+        lastUpdate = now
+        if (timeFromLast > 0) {
+            val fps = DateUtils.SECOND_IN_MILLIS / timeFromLast
+            if (fps in (0..200)) {
+                fpsList.add(fps)
+                if (fpsList.size > 20) {
+                    fpsList.removeAt(0)
                 }
             }
-            lastUpdate = System.currentTimeMillis()
         }
     }
+
+    @SuppressLint("LogNotTimber")
+    fun log() {
+        updateFps()
+
+        val prevRendE = rendE
+        rendE = System.nanoTime()
+        if (trans > 0) {
+            Log.d(
+                "D:",
+                "Perf: Render: [FPS:$medFps]\n" +
+                        "since last frame ${prevRendE toMs trans}\n" +
+                        "    [pass to vm] ${trans toMs cutoS}\n" +
+                        "    [coord prep] ${cutoS toMs moveE}\n" +
+                        "    [rend creat] ${moveE toMs tranS}\n" +
+                        "    [ translate] ${tranS toMs cachE}\n" +
+                        "    [      bake] ${cachE toMs sortS}\n" +
+                        "    [      sort] ${sortS toMs sortE}\n" +
+                        "    [       sum] ${sortE toMs mergE}\n" +
+                        "    [invali req] ${mergE toMs cutoE}\n" +
+                        "    [invalidate] ${cutoE toMs rendS}\n" +
+                        "    [    render] ${rendS toMs rendE}\n" +
+                        "             sum ${trans toMs rendE}"
+            )
+        }
+    }
+
+    private infix fun Long.toMs(right: Long) =
+        "${(right - this) / 10_000 / 1_00.0} ms"
 }
