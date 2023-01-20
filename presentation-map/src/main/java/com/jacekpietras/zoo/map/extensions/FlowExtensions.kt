@@ -1,15 +1,27 @@
 package com.jacekpietras.zoo.map.extensions
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 
 internal inline fun <T> MutableStateFlow<T>.reduce(block: T.() -> T) {
     value = block(value)
 }
+
+internal fun <T> ViewModel.stateFlowOf(block:()->T): StateFlow<T?> =
+    flow { block().also { emit(it) } }
+        .flowOnBackground()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
 internal fun <T> Flow<T>.combineWithIgnoredFlow(ignored: Flow<Any>): Flow<T> =
     combine(ignored.filter { false }.map {}.onStart { emit(Unit) }) { item, _ -> item }

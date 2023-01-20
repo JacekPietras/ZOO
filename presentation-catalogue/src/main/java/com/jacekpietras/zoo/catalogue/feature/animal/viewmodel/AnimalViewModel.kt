@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.catalogue.feature.animal.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
@@ -189,7 +190,8 @@ internal class AnimalViewModel(
 
     private fun makeComposableMapLogic() = MapViewLogic(
         invalidate = { mapList.value = it },
-        paintBaker = paintBaker
+        paintBaker = paintBaker,
+        coroutineScope = viewModelScope,
     )
 
     private fun MapViewLogic<ComposablePaint>.updateMap(viewState: AnimalViewState?) {

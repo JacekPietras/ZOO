@@ -2,6 +2,7 @@ package com.jacekpietras.mapview.logic
 
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.mapview.logic.ItemVisibility.CACHED
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
@@ -11,7 +12,7 @@ import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
-import timber.log.Timber
+import com.jacekpietras.mapview.ui.LastMapUpdate
 
 internal class RenderListMaker<T>(
     private val visibleGpsCoordinate: ViewCoordinates,
@@ -37,136 +38,81 @@ internal class RenderListMaker<T>(
             )
         }
 
-    private var calculated: Int = 0
-    private var skipped: Int = 0
-    private var hidden: Int = 0
-
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
+        LastMapUpdate.tranS = System.nanoTime()
+        preparedLists.forEach(::makeCache)
+        LastMapUpdate.cachE = System.nanoTime()
         preparedLists.forEach(::addToRenderItems)
-        Timber.d("Perf: skipped: $skipped, hidden: $hidden, calculated $calculated")
+        LastMapUpdate.sortS = System.nanoTime()
         icons.sortBy { it.cY }
+        LastMapUpdate.sortE = System.nanoTime()
         return borders + insides + icons
     }
 
     private fun addToRenderItems(preparedList: List<PreparedItem<T>>) {
         preparedList.forEach { item ->
-            if (!item.minZoom.isBiggerThanZoom()) {
-                return@forEach
-            }
-
-            if (!item.isHidden) {
+            if (item.visibility == CACHED) {
                 when (item) {
                     is PreparedPolygonItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                visibleGpsCoordinate
-                                    .transformPolygon(item.shape)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
-                                    ?.let { polygon ->
-                                        item.addToRender(polygon)
-                                        item.cache = polygon
-                                    }
-                                    ?: run { item.isHidden = true }
-                            }
+                        item.addToRender(item.cacheTranslated)
                     }
                     is PreparedPathItem -> {
-                        item.cache
-                            ?.forEach {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                visibleGpsCoordinate
-                                    .transformPath(item.shape)
-                                    .also {
-                                        if (it.isEmpty()) {
-                                            item.isHidden = true
-                                        }
-                                    }
-                                    .map { path ->
-                                        calculated++
-                                        path.withMatrix(matrix, worldRotation)
-                                    }
-                                    .also { item.cache = it }
-                                    .forEach { path ->
-                                        item.addToRender(path)
-                                    }
-                            }
+                        item.cacheTranslated!!.forEach { item.addToRender(it) }
                     }
                     is PreparedCircleItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                visibleGpsCoordinate
-                                    .transformPoint(item.point)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
-                                    ?.let { point ->
-                                        item.addToRender(point)
-                                        item.cache = point
-                                    }
-                                    ?: run { item.isHidden = true }
-                            }
+                        item.addToRender(item.cacheTranslated)
                     }
                     is PreparedIconItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                visibleGpsCoordinate
-                                    .transformPoint(item.point)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
-                                    ?.let { point ->
-                                        item.addToRender(point)
-                                        item.cache = point
-                                    }
-                                    ?: run { item.isHidden = true }
-                            }
+                        item.addToRender(item.cacheTranslated)
                     }
                     is PreparedBitmapItem -> {
-                        item.cache
-                            ?.let {
-                                item.addToRender(it)
-                                skipped++
-                            }
-                            ?: run {
-                                visibleGpsCoordinate
-                                    .transformPoint(item.point)
-                                    ?.withMatrix(matrix, worldRotation)
-                                    ?.also { calculated++ }
-                                    ?.let { point ->
-                                        item.addToRender(point)
-                                        item.cache = point
-                                    }
-                                    ?: run { item.isHidden = true }
-                            }
+                        item.addToRender(item.cacheTranslated)
                     }
                 }
-            } else {
-                hidden++
             }
         }
     }
 
-    private fun Float?.isBiggerThanZoom(): Boolean =
-        this == null || this > zoom
-
-    private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {
-        if (worldRotation != 0f) {
-            matrix.mapPoints(this)
+    private fun makeCache(preparedList: List<PreparedItem<T>>) {
+        preparedList.forEach { item ->
+            when (item) {
+                is PreparedPolygonItem -> {
+                    if (item.visibility != CACHED) {
+                        visibleGpsCoordinate.transformPolygon(item.shape, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
+                    }
+                }
+                is PreparedPathItem -> {
+                    if (item.visibility != CACHED) {
+                        visibleGpsCoordinate.transformPath(item.cacheRaw!!, item.cacheTranslated!!)
+                        item.cacheTranslated!!.forEach(matrix::mapPoints)
+                        item.visibility = CACHED
+                    }
+                }
+                is PreparedCircleItem -> {
+                    if (item.visibility != CACHED) {
+                        visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
+                    }
+                }
+                is PreparedIconItem -> {
+                    if (item.visibility != CACHED) {
+                        visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
+                    }
+                }
+                is PreparedBitmapItem -> {
+                    if (item.visibility != CACHED) {
+                        visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
+                    }
+                }
+            }
         }
-        return this
     }
 
     private fun PreparedPolygonItem<T>.addToRender(
@@ -238,6 +184,7 @@ internal class RenderListMaker<T>(
                 array[0],
                 array[1],
                 icon,
+                pivot,
             )
         )
     }
@@ -250,6 +197,7 @@ internal class RenderListMaker<T>(
                 array[0],
                 array[1],
                 bitmap,
+                pivot,
             )
         )
     }

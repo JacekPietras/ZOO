@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.model.Pivot
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
@@ -35,6 +37,7 @@ import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
 import timber.log.Timber
 
 @Composable
@@ -46,7 +49,7 @@ fun MapComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     mapList: List<RenderItem<ComposablePaint>>,
 ) {
-    val (icons, canvasItems) = mapList.partition { it is RenderIconItem || it is RenderBitmapItem }
+    rendS = System.nanoTime()
 
     Box {
         Canvas(
@@ -62,17 +65,16 @@ fun MapComposable(
                 onSizeChanged(width, height)
             }
 
-            canvasItems.forEach {
+            mapList.forEach {
                 when (it) {
                     is RenderPathItem -> drawPath(it.shape, it.paint, false)
                     is RenderPolygonItem -> drawPath(it.shape, it.paint, true)
                     is RenderCircleItem -> drawCircleSafe(it.paint.color, it.radius, Offset(it.cX, it.cY))
-                    is RenderBitmapItem -> Unit
-                    is RenderIconItem -> Unit
+                    else -> Unit
                 }
             }
         }
-        icons.forEach {
+        mapList.forEach {
             when (it) {
                 is RenderBitmapItem -> MapBitmap(it)
                 is RenderIconItem -> MapIcon(it)
@@ -81,7 +83,7 @@ fun MapComposable(
         }
 
         if (BuildConfig.DEBUG) {
-            LastMapUpdate.update()
+            LastMapUpdate.log()
             Text(
                 text = "FPS: $medFps",
                 modifier = Modifier.align(Alignment.BottomStart),
@@ -92,16 +94,14 @@ fun MapComposable(
 
 @Composable
 private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
-    with(LocalDensity.current) {
-        Icon(
-            modifier = Modifier
-                .offset(x = item.cX.toDp() - item.iconSize.dp / 2, y = item.cY.toDp() - item.iconSize.dp / 2)
-                .requiredSize(item.iconSize.dp),
-            painter = painterResource(item.iconRes),
-            contentDescription = null,
-            tint = colors.onSurface,
-        )
-    }
+    Icon(
+        modifier = Modifier
+            .offset(item)
+            .requiredSize(item.height.dp),
+        painter = painterResource(item.iconRes),
+        contentDescription = null,
+        tint = colors.onSurface,
+    )
 }
 
 @Composable
@@ -109,12 +109,45 @@ private fun MapBitmap(item: RenderBitmapItem<ComposablePaint>) {
     with(LocalDensity.current) {
         Image(
             modifier = Modifier
-                .offset(x = (item.cX - item.bitmap.width / 2).toDp(), y = (item.cY - item.bitmap.height).toDp()),
+                .offset(
+                    x = item.cXpivoted.toDp(),
+                    y = item.cYpivoted.toDp(),
+                ),
             bitmap = item.bitmap.asImageBitmap(),
             contentDescription = null,
         )
     }
 }
+
+private fun <T> Modifier.offset(item: RenderIconItem<T>): Modifier =
+    composed {
+        with(LocalDensity.current) {
+            with(item) {
+                when (pivot) {
+                    Pivot.TOP -> offset(
+                        x = cX.toDp() - width.dp / 2,
+                        y = cY.toDp(),
+                    )
+                    Pivot.BOTTOM -> offset(
+                        x = cX.toDp() - width.dp / 2,
+                        y = cY.toDp() - height.dp,
+                    )
+                    Pivot.LEFT -> offset(
+                        x = cX.toDp(),
+                        y = cY.toDp() - height.dp / 2,
+                    )
+                    Pivot.RIGHT -> offset(
+                        x = cX.toDp() - width.dp,
+                        y = cY.toDp() - height.dp / 2,
+                    )
+                    Pivot.CENTER -> offset(
+                        x = cX.toDp() - width.dp / 2,
+                        y = cY.toDp() - height.dp / 2,
+                    )
+                }
+            }
+        }
+    }
 
 private fun DrawScope.drawCircleSafe(
     color: Color,
