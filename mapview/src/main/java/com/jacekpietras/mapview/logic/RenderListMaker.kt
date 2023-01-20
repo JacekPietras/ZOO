@@ -14,7 +14,6 @@ import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.LastMapUpdate
-import timber.log.Timber
 
 internal class RenderListMaker<T>(
     private val visibleGpsCoordinate: ViewCoordinates,
@@ -40,13 +39,9 @@ internal class RenderListMaker<T>(
             )
         }
 
-    private var calculated: Int = 0
-    private var skipped: Int = 0
-    private var hidden: Int = 0
-
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
+        LastMapUpdate.tranS = System.nanoTime()
         preparedLists.forEach(::addToRenderItems)
-        Timber.d("Perf: skipped: $skipped, hidden: $hidden, calculated $calculated")
         LastMapUpdate.sortS = System.nanoTime()
         icons.sortBy { it.cY }
         LastMapUpdate.sortE = System.nanoTime()
@@ -60,30 +55,27 @@ internal class RenderListMaker<T>(
                     is PreparedPolygonItem -> {
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
-                            skipped++
                         } else if (item.minZoom.isBiggerThanZoom()) {
                             item.shape
                                 .let(visibleGpsCoordinate::transformPolygon)
                                 .withMatrix(matrix, worldRotation)
                                 .let { polygon ->
-                                    item.cacheTranslated = polygon
                                     item.visibility = CACHED
+                                    item.cacheTranslated = polygon
                                     item.addToRender(polygon)
-                                    calculated++
                                 }
                         }
                     }
                     is PreparedPathItem -> {
                         if (item.visibility == CACHED) {
                             item.cacheTranslated!!.forEach { item.addToRender(it) }
-                            skipped++
                         } else if (item.minZoom.isBiggerThanZoom()) {
                             item.cacheRaw!!
                                 .let(visibleGpsCoordinate::transformPath)
                                 .map { path ->
                                     item.visibility = CACHED
-                                    calculated++
-                                    path.withMatrix(matrix, worldRotation)
+                                    path
+                                        .withMatrix(matrix, worldRotation)
                                         .also { item.addToRender(it) }
                                 }
                                 .also { item.cacheTranslated = it }
@@ -92,54 +84,46 @@ internal class RenderListMaker<T>(
                     is PreparedCircleItem -> {
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
-                            skipped++
                         } else if (item.minZoom.isBiggerThanZoom()) {
                             item.point
                                 .let(visibleGpsCoordinate::transformPoint)
                                 .withMatrix(matrix, worldRotation)
                                 .let { point ->
                                     item.visibility = CACHED
-                                    calculated++
-                                    item.addToRender(point)
                                     item.cacheTranslated = point
+                                    item.addToRender(point)
                                 }
                         }
                     }
                     is PreparedIconItem -> {
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
-                            skipped++
                         } else if (item.minZoom.isBiggerThanZoom()) {
                             item.point
                                 .let(visibleGpsCoordinate::transformPoint)
                                 .withMatrix(matrix, worldRotation)
                                 .let { point ->
                                     item.visibility = CACHED
-                                    calculated++
-                                    item.addToRender(point)
                                     item.cacheTranslated = point
+                                    item.addToRender(point)
                                 }
                         }
                     }
                     is PreparedBitmapItem -> {
                         if (item.visibility == CACHED) {
                             item.addToRender(item.cacheTranslated!!)
-                            skipped++
                         } else if (item.minZoom.isBiggerThanZoom()) {
                             item.point
                                 .let(visibleGpsCoordinate::transformPoint)
                                 .withMatrix(matrix, worldRotation)
                                 .let { point ->
                                     item.visibility = CACHED
-                                    calculated++
-                                    item.addToRender(point)
                                     item.cacheTranslated = point
+                                    item.addToRender(point)
                                 }
                         }
                     }
                 }
-            } else {
-                hidden++
             }
         }
     }

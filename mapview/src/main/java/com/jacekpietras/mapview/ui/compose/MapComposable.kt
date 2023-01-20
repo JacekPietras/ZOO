@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.ui.compose
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,6 +43,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.LastMapUpdate.medFps
 import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
+import com.jacekpietras.mapview.ui.LastMapUpdate.tranS
 import com.jacekpietras.mapview.ui.LastMapUpdate.rendE
 import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
@@ -102,11 +104,12 @@ fun MapComposable(
         rendE = System.nanoTime()
         if (trans > 0) {
 
-            Timber.d(
+            Log.d("dupa",
                 "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
                         "    [pass to vm] ${trans toMs cutoS}\n" +
                         "    [coord prep] ${cutoS toMs moveE}\n" +
-                        "    [ translate] ${moveE toMs sortS}\n" +
+                        "    [rend creat] ${moveE toMs tranS}\n" +
+                        "    [ translate] ${tranS toMs sortS}\n" +
                         "    [      sort] ${sortS toMs sortE}\n" +
                         "    [       sum] ${sortE toMs mergE}\n" +
                         "    [invali req] ${mergE toMs cutoE}\n" +
