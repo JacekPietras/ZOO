@@ -10,6 +10,7 @@ object LastMapUpdate {
     var cutoS: Long = 0L
     var moveE: Long = 0L
     var tranS: Long = 0L
+    var cachE: Long = 0L
     var cutoE: Long = 0L
     var rendS: Long = 0L
     var rendE: Long = 0L

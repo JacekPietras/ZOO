@@ -38,6 +38,7 @@ import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.cachE
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
 import com.jacekpietras.mapview.ui.LastMapUpdate.trans
@@ -106,12 +107,14 @@ fun MapComposable(
         rendE = System.nanoTime()
         if (trans > 0) {
 
-            Log.d("Perf:",
-                "Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
+            Log.d(
+                "D:",
+                "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
                         "    [pass to vm] ${trans toMs cutoS}\n" +
                         "    [coord prep] ${cutoS toMs moveE}\n" +
                         "    [rend creat] ${moveE toMs tranS}\n" +
-                        "    [ translate] ${tranS toMs sortS}\n" +
+                        "    [ translate] ${tranS toMs cachE}\n" +
+                        "    [      bake] ${cachE toMs sortS}\n" +
                         "    [      sort] ${sortS toMs sortE}\n" +
                         "    [       sum] ${sortE toMs mergE}\n" +
                         "    [invali req] ${mergE toMs cutoE}\n" +
@@ -122,7 +125,7 @@ fun MapComposable(
     }
 }
 
-private infix fun Long.toMs(right:Long)=
+private infix fun Long.toMs(right: Long) =
     "${(right - this) / 10_000 / 1_00.0} ms"
 
 @Composable

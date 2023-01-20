@@ -409,7 +409,7 @@ class MapViewLogic<T>(
         mapNotNull { item ->
             when (item) {
                 is PreparedItem.PreparedColoredItem.PreparedPolygonItem -> {
-                    if (visibleGpsCoordinate.isPolygonVisible(item.shape)) {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPolygonVisible(item.shape)) {
                         item.visibility = VISIBLE
                         item
                     } else {
@@ -419,7 +419,7 @@ class MapViewLogic<T>(
                 }
                 is PreparedItem.PreparedColoredItem.PreparedPathItem -> {
                     val visiblePath = visibleGpsCoordinate.getVisiblePath(item.shape)
-                    if (visiblePath != null) {
+                    if (item.minZoom.isBiggerThanZoom() && visiblePath != null) {
                         item.visibility = VISIBLE
                         item.cacheRaw = visiblePath
                         item
@@ -429,7 +429,7 @@ class MapViewLogic<T>(
                     }
                 }
                 is PreparedItem.PreparedColoredItem.PreparedCircleItem -> {
-                    if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
                         item.visibility = VISIBLE
                         item
                     } else {
@@ -438,7 +438,7 @@ class MapViewLogic<T>(
                     }
                 }
                 is PreparedItem.PreparedIconItem -> {
-                    if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
                         item.visibility = VISIBLE
                         item
                     } else {
@@ -447,7 +447,7 @@ class MapViewLogic<T>(
                     }
                 }
                 is PreparedItem.PreparedBitmapItem -> {
-                    if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
                         item.visibility = VISIBLE
                         item
                     } else {
@@ -457,4 +457,7 @@ class MapViewLogic<T>(
                 }
             }
         }
+
+    private fun Float?.isBiggerThanZoom(): Boolean =
+        this == null || this > zoom
 }
