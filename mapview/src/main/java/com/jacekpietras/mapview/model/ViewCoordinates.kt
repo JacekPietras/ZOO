@@ -116,14 +116,10 @@ internal class ViewCoordinates(
             }
         }
 
-    fun transformPoint(p: PointD): FloatArray =
-        FloatArray(2) { i ->
-            if (i == 0) {
-                p.x.transformX()
-            } else {
-                p.y.transformY()
-            }
-        }
+    fun transformPoint(p: PointD, array: FloatArray){
+        array[0] = p.x.transformX()
+        array[1] = p.y.transformY()
+    }
 
     fun deTransformPoint(x: Float, y: Float): PointD =
         PointD(
