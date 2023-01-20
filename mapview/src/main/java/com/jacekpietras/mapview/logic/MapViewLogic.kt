@@ -417,6 +417,7 @@ class MapViewLogic<T>(
                     if (item.minZoom.isBiggerThanZoom() && visiblePath != null) {
                         item.visibility = MOVED
                         item.cacheRaw = visiblePath
+                        item.cacheTranslated = visiblePath.map { FloatArray(it.size) }
                         item
                     } else {
                         null
