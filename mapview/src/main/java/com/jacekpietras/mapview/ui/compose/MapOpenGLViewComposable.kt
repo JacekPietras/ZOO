@@ -28,7 +28,7 @@ fun MapOpenGLViewComposable(
         modifier = modifier,
         factory = { context ->
             MapOpenGLView(context).apply {
-                update.invoke { this.mapList = it }
+                update.invoke { mapList = it }
                 this.onSizeChanged = onSizeChanged
                 this.onClick = onClick
                 this.onTransform = onTransform
