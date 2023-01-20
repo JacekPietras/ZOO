@@ -47,7 +47,8 @@ object LastMapUpdate {
         if (trans > 0) {
             Log.d(
                 "D:",
-                "Perf: Render: [FPS:$medFps] ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
+                "Perf: Render: [FPS:$medFps]\n" +
+                        "since last frame ${prevRendE toMs trans}\n" +
                         "    [pass to vm] ${trans toMs cutoS}\n" +
                         "    [coord prep] ${cutoS toMs moveE}\n" +
                         "    [rend creat] ${moveE toMs tranS}\n" +
@@ -57,7 +58,8 @@ object LastMapUpdate {
                         "    [       sum] ${sortE toMs mergE}\n" +
                         "    [invali req] ${mergE toMs cutoE}\n" +
                         "    [invalidate] ${cutoE toMs rendS}\n" +
-                        "    [    render] ${rendS toMs rendE}"
+                        "    [    render] ${rendS toMs rendE}\n" +
+                        "             sum ${trans toMs rendE}"
             )
         }
     }
