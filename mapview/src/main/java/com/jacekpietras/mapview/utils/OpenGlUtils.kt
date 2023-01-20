@@ -57,3 +57,10 @@ private fun loadShader(type: Int, shaderCode: String): Int =
         GLES20.glShaderSource(shader, shaderCode)
         GLES20.glCompileShader(shader)
     }
+
+internal fun Int.setGLColor(color: FloatArray) {
+    // get handle to fragment shader's vColor member
+    val mColorHandle = GLES20.glGetUniformLocation(this, GL_COLOR_VAR)
+    // Set color for drawing the triangle
+    GLES20.glUniform4fv(mColorHandle, 1, color, 0)
+}
