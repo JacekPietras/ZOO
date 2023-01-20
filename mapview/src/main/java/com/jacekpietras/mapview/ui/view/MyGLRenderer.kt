@@ -45,6 +45,8 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
+        GLES20.glLineWidth(5f)
+
         // Draw shape
         mTriangle.draw(vPMatrix)
         mLine.draw(vPMatrix)

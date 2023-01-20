@@ -13,15 +13,18 @@ import com.jacekpietras.mapview.utils.createProgram
 
 private const val COORDS_PER_VERTEX = 3
 private val pathCords = floatArrayOf(
-    10.0f, 0.0f, 0.0f,
-    1090f, 2340f, 0.0f
+    0.0f, 0.0f, 0.0f,
+    500.0f, 500.0f, 0.0f,
+    1080.0f, 0.0f, 0.0f,
+    500.0f, 700.0f, 0.0f,
+    1090f, 2340f, 0.0f,
 )
 
 class Line {
 
     private val color = Color.BLUE.colorToGLFloatArray()
     private val mProgram = createProgram()
-    private val pathDrawOrder = shortArrayOf(0, 1)
+    private val pathDrawOrder = shortArrayOf(0, 1, 2, 3, 4 )
     private val vertexBuffer = allocateFloatBuffer(pathCords)
     private val drawListBuffer = allocateShortBuffer(pathDrawOrder)
 
@@ -45,6 +48,7 @@ class Line {
         val mColorHandle = GLES20.glGetUniformLocation(mProgram, GL_COLOR_VAR)
         GLES20.glUniform4fv(mColorHandle, 1, color, 0)
 
+        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, pathDrawOrder.size)
         GLES20.glDrawElements(GLES20.GL_LINES, pathDrawOrder.size, GLES20.GL_UNSIGNED_SHORT, drawListBuffer)
         GLES20.glDisableVertexAttribArray(mPositionHandle)
         GLES20.glDisable(mColorHandle)
