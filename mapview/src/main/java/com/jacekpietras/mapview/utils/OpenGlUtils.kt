@@ -2,10 +2,17 @@ package com.jacekpietras.mapview.utils
 
 import android.graphics.Color
 import android.opengl.GLES20
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.nio.FloatBuffer
+import java.nio.ShortBuffer
 
 const val GL_MATRIX_VAR = "uMVPMatrix"
 const val GL_POSITION_VAR = "vPosition"
 const val GL_COLOR_VAR = "vPosition"
+
+const val BYTES_PER_FLOAT = 4
+const val BYTES_PER_SHORT = 2
 
 internal fun setOpenGLClearColor(color: Int) {
     val red = Color.red(color).toFloat() / 255
@@ -52,15 +59,36 @@ internal fun createProgram(): Int {
     }
 }
 
-private fun loadShader(type: Int, shaderCode: String): Int =
+fun loadShader(type: Int, shaderCode: String): Int =
     GLES20.glCreateShader(type).also { shader ->
         GLES20.glShaderSource(shader, shaderCode)
         GLES20.glCompileShader(shader)
     }
 
-internal fun Int.setGLColor(color: FloatArray) {
-    // get handle to fragment shader's vColor member
-    val mColorHandle = GLES20.glGetUniformLocation(this, GL_COLOR_VAR)
-    // Set color for drawing the triangle
-    GLES20.glUniform4fv(mColorHandle, 1, color, 0)
-}
+fun allocateFloatBuffer(array: FloatArray): FloatBuffer =
+    ByteBuffer.allocateDirect(array.size * BYTES_PER_FLOAT).run {
+        // use the device hardware's native byte order
+        order(ByteOrder.nativeOrder())
+
+        // create a floating point buffer from the ByteBuffer
+        asFloatBuffer().apply {
+            // add the coordinates to the FloatBuffer
+            put(array)
+            // set the buffer to read the first coordinate
+            position(0)
+        }
+    }
+
+fun allocateShortBuffer(array: ShortArray): ShortBuffer =
+    ByteBuffer.allocateDirect(array.size * BYTES_PER_SHORT).run {
+        // use the device hardware's native byte order
+        order(ByteOrder.nativeOrder())
+
+        // create a floating point buffer from the ByteBuffer
+        asShortBuffer().apply {
+            // add the coordinates to the FloatBuffer
+            put(array)
+            // set the buffer to read the first coordinate
+            position(0)
+        }
+    }

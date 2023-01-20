@@ -7,28 +7,29 @@ import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
+import com.jacekpietras.mapview.utils.allocateShortBuffer
 import com.jacekpietras.mapview.utils.colorToGLFloatArray
 import com.jacekpietras.mapview.utils.createProgram
 
 private const val COORDS_PER_VERTEX = 3
-private val triangleCoords = floatArrayOf(
-    0f, 0f, 0f,
-    0f, 2340f, 0.0f,
-    1080f, 2340f, 0.0f,
+private val pathCords = floatArrayOf(
+    10.0f, 0.0f, 0.0f,
+    1090f, 2340f, 0.0f
 )
-private const val VERTEX_COUNT = 3
 
-class Triangle {
+class Line {
 
-    private val color = Color.RED.colorToGLFloatArray()
+    private val color = Color.BLUE.colorToGLFloatArray()
     private val mProgram = createProgram()
-    private val vertexBuffer = allocateFloatBuffer(triangleCoords)
+    private val pathDrawOrder = shortArrayOf(0, 1)
+    private val vertexBuffer = allocateFloatBuffer(pathCords)
+    private val drawListBuffer = allocateShortBuffer(pathDrawOrder)
 
-    fun draw(mvpMatrix: FloatArray) {
+    fun draw(mvpMatrix: FloatArray?) {
         GLES20.glUseProgram(mProgram)
 
-        val vPMatrixHandle = GLES20.glGetUniformLocation(mProgram, GL_MATRIX_VAR)
-        GLES20.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0)
+        val mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, GL_MATRIX_VAR)
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0)
 
         val mPositionHandle = GLES20.glGetAttribLocation(mProgram, GL_POSITION_VAR)
         GLES20.glEnableVertexAttribArray(mPositionHandle)
@@ -44,7 +45,7 @@ class Triangle {
         val mColorHandle = GLES20.glGetUniformLocation(mProgram, GL_COLOR_VAR)
         GLES20.glUniform4fv(mColorHandle, 1, color, 0)
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, VERTEX_COUNT)
+        GLES20.glDrawElements(GLES20.GL_LINES, pathDrawOrder.size, GLES20.GL_UNSIGNED_SHORT, drawListBuffer)
         GLES20.glDisableVertexAttribArray(mPositionHandle)
         GLES20.glDisable(mColorHandle)
     }

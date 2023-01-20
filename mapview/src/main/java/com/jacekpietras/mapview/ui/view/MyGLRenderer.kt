@@ -20,6 +20,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
     var openGLBackground: Int = Color.BLUE
 
     private lateinit var mTriangle: Triangle
+    private lateinit var mLine: Line
 
     private val vPMatrix = FloatArray(16)
     private val projectionMatrix = FloatArray(16)
@@ -29,6 +30,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         setOpenGLClearColor(openGLBackground)
 
         mTriangle = Triangle()
+        mLine = Line()
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -45,6 +47,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
         // Draw shape
         mTriangle.draw(vPMatrix)
+        mLine.draw(vPMatrix)
 
         LastMapUpdate.log()
     }
