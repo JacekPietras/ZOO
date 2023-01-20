@@ -45,7 +45,7 @@ internal sealed class PreparedItem<T>(
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
-            var cacheTranslated: FloatArray? = null,
+            val cacheTranslated: FloatArray = FloatArray(2),
             override var visibility: ItemVisibility = HIDDEN,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
     }
@@ -54,7 +54,7 @@ internal sealed class PreparedItem<T>(
         val point: PointD,
         @DrawableRes val icon: Int,
         override val minZoom: Float? = null,
-        var cacheTranslated: FloatArray? = null,
+        val cacheTranslated: FloatArray = FloatArray(2),
         override var visibility: ItemVisibility = HIDDEN,
         val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, visibility)
@@ -63,7 +63,7 @@ internal sealed class PreparedItem<T>(
         val point: PointD,
         val bitmap: Bitmap,
         override val minZoom: Float? = null,
-        var cacheTranslated: FloatArray? = null,
+        val cacheTranslated: FloatArray = FloatArray(2),
         override var visibility: ItemVisibility = HIDDEN,
         val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, visibility)

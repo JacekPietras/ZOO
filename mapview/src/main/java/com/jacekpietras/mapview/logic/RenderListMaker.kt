@@ -60,13 +60,13 @@ internal class RenderListMaker<T>(
                         item.cacheTranslated!!.forEach { item.addToRender(it) }
                     }
                     is PreparedCircleItem -> {
-                        item.addToRender(item.cacheTranslated!!)
+                        item.addToRender(item.cacheTranslated)
                     }
                     is PreparedIconItem -> {
-                        item.addToRender(item.cacheTranslated!!)
+                        item.addToRender(item.cacheTranslated)
                     }
                     is PreparedBitmapItem -> {
-                        item.addToRender(item.cacheTranslated!!)
+                        item.addToRender(item.cacheTranslated)
                     }
                 }
             }
@@ -100,35 +100,23 @@ internal class RenderListMaker<T>(
                 }
                 is PreparedCircleItem -> {
                     if (item.visibility != CACHED) {
-                        item.point
-                            .let(visibleGpsCoordinate::transformPoint)
-                            .withMatrix(matrix, worldRotation)
-                            .let { point ->
-                                item.visibility = CACHED
-                                item.cacheTranslated = point
-                            }
+                        visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
                     }
                 }
                 is PreparedIconItem -> {
                     if (item.visibility != CACHED) {
-                        item.point
-                            .let(visibleGpsCoordinate::transformPoint)
-                            .withMatrix(matrix, worldRotation)
-                            .let { point ->
-                                item.visibility = CACHED
-                                item.cacheTranslated = point
-                            }
+                        visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
                     }
                 }
                 is PreparedBitmapItem -> {
                     if (item.visibility != CACHED) {
-                        item.point
-                            .let(visibleGpsCoordinate::transformPoint)
-                            .withMatrix(matrix, worldRotation)
-                            .let { point ->
-                                item.visibility = CACHED
-                                item.cacheTranslated = point
-                            }
+                        visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
                     }
                 }
             }
