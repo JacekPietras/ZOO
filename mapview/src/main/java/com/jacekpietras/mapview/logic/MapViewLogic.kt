@@ -17,6 +17,7 @@ import com.jacekpietras.mapview.utils.doAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -384,7 +385,9 @@ class MapViewLogic<T>(
                 volatilePreparedListOfVisible = volatilePreparedList.checkVisibilityOfAllItems()
 
                 if (!cuttingOutNow.get()) {
-                    makeNewRenderList()
+                    withContext(Dispatchers.Main) {
+                        makeNewRenderList()
+                    }
                 }
             }
             prevVisibleGpsCoordinateForBigDiff = visibleGpsCoordinate
