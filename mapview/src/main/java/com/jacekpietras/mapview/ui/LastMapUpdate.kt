@@ -1,6 +1,8 @@
 package com.jacekpietras.mapview.ui
 
+import android.annotation.SuppressLint
 import android.text.format.DateUtils
+import android.util.Log
 import com.jacekpietras.mapview.BuildConfig
 
 object LastMapUpdate {
@@ -9,6 +11,8 @@ object LastMapUpdate {
     var trans: Long = 0L
     var cutoS: Long = 0L
     var moveE: Long = 0L
+    var tranS: Long = 0L
+    var cachE: Long = 0L
     var cutoE: Long = 0L
     var rendS: Long = 0L
     var rendE: Long = 0L
@@ -35,4 +39,29 @@ object LastMapUpdate {
             lastUpdate = System.currentTimeMillis()
         }
     }
+
+    @SuppressLint("LogNotTimber")
+    fun log() {
+        val prevRendE = rendE
+        rendE = System.nanoTime()
+        if (trans > 0) {
+            Log.d(
+                "D:",
+                "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
+                        "    [pass to vm] ${trans toMs cutoS}\n" +
+                        "    [coord prep] ${cutoS toMs moveE}\n" +
+                        "    [rend creat] ${moveE toMs tranS}\n" +
+                        "    [ translate] ${tranS toMs cachE}\n" +
+                        "    [      bake] ${cachE toMs sortS}\n" +
+                        "    [      sort] ${sortS toMs sortE}\n" +
+                        "    [       sum] ${sortE toMs mergE}\n" +
+                        "    [invali req] ${mergE toMs cutoE}\n" +
+                        "    [invalidate] ${cutoE toMs rendS}\n" +
+                        "    [    render] ${rendS toMs rendE}"
+            )
+        }
+    }
+
+    private infix fun Long.toMs(right: Long) =
+        "${(right - this) / 10_000 / 1_00.0} ms"
 }

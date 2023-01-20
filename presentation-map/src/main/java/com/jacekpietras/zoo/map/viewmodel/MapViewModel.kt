@@ -3,6 +3,7 @@ package com.jacekpietras.zoo.map.viewmodel
 import android.content.Context
 import android.graphics.Paint
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.RenderItem
@@ -520,6 +521,7 @@ internal class MapViewModel(
         setOnPointPlacedListener = ::onPointPlaced,
         onStopCentering = ::onStopCentering,
         onStartCentering = ::onStartCentering,
+        coroutineScope = viewModelScope,
     )
 
     private fun centerAtUserPosition() {
