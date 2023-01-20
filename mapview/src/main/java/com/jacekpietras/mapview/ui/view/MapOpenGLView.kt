@@ -32,10 +32,7 @@ class MapOpenGLView(
             requestRender()
         }
     var openGLBackground: Int = Color.BLUE
-
     private val renderer: MyGLRenderer
-
-
     private val viewGestures = object : ViewGestures(context) {
 
         override fun onTransform(cX: Float, cY: Float, scale: Float, rotate: Float, vX: Float, vY: Float) {
@@ -72,13 +69,14 @@ class MapOpenGLView(
 
     inner class MyGLRenderer : Renderer {
 
+        @Volatile
+        private var resolution: SurfaceResolution = SurfaceResolution(0f, 0f)
         private lateinit var mTriangle: Triangle
 
         // vPMatrix is an abbreviation for "Model View Projection Matrix"
         private val vPMatrix = FloatArray(16)
         private val projectionMatrix = FloatArray(16)
         private val viewMatrix = FloatArray(16)
-
 
         override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
             setOpenGlClearColor(openGLBackground)
@@ -106,11 +104,11 @@ class MapOpenGLView(
         override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
             GLES20.glViewport(0, 0, width, height)
 
-            val ratio: Float = width.toFloat() / height.toFloat()
+            resolution = SurfaceResolution(width.toFloat(), height.toFloat())
 
             // this projection matrix is applied to object coordinates
             // in the onDrawFrame() method
-            Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+            Matrix.frustumM(projectionMatrix, 0, 0f, width.toFloat(), height.toFloat(), 0f, 3f, 7f)
         }
     }
 }
@@ -118,9 +116,9 @@ class MapOpenGLView(
 // number of coordinates per vertex in this array
 const val COORDS_PER_VERTEX = 3
 var triangleCoords = floatArrayOf(     // in counterclockwise order:
-    0.0f, 0.622008459f, 0.0f,      // top
-    -0.5f, -0.311004243f, 0.0f,    // bottom left
-    0.5f, -0.311004243f, 0.0f      // bottom right
+    0f, 0f, 0f,      // top
+    0f, 2340f, 0.0f,    // bottom left
+    1080f, 2340f, 0.0f      // bottom right
 )
 
 class Triangle {
@@ -147,8 +145,8 @@ class Triangle {
     private var mProgram: Int
 
     init {
-        val vertexShader: Int = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
-        val fragmentShader: Int = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
+        val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
+        val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
 
         // create empty OpenGL ES Program
         mProgram = GLES20.glCreateProgram().also {
@@ -182,7 +180,7 @@ class Triangle {
             }
         }
 
-    fun loadShader(type: Int, shaderCode: String): Int {
+    private fun loadShader(type: Int, shaderCode: String): Int {
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
         // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)

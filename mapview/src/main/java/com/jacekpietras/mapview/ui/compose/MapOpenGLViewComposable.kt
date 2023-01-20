@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.view.MapOpenGLView
-import com.jacekpietras.mapview.ui.view.MapSurfaceView
 
 @Composable
 fun MapOpenGLViewComposable(
