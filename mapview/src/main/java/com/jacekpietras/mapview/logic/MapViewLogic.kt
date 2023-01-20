@@ -3,9 +3,7 @@ package com.jacekpietras.mapview.logic
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
-import com.jacekpietras.mapview.logic.ItemVisibility.CACHED
-import com.jacekpietras.mapview.logic.ItemVisibility.HIDDEN
-import com.jacekpietras.mapview.logic.ItemVisibility.VISIBLE
+import com.jacekpietras.mapview.logic.ItemVisibility.MOVED
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.LastMapUpdate
@@ -401,9 +399,7 @@ class MapViewLogic<T>(
         listOf(worldPreparedListOfVisible, volatilePreparedListOfVisible)
             .forEach { preparedItems ->
                 preparedItems.forEach { item ->
-                    if (item.visibility == CACHED) {
-                        item.visibility = VISIBLE
-                    }
+                    item.visibility = MOVED
                 }
             }
     }
@@ -413,48 +409,44 @@ class MapViewLogic<T>(
             when (item) {
                 is PreparedItem.PreparedColoredItem.PreparedPolygonItem -> {
                     if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPolygonVisible(item.shape)) {
-                        item.visibility = VISIBLE
+                        item.visibility = MOVED
                         item
                     } else {
-                        item.visibility = HIDDEN
                         null
                     }
                 }
                 is PreparedItem.PreparedColoredItem.PreparedPathItem -> {
                     val visiblePath = visibleGpsCoordinate.getVisiblePath(item.shape)
                     if (item.minZoom.isBiggerThanZoom() && visiblePath != null) {
-                        item.visibility = VISIBLE
+                        item.visibility = MOVED
                         item.cacheRaw = visiblePath
+                        item.cacheTranslated = visiblePath.map { FloatArray(it.size) }
                         item
                     } else {
-                        item.visibility = HIDDEN
                         null
                     }
                 }
                 is PreparedItem.PreparedColoredItem.PreparedCircleItem -> {
                     if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
-                        item.visibility = VISIBLE
+                        item.visibility = MOVED
                         item
                     } else {
-                        item.visibility = HIDDEN
                         null
                     }
                 }
                 is PreparedItem.PreparedIconItem -> {
                     if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
-                        item.visibility = VISIBLE
+                        item.visibility = MOVED
                         item
                     } else {
-                        item.visibility = HIDDEN
                         null
                     }
                 }
                 is PreparedItem.PreparedBitmapItem -> {
                     if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
-                        item.visibility = VISIBLE
+                        item.visibility = MOVED
                         item
                     } else {
-                        item.visibility = HIDDEN
                         null
                     }
                 }

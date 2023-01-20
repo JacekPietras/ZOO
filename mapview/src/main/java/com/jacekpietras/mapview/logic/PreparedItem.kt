@@ -3,7 +3,7 @@ package com.jacekpietras.mapview.logic
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.mapview.logic.ItemVisibility.HIDDEN
+import com.jacekpietras.mapview.logic.ItemVisibility.MOVED
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.Pivot
@@ -27,7 +27,7 @@ internal sealed class PreparedItem<T>(
             override val minZoom: Float? = null,
             var cacheTranslated: List<FloatArray>? = null,
             var cacheRaw: List<DoubleArray>? = null,
-            override var visibility: ItemVisibility = HIDDEN,
+            override var visibility: ItemVisibility = MOVED,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
 
         class PreparedPolygonItem<T>(
@@ -35,8 +35,8 @@ internal sealed class PreparedItem<T>(
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
-            var cacheTranslated: FloatArray? = null,
-            override var visibility: ItemVisibility = HIDDEN,
+            val cacheTranslated: FloatArray,
+            override var visibility: ItemVisibility = MOVED,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
 
         class PreparedCircleItem<T>(
@@ -46,7 +46,7 @@ internal sealed class PreparedItem<T>(
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
             val cacheTranslated: FloatArray = FloatArray(2),
-            override var visibility: ItemVisibility = HIDDEN,
+            override var visibility: ItemVisibility = MOVED,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
     }
 
@@ -55,7 +55,7 @@ internal sealed class PreparedItem<T>(
         @DrawableRes val icon: Int,
         override val minZoom: Float? = null,
         val cacheTranslated: FloatArray = FloatArray(2),
-        override var visibility: ItemVisibility = HIDDEN,
+        override var visibility: ItemVisibility = MOVED,
         val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, visibility)
 
@@ -64,13 +64,12 @@ internal sealed class PreparedItem<T>(
         val bitmap: Bitmap,
         override val minZoom: Float? = null,
         val cacheTranslated: FloatArray = FloatArray(2),
-        override var visibility: ItemVisibility = HIDDEN,
+        override var visibility: ItemVisibility = MOVED,
         val pivot: Pivot,
     ) : PreparedItem<T>(minZoom, visibility)
 }
 
 enum class ItemVisibility {
     CACHED,
-    VISIBLE,
-    HIDDEN,
+    MOVED,
 }

@@ -54,7 +54,7 @@ internal class RenderListMaker<T>(
             if (item.visibility == CACHED) {
                 when (item) {
                     is PreparedPolygonItem -> {
-                        item.addToRender(item.cacheTranslated!!)
+                        item.addToRender(item.cacheTranslated)
                     }
                     is PreparedPathItem -> {
                         item.cacheTranslated!!.forEach { item.addToRender(it) }
@@ -78,24 +78,16 @@ internal class RenderListMaker<T>(
             when (item) {
                 is PreparedPolygonItem -> {
                     if (item.visibility != CACHED) {
-                        item.shape
-                            .let(visibleGpsCoordinate::transformPolygon)
-                            .withMatrix(matrix, worldRotation)
-                            .let { polygon ->
-                                item.visibility = CACHED
-                                item.cacheTranslated = polygon
-                            }
+                        visibleGpsCoordinate.transformPolygon(item.shape, item.cacheTranslated)
+                        matrix.mapPoints(item.cacheTranslated)
+                        item.visibility = CACHED
                     }
                 }
                 is PreparedPathItem -> {
                     if (item.visibility != CACHED) {
-                        item.cacheRaw!!
-                            .let(visibleGpsCoordinate::transformPath)
-                            .map { path ->
-                                item.visibility = CACHED
-                                path.withMatrix(matrix, worldRotation)
-                            }
-                            .also { item.cacheTranslated = it }
+                        visibleGpsCoordinate.transformPath(item.cacheRaw!!, item.cacheTranslated!!)
+                        item.cacheTranslated!!.forEach(matrix::mapPoints)
+                        item.visibility = CACHED
                     }
                 }
                 is PreparedCircleItem -> {
@@ -121,13 +113,6 @@ internal class RenderListMaker<T>(
                 }
             }
         }
-    }
-
-    private fun FloatArray.withMatrix(matrix: Matrix, worldRotation: Float): FloatArray {
-        if (worldRotation != 0f) {
-            matrix.mapPoints(this)
-        }
-        return this
     }
 
     private fun PreparedPolygonItem<T>.addToRender(

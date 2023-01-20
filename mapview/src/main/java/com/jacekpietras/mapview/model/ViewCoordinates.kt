@@ -104,19 +104,18 @@ internal class ViewCoordinates(
     fun isPointVisible(p: PointD): Boolean =
         visibleRectRotated.contains(p)
 
-    fun transformPath(list: List<DoubleArray>): List<FloatArray> =
-        list.map(::transformPolygon)
+    fun transformPath(raw: List<DoubleArray>, translated: List<FloatArray>) {
+        raw.mapIndexed { i, double -> transformPolygon(double, translated[i]) }
+    }
 
-    fun transformPolygon(array: DoubleArray): FloatArray =
-        FloatArray(array.size) { i ->
-            if (i % 2 == 0) {
-                array[i].transformX()
-            } else {
-                array[i].transformY()
-            }
+    fun transformPolygon(input: DoubleArray, output: FloatArray) {
+        for (i in input.indices step 2) {
+            output[i] = input[i].transformX()
+            output[i + 1] = input[i + 1].transformY()
         }
+    }
 
-    fun transformPoint(p: PointD, array: FloatArray){
+    fun transformPoint(p: PointD, array: FloatArray) {
         array[0] = p.x.transformX()
         array[1] = p.y.transformY()
     }
