@@ -21,19 +21,18 @@ fun MapOpenGLViewComposable(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    mapList: List<RenderItem<Paint>>,
+    update: ((List<RenderItem<Paint>>) -> Unit) -> Unit,
 ) {
     var mapView by remember { mutableStateOf<MapOpenGLView?>(null) }
-    mapView?.mapList = mapList
 
     AndroidView(
         modifier = modifier,
         factory = { context ->
             MapOpenGLView(context).apply {
+                update.invoke { this.mapList = it }
                 this.onSizeChanged = onSizeChanged
                 this.onClick = onClick
                 this.onTransform = onTransform
-                this.mapList = mapList
                 this.openGLBackground = backgroundColor.toArgb()
                 mapView = this
             }

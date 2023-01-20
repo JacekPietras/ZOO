@@ -9,6 +9,8 @@ import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import android.view.MotionEvent
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
 import com.jacekpietras.mapview.utils.ViewGestures
 import com.jacekpietras.mapview.utils.setOpenGlClearColor
 import java.nio.ByteBuffer
@@ -85,6 +87,8 @@ class MapOpenGLView(
         }
 
         override fun onDrawFrame(unused: GL10) {
+            rendS = System.nanoTime()
+
             // Redraw background color
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
             // Set the camera position (View matrix)
@@ -96,6 +100,7 @@ class MapOpenGLView(
             // Draw shape
             mTriangle.draw(vPMatrix)
 
+            LastMapUpdate.log()
         }
 
         override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {

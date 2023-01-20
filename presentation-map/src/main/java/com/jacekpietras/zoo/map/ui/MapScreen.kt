@@ -47,7 +47,6 @@ fun MapScreen(
     BackHandler { viewModel.onBackClicked(router) }
 
     val viewState by viewModel.viewState.collectAsState(null)
-    val mapList by viewModel.mapList.collectAsState(initial = emptyList())
 
     MapView(
         viewState,
@@ -61,7 +60,7 @@ fun MapScreen(
         onClick = viewModel::onClick,
         onTransform = viewModel::onTransform,
         onMapActionClicked = viewModel::onMapActionClicked,
-        mapList = mapList,
+        update = { updateCallback -> viewModel.setUpdateCallback(updateCallback) }
     )
 }
 
