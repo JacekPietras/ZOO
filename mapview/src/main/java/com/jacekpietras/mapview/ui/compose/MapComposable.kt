@@ -83,14 +83,12 @@ fun MapComposable(
         }
 
         if (BuildConfig.DEBUG) {
-            LastMapUpdate.update()
+            LastMapUpdate.log()
             Text(
                 text = "FPS: $medFps",
                 modifier = Modifier.align(Alignment.BottomStart),
             )
         }
-
-        LastMapUpdate.log()
     }
 }
 
