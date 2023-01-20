@@ -11,12 +11,12 @@ object LastMapUpdate {
     var moveE: Long = 0L
     var tranS: Long = 0L
     var cachE: Long = 0L
-    var cutoE: Long = 0L
-    var rendS: Long = 0L
-    var rendE: Long = 0L
     var sortS: Long = 0L
     var sortE: Long = 0L
     var mergE: Long = 0L
+    var cutoE: Long = 0L
+    var rendS: Long = 0L
+    var rendE: Long = 0L
 
     private var lastUpdate: Long = 0L
     private val fpsList = mutableListOf<Long>()

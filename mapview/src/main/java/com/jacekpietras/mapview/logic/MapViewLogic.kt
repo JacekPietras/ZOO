@@ -6,15 +6,16 @@ import com.jacekpietras.geometry.RectD
 import com.jacekpietras.mapview.logic.ItemVisibility.MOVED
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
-import com.jacekpietras.mapview.ui.LastMapUpdate
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
+import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.doAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -367,7 +368,7 @@ class MapViewLogic<T>(
         )
             .translate(worldPreparedListOfVisible, volatilePreparedListOfVisible)
             .also {
-                LastMapUpdate.mergE = System.nanoTime()
+                mergE = System.nanoTime()
                 invalidate(it)
             }
     }
@@ -382,7 +383,9 @@ class MapViewLogic<T>(
                 volatilePreparedListOfVisible = volatilePreparedList.checkVisibilityOfAllItems()
 
                 if (!cuttingOutNow.get()) {
-                    makeNewRenderList()
+                    withContext(Dispatchers.Main) {
+                        makeNewRenderList()
+                    }
                 }
             }
             prevVisibleGpsCoordinateForBigDiff = visibleGpsCoordinate
