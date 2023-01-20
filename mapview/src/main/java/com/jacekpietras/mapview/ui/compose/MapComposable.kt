@@ -106,12 +106,17 @@ private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
 
 @Composable
 private fun MapBitmap(item: RenderBitmapItem<ComposablePaint>) {
-    Image(
-        modifier = Modifier
-            .offset(item),
-        bitmap = item.bitmap.asImageBitmap(),
-        contentDescription = null,
-    )
+    with(LocalDensity.current) {
+        Image(
+            modifier = Modifier
+                .offset(
+                    x = item.cXpivoted.toDp(),
+                    y = item.cYpivoted.toDp(),
+                ),
+            bitmap = item.bitmap.asImageBitmap(),
+            contentDescription = null,
+        )
+    }
 }
 
 private fun <T> Modifier.offset(item: RenderIconItem<T>): Modifier =
@@ -138,36 +143,6 @@ private fun <T> Modifier.offset(item: RenderIconItem<T>): Modifier =
                     Pivot.CENTER -> offset(
                         x = cX.toDp() - width.dp / 2,
                         y = cY.toDp() - height.dp / 2,
-                    )
-                }
-            }
-        }
-    }
-
-private fun <T> Modifier.offset(item: RenderBitmapItem<T>): Modifier =
-    composed {
-        with(LocalDensity.current) {
-            with(item) {
-                when (pivot) {
-                    Pivot.TOP -> offset(
-                        x = (cX - width / 2).toDp(),
-                        y = cY.toDp(),
-                    )
-                    Pivot.BOTTOM -> offset(
-                        x = (cX - width / 2).toDp(),
-                        y = (cY - height).toDp(),
-                    )
-                    Pivot.LEFT -> offset(
-                        x = cX.toDp(),
-                        y = (cY - height / 2).toDp(),
-                    )
-                    Pivot.RIGHT -> offset(
-                        x = (cX - width).toDp(),
-                        y = (cY - height / 2).toDp(),
-                    )
-                    Pivot.CENTER -> offset(
-                        x = (cX - width / 2).toDp(),
-                        y = (cY - height / 2).toDp(),
                     )
                 }
             }
