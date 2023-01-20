@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.ui.compose
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -50,6 +51,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortS
 import timber.log.Timber
 
+@SuppressLint("LogNotTimber")
 @Composable
 fun MapComposable(
     modifier: Modifier = Modifier,
@@ -104,8 +106,8 @@ fun MapComposable(
         rendE = System.nanoTime()
         if (trans > 0) {
 
-            Log.d("dupa",
-                "Perf: Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
+            Log.d("Perf:",
+                "Render: Full: ${trans toMs rendE}, from prev ${prevRendE toMs rendE}\n" +
                         "    [pass to vm] ${trans toMs cutoS}\n" +
                         "    [coord prep] ${cutoS toMs moveE}\n" +
                         "    [rend creat] ${moveE toMs tranS}\n" +

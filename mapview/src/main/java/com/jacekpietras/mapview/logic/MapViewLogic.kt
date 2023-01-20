@@ -56,6 +56,7 @@ class MapViewLogic<T>(
         }
     private val worldBounds: RectD get() = worldData.bounds
     private var worldPreparedList: List<PreparedItem<T>> = emptyList()
+    private var worldPreparedListOfVisible: List<PreparedItem<T>> = emptyList()
     private val worldPreparedListMaker = PreparedListMaker(paintBaker)
 
     var userData: UserData = UserData()
@@ -75,6 +76,7 @@ class MapViewLogic<T>(
         }
 
     private var volatilePreparedList: List<PreparedItem<T>> = emptyList()
+    private var volatilePreparedListOfVisible: List<PreparedItem<T>> = emptyList()
     private val volatilePreparedListMaker = PreparedListMaker(paintBaker)
     private val userPosition: PointD? get() = userData.userPosition.takeIf { it != PointD() }
     private val compass: Float get() = userData.compass
@@ -365,7 +367,7 @@ class MapViewLogic<T>(
             centerGpsCoordinate = centerGpsCoordinate,
             bakeDimension = paintBaker::bakeDimension,
         )
-            .translate(worldPreparedList, volatilePreparedList)
+            .translate(worldPreparedListOfVisible, volatilePreparedListOfVisible)
             .also {
                 LastMapUpdate.mergE = System.nanoTime()
                 invalidate(it)
@@ -378,8 +380,8 @@ class MapViewLogic<T>(
         if (worldMovedALot) {
             Timber.d("Perf: moved a lot")
             coroutineScope.launch(Dispatchers.Default) {
-                worldPreparedList.checkVisibilityOfAllItems()
-                volatilePreparedList.checkVisibilityOfAllItems()
+                worldPreparedListOfVisible = worldPreparedList.checkVisibilityOfAllItems()
+                volatilePreparedListOfVisible = volatilePreparedList.checkVisibilityOfAllItems()
 
                 if (!cuttingOutNow.get()) {
                     makeNewRenderList()
@@ -393,7 +395,7 @@ class MapViewLogic<T>(
     }
 
     private fun clearTranslatedCache() {
-        listOf(worldPreparedList, volatilePreparedList)
+        listOf(worldPreparedListOfVisible, volatilePreparedListOfVisible)
             .forEach { preparedItems ->
                 preparedItems.forEach { item ->
                     if (item.visibility == CACHED) {
@@ -403,14 +405,16 @@ class MapViewLogic<T>(
             }
     }
 
-    private fun <T> List<PreparedItem<T>>.checkVisibilityOfAllItems() {
-        forEach { item ->
+    private fun <T> List<PreparedItem<T>>.checkVisibilityOfAllItems() =
+        mapNotNull { item ->
             when (item) {
                 is PreparedItem.PreparedColoredItem.PreparedPolygonItem -> {
-                    item.visibility = if (visibleGpsCoordinate.isPolygonVisible(item.shape)) {
-                        VISIBLE
+                    if (visibleGpsCoordinate.isPolygonVisible(item.shape)) {
+                        item.visibility = VISIBLE
+                        item
                     } else {
-                        HIDDEN
+                        item.visibility = HIDDEN
+                        null
                     }
                 }
                 is PreparedItem.PreparedColoredItem.PreparedPathItem -> {
@@ -418,32 +422,39 @@ class MapViewLogic<T>(
                     if (visiblePath != null) {
                         item.visibility = VISIBLE
                         item.cacheRaw = visiblePath
+                        item
                     } else {
                         item.visibility = HIDDEN
+                        null
                     }
                 }
                 is PreparedItem.PreparedColoredItem.PreparedCircleItem -> {
-                    item.visibility = if (visibleGpsCoordinate.isPointVisible(item.point)) {
-                        VISIBLE
+                    if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                        item.visibility = VISIBLE
+                        item
                     } else {
-                        HIDDEN
+                        item.visibility = HIDDEN
+                        null
                     }
                 }
                 is PreparedItem.PreparedIconItem -> {
-                    item.visibility = if (visibleGpsCoordinate.isPointVisible(item.point)) {
-                        VISIBLE
+                    if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                        item.visibility = VISIBLE
+                        item
                     } else {
-                        HIDDEN
+                        item.visibility = HIDDEN
+                        null
                     }
                 }
                 is PreparedItem.PreparedBitmapItem -> {
-                    item.visibility = if (visibleGpsCoordinate.isPointVisible(item.point)) {
-                        VISIBLE
+                    if (visibleGpsCoordinate.isPointVisible(item.point)) {
+                        item.visibility = VISIBLE
+                        item
                     } else {
-                        HIDDEN
+                        item.visibility = HIDDEN
+                        null
                     }
                 }
             }
         }
-    }
 }
