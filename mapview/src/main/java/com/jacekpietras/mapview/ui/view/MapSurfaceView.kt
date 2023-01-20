@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
 import com.jacekpietras.mapview.utils.ViewGestures
 import com.jacekpietras.mapview.utils.drawMapObjects
 
@@ -23,8 +24,6 @@ class MapSurfaceView @JvmOverloads constructor(
         set(value) {
             field = value
             invalidate()
-
-            LastMapUpdate.log()
         }
 
     private val viewGestures = object : ViewGestures(context) {
@@ -60,6 +59,10 @@ class MapSurfaceView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        rendS = System.nanoTime()
+
         canvas.drawMapObjects(mapList)
+
+        LastMapUpdate.log()
     }
 }
