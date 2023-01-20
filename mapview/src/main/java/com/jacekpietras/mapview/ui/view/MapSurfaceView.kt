@@ -61,7 +61,7 @@ class MapSurfaceView @JvmOverloads constructor(
 
         rendS = System.nanoTime()
 
-        canvas.drawMapObjects(mapList)
+        canvas.drawMapObjects(context, mapList)
 
         LastMapUpdate.log()
     }

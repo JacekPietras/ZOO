@@ -57,6 +57,6 @@ class MapCustomView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        canvas.drawMapObjects(mapList)
+        canvas.drawMapObjects(context, mapList)
     }
 }
