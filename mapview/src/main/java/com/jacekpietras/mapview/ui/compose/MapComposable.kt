@@ -74,13 +74,13 @@ fun MapComposable(
                 }
             }
         }
-//        mapList.forEach {
-//            when (it) {
-//                is RenderBitmapItem -> MapBitmap(it)
-//                is RenderIconItem -> MapIcon(it)
-//                else -> Unit
-//            }
-//        }
+        mapList.forEach {
+            when (it) {
+                is RenderBitmapItem -> MapBitmap(it)
+                is RenderIconItem -> MapIcon(it)
+                else -> Unit
+            }
+        }
 
         if (BuildConfig.DEBUG) {
             LastMapUpdate.log()
