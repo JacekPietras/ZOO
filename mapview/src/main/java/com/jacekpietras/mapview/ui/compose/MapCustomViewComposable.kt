@@ -32,7 +32,6 @@ fun MapCustomViewComposable(
                 this.onSizeChanged = onSizeChanged
                 this.onClick = onClick
                 this.onTransform = onTransform
-                this.mapList = mapList
             }
         },
     )

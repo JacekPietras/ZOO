@@ -30,7 +30,6 @@ fun MapSurfaceViewComposable(
                 this.onSizeChanged = onSizeChanged
                 this.onClick = onClick
                 this.onTransform = onTransform
-                this.mapList = mapList
                 this.setBackgroundColor(backgroundColor.toArgb())
             }
         },
