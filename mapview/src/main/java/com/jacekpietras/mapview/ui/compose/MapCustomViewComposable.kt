@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
+import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.view.MapCustomView
 
@@ -20,7 +21,7 @@ fun MapCustomViewComposable(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    update: ((List<RenderItem<Paint>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
 ) {
     AndroidView(
         modifier = Modifier
@@ -28,7 +29,10 @@ fun MapCustomViewComposable(
             .then(modifier),
         factory = { context ->
             MapCustomView(context).apply {
-                update.invoke { this.mapList = it }
+                update.invoke {
+                    @Suppress("UNCHECKED_CAST")
+                    mapList = it as List<RenderItem<Paint>>
+                }
                 this.onSizeChanged = onSizeChanged
                 this.onClick = onClick
                 this.onTransform = onTransform

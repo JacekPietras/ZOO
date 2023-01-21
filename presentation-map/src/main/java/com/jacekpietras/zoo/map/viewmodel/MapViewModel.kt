@@ -78,11 +78,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @OptIn(FlowPreview::class)
-internal class MapViewModel<T>(
+internal class MapViewModel(
     context: Context,
     animalId: String?,
     regionId: String?,
-    paintBaker: PaintBaker<T>,
+    paintBaker: PaintBaker<Any>,
     private val mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
@@ -125,7 +125,7 @@ internal class MapViewModel<T>(
         coroutineScope = viewModelScope,
     )
 
-    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
+    fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {
         mapLogic.invalidate = updateCallback
     }
 

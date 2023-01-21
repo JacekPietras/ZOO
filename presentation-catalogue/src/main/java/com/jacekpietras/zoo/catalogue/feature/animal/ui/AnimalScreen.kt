@@ -27,7 +27,7 @@ fun AnimalScreen(
 ) {
     val context = LocalContext.current
     val activity = context.getActivity()
-    val viewModel = getViewModel<AnimalViewModel<ComposablePaint>> {
+    val viewModel = getViewModel<AnimalViewModel> {
         parametersOf(animalId, ComposablePaintBaker(context))
     }
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
