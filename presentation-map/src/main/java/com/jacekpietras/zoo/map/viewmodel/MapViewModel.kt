@@ -78,11 +78,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @OptIn(FlowPreview::class)
-internal class MapViewModel<T>(
+internal class MapViewModel(
     context: Context,
     animalId: String?,
     regionId: String?,
-    paintBaker: PaintBaker<T>,
+    paintBaker: PaintBaker<Any>,
     private val mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
@@ -117,15 +117,17 @@ internal class MapViewModel<T>(
         .filter(List<MapEffect>::isNotEmpty)
         .map { /* Unit */ }
 
-    private val mapLogic: MapViewLogic<T> = MapViewLogic(
-        invalidate = { updateCallback?.invoke(it) },
+    private val mapLogic = MapViewLogic(
         paintBaker = paintBaker,
         setOnPointPlacedListener = ::onPointPlaced,
         onStopCentering = ::onStopCentering,
         onStartCentering = ::onStartCentering,
         coroutineScope = viewModelScope,
     )
-    private var updateCallback: ((List<RenderItem<T>>) -> Unit)? = null
+
+    fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {
+        mapLogic.invalidate = updateCallback
+    }
 
     private val mapColors = MutableStateFlow(MapColors())
     private val bitmapLibrary = stateFlowOf { BitmapLibrary(context) }
@@ -516,7 +518,7 @@ internal class MapViewModel<T>(
             .flowOnBackground()
 
     fun fillColors(colors: MapColors) {
-        updateCallback?.invoke(emptyList())
+        mapLogic.invalidate?.invoke(emptyList())
         mapColors.value = colors
     }
 
@@ -547,9 +549,5 @@ internal class MapViewModel<T>(
             is Region.ExitRegion -> true
             is Region.RestaurantRegion -> true
         }
-    }
-
-    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
-        this.updateCallback = updateCallback
     }
 }

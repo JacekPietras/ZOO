@@ -20,13 +20,16 @@ fun MapSurfaceViewComposable(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    update: ((List<RenderItem<Paint>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
 ) {
     AndroidView(
         modifier = modifier,
         factory = { context ->
             MapSurfaceView(context).apply {
-                update.invoke { this.mapList = it }
+                update.invoke {
+                    @Suppress("UNCHECKED_CAST")
+                    mapList = it as List<RenderItem<Paint>>
+                }
                 this.onSizeChanged = onSizeChanged
                 this.onClick = onClick
                 this.onTransform = onTransform
