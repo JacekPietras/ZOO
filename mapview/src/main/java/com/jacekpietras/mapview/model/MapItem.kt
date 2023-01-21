@@ -1,7 +1,6 @@
 package com.jacekpietras.mapview.model
 
 import android.graphics.Bitmap
-import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
 
 sealed class MapItem(
@@ -32,13 +31,6 @@ sealed class MapItem(
             override val minZoom: Float? = null,
         ) : MapColoredItem(paint, minZoom)
     }
-
-    class IconMapItem(
-        val point: PointD,
-        @DrawableRes val icon: Int,
-        override val minZoom: Float? = null,
-        val pivot: Pivot = Pivot.CENTER,
-    ) : MapItem(minZoom)
 
     class BitmapMapItem(
         val point: PointD,
