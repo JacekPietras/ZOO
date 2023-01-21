@@ -11,13 +11,6 @@ import com.jacekpietras.mapview.utils.colorToGLFloatArray
 import com.jacekpietras.mapview.utils.createProgram
 
 private const val COORDS_PER_VERTEX = 3
-//private val pathCords = floatArrayOf(
-//    0.0f, 0.0f, 0.0f,
-//    500.0f, 500.0f, 0.0f,
-//    1080.0f, 0.0f, 0.0f,
-//    500.0f, 700.0f, 0.0f,
-//    1090f, 2340f, 0.0f,
-//)
 
 class Line {
 

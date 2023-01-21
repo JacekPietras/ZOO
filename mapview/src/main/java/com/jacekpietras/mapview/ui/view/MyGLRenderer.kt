@@ -26,14 +26,6 @@ class MyGLRenderer : GLSurfaceView.Renderer {
     private val projectionMatrix = FloatArray(16)
     private val viewMatrix = FloatArray(16)
 
-    private val line = floatArrayOf(
-        0.0f, 0.0f,
-        500.0f, 500.0f,
-        1080.0f, 0.0f,
-        500.0f, 700.0f,
-        1090f, 2340f,
-    )
-
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         setOpenGLClearColor(openGLBackground)
 
