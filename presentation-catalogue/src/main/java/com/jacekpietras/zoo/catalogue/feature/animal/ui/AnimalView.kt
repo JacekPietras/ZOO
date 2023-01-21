@@ -64,7 +64,7 @@ internal fun AnimalView(
     onNavClicked: () -> Unit,
     onMapSizeChanged: (Int, Int) -> Unit,
     onFavoriteClicked: () -> Unit,
-    update: ((List<RenderItem<out Any>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
 ) {
     if (viewState == null) return
 
@@ -146,7 +146,7 @@ private fun NavigationButtons(
 @Composable
 private fun MapView(
     onMapSizeChanged: (Int, Int) -> Unit,
-    update: ((List<RenderItem<out Any>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     val parentWidth = with(LocalDensity.current) {

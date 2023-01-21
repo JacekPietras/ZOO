@@ -93,7 +93,7 @@ internal class AnimalViewModel(
         coroutineScope = viewModelScope,
     )
 
-    fun setUpdateCallback(updateCallback: (List<RenderItem<out Any>>) -> Unit) {
+    fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {
         mapLogic.invalidate = updateCallback
     }
 
@@ -192,7 +192,7 @@ internal class AnimalViewModel(
         sendEffect(ShowToast(RichText(R.string.location_denied)))
     }
 
-    private fun MapViewLogic<out Any>.updateMap(viewState: AnimalViewState?) {
+    private fun MapViewLogic<Any>.updateMap(viewState: AnimalViewState?) {
         if (viewState == null) return
 
         worldData = WorldData(

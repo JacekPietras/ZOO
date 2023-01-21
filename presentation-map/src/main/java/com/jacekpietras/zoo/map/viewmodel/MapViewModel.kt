@@ -126,7 +126,7 @@ internal class MapViewModel(
         coroutineScope = viewModelScope,
     )
 
-    fun setUpdateCallback(updateCallback: (List<RenderItem<out Any>>) -> Unit) {
+    fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {
         mapLogic.invalidate = updateCallback
     }
 
