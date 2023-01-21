@@ -1,4 +1,4 @@
-package com.jacekpietras.mapview.ui.view
+package com.jacekpietras.mapview.ui.opengl
 
 import android.opengl.GLES20
 import com.jacekpietras.mapview.utils.BYTES_PER_FLOAT
@@ -6,7 +6,6 @@ import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
-import com.jacekpietras.mapview.utils.allocateShortBuffer
 import com.jacekpietras.mapview.utils.colorToGLFloatArray
 import com.jacekpietras.mapview.utils.createProgram
 
@@ -34,13 +33,16 @@ class Line {
         )
 
         val mColorHandle = GLES20.glGetUniformLocation(mProgram, GL_COLOR_VAR)
+//        GLES20.glEnable(GLES20.GL_BLEND)
+//        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
         GLES20.glUniform4fv(mColorHandle, 1, data.color, 0)
 
         GLES20.glLineWidth(thickness)
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, data.vertexCount)
-        GLES20.glDrawElements(GLES20.GL_LINES, data.vertexCount, GLES20.GL_UNSIGNED_SHORT, data.drawListBuffer)
+
         GLES20.glDisableVertexAttribArray(mPositionHandle)
-        GLES20.glDisable(mColorHandle)
+//        GLES20.glDisable(mColorHandle)
+//        GLES20.glDisable(GLES20.GL_BLEND)
     }
 
     private companion object {
@@ -53,7 +55,7 @@ class Line {
         val color = color.colorToGLFloatArray()
         val vertexCount = pathCords.size / COORDS_PER_VERTEX
         val vertexBuffer = allocateFloatBuffer(pathCords)
-        val drawListBuffer = allocateShortBuffer(ShortArray(pathCords.size, Int::toShort))
+//        val drawListBuffer = allocateShortBuffer(ShortArray(pathCords.size, Int::toShort))
     }
 }
 

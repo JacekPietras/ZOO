@@ -1,4 +1,4 @@
-package com.jacekpietras.mapview.ui.view
+package com.jacekpietras.mapview.ui.opengl
 
 import android.graphics.Color
 import android.graphics.Paint

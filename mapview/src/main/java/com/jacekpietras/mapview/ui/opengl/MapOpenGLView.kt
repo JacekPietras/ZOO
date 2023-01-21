@@ -1,4 +1,4 @@
-package com.jacekpietras.mapview.ui.view
+package com.jacekpietras.mapview.ui.opengl
 
 import android.annotation.SuppressLint
 import android.content.Context
