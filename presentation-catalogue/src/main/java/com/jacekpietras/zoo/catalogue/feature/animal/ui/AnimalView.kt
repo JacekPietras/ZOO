@@ -47,7 +47,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.compose.MapComposable
 import com.jacekpietras.zoo.catalogue.R

@@ -10,7 +10,7 @@ import com.jacekpietras.mapview.ui.compose.MapRenderer.SURFACE_VIEW
 
 @Composable
 fun UniversalMapComposable(
-    mapRenderer: MapRenderer = COMPOSE,
+    mapRenderer: MapRenderer,
     modifier: Modifier = Modifier,
     backgroundColor: Color,
     onSizeChanged: (Int, Int) -> Unit,
