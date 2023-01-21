@@ -9,6 +9,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -39,9 +44,15 @@ fun MapComposable(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    mapList: List<RenderItem<ComposablePaint>>,
+    update: ((List<RenderItem<ComposablePaint>>) -> Unit) -> Unit,
 ) {
     rendS = System.nanoTime()
+
+    var mapList by remember { mutableStateOf(emptyList<RenderItem<ComposablePaint>>()) }
+
+    LaunchedEffect("map observation") {
+        update.invoke { mapList = it }
+    }
 
     Box {
         Canvas(
