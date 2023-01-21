@@ -1,15 +1,12 @@
 package com.jacekpietras.zoo.map.viewmodel
 
 import android.content.Context
-import android.graphics.Paint
-import android.graphics.Paint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.LastMapUpdate.trans
-import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
@@ -129,7 +126,7 @@ internal class MapViewModel<T>(
         coroutineScope = viewModelScope,
     )
 
-    private var updateCallback: ((List<RenderItem<Paint>>) -> Unit)? = null
+    private var updateCallback: ((List<RenderItem<T>>) -> Unit)? = null
 
     private val mapColors = MutableStateFlow(MapColors())
     private val bitmapLibrary = stateFlowOf { BitmapLibrary(context) }
@@ -553,7 +550,7 @@ internal class MapViewModel<T>(
         }
     }
 
-    fun setUpdateCallback(updateCallback: (List<RenderItem<Paint>>) -> Unit) {
+    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
         this.updateCallback = updateCallback
     }
 }
