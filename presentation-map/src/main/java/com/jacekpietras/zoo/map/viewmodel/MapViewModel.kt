@@ -2,6 +2,7 @@ package com.jacekpietras.zoo.map.viewmodel
 
 import android.content.Context
 import android.graphics.Paint
+import android.graphics.Paint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
@@ -9,6 +10,7 @@ import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.LastMapUpdate.trans
 import com.jacekpietras.mapview.ui.view.ViewPaintBaker
+import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
@@ -79,10 +81,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @OptIn(FlowPreview::class)
-internal class MapViewModel(
+internal class MapViewModel<T>(
     context: Context,
     animalId: String?,
     regionId: String?,
+    paintBaker: PaintBaker<T>,
     private val mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
@@ -112,14 +115,20 @@ internal class MapViewModel(
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) : ViewModel() {
 
-    private val paintBaker = ViewPaintBaker(context)
-
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
     val effects: Flow<Unit> = _effects
         .filter(List<MapEffect>::isNotEmpty)
         .map { /* Unit */ }
 
-    private val mapLogic: MapViewLogic<Paint> = makeComposableMapLogic()
+    private val mapLogic: MapViewLogic<T> = MapViewLogic(
+        invalidate = { updateCallback?.invoke(it) },
+        paintBaker = paintBaker,
+        setOnPointPlacedListener = ::onPointPlaced,
+        onStopCentering = ::onStopCentering,
+        onStartCentering = ::onStartCentering,
+        coroutineScope = viewModelScope,
+    )
+
     private var updateCallback: ((List<RenderItem<Paint>>) -> Unit)? = null
 
     private val mapColors = MutableStateFlow(MapColors())
@@ -514,15 +523,6 @@ internal class MapViewModel(
         updateCallback?.invoke(emptyList())
         mapColors.value = colors
     }
-
-    private fun makeComposableMapLogic() = MapViewLogic(
-        invalidate = { updateCallback?.invoke(it) },
-        paintBaker = paintBaker,
-        setOnPointPlacedListener = ::onPointPlaced,
-        onStopCentering = ::onStopCentering,
-        onStartCentering = ::onStartCentering,
-        coroutineScope = viewModelScope,
-    )
 
     private fun centerAtUserPosition() {
         mapLogic.centerAtUserPosition()

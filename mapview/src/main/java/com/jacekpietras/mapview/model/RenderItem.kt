@@ -1,7 +1,6 @@
 package com.jacekpietras.mapview.model
 
 import android.graphics.Bitmap
-import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import com.jacekpietras.mapview.model.Pivot.BOTTOM
 import com.jacekpietras.mapview.model.Pivot.CENTER
@@ -35,18 +34,6 @@ sealed class RenderItem<T> {
             val radius: Float,
             val paint: T,
         ) : PointItem<T>(cX, cY)
-
-        @Immutable
-        class RenderIconItem<T>(
-            override val cX: Float,
-            override val cY: Float,
-            @DrawableRes val iconRes: Int,
-            val pivot: Pivot,
-        ) : PointItem<T>(cX, cY) {
-
-            val width: Int get() = 24
-            val height: Int get() = 24
-        }
 
         @Immutable
         class RenderBitmapItem<T>(

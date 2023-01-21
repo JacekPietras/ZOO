@@ -13,10 +13,11 @@ val mapModule = module {
     }
 
     viewModel { params ->
-        MapViewModel(
+        MapViewModel<Any>(
             context = androidContext(),
             animalId = params[0],
             regionId = params[1],
+            paintBaker = params.get(),
             mapper = get(),
             observeMapObjectsUseCase = get(),
             observeCompassUseCase = get(),

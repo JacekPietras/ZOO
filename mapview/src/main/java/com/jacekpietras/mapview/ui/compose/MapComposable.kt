@@ -7,14 +7,10 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -24,15 +20,11 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.model.Pivot
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
-import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderIconItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
@@ -77,7 +69,6 @@ fun MapComposable(
         mapList.forEach {
             when (it) {
                 is RenderBitmapItem -> MapBitmap(it)
-                is RenderIconItem -> MapIcon(it)
                 else -> Unit
             }
         }
@@ -90,18 +81,6 @@ fun MapComposable(
             )
         }
     }
-}
-
-@Composable
-private fun MapIcon(item: RenderIconItem<ComposablePaint>) {
-    Icon(
-        modifier = Modifier
-            .offset(item)
-            .requiredSize(item.height.dp),
-        painter = painterResource(item.iconRes),
-        contentDescription = null,
-        tint = colors.onSurface,
-    )
 }
 
 @Composable
@@ -118,36 +97,6 @@ private fun MapBitmap(item: RenderBitmapItem<ComposablePaint>) {
         )
     }
 }
-
-private fun <T> Modifier.offset(item: RenderIconItem<T>): Modifier =
-    composed {
-        with(LocalDensity.current) {
-            with(item) {
-                when (pivot) {
-                    Pivot.TOP -> offset(
-                        x = cX.toDp() - width.dp / 2,
-                        y = cY.toDp(),
-                    )
-                    Pivot.BOTTOM -> offset(
-                        x = cX.toDp() - width.dp / 2,
-                        y = cY.toDp() - height.dp,
-                    )
-                    Pivot.LEFT -> offset(
-                        x = cX.toDp(),
-                        y = cY.toDp() - height.dp / 2,
-                    )
-                    Pivot.RIGHT -> offset(
-                        x = cX.toDp() - width.dp,
-                        y = cY.toDp() - height.dp / 2,
-                    )
-                    Pivot.CENTER -> offset(
-                        x = cX.toDp() - width.dp / 2,
-                        y = cY.toDp() - height.dp / 2,
-                    )
-                }
-            }
-        }
-    }
 
 private fun DrawScope.drawCircleSafe(
     color: Color,
