@@ -22,6 +22,7 @@ internal interface PaintBaker<T> {
         @Suppress("UNCHECKED_CAST")
         fun <T> create(context: Context, mapRenderer: MapRenderer): PaintBaker<T> =
             when (mapRenderer) {
+                MapRenderer.OPEN_GL,
                 MapRenderer.CUSTOM_VIEW,
                 MapRenderer.SURFACE_VIEW -> ViewPaintBaker(context)
                 MapRenderer.COMPOSE -> ComposablePaintBaker(context)
