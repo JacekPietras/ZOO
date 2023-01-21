@@ -118,15 +118,14 @@ internal class MapViewModel<T>(
         .map { /* Unit */ }
 
     private val mapLogic: MapViewLogic<T> = MapViewLogic(
-        invalidate = { mapList.value = it },
+        invalidate = { updateCallback?.invoke(it) },
         paintBaker = paintBaker,
         setOnPointPlacedListener = ::onPointPlaced,
         onStopCentering = ::onStopCentering,
         onStartCentering = ::onStartCentering,
         coroutineScope = viewModelScope,
     )
-
-    val mapList = MutableStateFlow<List<RenderItem<T>>>(emptyList())
+    private var updateCallback: ((List<RenderItem<T>>) -> Unit)? = null
 
     private val mapColors = MutableStateFlow(MapColors())
     private val bitmapLibrary = stateFlowOf { BitmapLibrary(context) }
@@ -517,7 +516,7 @@ internal class MapViewModel<T>(
             .flowOnBackground()
 
     fun fillColors(colors: MapColors) {
-        mapList.value = emptyList()
+        updateCallback?.invoke(emptyList())
         mapColors.value = colors
     }
 
@@ -548,5 +547,9 @@ internal class MapViewModel<T>(
             is Region.ExitRegion -> true
             is Region.RestaurantRegion -> true
         }
+    }
+
+    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
+        this.updateCallback = updateCallback
     }
 }
