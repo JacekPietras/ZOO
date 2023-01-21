@@ -1,6 +1,7 @@
 package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
+import android.graphics.Paint
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -9,8 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.map.extensions.getActivity
@@ -29,8 +29,8 @@ fun MapScreen(
 ) {
     val context = LocalContext.current
     val activity = context.getActivity()
-    val viewModel = getViewModel<MapViewModel<ComposablePaint>> {
-        parametersOf(animalId, regionId, ComposablePaintBaker(context))
+    val viewModel = getViewModel<MapViewModel<Paint>> {
+        parametersOf(animalId, regionId, ViewPaintBaker(context))
     }
     val router = MapRouterImpl({ activity }, navController)
     val permissionChecker = rememberGpsPermissionRequesterState()

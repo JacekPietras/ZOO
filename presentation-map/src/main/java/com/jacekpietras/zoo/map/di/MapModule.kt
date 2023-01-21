@@ -1,6 +1,6 @@
 package com.jacekpietras.zoo.map.di
 
-import com.jacekpietras.mapview.model.ComposablePaint
+import android.graphics.Paint
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import org.koin.android.ext.koin.androidContext
@@ -14,7 +14,7 @@ val mapModule = module {
     }
 
     viewModel { params ->
-        MapViewModel<ComposablePaint>(
+        MapViewModel<Paint>(
             context = androidContext(),
             animalId = params[0],
             regionId = params[1],
