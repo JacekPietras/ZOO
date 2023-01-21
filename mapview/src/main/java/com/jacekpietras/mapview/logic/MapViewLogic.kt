@@ -26,7 +26,7 @@ import kotlin.system.measureTimeMillis
 
 class MapViewLogic<T>(
     private val doAnimation: ((progress: Float) -> Unit) -> Unit = ::doAnimation,
-    private val invalidate: (List<RenderItem<T>>) -> Unit,
+    var invalidate: ((List<RenderItem<T>>) -> Unit)? = null,
     var paintBaker: PaintBaker<T>,
     private var onStopCentering: (() -> Unit)? = null,
     private var onStartCentering: (() -> Unit)? = null,
@@ -369,7 +369,7 @@ class MapViewLogic<T>(
             .translate(worldPreparedListOfVisible, volatilePreparedListOfVisible)
             .also {
                 mergE = System.nanoTime()
-                invalidate(it)
+                invalidate?.invoke(it)
             }
     }
 

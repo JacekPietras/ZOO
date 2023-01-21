@@ -46,8 +46,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-internal class AnimalViewModel<T>(
-    paintBaker: PaintBaker<T>,
+internal class AnimalViewModel(
+    paintBaker: PaintBaker<Any>,
     private val animalId: AnimalId,
     private val mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
@@ -85,12 +85,14 @@ internal class AnimalViewModel<T>(
         .filter { it.isNotEmpty() }
         .map { /* Unit */ }
 
-    private val mapLogic: MapViewLogic<T> = MapViewLogic(
-        invalidate = { updateCallback?.invoke(it) },
+    private val mapLogic = MapViewLogic(
         paintBaker = paintBaker,
         coroutineScope = viewModelScope,
     )
-    private var updateCallback: ((List<RenderItem<T>>) -> Unit)? = null
+
+    fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {
+        mapLogic.invalidate = updateCallback
+    }
 
     init {
         launchInBackground {
@@ -165,7 +167,7 @@ internal class AnimalViewModel<T>(
             }
 
     fun fillColors(colors: MapColors) {
-        updateCallback?.invoke(emptyList())
+        mapLogic.invalidate?.invoke(emptyList())
         mapper.setColors(colors)
     }
 
@@ -187,7 +189,7 @@ internal class AnimalViewModel<T>(
         sendEffect(ShowToast(RichText(R.string.location_denied)))
     }
 
-    private fun MapViewLogic<T>.updateMap(viewState: AnimalViewState?) {
+    private fun MapViewLogic<Any>.updateMap(viewState: AnimalViewState?) {
         if (viewState == null) return
 
         worldData = WorldData(
@@ -196,9 +198,5 @@ internal class AnimalViewModel<T>(
         )
         setRotate(-23f)
         onScale(0f, 0f, Float.MAX_VALUE)
-    }
-
-    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
-        this.updateCallback = updateCallback
     }
 }

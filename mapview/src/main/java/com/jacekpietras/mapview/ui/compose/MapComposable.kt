@@ -44,14 +44,17 @@ fun MapComposable(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    update: ((List<RenderItem<ComposablePaint>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
 ) {
     rendS = System.nanoTime()
 
     var mapList by remember { mutableStateOf(emptyList<RenderItem<ComposablePaint>>()) }
 
     LaunchedEffect("map observation") {
-        update.invoke { mapList = it }
+        update.invoke {
+            @Suppress("UNCHECKED_CAST")
+            mapList = it as List<RenderItem<ComposablePaint>>
+        }
     }
 
     Box {

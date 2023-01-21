@@ -13,7 +13,7 @@ val mapModule = module {
     }
 
     viewModel { params ->
-        MapViewModel<Any>(
+        MapViewModel(
             context = androidContext(),
             animalId = params[0],
             regionId = params[1],
