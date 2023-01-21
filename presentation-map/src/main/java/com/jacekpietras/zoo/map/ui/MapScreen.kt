@@ -9,8 +9,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.map.extensions.getActivity
@@ -54,6 +54,7 @@ fun MapScreen(
 
     MapView(
         viewState,
+        mapRenderer = MapRenderer.COMPOSE,
         onBack = { viewModel.onBackClicked(router) },
         onClose = viewModel::onCloseClicked,
         onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },
