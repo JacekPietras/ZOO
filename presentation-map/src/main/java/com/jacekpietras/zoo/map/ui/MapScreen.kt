@@ -29,7 +29,7 @@ fun MapScreen(
 ) {
     val context = LocalContext.current
     val activity = context.getActivity()
-    val viewModel = getViewModel<MapViewModel<Paint>> {
+    val viewModel = getViewModel<MapViewModel> {
         parametersOf(animalId, regionId, ViewPaintBaker(context))
     }
     val router = MapRouterImpl({ activity }, navController)

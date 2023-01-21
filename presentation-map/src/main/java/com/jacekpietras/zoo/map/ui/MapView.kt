@@ -63,7 +63,7 @@ internal fun MapView(
     onClick: (Float, Float) -> Unit,
     onTransform: (Float, Float, Float, Float, Float, Float) -> Unit,
     onMapActionClicked: (MapAction) -> Unit,
-    update: ((List<RenderItem<Paint>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
 ) {
     Box {
         MapSurfaceViewComposable(
