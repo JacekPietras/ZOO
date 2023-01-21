@@ -11,7 +11,7 @@ import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.ui.PaintBaker
 
-class ComposablePaintBaker(
+internal class ComposablePaintBaker(
     private val context: Context,
 ) : PaintBaker<ComposablePaint> {
 

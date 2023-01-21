@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.model
 
+import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.containsLine
@@ -14,12 +15,22 @@ internal class ViewCoordinates(
     zoom: Double,
     viewWidth: Int,
     viewHeight: Int,
+    worldRotation: Float,
 ) {
 
     val visibleRect: RectD
     private val visibleRectRotated: RectD
     val horizontalScale: Double
     val verticalScale: Double
+
+    private val matrix = Matrix()
+        .apply {
+            setRotate(
+                -worldRotation,
+                viewWidth / 2.toFloat(),
+                viewHeight / 2.toFloat(),
+            )
+        }
 
     init {
         val haversineH = haversine(
@@ -113,11 +124,13 @@ internal class ViewCoordinates(
             output[i] = input.getOrNull(i)?.transformX() ?: 0f
             output[i + 1] = input.getOrNull(i + 1)?.transformY() ?: 0f
         }
+        matrix.mapPoints(output)
     }
 
-    fun transformPoint(p: PointD, array: FloatArray) {
-        array[0] = p.x.transformX()
-        array[1] = p.y.transformY()
+    fun transformPoint(p: PointD, output: FloatArray) {
+        output[0] = p.x.transformX()
+        output[1] = p.y.transformY()
+        matrix.mapPoints(output)
     }
 
     fun deTransformPoint(x: Float, y: Float): PointD =

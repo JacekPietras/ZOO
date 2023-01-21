@@ -51,7 +51,7 @@ import com.jacekpietras.zoo.map.model.MapViewState
 @Composable
 internal fun MapView(
     viewState: MapViewState?,
-    mapRenderer: MapRenderer = MapRenderer.COMPOSE,
+    mapRenderer: MapRenderer,
     onBack: () -> Unit,
     onClose: () -> Unit,
     onLocationClicked: () -> Unit,

@@ -8,8 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
+import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.zoo.catalogue.feature.animal.extensions.getActivity
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalEffect.ShowToast
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
@@ -25,10 +24,11 @@ fun AnimalScreen(
     navController: NavController,
     animalId: String?,
 ) {
+    val mapRenderer = MapRenderer.COMPOSE
     val context = LocalContext.current
     val activity = context.getActivity()
     val viewModel = getViewModel<AnimalViewModel> {
-        parametersOf(animalId, ComposablePaintBaker(context))
+        parametersOf(animalId, mapRenderer)
     }
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
     val permissionChecker = rememberGpsPermissionRequesterState()

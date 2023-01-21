@@ -1,6 +1,5 @@
 package com.jacekpietras.mapview.logic
 
-import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.ItemVisibility.CACHED
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
@@ -11,7 +10,6 @@ import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
-import com.jacekpietras.mapview.ui.LastMapUpdate
 import com.jacekpietras.mapview.ui.LastMapUpdate.cachE
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortS
@@ -19,12 +17,10 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.tranS
 
 internal class RenderListMaker<T>(
     private val visibleGpsCoordinate: ViewCoordinates,
-    private val worldRotation: Float,
     private val currentWidth: Int,
-    private val currentHeight: Int,
     private val zoom: Double,
     private val centerGpsCoordinate: PointD,
-    private val bakeDimension: (MapDimension) -> ((Double, PointD, Int) -> Float),
+    private val bakeDimension: (MapDimension) -> (Double, PointD, Int) -> Float,
 ) {
 
     private val borders = mutableListOf<RenderItem<T>>()
@@ -32,14 +28,6 @@ internal class RenderListMaker<T>(
     private val icons = mutableListOf<RenderItem.PointItem<T>>()
     private val dynamicPaints = mutableMapOf<PaintHolder.Dynamic<T>, T>()
     private val dynamicDimensions = mutableMapOf<MapDimension, Float>()
-    private val matrix = Matrix()
-        .apply {
-            setRotate(
-                -worldRotation,
-                currentWidth / 2.toFloat(),
-                currentHeight / 2.toFloat(),
-            )
-        }
 
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
         tranS = System.nanoTime()
@@ -79,28 +67,24 @@ internal class RenderListMaker<T>(
                 is PreparedPolygonItem -> {
                     if (item.visibility != CACHED) {
                         visibleGpsCoordinate.transformPolygon(item.shape, item.cacheTranslated)
-                        matrix.mapPoints(item.cacheTranslated)
                         item.visibility = CACHED
                     }
                 }
                 is PreparedPathItem -> {
                     if (item.visibility != CACHED) {
                         visibleGpsCoordinate.transformPath(item.cacheRaw!!, item.cacheTranslated!!)
-                        item.cacheTranslated!!.forEach(matrix::mapPoints)
                         item.visibility = CACHED
                     }
                 }
                 is PreparedCircleItem -> {
                     if (item.visibility != CACHED) {
                         visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
-                        matrix.mapPoints(item.cacheTranslated)
                         item.visibility = CACHED
                     }
                 }
                 is PreparedBitmapItem -> {
                     if (item.visibility != CACHED) {
                         visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
-                        matrix.mapPoints(item.cacheTranslated)
                         item.visibility = CACHED
                     }
                 }
