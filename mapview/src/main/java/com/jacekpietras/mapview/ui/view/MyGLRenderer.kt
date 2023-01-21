@@ -26,6 +26,14 @@ class MyGLRenderer : GLSurfaceView.Renderer {
     private val projectionMatrix = FloatArray(16)
     private val viewMatrix = FloatArray(16)
 
+    private val line = floatArrayOf(
+        0.0f, 0.0f,
+        500.0f, 500.0f,
+        1080.0f, 0.0f,
+        500.0f, 700.0f,
+        1090f, 2340f,
+    )
+
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         setOpenGLClearColor(openGLBackground)
 
@@ -45,11 +53,11 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
-        GLES20.glLineWidth(5f)
-
-        // Draw shape
-        mTriangle.draw(vPMatrix)
-        mLine.draw(vPMatrix)
+        mapList.forEach {
+            if(it is RenderItem.RenderPathItem){
+                mLine.draw(vPMatrix, it.shape, Color.GREEN, 10f)
+            }
+        }
 
         LastMapUpdate.log()
     }

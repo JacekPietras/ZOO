@@ -1,6 +1,5 @@
 package com.jacekpietras.mapview.ui.view
 
-import android.graphics.Color
 import android.opengl.GLES20
 import com.jacekpietras.mapview.utils.BYTES_PER_FLOAT
 import com.jacekpietras.mapview.utils.GL_COLOR_VAR
@@ -12,23 +11,19 @@ import com.jacekpietras.mapview.utils.colorToGLFloatArray
 import com.jacekpietras.mapview.utils.createProgram
 
 private const val COORDS_PER_VERTEX = 3
-private val pathCords = floatArrayOf(
-    0.0f, 0.0f, 0.0f,
-    500.0f, 500.0f, 0.0f,
-    1080.0f, 0.0f, 0.0f,
-    500.0f, 700.0f, 0.0f,
-    1090f, 2340f, 0.0f,
-)
+//private val pathCords = floatArrayOf(
+//    0.0f, 0.0f, 0.0f,
+//    500.0f, 500.0f, 0.0f,
+//    1080.0f, 0.0f, 0.0f,
+//    500.0f, 700.0f, 0.0f,
+//    1090f, 2340f, 0.0f,
+//)
 
 class Line {
 
-    private val color = Color.BLUE.colorToGLFloatArray()
-    private val mProgram = createProgram()
-    private val pathDrawOrder = shortArrayOf(0, 1, 2, 3, 4 )
-    private val vertexBuffer = allocateFloatBuffer(pathCords)
-    private val drawListBuffer = allocateShortBuffer(pathDrawOrder)
+    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float) {
+        val data = LineData(line, color)
 
-    fun draw(mvpMatrix: FloatArray?) {
         GLES20.glUseProgram(mProgram)
 
         val mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, GL_MATRIX_VAR)
@@ -42,15 +37,40 @@ class Line {
             GLES20.GL_FLOAT,
             false,
             COORDS_PER_VERTEX * BYTES_PER_FLOAT,
-            vertexBuffer
+            data.vertexBuffer,
         )
 
         val mColorHandle = GLES20.glGetUniformLocation(mProgram, GL_COLOR_VAR)
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0)
+        GLES20.glUniform4fv(mColorHandle, 1, data.color, 0)
 
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, pathDrawOrder.size)
-        GLES20.glDrawElements(GLES20.GL_LINES, pathDrawOrder.size, GLES20.GL_UNSIGNED_SHORT, drawListBuffer)
+        GLES20.glLineWidth(thickness)
+        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, data.vertexCount)
+        GLES20.glDrawElements(GLES20.GL_LINES, data.vertexCount, GLES20.GL_UNSIGNED_SHORT, data.drawListBuffer)
         GLES20.glDisableVertexAttribArray(mPositionHandle)
         GLES20.glDisable(mColorHandle)
+    }
+
+    private companion object {
+
+        private val mProgram = createProgram()
+    }
+
+    private class LineData(line: FloatArray, color: Int, pathCords: FloatArray = line.addZDimension()) {
+
+        val color = color.colorToGLFloatArray()
+        val vertexCount = pathCords.size / COORDS_PER_VERTEX
+        val vertexBuffer = allocateFloatBuffer(pathCords)
+        val drawListBuffer = allocateShortBuffer(ShortArray(pathCords.size, Int::toShort))
+    }
+}
+
+private fun FloatArray.addZDimension(): FloatArray {
+    var srcI = 0
+    return FloatArray(size / 2 * COORDS_PER_VERTEX) { resIt ->
+        if (resIt % COORDS_PER_VERTEX != 2) {
+            this[srcI++]
+        } else {
+            0f
+        }
     }
 }
