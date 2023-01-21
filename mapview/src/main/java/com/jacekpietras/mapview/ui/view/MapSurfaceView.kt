@@ -57,6 +57,8 @@ class MapSurfaceView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
+        rendS = System.nanoTime()
+
         super.onDraw(canvas)
 
         rendS = System.nanoTime()

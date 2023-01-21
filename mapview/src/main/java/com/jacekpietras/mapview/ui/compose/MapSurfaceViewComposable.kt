@@ -22,8 +22,6 @@ fun MapSurfaceViewComposable(
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
     update: ((List<RenderItem<Paint>>) -> Unit) -> Unit,
 ) {
-    var mapView by remember { mutableStateOf<MapSurfaceView?>(null) }
-
     AndroidView(
         modifier = modifier,
         factory = { context ->
@@ -33,7 +31,6 @@ fun MapSurfaceViewComposable(
                 this.onClick = onClick
                 this.onTransform = onTransform
                 this.setBackgroundColor(backgroundColor.toArgb())
-                mapView = this
             }
         },
     )

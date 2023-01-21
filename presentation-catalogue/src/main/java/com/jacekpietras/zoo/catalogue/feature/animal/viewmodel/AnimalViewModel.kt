@@ -1,14 +1,12 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
-import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.logic.WorldData
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.extensions.combine
 import com.jacekpietras.zoo.catalogue.extensions.combineWithIgnoredFlow
@@ -48,8 +46,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-internal class AnimalViewModel(
-    context: Context,
+internal class AnimalViewModel<T>(
+    paintBaker: PaintBaker<T>,
     private val animalId: AnimalId,
     private val mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
@@ -67,8 +65,6 @@ internal class AnimalViewModel(
     private val getShortestPathUseCase: GetShortestPathUseCase,
     private val startNavigationUseCase: StartNavigationUseCase,
 ) : ViewModel() {
-
-    private val paintBaker = ComposablePaintBaker(context)
 
     private val state = MutableStateFlow(AnimalState(animalId = animalId))
     val viewState: Flow<AnimalViewState?> = combine(
@@ -89,9 +85,12 @@ internal class AnimalViewModel(
         .filter { it.isNotEmpty() }
         .map { /* Unit */ }
 
-    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
-
-    val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
+    private val mapLogic: MapViewLogic<T> = MapViewLogic(
+        invalidate = { updateCallback?.invoke(it) },
+        paintBaker = paintBaker,
+        coroutineScope = viewModelScope,
+    )
+    private var updateCallback: ((List<RenderItem<T>>) -> Unit)? = null
 
     init {
         launchInBackground {
@@ -166,7 +165,7 @@ internal class AnimalViewModel(
             }
 
     fun fillColors(colors: MapColors) {
-        mapList.value = emptyList()
+        updateCallback?.invoke(emptyList())
         mapper.setColors(colors)
     }
 
@@ -188,13 +187,7 @@ internal class AnimalViewModel(
         sendEffect(ShowToast(RichText(R.string.location_denied)))
     }
 
-    private fun makeComposableMapLogic() = MapViewLogic(
-        invalidate = { mapList.value = it },
-        paintBaker = paintBaker,
-        coroutineScope = viewModelScope,
-    )
-
-    private fun MapViewLogic<ComposablePaint>.updateMap(viewState: AnimalViewState?) {
+    private fun MapViewLogic<T>.updateMap(viewState: AnimalViewState?) {
         if (viewState == null) return
 
         worldData = WorldData(
@@ -203,5 +196,9 @@ internal class AnimalViewModel(
         )
         setRotate(-23f)
         onScale(0f, 0f, Float.MAX_VALUE)
+    }
+
+    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
+        this.updateCallback = updateCallback
     }
 }
