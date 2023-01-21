@@ -46,7 +46,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
         mapList.forEach {
-            if(it is RenderItem.RenderPathItem){
+            if (it is RenderItem.RenderPathItem) {
                 mLine.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth)
             }
         }

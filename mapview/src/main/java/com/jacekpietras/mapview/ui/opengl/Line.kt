@@ -13,6 +13,8 @@ private const val COORDS_PER_VERTEX = 3
 
 class Line {
 
+    private val mProgram = createProgram()
+
     fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float) {
         val data = LineData(line, color)
 
@@ -43,11 +45,6 @@ class Line {
         GLES20.glDisableVertexAttribArray(mPositionHandle)
 //        GLES20.glDisable(mColorHandle)
 //        GLES20.glDisable(GLES20.GL_BLEND)
-    }
-
-    private companion object {
-
-        private val mProgram = createProgram()
     }
 
     private class LineData(line: FloatArray, color: Int, pathCords: FloatArray = line.addZDimension()) {
