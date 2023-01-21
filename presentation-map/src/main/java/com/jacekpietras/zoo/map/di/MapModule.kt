@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.map.di
 
-import android.graphics.Paint
 import com.jacekpietras.zoo.map.mapper.MapViewStateMapper
 import com.jacekpietras.zoo.map.viewmodel.MapViewModel
 import org.koin.android.ext.koin.androidContext
@@ -14,11 +13,11 @@ val mapModule = module {
     }
 
     viewModel { params ->
-        MapViewModel<Paint>(
+        MapViewModel<Any>(
             context = androidContext(),
             animalId = params[0],
             regionId = params[1],
-            paintBaker = params[2],
+            paintBaker = params.get(),
             mapper = get(),
             observeMapObjectsUseCase = get(),
             observeCompassUseCase = get(),
