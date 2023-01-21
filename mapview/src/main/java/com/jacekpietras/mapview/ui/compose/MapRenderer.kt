@@ -4,4 +4,5 @@ enum class MapRenderer {
     CUSTOM_VIEW,
     SURFACE_VIEW,
     COMPOSE,
+    OPEN_GL,
 }

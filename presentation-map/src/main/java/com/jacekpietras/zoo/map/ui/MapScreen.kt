@@ -54,7 +54,7 @@ fun MapScreen(
 
     MapView(
         viewState,
-        mapRenderer = MapRenderer.COMPOSE,
+        mapRenderer = MapRenderer.OPEN_GL,
         onBack = { viewModel.onBackClicked(router) },
         onClose = viewModel::onCloseClicked,
         onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },

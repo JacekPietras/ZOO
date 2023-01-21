@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.compose.MapRenderer.COMPOSE
 import com.jacekpietras.mapview.ui.compose.MapRenderer.CUSTOM_VIEW
+import com.jacekpietras.mapview.ui.compose.MapRenderer.OPEN_GL
 import com.jacekpietras.mapview.ui.compose.MapRenderer.SURFACE_VIEW
 
 @Composable
@@ -41,6 +42,16 @@ fun UniversalMapComposable(
         }
         COMPOSE -> {
             MapComposable(
+                modifier = modifier,
+                backgroundColor = backgroundColor,
+                onSizeChanged = onSizeChanged,
+                onClick = onClick,
+                onTransform = onTransform,
+                update = update,
+            )
+        }
+        OPEN_GL -> {
+            MapOpenGLViewComposable(
                 modifier = modifier,
                 backgroundColor = backgroundColor,
                 onSizeChanged = onSizeChanged,
