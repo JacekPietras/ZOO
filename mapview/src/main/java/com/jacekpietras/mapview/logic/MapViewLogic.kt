@@ -255,7 +255,7 @@ class MapViewLogic<T>(
 
     private fun establishViewCoordinates() {
         do {
-            visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
+            visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight, worldRotation)
         } while (preventedGoingOutsideWorld())
     }
 
@@ -364,9 +364,7 @@ class MapViewLogic<T>(
     private fun makeNewRenderList() {
         RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
-            worldRotation = worldRotation,
             currentWidth = currentWidth,
-            currentHeight = currentHeight,
             zoom = zoom,
             centerGpsCoordinate = centerGpsCoordinate,
             bakeDimension = paintBaker::bakeDimension,
