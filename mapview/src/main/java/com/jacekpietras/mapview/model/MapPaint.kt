@@ -54,7 +54,7 @@ sealed class MapDimension {
 
         class Screen(
             private val dp: Number
-        ) : MapDimension.Static() {
+        ) : Static() {
 
             override fun toPixels(context: Context): Float =
                 TypedValue.applyDimension(
@@ -66,7 +66,7 @@ sealed class MapDimension {
 
         class Dimen(
             @DimenRes private val dimenRes: Int
-        ) : MapDimension.Static() {
+        ) : Static() {
 
             override fun toPixels(context: Context): Float =
                 context.resources.getDimension(dimenRes)
@@ -79,7 +79,7 @@ sealed class MapDimension {
 
         class World(
             private val meters: Double
-        ) : MapDimension.Dynamic() {
+        ) : Dynamic() {
 
             override fun toPixels(zoom: Double, position: PointD, screenWidthInPixels: Int): Float {
                 val screenWidthInMeters = haversine(

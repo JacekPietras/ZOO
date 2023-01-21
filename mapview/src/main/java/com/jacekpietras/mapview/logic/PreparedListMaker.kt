@@ -47,12 +47,6 @@ internal class PreparedListMaker<T>(
                         )
                     }
                 }
-                is MapItem.IconMapItem -> PreparedItem.PreparedIconItem(
-                    item.point,
-                    item.icon,
-                    item.minZoom,
-                    pivot = item.pivot,
-                )
                 is MapItem.BitmapMapItem -> PreparedItem.PreparedBitmapItem(
                     item.point,
                     item.bitmap,

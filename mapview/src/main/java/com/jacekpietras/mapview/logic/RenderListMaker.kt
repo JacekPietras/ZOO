@@ -7,12 +7,15 @@ import com.jacekpietras.mapview.logic.PreparedItem.PreparedBitmapItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedCircleItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPathItem
 import com.jacekpietras.mapview.logic.PreparedItem.PreparedColoredItem.PreparedPolygonItem
-import com.jacekpietras.mapview.logic.PreparedItem.PreparedIconItem
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.ViewCoordinates
 import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.cachE
+import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
+import com.jacekpietras.mapview.ui.LastMapUpdate.sortS
+import com.jacekpietras.mapview.ui.LastMapUpdate.tranS
 
 internal class RenderListMaker<T>(
     private val visibleGpsCoordinate: ViewCoordinates,
@@ -39,13 +42,13 @@ internal class RenderListMaker<T>(
         }
 
     fun translate(vararg preparedLists: List<PreparedItem<T>>): List<RenderItem<T>> {
-        LastMapUpdate.tranS = System.nanoTime()
+        tranS = System.nanoTime()
         preparedLists.forEach(::makeCache)
-        LastMapUpdate.cachE = System.nanoTime()
+        cachE = System.nanoTime()
         preparedLists.forEach(::addToRenderItems)
-        LastMapUpdate.sortS = System.nanoTime()
+        sortS = System.nanoTime()
         icons.sortBy { it.cY }
-        LastMapUpdate.sortE = System.nanoTime()
+        sortE = System.nanoTime()
         return borders + insides + icons
     }
 
@@ -60,9 +63,6 @@ internal class RenderListMaker<T>(
                         item.cacheTranslated!!.forEach { item.addToRender(it) }
                     }
                     is PreparedCircleItem -> {
-                        item.addToRender(item.cacheTranslated)
-                    }
-                    is PreparedIconItem -> {
                         item.addToRender(item.cacheTranslated)
                     }
                     is PreparedBitmapItem -> {
@@ -91,13 +91,6 @@ internal class RenderListMaker<T>(
                     }
                 }
                 is PreparedCircleItem -> {
-                    if (item.visibility != CACHED) {
-                        visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
-                        matrix.mapPoints(item.cacheTranslated)
-                        item.visibility = CACHED
-                    }
-                }
-                is PreparedIconItem -> {
                     if (item.visibility != CACHED) {
                         visibleGpsCoordinate.transformPoint(item.point, item.cacheTranslated)
                         matrix.mapPoints(item.cacheTranslated)
@@ -174,19 +167,6 @@ internal class RenderListMaker<T>(
                 )
             )
         }
-    }
-
-    private fun PreparedIconItem<T>.addToRender(
-        array: FloatArray,
-    ) {
-        icons.add(
-            RenderItem.PointItem.RenderIconItem(
-                array[0],
-                array[1],
-                icon,
-                pivot,
-            )
-        )
     }
 
     private fun PreparedBitmapItem<T>.addToRender(
