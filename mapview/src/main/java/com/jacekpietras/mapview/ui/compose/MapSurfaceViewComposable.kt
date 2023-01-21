@@ -20,7 +20,7 @@ fun MapSurfaceViewComposable(
     onSizeChanged: (Int, Int) -> Unit,
     onClick: ((Float, Float) -> Unit)? = null,
     onTransform: ((Float, Float, Float, Float, Float, Float) -> Unit)? = null,
-    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<out Any>>) -> Unit) -> Unit,
 ) {
     AndroidView(
         modifier = modifier,

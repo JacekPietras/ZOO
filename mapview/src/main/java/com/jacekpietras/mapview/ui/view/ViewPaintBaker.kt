@@ -9,7 +9,7 @@ import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.ui.PaintBaker
 
-class ViewPaintBaker(
+internal class ViewPaintBaker(
     private val context: Context,
 ) : PaintBaker<Paint> {
 

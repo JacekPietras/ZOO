@@ -51,7 +51,7 @@ import com.jacekpietras.zoo.map.model.MapViewState
 @Composable
 internal fun MapView(
     viewState: MapViewState?,
-    mapRenderer: MapRenderer = MapRenderer.COMPOSE,
+    mapRenderer: MapRenderer,
     onBack: () -> Unit,
     onClose: () -> Unit,
     onLocationClicked: () -> Unit,
@@ -62,7 +62,7 @@ internal fun MapView(
     onClick: (Float, Float) -> Unit,
     onTransform: (Float, Float, Float, Float, Float, Float) -> Unit,
     onMapActionClicked: (MapAction) -> Unit,
-    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<out Any>>) -> Unit) -> Unit,
 ) {
     Box {
         UniversalMapComposable(

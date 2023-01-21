@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.jacekpietras.mapview.ui.compose.MapRenderer
-import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.map.extensions.getActivity
@@ -27,10 +26,11 @@ fun MapScreen(
     animalId: String? = null,
     regionId: String? = null,
 ) {
+    val mapRenderer = MapRenderer.OPEN_GL
     val context = LocalContext.current
     val activity = context.getActivity()
     val viewModel = getViewModel<MapViewModel> {
-        parametersOf(animalId, regionId, ViewPaintBaker(context))
+        parametersOf(animalId, regionId, mapRenderer)
     }
     val router = MapRouterImpl({ activity }, navController)
     val permissionChecker = rememberGpsPermissionRequesterState()
@@ -54,7 +54,7 @@ fun MapScreen(
 
     MapView(
         viewState,
-        mapRenderer = MapRenderer.OPEN_GL,
+        mapRenderer = mapRenderer,
         onBack = { viewModel.onBackClicked(router) },
         onClose = viewModel::onCloseClicked,
         onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },

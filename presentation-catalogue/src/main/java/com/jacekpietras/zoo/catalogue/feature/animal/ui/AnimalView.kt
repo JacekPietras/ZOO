@@ -47,7 +47,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.compose.MapComposable
 import com.jacekpietras.zoo.catalogue.R
@@ -65,7 +64,7 @@ internal fun AnimalView(
     onNavClicked: () -> Unit,
     onMapSizeChanged: (Int, Int) -> Unit,
     onFavoriteClicked: () -> Unit,
-    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<out Any>>) -> Unit) -> Unit,
 ) {
     if (viewState == null) return
 
@@ -147,7 +146,7 @@ private fun NavigationButtons(
 @Composable
 private fun MapView(
     onMapSizeChanged: (Int, Int) -> Unit,
-    update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
+    update: ((List<RenderItem<out Any>>) -> Unit) -> Unit,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     val parentWidth = with(LocalDensity.current) {
