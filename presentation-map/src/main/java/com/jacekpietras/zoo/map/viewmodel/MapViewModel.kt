@@ -8,6 +8,7 @@ import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.ComposablePaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.LastMapUpdate.trans
+import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
@@ -79,10 +80,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @OptIn(FlowPreview::class)
-internal class MapViewModel(
+internal class MapViewModel<T>(
     context: Context,
     animalId: String?,
     regionId: String?,
+    paintBaker: PaintBaker<T>,
     private val mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
@@ -112,16 +114,21 @@ internal class MapViewModel(
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
 ) : ViewModel() {
 
-    private val paintBaker = ComposablePaintBaker(context)
-
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
     val effects: Flow<Unit> = _effects
         .filter(List<MapEffect>::isNotEmpty)
         .map { /* Unit */ }
 
-    private val mapLogic: MapViewLogic<ComposablePaint> = makeComposableMapLogic()
+    private val mapLogic: MapViewLogic<T> = MapViewLogic(
+        invalidate = { mapList.value = it },
+        paintBaker = paintBaker,
+        setOnPointPlacedListener = ::onPointPlaced,
+        onStopCentering = ::onStopCentering,
+        onStartCentering = ::onStartCentering,
+        coroutineScope = viewModelScope,
+    )
 
-    val mapList = MutableStateFlow<List<RenderItem<ComposablePaint>>>(emptyList())
+    val mapList = MutableStateFlow<List<RenderItem<T>>>(emptyList())
 
     private val mapColors = MutableStateFlow(MapColors())
     private val bitmapLibrary = stateFlowOf { BitmapLibrary(context) }
@@ -515,15 +522,6 @@ internal class MapViewModel(
         mapList.value = emptyList()
         mapColors.value = colors
     }
-
-    private fun makeComposableMapLogic() = MapViewLogic(
-        invalidate = { mapList.value = it },
-        paintBaker = paintBaker,
-        setOnPointPlacedListener = ::onPointPlaced,
-        onStopCentering = ::onStopCentering,
-        onStartCentering = ::onStartCentering,
-        coroutineScope = viewModelScope,
-    )
 
     private fun centerAtUserPosition() {
         mapLogic.centerAtUserPosition()
