@@ -85,12 +85,14 @@ internal class AnimalViewModel<T>(
         .filter { it.isNotEmpty() }
         .map { /* Unit */ }
 
-    private val mapLogic: MapViewLogic<T> = MapViewLogic(
-        invalidate = { updateCallback?.invoke(it) },
+    private val mapLogic = MapViewLogic(
         paintBaker = paintBaker,
         coroutineScope = viewModelScope,
     )
-    private var updateCallback: ((List<RenderItem<T>>) -> Unit)? = null
+
+    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
+        mapLogic.invalidate = updateCallback
+    }
 
     init {
         launchInBackground {
@@ -165,7 +167,7 @@ internal class AnimalViewModel<T>(
             }
 
     fun fillColors(colors: MapColors) {
-        updateCallback?.invoke(emptyList())
+        mapLogic.invalidate?.invoke(emptyList())
         mapper.setColors(colors)
     }
 
@@ -196,9 +198,5 @@ internal class AnimalViewModel<T>(
         )
         setRotate(-23f)
         onScale(0f, 0f, Float.MAX_VALUE)
-    }
-
-    fun setUpdateCallback(updateCallback: (List<RenderItem<T>>) -> Unit) {
-        this.updateCallback = updateCallback
     }
 }
