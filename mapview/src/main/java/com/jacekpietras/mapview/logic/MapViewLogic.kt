@@ -434,14 +434,6 @@ class MapViewLogic<T>(
                         null
                     }
                 }
-                is PreparedItem.PreparedIconItem -> {
-                    if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
-                        item.visibility = MOVED
-                        item
-                    } else {
-                        null
-                    }
-                }
                 is PreparedItem.PreparedBitmapItem -> {
                     if (item.minZoom.isBiggerThanZoom() && visibleGpsCoordinate.isPointVisible(item.point)) {
                         item.visibility = MOVED

@@ -57,6 +57,6 @@ class MapSurfaceView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        canvas.drawMapObjects(context, mapList)
+        canvas.drawMapObjects(mapList)
     }
 }

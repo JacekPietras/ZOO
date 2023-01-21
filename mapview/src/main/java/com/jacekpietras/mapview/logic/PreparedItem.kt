@@ -1,7 +1,6 @@
 package com.jacekpietras.mapview.logic
 
 import android.graphics.Bitmap
-import androidx.annotation.DrawableRes
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.ItemVisibility.MOVED
 import com.jacekpietras.mapview.model.MapDimension
@@ -49,15 +48,6 @@ internal sealed class PreparedItem<T>(
             override var visibility: ItemVisibility = MOVED,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
     }
-
-    class PreparedIconItem<T>(
-        val point: PointD,
-        @DrawableRes val icon: Int,
-        override val minZoom: Float? = null,
-        val cacheTranslated: FloatArray = FloatArray(2),
-        override var visibility: ItemVisibility = MOVED,
-        val pivot: Pivot,
-    ) : PreparedItem<T>(minZoom, visibility)
 
     class PreparedBitmapItem<T>(
         val point: PointD,
