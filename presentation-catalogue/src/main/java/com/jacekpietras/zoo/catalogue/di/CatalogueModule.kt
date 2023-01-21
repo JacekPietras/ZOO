@@ -21,9 +21,9 @@ val catalogueModule = module {
     }
 
     viewModel { params ->
-        AnimalViewModel(
-            context = androidContext(),
+        AnimalViewModel<Any>(
             animalId = AnimalId(params[0]),
+            paintBaker = params.get(),
             getAnimalUseCase = get(),
             isAnimalSeenUseCase = get(),
             observeAnimalFavoritesUseCase = get(),

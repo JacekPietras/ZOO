@@ -125,7 +125,6 @@ internal class MapViewModel<T>(
         onStartCentering = ::onStartCentering,
         coroutineScope = viewModelScope,
     )
-
     private var updateCallback: ((List<RenderItem<T>>) -> Unit)? = null
 
     private val mapColors = MutableStateFlow(MapColors())

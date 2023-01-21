@@ -8,6 +8,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.jacekpietras.mapview.model.ComposablePaint
+import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.zoo.catalogue.feature.animal.extensions.getActivity
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalEffect.ShowToast
 import com.jacekpietras.zoo.catalogue.feature.animal.router.AnimalComposeRouterImpl
@@ -25,7 +27,9 @@ fun AnimalScreen(
 ) {
     val context = LocalContext.current
     val activity = context.getActivity()
-    val viewModel = getViewModel<AnimalViewModel> { parametersOf(animalId) }
+    val viewModel = getViewModel<AnimalViewModel<ComposablePaint>> {
+        parametersOf(animalId, ComposablePaintBaker(context))
+    }
     val router by lazy { AnimalComposeRouterImpl({ activity }, navController) }
     val permissionChecker = rememberGpsPermissionRequesterState()
 
@@ -42,16 +46,15 @@ fun AnimalScreen(
     }
 
     val viewState by viewModel.viewState.collectAsState(null)
-    val mapList by viewModel.mapList.collectAsState(initial = emptyList())
 
     AnimalView(
         viewState = viewState,
-        mapList = mapList,
         onWebClicked = { viewModel.onWebClicked(router) },
         onWikiClicked = { viewModel.onWikiClicked(router) },
         onNavClicked = { viewModel.onNavClicked(router, permissionChecker = permissionChecker) },
         onFavoriteClicked = viewModel::onFavoriteClicked,
         onMapSizeChanged = viewModel::onSizeChanged,
+        update = { updateCallback -> viewModel.setUpdateCallback(updateCallback) }
     )
 }
 

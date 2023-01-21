@@ -48,8 +48,8 @@ import coil.request.ImageRequest
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jacekpietras.mapview.model.ComposablePaint
-import com.jacekpietras.mapview.ui.compose.MapComposable
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.compose.MapComposable
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.feature.animal.model.AnimalViewState
 import com.jacekpietras.zoo.catalogue.feature.animal.model.TextParagraph
@@ -60,12 +60,12 @@ import com.jacekpietras.zoo.core.ui.shimmerWhen
 @Composable
 internal fun AnimalView(
     viewState: AnimalViewState?,
-    mapList: List<RenderItem<ComposablePaint>>,
     onWebClicked: () -> Unit,
     onWikiClicked: () -> Unit,
     onNavClicked: () -> Unit,
     onMapSizeChanged: (Int, Int) -> Unit,
     onFavoriteClicked: () -> Unit,
+    update: ((List<RenderItem<ComposablePaint>>) -> Unit) -> Unit,
 ) {
     if (viewState == null) return
 
@@ -114,7 +114,7 @@ internal fun AnimalView(
 
         ReadMoreButtonsView(viewState, onWebClicked, onWikiClicked)
 
-        MapView(mapList, onMapSizeChanged)
+        MapView(onMapSizeChanged, update)
     }
 }
 
@@ -146,8 +146,8 @@ private fun NavigationButtons(
 
 @Composable
 private fun MapView(
-    mapList: List<RenderItem<ComposablePaint>>,
     onMapSizeChanged: (Int, Int) -> Unit,
+    update: ((List<RenderItem<ComposablePaint>>) -> Unit) -> Unit,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     val parentWidth = with(LocalDensity.current) {
@@ -167,7 +167,7 @@ private fun MapView(
             ),
         backgroundColor = Color.Transparent,
         onSizeChanged = onMapSizeChanged,
-        mapList = mapList,
+        update = update,
     )
 }
 
@@ -403,11 +403,11 @@ private fun AnimalViewPreview() {
     )
     AnimalView(
         viewState = viewState,
-        mapList = emptyList(),
         onWebClicked = {},
         onWikiClicked = {},
         onNavClicked = {},
         onFavoriteClicked = {},
         onMapSizeChanged = { _, _ -> },
+        update = {},
     )
 }

@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceView
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.LastMapUpdate.rendS
 import com.jacekpietras.mapview.utils.ViewGestures
 import com.jacekpietras.mapview.utils.drawMapObjects
 
@@ -55,8 +57,12 @@ class MapSurfaceView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
+        rendS = System.nanoTime()
+
         super.onDraw(canvas)
 
         canvas.drawMapObjects(mapList)
+
+        LastMapUpdate.log()
     }
 }
