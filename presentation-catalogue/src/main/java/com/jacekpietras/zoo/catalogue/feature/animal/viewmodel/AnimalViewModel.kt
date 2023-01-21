@@ -1,12 +1,13 @@
 package com.jacekpietras.zoo.catalogue.feature.animal.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.logic.WorldData
 import com.jacekpietras.mapview.model.RenderItem
-import com.jacekpietras.mapview.ui.PaintBaker
+import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.zoo.catalogue.R
 import com.jacekpietras.zoo.catalogue.extensions.combine
 import com.jacekpietras.zoo.catalogue.extensions.combineWithIgnoredFlow
@@ -47,7 +48,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 internal class AnimalViewModel(
-    paintBaker: PaintBaker<Any>,
+    context: Context,
+    mapRenderer: MapRenderer,
     private val animalId: AnimalId,
     private val mapper: AnimalMapper = AnimalMapper(),
     getAnimalUseCase: GetAnimalUseCase,
@@ -85,12 +87,13 @@ internal class AnimalViewModel(
         .filter { it.isNotEmpty() }
         .map { /* Unit */ }
 
-    private val mapLogic = MapViewLogic(
-        paintBaker = paintBaker,
+    private val mapLogic = MapViewLogic<Any>(
+        context = context,
+        mapRenderer = mapRenderer,
         coroutineScope = viewModelScope,
     )
 
-    fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {
+    fun setUpdateCallback(updateCallback: (List<RenderItem<out Any>>) -> Unit) {
         mapLogic.invalidate = updateCallback
     }
 
@@ -189,7 +192,7 @@ internal class AnimalViewModel(
         sendEffect(ShowToast(RichText(R.string.location_denied)))
     }
 
-    private fun MapViewLogic<Any>.updateMap(viewState: AnimalViewState?) {
+    private fun MapViewLogic<out Any>.updateMap(viewState: AnimalViewState?) {
         if (viewState == null) return
 
         worldData = WorldData(

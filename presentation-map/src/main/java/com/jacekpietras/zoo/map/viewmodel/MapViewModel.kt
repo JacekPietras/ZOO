@@ -7,7 +7,7 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.LastMapUpdate.trans
-import com.jacekpietras.mapview.ui.PaintBaker
+import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
@@ -82,7 +82,7 @@ internal class MapViewModel(
     context: Context,
     animalId: String?,
     regionId: String?,
-    paintBaker: PaintBaker<Any>,
+    mapRenderer: MapRenderer,
     private val mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
@@ -117,15 +117,16 @@ internal class MapViewModel(
         .filter(List<MapEffect>::isNotEmpty)
         .map { /* Unit */ }
 
-    private val mapLogic = MapViewLogic(
-        paintBaker = paintBaker,
+    private val mapLogic = MapViewLogic<Any>(
+        context = context,
+        mapRenderer = mapRenderer,
         setOnPointPlacedListener = ::onPointPlaced,
         onStopCentering = ::onStopCentering,
         onStartCentering = ::onStartCentering,
         coroutineScope = viewModelScope,
     )
 
-    fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {
+    fun setUpdateCallback(updateCallback: (List<RenderItem<out Any>>) -> Unit) {
         mapLogic.invalidate = updateCallback
     }
 
