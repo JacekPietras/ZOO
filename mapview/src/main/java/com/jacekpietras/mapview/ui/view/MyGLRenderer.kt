@@ -55,7 +55,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
         mapList.forEach {
             if(it is RenderItem.RenderPathItem){
-                mLine.draw(vPMatrix, it.shape, Color.GREEN, 10f)
+                mLine.draw(vPMatrix, it.shape, it.paint.color, 10f)
             }
         }
 
