@@ -5,7 +5,6 @@ import com.jacekpietras.zoo.catalogue.feature.list.mapper.CatalogueStateMapper
 import com.jacekpietras.zoo.catalogue.feature.list.mapper.DivisionMapper
 import com.jacekpietras.zoo.catalogue.feature.list.viewmodel.CatalogueViewModel
 import com.jacekpietras.zoo.domain.feature.animal.model.AnimalId
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -21,7 +20,7 @@ val catalogueModule = module {
     }
 
     viewModel { params ->
-        AnimalViewModel<Any>(
+        AnimalViewModel(
             animalId = AnimalId(params[0]),
             paintBaker = params.get(),
             getAnimalUseCase = get(),
