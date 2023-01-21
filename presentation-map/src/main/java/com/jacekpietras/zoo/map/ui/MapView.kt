@@ -1,6 +1,5 @@
 package com.jacekpietras.zoo.map.ui
 
-import android.graphics.Paint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.fadeIn
@@ -38,7 +37,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.jacekpietras.mapview.model.RenderItem
-import com.jacekpietras.mapview.ui.compose.MapCustomViewComposable
+import com.jacekpietras.mapview.ui.compose.MapRenderer
+import com.jacekpietras.mapview.ui.compose.UniversalMapComposable
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.core.ui.ClosableToolbarView
@@ -51,6 +51,7 @@ import com.jacekpietras.zoo.map.model.MapViewState
 @Composable
 internal fun MapView(
     viewState: MapViewState?,
+    mapRenderer: MapRenderer = MapRenderer.COMPOSE,
     onBack: () -> Unit,
     onClose: () -> Unit,
     onLocationClicked: () -> Unit,
@@ -64,7 +65,8 @@ internal fun MapView(
     update: ((List<RenderItem<Any>>) -> Unit) -> Unit,
 ) {
     Box {
-        MapCustomViewComposable(
+        UniversalMapComposable(
+            mapRenderer = mapRenderer,
             modifier = Modifier.fillMaxSize(),
             backgroundColor = ZooTheme.colors.mapColors.colorMapGrass,
             onSizeChanged = onSizeChanged,

@@ -1,7 +1,6 @@
 package com.jacekpietras.zoo.map.ui
 
 import android.content.Context
-import android.graphics.Paint
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -10,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
@@ -54,6 +54,7 @@ fun MapScreen(
 
     MapView(
         viewState,
+        mapRenderer = MapRenderer.CUSTOM_VIEW,
         onBack = { viewModel.onBackClicked(router) },
         onClose = viewModel::onCloseClicked,
         onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },
