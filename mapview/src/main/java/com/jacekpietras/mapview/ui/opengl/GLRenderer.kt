@@ -24,6 +24,7 @@ class GLRenderer : GLSurfaceView.Renderer {
     private lateinit var line: Line
     private lateinit var circle: Circle
     private lateinit var polygon: Polygon
+    private lateinit var sprite: Sprite
 
     private val vPMatrix = FloatArray(16)
     private val projectionMatrix = FloatArray(16)
@@ -35,6 +36,7 @@ class GLRenderer : GLSurfaceView.Renderer {
         line = Line()
         circle = Circle()
         polygon = Polygon()
+        sprite = Sprite()
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -69,7 +71,7 @@ class GLRenderer : GLSurfaceView.Renderer {
                     circle.draw(vPMatrix, it.cX, it.cY, it.radius, it.paint.color)
                 }
                 is RenderBitmapItem -> {
-                    //TODO()
+                    sprite.draw(vPMatrix, it.bitmap)
                 }
             }
         }

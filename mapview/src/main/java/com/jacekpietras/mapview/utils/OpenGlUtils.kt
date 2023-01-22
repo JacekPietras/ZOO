@@ -19,7 +19,9 @@ internal const val GL_MATRIX_VAR = "uMVPMatrix"
 internal const val GL_POSITION_VAR = "vPosition"
 internal const val GL_COLOR_VAR = "vColor"
 
-internal const val COORDS_PER_VERTEX = 3
+internal const val GL_A_TEX_COORD_VAR = "a_TexCoordinate"
+internal const val GL_V_TEX_COORD_VAR = "a_TexCoordinate"
+internal const val GL_U_TEX_VAR = "u_Texture"
 
 internal const val BYTES_PER_FLOAT = 4
 internal const val BYTES_PER_SHORT = 2
@@ -66,7 +68,7 @@ internal fun createGLProgram(): Int {
     }
 }
 
-private fun loadShader(type: Int, shaderCode: String): Int =
+internal fun loadShader(type: Int, shaderCode: String): Int =
     GLES20.glCreateShader(type).also { shader ->
         GLES20.glShaderSource(shader, shaderCode)
         GLES20.glCompileShader(shader)
