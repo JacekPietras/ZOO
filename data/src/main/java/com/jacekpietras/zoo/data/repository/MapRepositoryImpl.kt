@@ -7,10 +7,10 @@ import com.jacekpietras.geometry.haversine
 import com.jacekpietras.geometry.polygonContains
 import com.jacekpietras.zoo.data.R
 import com.jacekpietras.zoo.data.parser.SvgParser
-import com.jacekpietras.zoo.data.utils.PerformanceClass
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PathEntity
 import com.jacekpietras.zoo.domain.feature.map.model.MapItemEntity.PolygonEntity
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
+import com.jacekpietras.zoo.domain.feature.performance.repository.PerformanceClassRepository
 import com.jacekpietras.zoo.domain.model.Region
 import com.jacekpietras.zoo.domain.model.Region.AnimalRegion
 import com.jacekpietras.zoo.domain.model.RegionId
@@ -38,11 +38,11 @@ internal class MapRepositoryImpl(
     private val aviaryWatcher: MutableStateFlow<List<PolygonEntity>?>,
     private val visitedRoadsWatcher: MutableStateFlow<List<VisitedRoadEdge>>,
     private val regionsWatcher: MutableStateFlow<List<Pair<Region, PolygonEntity>>?>,
+    private val performanceClassRepository: PerformanceClassRepository,
 ) : MapRepository {
 
     private var isMapLoaded = false
     private var visitedRoadsCalculated = false
-    private val performanceClass = PerformanceClass(context).getRating()
 
     override suspend fun loadMap() {
         isMapLoaded = true
@@ -61,7 +61,7 @@ internal class MapRepositoryImpl(
                 async { treesWatcher.value = emptyList() },
             ).awaitAll()
 
-            if (performanceClass) {
+            if (performanceClassRepository.getPerformanceRating()) {
                 forestWatcher.value = parser.getPointsByGroup("forestland").map(::PolygonEntity)
                 generateTrees(parser.getPointsByGroup("foresttrees").map(::PolygonEntity))
             }
