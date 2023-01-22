@@ -1,10 +1,10 @@
 package com.jacekpietras.mapview.ui.opengl
 
 import android.graphics.Color
-import android.graphics.Paint
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
+import com.jacekpietras.mapview.model.OpenGLPaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
 import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
@@ -18,7 +18,7 @@ import javax.microedition.khronos.opengles.GL10
 
 class GLRenderer : GLSurfaceView.Renderer {
 
-    var mapList: List<RenderItem<Paint>> = emptyList()
+    var mapList: List<RenderItem<OpenGLPaint>> = emptyList()
     var openGLBackground: Int = Color.BLUE
 
     private lateinit var line: Line
@@ -53,13 +53,16 @@ class GLRenderer : GLSurfaceView.Renderer {
         mapList.forEach {
             when (it) {
                 is RenderPathItem -> {
-                    line.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth, it.paint.strokeCap == Paint.Cap.ROUND)
+                    when (val paint = it.paint) {
+                        is OpenGLPaint.Stroke -> line.drawClosed(vPMatrix, it.shape, paint.color, paint.width)
+                        else -> {}
+                    }
                 }
                 is RenderPolygonItem -> {
-                    if (it.paint.style == Paint.Style.FILL) {
-                        polygon.draw(vPMatrix, it.shape, it.paint.color)
-                    } else {
-                        line.drawClosed(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth)
+                    when (val paint = it.paint) {
+                        is OpenGLPaint.Fill -> polygon.draw(vPMatrix, it.shape, it.paint.color)
+                        is OpenGLPaint.Stroke -> line.drawClosed(vPMatrix, it.shape, paint.color, paint.width)
+                        else -> {}
                     }
                 }
                 is RenderCircleItem -> {

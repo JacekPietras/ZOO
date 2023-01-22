@@ -1,11 +1,11 @@
 package com.jacekpietras.mapview.ui.compose
 
-import android.graphics.Paint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
+import com.jacekpietras.mapview.model.OpenGLPaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.opengl.MapOpenGLView
 
@@ -24,7 +24,7 @@ fun MapOpenGLViewComposable(
             MapOpenGLView(context).apply {
                 update.invoke {
                     @Suppress("UNCHECKED_CAST")
-                    mapList = it as List<RenderItem<Paint>>
+                    mapList = it as List<RenderItem<OpenGLPaint>>
                 }
                 this.onSizeChanged = onSizeChanged
                 this.onClick = onClick

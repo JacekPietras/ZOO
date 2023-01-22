@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
 import android.opengl.GLSurfaceView
+import android.os.Build
 import android.view.MotionEvent
+import com.jacekpietras.mapview.model.OpenGLPaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.MapRenderConfig
 import com.jacekpietras.mapview.utils.ViewGestures
+import com.jacekpietras.mapview.utils.isProbablyRunningOnEmulator
 
 class MapOpenGLView(
     context: Context
@@ -21,7 +24,7 @@ class MapOpenGLView(
             renderer.openGLBackground = value
         }
         get() = renderer.openGLBackground
-    var mapList: List<RenderItem<Paint>>
+    var mapList: List<RenderItem<OpenGLPaint>>
         set(value) {
             renderer.mapList = value
             requestRender()
@@ -43,7 +46,7 @@ class MapOpenGLView(
     init {
         onSizeChanged?.invoke(width, height)
         setEGLContextClientVersion(2)
-        if (MapRenderConfig.antialiasing) {
+        if (MapRenderConfig.antialiasing && !isProbablyRunningOnEmulator()) {
             setEGLConfigChooser(GLConfigChooser())
         }
         setRenderer(renderer)

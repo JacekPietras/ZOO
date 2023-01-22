@@ -7,6 +7,7 @@ import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.ui.compose.ComposablePaintBaker
 import com.jacekpietras.mapview.ui.compose.MapRenderer
+import com.jacekpietras.mapview.ui.opengl.OpenGLPaintBaker
 import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 
 internal interface PaintBaker<T> {
@@ -22,10 +23,10 @@ internal interface PaintBaker<T> {
         @Suppress("UNCHECKED_CAST")
         fun <T> create(context: Context, mapRenderer: MapRenderer, antialiasing: Boolean): PaintBaker<T> =
             when (mapRenderer) {
-                MapRenderer.OPEN_GL,
                 MapRenderer.CUSTOM_VIEW,
                 MapRenderer.SURFACE_VIEW -> ViewPaintBaker(context, antialiasing)
                 MapRenderer.COMPOSE -> ComposablePaintBaker(context)
+                MapRenderer.OPEN_GL -> OpenGLPaintBaker(context)
             } as PaintBaker<T>
     }
 }

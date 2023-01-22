@@ -10,12 +10,12 @@ import java.nio.ShortBuffer
 
 internal open class Polygon : ShapeOfTriangles() {
 
-    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int) {
+    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: FloatArray) {
         val data = PolygonShapeData(line, color)
         draw(mvpMatrix, data)
     }
 
-    private class PolygonShapeData(line: FloatArray, colorInt: Int) : ShapeOfTrianglesData(colorInt) {
+    private class PolygonShapeData(line: FloatArray, colorInt: FloatArray) : ShapeOfTrianglesData(colorInt) {
 
         override val vertexCount: Int
         override val vertexBuffer: FloatBuffer

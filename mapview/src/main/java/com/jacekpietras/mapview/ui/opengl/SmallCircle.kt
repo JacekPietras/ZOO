@@ -10,13 +10,13 @@ import java.nio.ShortBuffer
 
 internal class SmallCircle : ShapeOfTriangles() {
 
-    fun draw(mvpMatrix: FloatArray?, cX: Float, cY: Float, radius: Float, color: Int) {
+    fun draw(mvpMatrix: FloatArray?, cX: Float, cY: Float, radius: Float, color: FloatArray) {
         val data = SmallCircleShapeData(cX, cY, radius, color)
 
         draw(mvpMatrix, data)
     }
 
-    private class SmallCircleShapeData(cX: Float, cY: Float, radius: Float, colorInt: Int) : ShapeOfTrianglesData(colorInt) {
+    private class SmallCircleShapeData(cX: Float, cY: Float, radius: Float, color: FloatArray) : ShapeOfTrianglesData(color) {
 
         override val vertexCount: Int
         override val vertexBuffer: FloatBuffer

@@ -17,7 +17,7 @@ internal class Line {
     private val diamond = Diamond()
     private val circle = Circle()
 
-    fun drawClosed(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float) {
+    fun drawClosed(mvpMatrix: FloatArray?, line: FloatArray, color: FloatArray, thickness: Float) {
         if (thickness >= THICKNESS_BOLD) {
             for (i in 2..line.lastIndex - 2 step 2) {
                 diamond.draw(mvpMatrix, line[i], line[i + 1], thickness / 2, color)
@@ -28,15 +28,13 @@ internal class Line {
         draw(GLES20.GL_LINE_LOOP, mvpMatrix, data, thickness)
     }
 
-    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float, roundCap: Boolean) {
+    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: FloatArray, thickness: Float) {
         if (thickness >= THICKNESS_BOLD) {
             for (i in 2..line.lastIndex - 2 step 2) {
                 diamond.draw(mvpMatrix, line[i], line[i + 1], thickness / 2, color)
             }
-            if (roundCap) {
-                circle.draw(mvpMatrix, line[0], line[1], thickness * 0.45f, color)
-                circle.draw(mvpMatrix, line[line.lastIndex - 1], line[line.lastIndex], thickness * 0.45f, color)
-            }
+            circle.draw(mvpMatrix, line[0], line[1], thickness * 0.45f, color)
+            circle.draw(mvpMatrix, line[line.lastIndex - 1], line[line.lastIndex], thickness * 0.45f, color)
         }
 
         val data = LineShapeData(line, color)
@@ -69,7 +67,7 @@ internal class Line {
         GLES20.glDisableVertexAttribArray(mPositionHandle)
     }
 
-    private class LineShapeData(line: FloatArray, colorInt: Int) : ShapeData(colorInt) {
+    private class LineShapeData(line: FloatArray, color: FloatArray) : ShapeData(color) {
 
         override val vertexCount: Int
         override val vertexBuffer: FloatBuffer
