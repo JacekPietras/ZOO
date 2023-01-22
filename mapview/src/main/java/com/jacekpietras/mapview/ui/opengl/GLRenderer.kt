@@ -11,6 +11,7 @@ import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
 import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
+import com.jacekpietras.mapview.ui.MapRenderConfig.isDrawing
 import com.jacekpietras.mapview.utils.setOpenGLClearColor
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -37,6 +38,7 @@ class GLRenderer : GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(unused: GL10) {
+        isDrawing.set(true)
         LastMapUpdate.rendS = System.nanoTime()
 
         // Redraw background color
@@ -70,6 +72,7 @@ class GLRenderer : GLSurfaceView.Renderer {
         }
 
         LastMapUpdate.log()
+        isDrawing.set(false)
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {

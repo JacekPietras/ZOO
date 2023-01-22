@@ -12,6 +12,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
 import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.MapRenderConfig
+import com.jacekpietras.mapview.ui.MapRenderConfig.isDrawing
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.mapview.utils.doAnimation
@@ -204,7 +205,11 @@ class MapViewLogic<T>(
         centeringAtUser = false
         centerGpsCoordinate += toMovementInWorld(vX + mX, vY + mY)
 
-        cutOutNotVisible()
+        if (isDrawing.get()) {
+            Timber.e("Perf: Render: SKIPPED!!")
+        } else {
+            cutOutNotVisible()
+        }
     }
 
     private fun pinchCorrection(pinchPoint: Float, scale: Float, size: Int): Float {
