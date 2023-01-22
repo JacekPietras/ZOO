@@ -97,10 +97,28 @@ internal fun allocateShortBuffer(array: ShortArray): ShortBuffer =
     }
 
 internal fun FloatArray.addZDimension(): FloatArray {
-    var srcI = 0
+    var srcIt = 0
     return FloatArray(size / 2 * COORDS_PER_VERTEX) { resIt ->
         if (resIt % COORDS_PER_VERTEX != 2) {
-            this[srcI++]
+            this[srcIt++]
+        } else {
+            0f
+        }
+    }
+}
+
+internal fun FloatArray.addZDimensionAndLoop(): FloatArray {
+    var srcIt = 0
+    val count = (size / 2 + 1) * COORDS_PER_VERTEX
+    return FloatArray(count) { resIt ->
+        if (resIt >= count - 3) {
+            when (resIt % COORDS_PER_VERTEX) {
+                0 -> this[0]
+                1 -> this[1]
+                else -> 0f
+            }
+        } else if (resIt % COORDS_PER_VERTEX != 2) {
+            this[srcIt++]
         } else {
             0f
         }

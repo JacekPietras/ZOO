@@ -7,6 +7,7 @@ import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
 import com.jacekpietras.mapview.utils.addZDimension
+import com.jacekpietras.mapview.utils.addZDimensionAndLoop
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
 import com.jacekpietras.mapview.utils.createGLProgram
 import java.nio.FloatBuffer
@@ -15,16 +16,35 @@ internal class Line {
 
     private val glProgram = createGLProgram()
     private val diamond = Diamond()
+    private val circle = Circle()
 
-    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float) {
+    fun drawClosed(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float) {
         if (thickness >= THICKNESS_BOLD) {
             for (i in 2..line.lastIndex - 2 step 2) {
                 diamond.draw(mvpMatrix, line[i], line[i + 1], thickness / 2, color)
             }
         }
 
-        val data = LineShapeData(line, color)
+        val data = ClosedLineShapeData(line, color)
+        draw(mvpMatrix, data, thickness)
+    }
 
+    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float, roundCap: Boolean) {
+        if (thickness >= THICKNESS_BOLD) {
+            for (i in 2..line.lastIndex - 2 step 2) {
+                diamond.draw(mvpMatrix, line[i], line[i + 1], thickness / 2, color)
+            }
+            if (roundCap) {
+                circle.draw(mvpMatrix, line[0], line[1], thickness * 0.45f, color)
+                circle.draw(mvpMatrix, line[line.lastIndex - 1], line[line.lastIndex], thickness * 0.45f, color)
+            }
+        }
+
+        val data = LineShapeData(line, color)
+        draw(mvpMatrix, data, thickness)
+    }
+
+    private fun draw(mvpMatrix: FloatArray?, data: ShapeData, thickness: Float) {
         GLES20.glUseProgram(glProgram)
 
         val mMVPMatrixHandle = GLES20.glGetUniformLocation(glProgram, GL_MATRIX_VAR)
@@ -57,6 +77,18 @@ internal class Line {
 
         init {
             val pathCords = line.addZDimension()
+            vertexCount = pathCords.size / COORDS_PER_VERTEX
+            vertexBuffer = allocateFloatBuffer(pathCords)
+        }
+    }
+
+    private class ClosedLineShapeData(line: FloatArray, colorInt: Int) : ShapeData(colorInt) {
+
+        override val vertexCount: Int
+        override val vertexBuffer: FloatBuffer
+
+        init {
+            val pathCords = line.addZDimensionAndLoop()
             vertexCount = pathCords.size / COORDS_PER_VERTEX
             vertexBuffer = allocateFloatBuffer(pathCords)
         }

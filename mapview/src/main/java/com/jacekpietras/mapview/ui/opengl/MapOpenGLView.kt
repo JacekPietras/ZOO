@@ -37,7 +37,7 @@ class MapOpenGLView(
             onClick?.invoke(x, y)
         }
     }
-    private val renderer = MyGLRenderer()
+    private val renderer = GLRenderer()
 
     init {
         onSizeChanged?.invoke(width, height)

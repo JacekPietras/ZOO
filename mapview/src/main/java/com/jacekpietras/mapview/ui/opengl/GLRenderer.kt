@@ -15,7 +15,7 @@ import com.jacekpietras.mapview.utils.setOpenGLClearColor
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MyGLRenderer : GLSurfaceView.Renderer {
+class GLRenderer : GLSurfaceView.Renderer {
 
     @Volatile
     var mapList: List<RenderItem<Paint>> = emptyList()
@@ -53,9 +53,19 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
         mapList.forEach {
             when (it) {
-                is RenderPathItem -> line.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth)
-                is RenderPolygonItem -> polygon.draw(vPMatrix, it.shape, it.paint.color)
-                is RenderCircleItem -> circle.draw(vPMatrix, it.cX, it.cY, it.radius, it.paint.color)
+                is RenderPathItem -> {
+                    line.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth, it.paint.strokeCap == Paint.Cap.ROUND)
+                }
+                is RenderPolygonItem -> {
+                    if (it.paint.style == Paint.Style.FILL) {
+                        polygon.draw(vPMatrix, it.shape, it.paint.color)
+                    } else {
+                        line.drawClosed(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth)
+                    }
+                }
+                is RenderCircleItem -> {
+                    circle.draw(vPMatrix, it.cX, it.cY, it.radius, it.paint.color)
+                }
                 is RenderBitmapItem -> {
                     //TODO()
                 }
