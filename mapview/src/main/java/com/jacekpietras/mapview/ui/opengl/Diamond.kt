@@ -32,10 +32,10 @@ internal class Diamond : ShapeOfTriangles() {
     private companion object {
 
         val stamp = floatArrayOf(
-            -1f, 0f, 0f,
-            0f, -1f, 0f,
-            1f, 0f, 0f,
-            0f, 1f, 0f,
+            -1f, 0f,
+            0f, -1f,
+            1f, 0f,
+            0f, 1f,
         )
         val stampIndices = shortArrayOf(
             0, 1, 2,
