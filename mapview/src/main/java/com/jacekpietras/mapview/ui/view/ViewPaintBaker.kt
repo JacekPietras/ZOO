@@ -11,6 +11,7 @@ import com.jacekpietras.mapview.ui.PaintBaker
 
 internal class ViewPaintBaker(
     private val context: Context,
+    private val antialiasing: Boolean = true,
 ) : PaintBaker<Paint> {
 
     override fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float =
@@ -49,7 +50,7 @@ internal class ViewPaintBaker(
                 PaintHolder.Static(
                     Paint().apply {
                         style = Paint.Style.STROKE
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = strokeColor.toColorInt(context)
                         strokeWidth = width.toPixels(context)
@@ -60,7 +61,7 @@ internal class ViewPaintBaker(
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     Paint().apply {
                         style = Paint.Style.STROKE
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = strokeColor
                         strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
@@ -76,7 +77,7 @@ internal class ViewPaintBaker(
                     Paint().apply {
                         style = Paint.Style.STROKE
                         strokeCap = Paint.Cap.ROUND
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = strokeColor.toColorInt(context)
                         strokeWidth = width.toPixels(context)
@@ -88,7 +89,7 @@ internal class ViewPaintBaker(
                     Paint().apply {
                         style = Paint.Style.STROKE
                         strokeCap = Paint.Cap.ROUND
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = strokeColor
                         strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
@@ -104,7 +105,7 @@ internal class ViewPaintBaker(
                     Paint().apply {
                         style = Paint.Style.STROKE
                         strokeCap = Paint.Cap.ROUND
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = borderColor.toColorInt(context)
                         strokeWidth = width.toPixels(context) +
@@ -117,7 +118,7 @@ internal class ViewPaintBaker(
                     Paint().apply {
                         style = Paint.Style.STROKE
                         strokeCap = Paint.Cap.ROUND
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = borderColor
                         strokeWidth = width.toPixels(zoom, position, screenWidthInPixels) +
@@ -133,7 +134,7 @@ internal class ViewPaintBaker(
                 PaintHolder.Static(
                     Paint().apply {
                         style = Paint.Style.STROKE
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = strokeColor.toColorInt(context)
                         strokeWidth = width.toPixels(context)
@@ -150,7 +151,7 @@ internal class ViewPaintBaker(
                 PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
                     Paint().apply {
                         style = Paint.Style.STROKE
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = strokeColor
                         strokeWidth = width.toPixels(zoom, position, screenWidthInPixels)
@@ -169,7 +170,7 @@ internal class ViewPaintBaker(
         PaintHolder.Static(
             Paint().apply {
                 style = Paint.Style.FILL
-                isAntiAlias = true
+                isAntiAlias = antialiasing
 
                 color = fillColor.toColorInt(context)
             }
@@ -179,7 +180,7 @@ internal class ViewPaintBaker(
         PaintHolder.Static(
             Paint().apply {
                 style = Paint.Style.FILL_AND_STROKE
-                isAntiAlias = true
+                isAntiAlias = antialiasing
 
                 color = borderColor.toColorInt(context)
                 strokeWidth = borderWidth.toPixels(context) * 2
@@ -190,7 +191,7 @@ internal class ViewPaintBaker(
         PaintHolder.Static(
             Paint().apply {
                 style = Paint.Style.FILL
-                isAntiAlias = true
+                isAntiAlias = antialiasing
 
                 color = fillColor.toColorInt(context)
             }
@@ -202,7 +203,7 @@ internal class ViewPaintBaker(
                 PaintHolder.Static(
                     Paint().apply {
                         style = Paint.Style.FILL
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = fillColor.toColorInt(context)
                     }
@@ -211,7 +212,7 @@ internal class ViewPaintBaker(
                 PaintHolder.Static(
                     Paint().apply {
                         style = Paint.Style.FILL
-                        isAntiAlias = true
+                        isAntiAlias = antialiasing
 
                         color = fillColor.toColorInt(context)
                     }
