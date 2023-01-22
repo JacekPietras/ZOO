@@ -54,7 +54,7 @@ class GLRenderer : GLSurfaceView.Renderer {
             when (it) {
                 is RenderPathItem -> {
                     when (val paint = it.paint) {
-                        is OpenGLPaint.Stroke -> line.drawClosed(vPMatrix, it.shape, paint.color, paint.width)
+                        is OpenGLPaint.Stroke -> line.draw(vPMatrix, it.shape, paint.color, paint.width)
                         else -> {}
                     }
                 }
