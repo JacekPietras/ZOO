@@ -205,9 +205,7 @@ class MapViewLogic<T>(
         centeringAtUser = false
         centerGpsCoordinate += toMovementInWorld(vX + mX, vY + mY)
 
-        if (isDrawing.get()) {
-            Timber.e("Perf: Render: SKIPPED!!")
-        } else {
+        if (!isDrawing.get()) {
             cutOutNotVisible()
         }
     }
