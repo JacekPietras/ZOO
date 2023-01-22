@@ -1,5 +1,7 @@
 package com.jacekpietras.mapview.utils
 
+import android.app.ActivityManager
+import android.content.Context
 import android.graphics.Color.alpha
 import android.graphics.Color.blue
 import android.graphics.Color.green
@@ -107,24 +109,6 @@ internal fun FloatArray.addZDimension(): FloatArray {
     }
 }
 
-internal fun FloatArray.addZDimensionAndLoop(): FloatArray {
-    var srcIt = 0
-    val count = (size / 2 + 1) * COORDS_PER_VERTEX
-    return FloatArray(count) { resIt ->
-        if (resIt >= count - 3) {
-            when (resIt % COORDS_PER_VERTEX) {
-                0 -> this[0]
-                1 -> this[1]
-                else -> 0f
-            }
-        } else if (resIt % COORDS_PER_VERTEX != 2) {
-            this[srcIt++]
-        } else {
-            0f
-        }
-    }
-}
-
 internal fun createCircularStamp(points: Int): FloatArray {
     fun angle(i: Int): Double =
         2 * PI * (i / COORDS_PER_VERTEX) / points
@@ -167,3 +151,10 @@ internal fun createPolygonFanIndicesStamp(points: Int): ShortArray {
         }
     }
 }
+
+internal fun hasGLES20(context: Context): Boolean =
+    (context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager)
+        ?.deviceConfigurationInfo
+        ?.reqGlEsVersion
+        ?.let { it >= 0x20000 }
+        ?: false
