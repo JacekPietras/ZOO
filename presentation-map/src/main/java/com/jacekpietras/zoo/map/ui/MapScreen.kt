@@ -26,7 +26,7 @@ fun MapScreen(
     animalId: String? = null,
     regionId: String? = null,
 ) {
-    val mapRenderer = MapRenderer.COMPOSE
+    val mapRenderer = MapRenderer.SURFACE_VIEW
     val context = LocalContext.current
     val activity = context.getActivity()
     val viewModel = getViewModel<MapViewModel> {
