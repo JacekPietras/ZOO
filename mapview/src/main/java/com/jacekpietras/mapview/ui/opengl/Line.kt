@@ -6,7 +6,6 @@ import com.jacekpietras.mapview.utils.COORDS_PER_VERTEX
 import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
-import com.jacekpietras.mapview.utils.addZDimension
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
 import com.jacekpietras.mapview.utils.createGLProgram
 import java.nio.FloatBuffer
@@ -67,15 +66,14 @@ internal class Line {
         GLES20.glDisableVertexAttribArray(mPositionHandle)
     }
 
-    private class LineShapeData(line: FloatArray, color: FloatArray) : ShapeData(color) {
+    private class LineShapeData(path: FloatArray, color: FloatArray) : ShapeData(color) {
 
         override val vertexCount: Int
         override val vertexBuffer: FloatBuffer
 
         init {
-            val pathCords = line.addZDimension()
-            vertexCount = pathCords.size / COORDS_PER_VERTEX
-            vertexBuffer = allocateFloatBuffer(pathCords)
+            vertexCount = path.size / COORDS_PER_VERTEX
+            vertexBuffer = allocateFloatBuffer(path)
         }
     }
 

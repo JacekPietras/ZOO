@@ -17,12 +17,14 @@ import kotlin.math.sin
 
 internal const val GL_MATRIX_VAR = "uMVPMatrix"
 internal const val GL_POSITION_VAR = "vPosition"
-internal const val GL_COLOR_VAR = "vPosition"
+internal const val GL_COLOR_VAR = "vColor"
 
 internal const val COORDS_PER_VERTEX = 3
 
 internal const val BYTES_PER_FLOAT = 4
 internal const val BYTES_PER_SHORT = 2
+
+internal const val COORDS_PER_VERTEX = 2
 
 internal fun setOpenGLClearColor(color: Int) {
     val red = red(color) / 255f
@@ -98,17 +100,6 @@ internal fun allocateShortBuffer(array: ShortArray): ShortBuffer =
         }
     }
 
-internal fun FloatArray.addZDimension(): FloatArray {
-    var srcIt = 0
-    return FloatArray(size / 2 * COORDS_PER_VERTEX) { resIt ->
-        if (resIt % COORDS_PER_VERTEX != 2) {
-            this[srcIt++]
-        } else {
-            0f
-        }
-    }
-}
-
 internal fun createCircularStamp(points: Int): FloatArray {
     fun angle(i: Int): Double =
         2 * PI * (i / COORDS_PER_VERTEX) / points
@@ -129,11 +120,11 @@ internal fun createCircularStamp(points: Int): FloatArray {
 }
 
 internal fun createCircularIndicesStamp(points: Int): ShortArray {
-    return ShortArray(points * COORDS_PER_VERTEX) {
-        if (it == points * COORDS_PER_VERTEX - 1) {
+    return ShortArray(points * 3) {
+        if (it == points * 3 - 1) {
             1
         } else {
-            when (it % COORDS_PER_VERTEX) {
+            when (it % 3) {
                 0 -> 0
                 1 -> (it / 3 + 1).toShort()
                 else -> (it / 3 + 2).toShort()
@@ -143,8 +134,8 @@ internal fun createCircularIndicesStamp(points: Int): ShortArray {
 }
 
 internal fun createPolygonFanIndicesStamp(points: Int): ShortArray {
-    return ShortArray((points - 2) * COORDS_PER_VERTEX) {
-        when (it % COORDS_PER_VERTEX) {
+    return ShortArray((points - 2) * 3) {
+        when (it % 3) {
             0 -> 0
             1 -> (it / 3 + 1).toShort()
             else -> (it / 3 + 2).toShort()
