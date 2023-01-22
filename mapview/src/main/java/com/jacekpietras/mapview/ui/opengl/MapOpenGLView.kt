@@ -42,6 +42,7 @@ class MapOpenGLView(
     init {
         onSizeChanged?.invoke(width, height)
         setEGLContextClientVersion(2)
+        setEGLConfigChooser(GLConfigChooser())
         setRenderer(renderer)
         renderMode = RENDERMODE_WHEN_DIRTY
     }
