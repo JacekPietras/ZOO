@@ -1,23 +1,15 @@
 package com.jacekpietras.mapview.ui.opengl
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.opengl.GLES20
-import android.opengl.GLUtils
 import com.jacekpietras.mapview.utils.BYTES_PER_FLOAT
 import com.jacekpietras.mapview.utils.COORDS_PER_VERTEX
-import com.jacekpietras.mapview.utils.GL_A_TEX_COORD_VAR
 import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
-import com.jacekpietras.mapview.utils.GL_U_TEX_VAR
-import com.jacekpietras.mapview.utils.GL_V_TEX_COORD_VAR
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
 import com.jacekpietras.mapview.utils.allocateShortBuffer
 import com.jacekpietras.mapview.utils.createGLProgram
-import com.jacekpietras.mapview.utils.loadShader
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
@@ -44,9 +36,6 @@ internal class Sprite {
 //            "gl_FragColor = ($GL_COLOR_VAR * texture2D($GL_U_TEX_VAR, $GL_V_TEX_COORD_VAR));" +
 //            "}")
     private val shaderProgram = createGLProgram()
-    private val vertexBuffer = allocateFloatBuffer(spriteCoords)
-    private val drawListBuffer = allocateShortBuffer(drawOrder)
-    var color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f)
 
     init {
 
@@ -76,10 +65,10 @@ internal class Sprite {
 //        GLES20.glLinkProgram(shaderProgram)
     }
 
-    fun draw(mvpMatrix: FloatArray?, bitmap: Bitmap) {
+    fun draw(mvpMatrix: FloatArray?, cX: Float, cY: Float, bitmap: Bitmap) {
 //        val mTextureDataHandle = loadTexture(bitmap)
+        val data = SquareShapeData(cX, cY, bitmap.height.toFloat(), bitmap.width.toFloat())
 
-        //Add program to OpenGL ES Environment
         GLES20.glUseProgram(shaderProgram)
 
         val mMVPMatrixHandle = GLES20.glGetUniformLocation(shaderProgram, GL_MATRIX_VAR)
@@ -93,7 +82,7 @@ internal class Sprite {
             GLES20.GL_FLOAT,
             false,
             COORDS_PER_VERTEX * BYTES_PER_FLOAT,
-            vertexBuffer,
+            data.vertexBuffer,
         )
 
         //Set Texture Handles and bind Texture
@@ -127,9 +116,9 @@ internal class Sprite {
         //Draw the triangle
         GLES20.glDrawElements(
             GLES20.GL_TRIANGLES,
-            drawListBuffer.capacity(),
+            data.drawListBuffer.capacity(),
             GLES20.GL_UNSIGNED_SHORT,
-            drawListBuffer
+            data.drawListBuffer
         )
 
         //Disable Vertex Array
@@ -159,14 +148,36 @@ internal class Sprite {
 //        return textureHandle[0]
 //    }
 
+    private class SquareShapeData(cX: Float, cY: Float, height: Float, width: Float) : ShapeOfTrianglesData(color) {
+
+        override val vertexCount: Int = 4
+        override val vertexBuffer: FloatBuffer
+        override val drawListBuffer: ShortBuffer
+
+        init {
+            val pathCords = FloatArray(stamp.size)
+            for (i in pathCords.indices step COORDS_PER_VERTEX) {
+                pathCords[i] = stamp[i] * width + cX
+                pathCords[i + 1] = stamp[i + 1] * height + cY
+            }
+            vertexBuffer = allocateFloatBuffer(pathCords)
+            drawListBuffer = sprintDrawListBuffer
+        }
+    }
+
     private companion object {
 
-        var spriteCoords = floatArrayOf(
-            -500f, 500f,
-            -500f, -500f,
-            500f, -500f,
-            500f, 500f,
+        val stamp = floatArrayOf(
+            0f, 1f,
+            0f, 0f,
+            1f, 0f,
+            1f, 1f,
         )
-        val drawOrder = shortArrayOf(0, 1, 2, 0, 2, 3)
+        val stampIndices = shortArrayOf(
+            0, 1, 2,
+            0, 2, 3
+        )
+        val sprintDrawListBuffer = allocateShortBuffer(stampIndices)
+        var color = floatArrayOf(1f, 0f, 1f, 1.0f)
     }
 }

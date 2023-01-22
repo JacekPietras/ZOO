@@ -71,7 +71,7 @@ class GLRenderer : GLSurfaceView.Renderer {
                     circle.draw(vPMatrix, it.cX, it.cY, it.radius, it.paint.color)
                 }
                 is RenderBitmapItem -> {
-                    sprite.draw(vPMatrix, it.bitmap)
+                    sprite.draw(vPMatrix, it.cXpivoted, it.cYpivoted, it.bitmap)
                 }
             }
         }
