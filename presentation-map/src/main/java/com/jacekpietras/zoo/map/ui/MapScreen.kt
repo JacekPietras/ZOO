@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.jacekpietras.mapview.ui.compose.MapRenderer
-import com.jacekpietras.mapview.ui.view.ViewPaintBaker
 import com.jacekpietras.zoo.core.text.RichText
 import com.jacekpietras.zoo.core.theme.ZooTheme
 import com.jacekpietras.zoo.map.extensions.getActivity
