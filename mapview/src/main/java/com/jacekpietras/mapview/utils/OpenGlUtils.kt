@@ -139,3 +139,13 @@ internal fun createCircularIndicesStamp(points: Int): ShortArray {
         }
     }
 }
+
+internal fun createPolygonFanIndicesStamp(points: Int): ShortArray {
+    return ShortArray((points - 2) * COORDS_PER_VERTEX) {
+        when (it % COORDS_PER_VERTEX) {
+            0 -> 0
+            1 -> (it / 3 + 1).toShort()
+            else -> (it / 3 + 2).toShort()
+        }
+    }
+}

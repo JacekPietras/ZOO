@@ -25,7 +25,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
     private lateinit var line: Line
     private lateinit var circle: Circle
-    private lateinit var smallCircle: SmallCircle
+    private lateinit var polygon: Polygon
 
     private val vPMatrix = FloatArray(16)
     private val projectionMatrix = FloatArray(16)
@@ -36,6 +36,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
         line = Line()
         circle = Circle()
+        polygon = Polygon()
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -53,9 +54,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         mapList.forEach {
             when (it) {
                 is RenderPathItem -> line.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth)
-                is RenderPolygonItem -> {
-                    //TODO()
-                }
+                is RenderPolygonItem -> polygon.draw(vPMatrix, it.shape, it.paint.color)
                 is RenderCircleItem -> circle.draw(vPMatrix, it.cX, it.cY, it.radius, it.paint.color)
                 is RenderBitmapItem -> {
                     //TODO()

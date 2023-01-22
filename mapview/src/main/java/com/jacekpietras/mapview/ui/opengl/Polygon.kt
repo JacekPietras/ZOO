@@ -6,24 +6,21 @@ import com.jacekpietras.mapview.utils.COORDS_PER_VERTEX
 import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
+import com.jacekpietras.mapview.utils.addZDimension
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
 import com.jacekpietras.mapview.utils.allocateShortBuffer
-import com.jacekpietras.mapview.utils.createCircularIndicesStamp
-import com.jacekpietras.mapview.utils.createCircularStamp
 import com.jacekpietras.mapview.utils.createGLProgram
+import com.jacekpietras.mapview.utils.createPolygonFanIndicesStamp
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
-internal open class Circle {
+internal open class Polygon {
 
     private val glProgram = createGLProgram()
 
-    open fun draw(mvpMatrix: FloatArray?, cX: Float, cY: Float, radius: Float, color: Int) {
-        val data = CircleShapeData(cX, cY, radius, color)
-        draw(mvpMatrix, data)
-    }
+    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int) {
+        val data = PolygonShapeData(line, color)
 
-    protected fun draw(mvpMatrix: FloatArray?, data: OrganizedShapeData) {
         GLES20.glUseProgram(glProgram)
 
         val mMVPMatrixHandle = GLES20.glGetUniformLocation(glProgram, GL_MATRIX_VAR)
@@ -53,28 +50,17 @@ internal open class Circle {
         GLES20.glDisableVertexAttribArray(mPositionHandle)
     }
 
-    private class CircleShapeData(cX: Float, cY: Float, radius: Float, colorInt: Int) : OrganizedShapeData(colorInt) {
+    private class PolygonShapeData(line: FloatArray, colorInt: Int) : OrganizedShapeData(colorInt) {
 
         override val vertexCount: Int
         override val vertexBuffer: FloatBuffer
         override val drawListBuffer: ShortBuffer
 
         init {
-            val pathCords = FloatArray(stamp.size)
-            for (i in pathCords.indices step COORDS_PER_VERTEX) {
-                pathCords[i] = stamp[i] * radius + cX
-                pathCords[i + 1] = stamp[i + 1] * radius + cY
-            }
+            val pathCords = line.addZDimension()
             vertexCount = pathCords.size / COORDS_PER_VERTEX
             vertexBuffer = allocateFloatBuffer(pathCords)
-            drawListBuffer = allocateShortBuffer(stampIndices)
+            drawListBuffer = allocateShortBuffer(createPolygonFanIndicesStamp(vertexCount))
         }
-    }
-
-    private companion object {
-
-        const val CIRCLE_POINTS = 16
-        val stamp = createCircularStamp(CIRCLE_POINTS)
-        val stampIndices = createCircularIndicesStamp(CIRCLE_POINTS)
     }
 }

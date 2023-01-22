@@ -36,7 +36,7 @@ internal class SmallCircle : Circle() {
 
     private companion object {
 
-        const val CIRCLE_POINTS = 8
+        const val CIRCLE_POINTS = 4
         val stamp = createCircularStamp(CIRCLE_POINTS)
         val stampIndices = createCircularIndicesStamp(CIRCLE_POINTS)
     }

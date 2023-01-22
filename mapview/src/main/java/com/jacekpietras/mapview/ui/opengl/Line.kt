@@ -17,8 +17,14 @@ internal class Line {
     private val circle = SmallCircle()
 
     fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float) {
+        // cap is great idea, but too slow
+//        if (thickness >= THICKNESS_BOLD) {
+//            for (i in line.indices step 2) {
+//                circle.draw(mvpMatrix, line[i], line[i + 1], thickness * 0.48f, color)
+//            }
+//        }
         if (thickness >= THICKNESS_BOLD) {
-            for (i in line.indices step 2) {
+            for (i in 2..line.lastIndex-2 step 2) {
                 circle.draw(mvpMatrix, line[i], line[i + 1], thickness * 0.48f, color)
             }
         }
