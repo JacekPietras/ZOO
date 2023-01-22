@@ -6,24 +6,24 @@ import com.jacekpietras.mapview.utils.COORDS_PER_VERTEX
 import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
-import com.jacekpietras.mapview.utils.addZDimension
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
+import com.jacekpietras.mapview.utils.allocateShortBuffer
+import com.jacekpietras.mapview.utils.createCircularIndicesStamp
+import com.jacekpietras.mapview.utils.createCircularStamp
 import com.jacekpietras.mapview.utils.createGLProgram
 import java.nio.FloatBuffer
+import java.nio.ShortBuffer
 
-internal class Line {
+internal open class Circle {
 
     private val glProgram = createGLProgram()
 
-    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float, circle: Circle) {
-        if (thickness >= THICKNESS_BOLD) {
-            for (i in line.indices step 2) {
-                circle.draw(mvpMatrix, line[i], line[i + 1], thickness * 0.48f, color)
-            }
-        }
+    open fun draw(mvpMatrix: FloatArray?, cX: Float, cY: Float, radius: Float, color: Int) {
+        val data = CircleShapeData(cX, cY, radius, color)
+        draw(mvpMatrix, data)
+    }
 
-        val data = LineShapeData(line, color)
-
+    protected fun draw(mvpMatrix: FloatArray?, data: OrganizedShapeData) {
         GLES20.glUseProgram(glProgram)
 
         val mMVPMatrixHandle = GLES20.glGetUniformLocation(glProgram, GL_MATRIX_VAR)
@@ -43,26 +43,38 @@ internal class Line {
         val mColorHandle = GLES20.glGetUniformLocation(glProgram, GL_COLOR_VAR)
         GLES20.glUniform4fv(mColorHandle, 1, data.color, 0)
 
-        GLES20.glLineWidth(thickness)
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, data.vertexCount)
+        GLES20.glDrawElements(
+            GLES20.GL_TRIANGLE_FAN,
+            data.drawListBuffer.capacity(),
+            GLES20.GL_UNSIGNED_SHORT,
+            data.drawListBuffer
+        )
 
         GLES20.glDisableVertexAttribArray(mPositionHandle)
     }
 
-    private class LineShapeData(line: FloatArray, colorInt: Int) : ShapeData(colorInt) {
+    private class CircleShapeData(cX: Float, cY: Float, radius: Float, colorInt: Int) : OrganizedShapeData(colorInt) {
 
         override val vertexCount: Int
         override val vertexBuffer: FloatBuffer
+        override val drawListBuffer: ShortBuffer
 
         init {
-            val pathCords = line.addZDimension()
+            val pathCords = FloatArray(stamp.size)
+            for (i in pathCords.indices step COORDS_PER_VERTEX) {
+                pathCords[i] = stamp[i] * radius + cX
+                pathCords[i + 1] = stamp[i + 1] * radius + cY
+            }
             vertexCount = pathCords.size / COORDS_PER_VERTEX
             vertexBuffer = allocateFloatBuffer(pathCords)
+            drawListBuffer = allocateShortBuffer(stampIndices)
         }
     }
 
     private companion object {
 
-        const val THICKNESS_BOLD = 6
+        const val CIRCLE_POINTS = 16
+        val stamp = createCircularStamp(CIRCLE_POINTS)
+        val stampIndices = createCircularIndicesStamp(CIRCLE_POINTS)
     }
 }

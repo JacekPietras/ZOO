@@ -6,6 +6,10 @@ import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderBitmapItem
+import com.jacekpietras.mapview.model.RenderItem.PointItem.RenderCircleItem
+import com.jacekpietras.mapview.model.RenderItem.RenderPathItem
+import com.jacekpietras.mapview.model.RenderItem.RenderPolygonItem
 import com.jacekpietras.mapview.ui.LastMapUpdate
 import com.jacekpietras.mapview.utils.setOpenGLClearColor
 import javax.microedition.khronos.egl.EGLConfig
@@ -19,8 +23,9 @@ class MyGLRenderer : GLSurfaceView.Renderer {
     @Volatile
     var openGLBackground: Int = Color.BLUE
 
-    private lateinit var mTriangle: Triangle
-    private lateinit var mLine: Line
+    private lateinit var line: Line
+    private lateinit var circle: Circle
+    private lateinit var smallCircle: SmallCircle
 
     private val vPMatrix = FloatArray(16)
     private val projectionMatrix = FloatArray(16)
@@ -29,8 +34,9 @@ class MyGLRenderer : GLSurfaceView.Renderer {
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         setOpenGLClearColor(openGLBackground)
 
-        mTriangle = Triangle()
-        mLine = Line()
+        line = Line()
+        circle = Circle()
+        smallCircle = SmallCircle()
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -46,8 +52,15 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
         mapList.forEach {
-            if (it is RenderItem.RenderPathItem) {
-                mLine.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth)
+            when (it) {
+                is RenderPathItem -> line.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth, smallCircle)
+                is RenderPolygonItem -> {
+                    //TODO()
+                }
+                is RenderCircleItem -> circle.draw(vPMatrix, it.cX, it.cY, it.radius, it.paint.color)
+                is RenderBitmapItem -> {
+                    //TODO()
+                }
             }
         }
 
