@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.logic
 
+import android.content.Context
 import android.graphics.Matrix
 import com.jacekpietras.geometry.PointD
 import com.jacekpietras.geometry.RectD
@@ -11,6 +12,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
 import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
 import com.jacekpietras.mapview.ui.PaintBaker
+import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.mapview.utils.doAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,14 +27,18 @@ import kotlin.math.sin
 import kotlin.system.measureTimeMillis
 
 class MapViewLogic<T>(
+    context: Context,
+    mapRenderer: MapRenderer,
     private val doAnimation: ((progress: Float) -> Unit) -> Unit = ::doAnimation,
     var invalidate: ((List<RenderItem<T>>) -> Unit)? = null,
-    var paintBaker: PaintBaker<T>,
     private var onStopCentering: (() -> Unit)? = null,
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
     val coroutineScope: CoroutineScope,
+    private val antialiasing: Boolean = true,
 ) {
+
+    private val paintBaker = PaintBaker.Factory().create<T>(context, mapRenderer, antialiasing)
 
     var worldData: WorldData = WorldData()
         set(value) {
@@ -250,7 +256,7 @@ class MapViewLogic<T>(
 
     private fun establishViewCoordinates() {
         do {
-            visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight)
+            visibleGpsCoordinate = ViewCoordinates(centerGpsCoordinate, zoom, currentWidth, currentHeight, worldRotation)
         } while (preventedGoingOutsideWorld())
     }
 
@@ -359,9 +365,7 @@ class MapViewLogic<T>(
     private fun makeNewRenderList() {
         RenderListMaker<T>(
             visibleGpsCoordinate = visibleGpsCoordinate,
-            worldRotation = worldRotation,
             currentWidth = currentWidth,
-            currentHeight = currentHeight,
             zoom = zoom,
             centerGpsCoordinate = centerGpsCoordinate,
             bakeDimension = paintBaker::bakeDimension,

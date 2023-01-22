@@ -4,6 +4,7 @@ import com.jacekpietras.zoo.domain.feature.animal.di.animalModule
 import com.jacekpietras.zoo.domain.feature.favorites.di.favoritesModule
 import com.jacekpietras.zoo.domain.feature.map.di.mapModule
 import com.jacekpietras.zoo.domain.feature.pathfinder.di.pathFinderModule
+import com.jacekpietras.zoo.domain.feature.performance.di.performanceModule
 import com.jacekpietras.zoo.domain.feature.planner.di.plannerModule
 import com.jacekpietras.zoo.domain.feature.sensors.di.sensorsModule
 import com.jacekpietras.zoo.domain.feature.vrp.di.vrpModule
@@ -127,4 +128,4 @@ val domainModule = module {
             mapRepository = get(),
         )
     }
-} + favoritesModule + plannerModule + vrpModule + pathFinderModule + sensorsModule + mapModule + animalModule
+} + favoritesModule + plannerModule + vrpModule + pathFinderModule + sensorsModule + mapModule + animalModule + performanceModule

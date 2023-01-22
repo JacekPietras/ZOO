@@ -27,10 +27,11 @@ fun MapScreen(
     animalId: String? = null,
     regionId: String? = null,
 ) {
+    val mapRenderer = MapRenderer.CUSTOM_VIEW
     val context = LocalContext.current
     val activity = context.getActivity()
     val viewModel = getViewModel<MapViewModel> {
-        parametersOf(animalId, regionId, ViewPaintBaker(context))
+        parametersOf(animalId, regionId, mapRenderer)
     }
     val router = MapRouterImpl({ activity }, navController)
     val permissionChecker = rememberGpsPermissionRequesterState()
@@ -54,7 +55,7 @@ fun MapScreen(
 
     MapView(
         viewState,
-        mapRenderer = MapRenderer.CUSTOM_VIEW,
+        mapRenderer = mapRenderer,
         onBack = { viewModel.onBackClicked(router) },
         onClose = viewModel::onCloseClicked,
         onLocationClicked = { viewModel.onLocationButtonClicked(permissionChecker) },

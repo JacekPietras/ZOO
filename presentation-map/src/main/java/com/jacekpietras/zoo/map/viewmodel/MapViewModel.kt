@@ -7,7 +7,7 @@ import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.logic.MapViewLogic
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.LastMapUpdate.trans
-import com.jacekpietras.mapview.ui.PaintBaker
+import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.zoo.core.dispatcher.flowOnBackground
 import com.jacekpietras.zoo.core.dispatcher.flowOnMain
 import com.jacekpietras.zoo.core.dispatcher.launchInBackground
@@ -21,6 +21,7 @@ import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFav
 import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapObjectsUseCase
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
+import com.jacekpietras.zoo.domain.feature.performance.interactor.GetPerformanceClassUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveArrivalAtRegionEventUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
@@ -82,7 +83,7 @@ internal class MapViewModel(
     context: Context,
     animalId: String?,
     regionId: String?,
-    paintBaker: PaintBaker<Any>,
+    mapRenderer: MapRenderer,
     private val mapper: MapViewStateMapper,
 
     observeCompassUseCase: ObserveCompassUseCase,
@@ -110,6 +111,7 @@ internal class MapViewModel(
     private val getRegionUseCase: GetRegionUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
+    getPerformanceClassUseCase: GetPerformanceClassUseCase,
 ) : ViewModel() {
 
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
@@ -117,12 +119,14 @@ internal class MapViewModel(
         .filter(List<MapEffect>::isNotEmpty)
         .map { /* Unit */ }
 
-    private val mapLogic = MapViewLogic(
-        paintBaker = paintBaker,
+    private val mapLogic = MapViewLogic<Any>(
+        context = context,
+        mapRenderer = mapRenderer,
         setOnPointPlacedListener = ::onPointPlaced,
         onStopCentering = ::onStopCentering,
         onStartCentering = ::onStartCentering,
         coroutineScope = viewModelScope,
+        antialiasing = getPerformanceClassUseCase.run(),
     )
 
     fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {

@@ -17,7 +17,7 @@ val mapModule = module {
             context = androidContext(),
             animalId = params[0],
             regionId = params[1],
-            paintBaker = params.get(),
+            mapRenderer = params.get(),
             mapper = get(),
             observeMapObjectsUseCase = get(),
             observeCompassUseCase = get(),
@@ -42,6 +42,7 @@ val mapModule = module {
             observeCurrentPlanPathUseCase = get(),
             observeArrivalAtRegionEventUseCase = get(),
             observeAnimalFavoritesUseCase = get(),
+            getPerformanceClassUseCase = get(),
         )
     }
 }
