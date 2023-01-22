@@ -10,6 +10,6 @@ internal abstract class ShapeData(color: Int) {
     abstract val vertexBuffer: FloatBuffer
 }
 
-internal abstract class OrganizedShapeData(color: Int) : ShapeData(color) {
+internal abstract class ShapeOfTrianglesData(color: Int) : ShapeData(color) {
     abstract val drawListBuffer: ShortBuffer
 }

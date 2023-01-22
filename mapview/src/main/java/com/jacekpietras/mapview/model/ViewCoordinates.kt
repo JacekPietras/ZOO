@@ -121,8 +121,8 @@ internal class ViewCoordinates(
 
     fun transformPolygon(input: DoubleArray, output: FloatArray) {
         for (i in output.indices step 2) {
-            output[i] = input.getOrNull(i)?.transformX() ?: 0f
-            output[i + 1] = input.getOrNull(i + 1)?.transformY() ?: 0f
+            output[i] = input[i].transformX()
+            output[i + 1] = input[i + 1].transformY()
         }
         matrix.mapPoints(output)
     }

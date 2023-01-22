@@ -72,7 +72,11 @@ internal class RenderListMaker<T>(
                 }
                 is PreparedPathItem -> {
                     if (item.visibility != CACHED) {
-                        visibleGpsCoordinate.transformPath(item.cacheRaw!!, item.cacheTranslated!!)
+                        try {
+                            visibleGpsCoordinate.transformPath(item.cacheRaw!!, item.cacheTranslated!!)
+                        } catch (ignored: Throwable) {
+                            // just skip that
+                        }
                         item.visibility = CACHED
                     }
                 }
