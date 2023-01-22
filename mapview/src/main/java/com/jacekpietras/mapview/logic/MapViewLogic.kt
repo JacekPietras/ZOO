@@ -11,6 +11,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cutoE
 import com.jacekpietras.mapview.ui.LastMapUpdate.cutoS
 import com.jacekpietras.mapview.ui.LastMapUpdate.mergE
 import com.jacekpietras.mapview.ui.LastMapUpdate.moveE
+import com.jacekpietras.mapview.ui.MapRenderConfig
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.ui.compose.MapRenderer
 import com.jacekpietras.mapview.utils.doAnimation
@@ -35,8 +36,12 @@ class MapViewLogic<T>(
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
     val coroutineScope: CoroutineScope,
-    private val antialiasing: Boolean = true,
+    antialiasing: Boolean = true,
 ) {
+
+    init {
+        MapRenderConfig.antialiasing = antialiasing
+    }
 
     private val paintBaker = PaintBaker.Factory().create<T>(context, mapRenderer, antialiasing)
 

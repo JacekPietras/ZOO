@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import com.jacekpietras.mapview.model.RenderItem
+import com.jacekpietras.mapview.ui.MapRenderConfig
 import com.jacekpietras.mapview.utils.ViewGestures
 
 class MapOpenGLView(
@@ -42,7 +43,9 @@ class MapOpenGLView(
     init {
         onSizeChanged?.invoke(width, height)
         setEGLContextClientVersion(2)
-        setEGLConfigChooser(GLConfigChooser())
+        if (MapRenderConfig.antialiasing) {
+            setEGLConfigChooser(GLConfigChooser())
+        }
         setRenderer(renderer)
         renderMode = RENDERMODE_WHEN_DIRTY
     }
