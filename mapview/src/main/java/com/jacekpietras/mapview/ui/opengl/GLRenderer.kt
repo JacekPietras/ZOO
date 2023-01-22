@@ -17,10 +17,7 @@ import javax.microedition.khronos.opengles.GL10
 
 class GLRenderer : GLSurfaceView.Renderer {
 
-    @Volatile
     var mapList: List<RenderItem<Paint>> = emptyList()
-
-    @Volatile
     var openGLBackground: Int = Color.BLUE
 
     private lateinit var line: Line
