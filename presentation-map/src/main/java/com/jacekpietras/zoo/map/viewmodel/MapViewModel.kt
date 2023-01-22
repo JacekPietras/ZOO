@@ -21,6 +21,7 @@ import com.jacekpietras.zoo.domain.feature.favorites.interactor.ObserveAnimalFav
 import com.jacekpietras.zoo.domain.feature.map.interactor.LoadMapUseCase
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveMapObjectsUseCase
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
+import com.jacekpietras.zoo.domain.feature.performance.interactor.GetPerformanceClassUseCase
 import com.jacekpietras.zoo.domain.feature.planner.interactor.ObserveCurrentPlanPathWithOptimizationUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveArrivalAtRegionEventUseCase
 import com.jacekpietras.zoo.domain.feature.sensors.interactor.ObserveCompassUseCase
@@ -110,6 +111,7 @@ internal class MapViewModel(
     private val getRegionUseCase: GetRegionUseCase,
     private val uploadHistoryUseCase: UploadHistoryUseCase,
     private val getShortestPathUseCase: GetShortestPathFromUserUseCase,
+    getPerformanceClassUseCase: GetPerformanceClassUseCase,
 ) : ViewModel() {
 
     private val _effects = MutableStateFlow<List<MapEffect>>(emptyList())
@@ -124,6 +126,7 @@ internal class MapViewModel(
         onStopCentering = ::onStopCentering,
         onStartCentering = ::onStartCentering,
         coroutineScope = viewModelScope,
+        antialiasing = getPerformanceClassUseCase.run(),
     )
 
     fun setUpdateCallback(updateCallback: (List<RenderItem<Any>>) -> Unit) {

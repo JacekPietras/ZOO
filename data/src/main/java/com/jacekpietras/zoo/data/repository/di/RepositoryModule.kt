@@ -24,10 +24,13 @@ import com.jacekpietras.zoo.data.repository.FavoritesRepositoryImpl
 import com.jacekpietras.zoo.data.repository.GpsEventsRepositoryImpl
 import com.jacekpietras.zoo.data.repository.GpsRepositoryImpl
 import com.jacekpietras.zoo.data.repository.MapRepositoryImpl
+import com.jacekpietras.zoo.data.repository.PerformanceClassRepositoryImpl
 import com.jacekpietras.zoo.data.repository.PlanRepositoryImpl
+import com.jacekpietras.zoo.data.utils.PerformanceClass
 import com.jacekpietras.zoo.domain.feature.animal.repository.AnimalRepository
 import com.jacekpietras.zoo.domain.feature.favorites.repository.FavoritesRepository
 import com.jacekpietras.zoo.domain.feature.map.repository.MapRepository
+import com.jacekpietras.zoo.domain.feature.performance.repository.PerformanceClassRepository
 import com.jacekpietras.zoo.domain.feature.planner.repository.PlanRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsEventsRepository
 import com.jacekpietras.zoo.domain.feature.sensors.repository.GpsRepository
@@ -60,6 +63,7 @@ internal val repositoryModule = module {
             waterWatcher = get(named(MAP_WATER)),
             visitedRoadsWatcher = get(named(MAP_VISITED_ROADS)),
             regionsWatcher = get(named(MAP_REGIONS)),
+            performanceClassRepository = get(),
         )
     }
 
@@ -99,6 +103,12 @@ internal val repositoryModule = module {
             planDao = get<ZooDatabase>().planDao(),
             planMapper = get(),
             currentPlan = get(named(CURRENT_PLAN)),
+        )
+    }
+
+    factory<PerformanceClassRepository> {
+        PerformanceClassRepositoryImpl(
+            performanceClass = PerformanceClass(androidContext()),
         )
     }
 }

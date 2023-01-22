@@ -20,11 +20,11 @@ internal interface PaintBaker<T> {
     class Factory {
 
         @Suppress("UNCHECKED_CAST")
-        fun <T> create(context: Context, mapRenderer: MapRenderer): PaintBaker<T> =
+        fun <T> create(context: Context, mapRenderer: MapRenderer, antialiasing: Boolean): PaintBaker<T> =
             when (mapRenderer) {
                 MapRenderer.OPEN_GL,
                 MapRenderer.CUSTOM_VIEW,
-                MapRenderer.SURFACE_VIEW -> ViewPaintBaker(context)
+                MapRenderer.SURFACE_VIEW -> ViewPaintBaker(context, antialiasing)
                 MapRenderer.COMPOSE -> ComposablePaintBaker(context)
             } as PaintBaker<T>
     }

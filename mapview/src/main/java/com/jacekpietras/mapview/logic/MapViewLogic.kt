@@ -35,9 +35,10 @@ class MapViewLogic<T>(
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
     val coroutineScope: CoroutineScope,
+    private val antialiasing: Boolean = true,
 ) {
 
-    private val paintBaker = PaintBaker.Factory().create<T>(context, mapRenderer)
+    private val paintBaker = PaintBaker.Factory().create<T>(context, mapRenderer, antialiasing)
 
     var worldData: WorldData = WorldData()
         set(value) {
