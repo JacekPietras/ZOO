@@ -36,7 +36,6 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
         line = Line()
         circle = Circle()
-        smallCircle = SmallCircle()
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -53,7 +52,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
         mapList.forEach {
             when (it) {
-                is RenderPathItem -> line.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth, smallCircle)
+                is RenderPathItem -> line.draw(vPMatrix, it.shape, it.paint.color, it.paint.strokeWidth)
                 is RenderPolygonItem -> {
                     //TODO()
                 }

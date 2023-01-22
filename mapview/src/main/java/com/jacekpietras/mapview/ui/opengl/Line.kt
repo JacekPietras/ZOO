@@ -14,8 +14,9 @@ import java.nio.FloatBuffer
 internal class Line {
 
     private val glProgram = createGLProgram()
+    private val circle = SmallCircle()
 
-    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float, circle: Circle) {
+    fun draw(mvpMatrix: FloatArray?, line: FloatArray, color: Int, thickness: Float) {
         if (thickness >= THICKNESS_BOLD) {
             for (i in line.indices step 2) {
                 circle.draw(mvpMatrix, line[i], line[i + 1], thickness * 0.48f, color)
