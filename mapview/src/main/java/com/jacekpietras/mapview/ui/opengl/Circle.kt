@@ -17,7 +17,7 @@ internal class Circle : ShapeOfTriangles() {
 
     private class CircleShapeData(cX: Float, cY: Float, radius: Float, color: FloatArray) : ShapeOfTrianglesData(color) {
 
-        override val vertexCount: Int
+        override val vertexCount: Int = CIRCLE_POINTS + 1
         override val vertexBuffer: FloatBuffer
         override val drawListBuffer: ShortBuffer
 
@@ -27,9 +27,8 @@ internal class Circle : ShapeOfTriangles() {
                 pathCords[i] = stamp[i] * radius + cX
                 pathCords[i + 1] = stamp[i + 1] * radius + cY
             }
-            vertexCount = pathCords.size / COORDS_PER_VERTEX
             vertexBuffer = allocateFloatBuffer(pathCords)
-            drawListBuffer = allocateShortBuffer(stampIndices)
+            drawListBuffer = circleDrawListBuffer
         }
     }
 
@@ -38,5 +37,6 @@ internal class Circle : ShapeOfTriangles() {
         const val CIRCLE_POINTS = 16
         val stamp = createCircularStamp(CIRCLE_POINTS)
         val stampIndices = createCircularIndicesStamp(CIRCLE_POINTS)
+        val circleDrawListBuffer = allocateShortBuffer(stampIndices)
     }
 }
