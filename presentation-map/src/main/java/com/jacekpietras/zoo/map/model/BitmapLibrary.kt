@@ -22,6 +22,10 @@ class BitmapLibrary(
                 context = context,
                 res = R.drawable.ic_map_lion_64,
             ),
+            "pingwiny" to BitmapVersions(
+                context = context,
+                res = R.drawable.ic_map_penguin_64,
+            ),
             "wc-" to BitmapVersions(
                 context = context,
                 res = R.drawable.ic_map_wc_24,
