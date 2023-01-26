@@ -199,12 +199,12 @@ internal class ObserveCurrentPlanWithOptimizationUseCaseImpl(
             stages = emptyList(),
         )
 
-    private inner class Storage<T>(private var lastCalculated: T) {
+    private inner class Storage<T>(private var value: T) {
 
-        fun take() = lastCalculated
+        fun take() = value
 
         fun save(it: T) {
-            lastCalculated = it
+            value = it
         }
     }
 
