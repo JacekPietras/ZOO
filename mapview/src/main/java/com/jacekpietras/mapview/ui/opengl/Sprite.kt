@@ -6,7 +6,6 @@ import android.opengl.GLUtils
 import com.jacekpietras.mapview.utils.BYTES_PER_FLOAT
 import com.jacekpietras.mapview.utils.COORDS_PER_VERTEX
 import com.jacekpietras.mapview.utils.GL_A_TEX_COORD_VAR
-import com.jacekpietras.mapview.utils.GL_COLOR_VAR
 import com.jacekpietras.mapview.utils.GL_MATRIX_VAR
 import com.jacekpietras.mapview.utils.GL_POSITION_VAR
 import com.jacekpietras.mapview.utils.GL_U_TEX_VAR
@@ -14,8 +13,6 @@ import com.jacekpietras.mapview.utils.GL_V_TEX_COORD_VAR
 import com.jacekpietras.mapview.utils.allocateFloatBuffer
 import com.jacekpietras.mapview.utils.allocateShortBuffer
 import com.jacekpietras.mapview.utils.loadShader
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
@@ -102,6 +99,9 @@ internal class Sprite {
         )
         GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle)
 
+        GLES20.glEnable(GLES20.GL_BLEND)
+        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+
         //Draw the triangle
         GLES20.glDrawElements(
             GLES20.GL_TRIANGLES,
@@ -110,8 +110,8 @@ internal class Sprite {
             data.drawListBuffer
         )
 
-        //Disable Vertex Array
         GLES20.glDisableVertexAttribArray(mPositionHandle)
+        GLES20.glDisable(GLES20.GL_BLEND)
     }
 
     private fun loadTexture(bitmap: Bitmap): Int {
