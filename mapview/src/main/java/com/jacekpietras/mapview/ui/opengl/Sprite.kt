@@ -21,7 +21,6 @@ import java.nio.ShortBuffer
 
 internal class Sprite {
 
-    private val mCubeTextureCoordinates: FloatBuffer
     private var mTextureUniformHandle = 0
     private var mTextureCoordinateHandle = 0
     private val mTextureCoordinateDataSize = 2
@@ -39,35 +38,17 @@ internal class Sprite {
     private val fragmentShaderCode =
 """
     precision mediump float;
-    uniform vec4 $GL_COLOR_VAR;
     uniform sampler2D $GL_U_TEX_VAR;
     varying vec2 $GL_V_TEX_COORD_VAR;
     void main() {
-        gl_FragColor = ($GL_COLOR_VAR * texture2D($GL_U_TEX_VAR, $GL_V_TEX_COORD_VAR));
+        gl_FragColor = texture2D($GL_U_TEX_VAR, $GL_V_TEX_COORD_VAR);
     }
 """
     private val shaderProgram: Int
 
     init {
-
-        // S, T (or X, Y)
-        // Texture coordinate data.
-        // Because images have a Y axis pointing downward (values increase as you move down the image) while
-        // OpenGL has a Y axis pointing upward, we adjust for that here by flipping the Y axis.
-        // What's more is that the texture coordinates are the same for every face.
-        val cubeTextureCoordinateData = floatArrayOf(
-            -0.5f, 0.5f,
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.5f, 0.5f,
-        )
-        mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.size * 4)
-            .order(ByteOrder.nativeOrder())
-            .asFloatBuffer()
-        mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0)
-
-        val vertexShader: Int = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
-        val fragmentShader: Int = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
+        val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
+        val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
         shaderProgram = GLES20.glCreateProgram()
         GLES20.glAttachShader(shaderProgram, vertexShader)
         GLES20.glAttachShader(shaderProgram, fragmentShader)
@@ -121,9 +102,6 @@ internal class Sprite {
         )
         GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle)
 
-        val mColorHandle = GLES20.glGetUniformLocation(shaderProgram, GL_COLOR_VAR)
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0)
-
         //Draw the triangle
         GLES20.glDrawElements(
             GLES20.GL_TRIANGLES,
@@ -156,7 +134,7 @@ internal class Sprite {
         return textureHandle[0]
     }
 
-    private class SquareShapeData(cX: Float, cY: Float, height: Float, width: Float) : ShapeOfTrianglesData(color) {
+    private class SquareShapeData(cX: Float, cY: Float, height: Float, width: Float) : ShapeOfTrianglesData(emptyColor) {
 
         override val vertexCount: Int = 4
         override val vertexBuffer: FloatBuffer
@@ -186,6 +164,7 @@ internal class Sprite {
             0, 2, 3
         )
         val sprintDrawListBuffer = allocateShortBuffer(stampIndices)
-        var color = floatArrayOf(1f, 0f, 1f, 1.0f)
+        val mCubeTextureCoordinates = allocateFloatBuffer(stamp)
+        val emptyColor = floatArrayOf()
     }
 }

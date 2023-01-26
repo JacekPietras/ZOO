@@ -20,7 +20,7 @@ internal const val GL_POSITION_VAR = "vPosition"
 internal const val GL_COLOR_VAR = "vColor"
 
 internal const val GL_A_TEX_COORD_VAR = "a_TexCoordinate"
-internal const val GL_V_TEX_COORD_VAR = "a_TexCoordinate"
+internal const val GL_V_TEX_COORD_VAR = "v_TexCoordinate"
 internal const val GL_U_TEX_VAR = "u_Texture"
 
 internal const val BYTES_PER_FLOAT = 4
