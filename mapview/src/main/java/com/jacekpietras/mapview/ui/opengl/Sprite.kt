@@ -26,21 +26,26 @@ internal class Sprite {
     private var mTextureCoordinateHandle = 0
     private val mTextureCoordinateDataSize = 2
     private val vertexShaderCode =
-        "attribute vec2 $GL_A_TEX_COORD_VAR;" +
-                "varying vec2 $GL_V_TEX_COORD_VAR;" +
-                "uniform mat4 $GL_MATRIX_VAR;" +
-                "attribute vec4 $GL_POSITION_VAR;" +
-                "void main() {" +
-                "  gl_Position = $GL_MATRIX_VAR * $GL_POSITION_VAR;" +
-                "$GL_V_TEX_COORD_VAR = $GL_A_TEX_COORD_VAR;" +
-                "}"
-    private val fragmentShaderCode = ("precision mediump float;" +
-            "uniform vec4 $GL_COLOR_VAR;" +
-            "uniform sampler2D $GL_U_TEX_VAR;" +
-            "varying vec2 $GL_V_TEX_COORD_VAR;" +
-            "void main() {" +
-            "gl_FragColor = ($GL_COLOR_VAR * texture2D($GL_U_TEX_VAR, $GL_V_TEX_COORD_VAR));" +
-            "}")
+"""
+    attribute vec2 $GL_A_TEX_COORD_VAR;
+    varying vec2 $GL_V_TEX_COORD_VAR;
+    uniform mat4 $GL_MATRIX_VAR;
+    attribute vec4 $GL_POSITION_VAR;
+    void main() {
+        gl_Position = $GL_MATRIX_VAR * $GL_POSITION_VAR;
+        $GL_V_TEX_COORD_VAR = $GL_A_TEX_COORD_VAR;
+    }
+"""
+    private val fragmentShaderCode =
+"""
+    precision mediump float;
+    uniform vec4 $GL_COLOR_VAR;
+    uniform sampler2D $GL_U_TEX_VAR;
+    varying vec2 $GL_V_TEX_COORD_VAR;
+    void main() {
+        gl_FragColor = ($GL_COLOR_VAR * texture2D($GL_U_TEX_VAR, $GL_V_TEX_COORD_VAR));
+    }
+"""
     private val shaderProgram: Int
 
     init {

@@ -45,18 +45,22 @@ internal fun Int.colorToGLFloatArray(): FloatArray {
 }
 
 private const val VERTEX_SHADER_CODE =
-    "uniform mat4 $GL_MATRIX_VAR;" +
-            "attribute vec4 $GL_POSITION_VAR;" +
-            "void main() {" +
-            "  gl_Position = $GL_MATRIX_VAR * $GL_POSITION_VAR;" +
-            "}"
+"""
+    uniform mat4 $GL_MATRIX_VAR;
+    attribute vec4 $GL_POSITION_VAR;
+    void main() {
+      gl_Position = $GL_MATRIX_VAR * $GL_POSITION_VAR;
+    }
+"""
 
 private const val FRAGMENT_SHADER_CODE =
-    "precision mediump float;" +
-            "uniform vec4 $GL_COLOR_VAR;" +
-            "void main() {" +
-            "  gl_FragColor = $GL_COLOR_VAR;" +
-            "}"
+"""
+   precision mediump float;
+   uniform vec4 $GL_COLOR_VAR;
+   void main() {
+       gl_FragColor = $GL_COLOR_VAR;
+   }
+"""
 
 internal fun createGLProgram(): Int {
     val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_CODE)
