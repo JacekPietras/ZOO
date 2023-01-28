@@ -22,7 +22,7 @@ internal class Sprite {
     private var mTextureCoordinateHandle = 0
     private val mTextureCoordinateDataSize = 2
     private val vertexShaderCode =
-"""
+        """
     attribute vec2 $GL_A_TEX_COORD_VAR;
     varying vec2 $GL_V_TEX_COORD_VAR;
     uniform mat4 $GL_MATRIX_VAR;
@@ -33,7 +33,7 @@ internal class Sprite {
     }
 """
     private val fragmentShaderCode =
-"""
+        """
     precision mediump float;
     uniform sampler2D $GL_U_TEX_VAR;
     varying vec2 $GL_V_TEX_COORD_VAR;
@@ -42,6 +42,7 @@ internal class Sprite {
     }
 """
     private val shaderProgram: Int
+    private val bitmapHandles = mutableMapOf<Int, Int>()
 
     init {
         val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
@@ -54,8 +55,13 @@ internal class Sprite {
         GLES20.glLinkProgram(shaderProgram)
     }
 
+    private fun getBitmapHandle(bitmap: Bitmap): Int =
+        bitmapHandles[bitmap.hashCode()]
+            ?: loadTexture(bitmap)
+                .also { bitmapHandles[bitmap.hashCode()] = it }
+
     fun draw(mvpMatrix: FloatArray?, cX: Float, cY: Float, bitmap: Bitmap) {
-        val mTextureDataHandle = loadTexture(bitmap)
+        val mTextureDataHandle = getBitmapHandle(bitmap)
         val data = SquareShapeData(cX, cY, bitmap.height.toFloat(), bitmap.width.toFloat())
 
         GLES20.glUseProgram(shaderProgram)
