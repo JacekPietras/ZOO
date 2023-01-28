@@ -13,6 +13,7 @@ dependencies {
 
     // Triangulation algorithm
     implementation "io.github.earcut4j:earcut4j:$earcut_version"
+    implementation "org.locationtech.jts:jts-core:$jts_version"
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter")

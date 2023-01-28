@@ -25,6 +25,7 @@ buildscript {
         mockito_version = "4.1.0"
         yearclass_version = "2.1.0"
         earcut_version = "2.2.2"
+        jts_version = "1.19.0"
 
         lifecycle_version = "2.5.1"
         lifecycle_extensions_version = "2.2.0"

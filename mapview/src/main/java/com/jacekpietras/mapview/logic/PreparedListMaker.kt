@@ -1,5 +1,6 @@
 package com.jacekpietras.mapview.logic
 
+import com.jacekpietras.geometry.PointD
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
@@ -8,6 +9,12 @@ import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import com.jacekpietras.mapview.utils.toShortArray
 import earcut4j.Earcut
+import org.locationtech.jts.geom.Coordinate
+import org.locationtech.jts.geom.Geometry
+import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.LinearRing
+import org.locationtech.jts.geom.Polygon
+import org.locationtech.jts.triangulate.polygon.PolygonTriangulator
 
 
 internal class PreparedListMaker<T>(
@@ -41,7 +48,7 @@ internal class PreparedListMaker<T>(
                             val pointsArray = pointsToDoubleArray(item.polygon.vertices)
                             PreparedItem.PreparedColoredItem.PreparedPolygonItem(
                                 pointsArray,
-                                getTriangles(pointsArray),
+                                getTriangles2(item.polygon.vertices),
                                 inner,
                                 border,
                                 item.minZoom,
@@ -68,7 +75,32 @@ internal class PreparedListMaker<T>(
             }
         }
 
-    private fun getTriangles(pointsArray: DoubleArray) =
+    private fun getTriangles2(list: List<PointD>) =
+        if (isTriangulated) {
+            val geometryFactory = GeometryFactory();
+            val coordinates = (list.map { Coordinate(it.x, it.y) } + Coordinate(list.first().x, list.first().y)).toTypedArray()
+
+            val linear: LinearRing = GeometryFactory().createLinearRing(coordinates)
+            val poly = Polygon(linear, null, geometryFactory)
+
+            PolygonTriangulator
+                .triangulate(poly)
+                .geometries
+                .map { g ->
+                    g.coordinates
+                        .map { c -> coordinates.indexOfFirst { c == it } }
+                        .distinct()
+                }
+                .flatten()
+                .toShortArray()
+        } else {
+            null
+        }
+
+    private val Geometry.geometries
+        get() = (0 until numGeometries).map(::getGeometryN)
+
+    private fun getTriangles1(pointsArray: DoubleArray) =
         if (isTriangulated) {
             Earcut.earcut(pointsArray, null, 2).toShortArray()
         } else {
