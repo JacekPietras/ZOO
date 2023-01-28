@@ -31,6 +31,7 @@ internal sealed class PreparedItem<T>(
 
         class PreparedPolygonItem<T>(
             val shape: DoubleArray,
+            val triangles: ShortArray?,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,

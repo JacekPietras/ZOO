@@ -24,6 +24,7 @@ buildscript {
         junit5_version = "1.8.2.1"
         mockito_version = "4.1.0"
         yearclass_version = "2.1.0"
+        earcut_version = "2.2.2"
 
         lifecycle_version = "2.5.1"
         lifecycle_extensions_version = "2.2.0"

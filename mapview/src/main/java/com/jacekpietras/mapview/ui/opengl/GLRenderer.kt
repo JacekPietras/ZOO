@@ -62,7 +62,7 @@ class GLRenderer : GLSurfaceView.Renderer {
                 }
                 is RenderPolygonItem -> {
                     when (val paint = it.paint) {
-                        is OpenGLPaint.Fill -> polygon.draw(vPMatrix, it.shape, it.paint.color)
+                        is OpenGLPaint.Fill -> polygon.draw(vPMatrix, it.shape, it.triangles!!, it.paint.color)
                         is OpenGLPaint.Stroke -> line.drawClosed(vPMatrix, it.shape, paint.color, paint.width)
                         else -> {}
                     }

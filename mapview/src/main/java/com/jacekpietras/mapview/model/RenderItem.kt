@@ -19,6 +19,7 @@ sealed class RenderItem<T> {
     @Immutable
     class RenderPolygonItem<T>(
         val shape: FloatArray,
+        val triangles: ShortArray?,
         val paint: T,
     ) : RenderItem<T>()
 

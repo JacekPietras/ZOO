@@ -45,7 +45,7 @@ internal class RenderListMaker<T>(
             if (item.visibility == CACHED) {
                 when (item) {
                     is PreparedPolygonItem -> {
-                        item.addToRender(item.cacheTranslated)
+                        item.addToRender(item.cacheTranslated, item.triangles)
                     }
                     is PreparedPathItem -> {
                         item.cacheTranslated!!.forEach { item.addToRender(it) }
@@ -98,10 +98,12 @@ internal class RenderListMaker<T>(
 
     private fun PreparedPolygonItem<T>.addToRender(
         array: FloatArray,
+        triangles: ShortArray?,
     ) {
         insides.add(
             RenderItem.RenderPolygonItem(
                 array,
+                triangles,
                 paintHolder.takePaint(),
             )
         )
@@ -109,6 +111,7 @@ internal class RenderListMaker<T>(
             borders.add(
                 RenderItem.RenderPolygonItem(
                     array,
+                    triangles,
                     outerPaintHolder.takePaint(),
                 )
             )

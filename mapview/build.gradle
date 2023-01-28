@@ -11,6 +11,9 @@ dependencies {
     implementation project(':geometry')
     implementation "com.google.android.material:material:$material_version"
 
+    // Triangulation algorithm
+    implementation "io.github.earcut4j:earcut4j:$earcut_version"
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter")
 }

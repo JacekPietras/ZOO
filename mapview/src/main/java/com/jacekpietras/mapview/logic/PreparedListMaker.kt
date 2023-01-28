@@ -3,8 +3,12 @@ package com.jacekpietras.mapview.logic
 import com.jacekpietras.mapview.model.MapItem
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
+import com.jacekpietras.mapview.ui.MapRenderConfig.isTriangulated
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
+import com.jacekpietras.mapview.utils.toShortArray
+import earcut4j.Earcut
+
 
 internal class PreparedListMaker<T>(
     private val paintBaker: PaintBaker<T>,
@@ -25,26 +29,34 @@ internal class PreparedListMaker<T>(
                             .also { borderPaints[item.paint] = it }
 
                     when (item) {
-                        is MapItem.MapColoredItem.PathMapItem -> PreparedItem.PreparedColoredItem.PreparedPathItem(
-                            pointsToDoubleArray(item.path.vertices),
-                            inner,
-                            border,
-                            item.minZoom,
-                        )
-                        is MapItem.MapColoredItem.PolygonMapItem -> PreparedItem.PreparedColoredItem.PreparedPolygonItem(
-                            pointsToDoubleArray(item.polygon.vertices),
-                            inner,
-                            border,
-                            item.minZoom,
-                            FloatArray(item.polygon.vertices.size * 2)
-                        )
-                        is MapItem.MapColoredItem.CircleMapItem -> PreparedItem.PreparedColoredItem.PreparedCircleItem(
-                            item.point,
-                            item.radius,
-                            inner,
-                            border,
-                            item.minZoom,
-                        )
+                        is MapItem.MapColoredItem.PathMapItem -> {
+                            PreparedItem.PreparedColoredItem.PreparedPathItem(
+                                pointsToDoubleArray(item.path.vertices),
+                                inner,
+                                border,
+                                item.minZoom,
+                            )
+                        }
+                        is MapItem.MapColoredItem.PolygonMapItem -> {
+                            val pointsArray = pointsToDoubleArray(item.polygon.vertices)
+                            PreparedItem.PreparedColoredItem.PreparedPolygonItem(
+                                pointsArray,
+                                getTriangles(pointsArray),
+                                inner,
+                                border,
+                                item.minZoom,
+                                FloatArray(item.polygon.vertices.size * 2)
+                            )
+                        }
+                        is MapItem.MapColoredItem.CircleMapItem -> {
+                            PreparedItem.PreparedColoredItem.PreparedCircleItem(
+                                item.point,
+                                item.radius,
+                                inner,
+                                border,
+                                item.minZoom,
+                            )
+                        }
                     }
                 }
                 is MapItem.BitmapMapItem -> PreparedItem.PreparedBitmapItem(
@@ -54,5 +66,12 @@ internal class PreparedListMaker<T>(
                     pivot = item.pivot,
                 )
             }
+        }
+
+    private fun getTriangles(pointsArray: DoubleArray) =
+        if (isTriangulated) {
+            Earcut.earcut(pointsArray, null, 2).toShortArray()
+        } else {
+            null
         }
 }

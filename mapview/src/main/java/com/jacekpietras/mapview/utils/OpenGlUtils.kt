@@ -139,16 +139,6 @@ internal fun createCircularIndicesStamp(points: Int): ShortArray {
     }
 }
 
-internal fun createPolygonFanIndicesStamp(points: Int): ShortArray {
-    return ShortArray((points - 2) * 3) {
-        when (it % 3) {
-            0 -> 0
-            1 -> (it / 3 + 1).toShort()
-            else -> (it / 3 + 2).toShort()
-        }
-    }
-}
-
 internal fun hasGLES20(context: Context): Boolean =
     (context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager)
         ?.deviceConfigurationInfo

@@ -31,7 +31,7 @@ internal class Sprite {
         gl_Position = $GL_MATRIX_VAR * $GL_POSITION_VAR;
         $GL_V_TEX_COORD_VAR = $GL_A_TEX_COORD_VAR;
     }
-"""
+        """
     private val fragmentShaderCode =
         """
     precision mediump float;
@@ -40,7 +40,7 @@ internal class Sprite {
     void main() {
         gl_FragColor = texture2D($GL_U_TEX_VAR, $GL_V_TEX_COORD_VAR);
     }
-"""
+        """
     private val shaderProgram: Int
     private val bitmapHandles = mutableMapOf<Int, Int>()
 
@@ -54,11 +54,6 @@ internal class Sprite {
         GLES20.glBindAttribLocation(shaderProgram, 0, GL_A_TEX_COORD_VAR)
         GLES20.glLinkProgram(shaderProgram)
     }
-
-    private fun getBitmapHandle(bitmap: Bitmap): Int =
-        bitmapHandles[bitmap.hashCode()]
-            ?: loadTexture(bitmap)
-                .also { bitmapHandles[bitmap.hashCode()] = it }
 
     fun draw(mvpMatrix: FloatArray?, cX: Float, cY: Float, bitmap: Bitmap) {
         val mTextureDataHandle = getBitmapHandle(bitmap)
@@ -139,6 +134,11 @@ internal class Sprite {
         }
         return textureHandle[0]
     }
+
+    private fun getBitmapHandle(bitmap: Bitmap): Int =
+        bitmapHandles[bitmap.hashCode()]
+            ?: loadTexture(bitmap)
+                .also { bitmapHandles[bitmap.hashCode()] = it }
 
     private class SquareShapeData(cX: Float, cY: Float, height: Float, width: Float) : ShapeOfTrianglesData(emptyColor) {
 
