@@ -26,6 +26,7 @@ buildscript {
         yearclass_version = "2.1.0"
         earcut_version = "2.2.2"
         jts_version = "1.19.0"
+        poly2tri_version = "0.1.2"
 
         lifecycle_version = "2.5.1"
         lifecycle_extensions_version = "2.2.0"
