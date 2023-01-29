@@ -522,7 +522,7 @@ internal class MapViewModel(
             .flowOnBackground()
 
     fun fillColors(colors: MapColors) {
-        mapLogic.invalidate?.invoke(emptyList())
+        mapLogic.redraw()
         mapColors.value = colors
     }
 

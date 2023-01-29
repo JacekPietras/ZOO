@@ -170,7 +170,7 @@ internal class AnimalViewModel(
             }
 
     fun fillColors(colors: MapColors) {
-        mapLogic.invalidate?.invoke(emptyList())
+        mapLogic.redraw()
         mapper.setColors(colors)
     }
 
