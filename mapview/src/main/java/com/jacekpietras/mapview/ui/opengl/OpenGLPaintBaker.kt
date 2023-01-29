@@ -23,7 +23,10 @@ internal class OpenGLPaintBaker(
             }
         }
 
-    override fun bakeCanvasPaint(paint: MapPaint): PaintHolder<OpenGLPaint> =
+    override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<OpenGLPaint>, PaintHolder<OpenGLPaint>?> =
+        bakeInnerCanvasPaint(paint) to bakeBorderCanvasPaint(paint)
+
+    private fun bakeInnerCanvasPaint(paint: MapPaint): PaintHolder<OpenGLPaint> =
         when (paint) {
             is MapPaint.DashedStroke -> paint.toCanvasPaint()
             is MapPaint.Fill -> paint.toCanvasPaint()
@@ -33,7 +36,7 @@ internal class OpenGLPaintBaker(
             is MapPaint.Circle -> paint.toCanvasPaint()
         }
 
-    override fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<OpenGLPaint>? =
+    private fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<OpenGLPaint>? =
         when (paint) {
             is MapPaint.DashedStroke -> null
             is MapPaint.Fill -> null
