@@ -366,6 +366,8 @@ class MapViewLogic<T>(
 
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
+        if (worldPreparedList.isEmpty()) return
+        if (volatilePreparedList.isEmpty()) return
 
         if (cuttingOutNow.get()) return
         cuttingOutNow.set(true)
