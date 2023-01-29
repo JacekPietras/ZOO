@@ -29,6 +29,8 @@ class GLRenderer : GLSurfaceView.Renderer {
     private val vPMatrix = FloatArray(16)
     private val projectionMatrix = FloatArray(16)
     private val viewMatrix = FloatArray(16)
+    private var widthA: Float = 0f
+    private var heightA: Float = 0f
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         setOpenGLClearColor(openGLBackground)
@@ -51,6 +53,9 @@ class GLRenderer : GLSurfaceView.Renderer {
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
+
+        Matrix.rotateM(vPMatrix, 0, 0.3f, 1f, 0f, 0f)
+        Matrix.translateM(vPMatrix, 0, 0f, 0f, -16.0f)
 
         mapList.forEach {
             when (it) {
@@ -85,7 +90,10 @@ class GLRenderer : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
+        widthA = width.toFloat()
+        heightA = height.toFloat()
         GLES20.glViewport(0, 0, width, height)
-        Matrix.frustumM(projectionMatrix, 0, 0f, width.toFloat(), height.toFloat(), 0f, 3f, 7f)
+//        Matrix.frustumM(projectionMatrix, 0, 0f, width.toFloat(), height.toFloat(), 0f, 3f, 100f)
+        Matrix.frustumM(projectionMatrix, 0, -width.toFloat()/2, width.toFloat()/2, height.toFloat(), 0f, 3f, 100f)
     }
 }
