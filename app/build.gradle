@@ -7,7 +7,7 @@ android {
     namespace 'com.jacekpietras.zoo'
 
     defaultConfig {
-        applicationId "com.jacekpietras.zoo.opengl"
+        applicationId "com.jacekpietras.zoo.openglcamera"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
