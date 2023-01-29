@@ -1,5 +1,6 @@
 package com.jacekpietras.geometry
 
+import android.graphics.PointF
 import android.graphics.RectF
 import kotlin.math.*
 
@@ -333,3 +334,38 @@ private fun rayCrossesSegment(
 
 val Double.pow2: Double
     get() = this * this
+
+fun findIntersection(l1s: PointF, l1e: PointF, l2s: PointF, l2e: PointF): PointF {
+    val a1 = l1e.y - l1s.y
+    val b1 = l1s.x - l1e.x
+    val c1 = a1 * l1s.x + b1 * l1s.y
+
+    val a2 = l2e.y - l2s.y
+    val b2 = l2s.x - l2e.x
+    val c2 = a2 * l2s.x + b2 * l2s.y
+
+    val delta = a1 * b2 - a2 * b1
+
+    return if (delta == 0f) {
+        l1e
+    } else {
+        PointF((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta)
+    }
+}
+
+fun findIntersection(l1s: PointD, l1e: PointD, l2s: PointD, l2e: PointD): PointD {
+    val a1 = l1e.y - l1s.y
+    val b1 = l1s.x - l1e.x
+    val c1 = a1 * l1s.x + b1 * l1s.y
+
+    val a2 = l2e.y - l2s.y
+    val b2 = l2s.x - l2e.x
+    val c2 = a2 * l2s.x + b2 * l2s.y
+
+    val delta = a1 * b2 - a2 * b1
+    return if (delta == 0.0) {
+        l1e
+    } else {
+        PointD((b2 * c1 - b1 * c2) / delta, (a1 * c2 - a2 * c1) / delta)
+    }
+}

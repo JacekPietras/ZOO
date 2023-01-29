@@ -20,17 +20,20 @@ fun haversine(p1x: Double, p1y: Double, p2x: Double, p2y: Double): Double {
     return 12745600 * asin(sqrt(a))
 }
 
-fun inflateLine(points: List<PointD>, size: Number): List<PointD> {
-    val edges = points.zipWithNext() + points.reversed().zipWithNext()
-    val edgesWithBearing = edges.map { (a, b) ->
-        Triple(a, b, bearing(a, b) + 90)
+fun inflateLine(points: List<PointD>, size: Number): List<PointD> =
+    moveLine(points, size) + moveLine(points.reversed(), size)
+
+private fun moveLine(points: List<PointD>, distance: Number): List<PointD> {
+    val movedPairs = points
+        .zipWithNext()
+        .map { (a, b) ->
+            val bearing = bearing(a, b) + 90
+            perpendicular(a, distance, bearing) to perpendicular(b, distance, bearing)
+        }
+    val intersected = movedPairs.zipWithNext { (p1, p2), (p3, p4) ->
+        findIntersection(p1, p2, p3, p4)
     }
-    return edgesWithBearing.map { (a, b, bearing) ->
-        listOf(
-            perpendicular(a, size, bearing),
-            perpendicular(b, size, bearing),
-        )
-    }.flatten()
+    return listOf(movedPairs.first().first) + intersected + listOf(movedPairs.last().second)
 }
 
 fun inflatePolygon(points: List<PointD>, size: Int): List<PointD> {
