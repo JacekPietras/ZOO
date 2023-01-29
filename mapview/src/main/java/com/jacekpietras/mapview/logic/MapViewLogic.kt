@@ -349,6 +349,18 @@ class MapViewLogic<T>(
         return result
     }
 
+    fun redraw() {
+        prevVisibleGpsCoordinate = null
+        prevVisibleGpsCoordinateForBigDiff = null
+        worldPreparedListMaker.clear()
+        worldPreparedList = emptyList()
+        worldPreparedListOfVisible = emptyList()
+        volatilePreparedListMaker.clear()
+        volatilePreparedList = emptyList()
+        volatilePreparedListOfVisible = emptyList()
+        invalidate?.invoke(emptyList())
+    }
+
     private fun cutOutNotVisible() {
         cutoS = System.nanoTime()
 

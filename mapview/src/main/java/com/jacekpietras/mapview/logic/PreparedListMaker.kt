@@ -76,4 +76,8 @@ internal class PreparedListMaker<T>(
         } else {
             null
         }
+
+    fun clear() {
+        paints.clear()
+    }
 }
