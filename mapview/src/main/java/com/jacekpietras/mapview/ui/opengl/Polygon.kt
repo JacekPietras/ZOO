@@ -1,6 +1,7 @@
 package com.jacekpietras.mapview.ui.opengl
 
 import android.opengl.GLES20
+import com.jacekpietras.mapview.ui.MapRenderConfig.showTriangles
 import com.jacekpietras.mapview.utils.BYTES_PER_FLOAT
 import com.jacekpietras.mapview.utils.COORDS_PER_VERTEX
 import com.jacekpietras.mapview.utils.GL_COLOR_VAR
@@ -70,10 +71,5 @@ internal open class Polygon {
             vertexBuffer = allocateFloatBuffer(path)
             drawListBuffer = allocateShortBuffer(triangles)
         }
-    }
-
-    private companion object {
-
-        const val showTriangles: Boolean = false
     }
 }

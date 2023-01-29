@@ -2,13 +2,13 @@ package com.jacekpietras.mapview.ui.opengl
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Paint
 import android.opengl.GLSurfaceView
-import android.os.Build
 import android.view.MotionEvent
+import com.jacekpietras.mapview.BuildConfig
 import com.jacekpietras.mapview.model.OpenGLPaint
 import com.jacekpietras.mapview.model.RenderItem
 import com.jacekpietras.mapview.ui.MapRenderConfig
+import com.jacekpietras.mapview.ui.MapRenderConfig.showTriangles
 import com.jacekpietras.mapview.utils.ViewGestures
 import com.jacekpietras.mapview.utils.isProbablyRunningOnEmulator
 
@@ -38,6 +38,9 @@ class MapOpenGLView(
         }
 
         override fun onClick(x: Float, y: Float) {
+            if (BuildConfig.DEBUG && x < 400 && y < 400) {
+                showTriangles = !showTriangles
+            }
             onClick?.invoke(x, y)
         }
     }

@@ -1,6 +1,7 @@
 package com.jacekpietras.mapview.ui.opengl
 
 import android.opengl.GLES20
+import com.jacekpietras.mapview.ui.MapRenderConfig.showTriangles
 import com.jacekpietras.mapview.utils.BYTES_PER_FLOAT
 import com.jacekpietras.mapview.utils.COORDS_PER_VERTEX
 import com.jacekpietras.mapview.utils.GL_COLOR_VAR
@@ -119,7 +120,5 @@ internal class Line {
     private companion object {
 
         const val THICKNESS_BOLD = 6
-
-        const val showTriangles: Boolean = true
     }
 }
