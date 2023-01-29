@@ -19,6 +19,7 @@ class ViewCoordinatesTest {
         zoom = 0.0012801666666663418,
         viewWidth = viewWidth,
         viewHeight = viewHeight,
+        worldRotation = 0f,
     )
 
     @Test

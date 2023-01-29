@@ -2,6 +2,7 @@ package com.jacekpietras.mapview.ui.opengl
 
 import android.content.Context
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.inflateLine
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.OpenGLPaint
@@ -39,7 +40,16 @@ internal class OpenGLPaintBaker(
         }
 
     private fun bakePath(points: List<PointD>, width: Double): DoubleArray {
-        return DoubleArray(0) // fixme
+        val inflated = inflateLine(points, width)
+        val result = DoubleArray(inflated.size * 2)
+        val pointsCount = inflated.size / 2 - 1
+        for (i in 0..pointsCount) {
+            result[i shl 2] = inflated[i].x
+            result[(i shl 2) + 1] = inflated[i].y
+            result[(i shl 2) + 2] = inflated[inflated.lastIndex - i].x
+            result[(i shl 2) + 3] = inflated[inflated.lastIndex - i].y
+        }
+        return result
     }
 
     override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<OpenGLPaint>, PaintHolder<OpenGLPaint>?> =
