@@ -10,19 +10,15 @@ internal class PreparedListMaker<T>(
     private val paintBaker: PaintBaker<T>,
 ) {
 
-    private val innerPaints = mutableMapOf<MapPaint, PaintHolder<T>>()
-    private val borderPaints = mutableMapOf<MapPaint, PaintHolder<T>?>()
+    private val paints = mutableMapOf<MapPaint, Pair<PaintHolder<T>, PaintHolder<T>?>>()
 
     fun toPreparedItems(list: List<MapItem>): List<PreparedItem<T>> =
         list.map { item ->
             when (item) {
                 is MapItem.MapColoredItem -> {
-                    val inner = innerPaints[item.paint]
+                    val (inner, border) = paints[item.paint]
                         ?: paintBaker.bakeCanvasPaint(item.paint)
-                            .also { innerPaints[item.paint] = it }
-                    val border = borderPaints[item.paint]
-                        ?: paintBaker.bakeBorderCanvasPaint(item.paint)
-                            .also { borderPaints[item.paint] = it }
+                            .also { paints[item.paint] = it }
 
                     when (item) {
                         is MapItem.MapColoredItem.PathMapItem -> PreparedItem.PreparedColoredItem.PreparedPathItem(

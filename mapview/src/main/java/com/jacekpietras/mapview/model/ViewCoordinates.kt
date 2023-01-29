@@ -65,13 +65,12 @@ internal class ViewCoordinates(
     }
 
     fun getVisiblePath(array: DoubleArray): List<DoubleArray>? {
-        val rectF = visibleRectRotated
         val result = mutableListOf<DoubleArray>()
         var from = -1
         var to = -1
 
         for (i in 0 until (array.size - 2) step 2) {
-            if (rectF.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
+            if (visibleRectRotated.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
                 if (from == -1) {
                     from = i
                 }
