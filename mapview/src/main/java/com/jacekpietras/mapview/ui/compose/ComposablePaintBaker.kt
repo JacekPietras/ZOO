@@ -25,7 +25,10 @@ internal class ComposablePaintBaker(
             }
         }
 
-    override fun bakeCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
+    override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<ComposablePaint>, PaintHolder<ComposablePaint>?> =
+        bakeInnerCanvasPaint(paint) to bakeBorderCanvasPaint(paint)
+
+    private fun bakeInnerCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
         when (paint) {
             is MapPaint.DashedStroke -> paint.toCanvasPaint()
             is MapPaint.Fill -> paint.toCanvasPaint()
@@ -35,7 +38,7 @@ internal class ComposablePaintBaker(
             is MapPaint.Circle -> paint.toCanvasPaint()
         }
 
-    override fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint>? =
+    private fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint>? =
         when (paint) {
             is MapPaint.DashedStroke -> null
             is MapPaint.Fill -> null

@@ -15,9 +15,7 @@ internal interface PaintBaker<T> {
 
     fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float
 
-    fun bakeCanvasPaint(paint: MapPaint): PaintHolder<T>
-
-    fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<T>?
+    fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<T>, PaintHolder<T>?>
 
     class Factory {
 

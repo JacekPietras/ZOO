@@ -24,7 +24,10 @@ internal class ViewPaintBaker(
             }
         }
 
-    override fun bakeCanvasPaint(paint: MapPaint): PaintHolder<Paint> =
+    override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<Paint>, PaintHolder<Paint>?> =
+        bakeInnerCanvasPaint(paint) to bakeBorderCanvasPaint(paint)
+
+    private fun bakeInnerCanvasPaint(paint: MapPaint): PaintHolder<Paint> =
         when (paint) {
             is MapPaint.DashedStroke -> paint.toCanvasPaint()
             is MapPaint.Fill -> paint.toCanvasPaint()
@@ -34,7 +37,7 @@ internal class ViewPaintBaker(
             is MapPaint.Circle -> paint.toCanvasPaint()
         }
 
-    override fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<Paint>? =
+    private fun bakeBorderCanvasPaint(paint: MapPaint): PaintHolder<Paint>? =
         when (paint) {
             is MapPaint.DashedStroke -> null
             is MapPaint.Fill -> null
