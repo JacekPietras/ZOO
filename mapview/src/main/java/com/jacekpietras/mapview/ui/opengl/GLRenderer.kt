@@ -57,7 +57,7 @@ class GLRenderer : GLSurfaceView.Renderer {
                 is RenderPathItem -> {
                     when (val paint = it.paint) {
                         is OpenGLPaint.Stroke -> if (it.triangles == null) {
-//                            line.draw(vPMatrix, it.shape, paint.color, paint.width)
+                            line.draw(vPMatrix, it.shape, paint.color, paint.width)
                         } else {
                             line.drawTriangles(vPMatrix, it.triangles, paint.color)
                         }
