@@ -34,15 +34,15 @@ internal class OpenGLPaintBaker(
 
     private fun bakePath(points: List<PointD>, width: MapDimension): DoubleArray? =
         when (width) {
-            is MapDimension.Dynamic.World -> bakePath(points, width.meters)
+            is MapDimension.Dynamic.World -> bakePath(points, width.meters / 2)
             is MapDimension.Static -> null
             is MapDimension.Dynamic -> null
         }
 
     private fun bakePath(points: List<PointD>, width: Double): DoubleArray {
         val inflated = inflateLine(points, width)
-        val result = DoubleArray(inflated.size * 2)
-        val pointsCount = inflated.size / 2 - 1
+        val result = DoubleArray(inflated.size shl 1)
+        val pointsCount = (inflated.size shr 1) - 1
         for (i in 0..pointsCount) {
             result[i shl 2] = inflated[i].x
             result[(i shl 2) + 1] = inflated[i].y
