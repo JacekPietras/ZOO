@@ -40,6 +40,45 @@ internal class Line {
         draw(GLES20.GL_LINE_STRIP, mvpMatrix, data, thickness)
     }
 
+    fun drawTriangles(mvpMatrix: FloatArray?, path: FloatArray, color: FloatArray) {
+        if (showTriangles) {
+            path.toList().windowed(3 * COORDS_PER_VERTEX, step = COORDS_PER_VERTEX).map { t ->
+                drawClosed(
+                    mvpMatrix = mvpMatrix,
+                    line = t.toFloatArray(),
+                    color = floatArrayOf(1f, 0f, 0f, 1f),
+                    thickness = 3f,
+                )
+            }
+            return
+        }
+
+        val data = LineShapeData(path, color)
+
+        GLES20.glUseProgram(glProgram)
+
+        val mMVPMatrixHandle = GLES20.glGetUniformLocation(glProgram, GL_MATRIX_VAR)
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0)
+
+        val mPositionHandle = GLES20.glGetAttribLocation(glProgram, GL_POSITION_VAR)
+        GLES20.glEnableVertexAttribArray(mPositionHandle)
+        GLES20.glVertexAttribPointer(
+            mPositionHandle,
+            COORDS_PER_VERTEX,
+            GLES20.GL_FLOAT,
+            false,
+            COORDS_PER_VERTEX * BYTES_PER_FLOAT,
+            data.vertexBuffer,
+        )
+
+        val mColorHandle = GLES20.glGetUniformLocation(glProgram, GL_COLOR_VAR)
+        GLES20.glUniform4fv(mColorHandle, 1, data.color, 0)
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, data.vertexCount)
+
+        GLES20.glDisableVertexAttribArray(mPositionHandle)
+    }
+
     private fun draw(mode: Int, mvpMatrix: FloatArray?, data: ShapeData, thickness: Float) {
         GLES20.glUseProgram(glProgram)
 
@@ -80,5 +119,7 @@ internal class Line {
     private companion object {
 
         const val THICKNESS_BOLD = 6
+
+        const val showTriangles: Boolean = true
     }
 }

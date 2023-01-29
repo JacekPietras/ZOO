@@ -428,11 +428,16 @@ class MapViewLogic<T>(
                     }
                 }
                 is PreparedItem.PreparedColoredItem.PreparedPathItem -> {
-                    val visiblePath = visibleGpsCoordinate.getVisiblePath(item.shape)
-                    if (item.minZoom.isBiggerThanZoom() && visiblePath != null) {
+                    val visiblePaths = visibleGpsCoordinate.getVisiblePath(item.shape, item.innerTriangles, item.outerTriangles)
+                    if (item.minZoom.isBiggerThanZoom() && visiblePaths != null) {
+                        val (visiblePath, visibleInnerTriangles, visibleOuterTriangles) = visiblePaths
                         item.visibility = MOVED
                         item.cacheRaw = visiblePath
+                        item.cacheInnerTrianglesRaw = visibleInnerTriangles
+                        item.cacheOuterTrianglesRaw = visibleOuterTriangles
                         item.cacheTranslated = visiblePath.map { FloatArray(it.size) }
+                        item.cacheInnerTrianglesTranslated = visibleInnerTriangles?.map { FloatArray(it.size) }
+                        item.cacheOuterTrianglesTranslated = visibleOuterTriangles?.map { FloatArray(it.size) }
                         item
                     } else {
                         null

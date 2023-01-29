@@ -25,7 +25,7 @@ internal class OpenGLPaintBaker(
             }
         }
 
-    override fun bakePath(paint: MapPaint, points: List<PointD>): Pair<DoubleArray?, DoubleArray?>? =
+    override fun bakePathToTriangles(paint: MapPaint, points: List<PointD>): Pair<DoubleArray?, DoubleArray?>? =
         when (paint) {
             is MapPaint.Stroke -> bakePath(points, paint.width) to null
             is MapPaint.StrokeWithBorder -> bakePath(points, paint.width) to bakePath(points, paint.borderWidth)

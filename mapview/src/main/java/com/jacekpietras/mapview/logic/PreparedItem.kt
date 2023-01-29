@@ -20,14 +20,22 @@ internal sealed class PreparedItem<T>(
     ) : PreparedItem<T>(minZoom, visibility) {
 
         class PreparedPathItem<T>(
-            val shape: DoubleArray,
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
-            val innerPath: DoubleArray? = null,
-            val outerPath: DoubleArray? = null,
-            var cacheTranslated: List<FloatArray>? = null,
+
+            val shape: DoubleArray,
+            val innerTriangles: DoubleArray? = null,
+            val outerTriangles: DoubleArray? = null,
+
             var cacheRaw: List<DoubleArray>? = null,
+            var cacheInnerTrianglesRaw: List<DoubleArray>? = null,
+            var cacheOuterTrianglesRaw: List<DoubleArray>? = null,
+
+            var cacheTranslated: List<FloatArray>? = null,
+            var cacheInnerTrianglesTranslated: List<FloatArray>? = null,
+            var cacheOuterTrianglesTranslated: List<FloatArray>? = null,
+
             override var visibility: ItemVisibility = MOVED,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
 

@@ -88,14 +88,52 @@ internal class ViewCoordinates(
         return result.takeIf(MutableList<DoubleArray>::isNotEmpty)
     }
 
+    fun getVisiblePath(
+        array: DoubleArray,
+        innerTriangles: DoubleArray?,
+        outerTriangles: DoubleArray?
+    ): Triple<List<DoubleArray>, List<DoubleArray>?, List<DoubleArray>?>? {
+        val result = mutableListOf<DoubleArray>()
+        val resultInnerTriangles = if (innerTriangles != null) mutableListOf<DoubleArray>() else null
+        val resultOuterTriangles = if (outerTriangles != null) mutableListOf<DoubleArray>() else null
+        var from = -1
+        var to = -1
+
+        for (i in 0 until (array.size - 2) step 2) {
+            if (visibleRectRotated.containsLine(array[i], array[i + 1], array[i + 2], array[i + 3])) {
+                if (from == -1) {
+                    from = i
+                }
+                to = i + 4
+            } else if (from != -1) {
+                result.add(array.copyOfRange(from, to))
+                resultInnerTriangles?.add(innerTriangles!!.copyOfRange(from shl 1, to shl 1))
+                resultOuterTriangles?.add(outerTriangles!!.copyOfRange(from shl 1, to shl 1))
+                from = -1
+            }
+        }
+
+        if (from != -1) {
+            result.add(array.copyOfRange(from, to))
+            resultInnerTriangles?.add(innerTriangles!!.copyOfRange(from shl 1, to shl 1))
+            resultOuterTriangles?.add(outerTriangles!!.copyOfRange(from shl 1, to shl 1))
+        }
+
+        return Triple(
+            result,
+            resultInnerTriangles,
+            resultOuterTriangles,
+        ).takeIf { result.isNotEmpty() }
+    }
+
     fun isPolygonVisible(array: DoubleArray): Boolean =
         intersectsPolygon(array)
 
     fun isPointVisible(p: PointD): Boolean =
         visibleRectRotated.contains(p)
 
-    fun transformPath(raw: List<DoubleArray>, translated: List<FloatArray>) {
-        raw.mapIndexed { i, double -> transformPolygon(double, translated[i]) }
+    fun transformPath(raw: List<DoubleArray>?, translated: List<FloatArray>?) {
+        raw?.mapIndexed { i, double -> transformPolygon(double, translated!![i]) }
     }
 
     fun transformPolygon(input: DoubleArray, output: FloatArray) {

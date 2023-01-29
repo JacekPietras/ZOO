@@ -28,15 +28,15 @@ internal class PreparedListMaker<T>(
 
                     when (item) {
                         is MapItem.MapColoredItem.PathMapItem -> {
-                            val bakedPaths = pathBaker?.bakePath(item.paint, item.path.vertices)
+                            val bakedTriangles = pathBaker?.bakePathToTriangles(item.paint, item.path.vertices)
 
                             PreparedItem.PreparedColoredItem.PreparedPathItem(
-                                pointsToDoubleArray(item.path.vertices),
-                                inner,
-                                border,
-                                item.minZoom,
-                                innerPath = bakedPaths?.first,
-                                outerPath = bakedPaths?.second,
+                                shape = pointsToDoubleArray(item.path.vertices),
+                                paintHolder = inner,
+                                outerPaintHolder = border,
+                                minZoom = item.minZoom,
+                                innerTriangles = bakedTriangles?.first,
+                                outerTriangles = bakedTriangles?.second,
                             )
                         }
                         is MapItem.MapColoredItem.PolygonMapItem -> {

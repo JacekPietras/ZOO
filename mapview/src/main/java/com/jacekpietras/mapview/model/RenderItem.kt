@@ -14,6 +14,7 @@ sealed class RenderItem<T> {
     class RenderPathItem<T>(
         val shape: FloatArray,
         val paint: T,
+        val triangles: FloatArray? = null,
     ) : RenderItem<T>()
 
     @Immutable

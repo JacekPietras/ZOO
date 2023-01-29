@@ -5,5 +5,5 @@ import com.jacekpietras.mapview.model.MapPaint
 
 internal interface PathBaker {
 
-    fun bakePath(paint: MapPaint, points: List<PointD>): Pair<DoubleArray?, DoubleArray?>?
+    fun bakePathToTriangles(paint: MapPaint, points: List<PointD>): Pair<DoubleArray?, DoubleArray?>?
 }

@@ -48,7 +48,13 @@ internal class RenderListMaker<T>(
                         item.addToRender(item.cacheTranslated, item.triangles)
                     }
                     is PreparedPathItem -> {
-                        item.cacheTranslated!!.forEach { item.addToRender(it) }
+                        item.cacheTranslated?.forEachIndexed { i, it ->
+                            item.addToRender(
+                                it,
+                                item.cacheInnerTrianglesTranslated?.get(i),
+                                item.cacheOuterTrianglesTranslated?.get(i),
+                            )
+                        }
                     }
                     is PreparedCircleItem -> {
                         item.addToRender(item.cacheTranslated)
@@ -73,7 +79,9 @@ internal class RenderListMaker<T>(
                 is PreparedPathItem -> {
                     if (item.visibility != CACHED) {
                         try {
-                            visibleGpsCoordinate.transformPath(item.cacheRaw!!, item.cacheTranslated!!)
+                            visibleGpsCoordinate.transformPath(item.cacheRaw, item.cacheTranslated)
+                            visibleGpsCoordinate.transformPath(item.cacheInnerTrianglesRaw, item.cacheInnerTrianglesTranslated)
+                            visibleGpsCoordinate.transformPath(item.cacheOuterTrianglesRaw, item.cacheOuterTrianglesTranslated)
                         } catch (ignored: Throwable) {
                             // just skip that
                         }
@@ -120,11 +128,14 @@ internal class RenderListMaker<T>(
 
     private fun PreparedPathItem<T>.addToRender(
         array: FloatArray,
+        innerTrianglesTranslated: FloatArray?,
+        outerTrianglesTranslated: FloatArray?,
     ) {
         insides.add(
             RenderItem.RenderPathItem(
                 array,
                 paintHolder.takePaint(),
+                innerTrianglesTranslated,
             )
         )
         if (outerPaintHolder != null) {
@@ -132,6 +143,7 @@ internal class RenderListMaker<T>(
                 RenderItem.RenderPathItem(
                     array,
                     outerPaintHolder.takePaint(),
+                    outerTrianglesTranslated,
                 )
             )
         }
