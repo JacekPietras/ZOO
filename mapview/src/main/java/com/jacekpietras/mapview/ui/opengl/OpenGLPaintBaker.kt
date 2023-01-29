@@ -7,11 +7,12 @@ import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.OpenGLPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.ui.PaintBaker
+import com.jacekpietras.mapview.ui.PathBaker
 import com.jacekpietras.mapview.utils.colorToGLFloatArray
 
 internal class OpenGLPaintBaker(
     private val context: Context,
-) : PaintBaker<OpenGLPaint> {
+) : PaintBaker<OpenGLPaint>, PathBaker {
 
     override fun bakeDimension(dimension: MapDimension): (zoom: Double, position: PointD, screenWidthInPixels: Int) -> Float =
         when (dimension) {
@@ -22,6 +23,24 @@ internal class OpenGLPaintBaker(
                 dimension.toPixels(context)
             }
         }
+
+    override fun bakePath(paint: MapPaint, points: List<PointD>): Pair<DoubleArray?, DoubleArray?>? =
+        when (paint) {
+            is MapPaint.Stroke -> bakePath(points, paint.width) to null
+            is MapPaint.StrokeWithBorder -> bakePath(points, paint.width) to bakePath(points, paint.borderWidth)
+            else -> null
+        }
+
+    private fun bakePath(points: List<PointD>, width: MapDimension): DoubleArray? =
+        when (width) {
+            is MapDimension.Dynamic.World -> bakePath(points, width.meters)
+            is MapDimension.Static -> null
+            is MapDimension.Dynamic -> null
+        }
+
+    private fun bakePath(points: List<PointD>, width: Double): DoubleArray {
+        return DoubleArray(0) // fixme
+    }
 
     override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<OpenGLPaint>, PaintHolder<OpenGLPaint>?> =
         bakeInnerCanvasPaint(paint) to bakeBorderCanvasPaint(paint)

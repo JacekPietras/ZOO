@@ -24,6 +24,8 @@ internal sealed class PreparedItem<T>(
             override val paintHolder: PaintHolder<T>,
             override val outerPaintHolder: PaintHolder<T>? = null,
             override val minZoom: Float? = null,
+            val innerPath: DoubleArray? = null,
+            val outerPath: DoubleArray? = null,
             var cacheTranslated: List<FloatArray>? = null,
             var cacheRaw: List<DoubleArray>? = null,
             override var visibility: ItemVisibility = MOVED,

@@ -78,7 +78,7 @@ sealed class MapDimension {
         abstract fun toPixels(zoom: Double, position: PointD, screenWidthInPixels: Int): Float
 
         class World(
-            private val meters: Double
+            internal val meters: Double
         ) : Dynamic() {
 
             override fun toPixels(zoom: Double, position: PointD, screenWidthInPixels: Int): Float {

@@ -5,6 +5,7 @@ import com.jacekpietras.mapview.model.MapPaint
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.ui.MapRenderConfig.isTriangulated
 import com.jacekpietras.mapview.ui.PaintBaker
+import com.jacekpietras.mapview.ui.PathBaker
 import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import com.jacekpietras.mapview.utils.toShortArray
 import earcut4j.Earcut
@@ -14,6 +15,7 @@ internal class PreparedListMaker<T>(
     private val paintBaker: PaintBaker<T>,
 ) {
 
+    private val pathBaker = (paintBaker as? PathBaker)
     private val paints = mutableMapOf<MapPaint, Pair<PaintHolder<T>, PaintHolder<T>?>>()
 
     fun toPreparedItems(list: List<MapItem>): List<PreparedItem<T>> =
@@ -26,11 +28,15 @@ internal class PreparedListMaker<T>(
 
                     when (item) {
                         is MapItem.MapColoredItem.PathMapItem -> {
+                            val bakedPaths = pathBaker?.bakePath(item.paint, item.path.vertices)
+
                             PreparedItem.PreparedColoredItem.PreparedPathItem(
                                 pointsToDoubleArray(item.path.vertices),
                                 inner,
                                 border,
                                 item.minZoom,
+                                innerPath = bakedPaths?.first,
+                                outerPath = bakedPaths?.second,
                             )
                         }
                         is MapItem.MapColoredItem.PolygonMapItem -> {
