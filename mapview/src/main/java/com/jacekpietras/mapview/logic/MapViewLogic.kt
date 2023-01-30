@@ -15,6 +15,7 @@ import com.jacekpietras.mapview.ui.MapRenderConfig
 import com.jacekpietras.mapview.ui.MapRenderConfig.isDrawing
 import com.jacekpietras.mapview.ui.PaintBaker
 import com.jacekpietras.mapview.ui.compose.MapRenderer
+import com.jacekpietras.mapview.ui.opengl.LinePolygonF
 import com.jacekpietras.mapview.utils.doAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -442,16 +443,14 @@ class MapViewLogic<T>(
                     }
                 }
                 is PreparedItem.PreparedColoredItem.PreparedPathItem -> {
-                    val visiblePaths = visibleGpsCoordinate.getVisiblePath(item.shape, item.innerTriangles, item.outerTriangles)
+                    val visiblePaths = visibleGpsCoordinate.getVisiblePath(item.shape, item.linePolygon)
                     if (item.minZoom.isBiggerThanZoom() && visiblePaths != null) {
-                        val (visiblePath, visibleInnerTriangles, visibleOuterTriangles) = visiblePaths
+                        val (visiblePath, visibleLinePolygons) = visiblePaths
                         item.visibility = MOVED
-                        item.cacheRaw = visiblePath
-                        item.cacheInnerTrianglesRaw = visibleInnerTriangles
-                        item.cacheOuterTrianglesRaw = visibleOuterTriangles
+                        item.visibleParts = visiblePath
+                        item.visibleLinePolygons = visibleLinePolygons
                         item.cacheTranslated = visiblePath.map { FloatArray(it.size) }
-                        item.cacheInnerTrianglesTranslated = visibleInnerTriangles?.map { FloatArray(it.size) }
-                        item.cacheOuterTrianglesTranslated = visibleOuterTriangles?.map { FloatArray(it.size) }
+                        item.cacheLinePolygonsTranslated = visibleLinePolygons?.map { LinePolygonF.create(size = it.strip.array.size) }
                         item
                     } else {
                         null

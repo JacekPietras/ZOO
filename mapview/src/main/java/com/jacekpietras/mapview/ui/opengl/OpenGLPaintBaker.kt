@@ -28,37 +28,19 @@ internal class OpenGLPaintBaker(
             }
         }
 
-    override fun bakePathToTriangles(paint: MapPaint, points: List<PointD>): Pair<DoubleArray?, DoubleArray?>? =
+    override fun bakePathToTriangles(paint: MapPaint, points: List<PointD>): LinePolygonD? =
         when (paint) {
-            is MapPaint.Stroke -> bakePath(points, paint.width)?.array to null
-            is MapPaint.StrokeWithBorder -> bakePath(points, paint.width)?.array to bakePath(points, paint.borderWidth)?.array
+            is MapPaint.Stroke -> bakePath(points, paint.width)
+            is MapPaint.StrokeWithBorder -> bakePath(points, paint.width)
             else -> null
         }
 
-    private fun bakePath(points: List<PointD>, width: MapDimension): LineArrayD? =
+    private fun bakePath(points: List<PointD>, width: MapDimension): LinePolygonD? =
         when (width) {
-            is MapDimension.Dynamic.World -> bakePath(points, width.meters / 2).strip
+            is MapDimension.Dynamic.World -> LinePolygonD.create(points, width.meters / 2)
             is MapDimension.Static -> null
             else -> throw IllegalArgumentException("Width type not supported")
         }
-
-    private fun bakePath(points: List<PointD>, width: Double): LinePolygonD {
-        val inflated = inflateLine(points, width)
-        val pointsCount = (inflated.size shr 1) - 1
-        val strip = DoubleArray(inflated.size shl 1)
-        for (i in 0..pointsCount) {
-            strip[i shl 2] = inflated[i].x
-            strip[(i shl 2) + 1] = inflated[i].y
-            strip[(i shl 2) + 2] = inflated[inflated.lastIndex - i].x
-            strip[(i shl 2) + 3] = inflated[inflated.lastIndex - i].y
-        }
-        val outline = inflated.toDoubleArray()
-
-        return LinePolygonD(
-            strip = StripD(strip),
-            outline = OutlineD(outline),
-        )
-    }
 
     override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<OpenGLPaint>, PaintHolder<OpenGLPaint>?> =
         bakeInnerCanvasPaint(paint) to bakeBorderCanvasPaint(paint)
@@ -93,13 +75,11 @@ internal class OpenGLPaintBaker(
                     )
                 )
             is MapDimension.Dynamic -> {
-                val color = strokeColor.toColorInt(context).colorToGLFloatArray()
-                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                    OpenGLPaint.Stroke(
-                        color = color,
-                        width = width.toPixels(zoom, position, screenWidthInPixels),
+                PaintHolder.Static(
+                    OpenGLPaint.Line(
+                        color = strokeColor.toColorInt(context).colorToGLFloatArray(),
                     )
-                }
+                )
             }
         }
 
@@ -113,35 +93,21 @@ internal class OpenGLPaintBaker(
                     )
                 )
             is MapDimension.Dynamic -> {
-                val color = strokeColor.toColorInt(context).colorToGLFloatArray()
-                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                    OpenGLPaint.Stroke(
-                        color = color,
-                        width = width.toPixels(zoom, position, screenWidthInPixels),
+                PaintHolder.Static(
+                    OpenGLPaint.Line(
+                        color = strokeColor.toColorInt(context).colorToGLFloatArray(),
                     )
-                }
+                )
             }
         }
 
     private fun MapPaint.StrokeWithBorder.toBorderCanvasPaint(): PaintHolder<OpenGLPaint> =
-        when (width) {
-            is MapDimension.Static ->
-                PaintHolder.Static(
-                    OpenGLPaint.Stroke(
-                        color = borderColor.toColorInt(context).colorToGLFloatArray(),
-                        width = width.toPixels(context) + 2 * borderWidth.toPixels(context)
-                    )
-                )
-            is MapDimension.Dynamic -> {
-                val color = borderColor.toColorInt(context).colorToGLFloatArray()
-                PaintHolder.Dynamic { zoom, position, screenWidthInPixels ->
-                    OpenGLPaint.Stroke(
-                        color = color,
-                        width = width.toPixels(zoom, position, screenWidthInPixels) + 2 * borderWidth.toPixels(context)
-                    )
-                }
-            }
-        }
+        PaintHolder.Static(
+            OpenGLPaint.LineBorder(
+                color = borderColor.toColorInt(context).colorToGLFloatArray(),
+                borderWidth = borderWidth.toPixels(context) * 2
+            )
+        )
 
     private fun MapPaint.DashedStroke.toCanvasPaint(): PaintHolder<OpenGLPaint> =
         when (width) {
@@ -174,7 +140,7 @@ internal class OpenGLPaintBaker(
 
     private fun MapPaint.FillWithBorder.toBorderCanvasPaint(): PaintHolder<OpenGLPaint> =
         PaintHolder.Static(
-            OpenGLPaint.Stroke( // FillAndStroke
+            OpenGLPaint.Stroke(
                 color = borderColor.toColorInt(context).colorToGLFloatArray(),
                 width = borderWidth.toPixels(context) * 2
             )

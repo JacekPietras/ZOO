@@ -13,6 +13,17 @@ sealed class OpenGLPaint {
         val dashed: Boolean = false,
     ) : OpenGLPaint()
 
+    class Line(
+        override val color: FloatArray,
+        override val alpha: Float = 1f,
+    ) : OpenGLPaint()
+
+    class LineBorder(
+        override val color: FloatArray,
+        override val alpha: Float = 1f,
+        val borderWidth: Float = 0.0f,
+    ) : OpenGLPaint()
+
     class Fill(
         override val color: FloatArray,
         override val alpha: Float = 1f,
