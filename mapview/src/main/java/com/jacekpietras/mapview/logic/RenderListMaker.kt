@@ -14,6 +14,7 @@ import com.jacekpietras.mapview.ui.LastMapUpdate.cachE
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortE
 import com.jacekpietras.mapview.ui.LastMapUpdate.sortS
 import com.jacekpietras.mapview.ui.LastMapUpdate.tranS
+import com.jacekpietras.mapview.ui.opengl.LinePolygonF
 
 internal class RenderListMaker<T>(
     private val visibleGpsCoordinate: ViewCoordinates,
@@ -51,8 +52,7 @@ internal class RenderListMaker<T>(
                         item.cacheTranslated?.forEachIndexed { i, it ->
                             item.addToRender(
                                 it,
-                                item.cacheInnerTrianglesTranslated?.get(i),
-                                item.cacheOuterTrianglesTranslated?.get(i),
+                                item.cacheLinePolygonsTranslated?.get(i),
                             )
                         }
                     }
@@ -79,9 +79,8 @@ internal class RenderListMaker<T>(
                 is PreparedPathItem -> {
                     if (item.visibility != CACHED) {
                         try {
-                            visibleGpsCoordinate.transformPath(item.cacheRaw, item.cacheTranslated)
-                            visibleGpsCoordinate.transformPath(item.cacheInnerTrianglesRaw, item.cacheInnerTrianglesTranslated)
-                            visibleGpsCoordinate.transformPath(item.cacheOuterTrianglesRaw, item.cacheOuterTrianglesTranslated)
+                            visibleGpsCoordinate.transformPath(item.visibleParts, item.cacheTranslated)
+                            visibleGpsCoordinate.transformLinePolygon(item.visibleLinePolygons, item.cacheLinePolygonsTranslated)
                         } catch (ignored: Throwable) {
                             // just skip that
                         }
@@ -128,14 +127,13 @@ internal class RenderListMaker<T>(
 
     private fun PreparedPathItem<T>.addToRender(
         array: FloatArray,
-        innerTrianglesTranslated: FloatArray?,
-        outerTrianglesTranslated: FloatArray?,
+        linePolygonTranslated: LinePolygonF?,
     ) {
         insides.add(
             RenderItem.RenderPathItem(
                 array,
                 paintHolder.takePaint(),
-                innerTrianglesTranslated,
+                linePolygonTranslated,
             )
         )
         if (outerPaintHolder != null) {
@@ -143,7 +141,7 @@ internal class RenderListMaker<T>(
                 RenderItem.RenderPathItem(
                     array,
                     outerPaintHolder.takePaint(),
-                    outerTrianglesTranslated,
+                    linePolygonTranslated,
                 )
             )
         }

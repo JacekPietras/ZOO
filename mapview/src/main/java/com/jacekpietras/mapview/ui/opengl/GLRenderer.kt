@@ -56,11 +56,9 @@ class GLRenderer : GLSurfaceView.Renderer {
             when (it) {
                 is RenderPathItem -> {
                     when (val paint = it.paint) {
-                        is OpenGLPaint.Stroke -> if (it.triangles == null) {
-                            line.draw(vPMatrix, it.shape, paint.color, paint.width)
-                        } else {
-                            line.drawTriangles(vPMatrix, it.triangles, paint.color)
-                        }
+                        is OpenGLPaint.Stroke -> line.draw(vPMatrix, it.shape, paint.color, paint.width)
+                        is OpenGLPaint.Line -> line.drawTriangles(vPMatrix, it.triangles!!.strip.array, paint.color)
+                        is OpenGLPaint.LineBorder -> line.drawClosed(vPMatrix, it.triangles!!.outline.array, paint.color, paint.borderWidth)
                         else -> {}
                     }
                 }

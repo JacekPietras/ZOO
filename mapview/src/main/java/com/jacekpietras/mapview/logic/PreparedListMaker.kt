@@ -10,7 +10,6 @@ import com.jacekpietras.mapview.utils.pointsToDoubleArray
 import com.jacekpietras.mapview.utils.toShortArray
 import earcut4j.Earcut
 
-
 internal class PreparedListMaker<T>(
     private val paintBaker: PaintBaker<T>,
 ) {
@@ -35,8 +34,7 @@ internal class PreparedListMaker<T>(
                                 paintHolder = inner,
                                 outerPaintHolder = border,
                                 minZoom = item.minZoom,
-                                innerTriangles = bakedTriangles?.first,
-                                outerTriangles = bakedTriangles?.second,
+                                linePolygon = bakedTriangles,
                             )
                         }
                         is MapItem.MapColoredItem.PolygonMapItem -> {
