@@ -54,8 +54,8 @@ class GLRenderer : GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
-        Matrix.rotateM(vPMatrix, 0, 0.3f, 1f, 0f, 0f)
-        Matrix.translateM(vPMatrix, 0, 0f, 0f, -16.0f)
+        Matrix.rotateM(vPMatrix, 0, 0.04f, 1f, 0f, 0f)
+        Matrix.translateM(vPMatrix, 0, 0f, 0f, -1.5f)
 
         mapList.forEach {
             when (it) {
