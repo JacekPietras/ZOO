@@ -6,6 +6,8 @@ import com.jacekpietras.mapview.logic.ItemVisibility.MOVED
 import com.jacekpietras.mapview.model.MapDimension
 import com.jacekpietras.mapview.model.PaintHolder
 import com.jacekpietras.mapview.model.Pivot
+import com.jacekpietras.mapview.ui.opengl.LinePolygonD
+import com.jacekpietras.mapview.ui.opengl.LinePolygonF
 
 internal sealed class PreparedItem<T>(
     open val minZoom: Float?,
@@ -25,16 +27,13 @@ internal sealed class PreparedItem<T>(
             override val minZoom: Float? = null,
 
             val shape: DoubleArray,
-            val innerTriangles: DoubleArray? = null,
-            val outerTriangles: DoubleArray? = null,
+            val linePolygon: LinePolygonD? = null,
 
-            var cacheRaw: List<DoubleArray>? = null,
-            var cacheInnerTrianglesRaw: List<DoubleArray>? = null,
-            var cacheOuterTrianglesRaw: List<DoubleArray>? = null,
+            var visibleParts: List<DoubleArray>? = null,
+            var visibleLinePolygons: List<LinePolygonD>? = null,
 
             var cacheTranslated: List<FloatArray>? = null,
-            var cacheInnerTrianglesTranslated: List<FloatArray>? = null,
-            var cacheOuterTrianglesTranslated: List<FloatArray>? = null,
+            var cacheLinePolygonsTranslated: List<LinePolygonF>? = null,
 
             override var visibility: ItemVisibility = MOVED,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)

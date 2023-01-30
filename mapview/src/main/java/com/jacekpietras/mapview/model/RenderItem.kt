@@ -7,6 +7,7 @@ import com.jacekpietras.mapview.model.Pivot.CENTER
 import com.jacekpietras.mapview.model.Pivot.LEFT
 import com.jacekpietras.mapview.model.Pivot.RIGHT
 import com.jacekpietras.mapview.model.Pivot.TOP
+import com.jacekpietras.mapview.ui.opengl.LinePolygonF
 
 sealed class RenderItem<T> {
 
@@ -14,7 +15,7 @@ sealed class RenderItem<T> {
     class RenderPathItem<T>(
         val shape: FloatArray,
         val paint: T,
-        val triangles: FloatArray? = null,
+        val triangles: LinePolygonF? = null,
     ) : RenderItem<T>()
 
     @Immutable

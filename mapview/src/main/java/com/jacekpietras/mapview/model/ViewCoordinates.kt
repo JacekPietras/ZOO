@@ -6,6 +6,8 @@ import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.containsLine
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.geometry.polygonContains
+import com.jacekpietras.mapview.ui.opengl.LinePolygonD
+import com.jacekpietras.mapview.ui.opengl.LinePolygonF
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -90,12 +92,10 @@ internal class ViewCoordinates(
 
     fun getVisiblePath(
         array: DoubleArray,
-        innerTriangles: DoubleArray?,
-        outerTriangles: DoubleArray?
-    ): Triple<List<DoubleArray>, List<DoubleArray>?, List<DoubleArray>?>? {
+        linePolygon: LinePolygonD?,
+    ): Pair<List<DoubleArray>, List<LinePolygonD>?>? {
         val result = mutableListOf<DoubleArray>()
-        val resultInnerTriangles = if (innerTriangles != null) mutableListOf<DoubleArray>() else null
-        val resultOuterTriangles = if (outerTriangles != null) mutableListOf<DoubleArray>() else null
+        val resultLinePolygon = if (linePolygon != null) mutableListOf<LinePolygonD>() else null
         var from = -1
         var to = -1
 
@@ -107,22 +107,19 @@ internal class ViewCoordinates(
                 to = i + 4
             } else if (from != -1) {
                 result.add(array.copyOfRange(from, to))
-                resultInnerTriangles?.add(innerTriangles!!.copyOfRange(from shl 1, to shl 1))
-                resultOuterTriangles?.add(outerTriangles!!.copyOfRange(from shl 1, to shl 1))
+                resultLinePolygon?.add(linePolygon!!.copyOfRange(from, to))
                 from = -1
             }
         }
 
         if (from != -1) {
             result.add(array.copyOfRange(from, to))
-            resultInnerTriangles?.add(innerTriangles!!.copyOfRange(from shl 1, to shl 1))
-            resultOuterTriangles?.add(outerTriangles!!.copyOfRange(from shl 1, to shl 1))
+            resultLinePolygon?.add(linePolygon!!.copyOfRange(from, to))
         }
 
-        return Triple(
+        return Pair(
             result,
-            resultInnerTriangles,
-            resultOuterTriangles,
+            resultLinePolygon,
         ).takeIf { result.isNotEmpty() }
     }
 
@@ -133,7 +130,15 @@ internal class ViewCoordinates(
         visibleRectRotated.contains(p)
 
     fun transformPath(raw: List<DoubleArray>?, translated: List<FloatArray>?) {
-        raw?.mapIndexed { i, double -> transformPolygon(double, translated!![i]) }
+        raw?.forEachIndexed { i, double -> transformPolygon(double, translated!![i]) }
+    }
+
+    fun transformLinePolygon(raw: List<LinePolygonD>?, translated: List<LinePolygonF>?) {
+        raw?.forEachIndexed { i, double ->
+            val float = translated!![i]
+            transformPolygon(double.strip.array, float.strip.array)
+            transformPolygon(double.outline.array, float.outline.array)
+        }
     }
 
     fun transformPolygon(input: DoubleArray, output: FloatArray) {
