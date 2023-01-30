@@ -1,7 +1,13 @@
 package com.jacekpietras.zoo.domain.feature.planner.interactor
 
 import com.jacekpietras.geometry.PointD
+import com.jacekpietras.geometry.bearing
 import com.jacekpietras.geometry.haversine
+import com.jacekpietras.geometry.inflateLine
+import com.jacekpietras.geometry.inflatePolygon
+import com.jacekpietras.geometry.perpendicular
+import com.jacekpietras.geometry.pointInDistance
+import com.jacekpietras.geometry.pointInPercent
 import com.jacekpietras.zoo.domain.feature.map.interactor.ObserveTerminalNodesUseCase
 import com.jacekpietras.zoo.domain.feature.pathfinder.interactor.GetShortestPathFromUserUseCase
 import com.jacekpietras.zoo.domain.feature.planner.model.Stage
@@ -11,10 +17,6 @@ import com.jacekpietras.zoo.domain.utils.toLengthInMeters
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
-import kotlin.math.asin
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
 
 class ObserveCurrentPlanPathWithOptimizationUseCase(
     private val observeCurrentPlanWithOptimizationUseCase: ObserveCurrentPlanWithOptimizationUseCase,
@@ -67,9 +69,9 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     ): NavigationPlan {
         val turnPoints = getTurnPoints(turnWithArrow, points)
         val arrowInnerPoints = makeArrow(turnPoints, ARROW_INNER_M)
-        val arrowOuterPoints = makeSharpBorder(arrowInnerPoints, ARROW_OUTER_M)
-        val turnInnerPoints = makeLineBorder(turnPoints, ARROW_TAIL_INNER_M)
-        val turnOuterPoints = makeLineBorder(turnPoints.moveFirstForward(ARROW_OUTER_M), ARROW_TAIL_INNER_M + ARROW_OUTER_M)
+        val arrowOuterPoints = inflatePolygon(arrowInnerPoints, ARROW_OUTER_M)
+        val turnInnerPoints = inflateLine(turnPoints, ARROW_TAIL_INNER_M)
+        val turnOuterPoints = inflateLine(turnPoints.moveFirstForward(ARROW_OUTER_M), ARROW_TAIL_INNER_M + ARROW_OUTER_M)
 
         return copy(
             firstTurn = turnPoints,
@@ -80,32 +82,6 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
 
     private fun List<PointD>.moveFirstForward(distance: Int): List<PointD> =
         listOf(pointInDistance(this[0], this[1], -distance)) + drop(1)
-
-    private fun makeSharpBorder(points: List<PointD>, size: Int): List<PointD> {
-        val edges = (points + points[0]).zipWithNext()
-        val edgesWithBearing = edges.map { (a, b) ->
-            Triple(a, b, bearing(a, b) + 90)
-        }
-        return edgesWithBearing.map { (a, b, bearing) ->
-            listOf(
-                perpendicular(perpendicular(a, size, bearing), size, bearing + 90),
-                perpendicular(perpendicular(b, size, bearing), size, bearing - 90),
-            )
-        }.flatten()
-    }
-
-    private fun makeLineBorder(points: List<PointD>, size: Int): List<PointD> {
-        val edges = points.zipWithNext() + points.reversed().zipWithNext()
-        val edgesWithBearing = edges.map { (a, b) ->
-            Triple(a, b, bearing(a, b) + 90)
-        }
-        return edgesWithBearing.map { (a, b, bearing) ->
-            listOf(
-                perpendicular(a, size, bearing),
-                perpendicular(b, size, bearing),
-            )
-        }.flatten()
-    }
 
     private fun getIndexOfTurnWithArrow(
         points: List<PointD>,
@@ -155,22 +131,6 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
         )
     }
 
-    private fun bearing(
-        a: PointD,
-        b: PointD,
-    ): Double {
-        val ax = Math.toRadians(a.x / MAGIC)
-        val ay = Math.toRadians(a.y)
-        val bx = Math.toRadians(b.x / MAGIC)
-        val by = Math.toRadians(b.y)
-
-        val y = sin(by - ay) * cos(bx)
-        val x = cos(ax) * sin(bx) -
-                sin(ax) * cos(bx) * cos(by - ay)
-        val t = atan2(y, x)
-        return (t * 180 / Math.PI + 360) % 360
-    }
-
     private fun makeArrowHeadPath(
         arrowTip: PointD,
         arrowBase: PointD,
@@ -191,25 +151,6 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
             longerTip,
             p1,
             p2,
-        )
-    }
-
-    private fun perpendicular(center: PointD, distance: Number, b: Double): PointD {
-        val d = distance.toDouble() / EARTH_RADIUS
-        val brng = Math.toRadians(b)
-        val lat1 = Math.toRadians(center.x / MAGIC)
-        val lon1 = Math.toRadians(center.y)
-
-        var x = asin(sin(lat1) * cos(d) + cos(lat1) * sin(d) * cos(brng))
-        var y = lon1 + atan2(sin(brng) * sin(d) * cos(lat1), cos(d) - sin(lat1) * sin(x))
-
-        x = Math.toDegrees(x) * MAGIC
-        y = Math.toDegrees(y)
-
-        return pointInDistance(
-            begin = center,
-            end = PointD(x, y),
-            distance = distance,
         )
     }
 
@@ -255,20 +196,6 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
     private fun getForwardOfTurn(first: Int, points: List<PointD>): List<PointD> =
         getAroundTurn(points, range = first until points.size)
 
-    private fun pointInDistance(begin: PointD, end: PointD, distance: Number): PointD {
-        val pointDistance = haversine(begin.x, begin.y, end.x, end.y)
-        return pointInPercent(
-            begin = begin,
-            end = end,
-            percent = distance.toDouble() / pointDistance,
-        )
-    }
-
-    private fun pointInPercent(begin: PointD, end: PointD, percent: Double): PointD {
-        val diff = end - begin
-        return begin + (diff * percent)
-    }
-
     data class NavigationPlan(
         val points: List<PointD> = emptyList(),
         val stops: List<PointD> = emptyList(),
@@ -282,8 +209,6 @@ class ObserveCurrentPlanPathWithOptimizationUseCase(
 
     private companion object {
 
-        const val EARTH_RADIUS = 6378000.1
-        const val MAGIC = 1.6
         const val DISTANCE_M = 10
         const val ARROW_INNER_M = 4
         const val ARROW_TAIL_INNER_M = 1

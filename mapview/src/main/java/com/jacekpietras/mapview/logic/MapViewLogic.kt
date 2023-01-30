@@ -35,7 +35,7 @@ class MapViewLogic<T>(
     private var onStartCentering: (() -> Unit)? = null,
     var setOnPointPlacedListener: ((PointD) -> Unit)? = null,
     val coroutineScope: CoroutineScope,
-    private val antialiasing: Boolean = true,
+    antialiasing: Boolean = true,
 ) {
 
     private val paintBaker = PaintBaker.Factory().create<T>(context, mapRenderer, antialiasing)
@@ -341,11 +341,25 @@ class MapViewLogic<T>(
         return result
     }
 
+    fun redraw() {
+        prevVisibleGpsCoordinate = null
+        prevVisibleGpsCoordinateForBigDiff = null
+        worldPreparedListMaker.clear()
+        worldPreparedList = emptyList()
+        worldPreparedListOfVisible = emptyList()
+        volatilePreparedListMaker.clear()
+        volatilePreparedList = emptyList()
+        volatilePreparedListOfVisible = emptyList()
+        invalidate?.invoke(emptyList())
+    }
+
     private fun cutOutNotVisible() {
         cutoS = System.nanoTime()
 
         if (currentWidth == 0 || currentHeight == 0) return
         if (worldBounds.notInitialized()) return
+        if (worldPreparedList.isEmpty()) return
+        if (volatilePreparedList.isEmpty()) return
 
         if (cuttingOutNow.get()) return
         cuttingOutNow.set(true)

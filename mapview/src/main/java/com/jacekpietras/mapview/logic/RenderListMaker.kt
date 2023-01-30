@@ -168,7 +168,7 @@ internal class RenderListMaker<T>(
 
     private fun MapDimension.takeDimension(): Float =
         dynamicDimensions[this]
-            ?: bakeDimension(this).invoke(zoom, centerGpsCoordinate, currentWidth)
+            ?: bakeDimension(this)(zoom, centerGpsCoordinate, currentWidth)
                 .also { dynamicDimensions[this] = it }
 
     private fun PaintHolder<T>.takePaint(): T =
