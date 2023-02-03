@@ -32,6 +32,16 @@ internal class ViewCoordinates(
             )
         }
 
+    private val matrixRoof = Matrix()
+        .apply {
+            setScale(
+                1.1f,
+                1.1f,
+                viewWidth / 2.toFloat(),
+                viewHeight / 2.toFloat(),
+            )
+        }
+
     init {
         val haversineH = haversine(
             centerGpsCoordinate.x, centerGpsCoordinate.y + zoom,
@@ -104,6 +114,10 @@ internal class ViewCoordinates(
             output[i + 1] = input.getOrNull(i + 1)?.transformY() ?: 0f
         }
         matrix.mapPoints(output)
+    }
+
+    fun transformRoofPolygon(input: FloatArray, output: FloatArray) {
+        matrixRoof.mapPoints(output, input)
     }
 
     fun transformPoint(p: PointD, output: FloatArray) {

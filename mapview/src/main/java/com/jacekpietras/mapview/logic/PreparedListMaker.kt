@@ -27,13 +27,25 @@ internal class PreparedListMaker<T>(
                             border,
                             item.minZoom,
                         )
-                        is MapItem.MapColoredItem.PolygonMapItem -> PreparedItem.PreparedColoredItem.PreparedPolygonItem(
-                            pointsToDoubleArray(item.polygon.vertices),
-                            inner,
-                            border,
-                            item.minZoom,
-                            FloatArray(item.polygon.vertices.size * 2)
-                        )
+                        is MapItem.MapColoredItem.PolygonMapItem -> {
+                            if (item.is3DBlock) {
+                                PreparedItem.PreparedColoredItem.PreparedPolygonItem.Block(
+                                    shape = pointsToDoubleArray(item.polygon.vertices),
+                                    paintHolder = inner,
+                                    minZoom = item.minZoom,
+                                    cacheTranslated = FloatArray(item.polygon.vertices.size * 2),
+                                    cacheRoofTranslated = FloatArray(item.polygon.vertices.size * 2),
+                                )
+                            } else {
+                                PreparedItem.PreparedColoredItem.PreparedPolygonItem.Plain(
+                                    shape = pointsToDoubleArray(item.polygon.vertices),
+                                    paintHolder = inner,
+                                    outerPaintHolder = border,
+                                    minZoom = item.minZoom,
+                                    cacheTranslated = FloatArray(item.polygon.vertices.size * 2),
+                                )
+                            }
+                        }
                         is MapItem.MapColoredItem.CircleMapItem -> PreparedItem.PreparedColoredItem.PreparedCircleItem(
                             item.point,
                             item.radius,

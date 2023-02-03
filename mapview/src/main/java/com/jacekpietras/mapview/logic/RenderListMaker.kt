@@ -44,8 +44,11 @@ internal class RenderListMaker<T>(
         preparedList.forEach { item ->
             if (item.visibility == CACHED) {
                 when (item) {
-                    is PreparedPolygonItem -> {
+                    is PreparedPolygonItem.Plain -> {
                         item.addToRender(item.cacheTranslated)
+                    }
+                    is PreparedPolygonItem.Block -> {
+                        item.addToRender(item.cacheRoofTranslated)
                     }
                     is PreparedPathItem -> {
                         item.cacheTranslated!!.forEach { item.addToRender(it) }
@@ -67,6 +70,9 @@ internal class RenderListMaker<T>(
                 is PreparedPolygonItem -> {
                     if (item.visibility != CACHED) {
                         visibleGpsCoordinate.transformPolygon(item.shape, item.cacheTranslated)
+                        if (item is PreparedPolygonItem.Block) {
+                            visibleGpsCoordinate.transformRoofPolygon(item.cacheTranslated, item.cacheRoofTranslated)
+                        }
                         item.visibility = CACHED
                     }
                 }
@@ -101,7 +107,7 @@ internal class RenderListMaker<T>(
                 paintHolder.takePaint(),
             )
         )
-        if (outerPaintHolder != null) {
+        outerPaintHolder?.let { outerPaintHolder ->
             borders.add(
                 RenderItem.RenderPolygonItem(
                     array,

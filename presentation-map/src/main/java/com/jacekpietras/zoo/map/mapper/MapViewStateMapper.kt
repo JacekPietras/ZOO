@@ -165,8 +165,8 @@ internal class MapViewStateMapper {
                         fromPaths(technicalRoads, technicalPaint, ZOOM_CLOSE),
                         fromPaths(roads, roadPaint),
                         fromPaths(lines, linesPaint, ZOOM_CLOSE),
-                        fromPolygons(buildings, buildingPaint),
-                        fromPolygons(aviary, aviaryPaint),
+                        fromPolygons(buildings, buildingPaint, is3DBlock = true),
+                        fromPolygons(aviary, aviaryPaint, is3DBlock = true),
                         fromTrees(mapColors.nightTheme, trees, bitmapLibrary.data["tree"]),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
                         fromRegions(mapColors.nightTheme, regionsWithCenters, bitmapLibrary),
@@ -227,39 +227,47 @@ internal class MapViewStateMapper {
 
     private fun <T> flatListOf(vararg lists: List<T>): List<T> = listOf(*lists).flatten()
 
-    private fun fromPolygon(polygon: PolygonEntity, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
+    private fun fromPolygon(
+        polygon: PolygonEntity, paint: MapPaint, minZoom: Float? = null,
+        is3DBlock: Boolean = false,
+    ): List<MapItem> =
         listOf(
             PolygonMapItem(
-                PolygonD(polygon.vertices),
-                paint,
-                minZoom,
+                polygon = PolygonD(polygon.vertices),
+                paint = paint,
+                minZoom = minZoom,
+                is3DBlock = is3DBlock,
             )
         )
 
-    private fun fromPolygons(polygons: List<PolygonEntity>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
+    private fun fromPolygons(
+        polygons: List<PolygonEntity>, paint: MapPaint, minZoom: Float? = null,
+        is3DBlock: Boolean = false,
+    ): List<MapItem> =
         polygons.map { polygon ->
             PolygonMapItem(
-                PolygonD(polygon.vertices),
-                paint,
-                minZoom,
+                polygon = PolygonD(polygon.vertices),
+                paint = paint,
+                minZoom = minZoom,
+                is3DBlock = is3DBlock,
             )
         }
 
     private fun fromPath(path: List<PointD>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         listOf(
             PathMapItem(
-                PathD(path),
-                paint,
-                minZoom,
+                path = PathD(path),
+                paint = paint,
+                minZoom = minZoom,
             )
         )
 
     private fun fromPaths(paths: List<PathEntity>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         paths.map { path ->
             PathMapItem(
-                PathD(path.vertices),
-                paint,
-                minZoom,
+                path = PathD(path.vertices),
+                paint = paint,
+                minZoom = minZoom,
             )
         }
 
@@ -267,10 +275,10 @@ internal class MapViewStateMapper {
     private fun fromPoints(points: List<PointD>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         points.map { point ->
             CircleMapItem(
-                point,
-                (paint as MapPaint.Circle).radius,
-                paint,
-                minZoom,
+                point = point,
+                radius = (paint as MapPaint.Circle).radius,
+                paint = paint,
+                minZoom = minZoom,
             )
         }
 
@@ -278,9 +286,9 @@ internal class MapViewStateMapper {
         if (point != null) {
             listOf(
                 CircleMapItem(
-                    point,
-                    (paint as MapPaint.Circle).radius,
-                    paint,
+                    point = point,
+                    radius = (paint as MapPaint.Circle).radius,
+                    paint = paint,
                 )
             )
         } else {

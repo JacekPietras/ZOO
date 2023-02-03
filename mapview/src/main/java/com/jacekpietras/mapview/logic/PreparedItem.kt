@@ -29,14 +29,33 @@ internal sealed class PreparedItem<T>(
             override var visibility: ItemVisibility = MOVED,
         ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
 
-        class PreparedPolygonItem<T>(
-            val shape: DoubleArray,
-            override val paintHolder: PaintHolder<T>,
-            override val outerPaintHolder: PaintHolder<T>? = null,
-            override val minZoom: Float? = null,
-            val cacheTranslated: FloatArray,
-            override var visibility: ItemVisibility = MOVED,
-        ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility)
+        sealed class PreparedPolygonItem<T>(
+            open val shape: DoubleArray,
+            paintHolder: PaintHolder<T>,
+            outerPaintHolder: PaintHolder<T>? = null,
+            minZoom: Float? = null,
+            open val cacheTranslated: FloatArray,
+            visibility: ItemVisibility = MOVED,
+        ) : PreparedColoredItem<T>(paintHolder, outerPaintHolder, minZoom, visibility) {
+
+            class Plain<T>(
+                override val shape: DoubleArray,
+                override val paintHolder: PaintHolder<T>,
+                override val outerPaintHolder: PaintHolder<T>? = null,
+                override val minZoom: Float? = null,
+                override val cacheTranslated: FloatArray,
+                override var visibility: ItemVisibility = MOVED,
+            ) : PreparedPolygonItem<T>(shape, paintHolder, outerPaintHolder, minZoom, cacheTranslated, visibility)
+
+            class Block<T>(
+                override val shape: DoubleArray,
+                override val paintHolder: PaintHolder<T>,
+                override val minZoom: Float? = null,
+                override val cacheTranslated: FloatArray,
+                val cacheRoofTranslated: FloatArray,
+                override var visibility: ItemVisibility = MOVED,
+            ) : PreparedPolygonItem<T>(shape, paintHolder, null, minZoom, cacheTranslated, visibility)
+        }
 
         class PreparedCircleItem<T>(
             val point: PointD,
