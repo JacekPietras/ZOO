@@ -21,6 +21,7 @@ sealed class MapItem(
         class PolygonMapItem(
             val polygon: PolygonD,
             override val paint: MapPaint,
+            val wallPaint: MapPaint? = null,
             override val minZoom: Float? = null,
             val is3DBlock: Boolean = false,
         ) : MapColoredItem(paint, minZoom)

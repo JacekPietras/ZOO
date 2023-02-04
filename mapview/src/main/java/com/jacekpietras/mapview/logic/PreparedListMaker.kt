@@ -11,6 +11,7 @@ internal class PreparedListMaker<T>(
 ) {
 
     private val paints = mutableMapOf<MapPaint, Pair<PaintHolder<T>, PaintHolder<T>?>>()
+    private val wallPaints = mutableMapOf<MapPaint, PaintHolder<T>>()
 
     fun toPreparedItems(list: List<MapItem>): List<PreparedItem<T>> =
         list.map { item ->
@@ -29,9 +30,14 @@ internal class PreparedListMaker<T>(
                         )
                         is MapItem.MapColoredItem.PolygonMapItem -> {
                             if (item.is3DBlock) {
+                                val wallPaint = wallPaints[item.wallPaint]
+                                    ?: paintBaker.bakeWallPaint(item.wallPaint!!)
+                                        .also { wallPaints[item.wallPaint] = it }
+
                                 PreparedItem.PreparedColoredItem.PreparedPolygonItem.Block(
                                     shape = pointsToDoubleArray(item.polygon.vertices),
                                     paintHolder = inner,
+                                    wallPaintHolder = wallPaint,
                                     minZoom = item.minZoom,
                                     cacheTranslated = FloatArray(item.polygon.vertices.size * 2),
                                     cacheRoofTranslated = FloatArray(item.polygon.vertices.size * 2),

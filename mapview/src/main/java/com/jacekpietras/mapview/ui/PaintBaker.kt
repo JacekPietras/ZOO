@@ -15,6 +15,8 @@ internal interface PaintBaker<T> {
 
     fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<T>, PaintHolder<T>?>
 
+    fun bakeWallPaint(paint: MapPaint): PaintHolder<T>
+
     class Factory {
 
         @Suppress("UNCHECKED_CAST")

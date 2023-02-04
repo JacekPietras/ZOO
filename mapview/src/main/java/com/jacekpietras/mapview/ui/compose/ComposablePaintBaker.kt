@@ -28,6 +28,9 @@ internal class ComposablePaintBaker(
     override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<ComposablePaint>, PaintHolder<ComposablePaint>?> =
         bakeInnerCanvasPaint(paint) to bakeBorderCanvasPaint(paint)
 
+    override fun bakeWallPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
+        bakeInnerCanvasPaint(paint)
+
     private fun bakeInnerCanvasPaint(paint: MapPaint): PaintHolder<ComposablePaint> =
         when (paint) {
             is MapPaint.DashedStroke -> paint.toCanvasPaint()

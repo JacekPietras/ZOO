@@ -21,6 +21,7 @@ class MapColors(
     val colorMapWater = Color(0xFF84cdc9) onNight Color(0xFF114946)
 
     val colorMapBuilding = Color(0xFFCAD4DA) onNight Color(0xFF2f3a47)
+    val colorMapBuildingWall = Color(0xFF9DA8AF) onNight Color(0xFF232E3C)
     val colorMapAviary = Color(0xFFDDE3E7) onNight Color(0xFF415164)
     val colorMapBuildingBorder = Color(0xFFA9B3B9) onNight Color(0xFF0E141E)
 

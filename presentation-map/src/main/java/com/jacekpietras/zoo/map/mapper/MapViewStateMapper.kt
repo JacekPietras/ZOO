@@ -165,8 +165,8 @@ internal class MapViewStateMapper {
                         fromPaths(technicalRoads, technicalPaint, ZOOM_CLOSE),
                         fromPaths(roads, roadPaint),
                         fromPaths(lines, linesPaint, ZOOM_CLOSE),
-                        fromPolygons(buildings, buildingPaint, is3DBlock = true),
-                        fromPolygons(aviary, aviaryPaint, is3DBlock = true),
+                        fromPolygons(buildings, buildingPaint, wallPaint),
+                        fromPolygons(aviary, aviaryPaint, wallPaint),
                         fromTrees(mapColors.nightTheme, trees, bitmapLibrary.data["tree"]),
                         fromPaths(rawOldTakenRoute, oldTakenRoutePaint),
                         fromRegions(mapColors.nightTheme, regionsWithCenters, bitmapLibrary),
@@ -241,18 +241,33 @@ internal class MapViewStateMapper {
         )
 
     private fun fromPolygons(
-        polygons: List<PolygonEntity>, paint: MapPaint, minZoom: Float? = null,
-        is3DBlock: Boolean = false,
+        polygons: List<PolygonEntity>,
+        paint: MapPaint,
+        wallPaint: MapPaint,
+        minZoom: Float? = null,
+    ): List<MapItem> =
+        polygons.map { polygon ->
+            PolygonMapItem(
+                polygon = PolygonD(polygon.vertices),
+                paint = paint,
+                wallPaint = wallPaint,
+                minZoom = minZoom,
+                is3DBlock = true,
+            )
+        }
+
+    private fun fromPolygons(
+        polygons: List<PolygonEntity>,
+        paint: MapPaint,
+        minZoom: Float? = null,
     ): List<MapItem> =
         polygons.map { polygon ->
             PolygonMapItem(
                 polygon = PolygonD(polygon.vertices),
                 paint = paint,
                 minZoom = minZoom,
-                is3DBlock = is3DBlock,
             )
         }
-
     private fun fromPath(path: List<PointD>, paint: MapPaint, minZoom: Float? = null): List<MapItem> =
         listOf(
             PathMapItem(
@@ -373,6 +388,9 @@ internal class MapViewStateMapper {
             fillColor = MapColor.Compose(mapColors.colorMapAviary),
             borderColor = MapColor.Compose(mapColors.colorMapBuildingBorder),
             borderWidth = MapDimension.Static.Screen(1),
+        )
+        val wallPaint: MapPaint = MapPaint.Fill(
+            fillColor = MapColor.Compose(mapColors.colorMapBuildingWall),
         )
         val forestPaint: MapPaint = MapPaint.Fill(
             fillColor = MapColor.Compose(mapColors.colorMapForest),

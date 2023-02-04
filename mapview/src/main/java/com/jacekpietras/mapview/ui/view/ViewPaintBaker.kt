@@ -27,6 +27,9 @@ internal class ViewPaintBaker(
     override fun bakeCanvasPaint(paint: MapPaint): Pair<PaintHolder<Paint>, PaintHolder<Paint>?> =
         bakeInnerCanvasPaint(paint) to bakeBorderCanvasPaint(paint)
 
+    override fun bakeWallPaint(paint: MapPaint): PaintHolder<Paint> =
+        bakeInnerCanvasPaint(paint)
+
     private fun bakeInnerCanvasPaint(paint: MapPaint): PaintHolder<Paint> =
         when (paint) {
             is MapPaint.DashedStroke -> paint.toCanvasPaint()

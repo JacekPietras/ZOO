@@ -50,6 +50,7 @@ internal sealed class PreparedItem<T>(
             class Block<T>(
                 override val shape: DoubleArray,
                 override val paintHolder: PaintHolder<T>,
+                val wallPaintHolder: PaintHolder<T>,
                 override val minZoom: Float? = null,
                 override val cacheTranslated: FloatArray,
                 val cacheRoofTranslated: FloatArray,

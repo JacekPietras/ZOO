@@ -35,8 +35,8 @@ internal class ViewCoordinates(
     private val matrixRoof = Matrix()
         .apply {
             setScale(
-                1.1f,
-                1.1f,
+                1.05f,
+                1.05f,
                 viewWidth / 2.toFloat(),
                 viewHeight / 2.toFloat(),
             )
