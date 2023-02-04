@@ -6,6 +6,7 @@ import com.jacekpietras.geometry.RectD
 import com.jacekpietras.geometry.containsLine
 import com.jacekpietras.geometry.haversine
 import com.jacekpietras.geometry.polygonContains
+import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -22,6 +23,11 @@ internal class ViewCoordinates(
     private val visibleRectRotated: RectD
     val horizontalScale: Double
     val verticalScale: Double
+    private val wallScale = (1 + ((1 / (zoom * 10000)) - .08f).toFloat()).coerceAtLeast(1f)
+
+    init {
+        Timber.e("dupa $wallScale")
+    }
 
     private val matrix = Matrix()
         .apply {
@@ -35,8 +41,8 @@ internal class ViewCoordinates(
     private val matrixRoof = Matrix()
         .apply {
             setScale(
-                1.05f,
-                1.05f,
+                wallScale,
+                wallScale,
                 viewWidth / 2.toFloat(),
                 viewHeight / 2.toFloat(),
             )
