@@ -36,7 +36,7 @@ dependencies {
 
     //Dependency Injection
     implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
 
     //Logging
     implementation "com.jakewharton.timber:timber:$timber_version"
