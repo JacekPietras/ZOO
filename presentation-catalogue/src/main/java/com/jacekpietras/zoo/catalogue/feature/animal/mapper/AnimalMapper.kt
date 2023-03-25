@@ -37,12 +37,11 @@ internal class AnimalMapper {
         pathsToAnimal: List<MapItemEntity.PathEntity>,
         state: AnimalState,
     ): AnimalViewState? {
-        if (state.animal == null) return null
-
+        val animal = state.animal ?: return null
         return AnimalViewState(
-            title = RichText(state.animal.name),
-            subTitle = RichText(state.animal.nameLatin),
-            content = with(state.animal) {
+            title = RichText(animal.name),
+            subTitle = RichText(animal.nameLatin),
+            content = with(animal) {
                 listOfNotNull(
                     paragraph(R.string.occurrence, occurrence),
                     paragraph(R.string.environment, environment),
@@ -52,14 +51,14 @@ internal class AnimalMapper {
                     paragraph(R.string.facts, facts),
                 )
             },
-            isWikiLinkVisible = state.animal.wiki.isNotBlank(),
-            isWebLinkVisible = state.animal.web.isNotBlank(),
-            isNavLinkVisible = state.animal.regionInZoo.isNotEmpty(),
-            images = state.animal.photos,
+            isWikiLinkVisible = animal.wiki.isNotBlank(),
+            isWebLinkVisible = animal.web.isNotBlank(),
+            isNavLinkVisible = animal.regionInZoo.isNotEmpty(),
+            images = animal.photos,
             isSeen = state.isSeen,
             favoriteButtonText = when {
                 state.isFavorite == null -> RichText.Empty
-                state.isFavorite -> RichText(R.string.is_not_favorite)
+                state.isFavorite!! -> RichText(R.string.is_not_favorite)
                 else -> RichText(R.string.is_favorite)
             },
             worldBounds = worldBounds,
@@ -74,10 +73,10 @@ internal class AnimalMapper {
                 )
             },
             feeding =
-            if (state.animal.feeding.isNotEmpty()) {
+            if (animal.feeding.isNotEmpty()) {
                 RichText.Listing(
                     listOfNotNull(
-                        state.animal.feeding.filterUnique()
+                        animal.feeding.filterUnique()
                             .map { it.toText() }
                             .filterNot { it is RichText.Empty }
                             .takeIf { it.isNotEmpty() }
@@ -91,7 +90,7 @@ internal class AnimalMapper {
                                     }
                                 )
                             },
-                        state.animal.feeding.filterRepetitive()
+                        animal.feeding.filterRepetitive()
                             .toText()
                             .takeUnless { it is RichText.Empty }
                     ),

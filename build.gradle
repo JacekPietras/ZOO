@@ -26,6 +26,7 @@ buildscript {
         junit5_version = "1.8.2.1"
         mockito_version = "4.1.0"
         yearclass_version = "2.1.0"
+        mutekt_version = "1.0.0"
 
         lifecycle_version = "2.6.1"
         lifecycle_extensions_version = "2.2.0"
@@ -46,12 +47,13 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:$junit5_version"
     }
 }
 
 plugins {
+    id 'com.google.devtools.ksp' version "$ksp_version"
+    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
     id("com.github.ben-manes.versions").version("$benManes_version")
 }
 

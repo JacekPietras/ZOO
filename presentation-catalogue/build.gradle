@@ -2,6 +2,7 @@ apply plugin: "com.android.library"
 apply from: "$rootDir/common.gradle"
 apply from: "$rootDir/presentation.gradle"
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 
 android {
     namespace 'com.jacekpietras.zoo.catalogue'
@@ -20,4 +21,8 @@ dependencies {
 
     //Pager
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+
+    //Nice reduce of state
+    implementation("dev.shreyaspatil.mutekt:mutekt-core:$mutekt_version")
+    ksp("dev.shreyaspatil.mutekt:mutekt-codegen:$mutekt_version")
 }
